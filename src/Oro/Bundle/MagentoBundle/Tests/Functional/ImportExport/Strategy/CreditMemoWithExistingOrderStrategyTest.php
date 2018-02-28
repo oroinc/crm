@@ -5,15 +5,14 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Strategy;
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\JobInstance;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
-
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\ImportExportBundle\Context\StepExecutionProxyContext;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemoItem;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CreditMemoWithExistingOrderStrategy;
 use Oro\Bundle\MagentoBundle\Provider\Reader\ContextOrderReader;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class CreditMemoWithExistingOrderStrategyTest extends WebTestCase
 {

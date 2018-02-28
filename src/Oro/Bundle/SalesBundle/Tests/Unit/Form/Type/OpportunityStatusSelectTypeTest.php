@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusSelectType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusSelectType;
 
 class OpportunityStatusSelectTypeTest extends \PHPUnit_Framework_TestCase
 {

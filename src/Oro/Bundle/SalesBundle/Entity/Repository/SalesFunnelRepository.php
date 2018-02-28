@@ -5,10 +5,10 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 /**
  * @deprecated since 2.0 will be removed after 2.2
@@ -121,6 +121,7 @@ class SalesFunnelRepository extends EntityRepository
                 continue;
             }
 
+            QueryBuilderUtil::checkField($field);
             $customStepQueryBuilder = $this->getTemplateQueryBuilder($dateFrom, $dateTo)
                 ->addSelect('SUM(' . $field . ') as value')
                 ->andWhere('workflowStep.name = :workflowStep')

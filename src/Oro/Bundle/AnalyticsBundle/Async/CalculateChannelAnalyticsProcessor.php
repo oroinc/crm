@@ -2,7 +2,6 @@
 namespace Oro\Bundle\AnalyticsBundle\Async;
 
 use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
-
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;

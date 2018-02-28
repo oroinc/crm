@@ -5,17 +5,14 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
-
 use Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
 {

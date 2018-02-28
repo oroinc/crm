@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\ImportExport\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\FormBundle\Form\DataTransformer\PercentToLocalizedStringTransformer;
+use Oro\Bundle\ImportExportBundle\Event\DenormalizeEntityEvent;
 use Oro\Bundle\ImportExportBundle\Event\Events;
 use Oro\Bundle\ImportExportBundle\Event\NormalizeEntityEvent;
-use Oro\Bundle\ImportExportBundle\Event\DenormalizeEntityEvent;
-use Oro\Bundle\FormBundle\Form\DataTransformer\PercentToLocalizedStringTransformer;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OpportunityProbabilitySubscriber implements EventSubscriberInterface
 {

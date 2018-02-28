@@ -3,9 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
 
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
-
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 abstract class AbstractExportWriterTest extends WebTestCase
 {

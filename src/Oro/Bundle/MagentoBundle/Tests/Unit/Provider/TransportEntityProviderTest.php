@@ -4,14 +4,12 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
-
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider;
-use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class TransportEntityProviderTest extends \PHPUnit_Framework_TestCase
 {

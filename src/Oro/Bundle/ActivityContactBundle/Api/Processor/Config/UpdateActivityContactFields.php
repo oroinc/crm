@@ -2,15 +2,15 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Api\Processor\Config;
 
-use Oro\Component\ChainProcessor\ContextInterface;
-use Oro\Component\ChainProcessor\ProcessorInterface;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
+use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ApiBundle\Config\EntityDefinitionConfig;
 use Oro\Bundle\ApiBundle\Processor\Config\ConfigContext;
 use Oro\Bundle\ApiBundle\Util\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
-use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
-use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use Oro\Component\ChainProcessor\ContextInterface;
+use Oro\Component\ChainProcessor\ProcessorInterface;
 
 /**
  * Renames "contacting activity" (ac_*) fields to have more readable names.

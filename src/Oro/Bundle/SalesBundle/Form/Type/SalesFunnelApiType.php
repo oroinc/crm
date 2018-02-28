@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @deprecated since 2.0 will be removed after 2.2
@@ -23,7 +23,7 @@ class SalesFunnelApiType extends SalesFunnelType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(

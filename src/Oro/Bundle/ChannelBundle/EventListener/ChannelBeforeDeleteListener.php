@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
-use Oro\Bundle\IntegrationBundle\Manager\DeleteManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
+use Oro\Bundle\IntegrationBundle\Manager\DeleteManager;
 
 class ChannelBeforeDeleteListener
 {

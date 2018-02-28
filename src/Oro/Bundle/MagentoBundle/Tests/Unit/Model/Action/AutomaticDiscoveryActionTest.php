@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Model\Action;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\PropertyAccess\PropertyPath;
-
-use Oro\Component\ConfigExpression\ContextAccessor;
 use Oro\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
+use Oro\Component\ConfigExpression\ContextAccessor;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\PropertyAccess\PropertyPath;
 
 class AutomaticDiscoveryActionTest extends \PHPUnit_Framework_TestCase
 {

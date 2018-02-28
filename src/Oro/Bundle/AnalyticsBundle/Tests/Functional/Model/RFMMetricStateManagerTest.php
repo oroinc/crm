@@ -3,10 +3,10 @@
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Model;
 
 use Doctrine\ORM\EntityManager;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RFMMetricStateManagerTest extends WebTestCase
 {

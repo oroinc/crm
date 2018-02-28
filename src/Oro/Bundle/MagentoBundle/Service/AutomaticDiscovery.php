@@ -6,13 +6,11 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface;
+use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class AutomaticDiscovery
 {

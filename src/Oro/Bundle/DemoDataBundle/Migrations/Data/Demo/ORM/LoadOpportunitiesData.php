@@ -4,9 +4,6 @@ namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
@@ -16,6 +13,7 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixtureInterface
 {

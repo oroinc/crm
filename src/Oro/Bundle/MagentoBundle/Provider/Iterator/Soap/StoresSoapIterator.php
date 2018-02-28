@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
-use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Entity\Store;
+use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class StoresSoapIterator extends AbstractLoadeableSoapIterator

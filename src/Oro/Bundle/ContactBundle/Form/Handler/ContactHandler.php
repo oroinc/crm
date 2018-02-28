@@ -4,12 +4,10 @@ namespace Oro\Bundle\ContactBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\UnitOfWork;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
-
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactHandler
 {
@@ -19,9 +17,9 @@ class ContactHandler
     protected $form;
 
     /**
-     * @var Request
+     * @var RequestStack
      */
-    protected $request;
+    protected $requestStack;
 
     /**
      * @var EntityManagerInterface
@@ -29,14 +27,14 @@ class ContactHandler
     protected $manager;
 
     /**
-     * @param FormInterface          $form
-     * @param Request                $request
+     * @param FormInterface $form
+     * @param RequestStack $requestStack
      * @param EntityManagerInterface $manager
      */
-    public function __construct(FormInterface $form, Request $request, EntityManagerInterface $manager)
+    public function __construct(FormInterface $form, RequestStack $requestStack, EntityManagerInterface $manager)
     {
         $this->form    = $form;
-        $this->request = $request;
+        $this->requestStack = $requestStack;
         $this->manager = $manager;
     }
 
@@ -51,8 +49,9 @@ class ContactHandler
     {
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
-            $this->form->submit($this->request);
+        $request = $this->requestStack->getCurrentRequest();
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->form->submit($request);
 
             if ($this->form->isValid()) {
                 $appendAccounts = $this->form->get('appendAccounts')->getData();

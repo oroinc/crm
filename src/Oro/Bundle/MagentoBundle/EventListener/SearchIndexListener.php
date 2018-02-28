@@ -8,9 +8,6 @@ use Doctrine\ORM\Event\OnClearEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -18,6 +15,7 @@ use Oro\Bundle\IntegrationBundle\Event\SyncEvent;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\SearchBundle\Engine\IndexerInterface;
 use Oro\Bundle\SearchBundle\EventListener\IndexListener;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class SearchIndexListener extends IndexListener
 {

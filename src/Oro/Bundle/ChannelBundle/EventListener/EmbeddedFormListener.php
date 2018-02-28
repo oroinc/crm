@@ -2,23 +2,22 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
-use Symfony\Component\HttpFoundation\Request;
-
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
-use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class EmbeddedFormListener
 {
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /**
-     * @param Request|null $request
+     * @param RequestStack $requestStack
      */
-    public function setRequest(Request $request = null)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->request = $request;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -28,11 +27,12 @@ class EmbeddedFormListener
      */
     public function addDataChannelField(BeforeFormRenderEvent $event)
     {
-        if (!$this->request) {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request) {
             return;
         }
 
-        $routename = $this->request->attributes->get('_route');
+        $routename = $request->attributes->get('_route');
 
         if (strrpos($routename, 'oro_embedded_form_') === 0) {
             $env              = $event->getTwigEnvironment();

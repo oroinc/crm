@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;

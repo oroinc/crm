@@ -3,13 +3,12 @@
 namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Inflector\Inflector;
-
+use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
+use Oro\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\EmailBundle\Entity\EmailRecipient;
 use Oro\Bundle\EmailBundle\Tests\Unit\Entity\TestFixtures\EmailAddress;
 use Oro\Bundle\EmailBundle\Tests\Unit\Fixtures\Entity\TestEmailHolder;
-use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
-use Oro\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider;
 
 class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
 {

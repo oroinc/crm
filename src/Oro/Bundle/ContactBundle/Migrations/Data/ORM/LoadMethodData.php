@@ -4,7 +4,6 @@ namespace Oro\Bundle\ContactBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Oro\Bundle\ContactBundle\Entity\Method;
 
 class LoadMethodData extends AbstractFixture

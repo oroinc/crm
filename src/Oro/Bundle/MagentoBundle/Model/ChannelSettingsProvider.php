@@ -4,9 +4,9 @@ namespace Oro\Bundle\MagentoBundle\Model;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class ChannelSettingsProvider
 {

@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\MagentoBundle\Async\Topics;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;

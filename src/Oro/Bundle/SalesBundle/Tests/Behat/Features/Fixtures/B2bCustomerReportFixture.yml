@@ -1,0 +1,45 @@
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+  contactEmail{1..10}:
+    email: '<email()>'
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact{1..10}:
+    firstName: 'firstName<current()>'
+    lastName: 'lastName<current()>'
+    addEmail: ['@contactEmail<current()>']
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  account{1..10}:
+    name: 'Customer <current()>'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+  b2bcustomer{1..10}:
+    name: 'B2bCustomer <current()>'
+    account: '@account<current()>'
+    contact: '@contact<current()>'
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+  customer{1..10}:
+    account: '@account<current()>'
+    customerTarget: '@b2bcustomer<current()>'
+
+Oro\Bundle\SalesBundle\Entity\Opportunity:
+  opportunity{1..5}:
+    customerAssociation: '@customer<current()>'
+    name: 'Opportunity <current()>'
+    status: in_progress
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+  lead{6..10}:
+    customerAssociation: '@customer<current()>'
+    name: 'Lead <current()>'
+    status: new
+    owner: '@admin'
+    organization: '@organization'

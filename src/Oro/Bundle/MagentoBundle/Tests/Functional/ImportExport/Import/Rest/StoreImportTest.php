@@ -3,8 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Import\Rest;
 
 use Oro\Bundle\MagentoBundle\Entity\Store;
-use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\Rest\LoadMagentoRestWebsite;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\Rest\LoadMagentoRestChannel;
+use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\Rest\LoadMagentoRestWebsite;
 
 class StoreImportTest extends BaseIntegrationTest
 {

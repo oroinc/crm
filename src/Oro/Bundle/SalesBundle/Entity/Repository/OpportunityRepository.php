@@ -4,7 +4,6 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DataAuditBundle\Entity\AbstractAudit;
@@ -86,6 +85,9 @@ class OpportunityRepository extends EntityRepository
         $orderBy = 'budget',
         $direction = 'DESC'
     ) {
+        QueryBuilderUtil::checkIdentifier($alias);
+        QueryBuilderUtil::checkField($orderBy);
+
         $statusClass = ExtendHelper::buildEnumValueClassName('opportunity_status');
         $repository  = $this->getEntityManager()->getRepository($statusClass);
 
@@ -112,7 +114,7 @@ class OpportunityRepository extends EntityRepository
         )
         ->leftJoin('OroSalesBundle:Opportunity', $alias, 'WITH', sprintf('%s.status = s', $alias))
         ->groupBy('s.name')
-        ->orderBy($orderBy, $direction);
+        ->orderBy($orderBy, QueryBuilderUtil::getSortOrder($direction));
 
         return $qb;
     }
@@ -781,16 +783,17 @@ class OpportunityRepository extends EntityRepository
         $alias = 'o',
         array $excludedStatuses = ['lost', 'won']
     ) {
-        $qb     = $this->createQueryBuilder($alias);
+        QueryBuilderUtil::checkIdentifier($alias);
+        $qb = $this->createQueryBuilder($alias);
         $baBaseCurrencyQuery = $qbTransformer->getTransformSelectQuery('budgetAmount', $qb, $alias);
-        $qb->select([
-            sprintf('COUNT(%s.id) as inProgressCount', $alias),
+        $qb->select(
+            QueryBuilderUtil::sprintf('COUNT(%s.id) as inProgressCount', $alias),
             sprintf('SUM(%s) as budgetAmount', $baBaseCurrencyQuery),
             sprintf('SUM((%s) * %s.probability) as weightedForecast', $baBaseCurrencyQuery, $alias)
-        ]);
+        );
 
         if ($excludedStatuses) {
-            $qb->andWhere($qb->expr()->notIn(sprintf('%s.status', $alias), $excludedStatuses));
+            $qb->andWhere($qb->expr()->notIn(QueryBuilderUtil::getField($alias, 'status'), $excludedStatuses));
         }
 
         return $qb;

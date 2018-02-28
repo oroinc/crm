@@ -1,8 +1,8 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Async;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @dbIsolationPerTest

@@ -2,16 +2,15 @@
 
 namespace Oro\Bundle\SalesBundle\Dashboard\Provider;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
-use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class OpportunityByStatusProvider
 {

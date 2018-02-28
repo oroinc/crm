@@ -83,45 +83,40 @@ services:
             - { name: form.type, alias: oro_sales_lead_to_opportunity }
 
     oro_sales.opportunity.form:
-        class:           Symfony\Component\Form\Form
-        factory_method:  createNamed
-        factory_service: form.factory
+        class: Symfony\Component\Form\Form
+        factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_opportunity_form"
             - "oro_sales_opportunity"
 
     oro_sales.opportunity.form.api:
-        class:           Symfony\Component\Form\Form
-        factory_method:  createNamed
-        factory_service: form.factory
+        class: Symfony\Component\Form\Form
+        factory: ['@form.factory', createNamed]
         arguments:
             - "opportunity"
             - "oro_sales_opportunity_api"
 
     oro_sales.lead_to_opportunity.form:
-        class:           Symfony\Component\Form\Form
-        factory_method:  createNamed
-        factory_service: form.factory
+        class: Symfony\Component\Form\Form
+        factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_lead_to_opportunity_form"
             - "oro_sales_lead_to_opportunity"
 
     oro_sales.opportunity.form.handler:
         class: %oro_sales.opportunity.form.handler.class%
-        scope: request
         arguments:
             - "@oro_sales.opportunity.form"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
             - "@logger"
 
     oro_sales.lead_to_opportunity.form.handler:
         class: %oro_sales.lead_to_opportunity.form.handler.class%
-        scope: request
         arguments:
             - "@oro_sales.lead_to_opportunity.form"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
             - "@oro_sales.provider.lead_to_opportunity"
@@ -129,10 +124,9 @@ services:
 
     oro_sales.opportunity.form.handler.api:
         class: %oro_sales.opportunity.form.handler.class%
-        scope: request
         arguments:
             - "@oro_sales.opportunity.form.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
             - "@logger"
@@ -154,42 +148,37 @@ services:
 
     oro_sales.lead.form:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_lead_form"
             - "oro_sales_lead"
 
     oro_sales.lead.form.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - "lead"
             - "oro_sales_lead_api"
 
     oro_sales.lead.form.handler:
         class: %oro_sales.lead.form.handler.class%
-        scope: request
         arguments:
             - "@oro_sales.lead.form"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
 
     oro_sales.lead.form.handler.api:
         class: %oro_sales.lead.form.handler.class%
-        scope: request
         arguments:
             - "@oro_sales.lead.form.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
 
     oro_sales.lead_address.form:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_lead_address_form"
             - "oro_sales_lead_address"
@@ -198,10 +187,9 @@ services:
 
     oro_sales.lead_address.form.handler:
         class: %oro_address.form.handler.address.class%
-        scope: request
         arguments:
             - "@oro_sales.lead_address.form"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_sales.form.type.opportunity_select:
@@ -238,34 +226,30 @@ services:
 
     oro_sales.salesfunnel.form:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_salesfunnel_form"
             - "oro_sales_funnel"
 
     oro_sales.salesfunnel.form.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - "salesfunnel"
             - "oro_sales_salesfunnel_api"
 
     oro_sales.salesfunnel.form.handler:
         class: %oro_sales.salesfunnel.form.handler.class%
-        scope: request
         arguments:
             - "@oro_sales.salesfunnel.form"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_sales.salesfunnel.form.handler.api:
         class: %oro_sales.salesfunnel.form.handler.class%
-        scope: request
         arguments:
             - "@oro_sales.salesfunnel.form.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_sales.b2bcustomer.form.type:
@@ -295,35 +279,31 @@ services:
 
     oro_sales.b2bcustomer.form:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_b2bcustomer_form"
             - "oro_sales_b2bcustomer"
 
     oro_sales.b2bcustomer.form.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - "b2bcustomer"
             - "oro_sales_b2bcustomer_api"
 
     oro_sales.b2bcustomer.form.handler:
         class: %oro_sales.b2bcustomer.form.handler.class%
-        scope: request
         arguments:
             - "@oro_sales.b2bcustomer.form"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
 
     oro_sales.b2bcustomer.form.handler.api:
         class: %oro_sales.b2bcustomer.form.handler.class%
-        scope: request
         arguments:
             - "@oro_sales.b2bcustomer.form.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
 
@@ -355,10 +335,9 @@ services:
 
     oro_sales.form.type.lead_phone.handler:
         class: %oro_sales.lead_phone.form.handler.class%
-        scope: request
         arguments:
             - "@form.factory"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@security.authorization_checker"
 
@@ -369,10 +348,9 @@ services:
 
     oro_sales.form.type.lead_email.handler:
         class: %oro_sales.lead_email.handler.class%
-        scope: request
         arguments:
             - "@form.factory"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@security.authorization_checker"
 
@@ -388,10 +366,9 @@ services:
 
     oro_sales.form.type.b2bcustomer_phone.handler:
         class: %oro_sales.form.handler.b2bcustomer_phone.class%
-        scope: request
         arguments:
             - "@oro_sales.form.type.b2bcustomer_phone"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_sales.validator.b2bcustomer_phone_delete"
             - "@security.authorization_checker"
@@ -408,10 +385,9 @@ services:
 
     oro_sales.form.type.b2bcustomer_email.handler:
         class: %oro_sales.form.handler.b2bcustomer_email.class%
-        scope: request
         arguments:
             - "@oro_sales.form.type.b2bcustomer_email"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_sales.validator.b2bcustomer_email_delete"
             - "@security.authorization_checker"

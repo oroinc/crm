@@ -2,14 +2,14 @@
 
 namespace Oro\Bridge\MarketingCRM\Tests\Unit\Provider;
 
+use Oro\Bridge\MarketingCRM\Provider\TrackingCustomerIdentification;
+use Oro\Bridge\MarketingCRM\Tests\Unit\Fixtures\Entity\TestTrackingWebsite;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\TrackingBundle\Entity\TrackingEvent;
 use Oro\Bundle\TrackingBundle\Entity\TrackingEventDictionary;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
-use Oro\Bridge\MarketingCRM\Tests\Unit\Fixtures\Entity\TestTrackingWebsite;
-use Oro\Bridge\MarketingCRM\Provider\TrackingCustomerIdentification;
 
 class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Reference;
-
 use Oro\Bundle\ActivityContactBundle\DependencyInjection\Compiler\DirectionProviderPass;
+use Symfony\Component\DependencyInjection\Reference;
 
 class DirectionProviderPassTest extends \PHPUnit_Framework_TestCase
 {

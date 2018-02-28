@@ -4,9 +4,7 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Async;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
-
 use Oro\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor;
-
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;

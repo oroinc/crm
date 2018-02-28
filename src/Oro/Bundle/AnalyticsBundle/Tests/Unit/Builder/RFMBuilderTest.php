@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Builder;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder;
 use Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 class RFMBuilderTest extends \PHPUnit_Framework_TestCase
 {

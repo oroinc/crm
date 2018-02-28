@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener;
 
-use Symfony\Component\HttpFoundation\RequestStack;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeListRenderEvent;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class AccountViewListener
 {

@@ -3,7 +3,6 @@
 namespace Oro\Bundle\TestFrameworkCRMBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\TestFrameworkBundle\Entity\TestFrameworkEntityInterface;
 use Oro\Bundle\TestFrameworkCRMBundle\Model\ExtendTestCustomer1;

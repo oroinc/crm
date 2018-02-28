@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ChannelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 

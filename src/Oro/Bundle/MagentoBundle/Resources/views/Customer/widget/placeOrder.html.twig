@@ -6,14 +6,5 @@
             'url':                path('oro_magento_widget_customer_orderplace', {id: entity.id}),
             'loadingMaskEnabled': true
         }) }}
-
-        <script type="text/javascript">
-            require(['underscore', 'oroui/js/widget-manager'], function(_, widgetManager) {
-                widgetManager.getWidgetInstanceByAlias('order-place-widget', function(widget) {
-                    widget._showLoading();
-                    widget.once('externalContentLoaded', _.bind(widget._hideLoading, widget));
-                });
-            });
-        </script>
     </div>
 {% endblock %}

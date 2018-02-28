@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 
-use Oro\Bundle\MagentoBundle\Service\MagentoUrlGenerator;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
+use Oro\Bundle\MagentoBundle\Service\MagentoUrlGenerator;
 
 class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,9 +3,8 @@
 namespace Oro\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\ContactBundle\Model\ExtendContactPhone;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity

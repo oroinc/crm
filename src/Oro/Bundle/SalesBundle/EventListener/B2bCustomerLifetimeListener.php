@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener;
 
-use Doctrine\ORM\UnitOfWork;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-
+use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\CurrencyBundle\Converter\RateConverterInterface;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;

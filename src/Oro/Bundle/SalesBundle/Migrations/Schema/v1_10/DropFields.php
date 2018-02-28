@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
-
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
@@ -28,7 +27,7 @@ class DropFields implements Migration, OrderedMigrationInterface
         $this->modifyOrocrmAccountTable($schema, $queries);
         $queries->addQuery(new UpdateExtendedFieldQuery());
     }
-// @codingStandardsIgnoreStart
+    // @codingStandardsIgnoreStart
     /**
      * @param Schema   $schema
      * @param QueryBag $queries

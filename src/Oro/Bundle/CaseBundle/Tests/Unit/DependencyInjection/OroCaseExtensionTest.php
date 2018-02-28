@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Unit\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Oro\Bundle\CaseBundle\DependencyInjection\OroCaseExtension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class OroCaseExtensionTest extends \PHPUnit_Framework_TestCase
 {

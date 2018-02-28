@@ -3,12 +3,10 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener\Datagrid;
 
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\MagentoBundle\EventListener\CustomerGroupGridListener;
 use Oro\Bundle\MagentoBundle\EventListener\StoreGridListener;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class CustomerGroupGridListenerTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,17 +2,16 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Type;
 
-use Symfony\Component\Form\FormView;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use Oro\Bundle\FormBundle\Utils\FormUtils;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
-use Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ChannelType extends AbstractType
 {
@@ -52,7 +51,7 @@ class ChannelType extends AbstractType
         $builder->add('entities', 'oro_channel_entities');
         $builder->add(
             'channelType',
-            'genemu_jqueryselect2_choice',
+            'oro_select2_choice',
             [
                 'choices'  => $this->settingsProvider->getChannelTypeChoiceList(),
                 'required' => true,
@@ -83,7 +82,7 @@ class ChannelType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [

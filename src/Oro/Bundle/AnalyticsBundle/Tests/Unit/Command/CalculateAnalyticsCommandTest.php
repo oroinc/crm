@@ -1,9 +1,9 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Command;
 
+use Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;

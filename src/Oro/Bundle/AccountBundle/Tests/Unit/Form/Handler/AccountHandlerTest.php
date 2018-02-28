@@ -3,12 +3,12 @@
 namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AccountBundle\Form\Handler\AccountHandler;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class AccountHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,18 +39,14 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->form = $this->createMock(Form::class);
         $this->request = new Request();
-
-        $this->manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $this->manager = $this->createMock(ObjectManager::class);
 
         $this->entity  = new Account();
-        $this->handler = new AccountHandler($this->form, $this->request, $this->manager);
+        $this->handler = new AccountHandler($this->form, $requestStack, $this->manager);
     }
 
 

@@ -3,12 +3,12 @@
 namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,14 +29,14 @@ class ContactRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->form    = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()->getMock();
+        $this->form = $this->createMock(Form::class);
         $this->request = new Request();
-        $this->em      = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()->getMock();
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $this->em = $this->createMock(EntityManager::class);
 
         $this->entity  = new ContactRequest();
-        $this->handler = new ContactRequestHandler($this->form, $this->request, $this->em);
+        $this->handler = new ContactRequestHandler($this->form, $requestStack, $this->em);
     }
 
     protected function tearDown()

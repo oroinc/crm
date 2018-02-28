@@ -5,21 +5,19 @@ namespace Oro\Bundle\AnalyticsBundle\Form\Extension;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\PersistentCollection;
-
-use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ChannelTypeExtension extends AbstractTypeExtension
 {
@@ -66,7 +64,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['validation_groups' => $this->getValidationGroups()]);
     }

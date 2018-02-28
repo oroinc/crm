@@ -1,9 +1,8 @@
 <?php
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContactSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,14 +19,14 @@ class ContactSelectTypeTest extends \PHPUnit_Framework_TestCase
         $this->type = new ContactSelectType();
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
-        /** @var OptionsResolverInterface $resolver */
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        /** @var OptionsResolver $resolver */
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with($this->isType('array'));
-        $this->type->setDefaultOptions($resolver);
+        $this->type->configureOptions($resolver);
     }
 
     public function testGetParent()

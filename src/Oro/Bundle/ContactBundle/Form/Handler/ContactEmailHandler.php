@@ -3,24 +3,22 @@
 namespace Oro\Bundle\ContactBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
-
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Validator\ContactEmailDeleteValidator;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\ContactBundle\Validator\ContactEmailDeleteValidator;
-use Oro\Bundle\ContactBundle\Entity\ContactEmail;
-use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class ContactEmailHandler
 {
     /** @var FormInterface */
     protected $form;
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var EntityManagerInterface */
     protected $manager;
@@ -33,20 +31,20 @@ class ContactEmailHandler
 
     /**
      * @param FormInterface $form
-     * @param Request $request
+     * @param RequestStack $requestStack
      * @param EntityManagerInterface $manager
      * @param ContactEmailDeleteValidator $contactEmailDeleteValidator
      * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         FormInterface $form,
-        Request $request,
+        RequestStack $requestStack,
         EntityManagerInterface $manager,
         ContactEmailDeleteValidator $contactEmailDeleteValidator,
         AuthorizationCheckerInterface $authorizationChecker
     ) {
-        $this->form    = $form;
-        $this->request = $request;
+        $this->form = $form;
+        $this->requestStack = $requestStack;
         $this->manager = $manager;
         $this->contactEmailDeleteValidator = $contactEmailDeleteValidator;
         $this->authorizationChecker = $authorizationChecker;
@@ -65,24 +63,25 @@ class ContactEmailHandler
     {
         $this->form->setData($entity);
 
+        $request = $this->requestStack->getCurrentRequest();
         $submitData = [
-            'email' => $this->request->request->get('email'),
-            'primary' => $this->request->request->get('primary')
+            'email' => $request->request->get('email'),
+            'primary' => $request->request->get('primary')
         ];
 
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
             $this->form->submit($submitData);
 
-            if ($this->form->isValid() && $this->request->request->get('contactId')) {
+            if ($this->form->isValid() && $request->request->get('contactId')) {
                 $contact = $this->manager->find(
                     'OroContactBundle:Contact',
-                    $this->request->request->get('contactId')
+                    $request->request->get('contactId')
                 );
                 if (!$this->authorizationChecker->isGranted('EDIT', $contact)) {
                     throw new AccessDeniedException();
                 }
 
-                if ($contact->getPrimaryEmail() && $this->request->request->get('primary') === true) {
+                if ($contact->getPrimaryEmail() && $request->request->get('primary') === true) {
                     return false;
                 }
 

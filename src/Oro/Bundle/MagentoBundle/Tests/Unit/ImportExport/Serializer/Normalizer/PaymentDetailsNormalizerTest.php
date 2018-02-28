@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\MagentoBundle\Test\Unit\ImportExport\Serializer\Normalizer;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\PaymentDetailsNormalizer;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class PaymentDetailsNormalizerTest extends \PHPUnit_Framework_TestCase
 {

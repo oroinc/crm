@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
-use Oro\Bundle\EntityBundle\Helper\FieldHelper;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\Repository\ContactRepository;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
+use Oro\Bundle\EntityBundle\Helper\FieldHelper;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
 use Oro\Bundle\ImportExportBundle\Tests\Functional\AbstractImportExportTest;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;

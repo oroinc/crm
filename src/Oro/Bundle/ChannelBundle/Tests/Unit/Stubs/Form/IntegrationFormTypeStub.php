@@ -3,10 +3,9 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Form;
 
 use Oro\Bundle\ChannelBundle\Tests\Unit\Form\Extension\IntegrationTypeExtensionTest;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class IntegrationFormTypeStub extends AbstractType
 {
@@ -27,6 +26,7 @@ class IntegrationFormTypeStub extends AbstractType
     {
         $builder->add('type', 'choice', [
             'choices' => IntegrationTypeExtensionTest::$allChoices,
+            // TODO: Remove 'choices_as_values' option in scope of BAP-15236
             'choices_as_values' => true
         ]);
     }
@@ -34,7 +34,7 @@ class IntegrationFormTypeStub extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [

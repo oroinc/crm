@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\SalesBundle\Entity\Lead;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LeadStatusSelectType extends AbstractType
 {
@@ -23,9 +22,9 @@ class LeadStatusSelectType extends AbstractType
         $this->enumValueProvider = $enumValueProvider;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver->setDefaults(
             [
@@ -60,6 +59,6 @@ class LeadStatusSelectType extends AbstractType
      */
     public function getParent()
     {
-        return 'genemu_jqueryselect2_choice';
+        return 'oro_select2_choice';
     }
 }

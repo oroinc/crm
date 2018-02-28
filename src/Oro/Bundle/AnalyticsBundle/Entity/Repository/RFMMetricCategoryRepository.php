@@ -4,9 +4,8 @@ namespace Oro\Bundle\AnalyticsBundle\Entity\Repository;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
-
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class RFMMetricCategoryRepository extends EntityRepository
 {

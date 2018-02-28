@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Provider\Customer;
 
 use Doctrine\Common\Util\ClassUtils;
-
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider as EntityConfigProvider;
 use Oro\Bundle\UIBundle\Model\Image;
 

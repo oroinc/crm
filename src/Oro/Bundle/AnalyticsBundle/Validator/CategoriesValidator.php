@@ -5,11 +5,9 @@ namespace Oro\Bundle\AnalyticsBundle\Validator;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\PersistentCollection;
-
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-
-use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 
 class CategoriesValidator extends ConstraintValidator
 {

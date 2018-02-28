@@ -5,8 +5,8 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Dashboard;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
-use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadOrderDataWithFixedDate;
 use Oro\Bundle\MagentoBundle\Dashboard\OrderDataProvider as DataProvider;
+use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadOrderDataWithFixedDate;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class OrderDataProviderTest extends WebTestCase

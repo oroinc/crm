@@ -3,13 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
-
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\WorkflowBundle\Entity\EventTriggerInterface;
 use Oro\Bundle\WorkflowBundle\EventListener\Extension\ProcessTriggerExtension;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
 class CustomerContactManager implements LoggerAwareInterface
 {

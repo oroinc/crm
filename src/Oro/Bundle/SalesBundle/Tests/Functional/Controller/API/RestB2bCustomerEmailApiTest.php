@@ -3,9 +3,9 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use FOS\RestBundle\Util\Codes;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEmailData;
 use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RestB2bCustomerEmailApiTest extends WebTestCase
 {

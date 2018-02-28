@@ -3,19 +3,16 @@
 namespace Oro\Bundle\MagentoBundle\Dashboard;
 
 use DateTime;
-
 use Doctrine\Common\Persistence\ManagerRegistry;
-
-use Symfony\Component\Translation\TranslatorInterface;
-
 use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProviderInterface;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class PurchaseDataProvider
 {

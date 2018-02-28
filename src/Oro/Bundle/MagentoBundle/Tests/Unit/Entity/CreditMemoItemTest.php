@@ -5,7 +5,6 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemoItem;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
 use Oro\Component\Testing\Unit\EntityTestCaseTrait;
 
 class CreditMemoItemTest extends \PHPUnit_Framework_TestCase

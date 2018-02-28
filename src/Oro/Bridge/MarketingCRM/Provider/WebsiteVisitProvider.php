@@ -2,18 +2,16 @@
 
 namespace Oro\Bridge\MarketingCRM\Provider;
 
-use Oro\Bundle\FeatureToggleBundle\Checker\FeatureCheckerHolderTrait;
-use Oro\Bundle\FeatureToggleBundle\Checker\FeatureToggleableInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
-use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
+use Oro\Bundle\FeatureToggleBundle\Checker\FeatureCheckerHolderTrait;
+use Oro\Bundle\FeatureToggleBundle\Checker\FeatureToggleableInterface;
 use Oro\Bundle\MagentoBundle\Provider\DateFilterTrait;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteVisitProviderInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class WebsiteVisitProvider implements WebsiteVisitProviderInterface, FeatureToggleableInterface
 {

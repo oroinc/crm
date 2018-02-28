@@ -3,14 +3,13 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\ChannelBundle\Tests\Unit\EventListener\UpdateIntegrationConnectorsListenerTest as BaseTestCase;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
-use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
 {

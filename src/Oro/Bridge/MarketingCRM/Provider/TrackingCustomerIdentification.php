@@ -4,16 +4,14 @@ namespace Oro\Bridge\MarketingCRM\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
-
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TCI;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 use Oro\Bundle\TrackingBundle\Provider\TrackingEventIdentifierInterface;
-use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
-
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
 {

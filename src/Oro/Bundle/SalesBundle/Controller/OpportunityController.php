@@ -2,19 +2,17 @@
 
 namespace Oro\Bundle\SalesBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/opportunity")
@@ -135,31 +133,6 @@ class OpportunityController extends Controller
         $opportunity->setCustomerAssociation($customer);
 
         return $this->update($opportunity);
-    }
-
-    /**
-     * @Route(
-     *     "/datagrid/opportunity-with-datachannel/{channelIds}",
-     *     name="oro_sales_datagrid_opportunity_datachannel_aware"
-     * )
-     * @Template("OroSalesBundle:Widget:entityWithDataChannelGrid.html.twig")
-     * @AclAncestor("oro_sales_opportunity_view")
-     */
-    public function opportunityWithDataChannelGridAction($channelIds, Request $request)
-    {
-        $gridName = $request->query->get('gridName');
-
-        if (!$gridName) {
-            return $this->createNotFoundException('`gridName` Should be defined.');
-        }
-
-        return [
-            'channelId'    => $channelIds,
-            'gridName'     => $gridName,
-            'params'       => $request->query->get('params', []),
-            'renderParams' => $request->query->get('renderParams', []),
-            'multiselect'  => $request->query->get('multiselect', false)
-        ];
     }
 
     /**

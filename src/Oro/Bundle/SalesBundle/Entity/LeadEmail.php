@@ -3,9 +3,8 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EmailBundle\Entity\EmailInterface;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\SalesBundle\Model\ExtendLeadEmail;
 
 /**

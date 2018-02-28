@@ -2,18 +2,17 @@
 
 namespace Oro\Bundle\ContactBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-
-use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\AccountBundle\Entity\Account;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ContactController extends Controller
 {
@@ -40,10 +39,13 @@ class ContactController extends Controller
      *
      * @Template
      * @AclAncestor("oro_contact_view")
+     * @param Request $request
+     * @param Contact $contact
+     * @return array|RedirectResponse
      */
-    public function infoAction(Contact $contact)
+    public function infoAction(Request $request, Contact $contact)
     {
-        if (!$this->getRequest()->get('_wid')) {
+        if (!$request->get('_wid')) {
             return $this->redirect($this->get('router')->generate('oro_contact_view', ['id' => $contact->getId()]));
         }
 
@@ -62,15 +64,17 @@ class ContactController extends Controller
      *      permission="CREATE",
      *      class="OroContactBundle:Contact"
      * )
+     * @param Request $request
+     * @return array|RedirectResponse
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         // add predefined account to contact
-        $contact     = null;
-        $entityClass = $this->getRequest()->get('entityClass');
+        $contact = null;
+        $entityClass = $request->get('entityClass');
         if ($entityClass) {
             $entityClass = $this->get('oro_entity.routing_helper')->resolveEntityClass($entityClass);
-            $entityId    = $this->getRequest()->get('entityId');
+            $entityId = $request->get('entityId');
             if ($entityId && $entityClass === $this->container->getParameter('oro_account.entity.account.class')) {
                 $repository = $this->getDoctrine()->getRepository($entityClass);
                 /** @var Account $account */

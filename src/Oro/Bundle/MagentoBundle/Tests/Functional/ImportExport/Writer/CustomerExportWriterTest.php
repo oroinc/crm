@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
 
 use Akeneo\Bundle\BatchBundle\Job\BatchStatus;
-
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\IntegrationBundle\Exception\TransportException;
 use Oro\Bundle\MagentoBundle\Entity\Address;

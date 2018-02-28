@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
-use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 
 class ContactPaginationPermissionTest extends AbstractContactPaginationTestCase
 {

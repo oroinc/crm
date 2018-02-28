@@ -23,13 +23,10 @@
                 {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
             {% endif %}
 
-            {%- if is_granted('oro_contact_view') and entity.contact -%}
-                {% set contactView = '<a href="' ~ path('oro_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}
-            {%- else -%}
-                {% set contactView = entity.contact ? entity.contact : '' %}
-            {%- endif -%}
-
-            {{ ui.renderHtmlProperty('oro.sales.lead.contact.label'|trans, contactView) }}
+            {{ ui.renderHtmlProperty(
+                'oro.sales.lead.contact.label'|trans,
+                ui.entityViewLink(entity.contact, entity.contact ? entity.contact|oro_format_name : '', 'oro_contact_view')
+            ) }}
             {{ ui.renderProperty('oro.sales.lead.job_title.label'|trans, entity.jobTitle) }}
 
             {%- set opportunitiesData -%}
@@ -82,7 +79,7 @@
             {{ ui.renderHtmlProperty('oro.sales.lead.emails.label'|trans, sales.renderCollectionWithPrimaryElement(entity.emails, true, entity)) }}
             {{ ui.renderHtmlProperty('oro.sales.lead.phones.label'|trans, sales.renderCollectionWithPrimaryElement(entity.phones, false, entity)) }}
             {{ ui.renderHtmlProperty('oro.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
-            {{ ui.renderCollapsibleHtmlProperty('oro.sales.lead.notes.label'|trans, entity.notes|oro_tag_filter, entity, 'notes') }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.lead.notes.label'|trans, entity.notes|oro_html_strip_tags, entity, 'notes') }}
             {{ ui.renderHtmlProperty('oro.contact.social.label'|trans, socialData) }}
             {{ ui.renderHtmlProperty('oro.sales.opportunity.entity_label'|trans, opportunitiesData) }}
         </div>

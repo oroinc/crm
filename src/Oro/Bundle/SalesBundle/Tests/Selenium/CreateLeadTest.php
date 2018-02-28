@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Selenium\Sales;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 use Oro\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 
 /**
  * Class CreateLeadTest

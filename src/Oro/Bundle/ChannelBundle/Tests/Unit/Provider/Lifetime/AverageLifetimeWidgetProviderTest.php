@@ -3,11 +3,10 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-
+use Oro\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider;
 
 class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
 {

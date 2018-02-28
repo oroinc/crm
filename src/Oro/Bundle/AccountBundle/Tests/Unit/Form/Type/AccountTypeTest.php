@@ -3,12 +3,10 @@
 namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
 use Oro\Bundle\AccountBundle\Form\Type\AccountType;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AccountTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -80,16 +78,16 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $type->buildForm($builder, []);
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
-        /** @var OptionsResolverInterface $resolver */
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        /** @var OptionsResolver $resolver */
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with($this->isType('array'));
 
         $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
-        $type->setDefaultOptions($resolver);
+        $type->configureOptions($resolver);
     }
 
     public function testGetName()

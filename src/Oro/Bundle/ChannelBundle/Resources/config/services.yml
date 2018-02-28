@@ -114,18 +114,16 @@ services:
     # handlers
     oro_channel.channel_form.handler:
         class: %oro_channel.channel_form.handler.class%
-        scope: request
         arguments:
-            - "@request"
+            - "@request_stack"
             - "@oro_channel.form.channel"
             - "@doctrine"
             - "@event_dispatcher"
 
     oro_channel.channel_integration_form.handler:
         class: %oro_channel.channel_integration_form.handler.class%
-        scope: request
         arguments:
-            - "@request"
+            - "@request_stack"
             - "@form.factory"
 
     # Channel API
@@ -172,9 +170,8 @@ services:
     oro_channel.provider.request_channel:
         class: %oro_channel.provider.request_channel.class%
         arguments:
-            - "@request"
+            - "@request_stack"
             - "@doctrine"
-        scope: request
 
     # datagrid
     oro_channel.datagrid.extension.orm_channel_limitation:
@@ -272,8 +269,8 @@ services:
 
     oro_channel.event_listener.embedded_form:
         class: %oro_channel.event_listener.embedded_form.class%
-        calls:
-            - [setRequest, ['@?request=']]
+        arguments:
+            - '@request_stack'
         tags:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
             - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }

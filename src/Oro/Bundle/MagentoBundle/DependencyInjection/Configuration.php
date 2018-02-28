@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\DependencyInjection;
 
+use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-
-use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 
 class Configuration implements ConfigurationInterface
 {

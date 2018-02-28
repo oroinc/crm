@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Cache;
 
-use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
-
 use Oro\Bundle\MagentoBundle\Service\WsdlManager;
+use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 
 class WsdlCacheClearer implements CacheClearerInterface
 {

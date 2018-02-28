@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\DataTransformer;
 
-use Symfony\Component\Form\DataTransformerInterface;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Form\DataTransformer\CustomerToStringTransformer;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub as Customer;
 use Oro\Bundle\SalesBundle\Tests\Unit\Stub\AccountCustomerManager;
+use Symfony\Component\Form\DataTransformerInterface;
 
 class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
 {

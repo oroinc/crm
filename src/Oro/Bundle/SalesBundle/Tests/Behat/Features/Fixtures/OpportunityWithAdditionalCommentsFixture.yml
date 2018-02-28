@@ -1,0 +1,38 @@
+parameters:
+    opportunity1_name: 'Opportunity 1'
+    opportunity2_name: 'Opportunity 2'
+    opportunity3_name: 'Opportunity 3'
+    opportunity1_and_2_notes: 'Common notes'
+    opportunity3_notes: 'Notes 3'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  account1:
+    name: 'mister customer 1'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+  mrcustomer:
+    account: '@account1'
+
+Oro\Bundle\SalesBundle\Entity\Opportunity:
+  opportunity1:
+    name: '<{opportunity1_name}>'
+    customerAssociation: '@mrcustomer'
+    organization: '@organization'
+    status: in_progress
+    owner: '@admin'
+    notes: '<{opportunity1_and_2_notes}>'
+  opportunity2:
+    name: '<{opportunity2_name}>'
+    customerAssociation: '@mrcustomer'
+    organization: '@organization'
+    status: in_progress
+    owner: '@admin'
+    notes: '<{opportunity1_and_2_notes}>'
+  opportunity3:
+    name: '<{opportunity3_name}>'
+    customerAssociation: '@mrcustomer'
+    organization: '@organization'
+    status: in_progress
+    owner: '@admin'
+    notes: '<{opportunity3_notes}>'

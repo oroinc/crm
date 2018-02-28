@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Form\DataTransformer;
 
-use Symfony\Component\Form\DataTransformerInterface;
-
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
+use Symfony\Component\Form\DataTransformerInterface;
 
 class CustomerApiTransformer implements DataTransformerInterface
 {

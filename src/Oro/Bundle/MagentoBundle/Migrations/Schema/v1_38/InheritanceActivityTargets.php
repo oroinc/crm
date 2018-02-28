@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_38;
 
 use Doctrine\DBAL\Schema\Schema;
-
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;

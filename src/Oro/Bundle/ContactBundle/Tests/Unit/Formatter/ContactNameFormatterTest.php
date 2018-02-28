@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Formatter;
 
-use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
+use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 
 class ContactNameFormatterTest extends \PHPUnit_Framework_TestCase
 {

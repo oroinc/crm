@@ -5,11 +5,11 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\IsDisplayOrderNotesSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
-use Oro\Bundle\MagentoBundle\Form\EventListener\IsDisplayOrderNotesSubscriber;
 use Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport;
-use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 
 class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,9 +79,9 @@ class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
         $this->type->buildForm($builder, []);
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
         $this->restTransport->expects($this->once())
             ->method('getSettingsEntityFQCN')
             ->willReturn(MagentoRestTransport::class);
@@ -93,7 +93,7 @@ class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->type->setDefaultOptions($resolver);
+        $this->type->configureOptions($resolver);
     }
 
     public function testGetName()

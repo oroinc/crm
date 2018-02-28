@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\OptionsResolver\Options;
-
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ChannelSelectType
@@ -51,13 +50,13 @@ class ChannelSelectType extends AbstractType
      */
     public function getParent()
     {
-        return 'genemu_jqueryselect2_entity';
+        return 'oro_select2_entity';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [

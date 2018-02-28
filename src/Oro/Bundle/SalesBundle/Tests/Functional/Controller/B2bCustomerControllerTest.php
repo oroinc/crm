@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
-use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
-use Symfony\Component\DomCrawler\Form;
-
-use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
+use Symfony\Component\DomCrawler\Form;
 
 class B2bCustomerControllerTest extends AbstractDatagridTestCase
 {

@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
-use Symfony\Component\DomCrawler\Form;
-use Symfony\Component\DomCrawler\Field\ChoiceFormField;
-
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Field\ChoiceFormField;
+use Symfony\Component\DomCrawler\Form;
 
 class ContactAddressControllersTest extends WebTestCase
 {

@@ -4,12 +4,11 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Strategy;
 
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
-
 use Oro\Bundle\ImportExportBundle\Context\StepExecutionProxyContext;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberWithExistingCustomerStrategy;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class NewsletterSubscriberWithExistingCustomerStrategyTest extends WebTestCase
 {

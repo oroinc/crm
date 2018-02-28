@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 
-use Symfony\Component\Routing\RouterInterface;
-
-use Oro\Bundle\EntityBundle\Provider\EntityProvider;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ChannelBundle\Provider\MetadataProvider;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\EntityBundle\Provider\EntityProvider;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Symfony\Component\Routing\RouterInterface;
 
 class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 {

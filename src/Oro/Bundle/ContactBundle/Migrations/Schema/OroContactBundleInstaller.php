@@ -3,16 +3,15 @@
 namespace Oro\Bundle\ContactBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_5\OroContactBundle as AttachmentMigration;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_6\OroContactBundle as ActivityMigration;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_8\OroContactBundle as ContactOrganizations;
+use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)

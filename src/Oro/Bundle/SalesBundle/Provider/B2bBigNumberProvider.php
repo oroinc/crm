@@ -4,13 +4,11 @@ namespace Oro\Bundle\SalesBundle\Provider;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
-use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
+use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 abstract class B2bBigNumberProvider
 {

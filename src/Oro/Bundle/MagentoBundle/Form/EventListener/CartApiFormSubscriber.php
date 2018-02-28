@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\EventListener;
 
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CartItem;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-
-use Oro\Bundle\MagentoBundle\Entity\Cart;
-use Oro\Bundle\MagentoBundle\Entity\CartItem;
 
 class CartApiFormSubscriber implements EventSubscriberInterface
 {

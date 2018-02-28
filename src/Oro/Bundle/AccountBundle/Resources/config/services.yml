@@ -14,8 +14,7 @@ parameters:
 services:
     oro_account.form.account:
         class:                                      Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments: ["oro_account_form", "oro_account", null]
 
     oro_account.form.type.account:
@@ -28,11 +27,10 @@ services:
             - { name: form.type, alias: oro_account }
 
     oro_account.form.handler.account:
-        class:                                      %oro_account.handler.account.class%
-        scope: request
+        class: %oro_account.handler.account.class%
         arguments:
             - "@oro_account.form.account"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     # Form type
@@ -59,17 +57,15 @@ services:
             - { name: form.type, alias: account }
 
     oro_account.form.account.api:
-        class:                                      Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        class: Symfony\Component\Form\Form
+        factory: ['@form.factory', createNamed]
         arguments: ["account", "account", null]
 
     oro_account.form.handler.account.api:
         class: %oro_account.handler.account.class%
-        scope: request
         arguments:
             - "@oro_account.form.account.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_account.form.autocomplete.account.search_handler:

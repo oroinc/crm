@@ -3,7 +3,9 @@
 namespace Oro\Bundle\AccountBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-
+use Oro\Bundle\AccountBundle\Migrations\Schema\v1_10\InheritanceActivityTargets;
+use Oro\Bundle\AccountBundle\Migrations\Schema\v1_11\AccountNameExprIndexQuery;
+use Oro\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
@@ -14,9 +16,6 @@ use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\AccountBundle\Migrations\Schema\v1_10\InheritanceActivityTargets;
-use Oro\Bundle\AccountBundle\Migrations\Schema\v1_11\AccountNameExprIndexQuery;
-use Oro\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)

@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\ChannelBundle\Model\Condition;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Component\Action\Condition\AbstractCondition;
 use Oro\Component\ConfigExpression\ContextAccessorAwareInterface;
 use Oro\Component\ConfigExpression\ContextAccessorAwareTrait;
 use Oro\Component\ConfigExpression\Exception\InvalidArgumentException;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 
 class ChannelEntityAvailability extends AbstractCondition implements ContextAccessorAwareInterface
 {

@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Oro\Bundle\MagentoBundle\Form\Type\WebsiteSelectType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WebsiteSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,12 +15,12 @@ class WebsiteSelectTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('choice', $type->getParent());
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
         $type = new WebsiteSelectType();
 
         $resolver = new OptionsResolver();
-        $type->setDefaultOptions($resolver);
+        $type->configureOptions($resolver);
 
         $options = $resolver->resolve();
         $this->assertArrayHasKey('tooltip', $options);

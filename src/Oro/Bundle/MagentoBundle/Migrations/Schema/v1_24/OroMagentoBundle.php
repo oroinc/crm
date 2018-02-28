@@ -4,10 +4,9 @@ namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
-
 use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroMagentoBundle implements Migration, OrderedMigrationInterface
 {

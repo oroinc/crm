@@ -26,7 +26,7 @@ class CreatedCreditMemoTables implements
     /** @var ActivityListExtension */
     protected $activityListExtension;
 
-     /** @var ExtendExtension */
+    /** @var ExtendExtension */
     protected $extendExtension;
 
     /**

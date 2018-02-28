@@ -4,7 +4,6 @@ namespace Oro\Bundle\ActivityContactBundle\Provider;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 
 class ActivityContactProvider

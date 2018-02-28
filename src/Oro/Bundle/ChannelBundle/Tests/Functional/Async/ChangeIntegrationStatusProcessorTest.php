@@ -1,8 +1,8 @@
 <?php
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Async;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @dbIsolationPerTest

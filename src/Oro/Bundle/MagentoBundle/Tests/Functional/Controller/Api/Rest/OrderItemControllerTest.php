@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class OrderItemControllerTest extends WebTestCase
 {

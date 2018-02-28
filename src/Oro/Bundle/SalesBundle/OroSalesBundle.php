@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\CustomerIconProviderPass;
-use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\AccountCreationStrategyProviderPass;
 use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\AccountAutocompleteProviderPass;
+use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\AccountCreationStrategyProviderPass;
+use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\CustomerIconProviderPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class OroSalesBundle extends Bundle
 {

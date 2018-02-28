@@ -4,25 +4,22 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
-
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Translation\TranslatorInterface;
-
+use Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
+use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider;
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
-use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
+use Oro\Bundle\ImportExportBundle\Strategy\Import\NewEntitiesHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
-use Oro\Bundle\ImportExportBundle\Strategy\Import\NewEntitiesHelper;
-use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
-use Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use Oro\Bundle\SecurityBundle\Owner\OwnerChecker;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
 {

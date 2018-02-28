@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\DependencyInjection\CompilerPass;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
 use Oro\Bundle\AnalyticsBundle\DependencyInjection\CompilerPass\RFMBuilderPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class RFMBuilderPassTest extends \PHPUnit_Framework_TestCase
 {

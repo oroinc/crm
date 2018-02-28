@@ -2,22 +2,33 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\MagentoBundle\Acl\Voter\OrganizationAnnotationVoter;
+use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\MagentoBundle\Acl\Voter\OrganizationAnnotationVoter;
-
-class OrganizationAnnotationVoterTest extends AbstractTwoWaySyncVoterTest
+class OrganizationAnnotationVoterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     */
+    private $doctrineHelper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelSettingsProvider
+     */
+    private $settingsProvider;
+
     /**
      * @var OrganizationAnnotationVoter
      */
-    protected $voter;
+    private $voter;
 
     protected function setUp()
     {
-        parent::setUp();
-
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $this->settingsProvider = $this->createMock(ChannelSettingsProvider::class);
         $this->voter = new OrganizationAnnotationVoter($this->doctrineHelper);
         $this->voter->setSettingsProvider($this->settingsProvider);
     }
@@ -25,22 +36,6 @@ class OrganizationAnnotationVoterTest extends AbstractTwoWaySyncVoterTest
     protected function tearDown()
     {
         unset($this->voter, $this->doctrineHelper);
-    }
-
-    /**
-     * @return array
-     */
-    public function supportsAttributeDataProvider()
-    {
-        return [
-            'VIEW' => ['VIEW', false],
-            'CREATE' => ['CREATE', false],
-            'EDIT' => ['EDIT', false],
-            'DELETE' => ['DELETE', false],
-            'ASSIGN' => ['ASSIGN', false],
-            'oro_magento_customer_create' => ['oro_magento_customer_create', true],
-            'oro_magento_customer_update' => ['oro_magento_customer_update', false],
-        ];
     }
 
     /**

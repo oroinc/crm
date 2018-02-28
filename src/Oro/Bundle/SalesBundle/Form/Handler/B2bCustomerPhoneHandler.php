@@ -3,24 +3,22 @@
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
-
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 use Oro\Bundle\SalesBundle\Validator\B2bCustomerPhoneDeleteValidator;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class B2bCustomerPhoneHandler
 {
     /** @var FormInterface */
     protected $form;
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var EntityManagerInterface */
     protected $manager;
@@ -33,20 +31,20 @@ class B2bCustomerPhoneHandler
 
     /**
      * @param FormInterface $form
-     * @param Request $request
+     * @param RequestStack $requestStack
      * @param EntityManagerInterface $manager
      * @param B2bCustomerPhoneDeleteValidator $b2bCustomerPhoneDeleteValidator
      * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         FormInterface $form,
-        Request $request,
+        RequestStack $requestStack,
         EntityManagerInterface $manager,
         B2bCustomerPhoneDeleteValidator $b2bCustomerPhoneDeleteValidator,
         AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->form    = $form;
-        $this->request = $request;
+        $this->requestStack = $requestStack;
         $this->manager = $manager;
         $this->b2bCustomerPhoneDeleteValidator = $b2bCustomerPhoneDeleteValidator;
         $this->authorizationChecker = $authorizationChecker;
@@ -65,15 +63,16 @@ class B2bCustomerPhoneHandler
     {
         $this->form->setData($entity);
 
+        $request = $this->requestStack->getCurrentRequest();
         $submitData = [
-            'phone' => $this->request->request->get('phone'),
-            'primary' => $this->request->request->get('primary')
+            'phone' => $request->request->get('phone'),
+            'primary' => $request->request->get('primary')
         ];
 
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
             $this->form->submit($submitData);
 
-            $b2bCustomerId = $this->request->request->get('entityId');
+            $b2bCustomerId = $request->request->get('entityId');
             if ($this->form->isValid() && $b2bCustomerId) {
                 $customer = $this->manager->find(
                     'OroSalesBundle:B2bCustomer',
@@ -83,7 +82,7 @@ class B2bCustomerPhoneHandler
                     throw new AccessDeniedException();
                 }
 
-                if ($customer->getPrimaryPhone() && $this->request->request->get('primary') === true) {
+                if ($customer->getPrimaryPhone() && $request->request->get('primary') === true) {
                     return false;
                 }
 

@@ -3,10 +3,9 @@
 namespace Oro\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EmailBundle\Entity\EmailInterface;
 use Oro\Bundle\ContactBundle\Model\ExtendContactEmail;
+use Oro\Bundle\EmailBundle\Entity\EmailInterface;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity

@@ -5,17 +5,18 @@ namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ForecastProvider
@@ -209,12 +210,12 @@ class ForecastProvider
     ) {
         if ($start) {
             $qb
-                ->andWhere(sprintf('%s >= :start', $field))
+                ->andWhere(QueryBuilderUtil::sprintf('%s >= :start', $field))
                 ->setParameter('start', $start, Type::DATE);
         }
         if ($end) {
             $qb
-                ->andWhere(sprintf('%s <= :end', $field))
+                ->andWhere(QueryBuilderUtil::sprintf('%s <= :end', $field))
                 ->setParameter('end', $end, Type::DATE);
         }
     }
@@ -286,7 +287,8 @@ class ForecastProvider
     {
         $qb = $this->getAuditRepository()->createQueryBuilder('a');
         $qb
-            ->select(<<<SELECT
+            ->select(
+                <<<SELECT
 (SELECT afps.newFloat FROM OroDataAuditBundle:AuditField afps WHERE afps.id = MAX(afp.id)) AS probability,
 (SELECT afpb.newFloat FROM OroDataAuditBundle:AuditField afpb WHERE afpb.id = MAX(afb.id)) AS budgetAmount
 SELECT
@@ -297,7 +299,8 @@ SELECT
             ->leftJoin('a.fields', 'afb', Join::WITH, 'afb.field = :budgetAmountField')
             ->where('a.objectClass = :objectClass AND a.loggedAt < :moment')
             ->groupBy('a.objectId')
-            ->having(<<<HAVING
+            ->having(
+                <<<HAVING
 NOT EXISTS(
     SELECT
         afcah.newDatetime
@@ -331,7 +334,8 @@ HAVING
     {
         $qb
             ->join('a.fields', 'afo', Join::WITH, 'afo.field = :ownerField')
-            ->andHaving(<<<HAVING
+            ->andHaving(
+                <<<HAVING
 EXISTS(
     SELECT
         afoh.newText

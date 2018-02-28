@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\CurrencyBundle\Provider\RepositoryCurrencyCheckerProviderInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class CurrencyCheckerProvider implements RepositoryCurrencyCheckerProviderInterface
 {

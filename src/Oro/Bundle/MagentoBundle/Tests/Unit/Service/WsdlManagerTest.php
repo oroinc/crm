@@ -3,10 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 
 use Guzzle\Http\ClientInterface;
-
-use Symfony\Component\Filesystem\Filesystem;
-
 use Oro\Bundle\MagentoBundle\Service\WsdlManager;
+use Symfony\Component\Filesystem\Filesystem;
 
 class WsdlManagerTest extends \PHPUnit_Framework_TestCase
 {

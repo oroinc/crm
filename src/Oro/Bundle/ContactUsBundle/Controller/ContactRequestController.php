@@ -2,19 +2,15 @@
 
 namespace Oro\Bundle\ContactUsBundle\Controller;
 
-use FOS\RestBundle\Util\Codes;
-
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
+use FOS\RestBundle\Util\Codes;
+use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ContactRequestController extends Controller
 {

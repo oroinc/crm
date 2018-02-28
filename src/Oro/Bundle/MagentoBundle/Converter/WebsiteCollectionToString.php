@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Converter;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
 use Oro\Bundle\MagentoBundle\Entity\Website;
 

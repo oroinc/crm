@@ -6,12 +6,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\PersistentCollection;
-
-use Symfony\Component\Validator\ExecutionContextInterface;
-
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Oro\Bundle\AnalyticsBundle\Validator\CategoriesValidator;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
 class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
 {

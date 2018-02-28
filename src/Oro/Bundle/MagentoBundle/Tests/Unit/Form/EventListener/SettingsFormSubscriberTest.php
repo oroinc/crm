@@ -2,16 +2,15 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\EventListener;
 
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\Test\FormIntegrationTestCase;
-use Symfony\Component\Form\PreloadedExtension;
-use Symfony\Component\Form\FormEvent;
-
-use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
-use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\TransportSettingFormTypeStub;
-use Oro\Bundle\MagentoBundle\Form\Type\WebsiteSelectType;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\Type\WebsiteSelectType;
+use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\TransportSettingFormTypeStub;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\PreloadedExtension;
+use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
 class SettingsFormSubscriberTest extends FormIntegrationTestCase
 {

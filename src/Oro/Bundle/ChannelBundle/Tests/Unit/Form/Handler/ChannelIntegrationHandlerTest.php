@@ -2,14 +2,14 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Handler;
 
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
+use Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
-use Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,8 +40,10 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->form));
 
         $this->request = Request::create('');
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
         $this->entity  = new Integration();
-        $this->handler = new ChannelIntegrationHandler($this->request, $this->formBuilder);
+        $this->handler = new ChannelIntegrationHandler($requestStack, $this->formBuilder);
     }
 
     public function tearDown()

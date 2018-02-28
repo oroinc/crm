@@ -3,7 +3,6 @@
 namespace Oro\Bridge\MarketingCRM\Provider;
 
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteVisitProviderInterface;

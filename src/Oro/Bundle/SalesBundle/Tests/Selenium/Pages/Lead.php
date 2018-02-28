@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Selenium\Pages;
 
-use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
  * Class Lead

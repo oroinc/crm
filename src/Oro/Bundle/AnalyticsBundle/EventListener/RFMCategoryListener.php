@@ -3,7 +3,6 @@
 namespace Oro\Bundle\AnalyticsBundle\EventListener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
-
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;

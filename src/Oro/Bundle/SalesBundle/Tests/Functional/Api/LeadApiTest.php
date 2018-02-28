@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Api;
 
-use Symfony\Component\HttpFoundation\Response;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadLeadsData;
+use Symfony\Component\HttpFoundation\Response;
 
 class LeadApiTest extends RestJsonApiTestCase
 {

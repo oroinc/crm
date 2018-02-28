@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
-use Symfony\Component\DomCrawler\Form;
-
-use Oro\Bundle\UserBundle\DataFixtures\UserUtilityTrait;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\UserBundle\DataFixtures\UserUtilityTrait;
+use Symfony\Component\DomCrawler\Form;
 
 class ControllersTest extends WebTestCase
 {

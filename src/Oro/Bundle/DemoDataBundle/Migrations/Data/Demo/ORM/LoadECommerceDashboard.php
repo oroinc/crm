@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\DashboardBundle\Migrations\Data\ORM\AbstractDashboardFixture;
 use Oro\Bundle\DashboardBundle\Model\WidgetModel;
 

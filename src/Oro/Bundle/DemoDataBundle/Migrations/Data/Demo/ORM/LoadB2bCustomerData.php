@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
-use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;

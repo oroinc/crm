@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
-use Symfony\Component\Form\Form;
-
-use Oro\Bundle\MagentoBundle\Service\CustomerStateHandler;
-use Oro\Bundle\MagentoBundle\Service\StateManager;
 use Oro\Bundle\FormBundle\Tests\Unit\Model\UpdateHandlerTest;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Form\Handler\CustomerHandler;
+use Oro\Bundle\MagentoBundle\Service\CustomerStateHandler;
+use Oro\Bundle\MagentoBundle\Service\StateManager;
+use Symfony\Component\Form\Form;
 
 class CustomerHandlerTest extends UpdateHandlerTest
 {

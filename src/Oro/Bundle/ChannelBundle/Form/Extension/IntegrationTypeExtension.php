@@ -2,15 +2,14 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Extension;
 
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
-
+use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class IntegrationTypeExtension extends AbstractTypeExtension
 {
@@ -75,7 +74,7 @@ class IntegrationTypeExtension extends AbstractTypeExtension
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['disable_customer_datasource_types' => true]);
     }

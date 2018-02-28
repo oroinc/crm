@@ -344,8 +344,7 @@ services:
 
     oro_magento.form.cart.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - ~
             - 'cart_api_type'
@@ -362,8 +361,7 @@ services:
 
     oro_magento.form.cart_item.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - ~
             - 'cart_item_api_type'
@@ -375,8 +373,7 @@ services:
 
     oro_magento.form.cart_address.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - ~
             - 'cart_address_api_type'
@@ -388,8 +385,7 @@ services:
 
     oro_magento.form.order.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - ~
             - "order_api_type"
@@ -418,8 +414,7 @@ services:
 
     oro_magento.form.order_address.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - ~
             - 'order_address_api_type'
@@ -431,8 +426,7 @@ services:
 
     oro_magento.form.order_item.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - ~
             - 'order_item_api_type'
@@ -446,16 +440,14 @@ services:
 
     oro_magento.form.customer.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - ~
             - "api_customer_type"
 
     oro_magento.form.customer_address.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - ~
             - "customer_address_api_type"
@@ -605,7 +597,7 @@ services:
         class: %oro_magento.magento_url_generator.class%
         arguments:
             - "@router"
-        scope: prototype
+        shared: false
 
     oro_magento.event_listener.after_job_execution:
         class: %oro_magento.event_listener.integration_sync_after.class%
@@ -1022,84 +1014,75 @@ services:
     # handler
     oro_magento.form.handler.cart.api:
         class: %oro_magento.form.handler.cart.api.class%
-        scope: request
         arguments:
             - "@oro_magento.form.cart.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine"
             - "@oro_security.token_accessor"
 
     oro_magento.form.handler.cart_address:
         class: %oro_magento.form.handler.cart_address.class%
-        scope: request
         arguments:
             - "@oro_magento.form.cart_address.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine"
             - "@oro_security.token_accessor"
 
     oro_magento.form.handler.cart_item:
         class: %oro_magento.form.handler.cart_item.class%
-        scope: request
         arguments:
             - "@oro_magento.form.cart_item.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine"
 
     oro_magento.form.handler.order.api:
         class: %oro_magento.form.handler.order.class%
-        scope: request
         arguments:
             - "@oro_magento.form.order.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine"
             - "@oro_security.token_accessor"
 
     oro_magento.form.handler.order_item:
         class: %oro_magento.form.handler.order_item.class%
-        scope: request
         arguments:
             - "@oro_magento.form.order_item.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine"
 
     oro_magento.form.handler.order_address.api:
         class: %oro_magento.form.handler.order_address.api.class%
-        scope: request
         arguments:
             - "@oro_magento.form.order_address.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_security.token_accessor"
 
     oro_magento.form.handler.customer.api:
         class: %oro_magento.form.api.handler.customer.class%
-        scope: request
         arguments:
             - "@oro_magento.form.customer.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine"
             - "@oro_security.token_accessor"
             - "@oro_sales.manager.account_customer"
 
     oro_magento.form.api.handler.customer_address:
         class: %oro_magento.form.handler.customer_address.class%
-        scope: request
         arguments:
             - "@oro_magento.form.customer_address.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine"
             - "@oro_security.token_accessor"
 
     oro_magento.handler.transport:
         class: Oro\Bundle\MagentoBundle\Handler\TransportHandler
-        scope: request
         arguments:
             - '@oro_integration.manager.types_registry'
             - '@oro_magento.provider.transport_entity'
             - '@oro_magento.provider.website_choices'
             - '@oro_magento.provider.connector_choices'
-            - '@request'
+            - '@request_stack'
 
     oro_magento.routing.options_resolver.old_options:
         class: Oro\Bundle\MagentoBundle\Routing\OldOptionsRouteOptionsResolver
@@ -1242,3 +1225,11 @@ services:
         public: false
         tags:
             - { name: twig.extension }
+
+    oro_magento.customer_virtual_relations.provider:
+        class: Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider
+        public: false
+        arguments:
+            - '%oro_magento.entity.customer.class%'
+        tags:
+           - { name: oro_entity.virtual_relation_provider, priority: 150 }

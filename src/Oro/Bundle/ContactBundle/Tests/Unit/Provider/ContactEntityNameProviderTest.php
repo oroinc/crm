@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Provider;
 
-use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
-use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
-use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
 use Oro\Bundle\ContactBundle\Provider\ContactEntityNameProvider;
+use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
+use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
+use Oro\Component\DependencyInjection\ServiceLink;
 
 class ContactEntityNameProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,13 +36,9 @@ class ContactEntityNameProviderTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter')
             ->disableOriginalConstructor()->getMock();
 
-        $this->nameFormatterLink = $this
-            ->getMockBuilder('Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink')
-            ->disableOriginalConstructor()->getMock();
+        $this->nameFormatterLink = $this->createMock(ServiceLink::class);
 
-        $this->dqlNameFormatterLink = $this
-            ->getMockBuilder('Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink')
-            ->disableOriginalConstructor()->getMock();
+        $this->dqlNameFormatterLink = $this->createMock(ServiceLink::class);
 
         $this->provider = new ContactEntityNameProvider($this->nameFormatterLink, $this->dqlNameFormatterLink);
     }

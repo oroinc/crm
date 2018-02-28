@@ -2,17 +2,15 @@
 
 namespace Oro\Bundle\CaseBundle\Model;
 
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-
+use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
+use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
-use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class ViewFactory
 {

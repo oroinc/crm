@@ -2,17 +2,16 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\Common\Util\ClassUtils;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PlatformBundle\EventListener\OptionalListenerInterface;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
-use Oro\Bundle\SalesBundle\Entity\Customer;
 
 class CustomerAssociationListener implements OptionalListenerInterface
 {

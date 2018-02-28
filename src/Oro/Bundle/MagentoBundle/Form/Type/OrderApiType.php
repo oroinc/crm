@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\MagentoBundle\Form\EventListener\OrderApiFormSubscriber;
+use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
-use Oro\Bundle\MagentoBundle\Form\EventListener\OrderApiFormSubscriber;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OrderApiType extends AbstractType
 {
@@ -107,7 +106,7 @@ class OrderApiType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [

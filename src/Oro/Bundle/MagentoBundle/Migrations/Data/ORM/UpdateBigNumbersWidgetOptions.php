@@ -4,7 +4,6 @@ namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 
 class UpdateBigNumbersWidgetOptions implements FixtureInterface

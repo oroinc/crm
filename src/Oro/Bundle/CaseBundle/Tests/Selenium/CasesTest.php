@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Selenium;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\CaseBundle\Tests\Selenium\Pages\Cases;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
 /**
  * Class CasesTest

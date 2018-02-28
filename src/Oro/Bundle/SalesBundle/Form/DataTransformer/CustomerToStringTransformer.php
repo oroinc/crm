@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle\Form\DataTransformer;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-
-use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
-use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\AccountBundle\Entity\Account;
 
 class CustomerToStringTransformer implements DataTransformerInterface
 {

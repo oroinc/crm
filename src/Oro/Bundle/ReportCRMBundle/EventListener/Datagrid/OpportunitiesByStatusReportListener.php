@@ -3,8 +3,6 @@
 namespace Oro\Bundle\ReportCRMBundle\EventListener\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
-
-use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
@@ -14,6 +12,7 @@ use Oro\Bundle\FilterBundle\Filter\FilterUtility;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\FilterBundle\Utils\DateFilterModifier;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 /**
  * Apply query modifications to the Opportunity By Status Report
@@ -120,8 +119,8 @@ class OpportunitiesByStatusReportListener
 
         // readd join parts and append filter conditions to the appropriate joins
         foreach ($joinParts as $joins) {
+            /** @var \Doctrine\ORM\Query\Expr\Join $join */
             foreach ($joins as $join) {
-                /** @var \Doctrine\ORM\Query\Expr\Join $join */
                 $alias = $join->getAlias();
                 $fieldCondition = '';
                 // check if there is a column with a join filter on this alias

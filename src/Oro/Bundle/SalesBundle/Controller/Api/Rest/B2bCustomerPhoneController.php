@@ -2,22 +2,19 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
-
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\ContactBundle\Entity\Contact;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @RouteResource("b2bcustomer_phone")

@@ -3,11 +3,10 @@
 namespace Oro\Bundle\ChannelBundle\Provider;
 
 use Doctrine\ORM\QueryBuilder;
-
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class ChannelsByEntitiesProvider
 {

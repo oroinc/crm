@@ -1,14 +1,14 @@
 <?php
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 
+use Oro\Bundle\ChannelBundle\Async\ProcessChannelStateProcessor;
+use Oro\Bundle\ChannelBundle\Async\Topics;
+use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Oro\Bundle\ChannelBundle\Async\ProcessChannelStateProcessor;
-use Oro\Bundle\ChannelBundle\Async\Topics;
-use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 
 class ProcessChannelStateProcessorTest extends \PHPUnit_Framework_TestCase
 {

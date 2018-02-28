@@ -2,14 +2,13 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Api;
 
-use Symfony\Component\HttpFoundation\Response;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadOpportunitiesData;
+use Symfony\Component\HttpFoundation\Response;
 
 class OpportunityApiTest extends RestJsonApiTestCase
 {

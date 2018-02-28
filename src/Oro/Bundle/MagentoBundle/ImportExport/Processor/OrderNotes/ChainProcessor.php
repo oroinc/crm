@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderNote;
 

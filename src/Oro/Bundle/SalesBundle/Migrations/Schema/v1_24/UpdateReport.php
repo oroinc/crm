@@ -3,16 +3,14 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
-
-use Psr\Log\LoggerInterface;
-
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
+use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\SalesBundle\Entity\Lead;
+use Psr\Log\LoggerInterface;
 
 class UpdateReport extends ParametrizedMigrationQuery implements Migration, OrderedMigrationInterface
 {

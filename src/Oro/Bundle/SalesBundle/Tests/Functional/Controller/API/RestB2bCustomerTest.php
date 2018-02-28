@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RestB2bCustomerTest extends WebTestCase
 {

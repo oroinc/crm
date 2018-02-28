@@ -2,21 +2,20 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Handler;
 
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\FormFactoryInterface;
-
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ChannelIntegrationHandler
 {
     const DATA_PARAM_NAME = 'data';
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var FormInterface */
     protected $form;
@@ -25,12 +24,12 @@ class ChannelIntegrationHandler
     protected $options = ['disable_customer_datasource_types' => false];
 
     /**
-     * @param Request              $request
+     * @param RequestStack         $requestStack
      * @param FormFactoryInterface $factory
      */
-    public function __construct(Request $request, FormFactoryInterface $factory)
+    public function __construct(RequestStack $requestStack, FormFactoryInterface $factory)
     {
-        $this->request = $request;
+        $this->requestStack = $requestStack;
         $this->form    = $factory->createNamed(
             'oro_integration_channel_form',
             'oro_integration_channel_form',
@@ -48,13 +47,14 @@ class ChannelIntegrationHandler
     {
         $this->form->setData($integration);
 
-        $data = $this->request->get(self::DATA_PARAM_NAME, false);
-        if ('POST' === $this->request->getMethod()) {
-            $this->form->submit($this->request);
+        $request = $this->requestStack->getCurrentRequest();
+        $data = $request->get(self::DATA_PARAM_NAME, false);
+        if ('POST' === $request->getMethod()) {
+            $this->form->submit($request);
 
             return ($this->form->isValid());
-        } elseif ('GET' === $this->request->getMethod() && $data) {
-            $this->request->query->set(IntegrationChannelHandler::UPDATE_MARKER, true);
+        } elseif ('GET' === $request->getMethod() && $data) {
+            $request->query->set(IntegrationChannelHandler::UPDATE_MARKER, true);
             $this->form->submit($data);
         }
 
@@ -68,11 +68,12 @@ class ChannelIntegrationHandler
      */
     public function getFormSubmittedData()
     {
-        if ('POST' !== $this->request->getMethod()) {
+        $request = $this->requestStack->getCurrentRequest();
+        if ('POST' !== $request->getMethod()) {
             throw new \LogicException('Unable to fetch submitted data, only POST request supported');
         }
 
-        return $this->request->get($this->form->getName(), []);
+        return $request->get($this->form->getName(), []);
     }
 
     /**
@@ -84,7 +85,7 @@ class ChannelIntegrationHandler
      */
     public function getFormView()
     {
-        $isUpdateOnly = $this->request->get(IntegrationChannelHandler::UPDATE_MARKER, false);
+        $isUpdateOnly = $this->requestStack->getCurrentRequest()->get(IntegrationChannelHandler::UPDATE_MARKER, false);
 
         $form = $this->form;
         if ($isUpdateOnly) {

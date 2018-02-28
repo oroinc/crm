@@ -3,17 +3,14 @@
 namespace Oro\Bundle\MagentoBundle\Dashboard;
 
 use DateTime;
-
-use Oro\Bundle\ChartBundle\Model\ConfigProvider;
-
 use Doctrine\Common\Persistence\ManagerRegistry;
-
 use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
+use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class OrderDataProvider
 {

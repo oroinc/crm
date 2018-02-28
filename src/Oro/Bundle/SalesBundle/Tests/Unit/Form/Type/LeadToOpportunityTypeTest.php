@@ -2,21 +2,20 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\Form\FormBuilder;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormView;
-
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
-use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType;
 use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormView;
 
 class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
 {

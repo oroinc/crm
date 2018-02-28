@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
-use Oro\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class CaseControllerTest extends WebTestCase
 {

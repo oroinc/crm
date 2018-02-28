@@ -5,13 +5,13 @@ namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 class OrderRepository extends ChannelAwareEntityRepository
 {
@@ -131,7 +131,7 @@ class OrderRepository extends ChannelAwareEntityRepository
             throw new InvalidEntityException();
         }
         $qb = $this->createQueryBuilder('o');
-        $qb->where('o.' . $field . ' = :item');
+        $qb->where($qb->expr()->eq(QueryBuilderUtil::getField('o', $field), ':item'));
         $qb->setParameter('item', $item);
         $qb->orderBy('o.updatedAt', 'DESC');
         $qb->setMaxResults(1);
@@ -314,7 +314,7 @@ class OrderRepository extends ChannelAwareEntityRepository
     {
         $qb = $this->createQueryBuilder($alias)
             ->select(
-                sprintf(
+                QueryBuilderUtil::sprintf(
                     'COUNT(DISTINCT %s.customer) + SUM(CASE WHEN %s.isGuest = true THEN 1 ELSE 0 END)',
                     $alias,
                     $alias

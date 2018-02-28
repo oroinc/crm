@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Bundle\Tests\Unit\Api\Processor\Config;
 
+use Oro\Bundle\ActivityContactBundle\Api\Processor\Config\UpdateActivityContactFields;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\ApiBundle\Tests\Unit\Processor\Config\ConfigProcessorTestCase;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\Id\EntityConfigId;
-use Oro\Bundle\ActivityContactBundle\Api\Processor\Config\UpdateActivityContactFields;
-use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 
 class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
 {

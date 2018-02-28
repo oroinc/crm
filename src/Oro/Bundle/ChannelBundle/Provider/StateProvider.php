@@ -2,13 +2,11 @@
 
 namespace Oro\Bundle\ChannelBundle\Provider;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Cache\Cache;
-
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
+use Doctrine\ORM\EntityManager;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class StateProvider
 {

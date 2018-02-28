@@ -3,10 +3,9 @@
 namespace Oro\Bundle\ActivityContactBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-
+use Oro\Bundle\ActivityContactBundle\Migrations\Schema\v1_0\OroActivityContactBundle;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\ActivityContactBundle\Migrations\Schema\v1_0\OroActivityContactBundle;
 
 class OroActivityContactBundleInstaller implements Installation
 {

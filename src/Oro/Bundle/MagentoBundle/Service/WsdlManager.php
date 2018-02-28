@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Service;
 
 use Guzzle\Http\ClientInterface;
-
 use Symfony\Component\Filesystem\Filesystem;
 
 class WsdlManager

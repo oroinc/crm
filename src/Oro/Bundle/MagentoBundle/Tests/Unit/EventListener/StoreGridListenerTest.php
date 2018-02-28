@@ -3,13 +3,12 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener\Datagrid;
 
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\EventListener\StoreGridListener;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class StoreGridListenerTest extends \PHPUnit_Framework_TestCase
 {

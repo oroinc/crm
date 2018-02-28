@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
-use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @deprecated since 2.0 will be removed after 2.2
@@ -19,9 +18,9 @@ class SalesFunnelHandler
     protected $form;
 
     /**
-     * @var Request
+     * @var RequestStack
      */
-    protected $request;
+    protected $requestStack;
 
     /**
      * @var ObjectManager
@@ -30,13 +29,13 @@ class SalesFunnelHandler
 
     /**
      * @param FormInterface $form
-     * @param Request       $request
+     * @param RequestStack  $requestStack
      * @param ObjectManager $manager
      */
-    public function __construct(FormInterface $form, Request $request, ObjectManager $manager)
+    public function __construct(FormInterface $form, RequestStack $requestStack, ObjectManager $manager)
     {
-        $this->form    = $form;
-        $this->request = $request;
+        $this->form = $form;
+        $this->requestStack = $requestStack;
         $this->manager = $manager;
     }
 
@@ -50,8 +49,9 @@ class SalesFunnelHandler
     {
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
-            $this->form->submit($this->request);
+        $request = $this->requestStack->getCurrentRequest();
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->form->submit($request);
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);

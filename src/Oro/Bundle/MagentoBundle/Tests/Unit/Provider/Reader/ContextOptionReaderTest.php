@@ -2,7 +2,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Reader;
 
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
-
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\MagentoBundle\Provider\Reader\ContextOptionReader;

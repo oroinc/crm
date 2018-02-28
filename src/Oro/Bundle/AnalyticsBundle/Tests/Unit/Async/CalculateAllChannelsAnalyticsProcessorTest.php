@@ -1,14 +1,14 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Async;
 
+use Oro\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor;
+use Oro\Bundle\AnalyticsBundle\Async\Topics;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Oro\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor;
-use Oro\Bundle\AnalyticsBundle\Async\Topics;
-use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 
 class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
 {

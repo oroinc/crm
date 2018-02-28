@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
-use Symfony\Component\DomCrawler\Form;
-
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpenOpportunityFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpenOpportunityFixtures;
+use Symfony\Component\DomCrawler\Form;
 
 class OpportunityEditWithEnabledWorkflowTest extends WebTestCase
 {

@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Oro\Bundle\AddressBundle\Form\Type\PhoneCollectionType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PhoneCollectionTypeStub extends PhoneCollectionType
 {

@@ -4,14 +4,14 @@ namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
-use Oro\Bundle\MagentoBundle\Entity\Cart;
-use Oro\Bundle\MagentoBundle\Entity\CartStatus;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 class CartRepository extends ChannelAwareEntityRepository
 {
@@ -336,7 +336,7 @@ class CartRepository extends ChannelAwareEntityRepository
     {
         $qb = $this->createQueryBuilder($alias)
             ->select(
-                sprintf(
+                QueryBuilderUtil::sprintf(
                     'COUNT(DISTINCT %s.customer) + SUM(CASE WHEN %s.isGuest = true THEN 1 ELSE 0 END)',
                     $alias,
                     $alias
@@ -358,8 +358,12 @@ class CartRepository extends ChannelAwareEntityRepository
     {
         $qb = $this->createQueryBuilder($alias);
         $this->joinWorkflowStep($qb, 'workflowStep');
-        $qb->select('workflowStep.name as workflowStepName', sprintf('SUM(%s.grandTotal) as total', $alias))
-            ->leftJoin(sprintf('%s.status', $alias), 'status')
+        $qb
+            ->select(
+                'workflowStep.name as workflowStepName',
+                QueryBuilderUtil::sprintf('SUM(%s.grandTotal) as total', $alias)
+            )
+            ->leftJoin(QueryBuilderUtil::sprintf('%s.status', $alias), 'status')
             ->groupBy('workflowStep.name');
 
         $qb->where($qb->expr()->in('workflowStep.name', ':workflowStepsNames'))

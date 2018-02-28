@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class B2bCustomerApiType extends B2bCustomerType
 {
@@ -21,7 +20,7 @@ class B2bCustomerApiType extends B2bCustomerType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [

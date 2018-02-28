@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Validator;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint;
 use Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestCase
 {

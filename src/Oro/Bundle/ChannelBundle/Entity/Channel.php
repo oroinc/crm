@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\ChannelBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository")

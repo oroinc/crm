@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Datagrid\Extension\Customers;
 
-use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
+use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 
 class RelevantOpportunitiesExtension extends AccountRelatedEntitiesExtension

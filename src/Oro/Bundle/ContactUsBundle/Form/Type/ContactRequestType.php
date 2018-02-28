@@ -1,11 +1,10 @@
 <?php
 namespace Oro\Bundle\ContactUsBundle\Form\Type;
 
+use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContactRequestType extends AbstractType implements EmbeddedFormInterface
 {
@@ -67,7 +66,7 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [

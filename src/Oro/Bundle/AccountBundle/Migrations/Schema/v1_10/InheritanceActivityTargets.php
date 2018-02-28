@@ -3,7 +3,6 @@
 namespace Oro\Bundle\AccountBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
-
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;

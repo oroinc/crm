@@ -2,11 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_23;
 
-use Psr\Log\LoggerInterface;
-
 use Doctrine\DBAL\Types\Type;
-
 use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigEntityValueQuery as BaseQuery;
+use Psr\Log\LoggerInterface;
 
 class UpdateEntityConfigEntityValueQuery extends BaseQuery
 {

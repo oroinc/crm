@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Autocomplete;
 
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
-use Oro\Bundle\FormBundle\Autocomplete\SearchHandler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\FormBundle\Autocomplete\SearchHandler;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 abstract class IntegrationAwareSearchHandler extends SearchHandler
 {

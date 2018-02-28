@@ -662,6 +662,14 @@ services:
        calls:
           - [setSourceClass, [%oro_sales.opportunity.class%]]
 
+    oro_sales.b2bcustomer_virtual_relations.provider:
+        class: Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider
+        public: false
+        arguments:
+            - '%oro_sales.b2bcustomer.entity.class%'
+        tags:
+           - { name: oro_entity.virtual_relation_provider, priority: 150 }
+
     oro_sales.widget_config_value.widget_opportunity_status.converter:
         parent: oro_dashboard.widget_config_value.widget_enum_select.converter
         arguments: ['opportunity_status']

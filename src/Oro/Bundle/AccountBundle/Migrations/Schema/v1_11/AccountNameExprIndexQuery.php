@@ -3,11 +3,9 @@
 namespace Oro\Bundle\AccountBundle\Migrations\Schema\v1_11;
 
 use Doctrine\DBAL\Platforms\PostgreSQL92Platform;
-
-use Psr\Log\LoggerInterface;
-
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
+use Psr\Log\LoggerInterface;
 
 class AccountNameExprIndexQuery extends ParametrizedMigrationQuery
 {

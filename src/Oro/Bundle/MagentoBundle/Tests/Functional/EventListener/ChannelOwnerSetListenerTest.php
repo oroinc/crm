@@ -2,16 +2,14 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\EventListener;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Util\ClassUtils;
-
-use Symfony\Component\DomCrawler\Form;
-
+use Doctrine\ORM\EntityManager;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Form;
 
 /**
  * @dbIsolationPerTest

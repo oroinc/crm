@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\PropertyAccess\PropertyPath;
-
+use Oro\Bundle\ChannelBundle\Form\Type\AbstractChannelAwareType;
 use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
 use Oro\Component\ConfigExpression\ContextAccessor;
-use Oro\Bundle\ChannelBundle\Form\Type\AbstractChannelAwareType;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\PropertyAccess\PropertyPath;
 
 class TransitionsAttributeListener
 {

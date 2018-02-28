@@ -2,14 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
-use Doctrine\ORM\EntityRepository;
-
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
+use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class UpdateForecastWidgetOptions extends AbstractFixture
 {

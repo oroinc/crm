@@ -3,15 +3,13 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Entity;
 
 use Doctrine\ORM\EntityManagerInterface;
-
-use Oro\Component\MessageQueue\Client\MessagePriority;
-
 use Oro\Bundle\IntegrationBundle\Async\Topics;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Component\MessageQueue\Client\MessagePriority;
 
 /**
  * @dbIsolationPerTest

@@ -3,11 +3,9 @@
 namespace Oro\Bundle\ChannelBundle\Migrations\Schema\v1_9;
 
 use Doctrine\DBAL\Types\Type;
-
-use Psr\Log\LoggerInterface;
-
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
+use Psr\Log\LoggerInterface;
 
 class ActivateAllChannelsQuery extends ParametrizedMigrationQuery
 {

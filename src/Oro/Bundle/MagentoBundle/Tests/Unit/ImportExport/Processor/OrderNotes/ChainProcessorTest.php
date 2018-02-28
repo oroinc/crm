@@ -1,14 +1,13 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor\OrderNotes;
-
-use Oro\Component\Testing\Unit\EntityTrait;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Processor\OrderNotes;
 
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderNote;
 use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\ChainProcessor;
 use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\Context;
 use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\ProcessorInterface;
+use Oro\Component\Testing\Unit\EntityTrait;
 
 class ChainProcessorTest extends \PHPUnit_Framework_TestCase
 {

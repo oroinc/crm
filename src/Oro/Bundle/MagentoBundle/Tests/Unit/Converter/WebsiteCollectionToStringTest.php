@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Converter;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 use Oro\Bundle\MagentoBundle\Converter\WebsiteCollectionToString;
 

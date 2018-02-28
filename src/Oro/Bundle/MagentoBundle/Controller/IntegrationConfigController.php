@@ -3,17 +3,14 @@
 namespace Oro\Bundle\MagentoBundle\Controller;
 
 use Guzzle\Http\Exception\CurlException;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
 use Oro\Bundle\IntegrationBundle\Exception\TransportException;
-use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
+use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class IntegrationConfigController extends Controller
 {

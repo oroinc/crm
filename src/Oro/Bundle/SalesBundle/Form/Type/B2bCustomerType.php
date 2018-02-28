@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\AddressBundle\Form\DataTransformer\AddressSameTransformer;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
-
-use Oro\Bundle\AddressBundle\Form\DataTransformer\AddressSameTransformer;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class B2bCustomerType extends AbstractType
 {

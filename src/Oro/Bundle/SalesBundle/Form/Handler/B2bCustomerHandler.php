@@ -2,21 +2,19 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
-
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class B2bCustomerHandler
 {
     /** @var FormInterface */
     protected $form;
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var ObjectManager */
     protected $manager;
@@ -26,18 +24,18 @@ class B2bCustomerHandler
 
     /**
      * @param FormInterface          $form
-     * @param Request                $request
+     * @param RequestStack           $requestStack
      * @param ObjectManager          $manager
      * @param RequestChannelProvider $requestChannelProvider
      */
     public function __construct(
         FormInterface $form,
-        Request $request,
+        RequestStack $requestStack,
         ObjectManager $manager,
         RequestChannelProvider $requestChannelProvider
     ) {
         $this->form                   = $form;
-        $this->request                = $request;
+        $this->requestStack           = $requestStack;
         $this->manager                = $manager;
         $this->requestChannelProvider = $requestChannelProvider;
     }
@@ -55,8 +53,9 @@ class B2bCustomerHandler
 
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
-            $this->form->submit($this->request);
+        $request = $this->requestStack->getCurrentRequest();
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->form->submit($request);
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);
 

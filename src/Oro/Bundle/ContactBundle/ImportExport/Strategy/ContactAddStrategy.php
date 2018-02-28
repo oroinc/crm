@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ContactBundle\ImportExport\Strategy;
 
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
-use Oro\Bundle\SecurityBundle\Authentication\Token\OrganizationContextTokenInterface;
-use Oro\Bundle\ImportExportBundle\Strategy\Import\AbstractImportStrategy;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ImportExportBundle\Strategy\Import\AbstractImportStrategy;
+use Oro\Bundle\SecurityBundle\Authentication\Token\OrganizationContextTokenInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ContactAddStrategy extends AbstractImportStrategy
 {

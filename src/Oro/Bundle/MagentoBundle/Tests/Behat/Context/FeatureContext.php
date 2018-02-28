@@ -5,10 +5,8 @@ namespace Oro\Bundle\MagentoBundle\Tests\Behat\Context;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
-
 use Doctrine\Common\Inflector\Inflector;
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridRow;
@@ -17,6 +15,7 @@ use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
 use Oro\Bundle\LocaleBundle\Model\NameInterface;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Tests\Behat\Context\SalesExtension;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
@@ -25,8 +24,6 @@ use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
 use Oro\Bundle\UIBundle\Tests\Behat\Element\ContextSelector;
 use Oro\Bundle\UIBundle\Tests\Behat\Element\UiDialog;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\SalesBundle\Tests\Behat\Context\SalesExtension;
-
 use Symfony\Component\Console\Exception\RuntimeException;
 
 class FeatureContext extends OroFeatureContext implements

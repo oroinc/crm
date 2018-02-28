@@ -3,9 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Import\Rest;
 
 use Doctrine\ORM\EntityManager;
-
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\IntegrationBundle\Test\FakeRestClientFactory;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 abstract class BaseIntegrationTest extends WebTestCase
 {

@@ -2,12 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
-use Symfony\Component\DomCrawler\Form;
-
 use Doctrine\Bundle\DoctrineBundle\Registry;
-
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadFullOpportunityFixtures;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Form;
 
 class OpportunityNotChangesTest extends WebTestCase
 {

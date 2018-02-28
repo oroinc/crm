@@ -2,15 +2,13 @@
 
 namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class UpdateDefaultWorkflowItem extends AbstractFixture implements ContainerAwareInterface
 {

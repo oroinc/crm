@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SalesBundle\Provider\B2bBigNumberProvider;
-use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 
 class OpportunityStatisticsProvider extends B2bBigNumberProvider
 {

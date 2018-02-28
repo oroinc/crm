@@ -3,11 +3,10 @@
 namespace Oro\Bundle\SalesBundle\Entity\EventListener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
-
+use Oro\Bundle\CurrencyBundle\Converter\RateConverterInterface;
 use Oro\Bundle\CurrencyBundle\Provider\DefaultCurrencyProviderInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\CurrencyBundle\Converter\RateConverterInterface;
 
 class OpportunityListener
 {

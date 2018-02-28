@@ -3,9 +3,8 @@
 namespace Oro\Bundle\ChannelBundle\Entity\Repository;
 
 use Doctrine\ORM\QueryBuilder;
-
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 interface ChannelRepositoryInterface
 {

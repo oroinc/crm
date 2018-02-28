@@ -57,8 +57,8 @@
         <div class="row-fluid form-horizontal">
             <div class="responsive-block">
                 {{ UI.renderProperty('oro.case.caseentity.subject.label'|trans, entity.subject) }}
-                {{ UI.renderHtmlProperty('oro.case.caseentity.description.label'|trans, entity.description) }}
-                {{ UI.renderHtmlProperty('oro.case.caseentity.resolution.label'|trans, entity.resolution) }}
+                {{ UI.renderSwitchableHtmlProperty('oro.case.caseentity.description.label'|trans, entity.description) }}
+                {{ UI.renderSwitchableHtmlProperty('oro.case.caseentity.resolution.label'|trans, entity.resolution) }}
                 {{ UI.renderProperty('oro.case.caseentity.source.label'|trans, entity.source) }}
                 {{ UI.renderProperty('oro.case.caseentity.status.label'|trans, entity.status) }}
                 {{ UI.renderProperty('oro.case.caseentity.priority.label'|trans, entity.priority) }}
@@ -83,18 +83,10 @@
                 {%- endset -%}
                 {{ UI.renderHtmlProperty('oro.case.caseentity.assigned_to.label'|trans, assignedTo) }}
 
-                {%- set relatedContact -%}
-                    {%- if entity.relatedContact -%}
-                        {% if is_granted('oro_contact_view') %}
-                            <a href="{{ path('oro_contact_view', {'id': entity.relatedContact.id}) }}">
-                                {{ entity.relatedContact|oro_format_name|escape }}
-                            </a>
-                        {% else %}
-                            {{ entity.relatedContact|oro_format_name|escape }}
-                        {% endif %}
-                    {%- endif -%}
-                {%- endset -%}
-                {{ UI.renderHtmlProperty('oro.case.caseentity.related_contact.label'|trans, relatedContact) }}
+                {{ UI.renderHtmlProperty(
+                    'oro.case.caseentity.related_contact.label'|trans,
+                    UI.entityViewLink(entity.relatedContact, entity.relatedContact|oro_format_name, 'oro_contact_view')
+                ) }}
 
                 {%- set relatedAccount -%}
                     {%- if entity.relatedAccount -%}

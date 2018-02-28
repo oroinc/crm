@@ -3,10 +3,9 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_31\Query;
 
 use Doctrine\DBAL\Schema\Schema;
-use Psr\Log\LoggerInterface;
-
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
+use Psr\Log\LoggerInterface;
 
 class MigrateB2bCustomersQuery extends ParametrizedMigrationQuery
 {

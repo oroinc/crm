@@ -3,8 +3,8 @@
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Twig;
 
 use Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
-use Oro\Bundle\ContactBundle\Twig\ContactExtension;
 use Oro\Bundle\ContactBundle\Model\Social;
+use Oro\Bundle\ContactBundle\Twig\ContactExtension;
 use Oro\Component\Testing\Unit\TwigExtensionTestCaseTrait;
 
 class ContactExtensionTest extends \PHPUnit_Framework_TestCase

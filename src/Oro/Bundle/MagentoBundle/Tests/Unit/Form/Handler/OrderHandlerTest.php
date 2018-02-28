@@ -3,26 +3,25 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Form\Handler\OrderHandler;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class OrderHandlerTest extends AbstractHandlerTest
 {
     protected function setUp()
     {
-        $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
-
-        $this->manager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->form = $this->createMock(Form::class);
+        $this->request = $this->createMock(Request::class);
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $registry = $this->createMock(RegistryInterface::class);
+        $this->manager = $this->createMock(ObjectManager::class);
 
         $registry->expects($this->once())
             ->method('getManager')
@@ -37,7 +36,7 @@ class OrderHandlerTest extends AbstractHandlerTest
             ->will($this->returnValue($organization));
 
         $this->entity  = new Order();
-        $this->handler = new OrderHandler($this->form, $this->request, $registry, $tokenAccessor);
+        $this->handler = new OrderHandler($this->form, $requestStack, $registry, $tokenAccessor);
     }
 
     public function testValidProcess()

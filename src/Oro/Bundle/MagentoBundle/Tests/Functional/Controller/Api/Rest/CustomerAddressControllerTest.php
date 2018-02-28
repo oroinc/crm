@@ -3,12 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class CustomerAddressControllerTest extends WebTestCase
 {

@@ -5,14 +5,12 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Model\Gender;
-use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadCustomerData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

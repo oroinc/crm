@@ -10,15 +10,13 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AccountLifetimeSubscriber implements EventSubscriber
 {

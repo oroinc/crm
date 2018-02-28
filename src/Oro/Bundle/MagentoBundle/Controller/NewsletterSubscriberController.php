@@ -2,16 +2,15 @@
 
 namespace Oro\Bundle\MagentoBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/newsletter-subscriber")
@@ -50,6 +49,7 @@ class NewsletterSubscriberController extends Controller
 
     /**
      * @param NewsletterSubscriber $newsletterSubscriber
+     * @param Request $request
      * @return array
      *
      * @Route("/info/{id}", name="oro_magento_newsletter_subscriber_info", requirements={"id"="\d+"}))
@@ -61,9 +61,9 @@ class NewsletterSubscriberController extends Controller
      * )
      * @Template("OroMagentoBundle:NewsletterSubscriber/widget:info.html.twig")
      */
-    public function infoAction(NewsletterSubscriber $newsletterSubscriber)
+    public function infoAction(Request $request, NewsletterSubscriber $newsletterSubscriber)
     {
-        return ['entity' => $newsletterSubscriber, 'useCustomer' => $this->getRequest()->get('useCustomer')];
+        return ['entity' => $newsletterSubscriber, 'useCustomer' => $request->get('useCustomer')];
     }
 
     /**

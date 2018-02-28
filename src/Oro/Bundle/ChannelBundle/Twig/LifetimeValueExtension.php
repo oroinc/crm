@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\ChannelBundle\Twig;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LifetimeValueExtension extends \Twig_Extension
 {

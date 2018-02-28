@@ -4,7 +4,6 @@ namespace Oro\Bundle\SalesBundle\Autocomplete;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityNotFoundException;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ActivityBundle\Autocomplete\ContextSearchHandler;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;

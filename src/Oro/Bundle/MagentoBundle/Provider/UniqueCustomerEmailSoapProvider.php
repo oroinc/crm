@@ -3,8 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class UniqueCustomerEmailSoapProvider
 {

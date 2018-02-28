@@ -2,12 +2,11 @@
 
 namespace Oro\Bridge\MarketingCRM;
 
+use Oro\Bridge\MarketingCRM\DependencyInjection\CompilerPass\MagentoTrackingVisitEventProviderPass;
+use Oro\Bridge\MarketingCRM\DependencyInjection\CompilerPass\MagentoTrackingVisitProviderPass;
+use Oro\Bridge\MarketingCRM\DependencyInjection\CompilerPass\MagentoWebsiteVisitProviderPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-
-use Oro\Bridge\MarketingCRM\DependencyInjection\CompilerPass\MagentoTrackingVisitProviderPass;
-use Oro\Bridge\MarketingCRM\DependencyInjection\CompilerPass\MagentoTrackingVisitEventProviderPass;
-use Oro\Bridge\MarketingCRM\DependencyInjection\CompilerPass\MagentoWebsiteVisitProviderPass;
 
 class OroMarketingCRMBridgeBundle extends Bundle
 {

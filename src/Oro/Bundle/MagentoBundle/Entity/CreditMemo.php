@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -689,7 +688,7 @@ class CreditMemo extends ExtendCreditMemo implements
         return $this;
     }
 
-        /**
+    /**
      * @return \DateTime
      */
     public function getSyncedAt()

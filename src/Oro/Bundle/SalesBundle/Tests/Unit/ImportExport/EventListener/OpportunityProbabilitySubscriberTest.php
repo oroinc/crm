@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\ImportExport\EventListener;
 
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityProbabilitySubscriber;
 use Oro\Bundle\ImportExportBundle\Event\DenormalizeEntityEvent;
 use Oro\Bundle\ImportExportBundle\Event\NormalizeEntityEvent;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityProbabilitySubscriber;
 
 class OpportunityProbabilitySubscriberTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,7 +3,8 @@
 namespace Oro\Bridge\MarketingCRM\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-
+use Oro\Bridge\MarketingCRM\Migrations\Schema\v1_0\OroChannelBundleAssociation;
+use Oro\Bridge\MarketingCRM\Migrations\Schema\v1_0\OroMarketingCRMBridgeBundle;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
@@ -14,8 +15,6 @@ use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtension;
 use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtensionAwareInterface;
 use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension;
 use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtensionAwareInterface;
-use Oro\Bridge\MarketingCRM\Migrations\Schema\v1_0\OroChannelBundleAssociation;
-use Oro\Bridge\MarketingCRM\Migrations\Schema\v1_0\OroMarketingCRMBridgeBundle;
 
 class OroMarketingCRMBridgeBundleInstaller implements
     Installation,

@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Customer;
 
-use Oro\Bundle\SalesBundle\Entity\Customer;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\MagentoBundle\Entity\Customer as MagentoCustomer;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 
 class AssociationChecker

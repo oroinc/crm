@@ -3,7 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class B2bCustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,14 +23,14 @@ class B2bCustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
         unset($this->type);
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
-        /** @var OptionsResolverInterface|\PHPUnit_Framework_MockObject_MockObject $resolver */
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        /** @var OptionsResolver|\PHPUnit_Framework_MockObject_MockObject $resolver */
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with($this->isType('array'));
-        $this->type->setDefaultOptions($resolver);
+        $this->type->configureOptions($resolver);
     }
 
     public function testGetParent()

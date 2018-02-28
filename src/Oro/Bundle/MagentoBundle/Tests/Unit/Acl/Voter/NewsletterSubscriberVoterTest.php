@@ -2,22 +2,33 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
-use Oro\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter;
-
-class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
+class NewsletterSubscriberVoterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     */
+    private $doctrineHelper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelSettingsProvider
+     */
+    private $settingsProvider;
+
     /**
      * @var NewsletterSubscriberVoter
      */
-    protected $voter;
+    private $voter;
 
     protected function setUp()
     {
-        parent::setUp();
-
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $this->settingsProvider = $this->createMock(ChannelSettingsProvider::class);
         $this->voter = new NewsletterSubscriberVoter($this->doctrineHelper);
         $this->voter->setSettingsProvider($this->settingsProvider);
     }

@@ -4,18 +4,15 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\Rest;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
+use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Component\Config\Common\ConfigObject;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
-use Oro\Component\Config\Common\ConfigObject;
-
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadMagentoRestChannel extends AbstractFixture implements ContainerAwareInterface
 {

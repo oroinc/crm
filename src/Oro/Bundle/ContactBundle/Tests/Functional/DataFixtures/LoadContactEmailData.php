@@ -5,7 +5,6 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 
 class LoadContactEmailData extends AbstractFixture implements DependentFixtureInterface

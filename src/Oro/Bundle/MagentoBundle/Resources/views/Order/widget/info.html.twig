@@ -38,31 +38,15 @@
             {{ ui.renderHtmlProperty('oro.magento.order.store.label'|trans, entity.store.name|escape|nl2br) }}
             {{ ui.renderProperty('oro.magento.order.customer_email.label'|trans, entity.customerEmail) }}
 
-            {% set customerData %}
-                {% if entity.customer %}
-                    {% set customerViewGranted = is_granted('oro_magento_customer_view') %}
-                    {%- if customerViewGranted -%}
-                        <a href="{{ path('oro_magento_customer_view', {'id': entity.customer.id}) }}">{{ entity.customer|oro_format_name|default('N/A'|trans)|escape }}</a>
-                    {%- else -%}
-                        {{ entity.customer|oro_format_name|default('N/A'|trans)|escape }}
-                    {%- endif -%}
-                {% else %}
-                    {% trans %}N/A{% endtrans %}
-                {% endif %}
-            {% endset %}
-            {{ ui.renderHtmlProperty('oro.magento.order.customer.label'|trans, customerData) }}
+            {{ ui.renderHtmlProperty(
+                'oro.magento.order.customer.label'|trans,
+                ui.entityViewLink(entity.customer, entity.customer|oro_format_name, 'oro_magento_customer_view')
+            ) }}
 
-            {% set cartData %}
-                {% set cartViewGranted = is_granted('oro_magento_cart_view') %}
-                {% if entity.cart and cartViewGranted %}
-                    <a href="{{ path('oro_magento_cart_view', {'id': entity.cart.id}) }}">
-                        {{ 'oro.magento.cart.entity_label'|trans ~ ' ' ~  entity.cart.originId }}
-                    </a>
-                {% else %}
-                    {% trans %}N/A{% endtrans %}
-                {% endif %}
-            {% endset %}
-            {{ ui.renderHtmlProperty('oro.magento.order.cart.label'|trans, cartData) }}
+            {{ ui.renderHtmlProperty(
+                'oro.magento.order.cart.label'|trans,
+                ui.entityViewLink(entity.cart, entity.cart ? 'oro.magento.cart.entity_label'|trans ~ ' ' ~  entity.cart.originId : null, 'oro_magento_cart_view')
+            ) }}
 
             {% if entity.addresses is not empty %}
                 {% for orderAddress in entity.addresses %}
@@ -80,7 +64,7 @@
             {% endif %}
 
             {% if entity.notes is not empty %}
-                {{ ui.renderHtmlProperty('oro.magento.order.notes.label'|trans, entity.notes) }}
+                {{ ui.renderHtmlProperty('oro.magento.order.notes.label'|trans, entity.notes|oro_html_sanitize) }}
             {% endif %}
         </div>
     </div>

@@ -3,10 +3,9 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SalesBundle\Model\ExtendLeadMailboxProcessSettings;
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity

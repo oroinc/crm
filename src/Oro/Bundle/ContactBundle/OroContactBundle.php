@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\ContactBundle;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-
 use Oro\Bundle\ContactBundle\DependencyInjection\Compiler\EmailHolderHelperConfigPass;
 use Oro\Bundle\ContactBundle\DependencyInjection\Compiler\PhoneProviderConfigPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class OroContactBundle extends Bundle
 {

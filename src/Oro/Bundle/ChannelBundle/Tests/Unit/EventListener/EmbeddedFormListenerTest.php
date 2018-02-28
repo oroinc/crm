@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
-use Symfony\Component\HttpFoundation\Request;
-
-use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 use Oro\Bundle\ChannelBundle\EventListener\EmbeddedFormListener;
+use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,14 +60,16 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setFormData')
             ->with($formData);
 
-        $listener = new EmbeddedFormListener();
-        $listener->setRequest($this->request);
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $listener = new EmbeddedFormListener($requestStack);
         $listener->addDataChannelField($event);
     }
 
     public function testAddDataChannelFieldNoRequest()
     {
-        $listener = new EmbeddedFormListener();
+        $requestStack = new RequestStack();
+        $listener = new EmbeddedFormListener($requestStack);
         $event = $this->getMockBuilder('Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent')
             ->disableOriginalConstructor()
             ->getMock();
@@ -84,8 +86,9 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent([], $formEntity);
 
-        $listener = new EmbeddedFormListener();
-        $listener->setRequest($this->request);
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $listener = new EmbeddedFormListener($requestStack);
         $listener->onEmbeddedFormSubmit($event);
     }
 
@@ -103,8 +106,9 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent($data, $formEntity);
 
-        $listener = new EmbeddedFormListener();
-        $listener->setRequest($this->request);
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $listener = new EmbeddedFormListener($requestStack);
         $listener->onEmbeddedFormSubmit($event);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class CommentControllerTest extends WebTestCase
 {
@@ -59,7 +59,11 @@ class CommentControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertHtmlResponseStatusCodeEquals($this->client->getResponse(), 200);
-        $this->assertEquals(1, $crawler->filter('div.widget-content script')->count());
+        $this->assertEquals(0, $crawler->filter('div')->count());
+        $this->assertContains(
+            '{"widget":{"trigger":[{"eventBroker":"widget","name":"formSave","args":[',
+            $this->client->getResponse()->getContent()
+        );
         $this->assertEquals(0, $crawler->filter('form')->count());
 
         /** @var CaseComment $comment */
@@ -99,7 +103,11 @@ class CommentControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertHtmlResponseStatusCodeEquals($this->client->getResponse(), 200);
-        $this->assertEquals(1, $crawler->filter('div.widget-content script')->count());
+        $this->assertEquals(0, $crawler->filter('div')->count());
+        $this->assertContains(
+            '{"widget":{"trigger":[{"eventBroker":"widget","name":"formSave","args":[',
+            $this->client->getResponse()->getContent()
+        );
         $this->assertEquals(0, $crawler->filter('form')->count());
 
         return $id;

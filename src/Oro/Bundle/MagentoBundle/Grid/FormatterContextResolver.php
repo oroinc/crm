@@ -1,8 +1,8 @@
 <?php
 namespace Oro\Bundle\MagentoBundle\Grid;
 
-use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
+use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 
 class FormatterContextResolver
 {

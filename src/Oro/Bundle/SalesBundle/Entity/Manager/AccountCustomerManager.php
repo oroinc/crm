@@ -4,11 +4,9 @@ namespace Oro\Bundle\SalesBundle\Entity\Manager;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityNotFoundException;
-
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\AccountBundle\Entity\Account;
-
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;

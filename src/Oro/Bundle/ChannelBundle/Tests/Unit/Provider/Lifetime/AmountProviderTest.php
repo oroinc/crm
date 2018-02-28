@@ -2,13 +2,11 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Annotations\AnnotationReader;
-
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-
-use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
+use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 
 class AmountProviderTest extends OrmTestCase
 {

@@ -3,17 +3,14 @@
 namespace Oro\Bundle\ContactUsBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
-
-use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
-
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
+use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class CreateActivityAssociation implements
     Migration,

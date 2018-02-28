@@ -2,16 +2,14 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryInterface;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
-use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
+use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class MagentoBigNumberProvider
 {

@@ -2,15 +2,13 @@
 
 namespace Oro\Bundle\ChannelBundle\Provider\Lifetime;
 
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class AmountProvider
 {

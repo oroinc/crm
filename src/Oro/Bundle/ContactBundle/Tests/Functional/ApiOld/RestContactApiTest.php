@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ContactBundle\Tests\Functional\ApiOld;
 
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\ContactBundle\Entity\Group;

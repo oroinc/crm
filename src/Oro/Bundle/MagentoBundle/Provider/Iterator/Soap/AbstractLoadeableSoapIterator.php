@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
-use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
-use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableIterator;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
+use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
 
 abstract class AbstractLoadeableSoapIterator extends AbstractLoadeableIterator
 {

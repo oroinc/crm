@@ -2,11 +2,10 @@
 
 namespace Oro\Bridge\MarketingCRM\DependencyInjection\CompilerPass;
 
+use Oro\Bridge\MarketingCRM\Provider\TrackingVisitEventProvider;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-
-use Oro\Bridge\MarketingCRM\Provider\TrackingVisitEventProvider;
 
 class MagentoTrackingVisitEventProviderPass implements CompilerPassInterface
 {

@@ -6,14 +6,12 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 use Akeneo\Bundle\BatchBundle\Item\ItemReaderInterface;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
-
-use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
-use Psr\Log\NullLogger;
-
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Psr\Log\NullLogger;
 
 abstract class AbstractInfoReaderTest extends \PHPUnit_Framework_TestCase
 {

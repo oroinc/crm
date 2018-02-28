@@ -4,12 +4,11 @@ namespace Oro\Bridge\CallCRM\Provider;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\CallBundle\Entity\Call;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 class CallDirectionProvider implements DirectionProviderInterface
 {

@@ -5,9 +5,9 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\IsDisplayOrderNotesSubscriber;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
-use Oro\Bundle\MagentoBundle\Form\EventListener\IsDisplayOrderNotesSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
@@ -81,9 +81,9 @@ class SoapTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
         $this->type->buildForm($builder, []);
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
         $this->soapTransport->expects($this->once())
             ->method('getSettingsEntityFQCN')
             ->willReturn(MagentoSoapTransport::class);
@@ -95,7 +95,7 @@ class SoapTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->type->setDefaultOptions($resolver);
+        $this->type->configureOptions($resolver);
     }
 
     public function testGetName()

@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\ImportExport\TemplateFixture;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class ChannelFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {

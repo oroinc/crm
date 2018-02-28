@@ -4,11 +4,9 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
-use Oro\Bundle\AccountBundle\Entity\Account;
 
 class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
 {

@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\DependencyInjection;
 
+use Oro\Bundle\ContactBundle\Model\Social;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-
-use Oro\Bundle\ContactBundle\Model\Social;
 
 class Configuration implements ConfigurationInterface
 {

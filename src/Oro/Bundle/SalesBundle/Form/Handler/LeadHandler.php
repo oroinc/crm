@@ -2,21 +2,19 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 use Oro\Bundle\SalesBundle\Entity\Lead;
-
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
-use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class LeadHandler
 {
     /** @var FormInterface */
     protected $form;
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var ObjectManager */
     protected $manager;
@@ -26,18 +24,18 @@ class LeadHandler
 
     /**
      * @param FormInterface          $form
-     * @param Request                $request
+     * @param RequestStack           $requestStack
      * @param ObjectManager          $manager
      * @param RequestChannelProvider $requestChannelProvider
      */
     public function __construct(
         FormInterface $form,
-        Request $request,
+        RequestStack $requestStack,
         ObjectManager $manager,
         RequestChannelProvider $requestChannelProvider
     ) {
         $this->form                   = $form;
-        $this->request                = $request;
+        $this->requestStack           = $requestStack;
         $this->manager                = $manager;
         $this->requestChannelProvider = $requestChannelProvider;
     }
@@ -53,8 +51,9 @@ class LeadHandler
     {
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
-            $this->form->submit($this->request);
+        $request = $this->requestStack->getCurrentRequest();
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->form->submit($request);
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);

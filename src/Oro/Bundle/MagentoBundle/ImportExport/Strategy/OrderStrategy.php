@@ -7,10 +7,10 @@ use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
-use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
-use Oro\Bundle\MagentoBundle\Provider\Connector\MagentoConnectorInterface;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\ChainProcessor as OrderNotesProcessor;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
+use Oro\Bundle\MagentoBundle\Provider\Connector\MagentoConnectorInterface;
 
 class OrderStrategy extends AbstractImportStrategy
 {

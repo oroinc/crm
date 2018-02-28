@@ -5,21 +5,19 @@ namespace Oro\Bridge\MarketingCRM\Migrations\Data\Demo\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Oro\Bundle\TrackingBundle\Entity\TrackingData;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
+use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TrackingEvents;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\SecurityBundle\Tools\UUIDGenerator;
+use Oro\Bundle\TrackingBundle\Entity\TrackingData;
 use Oro\Bundle\TrackingBundle\Entity\TrackingEvent;
 use Oro\Bundle\TrackingBundle\Entity\TrackingEventDictionary;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 use Oro\Bundle\TrackingBundle\Entity\TrackingWebsite;
-use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
-use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TrackingEvents;
-use Oro\Bundle\SecurityBundle\Tools\UUIDGenerator;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadTrackingWebsiteData extends AbstractFixture implements
     ContainerAwareInterface,

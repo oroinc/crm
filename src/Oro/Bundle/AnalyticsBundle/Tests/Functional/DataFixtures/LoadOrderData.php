@@ -2,17 +2,15 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-
+use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadAdminUserData;
-use Oro\Bundle\MagentoBundle\Entity\Order;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class LoadOrderData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {

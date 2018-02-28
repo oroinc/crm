@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ChannelBundle\Provider;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-
 use Oro\Bundle\EntityBundle\Provider\ExclusionProviderInterface;
 
 /**

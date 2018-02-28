@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Selenium\Sales;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 use Oro\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
 use Oro\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\B2BCustomers;
 use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 
 /**
  * Class CreateOpportunityTest

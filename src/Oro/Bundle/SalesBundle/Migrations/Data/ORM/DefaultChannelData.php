@@ -3,12 +3,11 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
+use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
 use Oro\Bundle\MigrationBundle\Fixture\LoadedFixtureVersionAwareInterface;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
-use Oro\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
 
 class DefaultChannelData extends AbstractDefaultChannelDataFixture implements
     VersionedFixtureInterface,

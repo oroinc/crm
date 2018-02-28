@@ -3,16 +3,16 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,17 +41,15 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request    = new Request();
-        $this->form       = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()->getMock();
-        $this->em         = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()->getMock();
-        $this->dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-
-        $this->registry   = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
-
-        $this->entity  = new Channel();
-        $this->handler = new ChannelHandler($this->request, $this->form, $this->registry, $this->dispatcher);
+        $this->request = new Request();
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $this->form = $this->createMock(Form::class);
+        $this->em = $this->createMock(EntityManager::class);
+        $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->registry = $this->createMock(RegistryInterface::class);
+        $this->entity = new Channel();
+        $this->handler = new ChannelHandler($requestStack, $this->form, $this->registry, $this->dispatcher);
     }
 
     public function testProcessUnsupportedRequest()

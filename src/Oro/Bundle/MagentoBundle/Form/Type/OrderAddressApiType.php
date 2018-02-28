@@ -2,11 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
-
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class OrderAddressApiType extends AbstractApiAddressType
@@ -29,7 +27,7 @@ class OrderAddressApiType extends AbstractApiAddressType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [

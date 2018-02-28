@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Strategy;
 
 use Doctrine\Common\Util\Inflector;
-
 use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareExportProcessor;
 use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareImportProcessor;
 use Oro\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy;

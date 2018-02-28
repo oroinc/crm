@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
+use Oro\Bundle\MagentoBundle\EventListener\SearchIndexDemoDataFixturesListener;
 use Oro\Bundle\MigrationBundle\Event\MigrationDataFixturesEvent;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
-use Oro\Bundle\MagentoBundle\EventListener\SearchIndexDemoDataFixturesListener;
 
 class SearchIndexDemoDataFixturesListenerTest extends \PHPUnit_Framework_TestCase
 {

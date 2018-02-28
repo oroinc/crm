@@ -3,9 +3,8 @@
 namespace Oro\Bundle\ContactBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Util\ClassUtils;
-
-use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 
 class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {

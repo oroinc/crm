@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\ActivityContactBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
 use Oro\Bundle\ActivityContactBundle\DependencyInjection\Compiler\DirectionProviderPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class OroActivityContactBundle extends Bundle
 {

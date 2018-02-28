@@ -4,10 +4,9 @@ namespace Oro\Bundle\SalesBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-use Oro\Bundle\WorkflowBundle\Restriction\RestrictionManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\WorkflowBundle\Restriction\RestrictionManager;
 
 class DefaultProbabilityListener
 {

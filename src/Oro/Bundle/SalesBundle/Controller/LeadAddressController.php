@@ -2,16 +2,16 @@
 
 namespace Oro\Bundle\SalesBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadAddress;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SalesBundle\Entity\LeadAddress;
-use Oro\Bundle\SalesBundle\Entity\Lead;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @Route("/lead")
@@ -40,10 +40,13 @@ class LeadAddressController extends Controller
      * @Template("OroSalesBundle:LeadAddress:update.html.twig")
      * @AclAncestor("oro_sales_lead_update")
      * @ParamConverter("lead", options={"id" = "leadId"})
+     * @param Request $request
+     * @param Lead $lead
+     * @return array|RedirectResponse
      */
-    public function createAction(Lead $lead)
+    public function createAction(Request $request, Lead $lead)
     {
-        return $this->update($lead, new LeadAddress());
+        return $this->update($request, $lead, new LeadAddress());
     }
 
     /**
@@ -55,26 +58,31 @@ class LeadAddressController extends Controller
      * @Template
      * @AclAncestor("oro_sales_lead_update")
      * @ParamConverter("lead", options={"id" = "leadId"})
+     * @param Request $request
+     * @param Lead $lead
+     * @param LeadAddress $address
+     * @return array|RedirectResponse
      */
-    public function updateAction(Lead $lead, LeadAddress $address)
+    public function updateAction(Request $request, Lead $lead, LeadAddress $address)
     {
-        return $this->update($lead, $address);
+        return $this->update($request, $lead, $address);
     }
 
     /**
+     * @param Request $request
      * @param Lead $lead
      * @param LeadAddress $address
      * @return array
      * @throws BadRequestHttpException
      */
-    protected function update(Lead $lead, LeadAddress $address)
+    protected function update(Request $request, Lead $lead, LeadAddress $address)
     {
         $responseData = array(
             'saved' => false,
             'lead' => $lead
         );
 
-        if ($this->getRequest()->getMethod() == 'GET' && !$address->getId()) {
+        if ($request->isMethod('GET') && !$address->getId()) {
             $address->setFirstName($lead->getFirstName());
             $address->setLastName($lead->getLastName());
             if (!$lead->getAddresses()->count()) {

@@ -3,13 +3,12 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
-use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
+use Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class UpdateIntegrationConnectorsListenerTest extends \PHPUnit_Framework_TestCase
 {

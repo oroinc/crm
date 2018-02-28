@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Selenium;
 
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
-use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 class ContactPaginationTest extends Selenium2TestCase
 {
@@ -83,9 +83,9 @@ class ContactPaginationTest extends Selenium2TestCase
             ->switchEntityPagination('Previous')
             ->assertTitle($secondContactTitle)
             ->checkEntityFieldData('Emails', $secondContact['email']);
-            /** Mass delete all created contacts */
-            /** @var Contacts $login */
-            $login->openContacts('Oro\Bundle\ContactBundle')
+        /** Mass delete all created contacts */
+        /** @var Contacts $login */
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->massDelete();
     }
 

@@ -9,6 +9,7 @@ use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -44,7 +45,7 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
      */
     public function apply(QueryBuilder $qb, $rootAlias, $field, array $configuration, $entity)
     {
-        $addressAlias = $rootAlias . '.' . $field;
+        $addressAlias = QueryBuilderUtil::getField($rootAlias, $field);
 
         $fields = $configuration[Configuration::DISCOVERY_FIELDS_KEY][$field];
         if (!is_array($fields)) {
@@ -213,9 +214,11 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
         array $configuration
     ) {
         $andExpr = $qb->expr()->andX();
+        QueryBuilderUtil::checkIdentifier($alias);
         foreach ($fields as $field) {
+            QueryBuilderUtil::checkIdentifier($field);
             $qbFieldName = $alias . '.' . $field;
-            $qbParameterName = ':' . $field . $idx;
+            $qbParameterName = ':' . $field . (int)$idx;
 
             $andExpr->add($this->getFieldExpr($qb, $qbFieldName, $qbParameterName, $configuration));
             $fieldValue = $this->propertyAccessor->getValue($addressEntity, $field);

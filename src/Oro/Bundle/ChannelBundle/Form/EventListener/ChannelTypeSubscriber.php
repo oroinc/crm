@@ -2,14 +2,13 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\EventListener;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\FormBundle\Utils\FormUtils;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-use Oro\Bundle\FormBundle\Utils\FormUtils;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelTypeSubscriber implements EventSubscriberInterface
 {
@@ -72,7 +71,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             $form->remove('channelType');
             $form->add(
                 'channelType',
-                'genemu_jqueryselect2_choice',
+                'oro_select2_choice',
                 [
                     'choices'  => $this->settingsProvider->getNonSystemChannelTypeChoiceList(),
                     'required' => true,

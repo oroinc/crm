@@ -3,10 +3,9 @@
 namespace Oro\Bundle\MagentoBundle\Entity\Manager;
 
 use Doctrine\ORM\QueryBuilder;
-
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartAddress;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 class CartApiEntityManager extends ApiEntityManager
 {

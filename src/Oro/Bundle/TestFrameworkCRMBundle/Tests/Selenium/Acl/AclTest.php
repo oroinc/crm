@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\Selenium\Acl;
 
+use Oro\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\ContactGroups;
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 use Oro\Bundle\DataAuditBundle\Tests\Selenium\Pages\DataAudit;
 use Oro\Bundle\NavigationBundle\Tests\Selenium\Pages\Navigation;
 use Oro\Bundle\SecurityBundle\Tests\Selenium\Pages\AclCheck;
@@ -11,9 +14,6 @@ use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\User;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
-use Oro\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
-use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\ContactGroups;
-use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 /**
  * Class AclTest

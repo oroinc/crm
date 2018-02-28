@@ -3,10 +3,8 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Types\Type;
-
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
-
 use Psr\Log\LoggerInterface;
 
 class MigrateAccountRelations extends ParametrizedMigrationQuery

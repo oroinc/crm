@@ -2,19 +2,17 @@
 
 namespace Oro\Bundle\ChannelBundle\Migrations\Data\ORM;
 
-use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
-use Oro\Bundle\BatchBundle\ORM\Query\QueryCountCalculator;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
+use Oro\Bundle\BatchBundle\ORM\Query\QueryCountCalculator;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class AbstractDefaultChannelDataFixture extends AbstractFixture implements
     ContainerAwareInterface,

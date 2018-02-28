@@ -2,20 +2,19 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
-use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
 use Oro\Bundle\MagentoBundle\Form\EventListener\IsDisplayOrderNotesSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractTransportSettingFormType extends AbstractType
 {
@@ -111,6 +110,7 @@ abstract class AbstractTransportSettingFormType extends AbstractType
             [
                 'label'    => 'oro.magento.magentotransport.website_id.label',
                 'required' => true,
+                // TODO: Remove 'choices_as_values' option in scope of BAP-15236
                 'choices_as_values' => true
             ]
         );
@@ -148,7 +148,7 @@ abstract class AbstractTransportSettingFormType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['data_class' => $this->transport->getSettingsEntityFQCN()]);
     }

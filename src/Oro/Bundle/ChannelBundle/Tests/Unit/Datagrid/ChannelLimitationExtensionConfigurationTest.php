@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Datagrid;
 
-use Symfony\Component\Config\Definition\Processor;
-
 use Oro\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtensionConfiguration;
+use Symfony\Component\Config\Definition\Processor;
 
 class ChannelLimitationExtensionConfigurationTest extends \PHPUnit_Framework_TestCase
 {

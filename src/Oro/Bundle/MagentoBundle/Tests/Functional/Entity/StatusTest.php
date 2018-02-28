@@ -3,9 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Entity;
 
 use Doctrine\ORM\EntityManagerInterface;
-
-use Oro\Component\MessageQueue\Client\MessagePriority;
-
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel;
@@ -15,6 +12,7 @@ use Oro\Bundle\IntegrationBundle\Tests\Functional\DataFixtures\LoadChannelData a
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Component\MessageQueue\Client\MessagePriority;
 
 /**
  * @dbIsolationPerTest

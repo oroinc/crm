@@ -65,9 +65,9 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('oro_sales_lead', $this->type->getName());
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with(
@@ -76,6 +76,6 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->type->setDefaultOptions($resolver);
+        $this->type->configureOptions($resolver);
     }
 }

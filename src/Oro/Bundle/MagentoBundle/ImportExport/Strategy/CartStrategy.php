@@ -11,8 +11,8 @@ use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
-use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
+use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

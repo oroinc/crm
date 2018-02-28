@@ -1,16 +1,15 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor\OrderNotes;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Processor\OrderNotes;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Component\Testing\Unit\EntityTrait;
-
-use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderNote;
 use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\Context;
 use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\NoteFieldsProcessor;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Component\Testing\Unit\EntityTrait;
 
 class NoteFieldsProcessorTest extends \PHPUnit_Framework_TestCase
 {

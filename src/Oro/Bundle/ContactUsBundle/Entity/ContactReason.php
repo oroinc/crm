@@ -5,7 +5,6 @@ namespace Oro\Bundle\ContactUsBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**

@@ -2,22 +2,20 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Response;
-
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\IdentifierToReferenceFilter;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @RouteResource("opportunity")
@@ -51,12 +49,13 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      resource=true
      * )
      * @AclAncestor("oro_sales_opportunity_view")
+     * @param Request $request
      * @return Response
      */
-    public function cgetAction()
+    public function cgetAction(Request $request)
     {
-        $page  = (int) $this->getRequest()->get('page', 1);
-        $limit = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+        $page  = (int) $request->get('page', 1);
+        $limit = (int) $request->get('limit', self::ITEMS_PER_PAGE);
 
         $contactIdFilter  = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroContactBundle:Contact');
         $filterParameters = [

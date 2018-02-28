@@ -4,9 +4,8 @@ namespace Oro\Bundle\ChannelBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadChannel extends AbstractFixture
 {

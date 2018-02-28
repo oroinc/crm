@@ -2,15 +2,13 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\EventListener;
 
-use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
+use Doctrine\ORM\UnitOfWork;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\EventListener\ContactListener;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\ContactBundle\Entity\Contact;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ContactListenerTest extends \PHPUnit_Framework_TestCase
 {

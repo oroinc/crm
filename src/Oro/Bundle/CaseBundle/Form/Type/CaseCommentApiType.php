@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\CaseBundle\Form\Type;
 
+use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CaseCommentApiType extends AbstractType
 {
@@ -39,7 +38,7 @@ class CaseCommentApiType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [

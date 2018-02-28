@@ -2,20 +2,19 @@
 
 namespace Oro\Bundle\SalesBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomer;
-use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
-use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")

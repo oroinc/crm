@@ -3,9 +3,8 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\API;
 
 use FOS\RestBundle\Util\Codes;
-
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadLeadPhoneData;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RestLeadPhoneApiTest extends WebTestCase
 {

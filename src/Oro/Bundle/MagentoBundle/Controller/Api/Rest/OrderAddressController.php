@@ -3,23 +3,19 @@
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
-
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
-
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
+use Oro\Bundle\MagentoBundle\Entity\Manager\OrderApiEntityManager;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
-use Oro\Bundle\MagentoBundle\Entity\Order;
-use Oro\Bundle\MagentoBundle\Entity\Manager\OrderApiEntityManager;
-use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @NamePrefix("oro_api_")

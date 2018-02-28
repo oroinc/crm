@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\CaseBundle\EventListener;
 
+use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
 use Oro\Bundle\EmailBundle\Event\MailboxSaved;
 use Oro\Bundle\TagBundle\Entity\TagManager;
-use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
 
 class MailboxSavedListener
 {

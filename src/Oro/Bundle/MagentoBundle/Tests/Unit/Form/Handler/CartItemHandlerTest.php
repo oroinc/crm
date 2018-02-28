@@ -2,30 +2,30 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\MagentoBundle\Entity\CartItem;
 use Oro\Bundle\MagentoBundle\Form\Handler\CartItemHandler;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CartItemHandlerTest extends AbstractHandlerTest
 {
     protected function setUp()
     {
-        $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
-
-        $this->manager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->form = $this->createMock(Form::class);
+        $this->request = $this->createMock(Request::class);
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $registry = $this->createMock(RegistryInterface::class);
+        $this->manager = $this->createMock(ObjectManager::class);
 
         $registry->expects($this->once())
             ->method('getManager')
             ->will($this->returnValue($this->manager));
 
         $this->entity  = new CartItem();
-        $this->handler = new CartItemHandler($this->form, $this->request, $registry);
+        $this->handler = new CartItemHandler($this->form, $requestStack, $registry);
     }
 }

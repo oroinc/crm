@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Validator;
 
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
-
 use Oro\Bundle\MagentoBundle\Validator\Constraints\EmailAddressListConstraint;
 use Oro\Bundle\MagentoBundle\Validator\EmailAddressListValidator;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class EmailAddressListValidatorTest extends \PHPUnit_Framework_TestCase
 {

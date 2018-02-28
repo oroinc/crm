@@ -2,15 +2,14 @@
 
 namespace Oro\Bundle\ContactBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
+use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\ContactBundle\Entity\Group;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/group")
@@ -28,10 +27,12 @@ class GroupController extends Controller
      *      permission="CREATE",
      *      class="OroContactBundle:Group"
      * )
+     * @param Request $request
+     * @return array|RedirectResponse
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
-        return $this->update(new Group());
+        return $this->update($request, new Group());
     }
 
     /**
@@ -45,10 +46,13 @@ class GroupController extends Controller
      *      permission="EDIT",
      *      class="OroContactBundle:Group"
      * )
+     * @param Request $request
+     * @param Group $entity
+     * @return array|RedirectResponse
      */
-    public function updateAction(Group $entity)
+    public function updateAction(Request $request, Group $entity)
     {
-        return $this->update($entity);
+        return $this->update($request, $entity);
     }
 
     /**
@@ -75,10 +79,11 @@ class GroupController extends Controller
 
     /**
      * @param Group $entity
+     * @param Request $request
      *
-     * @return array
+     * @return array|RedirectResponse
      */
-    protected function update(Group $entity)
+    protected function update(Request $request, Group $entity)
     {
         if ($this->get('oro_contact.form.handler.group')->process($entity)) {
             $this->get('session')->getFlashBag()->add(
@@ -86,7 +91,7 @@ class GroupController extends Controller
                 $this->get('translator')->trans('oro.contact.controller.contact_group.saved.message')
             );
 
-            if (!$this->getRequest()->get('_widgetContainer')) {
+            if (!$request->get('_widgetContainer')) {
                 return $this->get('oro_ui.router')->redirect($entity);
             }
         }

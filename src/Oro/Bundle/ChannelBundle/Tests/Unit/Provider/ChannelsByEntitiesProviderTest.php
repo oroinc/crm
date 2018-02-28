@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class ChannelsByEntitiesProviderTest extends \PHPUnit_Framework_TestCase
 {

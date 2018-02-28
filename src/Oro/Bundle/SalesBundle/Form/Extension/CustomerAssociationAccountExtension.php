@@ -2,17 +2,14 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Extension;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-
-use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
-use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 
 class CustomerAssociationAccountExtension extends AbstractTypeExtension
 {

@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Entity;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class RFMMetricCategoryTest extends \PHPUnit_Framework_TestCase
 {

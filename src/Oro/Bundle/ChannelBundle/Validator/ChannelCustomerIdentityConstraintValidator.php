@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\ChannelBundle\Validator;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class ChannelCustomerIdentityConstraintValidator extends ConstraintValidator
 {

@@ -4,18 +4,11 @@ namespace Oro\Bundle\ActivityContactBundle\Command;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-
-use Psr\Log\AbstractLogger;
-
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
-use Oro\Component\PropertyAccess\PropertyAccessor;
-use Oro\Component\Log\OutputLogger;
-
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\EventListener\ActivityListener;
+use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
+use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
 use Oro\Bundle\ActivityListBundle\Entity\Repository\ActivityListRepository;
 use Oro\Bundle\ActivityListBundle\Filter\ActivityListFilterHelper;
@@ -24,10 +17,13 @@ use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
-use Oro\Bundle\ActivityContactBundle\EventListener\ActivityListener;
-use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
-use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
+use Oro\Component\Log\OutputLogger;
+use Oro\Component\PropertyAccess\PropertyAccessor;
+use Psr\Log\AbstractLogger;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ActivityContactRecalculateCommand extends ContainerAwareCommand
 {

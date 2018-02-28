@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Functional;
 
+use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
 use Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseMailboxSettingsData;
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
 
 /**
  * @dbIsolationPerTest

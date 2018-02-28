@@ -2,17 +2,15 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\EventListener\Customers;
 
-use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Symfony\Component\Translation\TranslatorInterface;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Tests\Unit\ORM\Fixtures\TestEntity;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
-use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
-
+use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider;
+use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
 {

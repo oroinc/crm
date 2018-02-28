@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\DependencyInjection;
 
-use Oro\Bundle\MagentoBundle\DependencyInjection\OroMagentoExtension;
 use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
-
+use Oro\Bundle\MagentoBundle\DependencyInjection\OroMagentoExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class OroMagentoExtensionTest extends \PHPUnit_Framework_TestCase

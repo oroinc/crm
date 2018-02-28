@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;

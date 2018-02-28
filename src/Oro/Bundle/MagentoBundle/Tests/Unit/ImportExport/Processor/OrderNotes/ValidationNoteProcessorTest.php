@@ -1,17 +1,15 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor\OrderNotes;
-
-use Oro\Component\Testing\Unit\EntityTrait;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Processor\OrderNotes;
 
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderNote;
 use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\Context;
 use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\ValidationNoteProcessor;
+use Oro\Component\Testing\Unit\EntityTrait;
 
 class ValidationNoteProcessorTest extends \PHPUnit_Framework_TestCase
 {

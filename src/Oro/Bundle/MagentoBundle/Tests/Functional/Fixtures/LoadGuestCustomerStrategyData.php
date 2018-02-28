@@ -3,11 +3,10 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixtures;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use Oro\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 use Oro\Bundle\SalesBundle\Entity\Customer as CustomerAssociation;

@@ -2,23 +2,22 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class OrderHandler
 {
     /** @var FormInterface */
     protected $form;
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var RegistryInterface */
     protected $manager;
@@ -28,18 +27,18 @@ class OrderHandler
 
     /**
      * @param FormInterface          $form
-     * @param Request                $request
+     * @param RequestStack           $requestStack
      * @param RegistryInterface      $registry
      * @param TokenAccessorInterface $security
      */
     public function __construct(
         FormInterface $form,
-        Request $request,
+        RequestStack $requestStack,
         RegistryInterface $registry,
         TokenAccessorInterface $security
     ) {
         $this->form = $form;
-        $this->request = $request;
+        $this->requestStack = $requestStack;
         $this->manager = $registry->getManager();
         $this->organization = $security->getOrganization();
     }
@@ -55,8 +54,9 @@ class OrderHandler
     {
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
-            $this->form->submit($this->request);
+        $request = $this->requestStack->getCurrentRequest();
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->form->submit($request);
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);

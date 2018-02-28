@@ -2,17 +2,15 @@
 
 namespace Oro\Bundle\CaseBundle\Controller\Api\Rest;
 
-use Symfony\Component\HttpFoundation\Response;
-
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
-use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-
+use FOS\RestBundle\Util\Codes;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Rest\RouteResource("case/comment")
@@ -38,13 +36,16 @@ class CommentController extends RestController implements ClassResourceInterface
      *     resource=true
      * )
      * @AclAncestor("oro_case_comment_view")
+     * @param Request $request
+     * @param CaseEntity $case
+     * @return Response
      */
-    public function cgetAction(CaseEntity $case)
+    public function cgetAction(Request $request, CaseEntity $case)
     {
         $comments = $this->get('oro_case.manager')
             ->getCaseComments(
                 $case,
-                $this->getRequest()->get('order', 'DESC')
+                $request->get('order', 'DESC')
             );
 
         return $this->handleView(

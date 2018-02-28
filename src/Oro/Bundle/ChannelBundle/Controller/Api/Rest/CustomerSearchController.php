@@ -2,18 +2,16 @@
 
 namespace Oro\Bundle\ChannelBundle\Controller\Api\Rest;
 
-use Symfony\Component\HttpFoundation\Response;
-
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-
+use FOS\RestBundle\Controller\Annotations\RouteResource;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Oro\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestGetController;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\StringToArrayParameterFilter;
-use Oro\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @RouteResource("search_customer")
@@ -55,16 +53,17 @@ class CustomerSearchController extends RestGetController
      *      resource=true
      * )
      *
+     * @param Request $request
      * @return Response
      */
-    public function cgetAction()
+    public function cgetAction(Request $request)
     {
-        $page     = (int) $this->getRequest()->get('page', 1);
-        $limit    = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
-        $search   = $this->getRequest()->get('search', '');
+        $page     = (int) $request->get('page', 1);
+        $limit    = (int) $request->get('limit', self::ITEMS_PER_PAGE);
+        $search   = $request->get('search', '');
         $criteria = null;
 
-        if ($this->getRequest()->get('dataChannel')) {
+        if ($request->get('dataChannel')) {
             $criteria = $this->getFilterCriteria(
                 $this->getSupportedQueryParameters(__FUNCTION__),
                 [

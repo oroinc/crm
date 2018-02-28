@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
 
-use Symfony\Component\DomCrawler\Form;
-use Symfony\Component\DomCrawler\Field\InputFormField;
-use Symfony\Component\DomCrawler\Field\ChoiceFormField;
-
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Field\ChoiceFormField;
+use Symfony\Component\DomCrawler\Field\InputFormField;
+use Symfony\Component\DomCrawler\Form;
 
 abstract class BaseStatistics extends WebTestCase
 {

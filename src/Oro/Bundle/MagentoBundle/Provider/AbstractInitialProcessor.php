@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;

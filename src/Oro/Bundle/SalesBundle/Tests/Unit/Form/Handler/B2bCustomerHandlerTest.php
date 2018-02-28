@@ -3,13 +3,13 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,24 +45,17 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->form = $this->createMock(Form::class);
         $this->request = new Request();
-
-        $this->manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->requestChannelProvider
-            = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider')
-            ->disableOriginalConstructor()->getMock();
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $this->manager = $this->createMock(ObjectManager::class);
+        $this->requestChannelProvider = $this->createMock(RequestChannelProvider::class);
 
         $this->entity  = new B2bCustomer();
         $this->handler = new B2bCustomerHandler(
             $this->form,
-            $this->request,
+            $requestStack,
             $this->manager,
             $this->requestChannelProvider
         );

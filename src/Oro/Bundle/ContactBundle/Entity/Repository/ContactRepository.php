@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ContactBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-
 use Oro\Bundle\EmailBundle\Entity\Repository\EmailAwareRepository;
 
 class ContactRepository extends EntityRepository implements EmailAwareRepository

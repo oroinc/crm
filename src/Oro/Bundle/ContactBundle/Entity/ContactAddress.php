@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ContactBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
-
+use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\ContactBundle\Model\ExtendContactAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\ContactBundle\Model\ExtendContactAddress;
 
 /**
  * @ORM\Table("orocrm_contact_address")

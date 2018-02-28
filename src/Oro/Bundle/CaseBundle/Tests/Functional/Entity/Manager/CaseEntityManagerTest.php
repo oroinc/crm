@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\ReportBundle\Tests\Functional;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
 use Oro\Bundle\CaseBundle\Entity\CasePriority;
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 use Oro\Bundle\CaseBundle\Model\CaseEntityManager;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class CaseEntityManagerTest extends WebTestCase
 {

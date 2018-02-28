@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
-use Symfony\Component\DependencyInjection\ContainerInterface as Container;
-
-use Oro\Bundle\ChartBundle\Model\ConfigProvider;
-use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ChartView;
+use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
+use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\ChartBundle\Utils\ColorUtils;
 use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TCI;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**

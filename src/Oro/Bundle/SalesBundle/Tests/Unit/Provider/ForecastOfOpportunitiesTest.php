@@ -2,16 +2,15 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
-use Symfony\Component\Translation\TranslatorInterface;
-
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
-use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
-use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
+use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
+use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
 {

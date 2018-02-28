@@ -4,7 +4,6 @@ namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Oro\Bundle\WorkflowBundle\Entity\Repository\WorkflowItemRepository;
 
 class UpdateWorkflowStartStep extends AbstractFixture

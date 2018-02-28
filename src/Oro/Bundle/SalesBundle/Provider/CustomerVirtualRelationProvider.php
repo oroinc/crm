@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Provider;
 
 use Doctrine\ORM\Query\Expr\Join;
-
 use Oro\Bundle\EntityBundle\Provider\VirtualRelationProviderInterface;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\Entity\Manager\AssociationManager;

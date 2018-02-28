@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Oro\Bundle\MagentoBundle\Form\Type\TransportCheckButtonType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TransportCheckButtonTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,12 +16,12 @@ class TransportCheckButtonTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\Form\Extension\Core\Type\ButtonType', $type);
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
         $type = new TransportCheckButtonType();
 
         $resolver = new OptionsResolver();
-        $type->setDefaultOptions($resolver);
+        $type->configureOptions($resolver);
 
         $options = $resolver->resolve();
         $this->assertArrayHasKey('attr', $options);

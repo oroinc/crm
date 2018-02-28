@@ -3,13 +3,12 @@
 namespace Oro\Bundle\MagentoBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\EntityBundle\ORM\DatabaseDriverInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 
 class MagentoDeleteProvider implements DeleteProviderInterface
 {

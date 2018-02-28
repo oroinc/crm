@@ -2,12 +2,10 @@
 
 namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\Performance;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\DependencyInjection\Container;
-
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpKernel\Kernel;
 
 class LoadTest extends WebTestCase
 {

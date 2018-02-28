@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Controller\Api\Rest;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @group crm

@@ -6,11 +6,10 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-
 use Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\EventListener\OrderListener;
-use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class OrderListenerTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Fixture;
 
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityStub extends Opportunity
 {

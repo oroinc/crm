@@ -7,20 +7,10 @@
             {{ UI.renderProperty('oro.magento.newslettersubscriber.email.label'|trans, entity.email) }}
 
             {% if useCustomer is defined and useCustomer %}
-                {%- set customerData -%}
-                    {% if entity.customer is not empty %}
-                        {% set viewGranted = is_granted('oro_magento_customer_view') %}
-                        {%- if viewGranted -%}
-                            <a href="{{ path('oro_magento_customer_view', {'id': entity.customer.id}) }}">
-                                {{ entity.customer|oro_format_name }}
-                            </a>
-                        {%- else -%}
-                            {{ entity.customer|oro_format_name }}
-                        {%- endif -%}
-                    {% endif %}
-                {%- endset -%}
-
-                {{ UI.renderHtmlProperty('oro.magento.newslettersubscriber.customer.label'|trans, customerData) }}
+                {{ UI.renderHtmlProperty(
+                    'oro.magento.newslettersubscriber.customer.label'|trans,
+                    UI.entityViewLink(entity.customer, entity.customer|oro_format_name, 'oro_magento_customer_view')
+                ) }}
             {% endif %}
 
             {{ entityConfig.renderDynamicFields(entity) }}

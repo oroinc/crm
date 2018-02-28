@@ -3,7 +3,6 @@
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractLoadAclData;
 use Oro\Bundle\UserBundle\Entity\Role;
 

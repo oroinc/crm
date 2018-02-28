@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
@@ -12,11 +11,10 @@ use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_37\CreateActivityAssociation;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_38\InheritanceActivityTargets;
-
+use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionAwareInterface;
 use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionTrait;
 

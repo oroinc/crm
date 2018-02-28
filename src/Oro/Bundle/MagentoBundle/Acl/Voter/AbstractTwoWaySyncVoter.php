@@ -3,11 +3,10 @@
 namespace Oro\Bundle\MagentoBundle\Acl\Voter;
 
 use Oro\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
+use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
+use Oro\Bundle\SecurityBundle\Acl\Voter\AbstractEntityVoter;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
-use Oro\Bundle\SecurityBundle\Acl\Voter\AbstractEntityVoter;
-use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 
 abstract class AbstractTwoWaySyncVoter extends AbstractEntityVoter
 {
