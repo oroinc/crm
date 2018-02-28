@@ -51,9 +51,9 @@ class OrderApiType extends AbstractType
             'oro_address_collection',
             [
                 'label'    => '',
-                'type'     => 'oro_typed_address',
+                'entry_type'     => 'oro_typed_address',
                 'required' => true,
-                'options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\OrderAddress']
+                'entry_options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\OrderAddress']
             ]
         );
 
@@ -62,9 +62,9 @@ class OrderApiType extends AbstractType
             'oro_order_item_collection',
             [
                 'label'    => '',
-                'type'     => 'oro_order_item',
+                'entry_type'     => 'oro_order_item',
                 'required' => true,
-                'options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\OrderItem']
+                'entry_options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\OrderItem']
             ]
         );
 

@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Oro\Bundle\AddressBundle\Form\DataTransformer\AddressSameTransformer;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -64,9 +63,9 @@ class B2bCustomerType extends AbstractType
             'oro_email_collection',
             [
                 'label'    => 'oro.sales.b2bcustomer.emails.label',
-                'type'     => 'oro_email',
+                'entry_type'     => 'oro_email',
                 'required' => false,
-                'options'  => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail']
+                'entry_options'  => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail']
             ]
         );
         $builder->add(
@@ -74,9 +73,9 @@ class B2bCustomerType extends AbstractType
             'oro_phone_collection',
             [
                 'label'    => 'oro.sales.b2bcustomer.phones.label',
-                'type'     => 'oro_phone',
+                'entry_type'     => 'oro_phone',
                 'required' => false,
-                'options'  => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone']
+                'entry_options'  => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone']
             ]
         );
         $builder->add(

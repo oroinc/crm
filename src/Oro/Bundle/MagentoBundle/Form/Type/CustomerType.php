@@ -90,9 +90,9 @@ class CustomerType extends AbstractType
                 'oro_address_collection',
                 [
                     'label' => 'oro.magento.customer.addresses.label',
-                    'type' => 'oro_magento_customer_addresses',
+                    'entry_type' => 'oro_magento_customer_addresses',
                     'required' => true,
-                    'options' => ['data_class' => $this->customerAddressClassName]
+                    'entry_options' => ['data_class' => $this->customerAddressClassName]
                 ]
             )
             ->add('contact', 'oro_contact_select', ['label' => 'oro.magento.customer.contact.label']);

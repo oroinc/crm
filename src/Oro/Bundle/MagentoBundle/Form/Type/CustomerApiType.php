@@ -71,9 +71,9 @@ class CustomerApiType extends AbstractType
             'oro_address_collection',
             [
                 'label'    => '',
-                'type'     => 'oro_typed_address',
+                'entry_type'     => 'oro_typed_address',
                 'required' => true,
-                'options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\Address']
+                'entry_options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\Address']
             ]
         );
 

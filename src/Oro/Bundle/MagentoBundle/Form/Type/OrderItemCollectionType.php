@@ -15,7 +15,7 @@ class OrderItemCollectionType extends AbstractType
     {
         $resolver->setNormalizers(
             [
-                'options' => function (Options $options, $values) {
+                'entry_options' => function (Options $options, $values) {
                     if (!$values) {
                         $values = [];
                     }

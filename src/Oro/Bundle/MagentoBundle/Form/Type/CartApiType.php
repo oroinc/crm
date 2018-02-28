@@ -25,9 +25,9 @@ class CartApiType extends AbstractType
             'oro_cart_item_collection',
             [
                 'label'    => '',
-                'type'     => 'cart_item_api_type',
+                'entry_type'     => 'cart_item_api_type',
                 'required' => true,
-                'options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\CartItem']
+                'entry_options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\CartItem']
             ]
         );
         $builder->add('customer', 'oro_customer_select', ['required' => false]);
