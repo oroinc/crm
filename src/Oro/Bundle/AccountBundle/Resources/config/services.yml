@@ -103,7 +103,7 @@ services:
     oro_account.accounts_view_list:
         class: Oro\Bundle\AccountBundle\Datagrid\AccountsViewList
         arguments:
-            - @translator
+            - '@translator'
 
     oro_account.provider.prepare_result_item_provider:
         class: Oro\Bundle\AccountBundle\Provider\AccountAutocompleteProvider
