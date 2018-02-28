@@ -53,10 +53,14 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
                  * @var $transportProvider MagentoTransportInterface
                  */
                 if (! $transportProvider->isCustomerHasUniqueEmail($value)) {
-                    $this->context->addViolationAt('email', $constraint->message);
+                    $this->context->buildViolation($constraint->message)
+                        ->atPath('email')
+                        ->addViolation();
                 }
             } catch (\RuntimeException $e) {
-                $this->context->addViolationAt('email', $constraint->transportMessage);
+                $this->context->buildViolation($constraint->transportMessage)
+                    ->atPath('email')
+                    ->addViolation();
             }
         }
     }

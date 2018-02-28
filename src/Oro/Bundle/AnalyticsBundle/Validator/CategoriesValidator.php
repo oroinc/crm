@@ -74,7 +74,9 @@ class CategoriesValidator extends ConstraintValidator
         }
 
         if ($hasEmpty) {
-            $this->context->addViolationAt($constraint->getType(), $constraint->blankMessage);
+            $this->context->buildViolation($constraint->blankMessage)
+                ->atPath($constraint->getType())
+                ->addViolation();
         }
 
         return !$hasEmpty;
@@ -102,11 +104,10 @@ class CategoriesValidator extends ConstraintValidator
             return true;
         }
 
-        $this->context->addViolationAt(
-            $constraint->getType(),
-            $constraint->countMessage,
-            ['%count%' => self::MIN_CATEGORIES_COUNT]
-        );
+        $this->context->buildViolation($constraint->countMessage)
+            ->atPath($constraint->getType())
+            ->setParameters(['%count%' => self::MIN_CATEGORIES_COUNT])
+            ->addViolation();
 
         return false;
     }
@@ -143,7 +144,10 @@ class CategoriesValidator extends ConstraintValidator
 
         $isValid = $this->orderByValue($orderedByValueArray, $inversion);
         if (!$isValid || $orderedByValueArray !== $orderedByIndex->toArray()) {
-            $this->context->addViolationAt($constraint->getType(), $constraint->message, ['%order%' => $criteria]);
+            $this->context->buildViolation($constraint->message)
+                ->atPath($constraint->getType())
+                ->setParameters(['%order%' => $criteria])
+                ->addViolation();
         }
     }
 

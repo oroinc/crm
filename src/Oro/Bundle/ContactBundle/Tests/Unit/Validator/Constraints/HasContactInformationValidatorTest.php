@@ -7,7 +7,7 @@ use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformation;
 use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformationValidator;
-use Symfony\Component\Validator\ExecutionContextInterface;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class HasContactInformationValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +27,7 @@ class HasContactInformationValidatorTest extends \PHPUnit_Framework_TestCase
                 return $id;
             }));
 
-        $this->context = $this->createMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
+        $this->context = $this->createMock(ExecutionContextInterface::class);
         $this->validator = new HasContactInformationValidator($translator);
         $this->validator->initialize($this->context);
     }

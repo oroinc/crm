@@ -2,10 +2,13 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Validator;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint;
 use Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Symfony\Component\Validator\Context\ExecutionContext;
+use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,10 +44,8 @@ class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestC
      */
     public function testValidateValid($isValid, $integration)
     {
-        $channel = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
-            ->disableOriginalConstructor()->getMock();
-        $context = $this->getMockBuilder('Symfony\Component\Validator\ExecutionContext')
-            ->disableOriginalConstructor()->getMock();
+        $channel = $this->createMock(Channel::class);
+        $context = $this->createMock(ExecutionContext::class);
 
         $channel
             ->expects($this->once())
@@ -61,9 +62,17 @@ class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestC
             ->will($this->returnValue('testType'));
 
         if ($isValid) {
-            $context->expects($this->never())->method('addViolationAt');
+            $context->expects($this->never())->method('buildViolation');
         } else {
-            $context->expects($this->once())->method('addViolationAt');
+            $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
+            $context->expects($this->once())
+                ->method('buildViolation')
+                ->willReturn($builder);
+            $builder->expects($this->once())
+                ->method('atPath')
+                ->willReturnSelf();
+            $builder->expects($this->once())
+                ->method('addViolation');
         }
 
         $constraint = new ChannelIntegrationConstraint();

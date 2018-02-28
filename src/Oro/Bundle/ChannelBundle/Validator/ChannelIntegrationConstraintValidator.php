@@ -46,7 +46,9 @@ class ChannelIntegrationConstraintValidator extends ConstraintValidator
             $integration = $channel->getDataSource();
 
             if (empty($integration)) {
-                $this->context->addViolationAt($field, $errorLabel);
+                $this->context->buildViolation($errorLabel)
+                    ->atPath($field)
+                    ->addViolation();
             }
         }
     }

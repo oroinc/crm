@@ -9,8 +9,9 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint;
 use Oro\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\ExecutionContextInterface;
+use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,9 +79,17 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
     public function testShouldAddViolationWhenTransportInitFails()
     {
         $context = $this->createMock(ExecutionContextInterface::class);
+        $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
         $context->expects($this->any())
-            ->method('addViolationAt')
-            ->with('email', $this->constraint->transportMessage);
+            ->method('buildViolation')
+            ->with($this->constraint->transportMessage)
+            ->willReturn($builder);
+        $builder->expects($this->any())
+            ->method('atPath')
+            ->with('email')
+            ->willReturnSelf();
+        $builder->expects($this->any())
+            ->method('addViolation');
 
         $transportProvider = $this->createMock(MagentoTransportInterface::class);
         $transportProvider
@@ -110,10 +119,17 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
             $context->expects($this->never())
                 ->method($this->anything());
         } else {
-            $context
-                ->expects($this->once())
-                ->method('addViolationAt')
-                ->with('email', $messageConstraint);
+            $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
+            $context->expects($this->once())
+                ->method('buildViolation')
+                ->with($messageConstraint)
+                ->willReturn($builder);
+            $builder->expects($this->once())
+                ->method('atPath')
+                ->with('email')
+                ->willReturnSelf();
+            $builder->expects($this->once())
+                ->method('addViolation');
         }
 
         $customer = $this->getCustomer();

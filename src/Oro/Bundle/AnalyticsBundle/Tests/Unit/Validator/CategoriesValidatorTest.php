@@ -9,7 +9,8 @@ use Doctrine\ORM\PersistentCollection;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Oro\Bundle\AnalyticsBundle\Validator\CategoriesValidator;
-use Symfony\Component\Validator\ExecutionContextInterface;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,22 +33,35 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
      * @param PersistentCollection $collection
      * @param string $type
      * @param array $expectedViolationsMessages
+     * @param bool $withParams
      *
      * @dataProvider validateDataProvider
      */
-    public function testValidate($collection, $type, $expectedViolationsMessages = [])
+    public function testValidate($collection, $type, $expectedViolationsMessages = [], $withParams = false)
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContextInterface $context */
-        $context = $this->getMockForAbstractClass('Symfony\Component\Validator\ExecutionContextInterface');
+        $context = $this->getMockForAbstractClass(ExecutionContextInterface::class);
 
         if (!$expectedViolationsMessages) {
             $context->expects($this->never())
-                ->method('addViolationAt');
+                ->method('buildViolation');
         } else {
             foreach ($expectedViolationsMessages as $key => $expectedViolationsMessage) {
+                $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
                 $context->expects($this->at($key))
-                    ->method('addViolationAt')
-                    ->with($this->equalTo($type), $this->equalTo($expectedViolationsMessage), $this->isType('array'));
+                    ->method('buildViolation')
+                    ->with($this->equalTo($expectedViolationsMessage))
+                    ->willReturn($builder);
+                $builder->expects($this->at($key))
+                    ->method('atPath')
+                    ->with($this->equalTo($type))
+                    ->willReturnSelf();
+                $builder->expects($this->any())
+                    ->method('setParameters')
+                    ->with($this->isType('array'))
+                    ->willReturnSelf();
+                $builder->expects($this->at($key))
+                    ->method('addViolation');
             }
         }
 
@@ -84,7 +98,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                 'expectedViolationsMessages' =>
                     [
                         $constraint->blankMessage,
-                    ]
+                    ],
             ],
             'ordered' => [
                 'collection' => $this->getCollection(
@@ -109,6 +123,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                 'expectedViolationsMessage' => [
                     $constraint->message
                 ],
+                'withParams' => true,
             ],
             'desc order' => [
                 'collection' => $this->getCollection(
@@ -133,6 +148,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                 'expectedViolationsMessage' => [
                     $constraint->message
                 ],
+                'withParams' => true,
             ],
             'desc order same value violation' => [
                 'collection' => $this->getCollection(
@@ -147,6 +163,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                 'expectedViolationsMessage' => [
                     $constraint->message
                 ],
+                'withParams' => true,
             ],
             'asc order same value violation' => [
                 'collection' => $this->getCollection(
@@ -161,6 +178,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                 'expectedViolationsMessage' => [
                     $constraint->message
                 ],
+                'withParams' => true,
             ],
             'blank value violation asc mid' => [
                 'collection' => $this->getCollection(
