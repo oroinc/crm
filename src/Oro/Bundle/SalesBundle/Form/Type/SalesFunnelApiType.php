@@ -28,7 +28,7 @@ class SalesFunnelApiType extends SalesFunnelType
         $resolver->setDefaults(
             array(
                 'data_class' => 'Oro\Bundle\SalesBundle\Entity\SalesFunnel',
-                'intention'  => 'group',
+                'csrf_token_id' => 'group',
                 'csrf_protection' => false,
             )
         );

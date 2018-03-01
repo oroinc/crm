@@ -25,7 +25,7 @@ class LeadApiType extends LeadType
         $resolver->setDefaults(
             array(
                 'data_class' => 'Oro\Bundle\SalesBundle\Entity\Lead',
-                'intention'  => 'group',
+                'csrf_token_id'  => 'group',
                 'csrf_protection' => false,
             )
         );

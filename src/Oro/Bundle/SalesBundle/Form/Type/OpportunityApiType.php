@@ -27,7 +27,7 @@ class OpportunityApiType extends OpportunityType
         $resolver->setDefaults(
             array(
                 'data_class' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
-                'intention'  => 'opportunity',
+                'csrf_token_id' => 'opportunity',
                 'csrf_protection' => false,
             )
         );

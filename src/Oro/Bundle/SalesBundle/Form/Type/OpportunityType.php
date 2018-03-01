@@ -202,7 +202,7 @@ class OpportunityType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class' => Opportunity::class,
-                'intention'  => 'opportunity'
+                'csrf_token_id' => 'opportunity'
             ]
         );
     }

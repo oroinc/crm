@@ -50,7 +50,7 @@ class CartItemsApiType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class'           => 'Oro\Bundle\MagentoBundle\Entity\CartItem',
-                'intention'            => 'items',
+                'csrf_token_id'        => 'items',
                 'single_form'          => true,
                 'csrf_protection'      => false
             ]

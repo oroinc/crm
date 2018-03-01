@@ -122,7 +122,7 @@ class CustomerType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class' => $this->customerClassName,
-                'intention' => 'magento_customer',
+                'csrf_token_id' => 'magento_customer',
                 'validation_groups' => [Constraint::DEFAULT_GROUP, 'form']
             ]
         );

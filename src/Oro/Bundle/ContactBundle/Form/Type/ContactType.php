@@ -208,7 +208,7 @@ class ContactType extends AbstractType
         $resolver->setDefaults(
             array(
                 'data_class'           => 'Oro\Bundle\ContactBundle\Entity\Contact',
-                'intention'            => 'contact',
+                'csrf_token_id'        => 'contact',
             )
         );
     }

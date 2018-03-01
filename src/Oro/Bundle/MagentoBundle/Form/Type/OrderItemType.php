@@ -38,7 +38,7 @@ class OrderItemType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class'           => 'Oro\Bundle\MagentoBundle\Entity\OrderItem',
-                'intention'            => 'items',
+                'csrf_token_id'        => 'items',
                 'single_form'          => true
             ]
         );
