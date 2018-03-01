@@ -31,10 +31,14 @@ class ContactRequestCallbackValidator
         }
 
         if ($emailError) {
-            $context->addViolationAt('emailAddress', 'This value should not be blank.');
+            $context->buildViolation('This value should not be blank.')
+                ->atPath('emailAddress')
+                ->addViolation();
         }
         if ($phoneError) {
-            $context->addViolationAt('phone', 'This value should not be blank.');
+            $context->buildViolation('This value should not be blank.')
+                ->atPath('phone')
+                ->addViolation();
         }
     }
 }

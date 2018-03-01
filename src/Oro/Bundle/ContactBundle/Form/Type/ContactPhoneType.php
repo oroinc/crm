@@ -27,7 +27,7 @@ class ContactPhoneType extends AbstractType
         $resolver->setDefaults(
             array(
                 'data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactPhone',
-                'intention' => 'contact',
+                'csrf_token_id' => 'contact',
                 'csrf_protection' => false,
             )
         );

@@ -57,7 +57,9 @@ class StartSyncDateValidator extends ConstraintValidator
         }
 
         if ($value > $oldValue) {
-            $this->context->addViolationAt($this->context->getPropertyPath(), $constraint->message);
+            $this->context->buildViolation($constraint->message)
+                ->atPath($this->context->getPropertyPath())
+                ->addViolation();
         }
     }
 

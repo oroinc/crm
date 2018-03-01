@@ -47,9 +47,9 @@ class LeadType extends AbstractType
                 'oro_phone_collection',
                 array(
                     'label' => 'oro.sales.lead.phones.label',
-                    'type' => 'oro_phone',
+                    'entry_type' => 'oro_phone',
                     'required' => false,
-                    'options' => array('data_class' => 'Oro\Bundle\SalesBundle\Entity\LeadPhone')
+                    'entry_options' => array('data_class' => 'Oro\Bundle\SalesBundle\Entity\LeadPhone')
                 )
             )
             ->add(
@@ -57,9 +57,9 @@ class LeadType extends AbstractType
                 'oro_email_collection',
                 array(
                     'label'    => 'oro.sales.lead.emails.label',
-                    'type'     => 'oro_email',
+                    'entry_type'     => 'oro_email',
                     'required' => false,
-                    'options'  => array('data_class' => 'Oro\Bundle\SalesBundle\Entity\LeadEmail')
+                    'entry_options'  => array('data_class' => 'Oro\Bundle\SalesBundle\Entity\LeadEmail')
                 )
             )
             ->add(
@@ -87,12 +87,12 @@ class LeadType extends AbstractType
                 'oro_address_collection',
                 [
                     'label'    => '',
-                    'type'     => 'oro_sales_lead_address',
+                    'entry_type'     => 'oro_sales_lead_address',
                     'required' => false,
                     'add_label'  => 'oro.sales.lead.add_address.label',
                     'show_form_when_empty' => true,
                     'block_name' => 'address_collection',
-                    'options'  => [
+                    'entry_options'  => [
                         'data_class' => 'Oro\Bundle\SalesBundle\Entity\LeadAddress',
                     ]
                 ]

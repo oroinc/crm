@@ -26,7 +26,7 @@ class LeadEmailType extends AbstractType
         $resolver->setDefaults(
             array(
                 'data_class' => 'Oro\Bundle\SalesBundle\Entity\LeadEmail',
-                'intention' => 'lead',
+                'csrf_token_id' => 'lead',
                 'csrf_protection' => false
             )
         );

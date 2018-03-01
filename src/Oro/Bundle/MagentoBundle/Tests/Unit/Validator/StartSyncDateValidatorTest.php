@@ -9,7 +9,8 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint;
 use Oro\Bundle\MagentoBundle\Validator\StartSyncDateValidator;
-use Symfony\Component\Validator\ExecutionContextInterface;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,13 +46,21 @@ class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidate($value, $formData, $queryResult = null, $expectsViolation = false)
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContextInterface $context */
-        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
+        $context = $this->createMock(ExecutionContextInterface::class);
 
         $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->any())->method('getData')->willReturn($formData);
         $context->expects($this->any())->method('getRoot')->willReturn($form);
+
+        $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
         $context->expects($expectsViolation ? $this->once() : $this->never())
-            ->method('addViolationAt')->willReturn($form);
+            ->method('buildViolation')
+            ->willReturn($builder);
+        $builder->expects($expectsViolation ? $this->once() : $this->never())
+            ->method('atPath')
+            ->willReturnSelf();
+        $builder->expects($expectsViolation ? $this->once() : $this->never())
+            ->method('addViolation');
 
         $repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()

@@ -27,7 +27,7 @@ class LeadPhoneType extends AbstractType
         $resolver->setDefaults(
             array(
                 'data_class' => 'Oro\Bundle\SalesBundle\Entity\LeadPhone',
-                'intention' => 'lead',
+                'csrf_token_id' => 'lead',
                 'csrf_protection' => false,
             )
         );

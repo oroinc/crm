@@ -25,7 +25,7 @@ class B2bCustomerApiType extends B2bCustomerType
         $resolver->setDefaults(
             [
                 'data_class'           => 'Oro\Bundle\SalesBundle\Entity\B2bCustomer',
-                'intention'            => 'b2bcustomer',
+                'csrf_token_id'        => 'b2bcustomer',
                 'csrf_protection'      => false
             ]
         );

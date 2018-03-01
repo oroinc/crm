@@ -13,8 +13,8 @@ class PhoneCollectionTypeStub extends PhoneCollectionType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'type'     => 'oro_phone',
-            'options'  => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone'],
+            'entry_type' => 'oro_phone',
+            'entry_options' => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone'],
             'multiple' => true,
         ]);
     }

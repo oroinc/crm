@@ -25,7 +25,7 @@ class AccountApiType extends AccountType
         $resolver->setDefaults(
             array(
                 'data_class'           => 'Oro\Bundle\AccountBundle\Entity\Account',
-                'intention'            => 'account',
+                'csrf_token_id'        => 'account',
                 'csrf_protection'      => false,
             )
         );

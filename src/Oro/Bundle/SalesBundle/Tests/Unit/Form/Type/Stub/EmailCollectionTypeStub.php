@@ -13,8 +13,8 @@ class EmailCollectionTypeStub extends EmailCollectionType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'type'     => 'oro_email',
-            'options'  => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail'],
+            'entry_type'     => 'oro_email',
+            'entry_options'  => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail'],
             'multiple' => true,
         ]);
     }

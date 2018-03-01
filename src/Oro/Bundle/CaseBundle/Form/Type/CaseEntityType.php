@@ -104,7 +104,7 @@ class CaseEntityType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class'         => 'Oro\\Bundle\\CaseBundle\\Entity\\CaseEntity',
-                'intention'          => 'oro_case_entity',
+                'csrf_token_id'      => 'oro_case_entity',
             ]
         );
     }

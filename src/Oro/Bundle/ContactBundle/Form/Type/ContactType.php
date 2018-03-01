@@ -136,9 +136,9 @@ class ContactType extends AbstractType
             'oro_address_collection',
             array(
                 'label'    => '',
-                'type'     => 'oro_typed_address',
+                'entry_type'     => 'oro_typed_address',
                 'required' => true,
-                'options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactAddress')
+                'entry_options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactAddress')
             )
         );
         $builder->add(
@@ -146,9 +146,9 @@ class ContactType extends AbstractType
             'oro_email_collection',
             array(
                 'label'    => 'oro.contact.emails.label',
-                'type'     => 'oro_email',
+                'entry_type'     => 'oro_email',
                 'required' => false,
-                'options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactEmail')
+                'entry_options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactEmail')
             )
         );
         $builder->add(
@@ -156,9 +156,9 @@ class ContactType extends AbstractType
             'oro_phone_collection',
             array(
                 'label'    => 'oro.contact.phones.label',
-                'type'     => 'oro_phone',
+                'entry_type'     => 'oro_phone',
                 'required' => false,
-                'options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactPhone')
+                'entry_options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactPhone')
             )
         );
 
@@ -208,7 +208,7 @@ class ContactType extends AbstractType
         $resolver->setDefaults(
             array(
                 'data_class'           => 'Oro\Bundle\ContactBundle\Entity\Contact',
-                'intention'            => 'contact',
+                'csrf_token_id'        => 'contact',
             )
         );
     }

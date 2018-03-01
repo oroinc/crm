@@ -27,7 +27,7 @@ class B2bCustomerEmailType extends AbstractType
         $resolver->setDefaults(
             array(
                 'data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail',
-                'intention' => 'b2bcustomer',
+                'csrf_token_id' => 'b2bcustomer',
                 'csrf_protection' => false
             )
         );

@@ -319,7 +319,7 @@ services:
     oro_contact.contacts_view_list:
         class: Oro\Bundle\ContactBundle\Datagrid\ContactsViewList
         arguments:
-            - @translator
+            - '@translator'
 
     oro_contact.twig.extension:
         class: Oro\Bundle\ContactBundle\Twig\ContactExtension

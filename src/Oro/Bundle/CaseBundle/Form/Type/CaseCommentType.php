@@ -58,7 +58,7 @@ class CaseCommentType extends AbstractType
             [
                 'public_field_hidden'   => true,
                 'data_class'            => 'Oro\\Bundle\\CaseBundle\\Entity\\CaseComment',
-                'intention'             => 'oro_case_comment',
+                'csrf_token_id'         => 'oro_case_comment',
                 'ownership_disabled'    => true,
             ]
         );

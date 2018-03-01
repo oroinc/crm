@@ -31,7 +31,9 @@ class ChannelCustomerIdentityConstraintValidator extends ConstraintValidator
         $entities   = $channel->getEntities();
 
         if (!in_array($channel->getCustomerIdentity(), $entities)) {
-            $this->context->addViolationAt($fieldName, $errorLabel);
+            $this->context->buildViolation($errorLabel)
+                ->atPath($fieldName)
+                ->addViolation();
         }
     }
 }

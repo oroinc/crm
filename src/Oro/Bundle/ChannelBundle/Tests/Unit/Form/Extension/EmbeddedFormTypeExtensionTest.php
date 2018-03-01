@@ -6,6 +6,7 @@ use Oro\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension;
 use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
 {
@@ -35,7 +36,7 @@ class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
                 [
                     'form' => [
                         new FormTypeValidatorExtension(
-                            $this->createMock('Symfony\Component\Validator\ValidatorInterface')
+                            $this->createMock(ValidatorInterface::class)
                         )
                     ]
                 ]

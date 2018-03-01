@@ -4,6 +4,8 @@ namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Validator;
 
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Validator\ContactRequestCallbackValidator;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class ContactRequestCallbackValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,8 +24,16 @@ class ContactRequestCallbackValidatorTest extends \PHPUnit_Framework_TestCase
         $request->setEmailAddress($email);
         $request->setPreferredContactMethod($method);
 
-        $context = $this->createMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
-        $context->expects($this->exactly($expectedViolationCount))->method('addViolationAt');
+        $context = $this->createMock(ExecutionContextInterface::class);
+        $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
+        $context->expects($this->exactly($expectedViolationCount))
+            ->method('buildViolation')
+            ->willReturn($builder);
+        $builder->expects($this->exactly($expectedViolationCount))
+            ->method('atPath')
+            ->willReturnSelf();
+        $builder->expects($this->exactly($expectedViolationCount))
+            ->method('addViolation');
         ContactRequestCallbackValidator::validate($request, $context);
     }
 

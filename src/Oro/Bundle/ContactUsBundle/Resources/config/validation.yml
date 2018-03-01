@@ -16,8 +16,7 @@ Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
             - NotBlank: ~
     constraints:
         - Callback:
-            methods:
-                - [ Oro\Bundle\ContactUsBundle\Validator\ContactRequestCallbackValidator, validate]
+            callback: [ Oro\Bundle\ContactUsBundle\Validator\ContactRequestCallbackValidator, validate]
 
 Oro\Bundle\ContactUsBundle\Entity\ContactReason:
     properties:

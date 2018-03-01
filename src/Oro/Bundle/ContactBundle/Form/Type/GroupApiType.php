@@ -25,7 +25,7 @@ class GroupApiType extends GroupType
         $resolver->setDefaults(
             array(
                 'data_class' => 'Oro\Bundle\ContactBundle\Entity\Group',
-                'intention'  => 'group',
+                'csrf_token_id' => 'group',
                 'csrf_protection' => false,
             )
         );
