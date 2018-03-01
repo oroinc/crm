@@ -23,7 +23,7 @@ Feature: Fetch base data for Magento 2 integration
       | Channel Type | Magento 2            |
     And I click on "Configure integration"
     And I fill form with:
-      | REST API URL    | %URL_LINK%||'1'|
+      | REST API URL    | %URL_LINK%+'1' |
       | REST API User   | %user_name%    |
       | REST API Key    | %key%          |
       | Sync start date | Jan 1, 2007    |
@@ -38,7 +38,7 @@ Feature: Fetch base data for Magento 2 integration
     And I fill form with:
       | REST API URL    | %URL_LINK%   |
       | REST API User   | %user_name%  |
-      | REST API Key    | %key% || '1' |
+      | REST API Key    | %key% + '1'  |
       | Sync start date | Jan 1, 2007  |
     When I click "Check Connection"
     Then I should see "Parameters are not valid!" flash message
