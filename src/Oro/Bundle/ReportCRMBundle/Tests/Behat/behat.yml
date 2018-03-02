@@ -1,0 +1,10 @@
+oro_behat_extension:
+  suites:
+    OroReportCRMBundle:
+      contexts:
+        - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
+        - OroFormBundle::FormContext
+        - OroDataGridBundle::GridContext
+        - OroReportCRMBundle::FeatureContext
+      paths:
+        - '@OroReportCRMBundle/Tests/Behat/Features'

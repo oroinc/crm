@@ -17,9 +17,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Model\ExtendLead;
 
 /**
- * @SuppressWarnings(PHPMD.ExcessivePublicCount)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @SuppressWarnings(PHPMD.TooManyFields)
+ * Entity holds information about lead
  *
  * @ORM\Table(
  *      name="orocrm_sales_lead",
@@ -72,7 +70,11 @@ use Oro\Bundle\SalesBundle\Model\ExtendLead;
  *      }
  * )
  *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Lead extends ExtendLead implements
     FullNameInterface,
