@@ -1,0 +1,159 @@
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+  contactEmail{1..16}:
+    email: '<email()>'
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact{1..16}:
+    firstName: 'firstName<current()>'
+    lastName: 'lastName<current()>'
+    addEmail: ['@contactEmail<current()>']
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  account{1..16}:
+    name: 'Customer <current()>'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+  b2bcustomer{1..16}:
+    name: 'B2bCustomer <current()>'
+    account: '@account<current()>'
+    contact: '@contact<current()>'
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+  customer{1..16}:
+    account: '@account<current()>'
+    customerTarget: '@b2bcustomer<current()>'
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+  lead1:
+    customerAssociation: '@customer1'
+    name: 'Lead 1'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-01-01 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-01-01 11:00:00 UTC"))>'
+  lead2:
+    customerAssociation: '@customer2'
+    name: 'Lead 2'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-01-01 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-01-01 11:00:00 UTC"))>'
+  lead3:
+    customerAssociation: '@customer3'
+    name: 'Lead 3'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-01-01 13:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-01-01 13:00:00 UTC"))>'
+  lead4:
+    customerAssociation: '@customer4'
+    name: 'Lead 4'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-01-01 13:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-01-01 13:00:00 UTC"))>'
+  lead5:
+    customerAssociation: '@customer5'
+    name: 'Lead 5'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-01-02 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-01-02 11:00:00 UTC"))>'
+  lead6:
+    customerAssociation: '@customer6'
+    name: 'Lead 6'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-01-03 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-01-03 11:00:00 UTC"))>'
+  lead7:
+    customerAssociation: '@customer7'
+    name: 'Lead 7'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-01-03 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-01-03 11:00:00 UTC"))>'
+  lead8:
+    customerAssociation: '@customer8'
+    name: 'Lead 8'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-01-03 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-01-03 11:00:00 UTC"))>'
+  lead9:
+    customerAssociation: '@customer9'
+    name: 'Lead 9'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-02-01 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-02-01 11:00:00 UTC"))>'
+  lead10:
+    customerAssociation: '@customer10'
+    name: 'Lead 10'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-02-01 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-02-01 11:00:00 UTC"))>'
+  lead11:
+    customerAssociation: '@customer11'
+    name: 'Lead 11'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-05-01 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-05-01 11:00:00 UTC"))>'
+  lead12:
+    customerAssociation: '@customer12'
+    name: 'Lead 12'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-05-01 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-05-01 11:00:00 UTC"))>'
+  lead13:
+    customerAssociation: '@customer13'
+    name: 'Lead 13'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-06-01 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-06-01 11:00:00 UTC"))>'
+  lead14:
+    customerAssociation: '@customer14'
+    name: 'Lead 14'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2016-06-01 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2016-06-01 11:00:00 UTC"))>'
+  lead15:
+    customerAssociation: '@customer15'
+    name: 'Lead 15'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2017-01-01 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2017-01-01 11:00:00 UTC"))>'
+  lead16:
+    customerAssociation: '@customer16'
+    name: 'Lead 16'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: '<(new DateTime("2017-01-01 11:00:00 UTC"))>'
+    updatedAt: '<(new DateTime("2017-01-01 11:00:00 UTC"))>'
