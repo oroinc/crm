@@ -30,6 +30,8 @@ Feature: Opportunity send email action
       | Subject | This value should not be blank.              |
     And I close ui dialog
 
+# TODO BB-13640
+  @skip
   Scenario: Check opportunity contact that has only email address, "Send Email" dialog should have field "To" containing opportunity title and contact email
     And I click view opportunity w contact no name in grid
     And I follow "More actions"
