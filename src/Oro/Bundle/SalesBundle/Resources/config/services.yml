@@ -634,7 +634,7 @@ services:
         tags:
          - { name: oro_sales.provider.customer.account_creation, priority: 10 }
 
-    oro_tag.event_listener.import_export_tags_subscriber:
+    oro_sales.event_listener.import_export_opportunity_probability_subscriber:
         class: Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityProbabilitySubscriber
         tags:
             - { name: kernel.event_subscriber }

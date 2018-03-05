@@ -12,6 +12,9 @@ use Oro\Bundle\ContactBundle\Entity\Source;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
+/**
+ * Fixture of Contact entity used for generation of import-export template
+ */
 class ContactFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
     /**
@@ -62,7 +65,7 @@ class ContactFixture extends AbstractTemplateRepository implements TemplateFixtu
                     ->setFirstName('Jerry')
                     ->setLastName('Coleman')
                     ->setNameSuffix('Jr.')
-                    ->setBirthday(new \DateTime('1973-03-07'))
+                    ->setBirthday(new \DateTime('1973-03-07', new \DateTimeZone('UTC')))
                     ->setGender('male')
                     ->setDescription('Sample Contact')
                     ->setJobTitle('Manager')
@@ -100,7 +103,7 @@ class ContactFixture extends AbstractTemplateRepository implements TemplateFixtu
                     ->setFirstName('John')
                     ->setLastName('Smith')
                     ->setNameSuffix('Jr.')
-                    ->setBirthday(new \DateTime('1973-03-07'))
+                    ->setBirthday(new \DateTime('1973-03-07', new \DateTimeZone('UTC')))
                     ->setGender('male')
                     ->setDescription('Sample Contact')
                     ->setJobTitle('Manager')
