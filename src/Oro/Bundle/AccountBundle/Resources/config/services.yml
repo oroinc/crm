@@ -7,7 +7,7 @@ parameters:
     oro_account.account.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     oro_account.type.account.api.class:          Oro\Bundle\AccountBundle\Form\Type\AccountApiType
 
-    oro_account.activity_widget_provider.class:  %oro_activity.widget_provider.activities.menu.class%
+    oro_account.activity_widget_provider.class:  '%oro_activity.widget_provider.activities.menu.class%'
 
     oro_account.provider.phone.account.class:    Oro\Bundle\AccountBundle\Provider\AccountPhoneProvider
 
@@ -18,7 +18,7 @@ services:
         arguments: ["oro_account_form", "oro_account", null]
 
     oro_account.form.type.account:
-        class:                                      %oro_account.type.account.class%
+        class:                                      '%oro_account.type.account.class%'
         arguments:
             - "@router"
             - "@oro_entity.entity_name_resolver"
@@ -27,7 +27,7 @@ services:
             - { name: form.type, alias: oro_account }
 
     oro_account.form.handler.account:
-        class: %oro_account.handler.account.class%
+        class: '%oro_account.handler.account.class%'
         arguments:
             - "@oro_account.form.account"
             - "@request_stack"
@@ -35,20 +35,20 @@ services:
 
     # Form type
     oro_account.form.type.account_select:
-        class:                                      %oro_account.form.type.account_select.class%
+        class:                                      '%oro_account.form.type.account_select.class%'
         tags:
             - { name: form.type, alias: oro_account_select }
 
     # Account API
     oro_account.account.manager.api:
-        class:                                      %oro_account.account.manager.api.class%
+        class:                                      '%oro_account.account.manager.api.class%'
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - %oro_account.entity.account.class%
+            - '%oro_account.entity.account.class%'
             - "@doctrine.orm.entity_manager"
 
     oro_account.form.type.account.api:
-        class:                                      %oro_account.type.account.api.class%
+        class:                                      '%oro_account.type.account.api.class%'
         arguments:
             - "@router"
             - "@oro_entity.entity_name_resolver"
@@ -62,7 +62,7 @@ services:
         arguments: ["account", "account", null]
 
     oro_account.form.handler.account.api:
-        class: %oro_account.handler.account.class%
+        class: '%oro_account.handler.account.class%'
         arguments:
             - "@oro_account.form.account.api"
             - "@request_stack"
@@ -71,25 +71,25 @@ services:
     oro_account.form.autocomplete.account.search_handler:
         parent: oro_form.autocomplete.search_handler
         arguments:
-            - %oro_account.entity.account.class%
+            - '%oro_account.entity.account.class%'
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: oro_account_view }
 
     oro_account.activity_widget_provider:
-        class: %oro_account.activity_widget_provider.class%
+        class: '%oro_account.activity_widget_provider.class%'
         arguments:
            - "@oro_entity.entity_identifier_accessor"
            - "@oro_ui.twig.tab_extension"
            - 'account_activity_tab_panel'
-           - %oro_account.entity.account.class%
+           - '%oro_account.entity.account.class%'
         tags:
            - { name: oro_activity.activity_widget_provider, priority: -10 }
 
     oro_account.provider.phone.account:
-        class: %oro_account.provider.phone.account.class%
+        class: '%oro_account.provider.phone.account.class%'
         tags:
-            - { name: oro_address.phone_provider, class: %oro_account.entity.account.class% }
+            - { name: oro_address.phone_provider, class: '%oro_account.entity.account.class%' }
 
     oro_account.event_listener.datagrid.my_accounts_activity:
         class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener

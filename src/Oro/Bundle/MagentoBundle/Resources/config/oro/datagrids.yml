@@ -966,7 +966,7 @@ datagrids:
                     - o.currency
                     - COUNT(items.id) as itemsCount
                 from:
-                    - { table: %oro_magento.order.entity.class%, alias: o }
+                    - { table: '%oro_magento.order.entity.class%', alias: o }
                 join:
                     left:
                         - { join: o.items, alias: items }
@@ -1031,7 +1031,7 @@ datagrids:
                     - MAX(cstatus.label) as statusLabel
                     - c.itemsCount
                 from:
-                    - { table: %oro_magento.cart.entity.class% , alias: c }
+                    - { table: '%oro_magento.cart.entity.class%' , alias: c }
                 join:
                     left:
                         - { join: c.status, alias: cstatus }
@@ -1111,7 +1111,7 @@ datagrids:
                     - o.discountPercent
                     - o.couponCode
                 from:
-                    - { table: %oro_magento.order.entity.class%, alias: o }
+                    - { table: '%oro_magento.order.entity.class%', alias: o }
                 join:
                     left:
                         - { join: o.items, alias: items }
@@ -1237,7 +1237,7 @@ datagrids:
                     - MAX(cstatus.label) as statusLabel
                     - c.itemsCount as itemsCount
                 from:
-                    - { table: %oro_magento.cart.entity.class% , alias: c }
+                    - { table: '%oro_magento.cart.entity.class%' , alias: c }
                 join:
                     left:
                         - { join: c.status, alias: cstatus }
@@ -1316,7 +1316,7 @@ datagrids:
                 rowAction:    true
 
     magento-customers-group-by-channel-grid:
-        extended_entity_name: %oro_magento.entity.customer_group.class%
+        extended_entity_name: '%oro_magento.entity.customer_group.class%'
         channel_limitation:
             channel_relation_path: dataChannel
         acl_resource: oro_magento_customer_view
@@ -1328,11 +1328,11 @@ datagrids:
                     - g.id
                     - g.name
                 from:
-                    - { table: %oro_magento.entity.customer_group.class%, alias: g }
+                    - { table: '%oro_magento.entity.customer_group.class%', alias: g }
                 join:
                     left:
                         - { join: g.channel, alias: integrationChannel }
-                        - { join: %oro_channel.entity.class%, alias: dataChannel, conditionType: WITH, condition: "dataChannel.dataSource = integrationChannel" }
+                        - { join: '%oro_channel.entity.class%', alias: dataChannel, conditionType: WITH, condition: "dataChannel.dataSource = integrationChannel" }
         columns:
             name:
                 label: oro.magento.customergroup.name.label
@@ -1350,7 +1350,7 @@ datagrids:
                     data_name: g.name
 
     magento-store-by-channel-grid:
-        extended_entity_name: %oro_magento.entity.store.class%
+        extended_entity_name: '%oro_magento.entity.store.class%'
         channel_limitation:
             channel_relation_path: dataChannel
         acl_resource: oro_magento_customer_view
@@ -1364,12 +1364,12 @@ datagrids:
                     - s.code
                     - w.name as websiteName
                 from:
-                    - { table: %oro_magento.entity.store.class%, alias: s }
+                    - { table: '%oro_magento.entity.store.class%', alias: s }
                 join:
                     left:
                         - { join: s.website, alias: w }
                         - { join: s.channel, alias: integrationChannel }
-                        - { join: %oro_channel.entity.class%, alias: dataChannel, conditionType: WITH, condition: "dataChannel.dataSource = integrationChannel" }
+                        - { join: '%oro_channel.entity.class%', alias: dataChannel, conditionType: WITH, condition: "dataChannel.dataSource = integrationChannel" }
         columns:
             name:
                 label: oro.magento.store.name.label
@@ -1400,7 +1400,7 @@ datagrids:
                     data_name: w.name
 
     magento-newsletter-subscriber-grid:
-        extended_entity_name: %oro_magento.entity.newsletter_subscriber.class%
+        extended_entity_name: '%oro_magento.entity.newsletter_subscriber.class%'
         acl_resource: oro_magento_newsletter_subscriber_view
         source:
             type: orm
@@ -1420,7 +1420,7 @@ datagrids:
                     - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                     - newsletterSubscriber AS customerData
                 from:
-                    - { table: %oro_magento.entity.newsletter_subscriber.class%, alias: newsletterSubscriber }
+                    - { table: '%oro_magento.entity.newsletter_subscriber.class%', alias: newsletterSubscriber }
                 join:
                     left:
                         - { join: newsletterSubscriber.customer, alias: customer }
@@ -1906,7 +1906,7 @@ datagrids:
             routerEnabled: false
 
     magento-customer-tracking-events-widget:
-        extended_entity_name: %oro_tracking.tracking_visit_event.class%
+        extended_entity_name: '%oro_tracking.tracking_visit_event.class%'
         acl_resource: oro_tracking_website_view
         extends: tracking-events-grid
         # Source config field is modified in TrackingEventsDataGridListener to change

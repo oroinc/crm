@@ -62,14 +62,14 @@ parameters:
 
 services:
     oro_channel.builder.factory:
-        class: %oro_channel.builder.factory.class%
+        class: '%oro_channel.builder.factory.class%'
         arguments:
           - "@doctrine"
           - "@oro_channel.provider.settings_provider"
 
     # forms
     oro_channel.form.type.channel:
-        class: %oro_channel.form.type.channel.class%
+        class: '%oro_channel.form.type.channel.class%'
         arguments:
             - "@oro_channel.provider.settings_provider"
             - "@oro_channel.form.subscriber.channel_subscriber"
@@ -77,32 +77,32 @@ services:
             - { name: form.type, alias: oro_channel_form }
 
     oro_channel.form.type.entity:
-        class: %oro_channel.form.type.entity.class%
+        class: '%oro_channel.form.type.entity.class%'
         tags:
             - { name: form.type, alias: oro_channel_entities }
 
     oro_channel.form.type.channel_datasource:
-        class: %oro_channel.form.type.channel_datasource.class%
+        class: '%oro_channel.form.type.channel_datasource.class%'
         arguments:
             - "@doctrine"
-            - %oro_integration.entity.class%
+            - '%oro_integration.entity.class%'
         tags:
             - { name: form.type, alias: oro_channel_datasource_form }
 
     oro_channel.form.type.channel_select:
-        class: %oro_channel.form.type.channel_select.class%
+        class: '%oro_channel.form.type.channel_select.class%'
         arguments:
             - '@oro_channel.provider.channels_by_entities'
         tags:
             - { name: form.type, alias: oro_channel_select_type }
 
     oro_channel.form.type.create_or_select_inline_channel_aware:
-        class: %oro_channel.form.type.create_or_select_inline_channel_aware.class%
+        class: '%oro_channel.form.type.create_or_select_inline_channel_aware.class%'
         tags:
             - { name: form.type, alias: oro_entity_create_or_select_inline_channel_aware }
 
     oro_channel.form.type.multiple_entity_channel_aware:
-        class: %oro_channel.form.type.multiple_entity_channel_aware.class%
+        class: '%oro_channel.form.type.multiple_entity_channel_aware.class%'
         tags:
             - { name: form.type, alias: oro_multiple_entity_channel_aware }
 
@@ -113,7 +113,7 @@ services:
 
     # handlers
     oro_channel.channel_form.handler:
-        class: %oro_channel.channel_form.handler.class%
+        class: '%oro_channel.channel_form.handler.class%'
         arguments:
             - "@request_stack"
             - "@oro_channel.form.channel"
@@ -121,24 +121,24 @@ services:
             - "@event_dispatcher"
 
     oro_channel.channel_integration_form.handler:
-        class: %oro_channel.channel_integration_form.handler.class%
+        class: '%oro_channel.channel_integration_form.handler.class%'
         arguments:
             - "@request_stack"
             - "@form.factory"
 
     # Channel API
     oro_channel.manager.channel.api:
-        class: %oro_channel.manager.channel.api.class%
+        class: '%oro_channel.manager.channel.api.class%'
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - %oro_channel.entity.class%
+            - '%oro_channel.entity.class%'
             - "@doctrine.orm.entity_manager"
 
     oro_channel.manager.customer_search.api:
-        class: %oro_channel.manager.customer_search.api.class%
+        class: '%oro_channel.manager.customer_search.api.class%'
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - %oro_channel.entity.class%
+            - '%oro_channel.entity.class%'
             - "@doctrine.orm.entity_manager"
             - "@oro_search.index"
             - "@event_dispatcher"
@@ -146,13 +146,13 @@ services:
 
     # Providers
     oro_channel.provider.settings_provider:
-        class: %oro_channel.provider.settings_provider.class%
+        class: '%oro_channel.provider.settings_provider.class%'
         arguments:
             - []
             - "@oro_channel.config_resolver"
 
     oro_channel.provider.exclusion_provider:
-        class: %oro_channel.provider.exclusion_provider.class%
+        class: '%oro_channel.provider.exclusion_provider.class%'
         arguments:
             - "@oro_channel.provider.settings_provider"
             - "@oro_channel.provider.state_provider"
@@ -160,7 +160,7 @@ services:
             - { name: oro_entity.exclusion_provider.default }
 
     oro_channel.provider.metadata_provider:
-        class: %oro_channel.provider.entity_metadata.class%
+        class: '%oro_channel.provider.entity_metadata.class%'
         arguments:
             - "@oro_channel.provider.settings_provider"
             - "@oro_entity.entity_provider"
@@ -168,39 +168,39 @@ services:
             - "@router"
 
     oro_channel.provider.request_channel:
-        class: %oro_channel.provider.request_channel.class%
+        class: '%oro_channel.provider.request_channel.class%'
         arguments:
             - "@request_stack"
             - "@doctrine"
 
     # datagrid
     oro_channel.datagrid.extension.orm_channel_limitation:
-        class: %oro_channel.datagrid.extension.orm_channel_limitation.class%
+        class: '%oro_channel.datagrid.extension.orm_channel_limitation.class%'
         tags:
             - { name: oro_datagrid.extension }
 
     # autocomplete
     oro_channel.autocomplete.channel_limitation_handler:
-        class: %oro_channel.autocomplete.channel_limitation_handler.class%
+        class: '%oro_channel.autocomplete.channel_limitation_handler.class%'
         calls:
             - [initDoctrinePropertiesByManagerRegistry, ["@doctrine"]]
-            - [initSearchIndexer, ["@oro_search.index", %oro_search.entities_config%]]
+            - [initSearchIndexer, ["@oro_search.index", '%oro_search.entities_config%']]
             - [setAclHelper,["@oro_security.acl_helper"]]
 
     # config resolver
     oro_channel.provider.channel_entity_exclusion_provider:
-        class: %oro_channel.provider.channel_entity_exclusion_provider.class%
+        class: '%oro_channel.provider.channel_entity_exclusion_provider.class%'
         arguments:
             - "@oro_channel.provider.settings_provider"
 
     oro_channel.provider.channel_entity_provider:
-        class: %oro_entity.entity_provider.class%
+        class: '%oro_entity.entity_provider.class%'
         parent: oro_entity.entity_provider.abstract
         calls:
             - [setExclusionProvider,  ["@oro_channel.provider.channel_entity_exclusion_provider"]]
 
     oro_channel.provider.state_provider:
-        class: %oro_channel.provider.state_provider.class%
+        class: '%oro_channel.provider.state_provider.class%'
         arguments:
             - "@oro_channel.provider.settings_provider"
             - "@oro_channel.state_cache"
@@ -209,18 +209,18 @@ services:
             - "@oro_security.acl_helper"
 
     oro_channel.provider.utils.entity_state_provider:
-        class: %oro_channel.provider.utils.entity_state_provider.class%
+        class: '%oro_channel.provider.utils.entity_state_provider.class%'
         abstract: true
         calls:
             - [setStateProvider,  ["@oro_channel.provider.state_provider"]]
 
     oro_channel.provider.lifetime.amount_provider:
-        class: %oro_channel.provider.lifetime.amount_provider.class%
+        class: '%oro_channel.provider.lifetime.amount_provider.class%'
         arguments:
             - "@doctrine"
 
     oro_channel.provider.lifetime.average_widget_provider:
-        class: %oro_channel.provider.lifetime.average_widget_provider.class%
+        class: '%oro_channel.provider.lifetime.average_widget_provider.class%'
         arguments:
             - '@doctrine'
             - '@oro_locale.settings'
@@ -228,13 +228,13 @@ services:
             - '@oro_dashboard.filter.date_filter_processor'
 
     oro_channel.config_resolver:
-        class: %oro_channel.config_resolver.class%
+        class: '%oro_channel.config_resolver.class%'
         arguments:
             - "@service_container"
 
     # event listeners
     oro_channel.event_listener.navigation:
-        class: %oro_channel.event_listener.navigation.class%
+        class: '%oro_channel.event_listener.navigation.class%'
         arguments:
             - "@oro_channel.provider.settings_provider"
             - "@oro_channel.provider.state_provider"
@@ -248,12 +248,12 @@ services:
               - [setNamespace, [ 'oro_channel_state' ] ]
 
     oro_channel.form.subscriber.channel_subscriber:
-        class: %oro_channel.form.subscriber.channel_subscriber.class%
+        class: '%oro_channel.form.subscriber.channel_subscriber.class%'
         arguments:
             - "@oro_channel.provider.settings_provider"
 
     oro_channel.event_listener.update_integration_connectors:
-        class: %oro_channel.event_listener.update_integration_connectors.class%
+        class: '%oro_channel.event_listener.update_integration_connectors.class%'
         arguments:
             - "@oro_channel.provider.settings_provider"
             - "@doctrine"
@@ -261,14 +261,14 @@ services:
             - { name: kernel.event_listener, event: oro_channel.channel.save_succeed, method: onChannelSave }
 
     oro_channel.event_listener.channel_succeed_deleted:
-        class: %oro_channel.event_listener.channel_before_deleted.class%
+        class: '%oro_channel.event_listener.channel_before_deleted.class%'
         arguments:
             - "@oro_integration.delete_manager"
         tags:
             - { name: kernel.event_listener, event: oro_channel.channel.before_delete, method: onChannelBeforeDelete }
 
     oro_channel.event_listener.embedded_form:
-        class: %oro_channel.event_listener.embedded_form.class%
+        class: '%oro_channel.event_listener.embedded_form.class%'
         arguments:
             - '@request_stack'
         tags:
@@ -276,7 +276,7 @@ services:
             - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }
 
     oro_channel.event_listener.doctrine:
-      class: %oro_channel.event_listener.doctrine.class%
+      class: '%oro_channel.event_listener.doctrine.class%'
       arguments:
           - "@oro_channel.provider.settings_provider"
       tags:
@@ -299,7 +299,7 @@ services:
         - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
     oro_channel.event_listener.job_execution:
-        class: %oro_channel.event_listener.job_execution.class%
+        class: '%oro_channel.event_listener.job_execution.class%'
         arguments:
             - "@oro_entity.doctrine_helper"
             - "@security.token_storage"
@@ -316,14 +316,14 @@ services:
             - { name: twig.extension }
 
     oro_channel.form.integration_type_extension:
-        class: %oro_channel.form.integration_type_extension.class%
+        class: '%oro_channel.form.integration_type_extension.class%'
         arguments:
             - "@oro_channel.provider.settings_provider"
         tags:
             - { name: form.type_extension, alias: oro_integration_channel_form }
 
     oro_channel.form.embedded_type_extension:
-        class: %oro_channel.form.embedded_type_extension.class%
+        class: '%oro_channel.form.embedded_type_extension.class%'
         tags:
             - { name: form.type_extension, alias: embedded_form }
 
@@ -337,7 +337,7 @@ services:
 
     #validators
     oro_channel.validators.channel_integration_validator:
-        class: %oro_channel.validators.channel_integration_validator.class%
+        class: '%oro_channel.validators.channel_integration_validator.class%'
         arguments:
             - "@oro_channel.provider.settings_provider"
         tags:
@@ -345,7 +345,7 @@ services:
 
     # import/export
     oro_channel.importexport.helper.channel:
-        class: %oro_channel.importexport.helper.channel.class%
+        class: '%oro_channel.importexport.helper.channel.class%'
         arguments:
             - "@doctrine"
 
@@ -371,7 +371,7 @@ services:
             - { name: form.type_extension, alias: oro_channel_select_type }
 
     oro_channel.event_listener.transitions_attribute:
-        class: %oro_channel.event_listener.transitions_attribute.class%
+        class: '%oro_channel.event_listener.transitions_attribute.class%'
         arguments:
             - '@form.factory'
             - '@oro_action.expression.context_accessor'

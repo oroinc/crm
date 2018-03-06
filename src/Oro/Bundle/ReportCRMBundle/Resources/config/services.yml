@@ -5,15 +5,15 @@ parameters:
 
 services:
     oro_reportcrm.report.filter.period:
-        class: %oro_reportcrm.report.filter.period.class%
+        class: '%oro_reportcrm.report.filter.period.class%'
         arguments:
             - '@form.factory'
             - '@oro_filter.filter_utility'
         tags:
-            - { name:oro_filter.extension.orm_filter.filter, type: oro_period_filter }
+            - { name: oro_filter.extension.orm_filter.filter, type: oro_period_filter }
 
     oro_reportcrm.report.grid.listener:
-        class: %oro_reportcrm.report.grid.listener.class%
+        class: '%oro_reportcrm.report.grid.listener.class%'
         tags:
             -
                 name:   kernel.event_listener
@@ -30,7 +30,7 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.oro_reportcrm-opportunities-by_status, method: onBuildAfter }
 
     oro_reportcrm.accounts.opportunities.listener:
-        class: %oro_reportcrm.accounts.opportunities.listener.class%
+        class: '%oro_reportcrm.accounts.opportunities.listener.class%'
         arguments:
             - '@oro_entity_extend.enum_value_provider'
         tags:

@@ -9,7 +9,7 @@ datagrids:
                     - c.name
                     - c.channelType
                 from:
-                    - { table: %oro_channel.entity.class%, alias: c }
+                    - { table: '%oro_channel.entity.class%', alias: c }
                 groupBy: c.id
         columns:
             name:

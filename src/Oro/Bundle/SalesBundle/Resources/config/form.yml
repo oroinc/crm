@@ -38,7 +38,7 @@ parameters:
 
 services:
     oro_sales.opportunity.form.type:
-        class: %oro_sales.opportunity.form.type.class%
+        class: '%oro_sales.opportunity.form.type.class%'
         arguments:
             - '@oro_sales.provider.probability'
             - '@oro_entity_extend.enum_value_provider'
@@ -72,13 +72,13 @@ services:
             - { name: form.type, alias: oro_sales_opportunity_status_enum_value }
 
     oro_sales.opportunity.form.type.api:
-        class: %oro_sales.opportunity.form.type.api.class%
+        class: '%oro_sales.opportunity.form.type.api.class%'
         parent: oro_sales.opportunity.form.type
         tags:
             - { name: form.type, alias: oro_sales_opportunity_api }
 
     oro_sales.lead_to_opportunity.form.type:
-        class: %oro_sales.lead_to_opportunity.form.type.class%
+        class: '%oro_sales.lead_to_opportunity.form.type.class%'
         tags:
             - { name: form.type, alias: oro_sales_lead_to_opportunity }
 
@@ -104,7 +104,7 @@ services:
             - "oro_sales_lead_to_opportunity"
 
     oro_sales.opportunity.form.handler:
-        class: %oro_sales.opportunity.form.handler.class%
+        class: '%oro_sales.opportunity.form.handler.class%'
         arguments:
             - "@oro_sales.opportunity.form"
             - "@request_stack"
@@ -113,7 +113,7 @@ services:
             - "@logger"
 
     oro_sales.lead_to_opportunity.form.handler:
-        class: %oro_sales.lead_to_opportunity.form.handler.class%
+        class: '%oro_sales.lead_to_opportunity.form.handler.class%'
         arguments:
             - "@oro_sales.lead_to_opportunity.form"
             - "@request_stack"
@@ -123,7 +123,7 @@ services:
             - "@logger"
 
     oro_sales.opportunity.form.handler.api:
-        class: %oro_sales.opportunity.form.handler.class%
+        class: '%oro_sales.opportunity.form.handler.class%'
         arguments:
             - "@oro_sales.opportunity.form.api"
             - "@request_stack"
@@ -132,17 +132,17 @@ services:
             - "@logger"
 
     oro_sales.lead.form.type:
-        class: %oro_sales.lead.form.type.class%
+        class: '%oro_sales.lead.form.type.class%'
         tags:
             - { name: form.type, alias: oro_sales_lead }
 
     oro_sales.lead.address.form.type:
-        class: %oro_sales.lead.address.form.type.class%
+        class: '%oro_sales.lead.address.form.type.class%'
         tags:
             - { name: form.type, alias: oro_sales_lead_address }
 
     oro_sales.lead.form.type.api:
-        class: %oro_sales.lead.form.type.api.class%
+        class: '%oro_sales.lead.form.type.api.class%'
         tags:
             - { name: form.type, alias: oro_sales_lead_api }
 
@@ -161,7 +161,7 @@ services:
             - "oro_sales_lead_api"
 
     oro_sales.lead.form.handler:
-        class: %oro_sales.lead.form.handler.class%
+        class: '%oro_sales.lead.form.handler.class%'
         arguments:
             - "@oro_sales.lead.form"
             - "@request_stack"
@@ -169,7 +169,7 @@ services:
             - "@oro_channel.provider.request_channel"
 
     oro_sales.lead.form.handler.api:
-        class: %oro_sales.lead.form.handler.class%
+        class: '%oro_sales.lead.form.handler.class%'
         arguments:
             - "@oro_sales.lead.form.api"
             - "@request_stack"
@@ -183,27 +183,27 @@ services:
             - "oro_sales_lead_address_form"
             - "oro_sales_lead_address"
             - ~
-            - { data_class: %oro_sales.leadaddress.entity.class% }
+            - { data_class: '%oro_sales.leadaddress.entity.class%' }
 
     oro_sales.lead_address.form.handler:
-        class: %oro_address.form.handler.address.class%
+        class: '%oro_address.form.handler.address.class%'
         arguments:
             - "@oro_sales.lead_address.form"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_sales.form.type.opportunity_select:
-        class: %oro_sales.form.type.opportunity_select.class%
+        class: '%oro_sales.form.type.opportunity_select.class%'
         tags:
             - { name: form.type, alias: oro_sales_opportunity_select }
 
     oro_sales.form.type.lead_select:
-        class: %oro_sales.form.type.lead_select.class%
+        class: '%oro_sales.form.type.lead_select.class%'
         tags:
             - { name: form.type, alias: "oro_sales_lead_select" }
 
     oro_sales.form.type.b2bcustomer_select:
-        class: %oro_sales.form.type.b2bcustomer_select.class%
+        class: '%oro_sales.form.type.b2bcustomer_select.class%'
         tags:
             - { name: form.type, alias: oro_sales_b2bcustomer_select }
 
@@ -215,12 +215,12 @@ services:
             - { name: form.type, alias: oro_sales_opportunity_status_select }
 
     oro_sales.salesfunnel.form.type:
-        class: %oro_sales.salesfunnel.form.type.class%
+        class: '%oro_sales.salesfunnel.form.type.class%'
         tags:
             - { name: form.type, alias: "oro_sales_funnel" }
 
     oro_sales.salesfunnel.form.type.api:
-        class: %oro_sales.salesfunnel.form.type.api.class%
+        class: '%oro_sales.salesfunnel.form.type.api.class%'
         tags:
             - { name: form.type, alias: "oro_sales_salesfunnel_api" }
 
@@ -239,40 +239,40 @@ services:
             - "oro_sales_salesfunnel_api"
 
     oro_sales.salesfunnel.form.handler:
-        class: %oro_sales.salesfunnel.form.handler.class%
+        class: '%oro_sales.salesfunnel.form.handler.class%'
         arguments:
             - "@oro_sales.salesfunnel.form"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_sales.salesfunnel.form.handler.api:
-        class: %oro_sales.salesfunnel.form.handler.class%
+        class: '%oro_sales.salesfunnel.form.handler.class%'
         arguments:
             - "@oro_sales.salesfunnel.form.api"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_sales.b2bcustomer.form.type:
-        class: %oro_sales.b2bcustomer.form.type.class%
+        class: '%oro_sales.b2bcustomer.form.type.class%'
         arguments:
             - "@property_accessor"
         tags:
             - { name: form.type, alias: oro_sales_b2bcustomer }
 
     oro_sales.b2bcustomer.form.type.api:
-        class: %oro_sales.b2bcustomer.form.type.api.class%
+        class: '%oro_sales.b2bcustomer.form.type.api.class%'
         arguments:
             - '@property_accessor'
         tags:
             - { name: form.type, alias: oro_sales_b2bcustomer_api }
 
     oro_sales.mailbox_process.lead.type:
-        class: %oro_sales.mailbox_process.lead.type.class%
+        class: '%oro_sales.mailbox_process.lead.type.class%'
         tags:
             - { name: form.type, alias: oro_sales_lead_mailbox_process_settings }
 
     oro_sales.lead_mailbox_process_source.type:
-        class: %oro_sales.lead_mailbox_process_source.type.class%
+        class: '%oro_sales.lead_mailbox_process_source.type.class%'
         arguments:  ["@oro_entity_extend.enum_value_provider"]
         tags:
             - { name: form.type, alias: oro_sales_lead_mailbox_process_source }
@@ -292,7 +292,7 @@ services:
             - "oro_sales_b2bcustomer_api"
 
     oro_sales.b2bcustomer.form.handler:
-        class: %oro_sales.b2bcustomer.form.handler.class%
+        class: '%oro_sales.b2bcustomer.form.handler.class%'
         arguments:
             - "@oro_sales.b2bcustomer.form"
             - "@request_stack"
@@ -300,7 +300,7 @@ services:
             - "@oro_channel.provider.request_channel"
 
     oro_sales.b2bcustomer.form.handler.api:
-        class: %oro_sales.b2bcustomer.form.handler.class%
+        class: '%oro_sales.b2bcustomer.form.handler.class%'
         arguments:
             - "@oro_sales.b2bcustomer.form.api"
             - "@request_stack"
@@ -329,12 +329,12 @@ services:
             - { name: form.type, alias: oro_type_widget_lead_status_select }
 
     oro_sales.form.type.lead_phone.type:
-        class: %oro_sales.lead_phone.form.type.class%
+        class: '%oro_sales.lead_phone.form.type.class%'
         tags:
             - { name: form.type, alias: oro_sales_lead_phone }
 
     oro_sales.form.type.lead_phone.handler:
-        class: %oro_sales.lead_phone.form.handler.class%
+        class: '%oro_sales.lead_phone.form.handler.class%'
         arguments:
             - "@form.factory"
             - "@request_stack"
@@ -342,12 +342,12 @@ services:
             - "@security.authorization_checker"
 
     oro_sales.form.type.lead_email.type:
-        class: %oro_sales.lead_email.type.class%
+        class: '%oro_sales.lead_email.type.class%'
         tags:
             - { name: form.type, alias: oro_sales_lead_email }
 
     oro_sales.form.type.lead_email.handler:
-        class: %oro_sales.lead_email.handler.class%
+        class: '%oro_sales.lead_email.handler.class%'
         arguments:
             - "@form.factory"
             - "@request_stack"
@@ -360,12 +360,12 @@ services:
         arguments: ["oro_b2bcustomer_phone", "oro_b2bcustomer_phone", null]
 
     oro_sales.form.type.b2bcustomer_phone.type:
-        class: %oro_sales.form.type.b2bcustomer_phone.class%
+        class: '%oro_sales.form.type.b2bcustomer_phone.class%'
         tags:
             - { name: form.type, alias: oro_b2bcustomer_phone }
 
     oro_sales.form.type.b2bcustomer_phone.handler:
-        class: %oro_sales.form.handler.b2bcustomer_phone.class%
+        class: '%oro_sales.form.handler.b2bcustomer_phone.class%'
         arguments:
             - "@oro_sales.form.type.b2bcustomer_phone"
             - "@request_stack"
@@ -379,12 +379,12 @@ services:
         arguments: ["oro_b2bcustomer_email", "oro_b2bcustomer_email", null]
 
     oro_sales.form.type.b2bcustomer_email.type:
-        class: %oro_sales.form.type.b2bcustomer_email.class%
+        class: '%oro_sales.form.type.b2bcustomer_email.class%'
         tags:
             - { name: form.type, alias: oro_b2bcustomer_email }
 
     oro_sales.form.type.b2bcustomer_email.handler:
-        class: %oro_sales.form.handler.b2bcustomer_email.class%
+        class: '%oro_sales.form.handler.b2bcustomer_email.class%'
         arguments:
             - "@oro_sales.form.type.b2bcustomer_email"
             - "@request_stack"
