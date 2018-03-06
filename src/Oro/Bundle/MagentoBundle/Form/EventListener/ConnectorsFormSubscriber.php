@@ -78,6 +78,9 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
                 }
             ));
 
+            //@TODO remove in scope BAP-15236
+            unset($config['cascade_validation']);
+
             $form->getParent()
                 ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
         }
