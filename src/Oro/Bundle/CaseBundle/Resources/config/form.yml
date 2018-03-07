@@ -10,27 +10,27 @@ parameters:
 
 services:
     oro_case.form.type.entity:
-        class: %oro_case.form.type.entity.class%
+        class: '%oro_case.form.type.entity.class%'
         tags:
             - { name: form.type, alias: oro_case_entity }
 
     oro_case.form.type.entity.api:
-        class: %oro_case.form.type.entity.api.class%
+        class: '%oro_case.form.type.entity.api.class%'
         tags:
             - { name: form.type, alias: oro_case_entity_api }
 
     oro_case.form.type.comment:
-        class: %oro_case.form.type.comment.class%
+        class: '%oro_case.form.type.comment.class%'
         tags:
             - { name: form.type, alias: oro_case_comment }
 
     oro_case.form.type.comment.api:
-        class: %oro_case.form.type.comment.api.class%
+        class: '%oro_case.form.type.comment.api.class%'
         tags:
             - { name: form.type, alias: oro_case_comment_api }
 
     oro_case.form.type.case_mailbox_process:
-        class: %oro_case.form.type.case_mailbox_process.class%
+        class: '%oro_case.form.type.case_mailbox_process.class%'
         tags:
             - { name: form.type, alias: oro_case_mailbox_process_settings }
 
@@ -63,7 +63,7 @@ services:
             - 'oro_case_comment_api'
 
     oro_case.form.handler.entity:
-        class: %oro_case.form.handler.entity.class%
+        class: '%oro_case.form.handler.entity.class%'
         arguments:
             - "@oro_case.form.entity"
             - "@request_stack"
@@ -71,7 +71,7 @@ services:
             - "@event_dispatcher"
 
     oro_case.form.handler.entity.api:
-        class: %oro_case.form.handler.entity.class%
+        class: '%oro_case.form.handler.entity.class%'
         arguments:
             - "@oro_case.form.entity.api"
             - "@request_stack"
@@ -79,7 +79,7 @@ services:
             - "@event_dispatcher"
 
     oro_case.form.handler.comment:
-        class: %oro_case.form.handler.entity.class%
+        class: '%oro_case.form.handler.entity.class%'
         arguments:
             - "@oro_case.form.comment"
             - "@request_stack"
@@ -87,7 +87,7 @@ services:
             - "@event_dispatcher"
 
     oro_case.form.handler.comment.api:
-        class: %oro_case.form.handler.entity.class%
+        class: '%oro_case.form.handler.entity.class%'
         arguments:
             - "@oro_case.form.comment.api"
             - "@request_stack"
@@ -95,7 +95,7 @@ services:
             - "@event_dispatcher"
 
     oro_case.form.type.case_mailbox_process_settings_tag:
-        class: %oro_case.form.type.case_mailbox_process_settings_tag.class%
+        class: '%oro_case.form.type.case_mailbox_process_settings_tag.class%'
         arguments:
             - "@oro_tag.form.subscriber.tag_select"
             - "@oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber"
@@ -103,5 +103,5 @@ services:
             - { name: form.type, alias: case_mailbox_process_settings_tag }
 
     oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber:
-        class: %oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber.class%
+        class: '%oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber.class%'
         parent: oro_tag.form.subscriber.tag_select

@@ -13,12 +13,12 @@ services:
         arguments: ["oro_contact_phone", "oro_contact_phone", null]
 
     oro_contact.form.type.contact_phone.type:
-        class: %oro_contact.form.type.contact_phone.class%
+        class: '%oro_contact.form.type.contact_phone.class%'
         tags:
             - { name: form.type, alias: oro_contact_phone }
 
     oro_contact.form.type.contact_phone.handler:
-        class: %oro_contact.form.handler.contact_phone.class%
+        class: '%oro_contact.form.handler.contact_phone.class%'
         arguments:
             - "@oro_contact.form.type.contact_phone"
             - "@request_stack"
@@ -32,12 +32,12 @@ services:
         arguments: ["oro_contact_email", "oro_contact_email", null]
 
     oro_contact.form.type.contact_email.type:
-        class: %oro_contact.form.type.contact_email.class%
+        class: '%oro_contact.form.type.contact_email.class%'
         tags:
             - { name: form.type, alias: oro_contact_email }
 
     oro_contact.form.type.contact_email.handler:
-        class: %oro_contact.form.handler.contact_email.class%
+        class: '%oro_contact.form.handler.contact_email.class%'
         arguments:
             - "@oro_contact.form.type.contact_email"
             - "@request_stack"

@@ -18,7 +18,7 @@ datagrids:
                     - pr.label as priorityLabel
                     - pr.name as priority
                 from:
-                    - { table: %oro_case.entity.class%, alias: caseEntity }
+                    - { table: '%oro_case.entity.class%', alias: caseEntity }
                 join:
                     left:
                         - { join: caseEntity.relatedContact, alias: relatedContact }
@@ -30,7 +30,7 @@ datagrids:
                         - { join: caseEntity.priority, alias: pr }
         inline_editing:
             enable: true
-            entity_name: %oro_case.entity.class%
+            entity_name: '%oro_case.entity.class%'
         columns:
             caseNumber:
                 label: oro.case.datagrid.case_number.label
@@ -253,7 +253,7 @@ datagrids:
                     - status.label as statusLabel
                     - priority.label as priorityLabel
                 from:
-                    - { table: %oro_case.entity.class%, alias: caseEntity }
+                    - { table: '%oro_case.entity.class%', alias: caseEntity }
                 join:
                     left:
                         - { join: caseEntity.relatedContact, alias: relatedContact }

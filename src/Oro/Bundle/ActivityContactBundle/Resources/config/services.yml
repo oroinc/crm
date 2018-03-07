@@ -9,7 +9,7 @@ parameters:
 
 services:
     oro_activiy_contact.listener.activity_contact_migration:
-        class: %oro_activiy_contact.listener.activity_contact_migration.class%
+        class: '%oro_activiy_contact.listener.activity_contact_migration.class%'
         arguments:
             - "@oro_entity_extend.migration.entity_metadata_helper"
             - "@oro_activity_contact.provider"
@@ -17,7 +17,7 @@ services:
             - { name: kernel.event_listener, event: oro_migration.post_up, method: onPostUp, priority: -100 }
 
     oro_activity_contact.entity_config_dumper.extension:
-        class: %oro_activity_contact.entity_config_dumper.extension.class%
+        class: '%oro_activity_contact.entity_config_dumper.extension.class%'
         arguments:
             - "@oro_entity_config.config_manager"
             - "@oro_activity_contact.provider"
@@ -25,10 +25,10 @@ services:
             - { name: oro_entity_extend.entity_config_dumper_extension }
 
     oro_activity_contact.provider:
-        class: %oro_activity_contact.provider.class%
+        class: '%oro_activity_contact.provider.class%'
 
     oro_activity_contact.listener.activity_listener:
-        class: %oro_activity_contact.listener.activity_listener.class%
+        class: '%oro_activity_contact.listener.activity_listener.class%'
         arguments:
             - "@oro_activity_contact.provider"
             - "@oro_entity.doctrine_helper"
@@ -40,7 +40,7 @@ services:
             - { name: doctrine.event_listener, event: postFlush }
 
     oro_activity_contact.email_activity_direction.provider:
-        class: %oro_activity_contact.email_activity_direction.provider.class%
+        class: '%oro_activity_contact.email_activity_direction.provider.class%'
         arguments:
             - "@oro_entity_config.provider.entity"
             - "@oro_entity.doctrine_helper"
@@ -50,10 +50,10 @@ services:
 
 
     oro_activity_contact.entity_activity_contact_data_provider:
-        class: %oro_activity_contact.entity_activity_contact_data_provider.class%
+        class: '%oro_activity_contact.entity_activity_contact_data_provider.class%'
         arguments:
             - "@oro_entity_config.config_manager"
 
     oro_activity_contact.placeholder.filter:
-        class: %oro_activity_contact.placeholder.filter.class%
+        class: '%oro_activity_contact.placeholder.filter.class%'
         parent: oro_activity_list.placeholder.filter

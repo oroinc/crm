@@ -3,7 +3,7 @@ parameters:
 
 services:
     oro_magento.orm.regions_repository:
-        class: %oro_magento.orm.repository.class%
+        class: '%oro_magento.orm.repository.class%'
         factory: ['@doctrine', getRepository]
         arguments:
             - OroMagentoBundle:Region

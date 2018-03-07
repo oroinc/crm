@@ -11,7 +11,7 @@ datagrids:
                     - phone.phone as primaryPhone
                     - max(history.visitedAt) as visitDate
                 from:
-                    - { table: %oro_contact.entity.class%, alias: c }
+                    - { table: '%oro_contact.entity.class%', alias: c }
                 join:
                     left:
                         - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
@@ -58,7 +58,7 @@ datagrids:
                     - g.id
                     - g.label
                 from:
-                  - { table: %oro_contact.group.entity.class%, alias: g }
+                  - { table: '%oro_contact.group.entity.class%', alias: g }
         columns:
             label:
                 label: oro.contact.group.label.label
@@ -118,7 +118,7 @@ datagrids:
                         THEN true ELSE false END
                       END) as hasGroup
                 from:
-                    - { table: %oro_contact.entity.class%, alias: c }
+                    - { table: '%oro_contact.entity.class%', alias: c }
             bind_parameters:
                 -
                     name: group
@@ -153,7 +153,7 @@ datagrids:
                     data_name: c.firstName
                 lastName:
                     data_name: c.lastName
-            default: { hasGroup: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
+            default: { hasGroup: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC' }
         options:
             entityHint: contacts
             rowSelection:
@@ -165,7 +165,7 @@ datagrids:
 
     # contacts main grid show on oro_contact_index route
     contacts-grid:
-        extended_entity_name: %oro_contact.entity.class%
+        extended_entity_name: '%oro_contact.entity.class%'
         mixins:
             - activity-contact-data-hidden-mixin
             - activity-contact-days-since-last-contact-hidden-mixin
@@ -202,7 +202,7 @@ datagrids:
                     - CONCAT_WS(' ', assignedTo.firstName, assignedTo.lastName) as assignedName
                     - CONCAT_WS(' ', reportsTo.firstName, reportsTo.lastName) as reportsName
                 from:
-                    - { table: %oro_contact.entity.class%, alias: c }
+                    - { table: '%oro_contact.entity.class%', alias: c }
                 join:
                     left:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -398,8 +398,8 @@ datagrids:
                 reportsName:
                     data_name: reportsName
             default:
-                lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
-                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                lastName:  '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
+                firstName: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
         filters:
             columns:
                 firstName:
@@ -543,7 +543,7 @@ datagrids:
         mass_actions:
             merge:
                 type: merge
-                entity_name: %oro_contact.entity.class%
+                entity_name: '%oro_contact.entity.class%'
                 data_identifier: c.id
         options:
             entityHint: contacts
@@ -623,7 +623,7 @@ datagrids:
                 ownerName:         { data_name: ownerName }
                 createdAt:         { data_name: a.createdAt }
                 updatedAt:         { data_name: a.updatedAt }
-            default: { hasContact: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
+            default: { hasContact: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC' }
         filters:
             columns:
                 hasContact:
@@ -675,7 +675,7 @@ datagrids:
 
     # contacts select grid used for contact selection in dialog
     contacts-select-grid:
-        extended_entity_name: %oro_contact.entity.class%
+        extended_entity_name: '%oro_contact.entity.class%'
         acl_resource: oro_contact_view
         source:
             type: orm
@@ -691,7 +691,7 @@ datagrids:
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                 from:
-                    - { table: %oro_contact.entity.class%, alias: c }
+                    - { table: '%oro_contact.entity.class%', alias: c }
                 join:
                     left:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -739,8 +739,8 @@ datagrids:
                 addressPostalCode:
                     data_name: address.postalCode
             default:
-                lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
-                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                lastName:  '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
+                firstName: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
         filters:
             columns:
                 firstName:
@@ -789,7 +789,7 @@ datagrids:
 
     # contacts grid for context
     contacts-for-context-grid:
-        extended_entity_name: %oro_contact.entity.class%
+        extended_entity_name: '%oro_contact.entity.class%'
         acl_resource: oro_contact_view
         source:
             type: orm
@@ -805,7 +805,7 @@ datagrids:
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                 from:
-                    - { table: %oro_contact.entity.class%, alias: c }
+                    - { table: '%oro_contact.entity.class%', alias: c }
                 join:
                     left:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -851,8 +851,8 @@ datagrids:
                 regionLabel:
                     data_name: regionLabel
             default:
-                lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
-                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                lastName:  '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
+                firstName: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
         filters:
             columns:
                 firstName:

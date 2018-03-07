@@ -154,7 +154,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                     'form'                         => [
                         new FormTypeCsrfExtension(
                             $this
-                                ->createMock('Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface')
+                                ->createMock('Symfony\Component\Security\Csrf\CsrfTokenManagerInterface')
                         ),
                         new FormTypeValidatorExtension($validator),
                         new TooltipFormExtension($this->entityConfigProvider, $this->translator),

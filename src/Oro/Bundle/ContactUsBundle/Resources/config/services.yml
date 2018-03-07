@@ -6,7 +6,7 @@ parameters:
 
 services:
     oro_contact_us.embedded_form:
-        class: %oro_contact_us.embedded_form.class%
+        class: '%oro_contact_us.embedded_form.class%'
         tags:
             - { name: oro_embedded_form, label: oro.contactus.contactrequest.entity_label }
             - { name: form.type, alias: oro_contactus_contact_request }
@@ -20,14 +20,14 @@ services:
             - null
 
     oro_contact_us.contact_request.form.handler:
-        class: %oro_contact_us.contact_request.form.handler.class%
+        class: '%oro_contact_us.contact_request.form.handler.class%'
         arguments:
             - "@oro_contact_us.contact_request.form"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact_us.provider.phone.abstract_contact_request:
-        class: %oro_contact_us.provider.phone.abstract_contact_request.class%
+        class: '%oro_contact_us.provider.phone.abstract_contact_request.class%'
         tags:
             - { name: oro_address.phone_provider, class: Oro\Bundle\ContactUsBundle\Entity\AbstractContactRequest }
 
@@ -35,7 +35,7 @@ services:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - %oro_contact_us.contactrequest.entity.class%
+            - '%oro_contact_us.contactrequest.entity.class%'
             - "@doctrine.orm.entity_manager"
 
     oro_contact_us.form.type.contact_reason:
