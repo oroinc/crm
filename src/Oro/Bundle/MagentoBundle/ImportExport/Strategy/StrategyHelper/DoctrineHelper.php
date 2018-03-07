@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
-use Symfony\Component\Security\Core\Util\ClassUtils;
+use Symfony\Component\Security\Acl\Util\ClassUtils;
 
 class DoctrineHelper
 {

@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
-use Symfony\Component\Security\Core\Util\ClassUtils;
+use Symfony\Component\Security\Acl\Util\ClassUtils;
 
 class LifetimeValueAverageAggregationRepository extends EntityRepository
 {

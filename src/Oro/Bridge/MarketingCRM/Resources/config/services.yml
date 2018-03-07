@@ -5,12 +5,12 @@ parameters:
 
 services:
     oro_magento.event_listener.tracking_events_datagrid_listener:
-        class: %oro_magento.event_listener.tracking_events_datagrid_listener.class%
+        class: '%oro_magento.event_listener.tracking_events_datagrid_listener.class%'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customer-tracking-events-widget, method: onPreBuild, priority: 255 }
 
     oro_magento.provider.tracking_customer_identificator:
-        class: %oro_magento.provider.tracking_customer_identificator.class%
+        class: '%oro_magento.provider.tracking_customer_identificator.class%'
         arguments:
            - "@doctrine"
            - "@oro_entity_config.provider.extend"
@@ -19,7 +19,7 @@ services:
            - {name: oro_tracking.provider.identification, priority: 10}
 
     oro_channel.listener.channel_repository_subscriber:
-        class: %oro_channel.listener.channel_repository_subscriber.class%
+        class: '%oro_channel.listener.channel_repository_subscriber.class%'
         tags:
             - { name: doctrine.event_subscriber }
 

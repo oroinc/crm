@@ -22,43 +22,43 @@ parameters:
     oro_analytics.model.rfm_state_manager.class: Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager
 services:
     oro_analytics.builder:
-        class: %oro_analytics.builder.class%
+        class: '%oro_analytics.builder.class%'
         arguments:
             - []
 
     oro_analytics.builder.rfm:
-        class: %oro_analytics.builder.rfm.class%
+        class: '%oro_analytics.builder.rfm.class%'
         arguments:
             - '@oro_entity.doctrine_helper'
         tags:
             - { name: oro_analytics.builder }
 
     oro_analytics.form.type.category:
-        class: %oro_analytics.form.type.category.class%
+        class: '%oro_analytics.form.type.category.class%'
         tags:
             - { name: form.type, alias: "oro_analytics_rfm_category" }
 
     oro_analytics.form.type.category_settings:
-        class: %oro_analytics.form.type.category_settings.class%
+        class: '%oro_analytics.form.type.category_settings.class%'
         tags:
             - { name: form.type, alias: "oro_analytics_rfm_category_settings" }
 
     oro_analytics.form.channel_type_extension:
-        class: %oro_analytics.form.channel_type_extension.class%
+        class: '%oro_analytics.form.channel_type_extension.class%'
         arguments:
             - '@oro_entity.doctrine_helper'
-            - %oro_analytics.model.rfm_aware_interface%
-            - %oro_analytics.entity.rfm_category.class%
+            - '%oro_analytics.model.rfm_aware_interface%'
+            - '%oro_analytics.entity.rfm_category.class%'
         tags:
             - { name: form.type_extension, alias: oro_channel_form }
 
     oro_analytics.placeholder.rfm_filter:
-        class: %oro_analytics.placeholder.rfm_filter.class%
+        class: '%oro_analytics.placeholder.rfm_filter.class%'
         arguments:
-            - %oro_analytics.model.analytics_aware_interface%
+            - '%oro_analytics.model.analytics_aware_interface%'
 
     oro_analytics.event_listener.timezone_change:
-        class: %oro_analytics.event_listener.timezone_change.class%
+        class: '%oro_analytics.event_listener.timezone_change.class%'
         arguments:
             - '@oro_analytics.model.rfm_state_manager'
             - '@oro_analytics.calculate_analytics_scheduler'
@@ -66,29 +66,29 @@ services:
             - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
     oro_analytics.validator.categories:
-        class: %oro_analytics.validator.categories.class%
+        class: '%oro_analytics.validator.categories.class%'
         tags:
             - { name: validator.constraint_validator, alias: oro_analytics.categories_validator }
 
     oro_analytics.model.state_manager:
-        class: %oro_analytics.model.state_manager.class%
+        class: '%oro_analytics.model.state_manager.class%'
         arguments:
             - '@oro_entity.doctrine_helper'
 
     oro_analytics.model.rfm_state_manager:
-        class: %oro_analytics.model.rfm_state_manager.class%
+        class: '%oro_analytics.model.rfm_state_manager.class%'
         arguments:
             - '@oro_entity.doctrine_helper'
-            - %oro_analytics.model.rfm_aware_interface%
-            - %oro_channel.entity.class%
+            - '%oro_analytics.model.rfm_aware_interface%'
+            - '%oro_channel.entity.class%'
 
     oro_analytics.event_listener.rfm_category:
-        class: %oro_analytics.event_listener.rfm_category.class%
+        class: '%oro_analytics.event_listener.rfm_category.class%'
         arguments:
             - '@oro_analytics.model.rfm_state_manager'
             - '@oro_analytics.calculate_analytics_scheduler'
-            - %oro_analytics.entity.rfm_category.class%
-            - %oro_channel.entity.class%
+            - '%oro_analytics.entity.rfm_category.class%'
+            - '%oro_channel.entity.class%'
         tags:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: kernel.event_listener, event: oro_channel.channel.save_succeed, method: onChannelSucceedSave }

@@ -232,8 +232,6 @@ Oro\Bundle\MagentoBundle\Entity\CartItem:
             - NotNull: ~
         taxPercent:
             - NotNull: ~
-        taxPercent:
-            - NotNull: ~
         createdAt:
             - DateTime: ~
             - NotBlank: ~

@@ -1,6 +1,6 @@
 datagrids:
     orcrm-contact-requests-grid:
-        extended_entity_name: %oro_contact_us.contactrequest.entity.class%
+        extended_entity_name: '%oro_contact_us.contactrequest.entity.class%'
         acl_resource: oro_contactus_request_view
         source:
             type: orm
@@ -14,7 +14,7 @@ datagrids:
                     - cr.createdAt
                     - rsn.label as cntReason
                 from:
-                    - { table: %oro_contact_us.contactrequest.entity.class%, alias: cr }
+                    - { table: '%oro_contact_us.contactrequest.entity.class%', alias: cr }
                 join:
                     left:
                         - { join: cr.contactReason, alias: rsn }
@@ -46,7 +46,7 @@ datagrids:
                 createdAt:
                     data_name: cr.createdAt
             default:
-                createdAt: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
+                createdAt: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC'
         filters:
             columns:
                 firstName:
