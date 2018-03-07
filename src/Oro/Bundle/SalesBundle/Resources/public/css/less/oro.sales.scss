@@ -1,0 +1,108 @@
+/**
+* Fix form style in system configuration
+*/
+form[name=opportunity] {
+  .form-horizontal-large,
+  .form-horizontal {
+    .control-group-oro_sales_opportunity_probability,
+    .control-group-oro_sales_opportunity_status_config {
+
+      > .controls {
+        margin-left: 0;
+
+        .control-label.wrap {
+          text-align: right;
+          width: 240px;
+          padding-right: 10px;
+        }
+      }
+    }
+
+    .enum-value-collection {
+      width: 350px;
+    }
+
+    .control-group-oro_entity_config_scope_type {
+      .control-group-collection .control-label.wrap {
+        position: absolute;
+      }
+      > .controls {
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+.oro-item-collection .input-append-sortable {
+  input[type="text"].add-on-input {
+      display: inline-block;
+      height: 20px;
+      text-shadow: 0 1px 0 #fff;
+      margin-left: -1px;
+      border-radius: 0;
+      width: 40px;
+  }
+}
+
+.sales-account-autocomplete {
+  .select2-results > .select2-result:first-child {
+    border-top: none;
+    padding-top: 0px;
+    margin-bottom: 7px;
+  }
+  .select2-results > .select2-result {
+    border-top: 1px solid #f4f4f4;
+    padding-top: 13px;
+    margin-bottom: 7px;
+  }
+  .select2-results {
+    .select2-result-with-children.select2-highlighted {
+      background: #ffffff;
+    }
+
+    .select2-result-label {
+      .separated-img {
+        width: 16px;
+      }
+    }
+
+    .select2-result-with-children.select2-highlighted{
+      .type {
+        color: #8f8f8f;
+      }
+      .match-value {
+        color: #8f8f8f;
+      }
+    }
+
+    .select2-highlighted {
+      background: #4476db;
+
+      .type {
+        color: #ffffff;
+      }
+      .match-value {
+        color: #ffffff;
+      }
+    }
+
+    .type {
+      color: #8f8f8f;
+    }
+    .match-value {
+      font-size: 11px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1;
+      color: #8f8f8f;
+      margin-left: 27px;
+    }
+  }
+  .select2-results .select2-results-dept-1 .select2-result-label {
+    padding-left: 7px;
+  }
+  .select2-result-with-children > .select2-result-label {
+    display: none;
+  }
+}

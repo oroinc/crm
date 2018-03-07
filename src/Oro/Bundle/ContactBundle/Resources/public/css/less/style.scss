@@ -1,0 +1,50 @@
+.contact-box-wrapper {
+  position: relative;
+}
+.contact-box-row {
+  padding: 5px 0;
+  line-height: 24px;
+  &:empty {
+    display: none;
+  }
+  .contact-element-label {
+    padding-right: 5px;
+    line-height: 24px;
+    + .inline-actions-element {
+      top: 0;
+    }
+  }
+}
+.contact-box {
+  background-color: #F6F6F6;
+  float: left;
+  margin: 3px;
+  padding: 10px 20px;
+  width: calc(50% - 6px);
+}
+.contact-widget-wrapper {
+  padding: 0 0 0 20px;
+  .title {
+    padding-left: 3px;
+  }
+}
+.contact-box-name-link {
+  font-weight: bold;
+}
+.contact-collection-element {
+  margin-bottom: 2px;
+  &:last-child {
+    margin-bottom: -3px;
+  }
+  .mobile-version & {
+    margin-bottom: 8px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  &.primary {
+    .phone, .email {
+      font-weight: bold;
+    }
+  }
+}
