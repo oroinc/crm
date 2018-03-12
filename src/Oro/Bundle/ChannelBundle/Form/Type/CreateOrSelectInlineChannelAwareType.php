@@ -39,7 +39,7 @@ class CreateOrSelectInlineChannelAwareType extends AbstractChannelAwareType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setOptional(['channel_id']);
+        $resolver->setDefined(['channel_id']);
         $resolver->setDefaults(['channel_field' => 'dataChannel', 'channel_required' => true]);
     }
 
