@@ -57,7 +57,7 @@ class ChannelType extends AbstractType
                 'required' => true,
                 'label'    => 'oro.channel.channel_type.label',
                 'configs'  => ['placeholder' => 'oro.channel.form.select_channel_type.label'],
-                'empty_value'     => '',
+                'placeholder' => '',
             ]
         );
         $builder->add(

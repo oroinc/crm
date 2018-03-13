@@ -99,7 +99,7 @@ class ContactType extends AbstractType
                 'class'       => 'OroContactBundle:Source',
                 'property'    => 'label',
                 'required'    => false,
-                'empty_value' => false,
+                'placeholder' => false,
             )
         );
 
@@ -126,7 +126,7 @@ class ContactType extends AbstractType
                 'class'       => 'OroContactBundle:Method',
                 'property'    => 'label',
                 'required'    => false,
-                'empty_value' => 'oro.contact.form.choose_contact_method'
+                'placeholder' => 'oro.contact.form.choose_contact_method'
             )
         );
 
