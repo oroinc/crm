@@ -1,4 +1,4 @@
 assets:
     css:
         orocontact:
-            - 'bundles/orocontact/css/less/style.scss'
+            - 'bundles/orocontact/css/scss/style.scss'
