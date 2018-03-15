@@ -41,15 +41,16 @@ class CustomerGroupSelectType extends AbstractType
         );
 
         // Set store form type readonly if ASSIGN permissions for integration not set
-        $resolver->setNormalizers(
-            [
-                'disabled' => function (Options $options, $value) {
-                    return $this->isReadOnly($options) ? true : $value;
-                },
-                'validation_groups' => function (Options $options, $value) {
-                    return $options['disabled'] ? false : $value;
-                },
-            ]
+        $resolver->setNormalizer(
+            'disabled',
+            function (Options $options, $value) {
+                return $this->isReadOnly() ? true : $value;
+            }
+        )->setNormalizer(
+            'validation_groups',
+            function (Options $options, $value) {
+                return $options['disabled'] ? false : $value;
+            }
         );
     }
 
@@ -80,11 +81,9 @@ class CustomerGroupSelectType extends AbstractType
     /**
      * Checks if the form type should be read-only or not
      *
-     * @param array $options
-     *
      * @return bool
      */
-    protected function isReadOnly($options)
+    protected function isReadOnly()
     {
         return !$this->authorizationChecker->isGranted('oro_integration_assign');
     }

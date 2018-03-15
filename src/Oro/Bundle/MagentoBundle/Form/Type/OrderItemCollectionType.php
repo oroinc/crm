@@ -13,17 +13,16 @@ class OrderItemCollectionType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setNormalizers(
-            [
-                'entry_options' => function (Options $options, $values) {
-                    if (!$values) {
-                        $values = [];
-                    }
-                    $values['single_form'] = false;
-
-                    return $values;
+        $resolver->setNormalizer(
+            'entry_options',
+            function (Options $options, $values) {
+                if (!$values) {
+                    $values = [];
                 }
-            ]
+                $values['single_form'] = false;
+
+                return $values;
+            }
         );
     }
 

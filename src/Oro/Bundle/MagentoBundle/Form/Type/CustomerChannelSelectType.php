@@ -75,45 +75,44 @@ class CustomerChannelSelectType extends AbstractType
             throw new \InvalidArgumentException('Channel class is missing');
         }
 
-        $resolver->setNormalizers(
-            [
-                'query_builder' => function (Options $options, $value) {
-                    $entities     = $options['entities'];
-                    $queryBuilder = $this->channelsProvider->getChannelsByEntitiesQB($entities);
+        $resolver->setNormalizer(
+            'query_builder',
+            function (Options $options, $value) {
+                $entities     = $options['entities'];
+                $queryBuilder = $this->channelsProvider->getChannelsByEntitiesQB($entities);
 
-                    $queryBuilder
-                        ->join('c.dataSource', 'd')
-                        ->andWhere(
-                            $queryBuilder->expr()->andX(
-                                $queryBuilder->expr()->eq('d.type', ':type'),
-                                $queryBuilder->expr()->eq('d.enabled', ':enabled')
-                            )
+                $queryBuilder
+                    ->join('c.dataSource', 'd')
+                    ->andWhere(
+                        $queryBuilder->expr()->andX(
+                            $queryBuilder->expr()->eq('d.type', ':type'),
+                            $queryBuilder->expr()->eq('d.enabled', ':enabled')
                         )
-                        /**
-                         * @todo Remove dependency on exact magento channel type in CRM-8153
-                         */
-                        ->setParameter('type', MagentoChannelType::TYPE)
-                        ->setParameter('enabled', true);
+                    )
+                    /**
+                     * @todo Remove dependency on exact magento channel type in CRM-8153
+                     */
+                    ->setParameter('type', MagentoChannelType::TYPE)
+                    ->setParameter('enabled', true);
 
-                    $filteredQb = clone $queryBuilder;
-                    /** @var Channel[] $channels */
-                    $channels     = $filteredQb->getQuery()->getResult();
-                    $skipEntities = [];
-                    foreach ($channels as $channel) {
-                        $dataSource = $channel->getDataSource();
-                        if (!(bool)$dataSource->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled')) {
-                            $skipEntities[] = $channel->getId();
-                        }
+                $filteredQb = clone $queryBuilder;
+                /** @var Channel[] $channels */
+                $channels     = $filteredQb->getQuery()->getResult();
+                $skipEntities = [];
+                foreach ($channels as $channel) {
+                    $dataSource = $channel->getDataSource();
+                    if (!(bool)$dataSource->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled')) {
+                        $skipEntities[] = $channel->getId();
                     }
-
-                    if ($skipEntities) {
-                        $queryBuilder->andWhere($queryBuilder->expr()->notIn('c.id', ':skipEntities'))
-                            ->setParameter('skipEntities', $skipEntities);
-                    }
-
-                    return $queryBuilder;
                 }
-            ]
+
+                if ($skipEntities) {
+                    $queryBuilder->andWhere($queryBuilder->expr()->notIn('c.id', ':skipEntities'))
+                        ->setParameter('skipEntities', $skipEntities);
+                }
+
+                return $queryBuilder;
+            }
         );
     }
 }

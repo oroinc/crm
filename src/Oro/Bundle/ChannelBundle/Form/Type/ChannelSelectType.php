@@ -74,14 +74,13 @@ class ChannelSelectType extends AbstractType
             ]
         );
 
-        $resolver->setNormalizers(
-            [
-                'choices' => function (Options $options, $value) {
-                    $entities = $options['entities'];
+        $resolver->setNormalizer(
+            'choices',
+            function (Options $options, $value) {
+                $entities = $options['entities'];
 
-                    return $this->channelsProvider->getChannelsByEntities($entities);
-                }
-            ]
+                return $this->channelsProvider->getChannelsByEntities($entities);
+            }
         );
     }
 }
