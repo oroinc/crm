@@ -7,6 +7,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomerPhone;
 
 /**
+ * Entity holds one phone of Business Customer. Will be used in collection of phones and can be marked as primary.
+ *
  * @ORM\Entity
  * @ORM\Table("orocrm_sales_b2bcustomer_phone", indexes={
  *      @ORM\Index(name="primary_phone_idx", columns={"phone", "is_primary"}),
@@ -42,18 +44,17 @@ class B2bCustomerPhone extends ExtendB2bCustomerPhone
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $owner;
+
     /**
-     * Set B2b customer as owner.
-     *
      * @param B2bCustomer $owner
      */
     public function setOwner(B2bCustomer $owner = null)
     {
         $this->owner = $owner;
+        $this->owner->addPhone($this);
     }
+
     /**
-     * Get owner B2bCustomer.
-     *
      * @return B2bCustomer
      */
     public function getOwner()
