@@ -7,6 +7,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
 class B2bCustomerPhoneTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var B2bCustomerPhone */
     protected $phone;
 
     protected function setUp()
@@ -18,9 +19,10 @@ class B2bCustomerPhoneTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->phone->getOwner());
 
-        $contact = new B2bCustomer();
-        $this->phone->setOwner($contact);
+        $customer = new B2bCustomer();
+        $this->phone->setOwner($customer);
 
-        $this->assertEquals($contact, $this->phone->getOwner());
+        $this->assertEquals($customer, $this->phone->getOwner());
+        $this->assertContains($this->phone, $customer->getPhones());
     }
 }

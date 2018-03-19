@@ -7,6 +7,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 
 class B2bCustomerEmailTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var B2bCustomerEmail */
     protected $email;
 
     protected function setUp()
@@ -18,9 +19,10 @@ class B2bCustomerEmailTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->email->getOwner());
 
-        $contact = new B2bCustomer();
-        $this->email->setOwner($contact);
+        $customer = new B2bCustomer();
+        $this->email->setOwner($customer);
 
-        $this->assertEquals($contact, $this->email->getOwner());
+        $this->assertEquals($customer, $this->email->getOwner());
+        $this->assertContains($this->email, $customer->getEmails());
     }
 }
