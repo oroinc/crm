@@ -12,6 +12,16 @@ define([
                 'additionalParamsCb'
             ],
 
+            /**
+             * @inheritDoc
+             */
+            constructor: function Select2ChannelAwareView() {
+                Select2ChannelAwareView.__super__.constructor.apply(this, arguments);
+            },
+
+            /**
+             * @inheritDoc
+             */
             initialize: function(options) {
                 Select2ChannelAwareView.__super__.initialize.apply(this, arguments);
 

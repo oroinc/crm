@@ -67,7 +67,7 @@ class OpportunityType extends AbstractType
                     'property'    => 'label',
                     'required'    => false,
                     'disabled'    => false,
-                    'empty_value' => 'oro.sales.form.choose_close_rsn'
+                    'placeholder' => 'oro.sales.form.choose_close_rsn'
                 ]
             )
             ->add(

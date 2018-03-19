@@ -9,7 +9,9 @@ define([
 ], function($, _, routing, Backbone, __, mediator, messenger) {
     'use strict';
 
-    return Backbone.View.extend({
+    var MadgentoCheckerView;
+
+    MadgentoCheckerView = Backbone.View.extend({
         events: {
             click: 'processClick'
         },
@@ -50,6 +52,16 @@ define([
             '</div>'
         ),
 
+        /**
+         * @inheritDoc
+         */
+        constructor: function MadgentoCheckerView() {
+            MadgentoCheckerView.__super__.constructor.apply(this, arguments);
+        },
+
+        /**
+         * @inheritDoc
+         */
         initialize: function(options) {
             this.options = _.defaults(options || {}, this.options);
             this.id = options.transportEntityId || null;
@@ -324,4 +336,6 @@ define([
             messenger.notificationMessage(type, message, {container: container, template: this.resultTemplate});
         }
     });
+
+    return MadgentoCheckerView;
 });

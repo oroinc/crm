@@ -22,6 +22,19 @@ Feature: Contact activities
     When save and close form
     Then I should see "Contact saved" flash message
 
+  Scenario: Add note to contact entity
+    And follow "More actions"
+    And press "Add note"
+    And fill "Note Form" with:
+      | Message    | <strong>Charlie works hard</strong> |
+    And I scroll to "Add Note Button"
+    And I press "Add Note Button"
+    Then I should see "Note saved" flash message
+    And I should see "Charlie works hard" note in activity list
+    And I should not see "<strong>Charlie works hard</strong>"
+    When I click on "First Activity Item"
+    Then I should not see "<strong>Charlie works hard</strong>"
+
   Scenario: Create "Calendar Event" activity as "Admin" and assert createdBy and updatedBy values
     And I follow "More actions"
     And I follow "Add Event"

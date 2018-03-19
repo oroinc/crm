@@ -23,18 +23,17 @@ class CartItemCollectionTypeTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
         $resolver->expects($this->once())
-            ->method('setNormalizers')
+            ->method('setNormalizer')
             ->with(
-                [
-                    'entry_options' => function (Options $options, $values) {
-                        if (!$values) {
-                            $values = [];
-                        }
-                        $values['single_form'] = false;
-
-                        return $values;
+                'entry_options',
+                function (Options $options, $values) {
+                    if (!$values) {
+                        $values = [];
                     }
-                ]
+                    $values['single_form'] = false;
+
+                    return $values;
+                }
             );
 
         $this->type->configureOptions($resolver);

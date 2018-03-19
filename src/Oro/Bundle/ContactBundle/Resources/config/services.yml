@@ -195,6 +195,32 @@ services:
             - { name: doctrine.orm.entity_listener, entity: '%oro_contact.entity.class%', event: prePersist }
             - { name: doctrine.orm.entity_listener, entity: '%oro_contact.entity.class%', event: preUpdate }
 
+    oro_contact.handler.contact_email_address_handler:
+        class: Oro\Bundle\ContactBundle\Handler\ContactEmailAddressHandler
+        public: false
+        arguments:
+            - '@oro_entity.orm.insert_from_select_query_executor'
+            - '@oro_email.email.address.manager'
+            - '@doctrine'
+
+    oro_contact.event_listener.import_listener:
+        class: Oro\Bundle\ContactBundle\EventListener\ImportEventListener
+        arguments:
+            - '@oro_platform.optional_listeners.manager'
+        tags:
+            - { name: kernel.event_listener, event: akeneo_batch.before_job_execution, method: onBeforeJobExecution }
+            - { name: kernel.event_listener, event: akeneo_batch.after_job_execution, method: onAfterJobExecution }
+
+    oro_contact.async.contact_post_import_processor:
+        class: Oro\Bundle\ContactBundle\Async\ContactPostImportProcessor
+        arguments:
+            - '@oro_contact.handler.contact_email_address_handler'
+            - '@oro_entity.database_exception_helper'
+            - '@oro_message_queue.job.storage'
+            - '@monolog.logger'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor', topicName: 'oro.importexport.send_import_notification' }
+
     oro_contact.social_url_formatter:
         class: '%oro_contact.social_url_formatter.class%'
         arguments:

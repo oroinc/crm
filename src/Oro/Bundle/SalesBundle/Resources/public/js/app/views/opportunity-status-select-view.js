@@ -6,7 +6,16 @@ define(function(require) {
     var BaseView = require('oroui/js/app/views/base/view');
 
     OpportunityStatusSelectView = BaseView.extend({
+        /**
+         * @inheritDoc
+         */
+        constructor: function OpportunityStatusSelectView() {
+            OpportunityStatusSelectView.__super__.constructor.apply(this, arguments);
+        },
 
+        /**
+         * @inheritDoc
+         */
         initialize: function(options) {
             OpportunityStatusSelectView.__super__.initialize.apply(this, arguments);
 

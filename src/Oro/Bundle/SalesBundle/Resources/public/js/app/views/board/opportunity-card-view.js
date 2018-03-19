@@ -8,6 +8,14 @@ define(function(require) {
     OpportunityCardView = CardView.extend({
         className: 'opportunity-card-view card-view',
         template: require('tpl!../../../../templates/board/opportunity-card-view.html'),
+
+        /**
+         * @inheritDoc
+         */
+        constructor: function OpportunityCardView() {
+            OpportunityCardView.__super__.constructor.apply(this, arguments);
+        },
+
         getTemplateData: function() {
             var data = OpportunityCardView.__super__.getTemplateData.call(this, arguments);
             var budgetAmount = multiCurrencyFormatter.unformatMultiCurrency(data.budgetAmount);
