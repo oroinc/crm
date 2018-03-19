@@ -14,6 +14,15 @@ define(function(require) {
         channelId: '',
         channelFieldName: '',
         ViewType: Select2View,
+        /**
+         * @inheritDoc
+         */
+        constructor: function Select2AutocompleteChannelAwareComponent() {
+            Select2AutocompleteChannelAwareComponent.__super__.constructor.apply(this, arguments);
+        },
+        /**
+         * @inheritDoc
+         */
         initialize: function(options) {
             this.$sourceElement = options._sourceElement;
             this.channelId = _.result(options, 'channel_id') || this.channelId;

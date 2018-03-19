@@ -9,6 +9,16 @@ define(function(require) {
             load: 'onFrameLoad'
         },
 
+        /**
+         * @inheritDoc
+         */
+        constructor: function PlaceOrderView() {
+            PlaceOrderView.__super__.constructor.apply(this, arguments);
+        },
+
+        /**
+         * @inheritDoc
+         */
         initialize: function() {
             BaseView.__super__.initialize.apply(this, arguments);
 

@@ -16,6 +16,14 @@ define([
             'permissions': null,
             'createdBy': null,
             'updatedBy': null
+        },
+
+
+        /**
+         * @inheritDoc
+         */
+        constructor: function CommentModel() {
+            CommentModel.__super__.constructor.apply(this, arguments);
         }
     });
 

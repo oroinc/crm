@@ -15,6 +15,16 @@ define(function(require) {
             'customerSelector'
         ],
 
+        /**
+         * @inheritDoc
+         */
+        constructor: function CustomerComponent() {
+            CustomerComponent.__super__.constructor.apply(this, arguments);
+        },
+
+        /**
+         * @inheritDoc
+         */
         initialize: function(options) {
             _.each(this.requiredOptions, function(optionName) {
                 if (!_.has(options, optionName)) {

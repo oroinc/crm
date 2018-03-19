@@ -8,6 +8,13 @@ define([
 
     CommentView = NoteView.extend({
         /**
+         * @inheritDoc
+         */
+        constructor: function CommentView() {
+            CommentView.__super__.constructor.apply(this, arguments);
+        },
+
+        /**
          * Returns class name for root element
          * @returns {string}
          */

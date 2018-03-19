@@ -14,6 +14,16 @@ define(function(require) {
         channelFieldName: '',
         gridName: '',
         ViewType: Select2View,
+        /**
+         * @inheritDoc
+         */
+        constructor: function Select2GridChannelAwareComponent() {
+            Select2GridChannelAwareComponent.__super__.constructor.apply(this, arguments);
+        },
+
+        /**
+         * @inheritDoc
+         */
         initialize: function(options) {
             this.$sourceElement = options._sourceElement;
             this.channelId = _.result(options, 'channel_id') || this.channelId;

@@ -1,6 +1,7 @@
 define(function(require) {
     'use strict';
 
+    var EntityComponentView;
     var Backbone = require('backbone');
     var _ = require('underscore');
     var __ = require('orotranslation/js/translator');
@@ -24,7 +25,7 @@ define(function(require) {
      * @class   orochannel.entityManagement.EntityComponentView
      * @extends Backbone.View
      */
-    return Backbone.View.extend({
+    EntityComponentView = Backbone.View.extend({
         /**
          * Widget mode constants
          *
@@ -77,6 +78,13 @@ define(function(require) {
          * @type {jQuery}
          */
         $noDataContainer: null,
+
+        /**
+         * @inheritDoc
+         */
+        constructor: function EntityComponentView() {
+            EntityComponentView.__super__.constructor.apply(this, arguments);
+        },
 
         /**
          * Initialize view
@@ -258,4 +266,6 @@ define(function(require) {
             return model;
         }
     });
+
+    return EntityComponentView;
 });
