@@ -17,6 +17,8 @@ use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomer;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
+ * Entity holds information of Business Customer.
+ *
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
  * @ORM\Table(name="orocrm_sales_b2bcustomer", indexes={
  *      @ORM\Index(
@@ -573,7 +575,10 @@ class B2bCustomer extends ExtendB2bCustomer implements
     {
         if (!$this->phones->contains($phone)) {
             $this->phones->add($phone);
-            $phone->setOwner($this);
+
+            if ($phone->getOwner() !== $this) {
+                $phone->setOwner($this);
+            }
         }
 
         return $this;
@@ -682,7 +687,10 @@ class B2bCustomer extends ExtendB2bCustomer implements
     {
         if (!$this->emails->contains($email)) {
             $this->emails->add($email);
-            $email->setOwner($this);
+
+            if ($email->getOwner() !== $this) {
+                $email->setOwner($this);
+            }
         }
 
         return $this;

@@ -2,24 +2,17 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Behat\Context;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridRow;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SalesBundle\Entity\Lead;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderDictionary;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
-use Oro\Bundle\UserBundle\Entity\User;
 
 class SalesContext extends OroFeatureContext implements
     FixtureLoaderAwareInterface,
@@ -27,16 +20,6 @@ class SalesContext extends OroFeatureContext implements
     KernelAwareContext
 {
     use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
-
-    /**
-     * Load account_with_customers.yml alice fixture
-     *
-     * @Given crm has (Acme) Account with (Charlie) and (Samantha) customers
-     */
-    public function crmHasAcmeAccountWithCharlieAndSamanthaCustomers()
-    {
-        $this->fixtureLoader->loadFixtureFile('account_with_customers.yml');
-    }
 
     /**
      * @Given /^two users (charlie) and (samantha) exists in the system$/

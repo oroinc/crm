@@ -1,0 +1,36 @@
+Oro\Bundle\ChannelBundle\Entity\Channel:
+  salesChannel:
+    owner: '@organization'
+    name: Business Customers
+    channelType: b2b
+    status: 1
+    customerIdentity: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+
+Oro\Bundle\ChannelBundle\Entity\EntityName:
+  salesEntityName:
+    __construct: [Oro\Bundle\SalesBundle\Entity\B2bCustomer]
+    channel: '@salesChannel'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  charlieAccount1:
+    name: Charlie
+    owner: '@charlie'
+    organization: '@organization'
+  samanthaAccount1:
+    name: Samantha
+    owner: '@samantha'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+  customer1:
+    name: Charlie B2b
+    owner: '@admin'
+    organization: '@organization'
+    account: '@charlieAccount1'
+    dataChannel: '@salesChannel'
+  customer2:
+    name: Samantha B2b
+    owner: '@admin'
+    organization: '@organization'
+    account: '@samanthaAccount1'
+    dataChannel: '@salesChannel'
