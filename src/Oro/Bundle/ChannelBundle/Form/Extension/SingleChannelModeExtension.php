@@ -61,7 +61,7 @@ class SingleChannelModeExtension extends AbstractTypeExtension
         $entities = $options['entities'];
         $channels = $this->channelsProvider->getChannelsByEntities($entities);
         if (count($channels) === 1) {
-            $view->vars['read_only'] = true;
+            $view->vars['attr']['readonly'] = true;
             FormUtils::appendClass($view, 'hide');
         }
     }

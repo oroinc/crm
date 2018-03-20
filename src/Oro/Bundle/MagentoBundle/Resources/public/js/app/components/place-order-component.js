@@ -25,6 +25,16 @@ define(function(require) {
 
         messageTemplate: _.template('<%= message %> <a href="<%= url %>" class="order-link"><%= urlLabel %></a> '),
 
+        /**
+         * @inheritDoc
+         */
+        constructor: function PlaceOrderComponent() {
+            PlaceOrderComponent.__super__.constructor.apply(this, arguments);
+        },
+
+        /**
+         * @inheritDoc
+         */
         initialize: function(options) {
             PlaceOrderComponent.__super__.initialize.apply(this, arguments);
 

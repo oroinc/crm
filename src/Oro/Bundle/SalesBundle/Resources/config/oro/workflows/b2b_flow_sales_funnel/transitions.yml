@@ -220,7 +220,7 @@ workflows:
                             form_type: choice
                             options:
                                 required: true
-                                empty_value: false
+                                placeholder: false
                                 choices:
                                     outsold: 'Outsold'
                                     cancelled: 'Cancelled'

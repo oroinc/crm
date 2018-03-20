@@ -27,6 +27,16 @@ define(function(require) {
             }
         },
 
+        /**
+         * @inheritDoc
+         */
+        constructor: function AccountMulticustomerView() {
+            AccountMulticustomerView.__super__.constructor.apply(this, arguments);
+        },
+
+        /**
+         * @inheritDoc
+         */
         initialize: function(options) {
             _.extend(this, _.pick(options, ['customerType', 'useChannel']));
             AccountMulticustomerView.__super__.initialize.call(this, options);

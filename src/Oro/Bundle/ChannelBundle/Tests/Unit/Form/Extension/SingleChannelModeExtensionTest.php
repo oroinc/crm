@@ -78,7 +78,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
         $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $options = ['entities' => $entities, 'single_channel_mode' => true];
 
-        $view->vars['read_only'] = false;
+        $view->vars['attr']['readonly'] = false;
 
         $this->channelsProvider
             ->expects($this->once())
@@ -87,7 +87,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($channels);
         $this->extension->buildView($view, $form, $options);
 
-        $this->assertEquals($readOnly, $view->vars['read_only']);
+        $this->assertEquals($readOnly, $view->vars['attr']['readonly']);
         if ($hide) {
             $this->assertEquals('hide', $view->vars['attr']['class']);
         }

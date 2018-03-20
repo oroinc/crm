@@ -15,6 +15,16 @@ define(function(require) {
 
         dialogWidget: null,
 
+        /**
+         * @inheritDoc
+         */
+        constructor: function CustomerView() {
+            CustomerView.__super__.constructor.apply(this, arguments);
+        },
+
+        /**
+         * @inheritDoc
+         */
         initialize: function(options) {
             CustomerView.__super__.initialize.apply(this, arguments);
 

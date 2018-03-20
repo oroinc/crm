@@ -20,7 +20,7 @@ workflows:
                             options:
                                 enum_code: opportunity_status
                                 required: true
-                                empty_value: false
+                                placeholder: false
                                 constraints:
                                     - NotBlank: ~
                                 choice_label: name
@@ -59,7 +59,7 @@ workflows:
                             options:
                                 enum_code: opportunity_status
                                 required: true
-                                empty_value: false
+                                placeholder: false
                                 constraints:
                                     - NotBlank: ~
                                 choice_label: name
@@ -113,7 +113,7 @@ workflows:
                             form_type: choice
                             options:
                                 required: true
-                                empty_value: false
+                                placeholder: false
                                 choices:
                                     outsold: 'Outsold'
                                     cancelled: 'Cancelled'
@@ -164,7 +164,7 @@ workflows:
                             options:
                                 enum_code: opportunity_status
                                 required: true
-                                empty_value: false
+                                placeholder: false
                                 constraints:
                                     - NotBlank: ~
                                 choice_label: name

@@ -5,6 +5,13 @@ define(function(require) {
     var Select2AutocompleteComponent = require('oro/select2-autocomplete-component');
 
     var Select2SalesCustomerComponent = Select2AutocompleteComponent.extend({
+        /**
+         * @inheritDoc
+         */
+        constructor: function Select2SalesCustomerComponent() {
+            Select2SalesCustomerComponent.__super__.constructor.apply(this, arguments);
+        },
+
         setConfig: function(config) {
             config.formatContext = function() {
                 return {

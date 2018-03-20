@@ -56,6 +56,13 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
         },
 
         /**
+         * @inheritDoc
+         */
+        constructor: function IntegrationWidgetView() {
+            IntegrationWidgetView.__super__.constructor.apply(this, arguments);
+        },
+
+        /**
          * Initialize.
          *
          * @param {Object} options
