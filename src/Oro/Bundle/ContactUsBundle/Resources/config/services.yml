@@ -8,7 +8,7 @@ services:
     oro_contact_us.embedded_form:
         class: '%oro_contact_us.embedded_form.class%'
         tags:
-            - { name: oro_embedded_form, label: oro.contactus.contactrequest.entity_label }
+            - { name: oro_embedded_form, label: oro.contactus.contactrequest.entity_label, type: Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType }
             - { name: form.type, alias: oro_contactus_contact_request }
 
     oro_contact_us.contact_request.form:
