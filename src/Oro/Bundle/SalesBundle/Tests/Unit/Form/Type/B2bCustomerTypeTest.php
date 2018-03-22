@@ -7,6 +7,8 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Form\EventListener\AddressCountryAndRegionSubscriber;
 use Oro\Bundle\AddressBundle\Form\Type\AddressType;
+use Oro\Bundle\AddressBundle\Form\Type\CountryType;
+use Oro\Bundle\AddressBundle\Form\Type\RegionType;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Oro\Bundle\ContactBundle\Entity\Contact;
@@ -22,8 +24,8 @@ use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
 use Oro\Component\Testing\Unit\EntityTrait;
 use Oro\Component\Testing\Unit\Form\Type\Stub\EntityType;
 use Oro\Component\Testing\Unit\FormIntegrationTestCase;
+use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class B2bCustomerTypeTest extends FormIntegrationTestCase
@@ -93,8 +95,8 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
                     'oro_address' => new AddressType(
                         new AddressCountryAndRegionSubscriber($objectManager, $formFactory)
                     ),
-                    $countryEntityType->getName() => $countryEntityType,
-                    $regionEntityType->getName() => $regionEntityType,
+                    CountryType::class => $countryEntityType,
+                    RegionType::class => $regionEntityType,
                 ],
                 [
                     'form' => [
