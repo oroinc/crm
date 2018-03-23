@@ -185,7 +185,7 @@ For more details on how to enable such integration, see [Magento 2 Documentation
 ### Changed
 #### SalesBundle
 * Implementation of REST API for customer association was changed.
-    * the logic related to the customer association is implemented in `CustomerAssociationListener`<sup>[[?]](https://github.com/laboro/dev/blob/maintenance/2.2/package/crm/src/Oro/Bundle/SalesBundle/Api/Form/EventListener/CustomerAssociationListener.php "Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener")</sup>
+    * the logic related to the customer association is implemented in `CustomerAssociationListener`<sup>[[?]](https://github.com/oroinc/crm/blob/2.2/src/Oro/Bundle/SalesBundle/Api/Form/EventListener/CustomerAssociationListener.php "Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener")</sup>
 ### Removed
 #### SalesBundle
 * removed the following services:
