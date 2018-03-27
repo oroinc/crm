@@ -7,18 +7,24 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Form\Handler\ContactHandler;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    const FORM_DATA = [];
+    const FORM_TYPE = 'formType';
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface
      */
     protected $form;
+
+    /**
+     * @var FormFactoryInterface
+     */
+    protected $formFactory;
 
     /**
      * @var Request
@@ -43,20 +49,22 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->form = $this->createMock(Form::class);
+        $this->formFactory = $this->createMock(FormFactoryInterface::class);
         $this->request = new Request();
         $requestStack = new RequestStack();
         $requestStack->push($this->request);
         $this->manager = $this->createMock(EntityManagerInterface::class);
 
         $this->entity = new Contact();
-        $this->handler = new ContactHandler($this->form, $requestStack, $this->manager);
+        $this->handler = new ContactHandler($this->formFactory, $requestStack, $this->manager, self::FORM_TYPE);
     }
 
     public function testProcessUnsupportedRequest()
     {
-        $this->form->expects($this->once())
-            ->method('setData')
-            ->with($this->entity);
+        $this->formFactory->expects($this->once())
+            ->method('create')
+            ->with(self::FORM_TYPE, $this->entity)
+            ->willReturn($this->form);
 
         $this->form->expects($this->never())
             ->method('handleRequest');
@@ -70,16 +78,16 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessSupportedRequest($method)
     {
-        $this->form->expects($this->once())
-            ->method('setData')
-            ->with($this->entity);
+        $this->formFactory->expects($this->once())
+            ->method('create')
+            ->with(self::FORM_TYPE, $this->entity, ['method' => $method])
+            ->willReturn($this->form);
 
-        $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod($method);
 
         $this->form->expects($this->once())
-            ->method('submit')
-            ->with(self::FORM_DATA);
+            ->method('handleRequest')
+            ->with($this->request);
 
         $this->assertFalse($this->handler->process($this->entity));
     }
@@ -107,16 +115,16 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->entity->addAccount($removedAccount);
 
-        $this->request->initialize([], self::FORM_DATA);
-        $this->request->setMethod('POST');
+        $this->request->setMethod(Request::METHOD_POST);
+
+        $this->formFactory->expects($this->once())
+            ->method('create')
+            ->with(self::FORM_TYPE, $this->entity, ['method' => Request::METHOD_POST])
+            ->willReturn($this->form);
 
         $this->form->expects($this->once())
-            ->method('setData')
-            ->with($this->entity);
-
-        $this->form->expects($this->once())
-            ->method('submit')
-            ->with(self::FORM_DATA);
+            ->method('handleRequest')
+            ->with($this->request);
 
         $this->form->expects($this->once())
             ->method('isValid')
@@ -128,7 +136,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
         $appendForm->expects($this->once())
             ->method('getData')
             ->will($this->returnValue(array($appendedAccount)));
-        $this->form->expects($this->at(4))
+        $this->form->expects($this->at(2))
             ->method('get')
             ->with('appendAccounts')
             ->will($this->returnValue($appendForm));
@@ -139,7 +147,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
         $removeForm->expects($this->once())
             ->method('getData')
             ->will($this->returnValue(array($removedAccount)));
-        $this->form->expects($this->at(5))
+        $this->form->expects($this->at(3))
             ->method('get')
             ->with('removeAccounts')
             ->will($this->returnValue($removeForm));

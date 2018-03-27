@@ -68,9 +68,10 @@ services:
     oro_contact.form.handler.contact:
         class: '%oro_contact.handler.contact.class%'
         arguments:
-            - "@oro_contact.form.contact"
+            - "@form.factory"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
+            - Oro\Bundle\ContactBundle\Form\Type\ContactType
 
     oro_contact.contact.manager:
         class: '%oro_contact.contact.manager.class%'
@@ -129,9 +130,10 @@ services:
     oro_contact.form.handler.contact.api:
         class: '%oro_contact.handler.contact.class%'
         arguments:
-            - "@oro_contact.form.contact.api"
+            - "@form.factory"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
+            - Oro\Bundle\ContactBundle\Form\Type\ContactApiType
 
     # Group API
     oro_contact.group.manager.api:
