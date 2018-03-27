@@ -17,7 +17,7 @@ class CustomerAddressApiHandlerTest extends AbstractHandlerTest
     protected function setUp()
     {
         $this->form = $this->createMock(Form::class);
-        $this->request = $this->createMock(Request::class);
+        $this->request = new Request();
         $requestStack = new RequestStack();
         $requestStack->push($this->request);
         $registry = $this->createMock(RegistryInterface::class);

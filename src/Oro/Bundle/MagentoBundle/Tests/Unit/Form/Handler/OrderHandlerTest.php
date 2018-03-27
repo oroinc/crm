@@ -17,7 +17,7 @@ class OrderHandlerTest extends AbstractHandlerTest
     protected function setUp()
     {
         $this->form = $this->createMock(Form::class);
-        $this->request = $this->createMock(Request::class);
+        $this->request = new Request();
         $requestStack = new RequestStack();
         $requestStack->push($this->request);
         $registry = $this->createMock(RegistryInterface::class);
@@ -45,12 +45,12 @@ class OrderHandlerTest extends AbstractHandlerTest
             ->method('setData')
             ->with($this->entity);
 
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('POST'));
+        $this->request->initialize([], self::FORM_DATA);
+        $this->request->setMethod('POST');
 
         $this->form->expects($this->once())
-            ->method('handleRequest');
+            ->method('submit')
+            ->with(self::FORM_DATA);
 
         $this->form->expects($this->once())
             ->method('isValid')

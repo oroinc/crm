@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    const FORM_DATA = [];
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface
      */
@@ -72,11 +74,12 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($this->entity);
 
+        $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod($method);
 
         $this->form->expects($this->once())
-            ->method('handleRequest')
-            ->with($this->request);
+            ->method('submit')
+            ->with(self::FORM_DATA);
 
         $this->assertFalse($this->handler->process($this->entity));
     }
@@ -104,6 +107,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->entity->addAccount($removedAccount);
 
+        $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod('POST');
 
         $this->form->expects($this->once())
@@ -111,8 +115,8 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($this->entity);
 
         $this->form->expects($this->once())
-            ->method('handleRequest')
-            ->with($this->request);
+            ->method('submit')
+            ->with(self::FORM_DATA);
 
         $this->form->expects($this->once())
             ->method('isValid')
@@ -124,7 +128,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
         $appendForm->expects($this->once())
             ->method('getData')
             ->will($this->returnValue(array($appendedAccount)));
-        $this->form->expects($this->at(3))
+        $this->form->expects($this->at(4))
             ->method('get')
             ->with('appendAccounts')
             ->will($this->returnValue($appendForm));
@@ -135,7 +139,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
         $removeForm->expects($this->once())
             ->method('getData')
             ->will($this->returnValue(array($removedAccount)));
-        $this->form->expects($this->at(4))
+        $this->form->expects($this->at(5))
             ->method('get')
             ->with('removeAccounts')
             ->will($this->returnValue($removeForm));

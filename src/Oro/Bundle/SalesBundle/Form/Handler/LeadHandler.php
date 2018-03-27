@@ -53,7 +53,10 @@ class LeadHandler
 
         $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->form->handleRequest($request);
+            $data = $this->form->getName()
+                ? $request->request->get($this->form->getName())
+                : $request->request->all();
+            $this->form->submit($data);
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);

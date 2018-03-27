@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    const FORM_DATA = ['field' => 'value'];
+
     /** @var FormInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $form;
 
@@ -29,12 +31,10 @@ abstract class AbstractHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($this->entity);
 
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('GET'));
+        $this->request->setMethod('GET');
 
         $this->form->expects($this->never())
-            ->method('handleRequest');
+            ->method('submit');
 
         $this->form->expects($this->never())
             ->method('isValid');
@@ -54,12 +54,12 @@ abstract class AbstractHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($this->entity);
 
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('POST'));
+        $this->request->initialize([], self::FORM_DATA);
+        $this->request->setMethod('POST');
 
         $this->form->expects($this->once())
-            ->method('handleRequest');
+            ->method('submit')
+            ->with(self::FORM_DATA);
 
         $this->form->expects($this->once())
             ->method('isValid')
@@ -80,12 +80,12 @@ abstract class AbstractHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($this->entity);
 
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('POST'));
+        $this->request->initialize([], self::FORM_DATA);
+        $this->request->setMethod('POST');
 
         $this->form->expects($this->once())
-            ->method('handleRequest');
+            ->method('submit')
+            ->with(self::FORM_DATA);
 
         $this->form->expects($this->once())
             ->method('isValid')
