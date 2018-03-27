@@ -43,7 +43,7 @@ class ContactRequestHandler
 
         $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->getForm()->submit($request);
+            $this->getForm()->handleRequest($request);
 
             if ($this->getForm()->isValid()) {
                 $this->em->persist($entity);

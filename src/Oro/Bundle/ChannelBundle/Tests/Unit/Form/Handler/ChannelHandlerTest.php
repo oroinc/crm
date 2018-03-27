@@ -57,7 +57,7 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
         $this->form->expects($this->once())->method('setData')
             ->with($this->entity);
 
-        $this->form->expects($this->never())->method('submit');
+        $this->form->expects($this->never())->method('handleRequest');
         $this->dispatcher->expects($this->never())->method('dispatch');
 
         $this->assertFalse($this->handler->process($this->entity));
@@ -74,7 +74,7 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->form->expects($this->once())->method('setData')
             ->with($this->entity);
-        $this->form->expects($this->once())->method('submit')
+        $this->form->expects($this->once())->method('handleRequest')
             ->with($this->request);
         $this->dispatcher->expects($this->never())->method('dispatch');
 
@@ -94,7 +94,7 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
         $this->request->setMethod('POST');
 
         $this->form->expects($this->once())->method('setData')->with($this->entity);
-        $this->form->expects($this->once())->method('submit')->with($this->request);
+        $this->form->expects($this->once())->method('handleRequest')->with($this->request);
         $this->form->expects($this->once())->method('isValid')
             ->will($this->returnValue(true));
 
@@ -194,7 +194,7 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($expectedEntity);
 
         $this->form->expects($this->never())
-            ->method('submit');
+            ->method('handleRequest');
         $this->dispatcher->expects($this->never())
             ->method('dispatch');
         $this->request->request->set('oro_channel_form', ['channelType' => $requestValue]);

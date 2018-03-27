@@ -57,7 +57,7 @@ class ChannelHandler
 
         $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->form->submit($request);
+            $this->form->handleRequest($request);
 
             if (!$request->get(self::UPDATE_MARKER, false) && $this->form->isValid()) {
                 $this->doSave($entity);

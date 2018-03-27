@@ -34,7 +34,7 @@ abstract class AbstractHandlerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('GET'));
 
         $this->form->expects($this->never())
-            ->method('submit');
+            ->method('handleRequest');
 
         $this->form->expects($this->never())
             ->method('isValid');
@@ -59,7 +59,7 @@ abstract class AbstractHandlerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('POST'));
 
         $this->form->expects($this->once())
-            ->method('submit');
+            ->method('handleRequest');
 
         $this->form->expects($this->once())
             ->method('isValid')
@@ -85,7 +85,7 @@ abstract class AbstractHandlerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('POST'));
 
         $this->form->expects($this->once())
-            ->method('submit');
+            ->method('handleRequest');
 
         $this->form->expects($this->once())
             ->method('isValid')

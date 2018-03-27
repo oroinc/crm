@@ -33,7 +33,7 @@ class CustomerHandlerTest extends UpdateHandlerTest
             ->method('getMethod')
             ->will($this->returnValue('POST'));
         $this->form->expects($this->once())
-            ->method('submit')
+            ->method('handleRequest')
             ->with($this->request);
         $this->form->expects($this->once())
             ->method('isValid')
@@ -78,7 +78,7 @@ class CustomerHandlerTest extends UpdateHandlerTest
             ->method('getMethod')
             ->will($this->returnValue('POST'));
         $this->form->expects($this->once())
-            ->method('submit')
+            ->method('handleRequest')
             ->with($this->request);
         $this->form->expects($this->once())
             ->method('isValid')
@@ -100,7 +100,7 @@ class CustomerHandlerTest extends UpdateHandlerTest
             ->method('getMethod')
             ->will($this->returnValue('POST'));
         $this->form->expects($this->once())
-            ->method('submit')
+            ->method('handleRequest')
             ->with($this->request);
         $this->form->expects($this->once())
             ->method('isValid')
@@ -144,7 +144,7 @@ class CustomerHandlerTest extends UpdateHandlerTest
             ->method('getMethod')
             ->will($this->returnValue('POST'));
         $form->expects($this->once())
-            ->method('submit')
+            ->method('handleRequest')
             ->with($this->request);
         $form->expects($this->once())
             ->method('isValid')
@@ -176,7 +176,7 @@ class CustomerHandlerTest extends UpdateHandlerTest
             ->method('getMethod')
             ->will($this->returnValue('POST'));
         $this->form->expects($this->once())
-            ->method('submit')
+            ->method('handleRequest')
             ->with($this->request);
         $this->form->expects($this->once())
             ->method('isValid')
@@ -219,7 +219,7 @@ class CustomerHandlerTest extends UpdateHandlerTest
             ->method('getMethod')
             ->will($this->returnValue('POST'));
         $this->form->expects($this->once())
-            ->method('submit')
+            ->method('handleRequest')
             ->with($this->request);
         $this->form->expects($this->once())
             ->method('isValid')

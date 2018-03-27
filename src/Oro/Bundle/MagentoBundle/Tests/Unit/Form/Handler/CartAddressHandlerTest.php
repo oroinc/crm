@@ -60,7 +60,7 @@ class CartAddressHandlerTest extends AbstractHandlerTest
             ->will($this->returnValue('POST'));
 
         $this->form->expects($this->once())
-            ->method('submit');
+            ->method('handleRequest');
 
         $this->form->expects($this->once())
             ->method('isValid')

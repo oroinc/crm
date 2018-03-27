@@ -60,7 +60,7 @@ class CustomerHandler extends UpdateHandler
         $request = $this->getCurrentRequest();
         $form->setData($entity);
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $form->submit($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $this->processFormSubmit($entity);
