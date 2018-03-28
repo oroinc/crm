@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
+use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\FormBundle\Model\UpdateHandler;
 use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
@@ -10,6 +11,8 @@ use Symfony\Component\Form\FormInterface;
 
 class CustomerHandler extends UpdateHandler
 {
+    use RequestHandlerTrait;
+
     /**
      * @var CustomerStateHandler
      */
@@ -60,7 +63,7 @@ class CustomerHandler extends UpdateHandler
         $request = $this->getCurrentRequest();
         $form->setData($entity);
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $form->handleRequest($request);
+            $this->submitPostPutRequest($form, $request);
 
             if ($form->isValid()) {
                 $this->processFormSubmit($entity);

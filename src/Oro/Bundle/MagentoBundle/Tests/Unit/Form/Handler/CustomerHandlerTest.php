@@ -29,12 +29,11 @@ class CustomerHandlerTest extends UpdateHandlerTest
     {
         $entity = $this->getObject();
 
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('POST'));
+        $this->request->initialize(['_wid' => 'WID'], self::FORM_DATA);
+        $this->request->setMethod('POST');
         $this->form->expects($this->once())
-            ->method('handleRequest')
-            ->with($this->request);
+            ->method('submit')
+            ->with(self::FORM_DATA);
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(true));
@@ -74,12 +73,11 @@ class CustomerHandlerTest extends UpdateHandlerTest
         $this->form->expects($this->once())
             ->method('setData')
             ->with($data);
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('POST'));
+        $this->request->initialize(['_wid' => 'WID'], self::FORM_DATA);
+        $this->request->setMethod('POST');
         $this->form->expects($this->once())
-            ->method('handleRequest')
-            ->with($this->request);
+            ->method('submit')
+            ->with(self::FORM_DATA);
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(false));
@@ -96,12 +94,11 @@ class CustomerHandlerTest extends UpdateHandlerTest
         $this->form->expects($this->once())
             ->method('setData')
             ->with($data);
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('POST'));
+        $this->request->initialize(['_wid' => 'WID'], self::FORM_DATA);
+        $this->request->setMethod('POST');
         $this->form->expects($this->once())
-            ->method('handleRequest')
-            ->with($this->request);
+            ->method('submit')
+            ->with(self::FORM_DATA);
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(true));
@@ -140,12 +137,11 @@ class CustomerHandlerTest extends UpdateHandlerTest
         $form->expects($this->once())
             ->method('setData')
             ->with($entity);
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('POST'));
+        $this->request->initialize(['_wid' => 'WID'], self::FORM_DATA);
+        $this->request->setMethod('POST');
         $form->expects($this->once())
-            ->method('handleRequest')
-            ->with($this->request);
+            ->method('submit')
+            ->with(self::FORM_DATA);
         $form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(false));
@@ -172,12 +168,11 @@ class CustomerHandlerTest extends UpdateHandlerTest
         $this->form->expects($this->once())
             ->method('setData')
             ->with($entity);
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('POST'));
+        $this->request->initialize([], self::FORM_DATA);
+        $this->request->setMethod('POST');
         $this->form->expects($this->once())
-            ->method('handleRequest')
-            ->with($this->request);
+            ->method('submit')
+            ->with(self::FORM_DATA);
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(true));
@@ -215,12 +210,11 @@ class CustomerHandlerTest extends UpdateHandlerTest
         $this->form->expects($this->once())
             ->method('setData')
             ->with($data);
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('POST'));
+        $this->request->initialize([], self::FORM_DATA);
+        $this->request->setMethod('POST');
         $this->form->expects($this->once())
-            ->method('handleRequest')
-            ->with($this->request);
+            ->method('submit')
+            ->with(self::FORM_DATA);
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(true));

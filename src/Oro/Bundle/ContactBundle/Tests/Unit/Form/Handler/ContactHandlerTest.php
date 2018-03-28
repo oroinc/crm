@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    const FORM_DATA = [];
+    const FORM_DATA = ['field' => 'value'];
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface
@@ -59,7 +59,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($this->entity);
 
         $this->form->expects($this->never())
-            ->method('handleRequest');
+            ->method('submit');
 
         $this->assertFalse($this->handler->process($this->entity));
     }
@@ -128,7 +128,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
         $appendForm->expects($this->once())
             ->method('getData')
             ->will($this->returnValue(array($appendedAccount)));
-        $this->form->expects($this->at(4))
+        $this->form->expects($this->at(5))
             ->method('get')
             ->with('appendAccounts')
             ->will($this->returnValue($appendForm));
@@ -139,7 +139,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
         $removeForm->expects($this->once())
             ->method('getData')
             ->will($this->returnValue(array($removedAccount)));
-        $this->form->expects($this->at(5))
+        $this->form->expects($this->at(6))
             ->method('get')
             ->with('removeAccounts')
             ->will($this->returnValue($removeForm));
