@@ -4,11 +4,14 @@ namespace Oro\Bundle\ContactUsBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
+use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactRequestHandler
 {
+    use RequestHandlerTrait;
+
     /** @var FormInterface */
     protected $form;
 
@@ -43,7 +46,7 @@ class ContactRequestHandler
 
         $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->getForm()->handleRequest($request);
+            $this->submitPostPutRequest($this->form, $request);
 
             if ($this->getForm()->isValid()) {
                 $this->em->persist($entity);

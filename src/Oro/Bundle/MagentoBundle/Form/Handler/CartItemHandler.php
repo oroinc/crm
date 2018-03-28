@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
+use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\MagentoBundle\Entity\CartItem;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -9,6 +10,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class CartItemHandler
 {
+    use RequestHandlerTrait;
+
     /** @var FormInterface */
     protected $form;
 
@@ -43,10 +46,7 @@ class CartItemHandler
 
         $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $data = $this->form->getName()
-                ? $request->request->get($this->form->getName())
-                : $request->request->all();
-            $this->form->submit($data);
+            $this->submitPostPutRequest($this->form, $request);
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);

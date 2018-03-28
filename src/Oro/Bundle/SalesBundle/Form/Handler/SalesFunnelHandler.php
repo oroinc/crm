@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -12,6 +13,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class SalesFunnelHandler
 {
+    use RequestHandlerTrait;
+
     /**
      * @var FormInterface
      */
@@ -51,7 +54,7 @@ class SalesFunnelHandler
 
         $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->form->handleRequest($request);
+            $this->submitPostPutRequest($this->form, $request);
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);

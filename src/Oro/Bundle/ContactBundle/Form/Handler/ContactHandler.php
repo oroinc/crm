@@ -6,21 +6,18 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
-use Symfony\Component\Form\FormFactoryInterface;
+use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactHandler
 {
-    /**
-     * @var string
-     */
-    protected $formType;
+    use RequestHandlerTrait;
 
     /**
-     * @var FormFactoryInterface
+     * @var FormInterface
      */
-    protected $formFactory;
+    protected $form;
 
     /**
      * @var RequestStack
@@ -33,26 +30,15 @@ class ContactHandler
     protected $manager;
 
     /**
-     * @var FormInterface|null
-     */
-    private $form;
-
-    /**
-     * @param FormFactoryInterface $formFactory
+     * @param FormInterface $form
      * @param RequestStack $requestStack
      * @param EntityManagerInterface $manager
-     * @param string $formType
      */
-    public function __construct(
-        FormFactoryInterface $formFactory,
-        RequestStack $requestStack,
-        EntityManagerInterface $manager,
-        string $formType
-    ) {
-        $this->formFactory = $formFactory;
+    public function __construct(FormInterface $form, RequestStack $requestStack, EntityManagerInterface $manager)
+    {
+        $this->form    = $form;
         $this->requestStack = $requestStack;
         $this->manager = $manager;
-        $this->formType = $formType;
     }
 
     /**
@@ -64,11 +50,11 @@ class ContactHandler
      */
     public function process(Contact $entity)
     {
-        $request = $this->requestStack->getCurrentRequest();
+        $this->form->setData($entity);
 
+        $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->form = $this->formFactory->create($this->formType, $entity, ['method' => $request->getMethod()]);
-            $this->form->handleRequest($request);
+            $this->submitPostPutRequest($this->form, $request);
 
             if ($this->form->isValid()) {
                 $appendAccounts = $this->form->get('appendAccounts')->getData();
@@ -77,19 +63,9 @@ class ContactHandler
 
                 return true;
             }
-        } else {
-            $this->form = $this->formFactory->create($this->formType, $entity);
         }
 
         return false;
-    }
-
-    /**
-     * @return null|FormInterface
-     */
-    public function getForm()
-    {
-        return $this->form;
     }
 
     /**
