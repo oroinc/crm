@@ -5,6 +5,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\EntityExtendBundle\Cache\EnumTranslationCache;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
@@ -184,7 +185,9 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
         );
 
         $doctrineHelper = $this->getDoctrineHelperMock($defaultStatuses);
-        $enumProvider = new EnumValueProvider($doctrineHelper);
+        /** @var EnumTranslationCache|\PHPUnit_Framework_MockObject_MockObject $cache */
+        $cache = $this->createMock(EnumTranslationCache::class);
+        $enumProvider = new EnumValueProvider($doctrineHelper, $cache);
         $helper = $this->getEnumTypeHelperMock();
 
         return new LeadToOpportunityType($probabilityProvider, $enumProvider, $helper);
