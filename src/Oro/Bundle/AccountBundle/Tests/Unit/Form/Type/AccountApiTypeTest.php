@@ -3,6 +3,9 @@
 namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\AccountBundle\Form\Type\AccountApiType;
+use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
+use Oro\Bundle\FormBundle\Form\Type\MultipleEntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -64,15 +67,15 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 
         $builder->expects($this->at(0))
             ->method('add')
-            ->with('name', 'text')
+            ->with('name', TextType::class)
             ->will($this->returnSelf());
         $builder->expects($this->at(1))
             ->method('add')
-            ->with('default_contact', 'oro_entity_identifier')
+            ->with('default_contact', EntityIdentifierType::class)
             ->will($this->returnSelf());
         $builder->expects($this->at(2))
             ->method('add')
-            ->with('contacts', 'oro_multiple_entity')
+            ->with('contacts', MultipleEntityType::class)
             ->will($this->returnSelf());
 
         $builder->expects($this->once())
@@ -92,7 +95,7 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 
         $builder->expects($this->at(0))
             ->method('add')
-            ->with('name', 'text')
+            ->with('name', TextType::class)
             ->will($this->returnSelf());
 
         $builder->expects($this->once())

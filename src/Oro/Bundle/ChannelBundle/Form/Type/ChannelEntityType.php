@@ -4,6 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Form\Type;
 
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class ChannelEntityType extends AbstractType
@@ -31,7 +32,7 @@ class ChannelEntityType extends AbstractType
      */
     public function getParent()
     {
-        return 'hidden';
+        return HiddenType::class;
     }
 
     /**

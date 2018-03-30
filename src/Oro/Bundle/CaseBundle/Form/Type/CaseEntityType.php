@@ -3,7 +3,13 @@
 namespace Oro\Bundle\CaseBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
+use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
+use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
+use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
+use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,14 +23,14 @@ class CaseEntityType extends AbstractType
         $builder
             ->add(
                 'subject',
-                'text',
+                TextType::class,
                 [
                     'label'        => 'oro.case.caseentity.subject.label'
                 ]
             )
             ->add(
                 'description',
-                'oro_resizeable_rich_text',
+                OroResizeableRichTextType::class,
                 [
                     'label'        => 'oro.case.caseentity.description.label',
                     'required'     => false
@@ -32,7 +38,7 @@ class CaseEntityType extends AbstractType
             )
             ->add(
                 'resolution',
-                'oro_resizeable_rich_text',
+                OroResizeableRichTextType::class,
                 [
                     'label'        => 'oro.case.caseentity.resolution.label',
                     'required'     => false
@@ -40,7 +46,7 @@ class CaseEntityType extends AbstractType
             )
             ->add(
                 'source',
-                'entity',
+                EntityType::class,
                 [
                     'label'        => 'oro.case.caseentity.source.label',
                     'class'        => 'OroCaseBundle:CaseSource',
@@ -48,7 +54,7 @@ class CaseEntityType extends AbstractType
             )
             ->add(
                 'status',
-                'entity',
+                EntityType::class,
                 [
                     'label'         => 'oro.case.caseentity.status.label',
                     'class'         => 'OroCaseBundle:CaseStatus',
@@ -60,7 +66,7 @@ class CaseEntityType extends AbstractType
             )
             ->add(
                 'priority',
-                'entity',
+                EntityType::class,
                 [
                     'label'         => 'oro.case.caseentity.priority.label',
                     'class'         => 'OroCaseBundle:CasePriority',
@@ -72,7 +78,7 @@ class CaseEntityType extends AbstractType
             )
             ->add(
                 'relatedContact',
-                'oro_contact_select',
+                ContactSelectType::class,
                 [
                     'required'      => false,
                     'label'         => 'oro.case.caseentity.related_contact.label',
@@ -80,7 +86,7 @@ class CaseEntityType extends AbstractType
             )
             ->add(
                 'relatedAccount',
-                'oro_account_select',
+                AccountSelectType::class,
                 [
                     'required'      => false,
                     'label'         => 'oro.case.caseentity.related_account.label',
@@ -88,7 +94,7 @@ class CaseEntityType extends AbstractType
             )
             ->add(
                 'assignedTo',
-                'oro_user_organization_acl_select',
+                OrganizationUserAclSelectType::class,
                 [
                     'required'      => false,
                     'label'         => 'oro.case.caseentity.assigned_to.label',

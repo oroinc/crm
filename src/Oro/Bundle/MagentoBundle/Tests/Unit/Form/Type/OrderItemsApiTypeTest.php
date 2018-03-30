@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
+use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\MagentoBundle\Form\Type\OrderItemsApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\OrderSelectType;
 
 class OrderItemsApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,19 +36,19 @@ class OrderItemsApiTypeTest extends \PHPUnit_Framework_TestCase
             'name'            => 'text',
             'sku'             => 'text',
             'qty'             => 'number',
-            'cost'            => 'oro_money',
-            'price'           => 'oro_money',
+            'cost'            => OroMoneyType::class,
+            'price'           => OroMoneyType::class,
             'weight'          => 'number',
-            'taxPercent'      => 'oro_percent',
-            'taxAmount'       => 'oro_money',
-            'discountPercent' => 'oro_percent',
-            'discountAmount'  => 'oro_money',
-            'rowTotal'        => 'oro_money',
-            'order'           => 'oro_order_select',
+            'taxPercent'      => OroPercentType::class,
+            'taxAmount'       => OroMoneyType::class,
+            'discountPercent' => OroPercentType::class,
+            'discountAmount'  => OroMoneyType::class,
+            'rowTotal'        => OroMoneyType::class,
+            'order'           => OrderSelectType::class,
             'productType'     => 'text',
             'productOptions'  => 'text',
             'isVirtual'       => 'checkbox',
-            'originalPrice'   => 'oro_money',
+            'originalPrice'   => OroMoneyType::class,
         ];
 
         $builder->expects($this->exactly(count($expectedFields)))

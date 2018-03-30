@@ -8,9 +8,9 @@ use Oro\Bundle\MagentoBundle\Form\Type\IsDisplayOrderNotesFormType;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\MagentoTransportStub;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\TransportSettingFormTypeWithIsDisplayOrderNotesStub;
 use Oro\Component\Testing\Unit\EntityTrait;
+use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
 class IsDisplayOrderCommentsSubscriberTest extends FormIntegrationTestCase

@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\OroDateType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,7 +21,7 @@ class SalesFunnelType extends AbstractType
         $builder
             ->add(
                 'startDate',
-                'oro_date',
+                OroDateType::class,
                 array('required' => true, 'label' => 'oro.sales.salesfunnel.start_date.label')
             );
     }

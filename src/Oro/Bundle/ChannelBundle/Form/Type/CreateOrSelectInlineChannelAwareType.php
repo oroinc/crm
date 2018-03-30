@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,7 +32,7 @@ class CreateOrSelectInlineChannelAwareType extends AbstractChannelAwareType
      */
     public function getParent()
     {
-        return 'oro_entity_create_or_select_inline';
+        return OroEntitySelectOrCreateInlineType::class;
     }
 
     /**

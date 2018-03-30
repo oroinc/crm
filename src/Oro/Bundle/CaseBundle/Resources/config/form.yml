@@ -39,28 +39,28 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - 'oro_case_entity_form'
-            - 'oro_case_entity'
+            - Oro\Bundle\CaseBundle\Form\Type\CaseEntityType
 
     oro_case.form.entity.api:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments:
             - 'case'
-            - 'oro_case_entity_api'
+            - Oro\Bundle\CaseBundle\Form\Type\CaseEntityApiType
 
     oro_case.form.comment:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments:
             - 'oro_case_comment_form'
-            - 'oro_case_comment'
+            - Oro\Bundle\CaseBundle\Form\Type\CaseCommentType
 
     oro_case.form.comment.api:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments:
             - 'comment'
-            - 'oro_case_comment_api'
+            - Oro\Bundle\CaseBundle\Form\Type\CaseCommentApiType
 
     oro_case.form.handler.entity:
         class: '%oro_case.form.handler.entity.class%'

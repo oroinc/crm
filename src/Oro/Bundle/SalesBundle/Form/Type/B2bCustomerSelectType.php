@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -30,7 +31,7 @@ class B2bCustomerSelectType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_entity_create_or_select_inline_channel_aware';
+        return CreateOrSelectInlineChannelAwareType::class;
     }
 
     /**

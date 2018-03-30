@@ -2,8 +2,12 @@
 
 namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class ContactRequestTypeTest extends TypeTestCase
@@ -59,13 +63,13 @@ class ContactRequestTypeTest extends TypeTestCase
 
         $this->assertSame(
             [
-                'dataChannel'  => 'oro_channel_select_type',
-                'firstName'    => 'text',
-                'lastName'     => 'text',
-                'emailAddress' => 'text',
-                'phone'        => 'text',
-                'comment'      => 'textarea',
-                'submit'       => 'submit',
+                'dataChannel'  => ChannelSelectType::class,
+                'firstName'    => TextType::class,
+                'lastName'     => TextType::class,
+                'emailAddress' => TextType::class,
+                'phone'        => TextType::class,
+                'comment'      => TextareaType::class,
+                'submit'       => SubmitType::class,
             ],
             $fields
         );

@@ -2,9 +2,16 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
+use Oro\Bundle\AddressBundle\Form\Type\AddressCollectionType;
+use Oro\Bundle\AddressBundle\Form\Type\TypedAddressType;
+use Oro\Bundle\FormBundle\Form\Type\OroDateType;
 use Oro\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
+use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
+use Oro\Bundle\UserBundle\Form\Type\GenderType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -18,19 +25,19 @@ class CustomerApiType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('namePrefix', 'text');
-        $builder->add('firstName', 'text');
-        $builder->add('middleName', 'text');
-        $builder->add('lastName', 'text');
-        $builder->add('nameSuffix', 'text');
-        $builder->add('gender', 'oro_gender');
-        $builder->add('birthday', 'oro_date');
-        $builder->add('email', 'text');
-        $builder->add('originId', 'text');
+        $builder->add('namePrefix', TextType::class);
+        $builder->add('firstName', TextType::class);
+        $builder->add('middleName', TextType::class);
+        $builder->add('lastName', TextType::class);
+        $builder->add('nameSuffix', TextType::class);
+        $builder->add('gender', GenderType::class);
+        $builder->add('birthday', OroDateType::class);
+        $builder->add('email', TextType::class);
+        $builder->add('originId', TextType::class);
 
         $builder->add(
             'website',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'OroMagentoBundle:Website',
                 'property' => 'name'
@@ -39,7 +46,7 @@ class CustomerApiType extends AbstractType
 
         $builder->add(
             'store',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'OroMagentoBundle:Store',
                 'property' => 'name'
@@ -48,7 +55,7 @@ class CustomerApiType extends AbstractType
 
         $builder->add(
             'group',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'OroMagentoBundle:CustomerGroup',
                 'property' => 'name',
@@ -58,7 +65,7 @@ class CustomerApiType extends AbstractType
 
         $builder->add(
             'dataChannel',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'OroChannelBundle:Channel',
                 'property' => 'name',
@@ -68,10 +75,10 @@ class CustomerApiType extends AbstractType
 
         $builder->add(
             'addresses',
-            'oro_address_collection',
+            AddressCollectionType::class,
             [
                 'label'    => '',
-                'entry_type'     => 'oro_typed_address',
+                'entry_type'     => TypedAddressType::class,
                 'required' => true,
                 'entry_options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\Address']
             ]
@@ -79,7 +86,7 @@ class CustomerApiType extends AbstractType
 
         $builder->add(
             'owner',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'Oro\Bundle\UserBundle\Entity\User',
                 'property' => 'username',
@@ -89,7 +96,7 @@ class CustomerApiType extends AbstractType
 
         $builder->add(
             'account',
-            'oro_account_select',
+            AccountSelectType::class,
             [
                 'label'       => 'oro.magento.customer.account.label',
                 'required'    => true,

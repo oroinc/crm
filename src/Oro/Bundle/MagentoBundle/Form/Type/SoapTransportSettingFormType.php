@@ -49,14 +49,14 @@ class SoapTransportSettingFormType extends AbstractTransportSettingFormType
         // added because of field orders
         $builder->add(
             'check',
-            'oro_magento_transport_check_button',
+            TransportCheckButtonType::class,
             [
                 'label' => 'oro.magento.magentotransport.check_connection.label'
             ]
         );
         $builder->add(
             'websiteId',
-            'oro_magento_website_select',
+            WebsiteSelectType::class,
             [
                 'label'    => 'oro.magento.magentotransport.website_id.label',
                 'required' => true,
@@ -73,14 +73,14 @@ class SoapTransportSettingFormType extends AbstractTransportSettingFormType
         $builder->add(
             $builder->create(
                 self::IS_DISPLAY_ORDER_NOTES_FIELD_NAME,
-                IsDisplayOrderNotesFormType::NAME
+                IsDisplayOrderNotesFormType::class
             )
         );
 
         $builder->add(
             $builder->create(
                 self::SHARED_GUEST_EMAIL_FIELD_NAME,
-                SharedGuestEmailListType::NAME
+                SharedGuestEmailListType::class
             )
         );
     }

@@ -4,6 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\DataTransformer;
 
 use Oro\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -160,7 +161,7 @@ class DatasourceDataTransformerTest extends \PHPUnit_Framework_TestCase
             $this->formFactory->expects($this->once())
                 ->method('create')
                 ->with(
-                    $this->equalTo('oro_integration_channel_form'),
+                    $this->equalTo(ChannelType::class),
                     $this->isInstanceOf('Oro\Bundle\IntegrationBundle\Entity\Channel'),
                     $this->equalTo(['csrf_protection' => false, 'disable_customer_datasource_types' => false])
                 )

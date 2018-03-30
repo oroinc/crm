@@ -3,7 +3,13 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
+use Oro\Bundle\AddressBundle\Form\Type\AddressCollectionType;
+use Oro\Bundle\FormBundle\Form\Type\OroDateType;
 use Oro\Bundle\MagentoBundle\Form\Type\CustomerApiType;
+use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
+use Oro\Bundle\UserBundle\Form\Type\GenderType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CustomerApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,22 +37,22 @@ class CustomerApiTypeTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
 
         $expectedFields = [
-            'namePrefix'   => 'text',
-            'firstName'    => 'text',
-            'middleName'   => 'text',
-            'lastName'     => 'text',
-            'nameSuffix'   => 'text',
-            'gender'       => 'oro_gender',
-            'birthday'     => 'oro_date',
-            'email'        => 'text',
-            'originId'     => 'text',
-            'website'      => 'translatable_entity',
-            'store'        => 'translatable_entity',
-            'group'        => 'translatable_entity',
-            'dataChannel'  => 'translatable_entity',
-            'addresses'    => 'oro_address_collection',
-            'owner'        => 'translatable_entity',
-            'account'      => 'oro_account_select'
+            'namePrefix'   => TextType::class,
+            'firstName'    => TextType::class,
+            'middleName'   => TextType::class,
+            'lastName'     => TextType::class,
+            'nameSuffix'   => TextType::class,
+            'gender'       => GenderType::class,
+            'birthday'     => OroDateType::class,
+            'email'        => TextType::class,
+            'originId'     => TextType::class,
+            'website'      => TranslatableEntityType::class,
+            'store'        => TranslatableEntityType::class,
+            'group'        => TranslatableEntityType::class,
+            'dataChannel'  => TranslatableEntityType::class,
+            'addresses'    => AddressCollectionType::class,
+            'owner'        => TranslatableEntityType::class,
+            'account'      => AccountSelectType::class
         ];
 
         $builder->expects($this->exactly(count($expectedFields)))

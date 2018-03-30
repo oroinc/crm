@@ -2,8 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\AddressBundle\Form\Type\TypedAddressType;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -19,7 +21,7 @@ class CustomerAddressType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('phone', 'text', ['required' => true, 'label' => 'oro.magento.address.phone.label']);
+        $builder->add('phone', TextType::class, ['required' => true, 'label' => 'oro.magento.address.phone.label']);
     }
 
     /**
@@ -65,6 +67,6 @@ class CustomerAddressType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_typed_address';
+        return TypedAddressType::class;
     }
 }

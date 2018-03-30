@@ -5,6 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Form\Handler;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
+use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -32,7 +33,7 @@ class ChannelIntegrationHandler
         $this->requestStack = $requestStack;
         $this->form    = $factory->createNamed(
             'oro_integration_channel_form',
-            'oro_integration_channel_form',
+            ChannelType::class,
             null,
             $this->options
         );

@@ -6,12 +6,13 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\FormBundle\Form\Type\Select2EntityType;
 use Oro\Bundle\FormBundle\Form\Type\Select2Type;
 use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
+use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
-use Symfony\Component\Form\PreloadedExtension;
 
 class ChannelSelectTypeTest extends OrmTestCase
 {
@@ -88,7 +89,7 @@ class ChannelSelectTypeTest extends OrmTestCase
     public function testGetParent()
     {
         $this->assertEquals(
-            'oro_select2_entity',
+            Select2EntityType::class,
             $this->type->getParent()
         );
     }

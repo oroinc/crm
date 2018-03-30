@@ -50,12 +50,12 @@ services:
     oro_contact.form.contact:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
-        arguments: ["oro_contact_form", "oro_contact", null]
+        arguments: ["oro_contact_form", Oro\Bundle\ContactBundle\Form\Type\ContactType, null]
 
     oro_contact.form.group:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
-        arguments: ["oro_contact_group_form", "oro_contact_group"]
+        arguments: ["oro_contact_group_form", Oro\Bundle\ContactBundle\Form\Type\GroupType]
 
     oro_contact.form.type.contact:
         class: '%oro_contact.type.contact.class%'
@@ -124,7 +124,7 @@ services:
     oro_contact.form.contact.api:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
-        arguments: ["contact", "contact", null]
+        arguments: ["contact", Oro\Bundle\ContactBundle\Form\Type\ContactApiType, null]
 
     oro_contact.form.handler.contact.api:
         class: '%oro_contact.handler.contact.class%'
@@ -149,7 +149,7 @@ services:
     oro_contact.form.group.api:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
-        arguments: ["contact_group", "contact_group", null]
+        arguments: ["contact_group", Oro\Bundle\ContactBundle\Form\Type\GroupApiType, null]
 
     oro_contact.form.handler.group.api:
         class: '%oro_contact.handler.group.class%'
@@ -163,7 +163,7 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_contact_address_form"
-            - "oro_typed_address"
+            - Oro\Bundle\AddressBundle\Form\Type\TypedAddressType
             - ~
             - { data_class: '%oro_contact.contact_address.entity.class%' }
 

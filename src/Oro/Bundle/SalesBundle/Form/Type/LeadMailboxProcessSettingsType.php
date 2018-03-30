@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,7 +29,7 @@ class LeadMailboxProcessSettingsType extends AbstractType
     {
         $builder->add(
             'owner',
-            'oro_user_organization_acl_select',
+            OrganizationUserAclSelectType::class,
             [
                 'required' => true,
                 'label'    => 'oro.sales.lead.owner.label',
@@ -38,7 +39,7 @@ class LeadMailboxProcessSettingsType extends AbstractType
             ]
         )->add(
             'source',
-            'oro_sales_lead_mailbox_process_source',
+            LeadMailboxProcessSourceType::class,
             [
                 'required'    => true,
                 'label'       => 'oro.sales.lead.source.label',

@@ -2,7 +2,16 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
+use Oro\Bundle\IntegrationBundle\Form\Type\IntegrationSelectType;
+use Oro\Bundle\MagentoBundle\Form\Type\CartAddressApiType;
 use Oro\Bundle\MagentoBundle\Form\Type\CartApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\CartItemCollectionType;
+use Oro\Bundle\MagentoBundle\Form\Type\CustomerSelectType;
+use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CartApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,31 +39,31 @@ class CartApiTypeTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
 
         $expectedFields = [
-            'subTotal'          => 'oro_money',
-            'grandTotal'        => 'oro_money',
-            'taxAmount'         => 'oro_money',
-            'cartItems'         => 'oro_cart_item_collection',
-            'customer'          => 'oro_customer_select',
-            'store'             => 'translatable_entity',
-            'itemsQty'          => 'number',
-            'baseCurrencyCode'  => 'text',
-            'storeCurrencyCode' => 'text',
-            'quoteCurrencyCode' => 'text',
-            'storeToBaseRate'   => 'number',
-            'storeToQuoteRate'  => 'number',
-            'email'             => 'text',
-            'giftMessage'       => 'text',
-            'isGuest'           => 'checkbox',
-            'shippingAddress'   => 'cart_address_api_type',
-            'billingAddress'    => 'cart_address_api_type',
-            'paymentDetails'    => 'text',
-            'status'            => 'translatable_entity',
-            'notes'             => 'text',
-            'statusMessage'     => 'text',
-            'owner'             => 'translatable_entity',
-            'dataChannel'       => 'translatable_entity',
-            'channel'           => 'oro_integration_select',
-            'originId'          => 'number'
+            'subTotal'          => OroMoneyType::class,
+            'grandTotal'        => OroMoneyType::class,
+            'taxAmount'         => OroMoneyType::class,
+            'cartItems'         => CartItemCollectionType::class,
+            'customer'          => CustomerSelectType::class,
+            'store'             => TranslatableEntityType::class,
+            'itemsQty'          => NumberType::class,
+            'baseCurrencyCode'  => TextType::class,
+            'storeCurrencyCode' => TextType::class,
+            'quoteCurrencyCode' => TextType::class,
+            'storeToBaseRate'   => NumberType::class,
+            'storeToQuoteRate'  => NumberType::class,
+            'email'             => TextType::class,
+            'giftMessage'       => TextType::class,
+            'isGuest'           => CheckboxType::class,
+            'shippingAddress'   => CartAddressApiType::class,
+            'billingAddress'    => CartAddressApiType::class,
+            'paymentDetails'    => TextType::class,
+            'status'            => TranslatableEntityType::class,
+            'notes'             => TextType::class,
+            'statusMessage'     => TextType::class,
+            'owner'             => TranslatableEntityType::class,
+            'dataChannel'       => TranslatableEntityType::class,
+            'channel'           => IntegrationSelectType::class,
+            'originId'          => NumberType::class
         ];
 
         $builder->expects($this->exactly(count($expectedFields)))

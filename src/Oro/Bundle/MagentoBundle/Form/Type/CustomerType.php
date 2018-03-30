@@ -2,11 +2,17 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\AddressBundle\Form\Type\AddressCollectionType;
+use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
+use Oro\Bundle\FormBundle\Form\Type\OroDateType;
 use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
+use Oro\Bundle\UserBundle\Form\Type\GenderType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -46,18 +52,30 @@ class CustomerType extends AbstractType
         $isExisting = $builder->getData() && $builder->getData()->getId();
 
         $builder
-            ->add('namePrefix', 'text', ['required' => false, 'label' => 'oro.magento.customer.name_prefix.label'])
-            ->add('firstName', 'text', ['label' => 'oro.magento.customer.first_name.label'])
-            ->add('middleName', 'text', ['required' => false, 'label' => 'oro.magento.customer.middle_name.label'])
-            ->add('lastName', 'text', ['label' => 'oro.magento.customer.last_name.label'])
-            ->add('nameSuffix', 'text', ['required' => false, 'label' => 'oro.magento.customer.name_suffix.label'])
-            ->add('gender', 'oro_gender', ['required' => false, 'label' => 'oro.magento.customer.gender.label'])
-            ->add('birthday', 'oro_date', ['required' => false, 'label' => 'oro.magento.customer.birthday.label'])
-            ->add('email', 'email', ['label' => 'oro.magento.customer.email.label'])
-            ->add('vat', 'text', ['required' => false, 'label' => 'oro.magento.customer.vat.label'])
+            ->add('namePrefix', TextType::class, [
+                'required' => false,
+                'label' => 'oro.magento.customer.name_prefix.label'
+            ])
+            ->add('firstName', TextType::class, ['label' => 'oro.magento.customer.first_name.label'])
+            ->add('middleName', TextType::class, [
+                'required' => false,
+                'label' => 'oro.magento.customer.middle_name.label'
+            ])
+            ->add('lastName', TextType::class, ['label' => 'oro.magento.customer.last_name.label'])
+            ->add('nameSuffix', TextType::class, [
+                'required' => false,
+                'label' => 'oro.magento.customer.name_suffix.label'
+            ])
+            ->add('gender', GenderType::class, ['required' => false, 'label' => 'oro.magento.customer.gender.label'])
+            ->add('birthday', OroDateType::class, [
+                'required' => false,
+                'label' => 'oro.magento.customer.birthday.label'
+            ])
+            ->add('email', EmailType::class, ['label' => 'oro.magento.customer.email.label'])
+            ->add('vat', TextType::class, ['required' => false, 'label' => 'oro.magento.customer.vat.label'])
             ->add(
                 'dataChannel',
-                'oro_magento_customer_channel_select',
+                CustomerChannelSelectType::class,
                 [
                     'label' => 'oro.magento.customer.data_channel.label',
                     'entities' => [$this->customerClassName],
@@ -68,7 +86,7 @@ class CustomerType extends AbstractType
             )
             ->add(
                 'store',
-                'oro_magento_store_select',
+                StoreSelectType::class,
                 [
                     'label' => 'oro.magento.customer.store.label',
                     'channel_field' => 'dataChannel',
@@ -78,7 +96,7 @@ class CustomerType extends AbstractType
             )
             ->add(
                 'group',
-                'oro_magento_customer_group_select',
+                CustomerGroupSelectType::class,
                 [
                     'label' => 'oro.magento.customer.group.label',
                     'channel_field' => 'dataChannel',
@@ -87,20 +105,20 @@ class CustomerType extends AbstractType
             )
             ->add(
                 'addresses',
-                'oro_address_collection',
+                AddressCollectionType::class,
                 [
                     'label' => 'oro.magento.customer.addresses.label',
-                    'entry_type' => 'oro_magento_customer_addresses',
+                    'entry_type' => CustomerAddressType::class,
                     'required' => true,
                     'entry_options' => ['data_class' => $this->customerAddressClassName]
                 ]
             )
-            ->add('contact', 'oro_contact_select', ['label' => 'oro.magento.customer.contact.label']);
+            ->add('contact', ContactSelectType::class, ['label' => 'oro.magento.customer.contact.label']);
 
         if ($this->isPasswordSetAllowed($builder->getData())) {
             $builder->add(
                 'generatedPassword',
-                'text',
+                TextType::class,
                 [
                     'label' => 'oro.magento.customer.password.label',
                     'tooltip' => 'oro.magento.customer.password.tooltip',

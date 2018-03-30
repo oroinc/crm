@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\MagentoBundle\Form\Type\OrderPlaceType;
+use Oro\Bundle\WorkflowBundle\Form\Type\WorkflowTransitionType;
 
 class OrderPlaceTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,6 +26,6 @@ class OrderPlaceTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $typeName);
         $this->assertNotEmpty($typeName);
 
-        $this->assertSame('oro_workflow_transition', $this->type->getParent());
+        $this->assertSame(WorkflowTransitionType::class, $this->type->getParent());
     }
 }

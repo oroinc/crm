@@ -3,7 +3,9 @@
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Oro\Bundle\AddressBundle\Form\EventListener\FixAddressesPrimarySubscriber;
+use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,7 +23,7 @@ class LeadAddressType extends AbstractType
         }
         $builder->add(
             'primary',
-            'checkbox',
+            CheckboxType::class,
             ['required' => false]
         );
     }
@@ -42,7 +44,7 @@ class LeadAddressType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_address';
+        return AddressType::class;
     }
 
     /**

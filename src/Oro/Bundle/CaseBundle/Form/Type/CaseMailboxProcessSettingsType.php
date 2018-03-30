@@ -7,6 +7,8 @@ use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
 use Oro\Bundle\CaseBundle\Entity\CasePriority;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
+use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -49,7 +51,7 @@ class CaseMailboxProcessSettingsType extends AbstractType
     {
         $builder->add(
             'owner',
-            'oro_user_organization_acl_select',
+            OrganizationUserAclSelectType::class,
             [
                 'required'    => true,
                 'label'       => 'oro.case.caseentity.owner.label',
@@ -59,14 +61,14 @@ class CaseMailboxProcessSettingsType extends AbstractType
             ]
         )->add(
             'assignTo',
-            'oro_user_organization_acl_select',
+            OrganizationUserAclSelectType::class,
             [
                 'required' => false,
                 'label'    => 'oro.case.caseentity.assigned_to.label',
             ]
         )->add(
             'status',
-            'entity',
+            EntityType::class,
             [
                 'label'         => 'oro.case.caseentity.status.label',
                 'class'         => 'OroCaseBundle:CaseStatus',
@@ -83,7 +85,7 @@ class CaseMailboxProcessSettingsType extends AbstractType
             ]
         )->add(
             'priority',
-            'entity',
+            EntityType::class,
             [
                 'label'         => 'oro.case.caseentity.priority.label',
                 'class'         => 'OroCaseBundle:CasePriority',
@@ -100,7 +102,7 @@ class CaseMailboxProcessSettingsType extends AbstractType
             ]
         )->add(
             'tags',
-            'case_mailbox_process_settings_tag',
+            CaseMailboxProcessSettingsTagType::class,
             [
                 'label' => 'oro.tag.entity_plural_label',
             ]
