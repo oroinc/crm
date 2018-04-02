@@ -83,9 +83,13 @@ class OpportunityStatusConfigType extends AbstractType
 
         $builder->add(
             'enum',
-            new ConfigScopeType($items, $config, $this->entityConfigManager, $options['config_model']),
+            ConfigScopeType::class,
             [
                 'label' => false,
+                'items' => $items,
+                'config' => $config,
+                'config_model' => $options['config_model'],
+                'config_manager' => $this->entityConfigManager
             ]
         );
 
