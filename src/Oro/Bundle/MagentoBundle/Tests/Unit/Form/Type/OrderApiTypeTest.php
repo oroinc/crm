@@ -2,7 +2,17 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\AddressBundle\Form\Type\AddressCollectionType;
+use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
+use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
+use Oro\Bundle\IntegrationBundle\Form\Type\IntegrationSelectType;
+use Oro\Bundle\MagentoBundle\Form\Type\CustomerSelectType;
 use Oro\Bundle\MagentoBundle\Form\Type\OrderApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\OrderItemCollectionType;
+use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class OrderApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,39 +40,39 @@ class OrderApiTypeTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
 
         $expectedFields = [
-            'incrementId'         => 'text',
-            'originId'            => 'text',
-            'isVirtual'           => 'checkbox',
-            'isGuest'             => 'checkbox',
-            'giftMessage'         => 'text',
-            'remoteIp'            => 'text',
-            'storeName'           => 'text',
-            'totalPaidAmount'     => 'number',
-            'totalInvoicedAmount' => 'oro_money',
-            'totalRefundedAmount' => 'oro_money',
-            'totalCanceledAmount' => 'oro_money',
-            'notes'               => 'text',
-            'feedback'            => 'text',
-            'customerEmail'       => 'text',
-            'currency'            => 'text',
-            'paymentMethod'       => 'text',
-            'paymentDetails'      => 'text',
-            'subtotalAmount'      => 'oro_money',
-            'shippingAmount'      => 'oro_money',
-            'shippingMethod'      => 'text',
-            'taxAmount'           => 'oro_money',
-            'couponCode'          => 'text',
-            'discountAmount'      => 'oro_money',
-            'discountPercent'     => 'oro_percent',
-            'totalAmount'         => 'oro_money',
-            'status'              => 'text',
-            'customer'            => 'oro_customer_select',
-            'addresses'           => 'oro_address_collection',
-            'items'               => 'oro_order_item_collection',
-            'owner'               => 'translatable_entity',
-            'dataChannel'         => 'translatable_entity',
-            'store'               => 'translatable_entity',
-            'channel'             => 'oro_integration_select'
+            'incrementId'         => TextType::class,
+            'originId'            => TextType::class,
+            'isVirtual'           => CheckboxType::class,
+            'isGuest'             => CheckboxType::class,
+            'giftMessage'         => TextType::class,
+            'remoteIp'            => TextType::class,
+            'storeName'           => TextType::class,
+            'totalPaidAmount'     => NumberType::class,
+            'totalInvoicedAmount' => OroMoneyType::class,
+            'totalRefundedAmount' => OroMoneyType::class,
+            'totalCanceledAmount' => OroMoneyType::class,
+            'notes'               => TextType::class,
+            'feedback'            => TextType::class,
+            'customerEmail'       => TextType::class,
+            'currency'            => TextType::class,
+            'paymentMethod'       => TextType::class,
+            'paymentDetails'      => TextType::class,
+            'subtotalAmount'      => OroMoneyType::class,
+            'shippingAmount'      => OroMoneyType::class,
+            'shippingMethod'      => TextType::class,
+            'taxAmount'           => OroMoneyType::class,
+            'couponCode'          => TextType::class,
+            'discountAmount'      => OroMoneyType::class,
+            'discountPercent'     => OroPercentType::class,
+            'totalAmount'         => OroMoneyType::class,
+            'status'              => TextType::class,
+            'customer'            => CustomerSelectType::class,
+            'addresses'           => AddressCollectionType::class,
+            'items'               => OrderItemCollectionType::class,
+            'owner'               => TranslatableEntityType::class,
+            'dataChannel'         => TranslatableEntityType::class,
+            'store'               => TranslatableEntityType::class,
+            'channel'             => IntegrationSelectType::class
         ];
 
         $builder->expects($this->exactly(count($expectedFields)))

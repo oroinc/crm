@@ -19,7 +19,7 @@ class CartAddressHandlerTest extends AbstractHandlerTest
     {
         $this->form = $this->createMock(Form::class);
 
-        $this->request = $this->createMock(Request::class);
+        $this->request = new Request();
         $requestStack = new RequestStack();
         $requestStack->push($this->request);
 
@@ -55,9 +55,8 @@ class CartAddressHandlerTest extends AbstractHandlerTest
             ->method('setData')
             ->with($this->entity);
 
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('POST'));
+        $this->request->initialize([], self::FORM_DATA);
+        $this->request->setMethod('POST');
 
         $this->form->expects($this->once())
             ->method('submit');

@@ -87,21 +87,21 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_opportunity_form"
-            - "oro_sales_opportunity"
+            - Oro\Bundle\SalesBundle\Form\Type\OpportunityType
 
     oro_sales.opportunity.form.api:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments:
             - "opportunity"
-            - "oro_sales_opportunity_api"
+            - Oro\Bundle\SalesBundle\Form\Type\OpportunityApiType
 
     oro_sales.lead_to_opportunity.form:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_lead_to_opportunity_form"
-            - "oro_sales_lead_to_opportunity"
+            - Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType
 
     oro_sales.opportunity.form.handler:
         class: '%oro_sales.opportunity.form.handler.class%'
@@ -151,14 +151,14 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_lead_form"
-            - "oro_sales_lead"
+            - Oro\Bundle\SalesBundle\Form\Type\LeadType
 
     oro_sales.lead.form.api:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments:
             - "lead"
-            - "oro_sales_lead_api"
+            - Oro\Bundle\SalesBundle\Form\Type\LeadApiType
 
     oro_sales.lead.form.handler:
         class: '%oro_sales.lead.form.handler.class%'
@@ -181,7 +181,7 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_lead_address_form"
-            - "oro_sales_lead_address"
+            - Oro\Bundle\SalesBundle\Form\Type\LeadAddressType
             - ~
             - { data_class: '%oro_sales.leadaddress.entity.class%' }
 
@@ -229,14 +229,14 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_salesfunnel_form"
-            - "oro_sales_funnel"
+            - Oro\Bundle\SalesBundle\Form\Type\SalesFunnelType
 
     oro_sales.salesfunnel.form.api:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments:
             - "salesfunnel"
-            - "oro_sales_salesfunnel_api"
+            - Oro\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
 
     oro_sales.salesfunnel.form.handler:
         class: '%oro_sales.salesfunnel.form.handler.class%'
@@ -282,14 +282,14 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_b2bcustomer_form"
-            - "oro_sales_b2bcustomer"
+            - Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType
 
     oro_sales.b2bcustomer.form.api:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments:
             - "b2bcustomer"
-            - "oro_sales_b2bcustomer_api"
+            - Oro\Bundle\SalesBundle\Form\Type\B2bCustomerApiType
 
     oro_sales.b2bcustomer.form.handler:
         class: '%oro_sales.b2bcustomer.form.handler.class%'
@@ -357,7 +357,7 @@ services:
     oro_sales.form.type.b2bcustomer_phone:
         class: Symfony\Component\Form\Form
         factory: ["@form.factory", createNamed]
-        arguments: ["oro_b2bcustomer_phone", "oro_b2bcustomer_phone", null]
+        arguments: ["oro_b2bcustomer_phone", Oro\Bundle\SalesBundle\Form\Type\B2bCustomerPhoneType, null]
 
     oro_sales.form.type.b2bcustomer_phone.type:
         class: '%oro_sales.form.type.b2bcustomer_phone.class%'
@@ -376,7 +376,7 @@ services:
     oro_sales.form.type.b2bcustomer_email:
         class: Symfony\Component\Form\Form
         factory: ["@form.factory", createNamed]
-        arguments: ["oro_b2bcustomer_email", "oro_b2bcustomer_email", null]
+        arguments: ["oro_b2bcustomer_email", Oro\Bundle\SalesBundle\Form\Type\B2bCustomerEmailType, null]
 
     oro_sales.form.type.b2bcustomer_email.type:
         class: '%oro_sales.form.type.b2bcustomer_email.class%'

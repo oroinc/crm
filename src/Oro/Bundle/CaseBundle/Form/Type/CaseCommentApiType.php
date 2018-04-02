@@ -2,7 +2,9 @@
 
 namespace Oro\Bundle\CaseBundle\Form\Type;
 
+use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
+use Oro\Bundle\UserBundle\Form\Type\UserSelectType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,7 +19,7 @@ class CaseCommentApiType extends AbstractType
         $builder
             ->add(
                 'updatedBy',
-                'oro_user_select',
+                UserSelectType::class,
                 [
                     'label'     => 'oro.case.casecomment.updated_by.label',
                     'required'  => false,
@@ -25,7 +27,7 @@ class CaseCommentApiType extends AbstractType
             )
             ->add(
                 'contact',
-                'oro_contact_select',
+                ContactSelectType::class,
                 [
                     'label'     => 'oro.case.casecomment.contact.label',
                     'required'  => false,
@@ -69,6 +71,6 @@ class CaseCommentApiType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_case_comment';
+        return CaseCommentType::class;
     }
 }

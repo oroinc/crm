@@ -3,6 +3,7 @@
 namespace Oro\Bundle\AnalyticsBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -28,9 +29,9 @@ class RFMCategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('category_index', 'hidden')
-            ->add('min_value', 'hidden')
-            ->add('max_value', 'hidden');
+            ->add('category_index', HiddenType::class)
+            ->add('min_value', HiddenType::class)
+            ->add('max_value', HiddenType::class);
     }
 
     /**

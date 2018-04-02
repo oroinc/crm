@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\MultipleEntityType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -46,6 +47,6 @@ class MultipleEntityChannelAwareType extends AbstractChannelAwareType
      */
     public function getParent()
     {
-        return 'oro_multiple_entity';
+        return MultipleEntityType::class;
     }
 }

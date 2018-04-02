@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType;
 use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -35,7 +36,7 @@ class B2bCustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParent()
     {
-        $this->assertEquals('oro_entity_create_or_select_inline_channel_aware', $this->type->getParent());
+        $this->assertEquals(CreateOrSelectInlineChannelAwareType::class, $this->type->getParent());
     }
 
     public function testGetName()

@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityExtendBundle\Form\Type\EnumSelectType;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
@@ -57,13 +58,21 @@ class OpportunityStatusSelectType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_enum_select';
+        return EnumSelectType::class;
     }
 
     /**
      * {@inheritdoc}
      */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return 'oro_sales_opportunity_status_select';
     }

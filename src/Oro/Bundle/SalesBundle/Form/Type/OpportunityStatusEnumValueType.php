@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\EntityExtendBundle\Form\Type\EnumValueType;
+use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -43,7 +45,7 @@ class OpportunityStatusEnumValueType extends AbstractType
         $form = $event->getForm();
         $form->add(
             'probability',
-            'oro_percent',
+            OroPercentType::class,
             [
                 'disabled' => $disabled,
                 'attr' => ['readonly' => $disabled],
@@ -57,7 +59,7 @@ class OpportunityStatusEnumValueType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_entity_extend_enum_value';
+        return EnumValueType::class;
     }
 
     /**

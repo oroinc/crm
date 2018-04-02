@@ -50,7 +50,7 @@ services:
             - '%oro_analytics.model.rfm_aware_interface%'
             - '%oro_analytics.entity.rfm_category.class%'
         tags:
-            - { name: form.type_extension, alias: oro_channel_form }
+            - { name: form.type_extension, alias: oro_channel_form, extended_type: Oro\Bundle\ChannelBundle\Form\Type\ChannelType }
 
     oro_analytics.placeholder.rfm_filter:
         class: '%oro_analytics.placeholder.rfm_filter.class%'

@@ -3,6 +3,7 @@
 namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
+use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 
 class AccountSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +27,7 @@ class AccountSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testParent()
     {
-        $this->assertEquals('oro_entity_create_or_select_inline', $this->type->getParent());
+        $this->assertEquals(OroEntitySelectOrCreateInlineType::class, $this->type->getParent());
     }
 
     public function testConfigureOptions()

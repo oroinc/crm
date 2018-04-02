@@ -4,6 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Oro\Bundle\MagentoBundle\Form\DataTransformer\EmailListToStringTransformer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -38,7 +39,7 @@ class SharedGuestEmailListType extends AbstractType
      */
     public function getParent()
     {
-        return 'textarea';
+        return TextareaType::class;
     }
 
     /**

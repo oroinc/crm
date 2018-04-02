@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class ChannelEntityTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +23,7 @@ class ChannelEntityTypeTest extends \PHPUnit_Framework_TestCase
     public function testType()
     {
         $this->assertSame('oro_channel_entities', $this->type->getName());
-        $this->assertSame('hidden', $this->type->getParent());
+        $this->assertSame(HiddenType::class, $this->type->getParent());
 
         $this->assertInstanceOf('Symfony\Component\Form\AbstractType', $this->type);
     }

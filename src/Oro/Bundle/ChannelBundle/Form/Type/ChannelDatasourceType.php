@@ -7,6 +7,7 @@ use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
 use Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -54,16 +55,16 @@ class ChannelDatasourceType extends AbstractType
         $em          = $this->registry->getManagerForClass($this->integrationEntityFQCN);
         $formFactory = $builder->getFormFactory();
 
-        $data = $builder->create('data', 'hidden');
+        $data = $builder->create('data', HiddenType::class);
         $data->addViewTransformer(new ArrayToJsonTransformer());
-        $identifier = $builder->create('identifier', 'hidden');
+        $identifier = $builder->create('identifier', HiddenType::class);
         $identifier->addViewTransformer(new EntityToIdTransformer($em, $this->integrationEntityFQCN));
         $builder->addViewTransformer(new DatasourceDataTransformer($formFactory));
 
         $builder->add($data);
         $builder->add($identifier);
-        $builder->add('type', 'hidden', ['data' => $options['type']]);
-        $builder->add('name', 'hidden');
+        $builder->add('type', HiddenType::class, ['data' => $options['type']]);
+        $builder->add('name', HiddenType::class);
     }
 
     /**

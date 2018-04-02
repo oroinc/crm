@@ -7,23 +7,32 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Form\EventListener\AddressCountryAndRegionSubscriber;
 use Oro\Bundle\AddressBundle\Form\Type\AddressType;
+use Oro\Bundle\AddressBundle\Form\Type\CountryType;
+use Oro\Bundle\AddressBundle\Form\Type\EmailCollectionType;
+use Oro\Bundle\AddressBundle\Form\Type\PhoneCollectionType;
+use Oro\Bundle\AddressBundle\Form\Type\RegionType;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 use Oro\Bundle\FormBundle\Form\Extension\AdditionalAttrExtension;
+use Oro\Bundle\FormBundle\Form\Type\Select2EntityType;
 use Oro\Bundle\FormBundle\Tests\Unit\Stub\StripTagsExtensionStub;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType;
+use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\EmailCollectionTypeParent;
 use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\EmailCollectionTypeStub;
+use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\PhoneCollectionTypeParent;
 use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\PhoneCollectionTypeStub;
 use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
 use Oro\Component\Testing\Unit\EntityTrait;
 use Oro\Component\Testing\Unit\Form\Type\Stub\EntityType;
 use Oro\Component\Testing\Unit\FormIntegrationTestCase;
+use Oro\Component\Testing\Unit\PreloadedExtension;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class B2bCustomerTypeTest extends FormIntegrationTestCase
@@ -38,9 +47,8 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
      */
     protected function setUp()
     {
-        parent::setUp();
-
         $this->formType = new B2bCustomerType(new PropertyAccessor());
+        parent::setUp();
     }
 
     /**
@@ -83,21 +91,22 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
         return [
             new PreloadedExtension(
                 [
-                    $contactEntityType->getName() => $contactEntityType,
-                    'oro_email_collection' => new EmailCollectionTypeStub(),
-                    $emailEntityType->getName() => $emailEntityType,
-                    'oro_phone_collection' => new PhoneCollectionTypeStub(),
-                    $phoneEntityType->getName() => $phoneEntityType,
-                    ChannelSelectType::NAME => new ChannelSelectType($channelsProvider),
-                    $channelEntityType->getName() => $channelEntityType,
-                    'oro_address' => new AddressType(
+                    B2bCustomerType::class => $this->formType,
+                    ContactSelectType::class => $contactEntityType,
+                    EmailCollectionType::class => new EmailCollectionTypeStub(),
+                    EmailCollectionTypeParent::class => $emailEntityType,
+                    PhoneCollectionType::class => new PhoneCollectionTypeStub(),
+                    PhoneCollectionTypeParent::class => $phoneEntityType,
+                    ChannelSelectType::class => new ChannelSelectType($channelsProvider),
+                    Select2EntityType::class => $channelEntityType,
+                    AddressType::class => new AddressType(
                         new AddressCountryAndRegionSubscriber($objectManager, $formFactory)
                     ),
-                    $countryEntityType->getName() => $countryEntityType,
-                    $regionEntityType->getName() => $regionEntityType,
+                    CountryType::class => $countryEntityType,
+                    RegionType::class => $regionEntityType,
                 ],
                 [
-                    'form' => [
+                    FormType::class => [
                         new AdditionalAttrExtension(),
                         new StripTagsExtensionStub($this->createMock(HtmlTagHelper::class))
                     ]
@@ -118,7 +127,7 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
 
     public function testBuildForm()
     {
-        $form = $this->factory->create($this->formType);
+        $form = $this->factory->create(B2bCustomerType::class);
 
         $this->assertTrue($form->has('name'));
         $this->assertTrue($form->has('contact'));
@@ -138,7 +147,7 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
      */
     public function testSubmit($existingData, $submittedData, $expectedData)
     {
-        $form = $this->factory->create($this->formType, $existingData);
+        $form = $this->factory->create(B2bCustomerType::class, $existingData);
 
         $this->assertEquals($existingData, $form->getData());
 

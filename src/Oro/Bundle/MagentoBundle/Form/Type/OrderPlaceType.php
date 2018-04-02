@@ -30,6 +30,6 @@ class OrderPlaceType extends AbstractType
      */
     public function getParent()
     {
-        return WorkflowTransitionType::NAME;
+        return WorkflowTransitionType::class;
     }
 }

@@ -347,7 +347,7 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
-            - 'cart_api_type'
+            - Oro\Bundle\MagentoBundle\Form\Type\CartApiType
 
     oro_magento.form.type.cart.api:
         class: '%oro_magento.form.type.cart.api.class%'
@@ -364,7 +364,7 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
-            - 'cart_item_api_type'
+            - Oro\Bundle\MagentoBundle\Form\Type\CartItemsApiType
 
     oro_magento.form.type.cart_item.api:
         class: '%oro_magento.form.type.cart_item.api.class%'
@@ -376,7 +376,7 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
-            - 'cart_address_api_type'
+            - Oro\Bundle\MagentoBundle\Form\Type\CartAddressApiType
 
     oro_magento.form.type.cart_address:
         class: '%oro_magento.form.type.cart_address.class%'
@@ -388,7 +388,7 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
-            - "order_api_type"
+            - Oro\Bundle\MagentoBundle\Form\Type\OrderApiType
 
     oro_magento.form.type.order.api:
         class: '%oro_magento.form.type.order.api.class%'
@@ -417,7 +417,7 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
-            - 'order_address_api_type'
+            - Oro\Bundle\MagentoBundle\Form\Type\OrderAddressApiType
 
     oro_magento.form.type.order_item.api:
         class: '%oro_magento.form.type.order_item.api.class%'
@@ -429,7 +429,7 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
-            - 'order_item_api_type'
+            - Oro\Bundle\MagentoBundle\Form\Type\OrderItemsApiType
 
     oro_magento.form.type.customer.api:
         class: '%oro_magento.form.type.customer.api.class%'
@@ -443,14 +443,14 @@ services:
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
-            - "api_customer_type"
+            - Oro\Bundle\MagentoBundle\Form\Type\CustomerApiType
 
     oro_magento.form.customer_address.api:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
-            - "customer_address_api_type"
+            - Oro\Bundle\MagentoBundle\Form\Type\CustomerAddressApiType
 
     oro_magento.form.type.customer_address.api:
         class: '%oro_magento.form.type.customer_address.api.class%'

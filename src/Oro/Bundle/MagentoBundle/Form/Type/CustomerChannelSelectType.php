@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Symfony\Component\Form\AbstractType;
@@ -63,7 +64,7 @@ class CustomerChannelSelectType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_channel_select_type';
+        return ChannelSelectType::class;
     }
 
     /**

@@ -2,9 +2,14 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
+use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\MagentoBundle\Form\EventListener\CartItemApiFormSubscriber;
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,26 +22,26 @@ class CartItemsApiType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('sku', 'text', ['required' => false]);
-        $builder->add('name', 'text', ['required' => true]);
-        $builder->add('qty', 'number', ['required' => true]);
-        $builder->add('price', 'oro_money', ['required' => true]);
-        $builder->add('discountAmount', 'oro_money', ['required' => true]);
-        $builder->add('taxPercent', 'oro_percent', ['required' => true]);
-        $builder->add('weight', 'number', ['required' => false]);
-        $builder->add('productId', 'number', ['required' => true]);
-        $builder->add('parentItemId', 'number', ['required' => false]);
-        $builder->add('freeShipping', 'text', ['required' => true]);
-        $builder->add('taxAmount', 'oro_money', ['required' => false]);
-        $builder->add('giftMessage', 'text', ['required' => false]);
-        $builder->add('taxClassId', 'text', ['required' => false]);
-        $builder->add('description', 'text', ['required' => false]);
-        $builder->add('isVirtual', 'checkbox', ['required' => true]);
-        $builder->add('customPrice', 'oro_money', ['required' => false]);
-        $builder->add('priceInclTax', 'oro_money', ['required' => false]);
-        $builder->add('rowTotal', 'oro_money', ['required' => true]);
-        $builder->add('productType', 'text', ['required' => true]);
-        $builder->add('cart', 'oro_cart_select', ['required' => false]);
+        $builder->add('sku', TextType::class, ['required' => false]);
+        $builder->add('name', TextType::class, ['required' => true]);
+        $builder->add('qty', NumberType::class, ['required' => true]);
+        $builder->add('price', OroMoneyType::class, ['required' => true]);
+        $builder->add('discountAmount', OroMoneyType::class, ['required' => true]);
+        $builder->add('taxPercent', OroPercentType::class, ['required' => true]);
+        $builder->add('weight', NumberType::class, ['required' => false]);
+        $builder->add('productId', NumberType::class, ['required' => true]);
+        $builder->add('parentItemId', NumberType::class, ['required' => false]);
+        $builder->add('freeShipping', TextType::class, ['required' => true]);
+        $builder->add('taxAmount', OroMoneyType::class, ['required' => false]);
+        $builder->add('giftMessage', TextType::class, ['required' => false]);
+        $builder->add('taxClassId', TextType::class, ['required' => false]);
+        $builder->add('description', TextType::class, ['required' => false]);
+        $builder->add('isVirtual', CheckboxType::class, ['required' => true]);
+        $builder->add('customPrice', OroMoneyType::class, ['required' => false]);
+        $builder->add('priceInclTax', OroMoneyType::class, ['required' => false]);
+        $builder->add('rowTotal', OroMoneyType::class, ['required' => true]);
+        $builder->add('productType', TextType::class, ['required' => true]);
+        $builder->add('cart', CartSelectType::class, ['required' => false]);
 
         $builder->addEventSubscriber(new PatchSubscriber());
         $builder->addEventSubscriber(new CartItemApiFormSubscriber());

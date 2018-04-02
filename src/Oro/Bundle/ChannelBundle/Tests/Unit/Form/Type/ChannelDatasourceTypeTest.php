@@ -8,7 +8,6 @@ use Oro\Bundle\FormBundle\Autocomplete\SearchRegistry;
 use Oro\Bundle\FormBundle\Form\Extension\TooltipFormExtension;
 use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Oro\Bundle\FormBundle\Form\Type\OroJquerySelect2HiddenType;
-use Oro\Bundle\FormBundle\Form\Type\Select2Type;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormSubscriber;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\DefaultOwnerSubscriber;
@@ -19,10 +18,11 @@ use Oro\Bundle\IntegrationBundle\Provider\SettingsProvider;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
+use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Csrf\Type\FormTypeCsrfExtension;
 use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\IdentityTranslator;
@@ -66,11 +66,11 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        parent::setUp();
         $this->registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\ManagerRegistry')
             ->disableOriginalConstructor()->getMock();
 
         $this->type = new ChannelDatasourceType($this->registry, $this->testEntityName);
+        parent::setUp();
     }
 
     protected function getExtensions()
@@ -130,28 +130,21 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         return [
             new PreloadedExtension(
                 [
-                    'oro_integration_channel_form'       => $this->getChannelType($registry),
-                    'oro_integration_type_select'        => new IntegrationTypeSelectType($registry, $assetsHelper),
-                    'oro_user_organization_acl_select'   => new OrganizationUserAclSelectType(),
-                    'oro_user_acl_select'                => new UserAclSelectType(),
-                    'oro_entity_create_or_select_inline' => new OroEntitySelectOrCreateInlineType(
+                    $this->type,
+                    ChannelType::class       => $this->getChannelType($registry),
+                    IntegrationTypeSelectType::class        => new IntegrationTypeSelectType($registry, $assetsHelper),
+                    OrganizationUserAclSelectType::class   => new OrganizationUserAclSelectType(),
+                    UserAclSelectType::class                => new UserAclSelectType(),
+                    OroEntitySelectOrCreateInlineType::class => new OroEntitySelectOrCreateInlineType(
                         $authorizationChecker,
                         $cm,
                         $em,
                         $searchRegistry
                     ),
-                    'oro_jqueryselect2_hidden'           => new OroJquerySelect2HiddenType($em, $searchRegistry, $cp),
-                    'oro_select2_choice' => new Select2Type(
-                        'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
-                        'oro_select2_choice'
-                    ),
-                    'oro_select2_hidden' => new Select2Type(
-                        'Symfony\Component\Form\Extension\Core\Type\HiddenType',
-                        'oro_select2_hidden'
-                    )
+                    OroJquerySelect2HiddenType::class => new OroJquerySelect2HiddenType($em, $searchRegistry, $cp)
                 ],
                 [
-                    'form'                         => [
+                    FormType::class => [
                         new FormTypeCsrfExtension(
                             $this
                                 ->createMock('Symfony\Component\Security\Csrf\CsrfTokenManagerInterface')
@@ -159,7 +152,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                         new FormTypeValidatorExtension($validator),
                         new TooltipFormExtension($this->entityConfigProvider, $this->translator),
                     ],
-                    'oro_integration_channel_form' => [
+                    ChannelType::class => [
                         new IntegrationTypeExtension($settingsProvider)
                     ]
                 ]
@@ -178,7 +171,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         $this->prepareEmMock();
 
         $form = $this->factory->create(
-            $this->type,
+            ChannelDatasourceType::class,
             null,
             [
                 'type'            => self::TEST_CHANNEL_TYPE,

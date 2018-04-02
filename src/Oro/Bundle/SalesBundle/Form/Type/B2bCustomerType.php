@@ -3,7 +3,15 @@
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Oro\Bundle\AddressBundle\Form\DataTransformer\AddressSameTransformer;
+use Oro\Bundle\AddressBundle\Form\Type\AddressType;
+use Oro\Bundle\AddressBundle\Form\Type\EmailCollectionType;
+use Oro\Bundle\AddressBundle\Form\Type\EmailType;
+use Oro\Bundle\AddressBundle\Form\Type\PhoneCollectionType;
+use Oro\Bundle\AddressBundle\Form\Type\PhoneType;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
+use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -44,7 +52,7 @@ class B2bCustomerType extends AbstractType
     {
         $builder->add(
             'name',
-            'text',
+            TextType::class,
             [
                 'required' => true,
                 'label'    => 'oro.sales.b2bcustomer.name.label'
@@ -52,7 +60,7 @@ class B2bCustomerType extends AbstractType
         );
         $builder->add(
             'contact',
-            'oro_contact_select',
+            ContactSelectType::class,
             [
                 'label'    => 'oro.sales.b2bcustomer.contact.label',
                 'required' => false,
@@ -60,27 +68,27 @@ class B2bCustomerType extends AbstractType
         );
         $builder->add(
             'emails',
-            'oro_email_collection',
+            EmailCollectionType::class,
             [
                 'label'    => 'oro.sales.b2bcustomer.emails.label',
-                'entry_type'     => 'oro_email',
+                'entry_type' => EmailType::class,
                 'required' => false,
                 'entry_options'  => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail']
             ]
         );
         $builder->add(
             'phones',
-            'oro_phone_collection',
+            PhoneCollectionType::class,
             [
                 'label'    => 'oro.sales.b2bcustomer.phones.label',
-                'entry_type'     => 'oro_phone',
+                'entry_type' => PhoneType::class,
                 'required' => false,
                 'entry_options'  => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone']
             ]
         );
         $builder->add(
             'dataChannel',
-            'oro_channel_select_type',
+            ChannelSelectType::class,
             [
                 'required' => true,
                 'label'    => 'oro.sales.b2bcustomer.data_channel.label',
@@ -91,14 +99,14 @@ class B2bCustomerType extends AbstractType
         );
         $builder->add(
             'shippingAddress',
-            'oro_address',
+            AddressType::class,
             [
                 'required' => false
             ]
         );
         $builder->add(
             'billingAddress',
-            'oro_address',
+            AddressType::class,
             [
                 'required' => false
             ]

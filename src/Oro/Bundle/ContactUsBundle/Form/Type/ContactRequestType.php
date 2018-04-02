@@ -1,8 +1,12 @@
 <?php
 namespace Oro\Bundle\ContactUsBundle\Form\Type;
 
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -32,7 +36,7 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
         if ($options['dataChannelField']) {
             $builder->add(
                 'dataChannel',
-                'oro_channel_select_type',
+                ChannelSelectType::class,
                 [
                     'required' => true,
                     'label' => 'oro.contactus.contactrequest.data_channel.label',
@@ -45,22 +49,25 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
 
         $builder->add(
             'firstName',
-            'text',
+            TextType::class,
             ['required' => true, 'label' => 'oro.contactus.contactrequest.first_name.label']
         );
         $builder->add(
             'lastName',
-            'text',
+            TextType::class,
             ['required' => true, 'label' => 'oro.contactus.contactrequest.last_name.label']
         );
         $builder->add(
             'emailAddress',
-            'text',
+            TextType::class,
             ['required' => false, 'label' => 'oro.contactus.contactrequest.email_address.label']
         );
-        $builder->add('phone', 'text', ['required' => false, 'label' => 'oro.contactus.contactrequest.phone.label']);
-        $builder->add('comment', 'textarea', ['label' => 'oro.contactus.contactrequest.comment.label']);
-        $builder->add('submit', 'submit');
+        $builder->add('phone', TextType::class, [
+            'required' => false,
+            'label' => 'oro.contactus.contactrequest.phone.label'
+        ]);
+        $builder->add('comment', TextareaType::class, ['label' => 'oro.contactus.contactrequest.comment.label']);
+        $builder->add('submit', SubmitType::class);
     }
 
     /**

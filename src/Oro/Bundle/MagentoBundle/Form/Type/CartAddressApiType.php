@@ -2,8 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,8 +18,8 @@ class CartAddressApiType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('phone', 'text', ['required' => false]);
-        $builder->add('countryText', 'text', ['required' => false]);
+        $builder->add('phone', TextType::class, ['required' => false]);
+        $builder->add('countryText', TextType::class, ['required' => false]);
         $builder->remove('organization');
 
         $builder->addEventSubscriber(new PatchSubscriber());
@@ -42,7 +44,7 @@ class CartAddressApiType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_address';
+        return AddressType::class;
     }
 
     /**

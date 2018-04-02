@@ -15,7 +15,7 @@ services:
     oro_account.form.account:
         class:                                      Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
-        arguments: ["oro_account_form", "oro_account", null]
+        arguments: ["oro_account_form", Oro\Bundle\AccountBundle\Form\Type\AccountType, null]
 
     oro_account.form.type.account:
         class:                                      '%oro_account.type.account.class%'
@@ -59,7 +59,7 @@ services:
     oro_account.form.account.api:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
-        arguments: ["account", "account", null]
+        arguments: ["account", Oro\Bundle\AccountBundle\Form\Type\AccountApiType, null]
 
     oro_account.form.handler.account.api:
         class: '%oro_account.handler.account.class%'

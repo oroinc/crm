@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
+use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ChannelHandler
 {
+    use RequestHandlerTrait;
+
     const UPDATE_MARKER = 'formUpdateMarker';
 
     /** @var RequestStack */
@@ -57,7 +60,7 @@ class ChannelHandler
 
         $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->form->submit($request);
+            $this->submitPostPutRequest($this->form, $request);
 
             if (!$request->get(self::UPDATE_MARKER, false) && $this->form->isValid()) {
                 $this->doSave($entity);

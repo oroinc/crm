@@ -10,7 +10,7 @@ services:
     oro_contact.form.type.contact_phone:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
-        arguments: ["oro_contact_phone", "oro_contact_phone", null]
+        arguments: ["oro_contact_phone", Oro\Bundle\ContactBundle\Form\Type\ContactPhoneType, null]
 
     oro_contact.form.type.contact_phone.type:
         class: '%oro_contact.form.type.contact_phone.class%'
@@ -29,7 +29,7 @@ services:
     oro_contact.form.type.contact_email:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
-        arguments: ["oro_contact_email", "oro_contact_email", null]
+        arguments: ["oro_contact_email", Oro\Bundle\ContactBundle\Form\Type\ContactEmailType, null]
 
     oro_contact.form.type.contact_email.type:
         class: '%oro_contact.form.type.contact_email.class%'

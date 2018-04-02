@@ -2,9 +2,23 @@
 
 namespace Oro\Bundle\ContactBundle\Form\Type;
 
+use Oro\Bundle\AddressBundle\Form\Type\AddressCollectionType;
+use Oro\Bundle\AddressBundle\Form\Type\EmailCollectionType;
+use Oro\Bundle\AddressBundle\Form\Type\EmailType;
+use Oro\Bundle\AddressBundle\Form\Type\PhoneCollectionType;
+use Oro\Bundle\AddressBundle\Form\Type\PhoneType;
+use Oro\Bundle\AddressBundle\Form\Type\TypedAddressType;
+use Oro\Bundle\AttachmentBundle\Form\Type\ImageType;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Oro\Bundle\FormBundle\Form\Type\OroBirthdayType;
+use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
+use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
+use Oro\Bundle\UserBundle\Form\Type\GenderType;
+use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -43,12 +57,12 @@ class ContactType extends AbstractType
     {
         // basic plain fields
         $builder
-            ->add('namePrefix', 'text', array('required' => false, 'label' => 'oro.contact.name_prefix.label'))
-            ->add('firstName', 'text', array('required' => false, 'label' => 'oro.contact.first_name.label'))
-            ->add('middleName', 'text', array('required' => false, 'label' => 'oro.contact.middle_name.label'))
-            ->add('lastName', 'text', array('required' => false, 'label' => 'oro.contact.last_name.label'))
-            ->add('nameSuffix', 'text', array('required' => false, 'label' => 'oro.contact.name_suffix.label'))
-            ->add('gender', 'oro_gender', array('required' => false, 'label' => 'oro.contact.gender.label'))
+            ->add('namePrefix', TextType::class, array('required' => false, 'label' => 'oro.contact.name_prefix.label'))
+            ->add('firstName', TextType::class, array('required' => false, 'label' => 'oro.contact.first_name.label'))
+            ->add('middleName', TextType::class, array('required' => false, 'label' => 'oro.contact.middle_name.label'))
+            ->add('lastName', TextType::class, array('required' => false, 'label' => 'oro.contact.last_name.label'))
+            ->add('nameSuffix', TextType::class, array('required' => false, 'label' => 'oro.contact.name_suffix.label'))
+            ->add('gender', GenderType::class, array('required' => false, 'label' => 'oro.contact.gender.label'))
             ->add(
                 'birthday',
                 OroBirthdayType::class,
@@ -56,7 +70,7 @@ class ContactType extends AbstractType
             )
             ->add(
                 'description',
-                'oro_resizeable_rich_text',
+                OroResizeableRichTextType::class,
                 array(
                     'required' => false,
                     'label' => 'oro.contact.description.label'
@@ -64,18 +78,18 @@ class ContactType extends AbstractType
             );
 
         $builder
-            ->add('jobTitle', 'text', array('required' => false, 'label' => 'oro.contact.job_title.label'))
-            ->add('fax', 'text', array('required' => false, 'label' => 'oro.contact.fax.label'))
-            ->add('skype', 'text', array('required' => false, 'label' => 'oro.contact.skype.label'));
+            ->add('jobTitle', TextType::class, array('required' => false, 'label' => 'oro.contact.job_title.label'))
+            ->add('fax', TextType::class, array('required' => false, 'label' => 'oro.contact.fax.label'))
+            ->add('skype', TextType::class, array('required' => false, 'label' => 'oro.contact.skype.label'));
 
         $builder
-            ->add('twitter', 'text', array('required' => false, 'label' => 'oro.contact.twitter.label'))
-            ->add('facebook', 'text', array('required' => false, 'label' => 'oro.contact.facebook.label'))
-            ->add('googlePlus', 'text', array('required' => false, 'label' => 'oro.contact.google_plus.label'))
-            ->add('linkedIn', 'text', array('required' => false, 'label' => 'oro.contact.linked_in.label'))
+            ->add('twitter', TextType::class, array('required' => false, 'label' => 'oro.contact.twitter.label'))
+            ->add('facebook', TextType::class, array('required' => false, 'label' => 'oro.contact.facebook.label'))
+            ->add('googlePlus', TextType::class, array('required' => false, 'label' => 'oro.contact.google_plus.label'))
+            ->add('linkedIn', TextType::class, array('required' => false, 'label' => 'oro.contact.linked_in.label'))
             ->add(
                 'picture',
-                'oro_image',
+                ImageType::class,
                 array(
                     'label'          => 'oro.contact.picture.label',
                     'required'       => false
@@ -93,7 +107,7 @@ class ContactType extends AbstractType
         // contact source
         $builder->add(
             'source',
-            'translatable_entity',
+            TranslatableEntityType::class,
             array(
                 'label'       => 'oro.contact.source.label',
                 'class'       => 'OroContactBundle:Source',
@@ -106,21 +120,21 @@ class ContactType extends AbstractType
         // assigned to (user)
         $builder->add(
             'assignedTo',
-            'oro_user_organization_acl_select',
+            OrganizationUserAclSelectType::class,
             array('required' => false, 'label' => 'oro.contact.assigned_to.label')
         );
 
         // reports to (contact)
         $builder->add(
             'reportsTo',
-            'oro_contact_select',
+            ContactSelectType::class,
             array('required' => false, 'label' => 'oro.contact.reports_to.label')
         );
 
         // contact method
         $builder->add(
             'method',
-            'translatable_entity',
+            TranslatableEntityType::class,
             array(
                 'label'       => 'oro.contact.method.label',
                 'class'       => 'OroContactBundle:Method',
@@ -133,30 +147,30 @@ class ContactType extends AbstractType
         // addresses, emails and phones
         $builder->add(
             'addresses',
-            'oro_address_collection',
+            AddressCollectionType::class,
             array(
                 'label'    => '',
-                'entry_type'     => 'oro_typed_address',
+                'entry_type' => TypedAddressType::class,
                 'required' => true,
                 'entry_options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactAddress')
             )
         );
         $builder->add(
             'emails',
-            'oro_email_collection',
+            EmailCollectionType::class,
             array(
                 'label'    => 'oro.contact.emails.label',
-                'entry_type'     => 'oro_email',
+                'entry_type'     => EmailType::class,
                 'required' => false,
                 'entry_options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactEmail')
             )
         );
         $builder->add(
             'phones',
-            'oro_phone_collection',
+            PhoneCollectionType::class,
             array(
                 'label'    => 'oro.contact.phones.label',
-                'entry_type'     => 'oro_phone',
+                'entry_type'     => PhoneType::class,
                 'required' => false,
                 'entry_options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactPhone')
             )
@@ -165,11 +179,11 @@ class ContactType extends AbstractType
         // groups
         $builder->add(
             'groups',
-            'entity',
+            EntityType::class,
             array(
                 'label'    => 'oro.contact.groups.label',
                 'class'    => 'OroContactBundle:Group',
-                'property' => 'label',
+                'choice_label' => 'label',
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
@@ -180,7 +194,7 @@ class ContactType extends AbstractType
         // accounts
         $builder->add(
             'appendAccounts',
-            'oro_entity_identifier',
+            EntityIdentifierType::class,
             array(
                 'class'    => 'OroAccountBundle:Account',
                 'required' => false,
@@ -190,7 +204,7 @@ class ContactType extends AbstractType
         );
         $builder->add(
             'removeAccounts',
-            'oro_entity_identifier',
+            EntityIdentifierType::class,
             array(
                 'class'    => 'OroAccountBundle:Account',
                 'required' => false,

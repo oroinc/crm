@@ -3,6 +3,7 @@
 namespace Oro\Bundle\AnalyticsBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,7 +21,7 @@ class RFMCategorySettingsType extends AbstractType
         $resolver->setRequired([self::TYPE_OPTION]);
         $resolver->setDefaults(
             [
-                'type' => RFMCategoryType::NAME,
+                'type' => RFMCategoryType::class,
                 'is_increasing' => true,
                 'allow_add' => true,
                 'allow_delete' => true,
@@ -43,7 +44,7 @@ class RFMCategorySettingsType extends AbstractType
      */
     public function getParent()
     {
-        return 'collection';
+        return CollectionType::class;
     }
 
     /**

@@ -8,9 +8,9 @@ use Oro\Bundle\MagentoBundle\Form\Type\SharedGuestEmailListType;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\MagentoTransportStub;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\TransportSettingFormTypeWithSharedEmailListStub;
 use Oro\Component\Testing\Unit\EntityTrait;
+use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
 class SharedEmailListSubscriberTest extends FormIntegrationTestCase

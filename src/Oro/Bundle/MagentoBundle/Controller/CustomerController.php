@@ -5,6 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Controller;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Form\Type\CustomerType;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -12,7 +13,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -109,7 +109,7 @@ class CustomerController extends Controller
     {
         return $this->get('oro_magento.form.handler.customer')->handleUpdate(
             $customer,
-            $this->createForm('oro_magento_customer', $customer),
+            $this->createForm(CustomerType::class, $customer),
             function (Customer $customer) {
                 return [
                     'route' => 'oro_magento_customer_update',

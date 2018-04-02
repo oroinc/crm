@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\CollectionType;
 use Oro\Bundle\MagentoBundle\Form\Type\CartItemCollectionType;
 use Symfony\Component\OptionsResolver\Options;
 
@@ -46,6 +47,6 @@ class CartItemCollectionTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParent()
     {
-        $this->assertEquals('oro_collection', $this->type->getParent());
+        $this->assertEquals(CollectionType::class, $this->type->getParent());
     }
 }

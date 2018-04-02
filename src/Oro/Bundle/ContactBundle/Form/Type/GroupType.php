@@ -2,7 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,7 +18,7 @@ class GroupType extends AbstractType
         $builder
             ->add(
                 'label',
-                'text',
+                TextType::class,
                 array(
                     'label' => 'oro.contact.group.label.label',
                     'required' => true,
@@ -24,7 +26,7 @@ class GroupType extends AbstractType
             )
             ->add(
                 'appendContacts',
-                'oro_entity_identifier',
+                EntityIdentifierType::class,
                 array(
                     'class'    => 'OroContactBundle:Contact',
                     'required' => false,
@@ -34,7 +36,7 @@ class GroupType extends AbstractType
             )
             ->add(
                 'removeContacts',
-                'oro_entity_identifier',
+                EntityIdentifierType::class,
                 array(
                     'class'    => 'OroContactBundle:Contact',
                     'required' => false,

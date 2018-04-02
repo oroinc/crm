@@ -5,9 +5,11 @@ namespace Oro\Bundle\ChannelBundle\Form\Type;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -42,16 +44,16 @@ class ChannelType extends AbstractType
 
         $builder->add(
             'name',
-            'text',
+            TextType::class,
             [
                 'required' => true,
                 'label'    => 'oro.channel.name.label'
             ]
         );
-        $builder->add('entities', 'oro_channel_entities');
+        $builder->add('entities', ChannelEntityType::class);
         $builder->add(
             'channelType',
-            'oro_select2_choice',
+            Select2ChoiceType::class,
             [
                 'choices'  => $this->settingsProvider->getChannelTypeChoiceList(),
                 'required' => true,

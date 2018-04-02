@@ -3,6 +3,8 @@
 namespace Oro\Bundle\CaseBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -17,7 +19,7 @@ class CaseCommentType extends AbstractType
     {
         $builder->add(
             'message',
-            'textarea',
+            TextareaType::class,
             [
                 'label'     => 'oro.case.casecomment.message.label'
             ]
@@ -25,7 +27,7 @@ class CaseCommentType extends AbstractType
 
         $builder->add(
             'public',
-            'checkbox',
+            CheckboxType::class,
             [
                 'label'     => 'oro.case.casecomment.public.label',
                 'required'  => false,
