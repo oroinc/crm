@@ -68,12 +68,12 @@ class OpportunityType extends AbstractType
                 'closeReason',
                 TranslatableEntityType::class,
                 [
-                    'label'       => 'oro.sales.opportunity.close_reason.label',
-                    'class'       => 'OroSalesBundle:OpportunityCloseReason',
-                    'property'    => 'label',
-                    'required'    => false,
-                    'disabled'    => false,
-                    'placeholder' => 'oro.sales.form.choose_close_rsn'
+                    'label'        => 'oro.sales.opportunity.close_reason.label',
+                    'class'        => 'OroSalesBundle:OpportunityCloseReason',
+                    'choice_label' => 'label',
+                    'required'     => false,
+                    'disabled'     => false,
+                    'placeholder'  => 'oro.sales.form.choose_close_rsn'
                 ]
             )
             ->add(

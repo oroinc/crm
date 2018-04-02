@@ -39,8 +39,8 @@ class CustomerApiType extends AbstractType
             'website',
             TranslatableEntityType::class,
             [
-                'class'    => 'OroMagentoBundle:Website',
-                'property' => 'name'
+                'class' => 'OroMagentoBundle:Website',
+                'choice_label' => 'name'
             ]
         );
 
@@ -48,8 +48,8 @@ class CustomerApiType extends AbstractType
             'store',
             TranslatableEntityType::class,
             [
-                'class'    => 'OroMagentoBundle:Store',
-                'property' => 'name'
+                'class' => 'OroMagentoBundle:Store',
+                'choice_label' => 'name'
             ]
         );
 
@@ -57,8 +57,8 @@ class CustomerApiType extends AbstractType
             'group',
             TranslatableEntityType::class,
             [
-                'class'    => 'OroMagentoBundle:CustomerGroup',
-                'property' => 'name',
+                'class' => 'OroMagentoBundle:CustomerGroup',
+                'choice_label' => 'name',
                 'required' => false
             ]
         );
@@ -67,8 +67,8 @@ class CustomerApiType extends AbstractType
             'dataChannel',
             TranslatableEntityType::class,
             [
-                'class'    => 'OroChannelBundle:Channel',
-                'property' => 'name',
+                'class' => 'OroChannelBundle:Channel',
+                'choice_label' => 'name',
                 'required' => false
             ]
         );
@@ -89,7 +89,7 @@ class CustomerApiType extends AbstractType
             TranslatableEntityType::class,
             [
                 'class'    => 'Oro\Bundle\UserBundle\Entity\User',
-                'property' => 'username',
+                'choice_label' => 'username',
                 'required' => false
             ]
         );

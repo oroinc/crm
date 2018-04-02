@@ -102,7 +102,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroCaseBundle:CaseStatus
-                            property: label
+                            choice_label: label
                 priorityLabel:
                     label: oro.case.datagrid.priority.label
                     type: entity
@@ -110,7 +110,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroCaseBundle:CasePriority
-                            property: label
+                            choice_label: label
                 source:
                     label: oro.case.datagrid.source.label
                     type: entity
@@ -119,7 +119,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroCaseBundle:CaseSource
-                            property: label
+                            choice_label: label
                 owner:
                     type: choice-tree
                     label: oro.user.owner.label
@@ -312,7 +312,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroCaseBundle:CaseStatus
-                            property: label
+                            choice_label: label
                 priorityLabel:
                     label: oro.case.datagrid.priority.label
                     type: entity
@@ -320,4 +320,4 @@ datagrids:
                     options:
                         field_options:
                             class: OroCaseBundle:CasePriority
-                            property: label
+                            choice_label: label

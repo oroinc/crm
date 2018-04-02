@@ -113,7 +113,7 @@ class OrderGridListener
             'options'   => [
                 'field_options' => [
                     'class'                => 'OroAddressBundle:Country',
-                    'property'             => 'name',
+                    'choice_label'         => 'name',
                     'query_builder'        => $this->datagridHelper->getCountryFilterQueryBuilder(),
                     'translatable_options' => false
                 ]

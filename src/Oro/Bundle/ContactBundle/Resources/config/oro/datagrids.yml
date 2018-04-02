@@ -456,7 +456,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroContactBundle:Source
-                            property: label
+                            choice_label: label
                             translatable_options: false
                 countryName:
                     type: choice
@@ -762,7 +762,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroContactBundle:Source
-                            property: label
+                            choice_label: label
                             translatable_options: false
                 countryName:
                     type: entity
@@ -771,7 +771,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
@@ -874,7 +874,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroContactBundle:Source
-                            property: label
+                            choice_label: label
                             translatable_options: false
                 countryName:
                     type: entity
@@ -883,7 +883,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
