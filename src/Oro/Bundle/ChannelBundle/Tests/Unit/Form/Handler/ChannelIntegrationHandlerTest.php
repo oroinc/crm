@@ -56,7 +56,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
         $this->form->expects($this->once())->method('setData')
             ->with($this->entity);
 
-        $this->form->expects($this->never())->method('submit');
+        $this->form->expects($this->never())->method('handleRequest');
         $this->assertFalse($this->handler->process($this->entity));
     }
 
@@ -85,7 +85,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
         $this->request->setMethod('POST');
         $this->request->query->set(IntegrationChannelHandler::UPDATE_MARKER, $updateMarker);
 
-        $this->form->expects($this->once())->method('submit')
+        $this->form->expects($this->once())->method('handleRequest')
             ->with($this->equalTo($this->request));
         $this->form->expects($this->any())->method('isValid')
             ->will($this->returnValue($isFormValid));

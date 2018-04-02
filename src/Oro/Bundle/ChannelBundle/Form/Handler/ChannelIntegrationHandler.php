@@ -51,7 +51,7 @@ class ChannelIntegrationHandler
         $request = $this->requestStack->getCurrentRequest();
         $data = $request->get(self::DATA_PARAM_NAME, false);
         if ('POST' === $request->getMethod()) {
-            $this->form->submit($request);
+            $this->form->handleRequest($request);
 
             return ($this->form->isValid());
         } elseif ('GET' === $request->getMethod() && $data) {

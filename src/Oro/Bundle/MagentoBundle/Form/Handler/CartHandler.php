@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartItem;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
@@ -12,6 +13,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class CartHandler
 {
+    use RequestHandlerTrait;
+
     /** @var FormInterface */
     protected $form;
 
@@ -52,7 +55,7 @@ class CartHandler
 
         $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->form->submit($request);
+            $this->submitPostPutRequest($this->form, $request);
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);
