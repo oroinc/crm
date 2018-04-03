@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\AddressBundle\Form\Type\TypedAddressType;
 use Oro\Bundle\MagentoBundle\Form\Type\CustomerAddressType;
 use Symfony\Component\Form\FormBuilder;
 
@@ -30,7 +31,7 @@ class CustomerAddressTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $parent);
         $this->assertNotEmpty($parent);
 
-        $this->assertSame('oro_typed_address', $parent);
+        $this->assertSame(TypedAddressType::class, $parent);
     }
 
     public function testBuildForm()

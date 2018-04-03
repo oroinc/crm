@@ -3,6 +3,8 @@
 namespace Oro\Bundle\ContactBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,8 +17,8 @@ class ContactEmailType extends AbstractType
     {
         // basic plain fields
         $builder
-            ->add('email', 'text', array('required' => true))
-            ->add('primary', 'checkbox', array('required' => true));
+            ->add('email', TextType::class, array('required' => true))
+            ->add('primary', CheckboxType::class, array('required' => true));
     }
 
     /**

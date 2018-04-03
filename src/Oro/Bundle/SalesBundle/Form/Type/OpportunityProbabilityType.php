@@ -5,6 +5,7 @@ namespace Oro\Bundle\SalesBundle\Form\Type;
 use Oro\Bundle\EntityBundle\ORM\Registry;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -63,7 +64,7 @@ class OpportunityProbabilityType extends AbstractType
             $builder
                 ->add(
                     $status->getId(),
-                    'oro_percent',
+                    OroPercentType::class,
                     [
                         'required' => false,
                         'disabled' => $disabled,

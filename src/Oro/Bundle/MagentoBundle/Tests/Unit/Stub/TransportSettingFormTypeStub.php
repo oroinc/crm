@@ -2,7 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Stub;
 
+use Oro\Bundle\MagentoBundle\Form\Type\WebsiteSelectType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class TransportSettingFormTypeStub extends AbstractType
@@ -15,10 +17,10 @@ class TransportSettingFormTypeStub extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('apiKey', 'password')
+            ->add('apiKey', PasswordType::class)
             ->add(
                 'websiteId',
-                'oro_magento_website_select',
+                WebsiteSelectType::class,
                 [
                     // TODO: Remove 'choices_as_values' option in scope of BAP-15236
                     'choices_as_values' => true,

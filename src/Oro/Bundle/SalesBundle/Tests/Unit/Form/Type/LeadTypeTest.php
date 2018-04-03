@@ -2,9 +2,18 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\AddressBundle\Form\Type\AddressCollectionType;
+use Oro\Bundle\AddressBundle\Form\Type\EmailCollectionType;
+use Oro\Bundle\AddressBundle\Form\Type\PhoneCollectionType;
+use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
+use Oro\Bundle\EntityExtendBundle\Form\Type\EnumSelectType;
+use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
 use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Form\Type\CustomerType;
 use Oro\Bundle\SalesBundle\Form\Type\LeadType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class LeadTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,27 +30,27 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
     public function testBuildForm()
     {
         $expectedFields = array(
-            'name' => 'text',
-            'status' => 'oro_enum_select',
-            'namePrefix' => 'text',
-            'firstName' => 'text',
-            'middleName' => 'text',
-            'lastName' => 'text',
-            'nameSuffix' => 'text',
-            'contact' => 'oro_contact_select',
-            'jobTitle' => 'text',
-            'phones' => 'oro_phone_collection',
-            'emails' => 'oro_email_collection',
-            'customerAssociation' => 'oro_sales_customer',
-            'companyName' => 'text',
-            'website' => 'url',
+            'name' => TextType::class,
+            'status' => EnumSelectType::class,
+            'namePrefix' => TextType::class,
+            'firstName' => TextType::class,
+            'middleName' => TextType::class,
+            'lastName' => TextType::class,
+            'nameSuffix' => TextType::class,
+            'contact' => ContactSelectType::class,
+            'jobTitle' => TextType::class,
+            'phones' => PhoneCollectionType::class,
+            'emails' => EmailCollectionType::class,
+            'customerAssociation' => CustomerType::class,
+            'companyName' => TextType::class,
+            'website' => UrlType::class,
             'numberOfEmployees' => IntegerType::class,
-            'industry' => 'text',
-            'addresses' => 'oro_address_collection',
-            'source' => 'oro_enum_select',
-            'notes' => 'oro_resizeable_rich_text',
-            'twitter' => 'text',
-            'linkedIn' => 'text',
+            'industry' => TextType::class,
+            'addresses' => AddressCollectionType::class,
+            'source' => EnumSelectType::class,
+            'notes' => OroResizeableRichTextType::class,
+            'twitter' => TextType::class,
+            'linkedIn' => TextType::class,
         );
 
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')

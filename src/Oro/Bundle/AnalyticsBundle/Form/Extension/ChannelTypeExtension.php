@@ -13,6 +13,7 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -48,7 +49,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
      */
     public function getExtendedType()
     {
-        return ChannelType::NAME;
+        return ChannelType::class;
     }
 
     /**
@@ -177,7 +178,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $form = $event->getForm();
         $form->add(
             RFMAwareInterface::RFM_STATE_KEY,
-            'checkbox',
+            CheckboxType::class,
             [
                 'label' => 'oro.analytics.form.rfm_enable.label',
                 'mapped' => false,
@@ -216,7 +217,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
 
             $form->add(
                 $type,
-                RFMCategorySettingsType::NAME,
+                RFMCategorySettingsType::class,
                 [
                     RFMCategorySettingsType::TYPE_OPTION => $type,
                     'label' => sprintf('oro.analytics.form.%s.label', $type),

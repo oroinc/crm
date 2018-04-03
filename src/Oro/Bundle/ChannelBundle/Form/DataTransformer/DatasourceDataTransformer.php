@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Form\DataTransformer;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormError;
@@ -54,7 +55,7 @@ class DatasourceDataTransformer implements DataTransformerInterface
         $integration = $value['identifier'] ? $value['identifier'] : (!empty($data) ? new Integration() : null);
 
         $form = $this->formFactory->create(
-            'oro_integration_channel_form',
+            ChannelType::class,
             $integration,
             ['csrf_protection' => false, 'disable_customer_datasource_types' => false]
         );

@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
+use Oro\Bundle\FormBundle\Form\Type\OroDateType;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
@@ -11,6 +12,10 @@ use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -60,24 +65,24 @@ abstract class AbstractTransportSettingFormType extends AbstractType
 
         $builder->add(
             'apiUrl',
-            'text',
+            TextType::class,
             ['label' => '', 'required' => true]
         );
 
         $builder->add(
             'apiUser',
-            'text',
+            TextType::class,
             ['label' => '', 'required' => true]
         );
 
         $builder->add(
             'apiKey',
-            'password'
+            PasswordType::class
         );
 
         $builder->add(
             'guestCustomerSync',
-            'checkbox',
+            CheckboxType::class,
             [
                 'label' => 'oro.magento.magentotransport.guest_customer_sync.label',
                 'tooltip' => 'oro.magento.magentotransport.guest_customer_sync.tooltip',
@@ -87,7 +92,7 @@ abstract class AbstractTransportSettingFormType extends AbstractType
 
         $builder->add(
             'syncStartDate',
-            'oro_date',
+            OroDateType::class,
             [
                 'label'      => 'oro.magento.magentotransport.sync_start_date.label',
                 'required'   => true,
@@ -98,7 +103,7 @@ abstract class AbstractTransportSettingFormType extends AbstractType
 
         $builder->add(
             'check',
-            'oro_magento_transport_check_button',
+            TransportCheckButtonType::class,
             [
                 'label' => 'oro.magento.magentotransport.check_connection.label'
             ]
@@ -106,7 +111,7 @@ abstract class AbstractTransportSettingFormType extends AbstractType
 
         $builder->add(
             'websiteId',
-            'oro_magento_website_select',
+            WebsiteSelectType::class,
             [
                 'label'    => 'oro.magento.magentotransport.website_id.label',
                 'required' => true,
@@ -123,14 +128,14 @@ abstract class AbstractTransportSettingFormType extends AbstractType
         $builder->add(
             $builder->create(
                 self::IS_DISPLAY_ORDER_NOTES_FIELD_NAME,
-                IsDisplayOrderNotesFormType::NAME
+                IsDisplayOrderNotesFormType::class
             )
         );
 
         $builder->add(
             $builder->create(
                 self::SHARED_GUEST_EMAIL_FIELD_NAME,
-                SharedGuestEmailListType::NAME
+                SharedGuestEmailListType::class
             )
         );
 
@@ -140,9 +145,9 @@ abstract class AbstractTransportSettingFormType extends AbstractType
                 ->addEventSubscriber(new ConnectorsFormSubscriber($this->registry))
         );
 
-        $builder->add('magentoVersion', 'hidden')
-            ->add('extensionVersion', 'hidden')
-            ->add('isOrderNoteSupportExtensionVersion', 'hidden', ['mapped' => false]);
+        $builder->add('magentoVersion', HiddenType::class)
+            ->add('extensionVersion', HiddenType::class)
+            ->add('isOrderNoteSupportExtensionVersion', HiddenType::class, ['mapped' => false]);
     }
 
     /**

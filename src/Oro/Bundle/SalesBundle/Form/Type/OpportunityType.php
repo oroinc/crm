@@ -2,14 +2,20 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 use Oro\Bundle\CurrencyBundle\Form\Type\MultiCurrencyType;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\FormBundle\Form\Type\OroDateType;
+use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
+use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
 use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
+use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -60,7 +66,7 @@ class OpportunityType extends AbstractType
         $builder
             ->add(
                 'closeReason',
-                'translatable_entity',
+                TranslatableEntityType::class,
                 [
                     'label'       => 'oro.sales.opportunity.close_reason.label',
                     'class'       => 'OroSalesBundle:OpportunityCloseReason',
@@ -72,7 +78,7 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'contact',
-                'oro_contact_select',
+                ContactSelectType::class,
                 [
                     'required'               => false,
                     'label'                  => 'oro.sales.opportunity.contact.label',
@@ -97,20 +103,20 @@ class OpportunityType extends AbstractType
                     'error_bubbling' => false,
                 ]
             )
-            ->add('name', 'text', ['required' => true, 'label' => 'oro.sales.opportunity.name.label'])
+            ->add('name', TextType::class, ['required' => true, 'label' => 'oro.sales.opportunity.name.label'])
             ->add(
                 'closeDate',
-                'oro_date',
+                OroDateType::class,
                 ['required' => false, 'label' => 'oro.sales.opportunity.close_date.label']
             )
             ->add(
                 'probability',
-                'oro_percent',
+                OroPercentType::class,
                 ['required' => false, 'label' => 'oro.sales.opportunity.probability.label']
             )
             ->add(
                 'budgetAmount',
-                MultiCurrencyType::NAME,
+                MultiCurrencyType::class,
                 [
                     'required' => false,
                     'label' => 'oro.sales.opportunity.budget_amount.label',
@@ -122,7 +128,7 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'closeRevenue',
-                MultiCurrencyType::NAME,
+                MultiCurrencyType::class,
                 [
                     'required' => false,
                     'label' => 'oro.sales.opportunity.close_revenue.label',
@@ -133,17 +139,17 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'customerNeed',
-                'oro_resizeable_rich_text',
+                OroResizeableRichTextType::class,
                 ['required' => false, 'label' => 'oro.sales.opportunity.customer_need.label']
             )
             ->add(
                 'proposedSolution',
-                'oro_resizeable_rich_text',
+                OroResizeableRichTextType::class,
                 ['required' => false, 'label' => 'oro.sales.opportunity.proposed_solution.label']
             )
             ->add(
                 'notes',
-                'oro_resizeable_rich_text',
+                OroResizeableRichTextType::class,
                 ['required' => false, 'label' => 'oro.sales.opportunity.notes.label']
             )
             ->add(

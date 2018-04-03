@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Type;
 
 use Oro\Bundle\ContactBundle\Form\Type\ContactApiType;
+use Oro\Bundle\ContactBundle\Form\Type\ContactType;
 
 class ContactApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,6 +53,6 @@ class ContactApiTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParent()
     {
-        $this->assertEquals('oro_contact', $this->type->getParent());
+        $this->assertEquals(ContactType::class, $this->type->getParent());
     }
 }

@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 abstract class AbstractApiAddressType extends AbstractType
@@ -12,34 +15,34 @@ abstract class AbstractApiAddressType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('label', 'text', ['required' => false]);
-        $builder->add('street', 'text', ['required' => false]);
-        $builder->add('street2', 'text', ['required' => false]);
-        $builder->add('city', 'text', ['required' => false]);
-        $builder->add('postalCode', 'text', ['required' => false]);
-        $builder->add('regionText', 'text', ['required' => false]);
-        $builder->add('namePrefix', 'text', ['required' => false]);
-        $builder->add('firstName', 'text', ['required' => true]);
-        $builder->add('middleName', 'text', ['required' => false]);
-        $builder->add('lastName', 'text', ['required' => true]);
-        $builder->add('nameSuffix', 'text', ['required' => false]);
-        $builder->add('phone', 'text', ['required' => false]);
-        $builder->add('primary', 'checkbox', ['required' => false]);
+        $builder->add('label', TextType::class, ['required' => false]);
+        $builder->add('street', TextType::class, ['required' => false]);
+        $builder->add('street2', TextType::class, ['required' => false]);
+        $builder->add('city', TextType::class, ['required' => false]);
+        $builder->add('postalCode', TextType::class, ['required' => false]);
+        $builder->add('regionText', TextType::class, ['required' => false]);
+        $builder->add('namePrefix', TextType::class, ['required' => false]);
+        $builder->add('firstName', TextType::class, ['required' => true]);
+        $builder->add('middleName', TextType::class, ['required' => false]);
+        $builder->add('lastName', TextType::class, ['required' => true]);
+        $builder->add('nameSuffix', TextType::class, ['required' => false]);
+        $builder->add('phone', TextType::class, ['required' => false]);
+        $builder->add('primary', CheckboxType::class, ['required' => false]);
 
         $builder->add(
             'country',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'Oro\Bundle\AddressBundle\Entity\Country',
                 'property' => 'name',
                 'required' => true
             ]
         );
-        $builder->add('countryText', 'text', ['required' => false]);
+        $builder->add('countryText', TextType::class, ['required' => false]);
 
         $builder->add(
             'region',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'Oro\Bundle\AddressBundle\Entity\Region',
                 'property' => 'name',
@@ -49,7 +52,7 @@ abstract class AbstractApiAddressType extends AbstractType
 
         $builder->add(
             'types',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'OroAddressBundle:AddressType',
                 'property' => 'label',

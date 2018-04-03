@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\ContactBundle\Form\Type\ContactType;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -45,7 +46,7 @@ class LeadToOpportunityType extends AbstractType
             $form->remove('contact');
             $form->add(
                 'contact',
-                'oro_contact',
+                ContactType::class,
                 [
                     'constraints' => new Valid()
                 ]
@@ -67,7 +68,7 @@ class LeadToOpportunityType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_sales_opportunity';
+        return OpportunityType::class;
     }
 
     /**

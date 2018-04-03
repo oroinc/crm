@@ -6,7 +6,10 @@ use Doctrine\Common\Collections\Collection;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
+use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
+use Oro\Bundle\FormBundle\Form\Type\MultipleEntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -48,7 +51,7 @@ class AccountType extends AbstractType
         // name
         $builder->add(
             'name',
-            'text',
+            TextType::class,
             array(
                 'label' => 'oro.account.name.label',
                 'required' => true,
@@ -58,7 +61,7 @@ class AccountType extends AbstractType
         if ($this->authorizationChecker->isGranted('oro_contact_view')) {
             $builder->add(
                 'default_contact',
-                'oro_entity_identifier',
+                EntityIdentifierType::class,
                 array(
                     'class'    => 'OroContactBundle:Contact',
                     'multiple' => false
@@ -68,7 +71,7 @@ class AccountType extends AbstractType
             // contacts
             $builder->add(
                 'contacts',
-                'oro_multiple_entity',
+                MultipleEntityType::class,
                 array(
                     'add_acl_resource'      => 'oro_contact_view',
                     'class'                 => 'OroContactBundle:Contact',

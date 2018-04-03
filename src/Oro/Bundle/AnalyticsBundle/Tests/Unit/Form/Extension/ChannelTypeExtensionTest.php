@@ -8,7 +8,9 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\PersistentCollection;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension;
+use Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
 use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -202,7 +204,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                     ],
                     [
                         $this->equalTo('recency'),
-                        $this->equalTo('oro_analytics_rfm_category_settings'),
+                        $this->equalTo(RFMCategorySettingsType::class),
                         $this->callback(
                             function ($options) {
                                 $this->assertEquals(
@@ -216,7 +218,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                     ],
                     [
                         $this->equalTo('frequency'),
-                        $this->equalTo('oro_analytics_rfm_category_settings'),
+                        $this->equalTo(RFMCategorySettingsType::class),
                         $this->callback(
                             function ($options) {
                                 $this->assertEquals(
@@ -230,7 +232,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                     ],
                     [
                         $this->equalTo('monetary'),
-                        $this->equalTo('oro_analytics_rfm_category_settings'),
+                        $this->equalTo(RFMCategorySettingsType::class),
                         $this->callback(
                             function ($options) {
                                 $this->assertEquals($this->getCollection([]), $options['data']);
@@ -408,7 +410,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetExtendedType()
     {
-        $this->assertEquals('oro_channel_form', $this->extension->getExtendedType());
+        $this->assertEquals(ChannelType::class, $this->extension->getExtendedType());
     }
 
     /**

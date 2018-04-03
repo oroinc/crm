@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Form\Type;
 
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\FormBundle\Form\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -50,7 +51,7 @@ class ChannelSelectType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_select2_entity';
+        return Select2EntityType::class;
     }
 
     /**

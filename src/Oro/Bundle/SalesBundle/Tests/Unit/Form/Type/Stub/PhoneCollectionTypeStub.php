@@ -24,6 +24,6 @@ class PhoneCollectionTypeStub extends PhoneCollectionType
      */
     public function getParent()
     {
-        return 'test_phone_entity';
+        return PhoneCollectionTypeParent::class;
     }
 }

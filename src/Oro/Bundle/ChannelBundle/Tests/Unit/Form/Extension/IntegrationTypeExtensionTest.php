@@ -6,8 +6,9 @@ use Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Form\IntegrationFormTypeStub;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
+use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
 class IntegrationTypeExtensionTest extends FormIntegrationTestCase
@@ -32,7 +33,7 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
         $this->settingsProvider->expects($this->any())
             ->method('getSourceIntegrationTypes')
             ->will($this->returnValue($configValue));
-        $form = $this->factory->create('oro_integration_channel_form');
+        $form = $this->factory->create(ChannelType::class);
         $form->setData($data);
         $typeView = $form->get('type')->createView();
         $this->assertEquals($expectedChoices, $typeView->vars['choices']);
@@ -103,8 +104,8 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
 
         return [
             new PreloadedExtension(
-                [$integrationType->getName() => $integrationType],
-                [$this->extension->getExtendedType() => [$this->extension]]
+                [ChannelType::class => $integrationType],
+                [IntegrationFormTypeStub::class => [$this->extension]]
             )
         ];
     }

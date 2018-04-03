@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\CaseBundle\Form\Type;
 
+use Oro\Bundle\TagBundle\Form\Type\TagSelectType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -38,7 +39,7 @@ class CaseMailboxProcessSettingsTagType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_tag_select';
+        return TagSelectType::class;
     }
 
     /**

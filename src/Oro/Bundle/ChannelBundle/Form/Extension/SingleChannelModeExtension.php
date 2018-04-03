@@ -79,6 +79,6 @@ class SingleChannelModeExtension extends AbstractTypeExtension
      */
     public function getExtendedType()
     {
-        return ChannelSelectType::NAME;
+        return ChannelSelectType::class;
     }
 }

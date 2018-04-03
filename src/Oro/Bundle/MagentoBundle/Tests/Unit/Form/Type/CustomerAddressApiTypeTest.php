@@ -3,6 +3,10 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\MagentoBundle\Form\Type\CustomerAddressApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\CustomerSelectType;
+use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CustomerAddressApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,24 +34,24 @@ class CustomerAddressApiTypeTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
 
         $expectedFields = [
-            'label'        => 'text',
-            'street'       => 'text',
-            'street2'      => 'text',
-            'city'         => 'text',
-            'postalCode'   => 'text',
-            'regionText'   => 'text',
-            'namePrefix'   => 'text',
-            'firstName'    => 'text',
-            'middleName'   => 'text',
-            'lastName'     => 'text',
-            'nameSuffix'   => 'text',
-            'phone'        => 'text',
-            'primary'      => 'checkbox',
-            'country'      => 'translatable_entity',
-            'countryText'  => 'text',
-            'region'       => 'translatable_entity',
-            'owner'        => 'oro_customer_select',
-            'types'        => 'translatable_entity'
+            'label'        => TextType::class,
+            'street'       => TextType::class,
+            'street2'      => TextType::class,
+            'city'         => TextType::class,
+            'postalCode'   => TextType::class,
+            'regionText'   => TextType::class,
+            'namePrefix'   => TextType::class,
+            'firstName'    => TextType::class,
+            'middleName'   => TextType::class,
+            'lastName'     => TextType::class,
+            'nameSuffix'   => TextType::class,
+            'phone'        => TextType::class,
+            'primary'      => CheckboxType::class,
+            'country'      => TranslatableEntityType::class,
+            'countryText'  => TextType::class,
+            'region'       => TranslatableEntityType::class,
+            'owner'        => CustomerSelectType::class,
+            'types'        => TranslatableEntityType::class
         ];
 
         $builder->expects($this->exactly(count($expectedFields)))

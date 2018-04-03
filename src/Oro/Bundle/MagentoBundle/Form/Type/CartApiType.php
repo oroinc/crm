@@ -2,9 +2,15 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
+use Oro\Bundle\IntegrationBundle\Form\Type\IntegrationSelectType;
 use Oro\Bundle\MagentoBundle\Form\EventListener\CartApiFormSubscriber;
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
+use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,53 +23,53 @@ class CartApiType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('subTotal', 'oro_money', ['required' => false]);
-        $builder->add('grandTotal', 'oro_money', ['required' => false]);
-        $builder->add('taxAmount', 'oro_money', ['required' => false]);
+        $builder->add('subTotal', OroMoneyType::class, ['required' => false]);
+        $builder->add('grandTotal', OroMoneyType::class, ['required' => false]);
+        $builder->add('taxAmount', OroMoneyType::class, ['required' => false]);
         $builder->add(
             'cartItems',
-            'oro_cart_item_collection',
+            CartItemCollectionType::class,
             [
                 'label'    => '',
-                'entry_type'     => 'cart_item_api_type',
+                'entry_type' => CartItemsApiType::class,
                 'required' => true,
                 'entry_options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\CartItem']
             ]
         );
-        $builder->add('customer', 'oro_customer_select', ['required' => false]);
+        $builder->add('customer', CustomerSelectType::class, ['required' => false]);
         $builder->add(
             'store',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'OroMagentoBundle:Store',
                 'property' => 'name'
             ]
         );
-        $builder->add('itemsQty', 'number', ['required' => true]);
-        $builder->add('baseCurrencyCode', 'text', ['required' => true]);
-        $builder->add('storeCurrencyCode', 'text', ['required' => true]);
-        $builder->add('quoteCurrencyCode', 'text', ['required' => true]);
-        $builder->add('storeToBaseRate', 'number', ['required' => true]);
-        $builder->add('storeToQuoteRate', 'number', ['required' => false]);
-        $builder->add('email', 'text', ['required' => false]);
-        $builder->add('giftMessage', 'text', ['required' => false]);
-        $builder->add('isGuest', 'checkbox', ['required' => true]);
-        $builder->add('shippingAddress', 'cart_address_api_type');
-        $builder->add('billingAddress', 'cart_address_api_type');
-        $builder->add('paymentDetails', 'text', ['required' => false]);
+        $builder->add('itemsQty', NumberType::class, ['required' => true]);
+        $builder->add('baseCurrencyCode', TextType::class, ['required' => true]);
+        $builder->add('storeCurrencyCode', TextType::class, ['required' => true]);
+        $builder->add('quoteCurrencyCode', TextType::class, ['required' => true]);
+        $builder->add('storeToBaseRate', NumberType::class, ['required' => true]);
+        $builder->add('storeToQuoteRate', NumberType::class, ['required' => false]);
+        $builder->add('email', TextType::class, ['required' => false]);
+        $builder->add('giftMessage', TextType::class, ['required' => false]);
+        $builder->add('isGuest', CheckboxType::class, ['required' => true]);
+        $builder->add('shippingAddress', CartAddressApiType::class);
+        $builder->add('billingAddress', CartAddressApiType::class);
+        $builder->add('paymentDetails', TextType::class, ['required' => false]);
         $builder->add(
             'status',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'OroMagentoBundle:CartStatus',
                 'property' => 'name'
             ]
         );
-        $builder->add('notes', 'text', ['required' => false]);
-        $builder->add('statusMessage', 'text', ['required' => false]);
+        $builder->add('notes', TextType::class, ['required' => false]);
+        $builder->add('statusMessage', TextType::class, ['required' => false]);
         $builder->add(
             'owner',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'Oro\Bundle\UserBundle\Entity\User',
                 'property' => 'username',
@@ -72,15 +78,15 @@ class CartApiType extends AbstractType
         );
         $builder->add(
             'dataChannel',
-            'translatable_entity',
+            TranslatableEntityType::class,
             [
                 'class'    => 'OroChannelBundle:Channel',
                 'property' => 'name',
                 'required' => false
             ]
         );
-        $builder->add('channel', 'oro_integration_select');
-        $builder->add('originId', 'number', ['required' => false]);
+        $builder->add('channel', IntegrationSelectType::class);
+        $builder->add('originId', NumberType::class, ['required' => false]);
 
         $builder->addEventSubscriber(new PatchSubscriber());
         $builder->addEventSubscriber(new CartApiFormSubscriber());

@@ -3,8 +3,10 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Extension;
 
 use Oro\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension;
+use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormType;
+use Oro\Component\Testing\Unit\PreloadedExtension;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -34,7 +36,7 @@ class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
             new PreloadedExtension(
                 [],
                 [
-                    'form' => [
+                    FormType::class => [
                         new FormTypeValidatorExtension(
                             $this->createMock(ValidatorInterface::class)
                         )
@@ -49,7 +51,7 @@ class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
     {
         $this->assertEquals(
             $this->extension->getExtendedType(),
-            'embedded_form'
+            EmbeddedFormType::class
         );
     }
 

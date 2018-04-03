@@ -8,9 +8,9 @@ use Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\FormBundle\Form\Type\Select2Type;
+use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
 class ChannelTypeSubscriberTest extends FormIntegrationTestCase

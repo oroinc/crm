@@ -109,7 +109,7 @@ services:
     oro_channel.form.channel:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', 'createNamed']
-        arguments: ["oro_channel_form", "oro_channel_form", null]
+        arguments: ["oro_channel_form", Oro\Bundle\ChannelBundle\Form\Type\ChannelType, null]
 
     # handlers
     oro_channel.channel_form.handler:
@@ -320,12 +320,12 @@ services:
         arguments:
             - "@oro_channel.provider.settings_provider"
         tags:
-            - { name: form.type_extension, alias: oro_integration_channel_form }
+            - { name: form.type_extension, extended_type: Oro\Bundle\IntegrationBundle\Form\Type\ChannelType, alias: oro_integration_channel_form }
 
     oro_channel.form.embedded_type_extension:
         class: '%oro_channel.form.embedded_type_extension.class%'
         tags:
-            - { name: form.type_extension, alias: embedded_form }
+            - { name: form.type_extension, alias: embedded_form, extended_type: Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormType }
 
     oro_channel.twig.lifetime_value_extension:
         class: Oro\Bundle\ChannelBundle\Twig\LifetimeValueExtension
@@ -368,7 +368,7 @@ services:
         arguments:
             - '@oro_channel.provider.channels_by_entities'
         tags:
-            - { name: form.type_extension, alias: oro_channel_select_type }
+            - { name: form.type_extension, alias: oro_channel_select_type, extended_type: Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType }
 
     oro_channel.event_listener.transitions_attribute:
         class: '%oro_channel.event_listener.transitions_attribute.class%'

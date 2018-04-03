@@ -3,8 +3,12 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormView;
 
@@ -61,10 +65,10 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             [
-                'name'             => 'text',
-                'entities'         => 'oro_channel_entities',
-                'channelType'      => 'oro_select2_choice',
-                'status'           => 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
+                'name'             => TextType::class,
+                'entities'         => ChannelEntityType::class,
+                'channelType'      => Select2ChoiceType::class,
+                'status'           => HiddenType::class
             ],
             $fields
         );

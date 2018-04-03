@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,8 +19,8 @@ class OrderAddressApiType extends AbstractApiAddressType
     {
         parent::buildForm($builder, $options);
 
-        $builder->add('fax', 'text', ['required' => false]);
-        $builder->add('owner', 'oro_order_select');
+        $builder->add('fax', TextType::class, ['required' => false]);
+        $builder->add('owner', OrderSelectType::class);
 
         $builder->addEventSubscriber(new PatchSubscriber());
     }

@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Extension;
 
+use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormType;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,7 +17,7 @@ class EmbeddedFormTypeExtension extends AbstractTypeExtension
      */
     public function getExtendedType()
     {
-        return 'embedded_form';
+        return EmbeddedFormType::class;
     }
 
     /**

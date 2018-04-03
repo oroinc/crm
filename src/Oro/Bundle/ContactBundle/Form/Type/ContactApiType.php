@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,7 +16,7 @@ class ContactApiType extends AbstractType
     {
         $builder->add(
             'createdAt',
-            'oro_datetime',
+            OroDateTimeType::class,
             ['required' => false]
         );
 
@@ -39,7 +40,7 @@ class ContactApiType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_contact';
+        return ContactType::class;
     }
 
     /**

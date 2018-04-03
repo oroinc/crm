@@ -99,12 +99,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertArraySubset(['use_full_contact_form' => true], $formView->vars);
     }
 
-    /**
-     * @dataProvider contactFieldTypeDataProvider
-     *
-     * @param array $fields
-     */
-    public function testBuildForm(array $fields)
+    public function testBuildForm()
     {
         /** @var FormBuilder|\PHPUnit_Framework_MockObject_MockObject $builder */
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
@@ -117,29 +112,6 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $this->type->buildForm($builder, []);
-    }
-
-    public function contactFieldTypeDataProvider()
-    {
-        return [
-          [
-              'fields' => [
-                  'closeReason'  => 'translatable_entity',
-                  'contact'  => 'oro_contact_select',
-                  'customer' => 'oro_sales_b2bcustomer_with_channel_create_or_select',
-                  'name'  => 'text',
-                  'dataChannel'  => 'oro_channel_select_type',
-                  'closeDate'  => 'oro_date',
-                  'probability'  => 'oro_percent',
-                  'budgetAmount' => 'oro_money',
-                  'closeRevenue'  => 'oro_money',
-                  'customerNeed'  => 'oro_resizeable_rich_text',
-                  'proposedSolution'  => 'oro_resizeable_rich_text',
-                  'notes'  => 'oro_resizeable_rich_text',
-                  'status'  => 'oro_sales_opportunity_status_select',
-              ]
-          ]
-        ];
     }
 
     /**

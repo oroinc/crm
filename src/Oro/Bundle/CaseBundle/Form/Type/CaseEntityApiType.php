@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\CaseBundle\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,7 +18,7 @@ class CaseEntityApiType extends AbstractType
         $builder
             ->add(
                 'reportedAt',
-                'oro_datetime',
+                OroDateTimeType::class,
                 [
                     'required' => true,
                     'label'    => 'oro.case.caseentity.reported_at.label'
@@ -25,7 +26,7 @@ class CaseEntityApiType extends AbstractType
             )
             ->add(
                 'closedAt',
-                'oro_datetime',
+                OroDateTimeType::class,
                 [
                     'required' => true,
                     'label'    => 'oro.case.caseentity.closed_at.label'
@@ -68,6 +69,6 @@ class CaseEntityApiType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_case_entity';
+        return CaseEntityType::class;
     }
 }

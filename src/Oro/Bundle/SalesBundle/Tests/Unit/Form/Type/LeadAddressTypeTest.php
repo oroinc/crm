@@ -2,7 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Oro\Bundle\SalesBundle\Form\Type\LeadAddressType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class LeadAddressTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +31,7 @@ class LeadAddressTypeTest extends \PHPUnit_Framework_TestCase
                 );
         $builder->expects($this->once())
                 ->method('add')
-                ->with('primary', 'checkbox')
+                ->with('primary', CheckboxType::class)
                 ->will($this->returnSelf());
 
         $this->type->buildForm($builder, ['single_form' => true]);
@@ -42,6 +44,6 @@ class LeadAddressTypeTest extends \PHPUnit_Framework_TestCase
 
     public function getParent()
     {
-        $this->assertEquals('oro_address', $this->type->getParent());
+        $this->assertEquals(AddressType::class, $this->type->getParent());
     }
 }

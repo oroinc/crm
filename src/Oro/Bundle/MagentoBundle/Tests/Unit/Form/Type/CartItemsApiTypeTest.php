@@ -2,7 +2,13 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
+use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\MagentoBundle\Form\Type\CartItemsApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\CartSelectType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CartItemsApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,26 +36,26 @@ class CartItemsApiTypeTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
 
         $expectedFields = [
-            'sku'            => 'text',
-            'name'           => 'text',
-            'qty'            => 'number',
-            'price'          => 'oro_money',
-            'discountAmount' => 'oro_money',
-            'taxPercent'     => 'oro_percent',
-            'weight'         => 'number',
-            'productId'      => 'number',
-            'parentItemId'   => 'number',
-            'freeShipping'   => 'text',
-            'taxAmount'      => 'oro_money',
-            'giftMessage'    => 'text',
-            'taxClassId'     => 'text',
-            'description'    => 'text',
-            'isVirtual'      => 'checkbox',
-            'customPrice'    => 'oro_money',
-            'priceInclTax'   => 'oro_money',
-            'rowTotal'       => 'oro_money',
-            'productType'    => 'text',
-            'cart'           => 'oro_cart_select'
+            'sku'            => TextType::class,
+            'name'           => TextType::class,
+            'qty'            => NumberType::class,
+            'price'          => OroMoneyType::class,
+            'discountAmount' => OroMoneyType::class,
+            'taxPercent'     => OroPercentType::class,
+            'weight'         => NumberType::class,
+            'productId'      => NumberType::class,
+            'parentItemId'   => NumberType::class,
+            'freeShipping'   => TextType::class,
+            'taxAmount'      => OroMoneyType::class,
+            'giftMessage'    => TextType::class,
+            'taxClassId'     => TextType::class,
+            'description'    => TextType::class,
+            'isVirtual'      => CheckboxType::class,
+            'customPrice'    => OroMoneyType::class,
+            'priceInclTax'   => OroMoneyType::class,
+            'rowTotal'       => OroMoneyType::class,
+            'productType'    => TextType::class,
+            'cart'           => CartSelectType::class
         ];
 
         $builder->expects($this->exactly(count($expectedFields)))

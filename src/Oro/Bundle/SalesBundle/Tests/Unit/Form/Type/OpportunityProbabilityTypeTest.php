@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Oro\Bundle\EntityBundle\ORM\Registry;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
+use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityProbabilityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -54,7 +55,7 @@ class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
                 ->method('add')
                 ->with(
                     $status->getId(),
-                    'oro_percent',
+                    OroPercentType::class,
                     [
                         'required' => false,
                         'disabled' => $disabled,

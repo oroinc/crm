@@ -37,7 +37,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             $this->extension->getExtendedType(),
-            ChannelSelectType::NAME
+            ChannelSelectType::class
         );
     }
 

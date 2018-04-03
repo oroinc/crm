@@ -6,12 +6,12 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
-use Oro\Bundle\FormBundle\Form\Type\Select2Type;
+use Oro\Bundle\FormBundle\Form\Type\Select2EntityType;
 use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
+use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
-use Symfony\Component\Form\PreloadedExtension;
 
 class ChannelSelectTypeTest extends OrmTestCase
 {
@@ -44,10 +44,6 @@ class ChannelSelectTypeTest extends OrmTestCase
             ->will($this->returnValue($em));
 
         $entityType = new EntityType($registry);
-        $select2Type = new Select2Type(
-            'Symfony\Bridge\Doctrine\Form\Type\EntityType',
-            'oro_select2_entity'
-        );
 
         $channelsProvider = $this
             ->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider')
@@ -61,9 +57,8 @@ class ChannelSelectTypeTest extends OrmTestCase
                 [
                     new PreloadedExtension(
                         [
-                            $entityType->getName() => $entityType,
-                            $this->type->getName() => $this->type,
-                            $select2Type->getName() => $select2Type
+                            EntityType::class => $entityType,
+                            $this->type
                         ],
                         []
                     )
@@ -88,7 +83,7 @@ class ChannelSelectTypeTest extends OrmTestCase
     public function testGetParent()
     {
         $this->assertEquals(
-            'oro_select2_entity',
+            Select2EntityType::class,
             $this->type->getParent()
         );
     }

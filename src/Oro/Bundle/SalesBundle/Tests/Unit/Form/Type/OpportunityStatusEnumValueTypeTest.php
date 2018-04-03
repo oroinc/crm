@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumValueType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -43,7 +44,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with(
                 'probability',
-                'oro_percent',
+                OroPercentType::class,
                 [
                     'disabled' => $shouldBeDisabled,
                     'attr' => ['readonly' => $shouldBeDisabled],
