@@ -23,7 +23,7 @@
             'route': 'oro_contactus_reason_create'
         }) %}
     {% endif %}
-    {% if is_granted('oro_contactus_reason_edit') %}
+    {% if is_granted('oro_contactus_reason_update') %}
         {% set html = html ~ UI.saveAndStayButton({
             'route': 'oro_contactus_reason_update',
             'params': {'id': '$id'}

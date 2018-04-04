@@ -15,13 +15,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * CRUD controller for ContactReason entity
+ */
 class ContactReasonController extends Controller
 {
     /**
      * @Route("/", name="oro_contactus_reason_index")
      * @Template
-     * @AclAncestor("oro_contactus_reason_view")
-     *
+     * @Acl(
+     *      id="oro_contactus_reason_view",
+     *      type="entity",
+     *      class="OroContactUsBundle:ContactReason",
+     *      permission="VIEW"
+     * )
      * @return array
      */
     public function indexAction()
