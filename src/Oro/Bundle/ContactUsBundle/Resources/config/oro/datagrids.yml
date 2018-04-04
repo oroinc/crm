@@ -143,7 +143,7 @@ datagrids:
                 params: [ id ]
         actions:
             update:
-                acl_resource: oro_contactus_reason_edit
+                acl_resource: oro_contactus_reason_update
                 type:         navigate
                 label:        oro.grid.action.update
                 icon:         edit

@@ -9,6 +9,8 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
+ * Entity that represents contact reason
+ *
  * @ORM\Entity(repositoryClass="Oro\Bundle\ContactUsBundle\Entity\Repository\ContactReasonRepository")
  * @ORM\Table(name="orocrm_contactus_contact_rsn")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
@@ -20,7 +22,13 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *          },
  *          "grid"={
  *              "default"="orcrm-contact-reasons-grid"
- *          }
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "permissions"="All",
+ *              "group_name"="",
+ *              "category"="account_management"
+ *          },
  *      }
  * )
  */
