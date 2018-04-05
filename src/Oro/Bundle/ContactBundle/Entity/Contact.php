@@ -60,7 +60,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *              "category"="account_management"
  *          },
  *          "form"={
- *              "form_type"="oro_contact_select",
+ *              "form_type"="Oro\Bundle\ContactBundle\Form\Type\ContactSelectType",
  *              "grid_name"="contacts-select-grid",
  *          },
  *          "dataaudit"={

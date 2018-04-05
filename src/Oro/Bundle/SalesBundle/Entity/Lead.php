@@ -52,7 +52,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *              "category"="sales_data"
  *          },
  *          "form"={
- *              "form_type"="oro_sales_lead_select",
+ *              "form_type"="Oro\Bundle\SalesBundle\Form\Type\LeadSelectType",
  *              "grid_name"="sales-lead-grid",
  *          },
  *          "dataaudit"={
