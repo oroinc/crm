@@ -35,7 +35,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
  *          "category"="account_management"
  *      },
  *      "form"={
- *            "form_type"="oro_channel_select_type"
+ *            "form_type"="Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType" # TODO: BAP-16688, migration?
  *      },
  *      "grid"={
  *          "default"="oro-channels-grid"

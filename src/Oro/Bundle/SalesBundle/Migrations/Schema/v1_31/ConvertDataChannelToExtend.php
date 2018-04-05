@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_31;
 
 use Doctrine\DBAL\Schema\Schema;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
@@ -48,7 +49,7 @@ class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionA
                 ],
                 'form' => [
                     'is_enabled' => true,
-                    'form_type' => 'oro_channel_select_type'
+                    'form_type' => ChannelSelectType::class,
                 ],
                 'view' => ['is_displayable' => true],
                 'merge' => ['display' => false],
@@ -72,7 +73,7 @@ class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionA
                 ],
                 'form' => [
                     'is_enabled' => true,
-                    'form_type' => 'oro_channel_select_type'
+                    'form_type' => ChannelSelectType::class,
                 ],
                 'view' => ['is_displayable' => true],
                 'merge' => ['display' => false],
@@ -96,7 +97,7 @@ class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionA
                 ],
                 'form' => [
                     'is_enabled' => true,
-                    'form_type' => 'oro_channel_select_type'
+                    'form_type' => ChannelSelectType::class,
                 ],
                 'view' => ['is_displayable' => true],
                 'merge' => ['display' => false],
