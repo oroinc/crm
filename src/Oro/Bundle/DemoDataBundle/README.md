@@ -1,4 +1,3 @@
-OroDemoDataBundle
-====================
+# OroDemoDataBundle
 
-Contains necessary fixtures for CRM features demonstration.
+OroDemoDataBundle provides necessary fixtures for CRM features demonstration.
