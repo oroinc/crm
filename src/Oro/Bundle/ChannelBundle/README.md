@@ -1,8 +1,8 @@
-OroChannelBundle
-===================
+# OroChannelBundle
 
-Entity data block
------------------
+OroChannelBundle adds the Channel entity that represents the source of customer data into Oro applications, allows developers to define Channels types and specify the channel-related features in bundles YAML configuration files, and provides UI for admin users to create and manage channels of the types defined by developers.
+
+## Entity data block
 
 This bundle brings "channel entity" to the system. Channel is a set of features which might be included in CRM.
 Also channel may come with "customer datasource", it's basically integration that brings business entities into system.
@@ -63,8 +63,7 @@ Menu item should be hidden by default in navigation configuration using paramete
                     menu_item: ~
 ```
 
-Channel types block
--------------------
+## Channel types block
 
 Channel is configured by `Channel Type` and `Entities` fields. Some types of channels that bring customers,
 also bring the `integration` field to configure the integration. It should be described in configuration block:
@@ -96,8 +95,7 @@ also bring the `integration` field to configure the integration. It should be de
 By default, if `customer_identity` option is not set `Oro\Bundle\ChannelBundle\Entity\CustomerIdentity` will be used as *customer identity* and
 will be included automatically.
 
-Lifetime sales value
---------------------
+## Lifetime sales value
 
 In order to bring full 360 degrees view of account in scope of the channel "Channel lifetime sales value" was defined.
 Each channel type could define field from _customer identity_ entity that should be used as indicator of aggregated
