@@ -1,0 +1,31 @@
+trusted_data:
+    variables:
+        Oro\Bundle\MagentoBundle\EventListener\ChannelOwnerSetListener:
+            updateMagentoEntity:
+                entityName: true
+        Oro\Bundle\MagentoBundle\Manager\MagentoDeleteProvider:
+            removeWorkflowDefinitions:
+                entityClassName: true
+        Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\AddressDiscoveryStrategy:
+            matchByTypeMatch:
+                addressAlias: true
+            matchByType:
+                addressAlias: true
+            matchAnyOf:
+                addressAlias: true
+            getMatchByTypeExpr:
+                alias: true
+        Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\AbstractDiscoveryStrategy:
+            getFieldExpr:
+                qbFieldName: true
+    safe_methods:
+        Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\EmailDiscoveryStrategy:
+            getFieldExpr: true
+        Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy:
+            getFieldExpr: true
+        Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\AddressDiscoveryStrategy:
+            getAddressMatchExpr: true
+            getMatchByTypeExpr: true
+            getFieldExpr: true
+        Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\AbstractDiscoveryStrategy:
+            getFieldExpr: true

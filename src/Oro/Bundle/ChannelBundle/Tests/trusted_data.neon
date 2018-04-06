@@ -1,0 +1,20 @@
+trusted_data:
+    variables:
+        Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository:
+            massStatusUpdate:
+                k: true
+        Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository:
+            getAggregatedValue:
+                calculationPeriodEnd: true
+                sql: true
+        Oro\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager:
+            getSearchResult:
+                expression: true
+    safe_methods:
+        Oro\Bundle\ChannelBundle\Entity\Channel:
+            getCustomerIdentity: true
+        Oro\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager:
+            getChannelFieldName: true
+    check_methods_safety:
+        Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeSubscriber:
+            createNoCustomerCondition: true
