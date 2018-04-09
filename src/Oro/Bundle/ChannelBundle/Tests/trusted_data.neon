@@ -1,4 +1,4 @@
-# This is is adidtional configuration for phpstan rules, see https://github.com/oroinc/phpstan-rules/blob/master/README.md
+# Configuration for https://github.com/oroinc/phpstan-rules/
 trusted_data:
     variables:
         Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository:
