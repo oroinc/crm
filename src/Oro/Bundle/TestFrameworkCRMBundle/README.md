@@ -1,4 +1,3 @@
-OroTestFrameworkCRMBundle
-=========================
+# OroTestFrameworkCRMBundle
 
-Provides test framework functionality (SOAP/REST client, Custom TestCases, PageObjects for Selenium etc).
+OroTestFrameworkCRMBundle provides migrations, functional and unit tests for OroCRM specific features.
