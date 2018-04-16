@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Customer;
 
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
+
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -22,6 +24,12 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
     /** @var NewEntitiesHelper */
     protected $newEntitiesHelper;
 
+    /** @var int */
+    private $accountNameLength;
+
+    /**
+     * @param NewEntitiesHelper $newEntitiesHelper
+     */
     public function __construct(NewEntitiesHelper $newEntitiesHelper)
     {
         $this->newEntitiesHelper = $newEntitiesHelper;
@@ -84,13 +92,11 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
      */
     protected function createAccount($targetCustomer)
     {
-        $accountName = !$targetCustomer->getFirstName() && !$targetCustomer->getLastName()
-            ? 'N/A'
-            : sprintf('%s %s', $targetCustomer->getFirstName(), $targetCustomer->getLastName());
+        $account = new Account();
+        $account->setName($this->getAccountName($targetCustomer))
+            ->setOwner($targetCustomer->getOwner())
+            ->setOrganization($targetCustomer->getOrganization());
 
-        $account = (new Account())->setName($accountName);
-        $account->setOwner($targetCustomer->getOwner());
-        $account->setOrganization($targetCustomer->getOrganization());
         $contact = $targetCustomer->getContact();
         if ($contact) {
             $account->setDefaultContact($contact);
@@ -109,5 +115,38 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
         }
 
         return $this->automaticDiscovery;
+    }
+
+    /**
+     * @param Customer $targetCustomer
+     * @return string
+     */
+    private function getAccountName(Customer $targetCustomer)
+    {
+        $accountName = 'N/A';
+        if ($targetCustomer->getFirstName() || $targetCustomer->getLastName()) {
+            $accountName = sprintf('%s %s', $targetCustomer->getFirstName(), $targetCustomer->getLastName());
+            $accountName = substr(trim($accountName), 0, $this->getAccountNameLength());
+        }
+
+        return $accountName;
+    }
+
+    /**
+     * @return int|null
+     */
+    private function getAccountNameLength()
+    {
+        if ($this->accountNameLength === null) {
+            $manager = $this->container->get('doctrine')->getManagerForClass(Account::class);
+
+            /** @var ClassMetadataInfo $metadata */
+            $metadata = $manager->getClassMetadata(Account::class);
+            $nameMetadata = $metadata->getFieldMapping('name');
+
+            $this->accountNameLength = (int)$nameMetadata['length'];
+        }
+
+        return $this->accountNameLength;
     }
 }

@@ -1163,7 +1163,7 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
         tags:
-         - { name: oro_sales.provider.customer.account_creation, priority: 10 }
+            - { name: oro_sales.provider.customer.account_creation, priority: 10 }
 
     oro_magento.provider.customer.account.new_entities_helper:
         class: Oro\Bundle\ImportExportBundle\Strategy\Import\NewEntitiesHelper
