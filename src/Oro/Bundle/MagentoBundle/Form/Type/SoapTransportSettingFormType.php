@@ -59,9 +59,7 @@ class SoapTransportSettingFormType extends AbstractTransportSettingFormType
             WebsiteSelectType::class,
             [
                 'label'    => 'oro.magento.magentotransport.website_id.label',
-                'required' => true,
-                // TODO: Remove 'choices_as_values' option in scope of BAP-15236
-                'choices_as_values' => true
+                'required' => true
             ]
         );
         $builder->add(

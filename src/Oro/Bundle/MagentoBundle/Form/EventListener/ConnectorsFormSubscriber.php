@@ -17,6 +17,9 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
     /** @var TypesRegistry */
     protected $typeRegistry;
 
+    /**
+     * @param TypesRegistry $registry
+     */
     public function __construct(TypesRegistry $registry)
     {
         $this->typeRegistry = $registry;
@@ -77,9 +80,6 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
                     return $connector instanceof ExtensionAwareInterface ? $data : true;
                 }
             ));
-
-            //@TODO remove in scope BAP-15236
-            unset($config['cascade_validation']);
 
             $form->getParent()
                 ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
