@@ -2,36 +2,44 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Customer;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\NewEntitiesHelper;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\AccountProviderInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class AccountProvider implements AccountProviderInterface, ContainerAwareInterface
+/**
+ * Provides Account instance based on the Customer entity.
+ */
+class AccountProvider implements AccountProviderInterface
 {
-    /** @var ContainerInterface */
-    protected $container;
+    /** @var NewEntitiesHelper */
+    protected $newEntitiesHelper;
 
     /** @var AutomaticDiscovery */
     protected $automaticDiscovery;
 
-    /** @var NewEntitiesHelper */
-    protected $newEntitiesHelper;
+    /** @var ManagerRegistry */
+    protected $registry;
 
-    public function __construct(NewEntitiesHelper $newEntitiesHelper)
-    {
-        $this->newEntitiesHelper = $newEntitiesHelper;
-    }
+    /** @var int */
+    private $accountNameLength;
 
     /**
-     * {@inheritdoc}
+     * @param NewEntitiesHelper $newEntitiesHelper
+     * @param AutomaticDiscovery $automaticDiscovery
+     * @param ManagerRegistry $registry
      */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
+    public function __construct(
+        NewEntitiesHelper $newEntitiesHelper,
+        AutomaticDiscovery $automaticDiscovery,
+        ManagerRegistry $registry
+    ) {
+        $this->newEntitiesHelper = $newEntitiesHelper;
+        $this->automaticDiscovery = $automaticDiscovery;
+        $this->registry = $registry;
     }
 
     /**
@@ -49,8 +57,7 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
         } else {
             // try to find similar customer and get its account
             /** @var Customer|null $similar */
-            $automaticDiscovery = $this->getAutomaticDiscovery();
-            $similar            = $automaticDiscovery->discoverSimilar($targetCustomer);
+            $similar            = $this->automaticDiscovery->discoverSimilar($targetCustomer);
 
             if (null !== $similar) {
                 if ($similar->getAccount()) {
@@ -83,13 +90,11 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
      */
     protected function createAccount($targetCustomer)
     {
-        $accountName = !$targetCustomer->getFirstName() && !$targetCustomer->getLastName()
-            ? 'N/A'
-            : sprintf('%s %s', $targetCustomer->getFirstName(), $targetCustomer->getLastName());
+        $account = new Account();
+        $account->setName($this->getAccountName($targetCustomer))
+            ->setOwner($targetCustomer->getOwner())
+            ->setOrganization($targetCustomer->getOrganization());
 
-        $account = (new Account())->setName($accountName);
-        $account->setOwner($targetCustomer->getOwner());
-        $account->setOrganization($targetCustomer->getOrganization());
         $contact = $targetCustomer->getContact();
         if ($contact) {
             $account->setDefaultContact($contact);
@@ -99,14 +104,35 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
     }
 
     /**
-     * @return AutomaticDiscovery
+     * @param Customer $targetCustomer
+     * @return string
      */
-    protected function getAutomaticDiscovery()
+    private function getAccountName(Customer $targetCustomer)
     {
-        if (null === $this->automaticDiscovery) {
-            $this->automaticDiscovery = $this->container->get('oro_magento.service.automatic_discovery');
+        $accountName = 'N/A';
+        if ($targetCustomer->getFirstName() || $targetCustomer->getLastName()) {
+            $accountName = sprintf('%s %s', $targetCustomer->getFirstName(), $targetCustomer->getLastName());
+            $accountName = substr(trim($accountName), 0, $this->getAccountNameLength());
         }
 
-        return $this->automaticDiscovery;
+        return $accountName;
+    }
+
+    /**
+     * @return int|null
+     */
+    private function getAccountNameLength()
+    {
+        if ($this->accountNameLength === null) {
+            $manager = $this->registry->getManagerForClass(Account::class);
+
+            /** @var ClassMetadataInfo $metadata */
+            $metadata = $manager->getClassMetadata(Account::class);
+            $nameMetadata = $metadata->getFieldMapping('name');
+
+            $this->accountNameLength = (int)$nameMetadata['length'];
+        }
+
+        return $this->accountNameLength;
     }
 }
