@@ -4,6 +4,7 @@ namespace Oro\Bundle\AccountBundle\Migrations\Schema\v1_11;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
+use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -19,7 +20,7 @@ class MakeRichAccountExtendDescription implements Migration
         $column->setOptions(
             [
                 OroOptions::KEY => [
-                    'form' => ['type' => 'oro_resizeable_rich_text'],
+                    'form' => ['type' => OroResizeableRichTextType::class],
                     'view' => ['type' => 'html']
                 ]
             ]
