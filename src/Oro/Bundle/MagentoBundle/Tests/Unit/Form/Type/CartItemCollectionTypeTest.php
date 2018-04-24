@@ -40,11 +40,6 @@ class CartItemCollectionTypeTest extends \PHPUnit_Framework_TestCase
         $this->type->configureOptions($resolver);
     }
 
-    public function testGetName()
-    {
-        $this->assertEquals('oro_cart_item_collection', $this->type->getName());
-    }
-
     public function testGetParent()
     {
         $this->assertEquals(CollectionType::class, $this->type->getParent());

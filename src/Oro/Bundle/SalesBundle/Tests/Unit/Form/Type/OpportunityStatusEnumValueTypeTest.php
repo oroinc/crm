@@ -12,13 +12,6 @@ use Symfony\Component\Validator\Constraints\Range;
 
 class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetName()
-    {
-        $type = $this->getFormType();
-
-        $this->assertEquals('oro_sales_opportunity_status_enum_value', $type->getName());
-    }
-
     public function testBuildForm()
     {
         /** @var $builder FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject */

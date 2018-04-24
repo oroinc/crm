@@ -9,7 +9,7 @@ with  `entities` set.
 ```php
     $builder->add(
         'dataChannel',
-        'oro_channel_select_type',
+        ChannelSelectType::class,
         [
             'required' => true,
             'label'    => 'oro.some_field_name.label',

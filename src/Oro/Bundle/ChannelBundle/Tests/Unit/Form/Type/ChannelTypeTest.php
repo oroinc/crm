@@ -74,11 +74,6 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetName()
-    {
-        $this->assertEquals('oro_channel_form', $this->type->getName());
-    }
-
     public function testConfigureOptions()
     {
         $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');

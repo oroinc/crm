@@ -5,6 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Handler;
 use Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
+use Oro\Component\Testing\Unit\Form\Type\Stub\FormStub;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -182,8 +183,8 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($formFactory));
             $formConfig->expects($this->once())->method('getType')
                 ->will($this->returnValue($formType));
-            $formType->expects($this->once())->method('getName')
-                ->will($this->returnValue('type' . self::TEST_NAME));
+            $formType->expects($this->once())->method('getInnerType')
+                ->will($this->returnValue(new FormStub('type' . self::TEST_NAME)));
             $this->form->expects($this->once())->method('getName')
                 ->will($this->returnValue('form' . self::TEST_NAME));
             $this->form->expects($this->once())->method('getConfig')

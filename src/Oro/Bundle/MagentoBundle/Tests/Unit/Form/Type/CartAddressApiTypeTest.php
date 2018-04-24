@@ -67,11 +67,6 @@ class CartAddressApiTypeTest extends \PHPUnit_Framework_TestCase
         $this->type->configureOptions($resolver);
     }
 
-    public function testGetName()
-    {
-        $this->assertEquals('cart_address_api_type', $this->type->getName());
-    }
-
     public function testGetParent()
     {
         $this->assertEquals(AddressType::class, $this->type->getParent());

@@ -93,12 +93,6 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $type->configureOptions($resolver);
     }
 
-    public function testGetName()
-    {
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
-        $this->assertEquals('oro_account', $type->getName());
-    }
-
     public function testFinishView()
     {
         $this->authorizationChecker->expects($this->once())
