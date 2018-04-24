@@ -6,6 +6,7 @@ use Oro\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension;
 use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormType;
 use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -59,7 +60,7 @@ class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
     {
         $builder      = $this->factory->createNamedBuilder('root');
         $builderInner = $this->factory->createNamedBuilder('additional');
-        $builderInner->add('dataChannel', 'text', ['required' => false, 'constraints' => []]);
+        $builderInner->add('dataChannel', TextType::class, ['required' => false, 'constraints' => []]);
         $builder->add($builderInner);
 
         $form = $builder->getForm();

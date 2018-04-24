@@ -46,11 +46,6 @@ class ContactApiTypeTest extends \PHPUnit_Framework_TestCase
         $this->type->configureOptions($resolver);
     }
 
-    public function testGetName()
-    {
-        $this->assertEquals('contact', $this->type->getName());
-    }
-
     public function testGetParent()
     {
         $this->assertEquals(ContactType::class, $this->type->getParent());

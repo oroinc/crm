@@ -21,7 +21,7 @@ class RFMCategorySettingsType extends AbstractType
         $resolver->setRequired([self::TYPE_OPTION]);
         $resolver->setDefaults(
             [
-                'type' => RFMCategoryType::class,
+                'entry_type' => RFMCategoryType::class,
                 'is_increasing' => true,
                 'allow_add' => true,
                 'allow_delete' => true,

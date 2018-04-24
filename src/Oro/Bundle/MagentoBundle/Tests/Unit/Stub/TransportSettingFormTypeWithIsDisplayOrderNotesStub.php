@@ -18,7 +18,7 @@ class TransportSettingFormTypeWithIsDisplayOrderNotesStub extends AbstractType
     {
         $builder->add(
             AbstractTransportSettingFormType::IS_DISPLAY_ORDER_NOTES_FIELD_NAME,
-            IsDisplayOrderNotesFormType::NAME
+            IsDisplayOrderNotesFormType::class
         );
     }
 

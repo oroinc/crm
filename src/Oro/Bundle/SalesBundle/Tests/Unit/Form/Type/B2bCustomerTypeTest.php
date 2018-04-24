@@ -115,11 +115,6 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
         ];
     }
 
-    public function testGetName()
-    {
-        $this->assertEquals('oro_sales_b2bcustomer', $this->formType->getName());
-    }
-
     public function testGetBlockPrefix()
     {
         $this->assertEquals('oro_sales_b2bcustomer', $this->formType->getBlockPrefix());

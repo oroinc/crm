@@ -480,7 +480,7 @@ class RestTransport implements
      */
     public function getSettingsFormType()
     {
-        return RestTransportSettingFormType::NAME;
+        return RestTransportSettingFormType::class;
     }
 
     /**
