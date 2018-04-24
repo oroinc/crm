@@ -1,7 +1,8 @@
-OroMagentoBundle
-===================
+# OroMagentoBundle
 
-Bundle provides integration with Magento e-commerce solution.
+OroMagentoBundle enables integration with Magento e-commerce solution in Oro applications.
+
+The bundle allows admin users to create and configure Magento [channels](https://github.com/oroinc/crm/tree/master/src/Oro/Bundle/ChannelBundle) and [integrations](https://github.com/oroinc/platform/tree/master/src/Oro/Bundle/IntegrationBundle) to synchronize customers contacts, orders, carts, credit memos, and newsletters subscribers data between Magento and Oro applications.
 
 ### Table of contents
 

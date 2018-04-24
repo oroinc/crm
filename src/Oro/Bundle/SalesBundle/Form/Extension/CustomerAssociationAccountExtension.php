@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Extension;
 
+use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
@@ -59,7 +60,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
 
         $builder->add(
             'customer_association_account',
-            'oro_account_select',
+            AccountSelectType::class,
             [
                 'label'    => 'oro.account.entity_label',
                 'mapped'   => false,
