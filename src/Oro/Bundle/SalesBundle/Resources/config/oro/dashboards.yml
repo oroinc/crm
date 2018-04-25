@@ -22,19 +22,19 @@ dashboards:
             icon:        bundles/orosales/img/opportunities_by_lead_source.png
             configuration:
                 owners:
-                    type: oro_type_widget_owners
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     show_on_widget: true
                     options:
                         label: oro.user.dashboard.owners
                         required: false
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
                 excludedSources:
-                    type: oro_type_widget_lead_source_select
+                    type: Oro\Bundle\SalesBundle\Form\Type\LeadSourceSelectType
                     options:
                         label:  oro.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.label
                         tooltip:  oro.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.tooltip
@@ -42,7 +42,7 @@ dashboards:
                         configs:
                             placeholder: oro.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.placeholder
                 byAmount:
-                    type: oro_type_widget_choice
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetChoiceType
                     show_on_widget: true
                     converter_attributes:
                         default_selected: 0
@@ -61,19 +61,19 @@ dashboards:
             icon:        bundles/orosales/img/opportunity_by_status.png
             configuration:
                 owners:
-                    type: oro_type_widget_owners
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     show_on_widget: true
                     options:
                         label: oro.user.dashboard.owners
                         required: false
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
                 excluded_statuses:
-                    type: oro_type_widget_opportunity_status_select
+                    type: Oro\Bundle\SalesBundle\Form\Type\WidgetOpportunityStatusSelectType
                     show_on_widget: true
                     options:
                         label:  oro.sales.dashboard.opportunities_by_state.excluded_statuses.label
@@ -81,7 +81,7 @@ dashboards:
                         configs:
                             placeholder:  oro.sales.dashboard.opportunities_list.excluded_statuses.placeholder
                 useQuantityAsData:
-                    type: choice
+                    type: Symfony\Component\Form\Extension\Core\Type\ChoiceType
                     options:
                         label: oro.sales.dashboard.opportunities_by_state.quantity_as_data.label
                         tooltip: oro.sales.dashboard.opportunities_by_state.quantity_as_data.tooltip
@@ -97,7 +97,7 @@ dashboards:
             icon:        bundles/orosales/img/my_sales_flow_b2b.png
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -110,7 +110,7 @@ dashboards:
             icon:        bundles/orocampaign/img/Lead-generation-of-most-recently-created-campaigns.png
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -123,7 +123,7 @@ dashboards:
             icon:        bundles/orocampaign/img/Top-5-opportunity-generating-campaigns.png
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -136,7 +136,7 @@ dashboards:
             icon:        bundles/orocampaign/img/Top-5-revenue-generating-campaigns.png
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -179,13 +179,13 @@ dashboards:
                     template:      OroSalesBundle:Dashboard:forecastOfOpportunitiesSimpleSubwidget.html.twig
             configuration:
                 owners:
-                    type: oro_type_widget_owners
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     show_on_widget: true
                     options:
                         label: oro.user.dashboard.owners
                         required: false
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -194,13 +194,13 @@ dashboards:
                         save_open_range: true
                         create_previous_period: true
                 compareToDate:
-                    type: oro_type_widget_date
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateType
                     options:
                         label: oro.sales.dashboard.forecast_of_opportunities.compareToDate
                         required: false
                         enable_date: false
                 queryFilter:
-                    type: oro_dashboard_query_filter
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetFilterType
                     options:
                         required: false
                         label: oro.dashboard.query_filter.label
@@ -209,7 +209,7 @@ dashboards:
                         collapsible: true
                         expand_filled: true
                 subWidgets:
-                    type: oro_type_widget_items
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetItemsType
                     options:
                         label: oro.sales.dashboard.forecast_of_opportunities.metrics
                         attr:
@@ -248,19 +248,19 @@ dashboards:
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
             configuration:
                 owners:
-                    type: oro_type_widget_owners
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     show_on_widget: true
                     options:
                         label: oro.user.dashboard.owners
                         required: false
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
                 usePreviousInterval:
-                    type: oro_type_widget_previous_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetPreviousDateRangeType
                     options:
                        label: oro.dashboard.previous_date_range.label
                        required: false
@@ -268,7 +268,7 @@ dashboards:
                         dateRangeField: dateRange
                         default_checked: true
                 queryFilter:
-                    type: oro_dashboard_query_filter
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetFilterType
                     options:
                         required: false
                         label: oro.dashboard.query_filter.label
@@ -277,7 +277,7 @@ dashboards:
                         collapsible: true
                         expand_filled: true
                 subWidgets:
-                    type: oro_type_widget_items
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     options:
                        label: oro.dashboard.widget.big_number.choose_metrics
                        attr:
@@ -306,19 +306,19 @@ dashboards:
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
             configuration:
                 owners:
-                    type: oro_type_widget_owners
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     show_on_widget: true
                     options:
                         label: oro.user.dashboard.owners
                         required: false
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
                 usePreviousInterval:
-                    type: oro_type_widget_previous_date_range
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     options:
                        label: oro.dashboard.previous_date_range.label
                        required: false
@@ -326,7 +326,7 @@ dashboards:
                         dateRangeField: dateRange
                         default_checked: true
                 queryFilter:
-                    type: oro_dashboard_query_filter
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetFilterType
                     options:
                         required: false
                         label: oro.dashboard.query_filter.label
@@ -335,7 +335,7 @@ dashboards:
                         collapsible: true
                         expand_filled: true
                 subWidgets:
-                    type: oro_type_widget_items
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     options:
                        label: oro.dashboard.widget.big_number.choose_metrics
                        attr:
@@ -351,7 +351,7 @@ dashboards:
             icon:        bundles/orochannel/img/average_lifetime_sales_chart.png
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                         label: oro.dashboard.date_range.label
                         value_types: true
@@ -366,7 +366,7 @@ dashboards:
             icon:       bundles/orosales/img/opportunity_by_status.png
             configuration:
                 owners:
-                    type: oro_type_widget_owners
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     show_on_widget: true
                     options:
                         label: oro.user.dashboard.owners
@@ -376,7 +376,7 @@ dashboards:
                             users:
                                 - current_user
                 excluded_statuses:
-                    type: oro_type_widget_opportunity_status_select
+                    type: Oro\Bundle\SalesBundle\Form\Type\WidgetOpportunityStatusSelectType
                     show_on_widget: true
                     options:
                         label:  oro.sales.dashboard.opportunities_list.excluded_statuses.label
@@ -388,7 +388,7 @@ dashboards:
                             - won
                             - lost
                 sortBy:
-                    type: oro_type_widget_sort_by
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetSortByType
                     show_on_widget: true
                     options:
                         required: false
@@ -403,7 +403,7 @@ dashboards:
             icon:       bundles/orosales/img/opportunities_by_lead_source.png
             configuration:
                 owners:
-                    type: oro_type_widget_owners
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     show_on_widget: true
                     options:
                         label: oro.user.dashboard.owners
@@ -413,7 +413,7 @@ dashboards:
                             users:
                                 - current_user
                 excluded_statuses:
-                    type: oro_type_widget_lead_status_select
+                    type: Oro\Bundle\SalesBundle\Form\Type\LeadStatusSelectType
                     show_on_widget: true
                     options:
                         label:  oro.sales.dashboard.leads_list.excluded_statuses.label
@@ -425,7 +425,7 @@ dashboards:
                             - canceled
                             - qualified
                 sortBy:
-                    type: oro_type_widget_sort_by
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     show_on_widget: true
                     options:
                         required: false
