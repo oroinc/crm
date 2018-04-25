@@ -17,7 +17,7 @@ dashboards:
             icon:        bundles/oroaccount/img/recent_accessed_accounts.png
             configuration:
                 owners:
-                    type: oro_type_widget_owners
+                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
                     show_on_widget: true
                     options:
                         label: oro.user.dashboard.owners

@@ -9,7 +9,7 @@ dashboards:
             applicable:  "@oro_magento.provider.enitity_state->isEntityCartEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -23,7 +23,7 @@ dashboards:
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -37,7 +37,7 @@ dashboards:
             applicable:  "@oro_magento.provider.enitity_state->isEntityCustomerEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -113,13 +113,13 @@ dashboards:
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
                 usePreviousInterval:
-                    type: oro_type_widget_previous_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetPreviousDateRangeType
                     options:
                        label: oro.dashboard.previous_date_range.label
                        required: false
@@ -127,7 +127,7 @@ dashboards:
                         dateRangeField: dateRange
                         default_checked: true
                 subWidgets:
-                    type: oro_type_widget_items
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetItemsType
                     options:
                         label: oro.dashboard.widget.big_number.metrics
                         attr:
@@ -144,7 +144,7 @@ dashboards:
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -158,7 +158,7 @@ dashboards:
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -172,7 +172,7 @@ dashboards:
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
