@@ -94,7 +94,7 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'customerAssociation',
-                'oro_sales_customer',
+                CustomerType::class,
                 [
                     'required' => true,
                     'label'    => 'oro.sales.opportunity.customer.label',
@@ -154,7 +154,7 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'status',
-                'oro_sales_opportunity_status_select',
+                OpportunityStatusSelectType::class,
                 [
                     'required'    => true,
                     'label'       => 'oro.sales.opportunity.status.label',

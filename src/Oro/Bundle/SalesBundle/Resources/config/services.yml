@@ -674,10 +674,12 @@ services:
         parent: oro_dashboard.widget_config_value.widget_enum_select.converter
         arguments: ['opportunity_status']
         tags:
-            - { name: oro_dashboard.value.converter, alias: 'oro_type_widget_opportunity_status_select' }
+            #@TODO Change to FQCN in scope BAP-16688
+            - { name: oro_dashboard.value.converter, form_type: 'oro_type_widget_opportunity_status_select' }
 
     oro_sales.widget_config_value.widget_lead_status.converter:
         parent: oro_dashboard.widget_config_value.widget_enum_select.converter
         arguments: ['lead_status']
         tags:
-            - { name: oro_dashboard.value.converter, alias: 'oro_type_widget_lead_status_select' }
+            #@TODO Change to FQCN in scope BAP-16688
+            - { name: oro_dashboard.value.converter, form_type: 'oro_type_widget_lead_status_select' }

@@ -5,6 +5,7 @@ namespace Oro\Bundle\SalesBundle\Form\Handler;
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Form\Type\LeadEmailType;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -54,7 +55,7 @@ class LeadEmailHandler
      */
     public function process(LeadEmail $entity)
     {
-        $form = $this->form->create('oro_sales_lead_email', $entity);
+        $form = $this->form->create(LeadEmailType::class, $entity);
 
         $request = $this->requestStack->getCurrentRequest();
         $submitData = [
