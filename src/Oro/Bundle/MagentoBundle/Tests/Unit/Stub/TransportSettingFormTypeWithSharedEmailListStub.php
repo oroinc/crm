@@ -18,7 +18,7 @@ class TransportSettingFormTypeWithSharedEmailListStub extends AbstractType
     {
         $builder->add(
             AbstractTransportSettingFormType::SHARED_GUEST_EMAIL_FIELD_NAME,
-            SharedGuestEmailListType::NAME
+            SharedGuestEmailListType::class
         );
     }
 

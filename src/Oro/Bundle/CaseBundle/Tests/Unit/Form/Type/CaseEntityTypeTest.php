@@ -60,11 +60,6 @@ class CaseEntityTypeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testGetName()
-    {
-        $this->assertEquals('oro_case_entity', $this->formType->getName());
-    }
-
     public function testConfigureOptions()
     {
         $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');

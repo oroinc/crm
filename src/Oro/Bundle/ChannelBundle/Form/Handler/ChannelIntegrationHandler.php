@@ -92,7 +92,12 @@ class ChannelIntegrationHandler
         if ($isUpdateOnly) {
             $config = $form->getConfig();
             $form   = $config->getFormFactory()
-                ->createNamed($form->getName(), $config->getType()->getName(), $form->getData(), $this->options);
+                ->createNamed(
+                    $form->getName(),
+                    get_class($config->getType()->getInnerType()),
+                    $form->getData(),
+                    $this->options
+                );
         }
 
         $view = $form->createView();

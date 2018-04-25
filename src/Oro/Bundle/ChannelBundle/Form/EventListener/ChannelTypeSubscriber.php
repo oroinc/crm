@@ -3,7 +3,9 @@
 namespace Oro\Bundle\ChannelBundle\Form\EventListener;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
@@ -71,7 +73,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             $form->remove('channelType');
             $form->add(
                 'channelType',
-                'oro_select2_choice',
+                Select2ChoiceType::class,
                 [
                     'choices'  => $this->settingsProvider->getNonSystemChannelTypeChoiceList(),
                     'required' => true,
@@ -158,7 +160,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 if (false !== $integrationType) {
                     $form->add(
                         'dataSource',
-                        'oro_channel_datasource_form',
+                        ChannelDatasourceType::class,
                         [
                             'label'          => 'oro.channel.data_source.label',
                             'type'           => $integrationType,

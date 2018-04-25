@@ -85,9 +85,4 @@ class CustomerApiTypeTest extends \PHPUnit_Framework_TestCase
 
         $this->type->configureOptions($resolver);
     }
-
-    public function testGetName()
-    {
-        $this->assertEquals('api_customer_type', $this->type->getName());
-    }
 }

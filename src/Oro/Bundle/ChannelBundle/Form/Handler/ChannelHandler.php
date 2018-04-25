@@ -122,7 +122,7 @@ class ChannelHandler
             /** @var FormInterface $form */
             $form = $config->getFormFactory()->createNamed(
                 $form->getName(),
-                $config->getType()->getName(),
+                get_class($config->getType()->getInnerType()),
                 $form->getData()
             );
         }
