@@ -62,7 +62,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
     public function testNotAbstractChannelAwareType()
     {
         $attribute = new Attribute();
-        $attributeOptions = ['form_type' => 'oro_channel_entities'];
+        $attributeOptions = ['form_type' => ChannelEntityType::class];
         $options = ['option1', 'option2'];
 
         $event = new TransitionsAttributeEvent($attribute, $attributeOptions, $options);

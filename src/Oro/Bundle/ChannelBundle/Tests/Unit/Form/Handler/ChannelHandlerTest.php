@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
+use Oro\Component\Testing\Unit\Form\Type\Stub\FormStub;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
@@ -134,8 +135,8 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($formFactory));
             $formConfig->expects($this->once())->method('getType')
                 ->will($this->returnValue($formType));
-            $formType->expects($this->once())->method('getName')
-                ->will($this->returnValue('type' . self::TEST_NAME));
+            $formType->expects($this->any())->method('getInnerType')
+                ->will($this->returnValue(new FormStub('type' . self::TEST_NAME)));
             $this->form->expects($this->once())->method('getName')
                 ->will($this->returnValue('form' . self::TEST_NAME));
             $this->form->expects($this->once())->method('getConfig')

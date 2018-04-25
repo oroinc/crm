@@ -11,6 +11,7 @@ use Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
+use Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CreditMemoSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator;
@@ -752,7 +753,7 @@ class SoapTransport extends BaseSOAPTransport implements
      */
     public function getSettingsFormType()
     {
-        return 'oro_magento_soap_transport_setting_form_type';
+        return SoapTransportSettingFormType::class;
     }
 
     /**

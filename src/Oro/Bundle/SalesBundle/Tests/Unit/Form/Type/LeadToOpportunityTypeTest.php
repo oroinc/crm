@@ -2,8 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityExtendBundle\Cache\EnumTranslationCache;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
@@ -11,9 +13,14 @@ use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
+use Oro\Bundle\FormBundle\Form\Type\OroDateType;
+use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
+use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
+use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType;
 use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
+use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormView;
@@ -112,6 +119,29 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $this->type->buildForm($builder, []);
+    }
+
+    public function contactFieldTypeDataProvider()
+    {
+        return [
+          [
+              'fields' => [
+                  'closeReason'  => TranslatableEntityType::class,
+                  'contact' => ContactSelectType::class,
+                  'customer' => 'oro_sales_b2bcustomer_with_channel_create_or_select',
+                  'name'  => 'text',
+                  'dataChannel'  => ChannelSelectType::class,
+                  'closeDate'  => OroDateType::class,
+                  'probability'  => OroPercentType::class,
+                  'budgetAmount' => OroMoneyType::class,
+                  'closeRevenue'  => OroMoneyType::class,
+                  'customerNeed'  => OroResizeableRichTextType::class,
+                  'proposedSolution'  => OroResizeableRichTextType::class,
+                  'notes'  => OroResizeableRichTextType::class,
+                  'status'  => 'oro_sales_opportunity_status_select',
+              ]
+          ]
+        ];
     }
 
     /**

@@ -15,7 +15,7 @@ class IntegrationFormTypeStub extends AbstractType
      *
      * @return string The name of this type
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'oro_integration_channel_form';
     }

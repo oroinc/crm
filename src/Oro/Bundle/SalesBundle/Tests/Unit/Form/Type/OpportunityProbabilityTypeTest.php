@@ -25,13 +25,6 @@ class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('validation_groups', $options);
     }
 
-    public function testGetName()
-    {
-        $type = $this->getFormType([]);
-
-        $this->assertEquals('oro_sales_opportunity_probability', $type->getName());
-    }
-
     /**
      * @dataProvider enumOptionsDataProvider
      *

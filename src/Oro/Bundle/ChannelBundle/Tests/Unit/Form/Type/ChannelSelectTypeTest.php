@@ -72,14 +72,6 @@ class ChannelSelectTypeTest extends OrmTestCase
         unset($this->type, $this->factory);
     }
 
-    public function testGetName()
-    {
-        $this->assertEquals(
-            'oro_channel_select_type',
-            $this->type->getName()
-        );
-    }
-
     public function testGetParent()
     {
         $this->assertEquals(

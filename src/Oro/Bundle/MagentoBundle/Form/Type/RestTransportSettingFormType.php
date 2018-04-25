@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -18,19 +20,19 @@ class RestTransportSettingFormType extends AbstractTransportSettingFormType
 
         $builder->add(
             'apiUrl',
-            'text',
+            TextType::class,
             ['label' => 'oro.magento.magentotransport.rest.api_url.label', 'required' => true]
         );
 
         $builder->add(
             'apiUser',
-            'text',
+            TextType::class,
             ['label' => 'oro.magento.magentotransport.rest.api_user.label', 'required' => true]
         );
 
         $builder->add(
             'apiKey',
-            'password',
+            PasswordType::class,
             [
                 'label'       => 'oro.magento.magentotransport.rest.api_key.label',
                 'required'    => true,
