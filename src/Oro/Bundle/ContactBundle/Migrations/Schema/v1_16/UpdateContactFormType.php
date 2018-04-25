@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bridge\MarketingCRM\Migrations\Schema\v3_0;
+namespace Oro\Bundle\ContactBundle\Migrations\Schema\v1_16;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\ContactBundle\Entity\Contact;
