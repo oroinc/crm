@@ -38,8 +38,8 @@ class CustomerAddressApiType extends AbstractType
             'country',
             TranslatableEntityType::class,
             [
-                'class'    => 'Oro\Bundle\AddressBundle\Entity\Country',
-                'property' => 'name',
+                'class' => 'Oro\Bundle\AddressBundle\Entity\Country',
+                'choice_label' => 'name',
                 'required' => true,
             ]
         );
@@ -49,8 +49,8 @@ class CustomerAddressApiType extends AbstractType
             'region',
             TranslatableEntityType::class,
             [
-                'class'    => 'Oro\Bundle\AddressBundle\Entity\Region',
-                'property' => 'name',
+                'class' => 'Oro\Bundle\AddressBundle\Entity\Region',
+                'choice_label' => 'name',
                 'required' => true,
             ]
         );
@@ -61,8 +61,8 @@ class CustomerAddressApiType extends AbstractType
             'types',
             TranslatableEntityType::class,
             [
-                'class'    => 'OroAddressBundle:AddressType',
-                'property' => 'label',
+                'class' => 'OroAddressBundle:AddressType',
+                'choice_label' => 'label',
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true

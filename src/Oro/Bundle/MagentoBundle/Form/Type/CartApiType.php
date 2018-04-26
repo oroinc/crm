@@ -41,8 +41,8 @@ class CartApiType extends AbstractType
             'store',
             TranslatableEntityType::class,
             [
-                'class'    => 'OroMagentoBundle:Store',
-                'property' => 'name'
+                'class' => 'OroMagentoBundle:Store',
+                'choice_label' => 'name'
             ]
         );
         $builder->add('itemsQty', NumberType::class, ['required' => true]);
@@ -61,8 +61,8 @@ class CartApiType extends AbstractType
             'status',
             TranslatableEntityType::class,
             [
-                'class'    => 'OroMagentoBundle:CartStatus',
-                'property' => 'name'
+                'class' => 'OroMagentoBundle:CartStatus',
+                'choice_label' => 'name'
             ]
         );
         $builder->add('notes', TextType::class, ['required' => false]);
@@ -71,8 +71,8 @@ class CartApiType extends AbstractType
             'owner',
             TranslatableEntityType::class,
             [
-                'class'    => 'Oro\Bundle\UserBundle\Entity\User',
-                'property' => 'username',
+                'class' => 'Oro\Bundle\UserBundle\Entity\User',
+                'choice_label' => 'username',
                 'required' => false
             ]
         );
@@ -80,8 +80,8 @@ class CartApiType extends AbstractType
             'dataChannel',
             TranslatableEntityType::class,
             [
-                'class'    => 'OroChannelBundle:Channel',
-                'property' => 'name',
+                'class' => 'OroChannelBundle:Channel',
+                'choice_label' => 'name',
                 'required' => false
             ]
         );
