@@ -58,7 +58,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *              "auditable"=true
  *          },
  *          "form"={
- *              "form_type"="oro_sales_b2bcustomer_select"
+ *              "form_type"="Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType"
  *          },
  *          "grid"={
  *              "default"="oro-sales-b2bcustomers-grid",

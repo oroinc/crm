@@ -50,9 +50,11 @@ dashboards:
                         label:  oro.sales.dashboard.opportunities_by_lead_source_chart.by_amount.label
                         tooltip: oro.sales.dashboard.opportunities_by_lead_source_chart.by_amount.tooltip
                         required: true
+                        # TODO: remove 'choices_as_values' option below in scope of BAP-15236
+                        choices_as_values: true
                         choices:
-                            0: oro.sales.dashboard.opportunities_by_lead_source_chart.by_amount.count
-                            1: oro.sales.dashboard.opportunities_by_lead_source_chart.by_amount.amount
+                            oro.sales.dashboard.opportunities_by_lead_source_chart.by_amount.count: 0
+                            oro.sales.dashboard.opportunities_by_lead_source_chart.by_amount.amount: 1
         opportunities_by_state:
             label:       oro.sales.dashboard.opportunities_by_state.title
             route:       oro_sales_dashboard_opportunity_by_state_chart
@@ -86,9 +88,11 @@ dashboards:
                         label: oro.sales.dashboard.opportunities_by_state.quantity_as_data.label
                         tooltip: oro.sales.dashboard.opportunities_by_state.quantity_as_data.tooltip
                         required: true
+                        # TODO: remove 'choices_as_values' option below in scope of BAP-15236
+                        choices_as_values: true
                         choices:
-                            0: oro.sales.dashboard.opportunities_by_state.quantity_as_data.amount
-                            1: oro.sales.dashboard.opportunities_by_state.quantity_as_data.count
+                            oro.sales.dashboard.opportunities_by_state.quantity_as_data.amount: 0
+                            oro.sales.dashboard.opportunities_by_state.quantity_as_data.count: 1
         my_sales_flow_b2b_chart:
             label:       oro.sales.dashboard.my_sales_flow_b2b_chart.title
             route:       oro_sales_dashboard_sales_flow_b2b_chart

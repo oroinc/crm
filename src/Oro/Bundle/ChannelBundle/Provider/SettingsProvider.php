@@ -180,7 +180,7 @@ class SettingsProvider
         );
 
         foreach (array_keys($settings) as $channelTypeName) {
-            $channelTypes[$channelTypeName] = $settings[$channelTypeName]['label'];
+            $channelTypes[$settings[$channelTypeName]['label']] = $channelTypeName;
         }
 
         return $channelTypes;
@@ -196,7 +196,7 @@ class SettingsProvider
     {
         $channelTypes = array_filter($this->getChannelTypeChoiceList(), function ($channelTypeName) {
             return !$this->isChannelSystem($channelTypeName);
-        }, ARRAY_FILTER_USE_KEY);
+        });
 
         return $channelTypes;
     }

@@ -222,8 +222,8 @@ workflows:
                                 required: true
                                 placeholder: false
                                 choices:
-                                    outsold: 'Outsold'
-                                    cancelled: 'Cancelled'
+                                    Outsold: outsold
+                                    Cancelled: cancelled
                                 constraints:
                                     - NotBlank: ~
                         close_date:

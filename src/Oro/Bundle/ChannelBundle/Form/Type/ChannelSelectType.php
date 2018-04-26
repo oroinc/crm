@@ -63,7 +63,7 @@ class ChannelSelectType extends AbstractType
             [
                 'label'                => 'oro.channel.entity_label',
                 'class'                => 'OroChannelBundle:Channel',
-                'property'             => 'name',
+                'choice_label'         => 'name',
                 'random_id'            => true,
                 'choices'              => [],
                 'configs'              => [

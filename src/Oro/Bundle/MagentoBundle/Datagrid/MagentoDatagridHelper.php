@@ -77,7 +77,7 @@ class MagentoDatagridHelper
                 // append channel name
                 $groupName .= sprintf(' (%s)', $magentoChannels[$group['channelId']]);
             }
-            $choices[$group['id']] = $groupName;
+            $choices[$groupName] = $group['id'];
         }
 
         return $choices;

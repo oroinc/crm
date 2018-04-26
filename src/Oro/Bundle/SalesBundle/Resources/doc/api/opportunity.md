@@ -448,23 +448,6 @@ Example:
 ```
 {@/request}
 
-# Extend\Entity\EV_Opportunity_Status
-
-## ACTIONS  
-
-### get
-
-Retrieve a specific opportunity status record.
-
-{@inheritdoc}
-
-### get_list
-
-Retrieve a collection of opportunity status records.
-
-{@inheritdoc}
-
-
 # Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
 
 ## ACTIONS

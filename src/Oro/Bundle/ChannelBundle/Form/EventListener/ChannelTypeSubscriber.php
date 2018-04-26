@@ -75,6 +75,8 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 'channelType',
                 Select2ChoiceType::class,
                 [
+                    // TODO: remove 'choices_as_values' option below in scope of BAP-15236
+                    'choices_as_values' => true,
                     'choices'  => $this->settingsProvider->getNonSystemChannelTypeChoiceList(),
                     'required' => true,
                     'label'    => 'oro.channel.channel_type.label',
@@ -171,17 +173,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 }
             }
         };
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFirstChannelType()
-    {
-        $channelTypes = $this->settingsProvider->getChannelTypeChoiceList();
-        reset($channelTypes);
-
-        return (string) key($channelTypes);
     }
 
     /**

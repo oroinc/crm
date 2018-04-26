@@ -107,7 +107,7 @@ class OrderGridListenerTest extends \PHPUnit_Framework_TestCase
                                 'options'   => [
                                     'field_options' => [
                                         'class'                => 'OroAddressBundle:Country',
-                                        'property'             => 'name',
+                                        'choice_label'         => 'name',
                                         'query_builder'        => null,
                                         'translatable_options' => false
                                     ]
@@ -219,7 +219,7 @@ class OrderGridListenerTest extends \PHPUnit_Framework_TestCase
                                 'options'   => [
                                     'field_options' => [
                                         'class'                => 'OroAddressBundle:Country',
-                                        'property'             => 'name',
+                                        'choice_label'         => 'name',
                                         'query_builder'        => null,
                                         'translatable_options' => false
                                     ]

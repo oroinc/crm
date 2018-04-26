@@ -43,7 +43,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *              "enable"=true
  *          },
  *          "form"={
- *              "form_type"="oro_account_select",
+ *              "form_type"="Oro\Bundle\AccountBundle\Form\Type\AccountSelectType",
  *              "grid_name"="accounts-select-grid",
  *          },
  *          "dataaudit"={

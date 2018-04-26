@@ -3,6 +3,7 @@
 namespace Oro\Bridge\MarketingCRM\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
@@ -63,7 +64,7 @@ class OroChannelBundleAssociation implements
                     ],
                     'form' => [
                         'is_enabled' => true,
-                        'form_type' => 'oro_channel_select_type',
+                        'form_type' => ChannelSelectType::class,
                         'form_options' => [
                             'tooltip' => 'oro.channel.tracking_website_channel_select.tooltip'
                         ]
