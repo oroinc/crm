@@ -99,7 +99,7 @@ class OpportunityProbabilitiesConfigRaw
 
     public function setDefault()
     {
-        $this->default->check();
+        $this->default->click();
     }
 
     public function remove()
