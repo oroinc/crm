@@ -39,6 +39,9 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
         $this->settingsProvider->expects($this->any())->method('getSettings')
             ->will($this->returnValue([]));
+        $this->settingsProvider->expects($this->any())
+            ->method('getChannelTypeChoiceList')
+            ->willReturn([]);
 
         $this->type = new ChannelType($this->settingsProvider, $this->channelTypeSubscriber);
     }

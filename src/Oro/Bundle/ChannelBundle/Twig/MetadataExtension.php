@@ -52,7 +52,7 @@ class MetadataExtension extends \Twig_Extension
      */
     public function getChannelTypeMetadata()
     {
-        return $this->getMetadataProvider()->getChannelTypeMetadata();
+        return array_flip($this->getMetadataProvider()->getChannelTypeMetadata());
     }
 
     /**

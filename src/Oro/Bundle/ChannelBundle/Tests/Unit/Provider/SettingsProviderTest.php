@@ -275,7 +275,7 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                 ],
-                '$expectedResults' => ['custom' => 'Custom', 'magento' => 'Magento type']
+                '$expectedResults' => ['Custom' => 'custom', 'Magento type' => 'magento']
             ]
         ];
     }

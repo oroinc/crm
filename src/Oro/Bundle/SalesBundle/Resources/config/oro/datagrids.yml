@@ -223,6 +223,7 @@ datagrids:
                     label: oro.sales.opportunity.close_revenue_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                     enabled: false
@@ -247,6 +248,7 @@ datagrids:
                     label: oro.sales.opportunity.budget_amount_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                 probability:
@@ -824,6 +826,7 @@ datagrids:
                     label: oro.sales.opportunity.close_revenue_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                 budgetAmount:
@@ -835,6 +838,7 @@ datagrids:
                     label: oro.sales.opportunity.budget_amount_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                 opportunityProbability:
@@ -1615,6 +1619,7 @@ datagrids:
                     label: oro.sales.opportunity.budget_amount_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                 probability:
@@ -2143,6 +2148,7 @@ datagrids:
                     label: oro.sales.opportunity.budget_amount_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                 probability:
