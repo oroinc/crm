@@ -29,10 +29,12 @@ class LeadStatusSelectType extends AbstractType
 
         $resolver->setDefaults(
             [
-                'choices'  => $this->enumValueProvider->getEnumChoicesByCode(Lead::INTERNAL_STATUS_CODE),
+                // TODO: remove 'choices_as_values' option below in scope of BAP-15236
+                'choices_as_values' => true,
+                'choices' => $this->enumValueProvider->getEnumChoicesByCode(Lead::INTERNAL_STATUS_CODE),
                 'multiple' => true,
-                'configs'  => [
-                    'width'      => '400px',
+                'configs' => [
+                    'width' => '400px',
                     'allowClear' => true,
                 ]
             ]

@@ -109,11 +109,11 @@ class ContactType extends AbstractType
             'source',
             TranslatableEntityType::class,
             array(
-                'label'       => 'oro.contact.source.label',
-                'class'       => 'OroContactBundle:Source',
-                'property'    => 'label',
-                'required'    => false,
-                'placeholder' => false,
+                'label'        => 'oro.contact.source.label',
+                'class'        => 'OroContactBundle:Source',
+                'choice_label' => 'label',
+                'required'     => false,
+                'placeholder'  => false,
             )
         );
 
@@ -136,11 +136,11 @@ class ContactType extends AbstractType
             'method',
             TranslatableEntityType::class,
             array(
-                'label'       => 'oro.contact.method.label',
-                'class'       => 'OroContactBundle:Method',
-                'property'    => 'label',
-                'required'    => false,
-                'placeholder' => 'oro.contact.form.choose_contact_method'
+                'label'        => 'oro.contact.method.label',
+                'class'        => 'OroContactBundle:Method',
+                'choice_label' => 'label',
+                'required'     => false,
+                'placeholder'  => 'oro.contact.form.choose_contact_method'
             )
         );
 
