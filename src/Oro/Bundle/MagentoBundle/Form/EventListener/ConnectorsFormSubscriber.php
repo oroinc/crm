@@ -60,7 +60,6 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
             $connectors = $form->getParent()->get('connectors');
             if ($connectors) {
                 $config = $connectors->getConfig()->getOptions();
-                unset($config['choice_list']);
                 unset($config['choices']);
             } else {
                 $config = [];
