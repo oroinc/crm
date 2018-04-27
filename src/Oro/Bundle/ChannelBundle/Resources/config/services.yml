@@ -208,8 +208,14 @@ services:
             - "@oro_channel.provider.settings_provider"
             - "@oro_channel.state_cache"
             - "@doctrine"
-            - "@oro_security.token_accessor"
+            - "@oro_channel.state_provider.token_accessor"
             - "@oro_security.acl_helper"
+
+    oro_channel.state_provider.token_accessor:
+        class: Oro\Bundle\SecurityBundle\Authentication\TokenAccessor
+        public: false
+        arguments:
+            - '@security.token_storage'
 
     oro_channel.provider.utils.entity_state_provider:
         class: %oro_channel.provider.utils.entity_state_provider.class%

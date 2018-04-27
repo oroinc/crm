@@ -10,6 +10,10 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+/**
+ * Provider that allows to check whether entity is enabled in current system state
+ * and to check are there any channel with all listed entities enabled
+ */
 class StateProvider
 {
     const CACHE_ID = 'oro_channel_state_data';
@@ -23,10 +27,18 @@ class StateProvider
     /** @var RegistryInterface */
     protected $registry;
 
-    /** @var null|array */
+    /**
+     * @deprecated since 2.3. Will be removed in 3.0.
+     *
+     * @var null|array
+     */
     protected $enabledEntities;
 
-    /** @var AclHelper */
+    /**
+     * @deprecated since 2.3. Will be removed in 3.0.
+     *
+     * @var AclHelper
+     */
     protected $aclHelper;
 
     /** @var TokenAccessorInterface */
@@ -63,8 +75,11 @@ class StateProvider
     public function isEntityEnabled($entityFQCN)
     {
         $this->ensureLocalCacheWarmed();
+        $enabledEntities = $this->enabledEntities;
 
-        return array_key_exists($entityFQCN, $this->enabledEntities) && $this->enabledEntities[$entityFQCN] === true;
+        return
+            array_key_exists($entityFQCN, $enabledEntities)
+            && $enabledEntities[$entityFQCN] === true;
     }
 
     /**
@@ -91,7 +106,17 @@ class StateProvider
             $qb->setParameter('count', count($entities));
         }
 
-        return (bool)$this->aclHelper->apply($qb)->getArrayResult();
+        $organizationId = $this->tokenAccessor->getOrganizationId();
+        if ($organizationId) {
+            // at this query we should not use ACL helper and should just add limitation by organization.
+            // If here ACL helper will be used, there is a case, when a user have no permission to view Channel
+            // entity. In this case, empty result will be returned. But at this query we select entities that user
+            // might have access (entities that used at the channel).
+            $qb->andWhere('c.owner = :organizationId')
+                ->setParameter('organizationId', $organizationId);
+        }
+
+        return (bool)$qb->getQuery()->getArrayResult();
     }
 
     /**
@@ -117,37 +142,49 @@ class StateProvider
      */
     protected function ensureLocalCacheWarmed()
     {
-        if ($this->enabledEntities === null) {
-            if (false !== ($data = $this->tryCacheLookUp())) {
-                $this->enabledEntities = $data;
+        $data = $this->tryCacheLookUp();
+        if (false !== $data) {
+            $this->enabledEntities = $data;
 
-                return;
-            }
-
-            $settings = $this->settingsProvider->getSettings(SettingsProvider::DATA_PATH);
-
-            $qb = $this->getManager()->createQueryBuilder();
-            $qb->distinct(true);
-            $qb->select('e.name')
-                ->from('OroChannelBundle:Channel', 'c')
-                ->innerJoin('c.entities', 'e');
-
-            $assignedEntityNames = $this->aclHelper->apply($qb)->getArrayResult();
-            $assignedEntityNames = array_map(
-                function ($result) {
-                    return $result['name'];
-                },
-                $assignedEntityNames
-            );
-
-            $this->enabledEntities = [];
-            foreach (array_keys($settings) as $entityName) {
-                if (in_array($entityName, $assignedEntityNames, true)) {
-                    $this->enabledEntities[$entityName] = true;
-                }
-            }
-            $this->persistToCache();
+            return;
         }
+
+        $qb = $this->getManager()->createQueryBuilder();
+        $qb->distinct(true);
+        $qb->select('e.name')
+            ->from('OroChannelBundle:Channel', 'c')
+            ->innerJoin('c.entities', 'e');
+
+        $organizationId = $this->tokenAccessor->getOrganizationId();
+        if ($organizationId) {
+            // at this query we should not use ACL helper and should just add limitation by organization.
+            // If here ACL helper will be used, there is a case, when a user have no permission to view Channel
+            // entity. In this case, empty result will be returned. But at this query we select entities that user
+            // might have access (entities that used at the channel).
+            $qb->andWhere('c.owner = :organizationId')
+                ->setParameter('organizationId', $organizationId);
+        }
+
+        $assignedEntityNames = $qb->getQuery()->getArrayResult();
+        $assignedEntityNames = array_map(
+            function ($result) {
+                return $result['name'];
+            },
+            $assignedEntityNames
+        );
+
+        $enabledEntities = [];
+
+        $settings = $this->settingsProvider->getSettings(SettingsProvider::DATA_PATH);
+        foreach (array_keys($settings) as $entityName) {
+            if (in_array($entityName, $assignedEntityNames, true)) {
+                $enabledEntities[$entityName] = true;
+            }
+        }
+        $this->enabledEntities = $enabledEntities;
+        $this->persistToCache();
+
+        return;
     }
 
     /**
@@ -164,6 +201,8 @@ class StateProvider
 
     /**
      * Persist data to cache
+     *
+     * @param array $enabledEntities
      */
     protected function persistToCache()
     {
