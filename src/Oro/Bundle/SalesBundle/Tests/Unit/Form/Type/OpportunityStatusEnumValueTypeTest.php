@@ -33,6 +33,12 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
 
         /** @var $form FormInterface|\PHPUnit_Framework_MockObject_MockObject */
         $form = $this->createMock('Symfony\Component\Form\FormInterface');
+        $attr = [];
+
+        if ($shouldBeDisabled) {
+            $attr['readonly'] = true;
+        }
+
         $form->expects($this->once())
             ->method('add')
             ->with(
@@ -40,7 +46,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
                 OroPercentType::class,
                 [
                     'disabled' => $shouldBeDisabled,
-                    'attr' => ['readonly' => $shouldBeDisabled],
+                    'attr' => $attr,
                     'constraints' => new Range(['min' => 0, 'max' => 100]),
                 ]
             );
