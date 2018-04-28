@@ -8,6 +8,7 @@ use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -62,7 +63,6 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
             $connectors = $form->getParent()->get('connectors');
             if ($connectors) {
                 $config = $connectors->getConfig()->getOptions();
-                unset($config['choice_list']);
                 unset($config['choices']);
             } else {
                 $config = [];
@@ -82,7 +82,7 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
             ));
 
             $form->getParent()
-                ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
+                ->add('connectors', ChoiceType::class, array_merge($config, ['choices' => $allowedTypesChoices]));
         }
     }
 

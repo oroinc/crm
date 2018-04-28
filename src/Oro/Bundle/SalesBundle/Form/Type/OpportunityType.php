@@ -68,12 +68,12 @@ class OpportunityType extends AbstractType
                 'closeReason',
                 TranslatableEntityType::class,
                 [
-                    'label'       => 'oro.sales.opportunity.close_reason.label',
-                    'class'       => 'OroSalesBundle:OpportunityCloseReason',
-                    'property'    => 'label',
-                    'required'    => false,
-                    'disabled'    => false,
-                    'placeholder' => 'oro.sales.form.choose_close_rsn'
+                    'label'        => 'oro.sales.opportunity.close_reason.label',
+                    'class'        => 'OroSalesBundle:OpportunityCloseReason',
+                    'choice_label' => 'label',
+                    'required'     => false,
+                    'disabled'     => false,
+                    'placeholder'  => 'oro.sales.form.choose_close_rsn'
                 ]
             )
             ->add(
@@ -94,7 +94,7 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'customerAssociation',
-                'oro_sales_customer',
+                CustomerType::class,
                 [
                     'required' => true,
                     'label'    => 'oro.sales.opportunity.customer.label',
@@ -154,7 +154,7 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'status',
-                'oro_sales_opportunity_status_select',
+                OpportunityStatusSelectType::class,
                 [
                     'required'    => true,
                     'label'       => 'oro.sales.opportunity.status.label',

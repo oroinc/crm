@@ -95,9 +95,4 @@ class CartApiTypeTest extends \PHPUnit_Framework_TestCase
 
         $this->type->configureOptions($resolver);
     }
-
-    public function testGetName()
-    {
-        $this->assertEquals('cart_api_type', $this->type->getName());
-    }
 }

@@ -119,7 +119,7 @@ abstract class AbstractTransportSettingFormType extends AbstractType
         );
 
         $builder->add(
-            $builder->create('websites', 'hidden')
+            $builder->create('websites', HiddenType::class)
                 ->addViewTransformer(new ArrayToJsonTransformer())
         );
 
@@ -139,7 +139,7 @@ abstract class AbstractTransportSettingFormType extends AbstractType
 
         $builder->add(
             $builder
-                ->create('isExtensionInstalled', 'hidden')
+                ->create('isExtensionInstalled', HiddenType::class)
                 ->addEventSubscriber(new ConnectorsFormSubscriber($this->registry))
         );
 

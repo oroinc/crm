@@ -37,11 +37,6 @@ class CustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
         $this->type->configureOptions($resolver);
     }
 
-    public function testGetName()
-    {
-        $this->assertEquals('oro_customer_select', $this->type->getName());
-    }
-
     public function testGetParent()
     {
         $this->assertEquals(OroJquerySelect2HiddenType::class, $this->type->getParent());

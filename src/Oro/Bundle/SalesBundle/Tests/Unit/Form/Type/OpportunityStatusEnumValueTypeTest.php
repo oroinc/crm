@@ -12,13 +12,6 @@ use Symfony\Component\Validator\Constraints\Range;
 
 class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetName()
-    {
-        $type = $this->getFormType();
-
-        $this->assertEquals('oro_sales_opportunity_status_enum_value', $type->getName());
-    }
-
     public function testBuildForm()
     {
         /** @var $builder FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -40,6 +33,12 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
 
         /** @var $form FormInterface|\PHPUnit_Framework_MockObject_MockObject */
         $form = $this->createMock('Symfony\Component\Form\FormInterface');
+        $attr = [];
+
+        if ($shouldBeDisabled) {
+            $attr['readonly'] = true;
+        }
+
         $form->expects($this->once())
             ->method('add')
             ->with(
@@ -47,7 +46,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
                 OroPercentType::class,
                 [
                     'disabled' => $shouldBeDisabled,
-                    'attr' => ['readonly' => $shouldBeDisabled],
+                    'attr' => $attr,
                     'constraints' => new Range(['min' => 0, 'max' => 100]),
                 ]
             );

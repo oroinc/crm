@@ -14,6 +14,7 @@ use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -65,7 +66,7 @@ class OroAccountBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_13';
+        return 'v1_14';
     }
 
     /**
@@ -132,7 +133,7 @@ class OroAccountBundleInstaller implements
                     'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                     'merge'     => ['display' => true, 'autoescape' => false],
                     'dataaudit' => ['auditable' => true],
-                    'form'      => ['type' => 'oro_resizeable_rich_text'],
+                    'form'      => ['type' => OroResizeableRichTextType::class],
                     'view'      => ['type' => 'html'],
                 ]
             ]

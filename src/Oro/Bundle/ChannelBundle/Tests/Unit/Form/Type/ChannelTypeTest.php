@@ -39,6 +39,9 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
         $this->settingsProvider->expects($this->any())->method('getSettings')
             ->will($this->returnValue([]));
+        $this->settingsProvider->expects($this->any())
+            ->method('getChannelTypeChoiceList')
+            ->willReturn([]);
 
         $this->type = new ChannelType($this->settingsProvider, $this->channelTypeSubscriber);
     }
@@ -72,11 +75,6 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
             ],
             $fields
         );
-    }
-
-    public function testGetName()
-    {
-        $this->assertEquals('oro_channel_form', $this->type->getName());
     }
 
     public function testConfigureOptions()

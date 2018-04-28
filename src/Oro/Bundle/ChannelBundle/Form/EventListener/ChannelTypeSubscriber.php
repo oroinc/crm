@@ -3,7 +3,9 @@
 namespace Oro\Bundle\ChannelBundle\Form\EventListener;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
@@ -71,8 +73,10 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             $form->remove('channelType');
             $form->add(
                 'channelType',
-                'oro_select2_choice',
+                Select2ChoiceType::class,
                 [
+                    // TODO: remove 'choices_as_values' option below in scope of BAP-15236
+                    'choices_as_values' => true,
                     'choices'  => $this->settingsProvider->getNonSystemChannelTypeChoiceList(),
                     'required' => true,
                     'label'    => 'oro.channel.channel_type.label',
@@ -158,7 +162,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 if (false !== $integrationType) {
                     $form->add(
                         'dataSource',
-                        'oro_channel_datasource_form',
+                        ChannelDatasourceType::class,
                         [
                             'label'          => 'oro.channel.data_source.label',
                             'type'           => $integrationType,
@@ -169,17 +173,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 }
             }
         };
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFirstChannelType()
-    {
-        $channelTypes = $this->settingsProvider->getChannelTypeChoiceList();
-        reset($channelTypes);
-
-        return (string) key($channelTypes);
     }
 
     /**
