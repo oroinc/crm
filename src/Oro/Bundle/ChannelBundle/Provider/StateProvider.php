@@ -5,9 +5,12 @@ namespace Oro\Bundle\ChannelBundle\Provider;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
+/**
+ * Provider that allows to check whether entity is enabled in current system state
+ * and to check are there any channel with all listed entities enabled
+ */
 class StateProvider
 {
     const CACHE_ID = 'oro_channel_state_data';
@@ -21,12 +24,6 @@ class StateProvider
     /** @var RegistryInterface */
     protected $registry;
 
-    /** @var null|array */
-    protected $enabledEntities;
-
-    /** @var AclHelper */
-    protected $aclHelper;
-
     /** @var TokenAccessorInterface */
     protected $tokenAccessor;
 
@@ -35,20 +32,17 @@ class StateProvider
      * @param Cache                  $cache
      * @param RegistryInterface      $registry
      * @param TokenAccessorInterface $tokenAccessor
-     * @param AclHelper              $aclHelper
      */
     public function __construct(
         SettingsProvider $settingsProvider,
         Cache $cache,
         RegistryInterface $registry,
-        TokenAccessorInterface $tokenAccessor,
-        AclHelper $aclHelper
+        TokenAccessorInterface $tokenAccessor
     ) {
         $this->settingsProvider = $settingsProvider;
         $this->cache = $cache;
         $this->registry = $registry;
         $this->tokenAccessor = $tokenAccessor;
-        $this->aclHelper = $aclHelper;
     }
 
     /**
@@ -60,9 +54,11 @@ class StateProvider
      */
     public function isEntityEnabled($entityFQCN)
     {
-        $this->ensureLocalCacheWarmed();
+        $enabledEntities = $this->getEnabledEntities();
 
-        return array_key_exists($entityFQCN, $this->enabledEntities) && $this->enabledEntities[$entityFQCN] === true;
+        return
+            array_key_exists($entityFQCN, $enabledEntities)
+            && $enabledEntities[$entityFQCN] === true;
     }
 
     /**
@@ -89,7 +85,17 @@ class StateProvider
             $qb->setParameter('count', count($entities));
         }
 
-        return (bool)$this->aclHelper->apply($qb)->getArrayResult();
+        $organizationId = $this->tokenAccessor->getOrganizationId();
+        if ($organizationId) {
+            // at this query we should not use ACL helper and should just add limitation by organization.
+            // If here ACL helper will be used, there is a case, when a user have no permission to view Channel
+            // entity. In this case, empty result will be returned. But at this query we select entities that user
+            // might have access (entities that used at the channel).
+            $qb->andWhere('c.owner = :organizationId')
+                ->setParameter('organizationId', $organizationId);
+        }
+
+        return (bool)$qb->getQuery()->getArrayResult();
     }
 
     /**
@@ -111,41 +117,51 @@ class StateProvider
     }
 
     /**
-     * Warm up local data cache in order to prevent multiple queries to DB
+     * Returns a list of enabled entities form the cache. In case if cache does not have any data - warms up
+     * data into the cache and return them.
      */
-    protected function ensureLocalCacheWarmed()
+    protected function getEnabledEntities()
     {
-        if ($this->enabledEntities === null) {
-            if (false !== ($data = $this->tryCacheLookUp())) {
-                $this->enabledEntities = $data;
-
-                return;
-            }
-
-            $settings = $this->settingsProvider->getSettings(SettingsProvider::DATA_PATH);
-
-            $qb = $this->getManager()->createQueryBuilder();
-            $qb->distinct(true);
-            $qb->select('e.name')
-                ->from('OroChannelBundle:Channel', 'c')
-                ->innerJoin('c.entities', 'e');
-
-            $assignedEntityNames = $this->aclHelper->apply($qb)->getArrayResult();
-            $assignedEntityNames = array_map(
-                function ($result) {
-                    return $result['name'];
-                },
-                $assignedEntityNames
-            );
-
-            $this->enabledEntities = [];
-            foreach (array_keys($settings) as $entityName) {
-                if (in_array($entityName, $assignedEntityNames, true)) {
-                    $this->enabledEntities[$entityName] = true;
-                }
-            }
-            $this->persistToCache();
+        $data = $this->tryCacheLookUp();
+        if (false !== $data) {
+            return $data;
         }
+
+        $qb = $this->getManager()->createQueryBuilder();
+        $qb->distinct(true);
+        $qb->select('e.name')
+            ->from('OroChannelBundle:Channel', 'c')
+            ->innerJoin('c.entities', 'e');
+
+        $organizationId = $this->tokenAccessor->getOrganizationId();
+        if ($organizationId) {
+            // at this query we should not use ACL helper and should just add limitation by organization.
+            // If here ACL helper will be used, there is a case, when a user have no permission to view Channel
+            // entity. In this case, empty result will be returned. But at this query we select entities that user
+            // might have access (entities that used at the channel).
+            $qb->andWhere('c.owner = :organizationId')
+                ->setParameter('organizationId', $organizationId);
+        }
+
+        $assignedEntityNames = $qb->getQuery()->getArrayResult();
+        $assignedEntityNames = array_map(
+            function ($result) {
+                return $result['name'];
+            },
+            $assignedEntityNames
+        );
+
+        $enabledEntities = [];
+
+        $settings = $this->settingsProvider->getSettings(SettingsProvider::DATA_PATH);
+        foreach (array_keys($settings) as $entityName) {
+            if (in_array($entityName, $assignedEntityNames, true)) {
+                $enabledEntities[$entityName] = true;
+            }
+        }
+        $this->persistToCache($enabledEntities);
+
+        return $enabledEntities;
     }
 
     /**
@@ -162,10 +178,12 @@ class StateProvider
 
     /**
      * Persist data to cache
+     *
+     * @param array $enabledEntities
      */
-    protected function persistToCache()
+    protected function persistToCache(array $enabledEntities)
     {
-        $this->cache->save($this->getCacheId(), $this->enabledEntities);
+        $this->cache->save($this->getCacheId(), $enabledEntities);
     }
 
     /**
