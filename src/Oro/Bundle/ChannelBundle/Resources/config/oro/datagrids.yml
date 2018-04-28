@@ -35,7 +35,6 @@ datagrids:
                     data_name: c.channelType
                     options:
                         field_options:
-                            choices_as_values: true
                             choices: '@oro_channel.provider.settings_provider->getChannelTypeChoiceList'
         properties:
             id: ~

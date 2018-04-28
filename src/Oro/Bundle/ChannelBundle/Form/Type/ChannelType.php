@@ -55,8 +55,6 @@ class ChannelType extends AbstractType
             'channelType',
             Select2ChoiceType::class,
             [
-                // TODO: remove 'choices_as_values' option below in scope of BAP-15236
-                'choices_as_values' => true,
                 'choices'  => $this->settingsProvider->getChannelTypeChoiceList(),
                 'required' => true,
                 'label'    => 'oro.channel.channel_type.label',
