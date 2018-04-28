@@ -642,7 +642,7 @@ Retrieve the picture configured for a specific contact record.
 
 #### get_relationship
 
-Retrive the ID of the picture configured for a specific contact record.
+Retrieve the ID of the picture configured for a specific contact record.
 
 #### update_relationship
 
