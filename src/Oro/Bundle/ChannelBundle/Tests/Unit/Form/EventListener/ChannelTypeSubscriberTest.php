@@ -4,10 +4,8 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\EventListener;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
-use Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
-use Oro\Bundle\FormBundle\Form\Type\Select2Type;
 use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -188,14 +186,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         return [
             new PreloadedExtension(
                 [
-                    $channelType->getName()                  => $channelType,
-                    'oro_channel_entities'                => new ChannelEntityType(),
-                    'oro_channel.form.type.entity_choice' => new ChannelEntityType($provider),
-                    'oro_channel_entity_choice_form'      => new ChannelEntityType($provider),
-                    'oro_select2_choice'                  => new Select2Type(
-                        'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
-                        'oro_select2_choice'
-                    )
+                    ChannelType::class => $channelType
                 ],
                 []
             )
