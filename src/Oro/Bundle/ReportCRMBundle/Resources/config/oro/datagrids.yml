@@ -146,7 +146,7 @@ datagrids:
             query:
                 select:
                     - COUNT(l.id) as leadsCount
-                    - DATE(l.createdAt) as createdDate
+                    - DATE(@oro_datagrid.helper.date->getConvertTimezoneExpression(l.createdAt)) as createdDate
                 from:
                     - { table: OroSalesBundle:Lead, alias: l }
                 groupBy: createdDate
