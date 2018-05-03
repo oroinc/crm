@@ -29,13 +29,15 @@ class LeadSourceSelectType extends AbstractType
     {
         $choices = array_merge(
             [
-                '' => 'oro.sales.lead.source.unclassified',
+                'oro.sales.lead.source.unclassified' => '',
             ],
             $this->enumValueProvider->getEnumChoicesByCode('lead_source')
         );
 
         $resolver->setDefaults(
             [
+                // TODO: remove 'choices_as_values' option below in scope of BAP-15236
+                'choices_as_values' => true,
                 'choices' => $choices,
                 'multiple' => true,
                 'configs'  => [

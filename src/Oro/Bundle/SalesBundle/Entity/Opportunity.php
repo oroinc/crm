@@ -49,7 +49,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *              "field_acl_supported" = "true"
  *          },
  *          "form"={
- *              "form_type"="oro_sales_opportunity_select",
+ *              "form_type"="Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType",
  *              "grid_name"="sales-opportunity-grid",
  *          },
  *          "dataaudit"={
@@ -132,7 +132,7 @@ class Opportunity extends ExtendOpportunity implements
      *          "short"=true
      *      },
      *      "form"={
-     *          "form_type"="oro_contact_select"
+     *          "form_type"="Oro\Bundle\ContactBundle\Form\Type\ContactSelectType"
      *      }
      *  }
      * )
@@ -210,7 +210,7 @@ class Opportunity extends ExtendOpportunity implements
      * @ConfigField(
      *  defaultValues={
      *      "form"={
-     *          "form_type"="oro_percent",
+     *          "form_type"="Oro\Bundle\FormBundle\Form\Type\OroPercentType",
      *          "form_options"={
      *              "constraints"={{"Range":{"min":0, "max":100}}},
      *          }
@@ -257,7 +257,7 @@ class Opportunity extends ExtendOpportunity implements
      * @ConfigField(
      *  defaultValues={
      *      "form"={
-     *          "form_type"="oro_money",
+     *          "form_type"="Oro\Bundle\FormBundle\Form\Type\OroMoneyType",
      *          "form_options"={
      *              "constraints"={{"Range":{"min":0}}},
      *          }
@@ -330,7 +330,7 @@ class Opportunity extends ExtendOpportunity implements
      * @ConfigField(
      *  defaultValues={
      *      "form"={
-     *          "form_type"="oro_money",
+     *          "form_type"="Oro\Bundle\FormBundle\Form\Type\OroMoneyType",
      *          "form_options"={
      *              "constraints"={{"Range":{"min":0}}},
      *          }

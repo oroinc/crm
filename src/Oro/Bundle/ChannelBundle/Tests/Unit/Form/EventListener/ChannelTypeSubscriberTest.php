@@ -47,6 +47,10 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
                 $this->returnValue(self::TEST_CUSTOMER_IDENTITY)
             );
 
+        $this->settingsProvider->expects($this->any())
+            ->method('getNonSystemChannelTypeChoiceList')
+            ->willReturn([]);
+
         $this->subscriber = new ChannelTypeSubscriber($this->settingsProvider);
         parent::setUp();
     }

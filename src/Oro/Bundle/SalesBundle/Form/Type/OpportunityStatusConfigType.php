@@ -76,7 +76,7 @@ class OpportunityStatusConfigType extends AbstractType
         // replace items type with the extended form that includes 'probability'
         // clean form options and leave only those needed by System Config layout
         $items['enum_options']['form']['options'] = [
-            'type' => OpportunityStatusEnumValueType::class,
+            'entry_type' => OpportunityStatusEnumValueType::class,
             'label' => 'oro.sales.system_configuration.groups.opportunity_status_probabilities.options.label',
             'tooltip' => 'oro.sales.system_configuration.groups.opportunity_status_probabilities.options.tooltip',
         ];
@@ -90,10 +90,6 @@ class OpportunityStatusConfigType extends AbstractType
                 'config_model' => $options['config_model'],
                 'config_manager' => $this->entityConfigManager,
                 'label' => false,
-                'items' => $items,
-                'config' => $config,
-                'config_model' => $options['config_model'],
-                'config_manager' => $this->entityConfigManager
             ]
         );
 

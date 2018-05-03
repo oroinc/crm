@@ -50,14 +50,14 @@ class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChannelTypeMetadata()
     {
-        $expectedResult = new \stdClass();
+        $expectedResult = ['key' => 'value'];
 
         $this->provider->expects($this->once())
             ->method('getChannelTypeMetadata')
             ->will($this->returnValue($expectedResult));
 
         $this->assertSame(
-            $expectedResult,
+            array_flip($expectedResult),
             self::callTwigFunction($this->extension, 'oro_channel_type_metadata', [])
         );
     }

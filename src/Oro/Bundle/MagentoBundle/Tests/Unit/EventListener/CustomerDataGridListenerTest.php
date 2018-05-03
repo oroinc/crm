@@ -62,10 +62,11 @@ class CustomerDataGridListenerTest extends \PHPUnit_Framework_TestCase
                             'data_name' => 'isSubscriber',
                             'options'   => [
                                 'field_options' => [
+                                    'choices_as_values' => true,
                                     'choices' => [
-                                        'unknown' => 'oro.magento.datagrid.columns.is_subscriber.unknown',
-                                        'no'      => 'oro.magento.datagrid.columns.is_subscriber.no',
-                                        'yes'     => 'oro.magento.datagrid.columns.is_subscriber.yes'
+                                        'oro.magento.datagrid.columns.is_subscriber.unknown' => 'unknown',
+                                        'oro.magento.datagrid.columns.is_subscriber.no' => 'no',
+                                        'oro.magento.datagrid.columns.is_subscriber.yes' => 'yes',
                                     ]
                                 ]
                             ]
@@ -149,10 +150,11 @@ class CustomerDataGridListenerTest extends \PHPUnit_Framework_TestCase
                             'data_name' => 'isSubscriber',
                             'options'   => [
                                 'field_options' => [
+                                    'choices_as_values' => true,
                                     'choices' => [
-                                        'unknown' => 'oro.magento.datagrid.columns.is_subscriber.unknown',
-                                        'no'      => 'oro.magento.datagrid.columns.is_subscriber.no',
-                                        'yes'     => 'oro.magento.datagrid.columns.is_subscriber.yes'
+                                        'oro.magento.datagrid.columns.is_subscriber.unknown' => 'unknown',
+                                        'oro.magento.datagrid.columns.is_subscriber.no' => 'no',
+                                        'oro.magento.datagrid.columns.is_subscriber.yes' => 'yes',
                                     ]
                                 ]
                             ]

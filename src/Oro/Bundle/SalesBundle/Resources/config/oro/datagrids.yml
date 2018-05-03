@@ -223,6 +223,7 @@ datagrids:
                     label: oro.sales.opportunity.close_revenue_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                     enabled: false
@@ -233,7 +234,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroSalesBundle:OpportunityCloseReason
-                            property: label
+                            choice_label: label
                             translatable_options: false
                 closeDate:
                     type: date
@@ -247,6 +248,7 @@ datagrids:
                     label: oro.sales.opportunity.budget_amount_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                 probability:
@@ -635,7 +637,7 @@ datagrids:
                         lazy: true
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
@@ -824,6 +826,7 @@ datagrids:
                     label: oro.sales.opportunity.close_revenue_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                 budgetAmount:
@@ -835,6 +838,7 @@ datagrids:
                     label: oro.sales.opportunity.budget_amount_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                 opportunityProbability:
@@ -961,7 +965,7 @@ datagrids:
                          lazy: true
                          field_options:
                              class: OroAddressBundle:Country
-                             property: name
+                             choice_label: name
                              query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                              translatable_options: false
                  regionLabel:
@@ -1151,7 +1155,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                  name:
                     type:      string
@@ -1296,7 +1300,7 @@ datagrids:
                         lazy: true
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 baRegionLabel:
@@ -1323,7 +1327,7 @@ datagrids:
                         lazy: true
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 saRegionLabel:
@@ -1559,7 +1563,7 @@ datagrids:
                         lazy: true
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                  regionLabel:
@@ -1615,6 +1619,7 @@ datagrids:
                     label: oro.sales.opportunity.budget_amount_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                 probability:
@@ -1907,7 +1912,7 @@ datagrids:
                         field_options:
                             class: OroUserBundle:User
                             multiple: true
-                            property: fullName
+                            choice_label: fullName
                             translatable_options: false
 
     oro-sales-b2bcustomers-for-context-grid:
@@ -1951,7 +1956,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                  name:
                     type:      string
@@ -2143,6 +2148,7 @@ datagrids:
                     label: oro.sales.opportunity.budget_amount_currency.label
                     options:
                         field_options:
+                            choices_as_values: true
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
                 probability:
@@ -2166,7 +2172,7 @@ datagrids:
                         field_options:
                             class: OroUserBundle:User
                             multiple: true
-                            property: fullName
+                            choice_label: fullName
                             translatable_options: false
 
         columns:
@@ -2296,7 +2302,7 @@ datagrids:
                         lazy: true
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                  regionLabel:
