@@ -17,4 +17,4 @@ layout:
             id:       embedded_form_lastName
             parentId: name_group
 
-    conditions: 'context["embedded_form_type"] == "oro_contact_us.embedded_form"'
+    conditions: 'context["embedded_form_type"] == "Oro\\Bundle\\ContactUsBundle\\Form\\Type\\ContactRequestType"'
