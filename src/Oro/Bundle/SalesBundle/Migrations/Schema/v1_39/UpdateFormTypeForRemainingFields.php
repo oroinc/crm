@@ -24,28 +24,60 @@ class UpdateFormTypeForRemainingFields implements Migration, ContainerAwareInter
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->updateFieldFormType('orocrm_sales_lead', 'data_channel', ChannelSelectType::class);
-        $this->updateFieldFormType('orocrm_sales_opportunity', 'data_channel', ChannelSelectType::class);
-        $this->updateFieldFormType('orocrm_sales_funnel', 'data_channel', ChannelSelectType::class);
-        $this->updateFieldFormType('orocrm_sales_opportunity', 'customer', B2bCustomerSelectType::class);
+        $this->updateFieldFormType(
+            'orocrm_sales_lead',
+            'data_channel',
+            ChannelSelectType::class,
+            'oro_channel_select_type'
+        );
+
+        $this->updateFieldFormType(
+            'orocrm_sales_opportunity',
+            'data_channel',
+            ChannelSelectType::class,
+            'oro_channel_select_type'
+        );
+
+        $this->updateFieldFormType(
+            'orocrm_sales_funnel',
+            'data_channel',
+            ChannelSelectType::class,
+            'oro_channel_select_type'
+        );
+
+        $this->updateFieldFormType(
+            'orocrm_sales_opportunity',
+            'customer',
+            B2bCustomerSelectType::class,
+            'oro_sales_b2bcustomer_select'
+        );
     }
 
     /**
      * @param string $table
      * @param string $field
      * @param string $formType
+     * @param string $replaceFormType
      */
-    private function updateFieldFormType(string $table, string $field, string $formType)
+    private function updateFieldFormType(string $table, string $field, string $formType, string $replaceFormType)
     {
         /** @var ExtendOptionsManager $extendOptionsManager */
         $extendOptionsManager = $this->container->get('oro_entity_extend.migration.options_manager');
 
-        if ($extendOptionsManager->hasColumnOptions($table, $field)) {
-            $extendOptionsManager->mergeColumnOptions($table, $field, [
-                'form' => [
-                    'form_type' => $formType
-                ]
-            ]);
+        if (!$extendOptionsManager->hasColumnOptions($table, $field)) {
+            return;
         }
+
+        $options = $extendOptionsManager->getColumnOptions($table, $field);
+
+        if ($options['form']['form_type'] !== $replaceFormType) {
+            return;
+        }
+
+        $extendOptionsManager->mergeColumnOptions($table, $field, [
+            'form' => [
+                'form_type' => $formType
+            ]
+        ]);
     }
 }
