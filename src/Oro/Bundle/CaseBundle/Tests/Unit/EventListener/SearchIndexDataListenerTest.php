@@ -28,6 +28,22 @@ class SearchIndexDataListenerTest extends \PHPUnit_Framework_TestCase
                     return trim(strip_tags($value));
                 }
             );
+        $htmlTagHelper->expects($this->any())
+            ->method('stripLongWords')
+            ->willReturnCallback(
+                function ($value) {
+                    $words = preg_split('/\s+/', $value);
+
+                    $words = array_filter(
+                        $words,
+                        function ($item) {
+                            return \strlen($item) <= HtmlTagHelper::MAX_STRING_LENGTH;
+                        }
+                    );
+
+                    return implode(' ', $words);
+                }
+            );
 
         $this->mapper = new ObjectMapper($this->createMock(EventDispatcherInterface::class), []);
         $this->mapper->setHtmlTagHelper($htmlTagHelper);

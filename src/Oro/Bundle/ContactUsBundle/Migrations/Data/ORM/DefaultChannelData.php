@@ -6,13 +6,12 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
 
 class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
     const PREFERABLE_CHANNEL_TYPE = 'custom';
-
-    const FORM_TYPE = 'oro_contact_us.embedded_form';
 
     /**
      * {@inheritdoc}
@@ -22,7 +21,7 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
         $entity = 'Oro\Bundle\ContactUsBundle\Entity\ContactRequest';
 
         $forms = $this->em->getRepository('OroEmbeddedFormBundle:EmbeddedForm')
-            ->findBy(['formType' => self::FORM_TYPE]);
+            ->findBy(['formType' => ContactRequestType::class]);
 
         $existingRecords =  $this->getRowCount($entity);
         $shouldBeCreated =  $existingRecords || !empty($forms);
