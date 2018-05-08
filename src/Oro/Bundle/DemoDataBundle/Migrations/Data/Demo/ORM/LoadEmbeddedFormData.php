@@ -5,7 +5,6 @@ namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
@@ -93,7 +92,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
         $embeddedForm = new EmbeddedForm();
         /** @var ContactRequestType $contactUs */
         $contactUs = $this->container->get('oro_contact_us.embedded_form');
-        $embeddedForm->setFormType('oro_contact_us.embedded_form');
+        $embeddedForm->setFormType(ContactRequestType::class);
         $embeddedForm->setCss($contactUs->getDefaultCss());
         $embeddedForm->setSuccessMessage($contactUs->getDefaultSuccessMessage());
         $embeddedForm->setTitle('Contact Us Form');
