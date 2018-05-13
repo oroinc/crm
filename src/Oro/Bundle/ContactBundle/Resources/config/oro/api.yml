@@ -26,18 +26,8 @@ api:
                         constraints:
                             - Email: ~
                     property_path: _
-            sorters:
-                fields:
-                    firstName:
-                        exclude: false
-                        property_path: firstName
             filters:
                 fields:
-                    firstName:
-                        exclude: false
-                        data_type: string
-                        property_path: firstName
-                        description: "Filter records by 'firstName' field."
                     phones:
                         data_type: string
                         allow_array: true
