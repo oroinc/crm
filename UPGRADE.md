@@ -6,7 +6,7 @@
 * Search index fields `description`, `resolution` and `message` for `CaseEntity` now contain no more than **255** characters each.
     * Please, run re-indexation for this entity using command:
         ```bash
-          php app/console oro:search:reindex OroCaseBundle:CaseEntity --env=prod
+          php bin/console oro:search:reindex OroCaseBundle:CaseEntity --env=prod
         ```
 
 ## FROM 2.0.0 to 2.1.0
