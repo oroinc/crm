@@ -88,6 +88,8 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->form->expects($this->once())->method('handleRequest')
             ->with($this->equalTo($this->request));
+        $this->form->expects($this->any())->method('isSubmitted')
+            ->will($this->returnValue(true));
         $this->form->expects($this->any())->method('isValid')
             ->will($this->returnValue($isFormValid));
 
