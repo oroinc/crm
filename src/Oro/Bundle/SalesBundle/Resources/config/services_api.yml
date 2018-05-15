@@ -6,6 +6,11 @@ services:
             - '@oro_sales.manager.account_customer'
             - '@oro_security.form.field_acl_helper'
 
+    oro_sales.api.form_listener.lead_status:
+        class: Oro\Bundle\SalesBundle\Api\Form\EventListener\LeadStatusListener
+        arguments:
+            - '@oro_entity_extend.enum_value_provider'
+
     oro_sales.api.b2bcustomer.customize_loaded_data.compute_primary_phone:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\ComputePrimaryField
         arguments: [primaryPhone, phones, phone]

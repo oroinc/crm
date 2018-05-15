@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Api\Form\EventListener;
 
 use Doctrine\Common\Util\ClassUtils;
 
+use Oro\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -23,6 +24,9 @@ class CustomerAssociationListener implements EventSubscriberInterface
 {
     const ACCOUNT_FIELD_NAME  = 'account';
     const CUSTOMER_FIELD_NAME = 'customer';
+
+    /** @var array */
+    protected $relationOptionalForClasses = [Lead::class];
 
     /** @var AccountCustomerManager */
     protected $accountCustomerManager;
@@ -245,7 +249,9 @@ class CustomerAssociationListener implements EventSubscriberInterface
         $submittedCustomer = null
     ) {
         if (null === $submittedAccount && null === $submittedCustomer) {
-            FormUtil::addFormError($form, 'Either an account or a customer should be set.');
+            if (!$this->isRelationOptionalForClass(get_class($form->getData()))) {
+                FormUtil::addFormError($form, 'Either an account or a customer should be set.');
+            }
         } else {
             $entity = $form->getData();
 
@@ -294,5 +300,32 @@ class CustomerAssociationListener implements EventSubscriberInterface
     protected function addFieldModificationDeniedFormError(FormInterface $form)
     {
         $this->fieldAclHelper->addFieldModificationDeniedFormError($form);
+    }
+
+    /**
+     * @param string $class
+     */
+    protected function addClassWhereRelationIsOptional(string $class)
+    {
+        $this->relationOptionalForClasses[] = $class;
+    }
+
+    /**
+     * @param string $class
+     */
+    protected function removeClassWhereRelationIsOptional(string $class)
+    {
+        if (($key = array_search($class, $this->relationOptionalForClasses)) !== false) {
+            unset($this->relationOptionalForClasses[$key]);
+        }
+    }
+
+    /**
+     * @param string $class
+     * @return bool
+     */
+    protected function isRelationOptionalForClass(string $class)
+    {
+        return in_array($class, $this->relationOptionalForClasses);
     }
 }
