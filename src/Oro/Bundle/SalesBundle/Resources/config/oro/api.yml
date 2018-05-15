@@ -57,7 +57,9 @@ api:
 
         Oro\Bundle\SalesBundle\Entity\Lead:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/lead.md'
-            form_event_subscriber: oro_sales.api.form_listener.customer_association
+            form_event_subscriber:
+                - oro_sales.api.form_listener.customer_association
+                - oro_sales.api.form_listener.lead_status
             fields:
                 phones:
                     data_type: array
