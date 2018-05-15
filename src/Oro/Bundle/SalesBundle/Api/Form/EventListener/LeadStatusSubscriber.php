@@ -10,8 +10,6 @@ use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 
 class LeadStatusSubscriber implements EventSubscriberInterface
 {
-    const STATUS_FIELD_NAME = 'status';
-
     /** @var EnumValueProvider */
     protected $enumProvider;
 
