@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormEvents;
 
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 
-class LeadStatusListener implements EventSubscriberInterface
+class LeadStatusSubscriber implements EventSubscriberInterface
 {
     const STATUS_FIELD_NAME = 'status';
 

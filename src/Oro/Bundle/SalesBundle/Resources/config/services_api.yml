@@ -7,7 +7,7 @@ services:
             - '@oro_security.form.field_acl_helper'
 
     oro_sales.api.form_listener.lead_status:
-        class: Oro\Bundle\SalesBundle\Api\Form\EventListener\LeadStatusListener
+        class: Oro\Bundle\SalesBundle\Api\Form\EventListener\LeadStatusSubscriber
         arguments:
             - '@oro_entity_extend.enum_value_provider'
 
