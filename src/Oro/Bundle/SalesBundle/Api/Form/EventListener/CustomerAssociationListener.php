@@ -15,7 +15,6 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SecurityBundle\Form\FieldAclHelper;
-use Oro\Bundle\SalesBundle\Entity\Lead;
 
 /**
  * The form event listener responsible for save the customer association related fields.
@@ -26,9 +25,6 @@ class CustomerAssociationListener implements EventSubscriberInterface
     const CUSTOMER_FIELD_NAME = 'customer';
 
     protected $isRelationOptional = false;
-
-    /** @var array */
-    protected $relationOptionalForClasses = [Lead::class];
 
     /** @var AccountCustomerManager */
     protected $accountCustomerManager;
