@@ -26,9 +26,6 @@ class CustomerAssociationListener implements EventSubscriberInterface
 
     protected $isRelationOptional = false;
 
-    /** @var array */
-    protected $relationOptionalForClasses = [Lead::class];
-
     /** @var AccountCustomerManager */
     protected $accountCustomerManager;
 
