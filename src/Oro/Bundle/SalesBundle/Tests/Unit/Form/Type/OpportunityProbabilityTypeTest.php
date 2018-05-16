@@ -44,6 +44,12 @@ class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
         $counter = 0;
         foreach ($enumOptions as $status) {
             $disabled = in_array($status->getId(), $type::$immutableProbabilityStatuses);
+            $attr = [];
+
+            if ($disabled) {
+                $attr['readonly'] = true;
+            }
+
             $builder->expects($this->at($counter))
                 ->method('add')
                 ->with(
@@ -53,7 +59,7 @@ class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
                         'required' => false,
                         'disabled' => $disabled,
                         'label' => $status->getName(),
-                        'attr' => ['readonly' => $disabled],
+                        'attr' => $attr,
                         'constraints' => $constraint,
                     ]
                 )

@@ -122,6 +122,6 @@ class SettingsFormSubscriber implements EventSubscriberInterface
             $choices[$website['label']] = $website['id'];
         }
 
-        FormUtils::replaceField($form, 'websiteId', ['choices' => $choices], ['choice_list']);
+        FormUtils::replaceField($form, 'websiteId', ['choices' => $choices]);
     }
 }

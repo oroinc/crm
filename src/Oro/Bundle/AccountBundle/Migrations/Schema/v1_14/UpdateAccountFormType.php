@@ -21,7 +21,8 @@ class UpdateAccountFormType implements Migration
                 Account::class,
                 'form',
                 'form_type',
-                AccountSelectType::class
+                AccountSelectType::class,
+                'oro_account_select'
             )
         );
     }

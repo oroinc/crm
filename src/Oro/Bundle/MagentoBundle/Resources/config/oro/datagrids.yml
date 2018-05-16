@@ -160,8 +160,6 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            # TODO: remove 'choices_as_values' option below in scope of BAP-15236
-                            choices_as_values: true
                             choices: '@oro_magento.datagrid_helper->getMagentoGroupsChoices'
                             multiple: true
                             translatable_options: false

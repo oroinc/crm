@@ -21,7 +21,8 @@ class UpdateLeadFormType implements Migration
                 Lead::class,
                 'form',
                 'form_type',
-                LeadSelectType::class
+                LeadSelectType::class,
+                'oro_sales_lead_select'
             )
         );
     }
