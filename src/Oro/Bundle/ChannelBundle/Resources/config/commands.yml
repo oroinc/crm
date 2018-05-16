@@ -1,0 +1,12 @@
+services:
+    Oro\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand:
+        public: false
+        class: Oro\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand
+        tags:
+            - { name: console.command }
+
+    Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand:
+        public: false
+        class: Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand
+        tags:
+            - { name: console.command }
