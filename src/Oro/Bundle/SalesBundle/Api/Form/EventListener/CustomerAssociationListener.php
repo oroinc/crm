@@ -24,6 +24,8 @@ class CustomerAssociationListener implements EventSubscriberInterface
     const ACCOUNT_FIELD_NAME  = 'account';
     const CUSTOMER_FIELD_NAME = 'customer';
 
+    protected $isRelationOptional = false;
+
     /** @var array */
     protected $relationOptionalForClasses = [Lead::class];
 
@@ -248,7 +250,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
         $submittedCustomer = null
     ) {
         if (null === $submittedAccount && null === $submittedCustomer) {
-            if (!$this->isRelationOptionalForClass(get_class($form->getData()))) {
+            if (!$this->isRelationOptional()) {
                 FormUtil::addFormError($form, 'Either an account or a customer should be set.');
             }
         } else {
@@ -302,29 +304,22 @@ class CustomerAssociationListener implements EventSubscriberInterface
     }
 
     /**
-     * @param string $class
+     * @param bool $isRelationOptional
+     *
+     * @return $this
      */
-    protected function addClassWhereRelationIsOptional(string $class)
+    public function setIsRelationOptional(bool $isRelationOptional)
     {
-        $this->relationOptionalForClasses[] = $class;
+        $this->isRelationOptional = $isRelationOptional;
+
+        return $this;
     }
 
     /**
-     * @param string $class
-     */
-    protected function removeClassWhereRelationIsOptional(string $class)
-    {
-        if (($key = array_search($class, $this->relationOptionalForClasses)) !== false) {
-            unset($this->relationOptionalForClasses[$key]);
-        }
-    }
-
-    /**
-     * @param string $class
      * @return bool
      */
-    protected function isRelationOptionalForClass(string $class)
+    protected function isRelationOptional()
     {
-        return in_array($class, $this->relationOptionalForClasses);
+        return $this->isRelationOptional;
     }
 }
