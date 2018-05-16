@@ -7,10 +7,7 @@ services:
             - '@oro_security.form.field_acl_helper'
 
     oro_sales.api.form_listener.optional_customer_association:
-        class: Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener
-        arguments:
-            - '@oro_sales.manager.account_customer'
-            - '@oro_security.form.field_acl_helper'
+        parent: 'oro_sales.api.form_listener.customer_association'
         calls:
             - [setIsRelationOptional, [true]]
 
