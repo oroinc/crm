@@ -15,11 +15,11 @@
     },
     "require": {
         "php": "7.1.*",
-        "oro/platform": "2.x-dev",
-        "oro/crm-task-bundle": "2.x-dev",
-        "oro/crm-call-bundle": "2.x-dev",
-        "oro/calendar-bundle": "2.x-dev",
-        "oro/marketing": "2.x-dev"
+        "oro/platform": "3.0.*",
+        "oro/crm-task-bundle": "3.0.*",
+        "oro/crm-call-bundle": "3.0.*",
+        "oro/calendar-bundle": "3.0.*",
+        "oro/marketing": "3.0.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "3.1.2",
@@ -53,7 +53,7 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "2.x-dev"
+            "dev-3.0-rc": "3.0.x-dev"
         }
     }
 }
