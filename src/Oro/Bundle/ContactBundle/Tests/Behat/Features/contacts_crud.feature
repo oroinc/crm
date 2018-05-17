@@ -1,4 +1,3 @@
-@skip
 Feature: Contacts CRUD
   In order to have ability work with contacts
   As administrator
