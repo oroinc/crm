@@ -24,6 +24,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
     const ACCOUNT_FIELD_NAME  = 'account';
     const CUSTOMER_FIELD_NAME = 'customer';
 
+    /** @var bool */
     protected $isRelationOptional = false;
 
     /** @var AccountCustomerManager */

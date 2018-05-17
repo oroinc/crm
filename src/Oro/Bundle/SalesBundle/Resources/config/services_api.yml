@@ -11,7 +11,6 @@ services:
         calls:
             - [setIsRelationOptional, [true]]
 
-
     oro_sales.api.form_listener.lead_status:
         class: Oro\Bundle\SalesBundle\Api\Form\EventListener\LeadStatusSubscriber
         arguments:
