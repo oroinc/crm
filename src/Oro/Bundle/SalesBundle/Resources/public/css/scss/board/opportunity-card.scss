@@ -4,7 +4,7 @@
   .card-probability {
     @include text-line-truncate();
     color: #888;
-    font-size: $fontSizeSmall;
+    font-size: $base-font-size--s;
     line-height: 17px;
   }
 }
