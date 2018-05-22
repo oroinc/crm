@@ -25,7 +25,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
     const CUSTOMER_FIELD_NAME = 'customer';
 
     /** @var bool */
-    protected $isRelationOptional = false;
+    private $isRelationOptional = false;
 
     /** @var AccountCustomerManager */
     protected $accountCustomerManager;
@@ -116,8 +116,8 @@ class CustomerAssociationListener implements EventSubscriberInterface
         }
 
         if ($hasSubmittedData
-            && (!$accountField->isSubmitted() || $accountField->isValid())
-            && (!$customerField->isSubmitted() || $customerField->isValid())
+            && FormUtil::isNotSubmittedOrValid($accountField)
+            && FormUtil::isNotSubmittedOrValid($customerField)
         ) {
             $this->changeCustomerAssociation($form, $submittedAccount, $submittedCustomer);
         }
@@ -248,7 +248,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
         $submittedCustomer = null
     ) {
         if (null === $submittedAccount && null === $submittedCustomer) {
-            if (!$this->isRelationOptional()) {
+            if (!$this->isRelationOptional) {
                 FormUtil::addFormError($form, 'Either an account or a customer should be set.');
             }
         } else {
@@ -311,13 +311,5 @@ class CustomerAssociationListener implements EventSubscriberInterface
         $this->isRelationOptional = $isRelationOptional;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isRelationOptional()
-    {
-        return $this->isRelationOptional;
     }
 }
