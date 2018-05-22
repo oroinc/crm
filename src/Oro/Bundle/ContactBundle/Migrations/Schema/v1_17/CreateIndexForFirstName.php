@@ -11,6 +11,6 @@ class CreateIndexForFirstName implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_contact');
-        $table->addIndex(['first_name'], 'orocrm_contact_first_name_idx', []);
+        $table->addIndex(['first_name'], 'contact_first_name_idx', []);
     }
 }
