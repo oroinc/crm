@@ -14,7 +14,6 @@
         "exclude-from-classmap": ["/Tests/"]
     },
     "require": {
-        "php": "7.1.*",
         "oro/platform": "3.0.x-dev",
         "oro/crm-task-bundle": "3.0.x-dev",
         "oro/crm-call-bundle": "3.0.x-dev",
