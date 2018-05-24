@@ -3,8 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Api\Form\EventListener;
 
 use Doctrine\Common\Util\ClassUtils;
-
-use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ApiBundle\Form\FormUtil;
 use Oro\Bundle\SalesBundle\Entity\Customer;
