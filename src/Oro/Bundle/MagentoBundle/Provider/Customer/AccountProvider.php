@@ -126,7 +126,7 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
         $accountName = 'N/A';
         if ($targetCustomer->getFirstName() || $targetCustomer->getLastName()) {
             $accountName = sprintf('%s %s', $targetCustomer->getFirstName(), $targetCustomer->getLastName());
-            $accountName = substr(trim($accountName), 0, $this->getAccountNameLength());
+            $accountName = mb_substr(trim($accountName), 0, $this->getAccountNameLength());
         }
 
         return $accountName;

@@ -80,6 +80,18 @@ class AccountProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Too long first name for Account Too long l', $account->getName());
     }
 
+    public function testGetAccountUtf8()
+    {
+        $targetCustomer = new Customer();
+        $targetCustomer->setFirstName('票驗驗後付票驗驗後付票驗驗後付票驗驗後付票驗驗後付票驗驗後付');
+        $targetCustomer->setLastName('票驗驗後付票驗驗後付票驗驗後付票驗驗後付票驗驗後付票驗驗後付');
+
+        $account = $this->provider->getAccount($targetCustomer);
+
+        $this->assertInstanceOf(Account::class, $account);
+        $this->assertEquals('票驗驗後付票驗驗後付票驗驗後付票驗驗後付票驗驗後付票驗驗後付 票驗驗後付票驗驗後付票', $account->getName());
+    }
+
     public function testGetAccountNameComposition()
     {
         $targetCustomer = new Customer();
