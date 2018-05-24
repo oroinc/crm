@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle\Api\Form\EventListener;
 
+use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 
 /**
  * The form event subscriber responsible for setting default Lead status if Lead doesn't have it,
@@ -28,9 +27,9 @@ class LeadStatusSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            FormEvents::SUBMIT   => 'onSubmit',
-        );
+        return [
+            FormEvents::SUBMIT => 'onSubmit',
+        ];
     }
 
     /**
