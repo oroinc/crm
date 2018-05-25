@@ -24,7 +24,7 @@ The created record is returned in the response.
 
 **Please note:**
 
-*Either **account** or **customer** field should be specified. In case when both fields are provided
+*An **account** and **customer** fields are optional. In case when both fields are provided
 the customer should be a part of the specified account.*
 
 {@request:json_api}
@@ -285,8 +285,6 @@ A customer the lead is assigned to.
 {@inheritdoc}
 
 **Please note:**
-
-*This field is **required** if the **account** field is not specified.*
 
 *If both **customer** and **account** fields are provided the customer should be a part of the specified account.*
 
