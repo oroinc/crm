@@ -124,6 +124,10 @@ The phone number that should be set as the primary one.
 
 Filter records by email address.
 
+### firstName
+
+Filter records by first name.
+
 ### phones
 
 Filter records by phone number.

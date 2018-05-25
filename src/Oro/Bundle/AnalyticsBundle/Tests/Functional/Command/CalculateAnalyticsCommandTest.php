@@ -89,7 +89,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
     {
         $result = $this->runCommand('oro:cron:analytic:calculate', ['--ids=1', '--ids=2']);
 
-        self::assertContains('[InvalidArgumentException]', $result);
+        self::assertContains('In CalculateAnalyticsCommand.php', $result);
         self::assertContains('Option "ids" does not work without "channel"', $result);
     }
 

@@ -62,7 +62,6 @@ class CustomerDataGridListenerTest extends \PHPUnit_Framework_TestCase
                             'data_name' => 'isSubscriber',
                             'options'   => [
                                 'field_options' => [
-                                    'choices_as_values' => true,
                                     'choices' => [
                                         'oro.magento.datagrid.columns.is_subscriber.unknown' => 'unknown',
                                         'oro.magento.datagrid.columns.is_subscriber.no' => 'no',
@@ -150,7 +149,6 @@ class CustomerDataGridListenerTest extends \PHPUnit_Framework_TestCase
                             'data_name' => 'isSubscriber',
                             'options'   => [
                                 'field_options' => [
-                                    'choices_as_values' => true,
                                     'choices' => [
                                         'oro.magento.datagrid.columns.is_subscriber.unknown' => 'unknown',
                                         'oro.magento.datagrid.columns.is_subscriber.no' => 'no',

@@ -23,8 +23,6 @@ class IsDisplayOrderNotesFormType extends AbstractType
                 'oro.magento.magentotransport.is_display_order_notes.value.false.label' => false,
             ],
             'placeholder' => false,
-            // TODO: Remove 'choices_as_values' option in scope of BAP-15236
-            'choices_as_values' => true,
             'required' => false
         ]);
     }

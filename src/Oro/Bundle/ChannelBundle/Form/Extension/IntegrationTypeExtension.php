@@ -63,8 +63,7 @@ class IntegrationTypeExtension extends AbstractTypeExtension
                     FormUtils::replaceField(
                         $form,
                         'type',
-                        ['choices' => array_diff($config['choices'], $sourceTypes)],
-                        ['choice_list']
+                        ['choices' => array_diff($config['choices'], $sourceTypes)]
                     );
                 }
             },
