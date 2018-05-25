@@ -114,8 +114,8 @@ class CustomerAssociationListener implements EventSubscriberInterface
         }
 
         if ($hasSubmittedData
-            && FormUtil::isNotSubmittedOrValid($accountField)
-            && FormUtil::isNotSubmittedOrValid($customerField)
+            && FormUtil::isNotSubmittedOrSubmittedAndValid($accountField)
+            && FormUtil::isNotSubmittedOrSubmittedAndValid($customerField)
         ) {
             $this->changeCustomerAssociation($form, $submittedAccount, $submittedCustomer);
         }
