@@ -22,6 +22,9 @@ class CustomerAssociationListener implements EventSubscriberInterface
     const ACCOUNT_FIELD_NAME  = 'account';
     const CUSTOMER_FIELD_NAME = 'customer';
 
+    /** @var bool */
+    private $isRelationOptional = false;
+
     /** @var AccountCustomerManager */
     protected $accountCustomerManager;
 
@@ -111,8 +114,8 @@ class CustomerAssociationListener implements EventSubscriberInterface
         }
 
         if ($hasSubmittedData
-            && (!$accountField->isSubmitted() || $accountField->isValid())
-            && (!$customerField->isSubmitted() || $customerField->isValid())
+            && FormUtil::isNotSubmittedOrValid($accountField)
+            && FormUtil::isNotSubmittedOrValid($customerField)
         ) {
             $this->changeCustomerAssociation($form, $submittedAccount, $submittedCustomer);
         }
@@ -243,7 +246,9 @@ class CustomerAssociationListener implements EventSubscriberInterface
         $submittedCustomer = null
     ) {
         if (null === $submittedAccount && null === $submittedCustomer) {
-            FormUtil::addFormError($form, 'Either an account or a customer should be set.');
+            if (!$this->isRelationOptional) {
+                FormUtil::addFormError($form, 'Either an account or a customer should be set.');
+            }
         } else {
             $entity = $form->getData();
 
@@ -292,5 +297,17 @@ class CustomerAssociationListener implements EventSubscriberInterface
     protected function addFieldModificationDeniedFormError(FormInterface $form)
     {
         $this->fieldAclHelper->addFieldModificationDeniedFormError($form);
+    }
+
+    /**
+     * @param bool $isRelationOptional
+     *
+     * @return $this
+     */
+    public function setIsRelationOptional(bool $isRelationOptional)
+    {
+        $this->isRelationOptional = $isRelationOptional;
+
+        return $this;
     }
 }
