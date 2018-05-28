@@ -17,14 +17,13 @@ Retrieve a collection of Magento customer records.
 ### create
 
 Create a new Magento customer record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentocustomers>`
 
 ```JSON
 {  
@@ -109,13 +108,11 @@ Edit a specific Magento customer record.
 {@request:json_api}
 Example:
 
-`</api/magentocustomers/245>`
-
 ```JSON
 {  
    "data":{  
       "type":"magentocustomers",
-"id":"245",
+      "id":"245",
       "attributes":{  
          "firstName":"Jerry",
          "lastName":"Coleman",
@@ -189,7 +186,6 @@ Delete a specific Magento customer record
 ### delete_list
 
 Delete a collection of Magento customer records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -294,8 +290,6 @@ Set address records for a specific Magento customer record.
 {@request:json_api}
 Example:
 
-`</api/magentocustomers/1/relationships/addresses>`
-
 ```JSON
 {
   "data": [
@@ -318,8 +312,6 @@ Replace address records assigned to a specific Magento customer record.
 
 {@request:json_api}
 Example:
-
-`</api/magentocustomers/1/relationships/addresses>`
 
 ```JSON
 {
@@ -358,8 +350,6 @@ Replace accounts assigned to a specific Magento customer record.
 {@request:json_api}
 Example:
 
-`</api/magentocustomers/1/relationships/account>`
-
 ```JSON
 {
   "data": {
@@ -397,8 +387,6 @@ Replace a contact record assigned to a specific Magento customer record.
 {@request:json_api}
 Example:
 
-`</api/magentocustomers/1/relationships/contact>`
-
 ```JSON
 {
   "data": {
@@ -425,8 +413,6 @@ Replace the channel for a specific Magento customer record.
 
 {@request:json_api}
 Example:
-
-`</api/magentocustomers/1/relationships/dataChannel>`
 
 ```JSON
 {
@@ -465,8 +451,6 @@ Replace the organization a specific Magento customer record belongs to.
 {@request:json_api}
 Example:
 
-`</api/magentocustomers/1/relationships/organization>`
-
 ```JSON
 {
   "data": {
@@ -493,8 +477,6 @@ Replace the owner of a specific Magento customer record.
 
 {@request:json_api}
 Example:
-
-`</api/magentocustomers/1/relationships/owner>`
 
 ```JSON
 {
@@ -523,8 +505,6 @@ Replace the store from which a specific Magento customer records have been recei
 {@request:json_api}
 Example:
 
-`</api/magentocustomers/1/relationships/store>`
-
 ```JSON
 {
   "data": {
@@ -552,8 +532,6 @@ Replace the Magento website to which a specific Magento customer record is assig
 {@request:json_api}
 Example:
 
-`</api/magentocustomers/1/relationships/website>`
-
 ```JSON
 {
   "data": {
@@ -580,8 +558,6 @@ Replace an integration channel via which information about the Magento customer 
 
 {@request:json_api}
 Example:
-
-`</api/magentocustomers/1/relationships/channel>`
 
 ```JSON
 {

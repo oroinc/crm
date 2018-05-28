@@ -17,14 +17,13 @@ Retrieve a collection of Magento store records.
 ### create
 
 Create a new Magento store record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentostores>`
 
 ```JSON
 {  
@@ -56,8 +55,6 @@ Edit a specific Magento store record.
 
 {@request:json_api}
 Example:
-
-`</api/magentostores/1>`
 
 ```JSON
 {  
@@ -91,7 +88,6 @@ Delete a specific Magento store record.
 ### delete_list
 
 Delete a collection of Magento store records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -164,8 +160,6 @@ Replace the record of a Magento website assigned to a specific Magento store rec
 {@request:json_api}
 Example:
 
-`</api/magentostores/1/relationships/website>`
-
 ```JSON
 {
   "data": {
@@ -192,8 +186,6 @@ Replace an integration channel via which information about the Magento store is 
 
 {@request:json_api}
 Example:
-
-`</api/magentostores/1/relationships/channel>`
 
 ```JSON
 {
