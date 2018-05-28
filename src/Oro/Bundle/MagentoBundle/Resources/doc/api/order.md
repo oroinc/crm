@@ -17,14 +17,13 @@ Retrieve a collection of Magento order records.
 ### create
 
 Create a new Magento order record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentoorders>`
 
 ```JSON
 {  
@@ -129,8 +128,6 @@ Edit a specific Magento order record.
 {@request:json_api}
 Example:
 
-`</api/magentoorders/1>`
-
 ```JSON
 {  
    "data":{  
@@ -234,7 +231,6 @@ Delete a specific Magento order record.
 ### delete_list
 
 Delete a collection of Magento order records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -307,8 +303,6 @@ Set address records for a specific Magento order record.
 {@request:json_api}
 Example:
 
-`</api/magentoorders/1/relationships/addresses>`
-
 ```JSON
 {
   "data": [
@@ -331,8 +325,6 @@ Replace address records assigned to a specific Magento order record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoorders/1/relationships/addresses>`
 
 ```JSON
 {
@@ -371,8 +363,6 @@ Set item records for a specific Magento order record.
 {@request:json_api}
 Example:
 
-`</api/magentoorders/1/relationships/items>`
-
 ```JSON
 {  
    "data":[  
@@ -395,8 +385,6 @@ Replace records of items assigned to a specific Magento order record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoorders/1/relationships/items>`
 
 ```JSON
 {  
@@ -445,8 +433,6 @@ Replace a cart record assigned to a specific Magento order record.
 {@request:json_api}
 Example:
 
-`</api/magentoorders/1/relationships/cart>`
-
 ```JSON
 {
   "data": {
@@ -473,8 +459,6 @@ Replace the custom record assigned to a specific Magento order record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoorders/1/relationships/customer>`
 
 ```JSON
 {
@@ -503,8 +487,6 @@ Replace the channel for a specific Magento order record.
 {@request:json_api}
 Example:
 
-`</api/magentoorders/1/relationships/dataChannel>`
-
 ```JSON
 {
   "data": {
@@ -531,8 +513,6 @@ Replace the owner of a specific Magento order record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoorders/1/relationships/owner>`
 
 ```JSON
 {
@@ -561,8 +541,6 @@ Replace the organization that a specific Magento order belongs to.
 {@request:json_api}
 Example:
 
-`</api/magentoorders/1/relationships/organization`
-
 ```JSON
 {
   "data": {
@@ -589,8 +567,6 @@ Replace the store from which a specific Magento order records have been received
 
 {@request:json_api}
 Example:
-
-`</api/magentoorders/1/relationships/store>`
 
 ```JSON
 {
@@ -619,8 +595,6 @@ Replace an integration channel via which information about the Magento order is 
 {@request:json_api}
 Example:
 
-`</api/magentoorders/1/relationships/channel>`
-
 ```JSON
 {
   "data": {
@@ -648,8 +622,6 @@ Set credit memos records for a specific Magento order record.
 {@request:json_api}
 Example:
 
-`</api/magentocustomers/1/relationships/addresses>`
-
 ```JSON
 {
   "data": [
@@ -668,8 +640,6 @@ Replace credit memos for a specific Magento order record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoorders/1/relationships/creditMemos>`
 
 ```JSON
 {

@@ -17,14 +17,13 @@ Retrieve a collection of case comment records.
 ### create
 
 Create a new case comment record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/casecomments>`
 
 ```JSON
 {  
@@ -66,8 +65,6 @@ Edit a specific case comment record.
 
 {@request:json_api}
 Example:
-
-`</api/casecomments/370>`
 
 ```JSON
 {  
@@ -111,7 +108,6 @@ Delete a specific case comment record.
 ### delete_list
 
 Delete a collection of case comment records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -176,8 +172,6 @@ Replace the file attached to a specific case comment.
 {@request:json_api}
 Example:
 
-`</api/casecomments/367/relationships/attachment>`
-
 ```JSON
 {
   "data": {
@@ -204,8 +198,6 @@ Replace the case that a specific case comment was made on.
 
 {@request:json_api}
 Example:
-
-`</api/casecomments/1/relationships/case>`
 
 ```JSON
 {
@@ -234,8 +226,6 @@ Replace the contact who is an author of a specific case comment record.
 {@request:json_api}
 Example:
 
-`</api/casecomments/1/relationships/contact>`
-
 ```JSON
 {
   "data": {
@@ -262,8 +252,6 @@ Replace the organization that a specific case comment belongs to.
 
 {@request:json_api}
 Example:
-
-`</api/casecomments/1/relationships/organization>`
 
 ```JSON
 {
@@ -294,8 +282,6 @@ Replace the owner of a specific case comment record.
 {@request:json_api}
 Example:
 
-`</api/casecomments/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -322,8 +308,6 @@ Replace the user who last updated a specific case comment record.
 
 {@request:json_api}
 Example:
-
-`</api/casecomments/2/relationships/updatedBy>`
 
 ```JSON
 {

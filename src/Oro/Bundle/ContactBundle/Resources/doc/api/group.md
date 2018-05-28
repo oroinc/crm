@@ -17,14 +17,13 @@ Retrieve a collection of contact group records.
 ### create
 
 Create a new contact group record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/contactgroups>`
 
 ```JSON
 {  
@@ -60,8 +59,6 @@ Edit a specific contact group record.
 
 {@request:json_api}
 Example:
-
-`</api/contactgroups/1>`
 
 ```JSON
 {  
@@ -99,7 +96,6 @@ Delete a specific contact group record.
 ### delete_list
 
 Delete a collection of contact group records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -148,8 +144,6 @@ Replace the organization a specific contact group record belongs to.
 {@request:json_api}
 Example:
 
-`</api/contactgroups/1/relationships/organization>`
-
 ```JSON
 {
   "data": {
@@ -176,8 +170,6 @@ Replace the owner of a specific contact group record.
 
 {@request:json_api}
 Example:
-
-`</api/contactgroups/1/relationships/owner>`
 
 ```JSON
 {
