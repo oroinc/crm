@@ -293,7 +293,7 @@ Feature: Activities
     And go to Activities/ Calendar Events
     And I sort grid by "Title"
     And should see following grid:
-      | Title                   | Calendar | Recurrent | Recurrence                               | Invitation status |
-      | All day no repeat Event | John Doe | No        | N/A                                      | Not responded     |
-      | New event               | John Doe | No        | N/A                                      | Not responded     |
-      | Stand-Up                | John Doe | Yes       |Daily every 1 day, end after 1 occurrence | Not responded     |
+      | Title                   | Calendar | Recurrent | Recurrence                               | Invitation status|
+      | All day no repeat Event | John Doe | No        | N/A                                      | Not responded    |
+      | New event               | John Doe | No        | N/A                                      | Not responded    |
+      | Stand-Up                | John Doe | Yes       |Daily every 1 day, end after 1 occurrence | Not responded    |
