@@ -1,0 +1,20 @@
+.mobile-version {
+  .contact-widget-wrapper {
+    padding-left: 0;
+  }
+
+  .contact-widget-wrapper {
+    .box-type1 {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  .contact-box-wrapper {
+    padding: 0;
+  }
+
+  .contact-box {
+    width: calc(100% - 20px);
+  }
+}
