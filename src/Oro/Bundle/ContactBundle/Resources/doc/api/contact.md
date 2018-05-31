@@ -124,6 +124,10 @@ The phone number that should be set as the primary one.
 
 Filter records by email address.
 
+### firstName
+
+Filter records by first name.
+
 ### phones
 
 Filter records by phone number.
@@ -153,14 +157,13 @@ Retrieve a collection of contact records.
 ### create
 
 Create a new contact record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/contacts>`
 
 ```JSON
 {  
@@ -199,8 +202,6 @@ Edit a specific contact record.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1>`
 
 ```JSON
 {  
@@ -259,7 +260,6 @@ Delete a specific contact record.
 ### delete_list
 
 Delete a collection of contact records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -282,8 +282,6 @@ Replace accounts assigned to a specific contact record
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/accounts>`
-
 ```JSON
 {
   "data": [
@@ -302,8 +300,6 @@ Set account records for a specific contact.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/accounts>`
 
 ```JSON
 {
@@ -338,8 +334,6 @@ Replace the list of addresses assigned to a specific contact record.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/addresses>`
-
 ```JSON
 {  
    "data":[  
@@ -358,8 +352,6 @@ Set address records for a specific contact record.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/addresses>`
 
 ```JSON
 {  
@@ -394,8 +386,6 @@ Replace the user a specific contact record is assigned to.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/assignedTo>`
-
 ```JSON
 {
   "data": {
@@ -422,8 +412,6 @@ Replace the user who created a specific contact record.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/createdBy>`
 
 ```JSON
 {
@@ -452,8 +440,6 @@ Set accounts for which a specific contact record will be default.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/defaultInAccounts>`
-
 ```JSON
 {
   "data": [
@@ -472,8 +458,6 @@ Replace accounts for which a specific contact record is default.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/defaultInAccounts>`
 
 ```JSON
 {
@@ -508,8 +492,6 @@ Set groups a specific contact will belong to.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/groups>`
-
 ```JSON
 {
   "data": [
@@ -528,8 +510,6 @@ Replace the groups a specific contact record belongs to.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/groups>`
 
 ```JSON
 {
@@ -564,8 +544,6 @@ Replace the contact method configured for a specific contact record.
 {@request:json_api}
 Example:
 
-`</api/contacts/49/relationships/method>`
-
 ```JSON
 {
   "data": {
@@ -592,8 +570,6 @@ Replace the organization a specific contact record belongs to.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/organization>`
 
 ```JSON
 {
@@ -622,8 +598,6 @@ Replace the owner of a specific contact record.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -650,8 +624,6 @@ Replace the picture for a specific contact record.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/picture>`
 
 ```JSON
 {
@@ -680,8 +652,6 @@ Replace the contact a specific contact record reports to.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/reportsTo>`
-
 ```JSON
 {
   "data": {
@@ -709,8 +679,6 @@ Replace the source of a specific contact record.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/source>`
-
 ```JSON
 {
   "data": {
@@ -737,8 +705,6 @@ Replace the user who updated a specific contact record.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/updatedBy>`
 
 ```JSON
 {

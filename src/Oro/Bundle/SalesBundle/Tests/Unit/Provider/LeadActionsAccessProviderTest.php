@@ -5,9 +5,9 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider;
-use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnel;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 use Oro\Component\Testing\Unit\Entity\Stub\StubEnumValue;
 
@@ -200,7 +200,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit_Framework_TestCase
         $this->wfRegistry
             ->expects($this->at(1))
             ->method('getActiveWorkflowsByEntityClass')
-            ->with(SalesFunnel::class)
+//            ->with(SalesFunnel::class)
             ->willReturn(new ArrayCollection([1]));
     }
 }

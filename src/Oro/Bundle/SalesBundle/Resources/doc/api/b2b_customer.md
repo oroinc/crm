@@ -17,14 +17,13 @@ Retrieve a collection of business customer records.
 ### create
 
 Create a new business customer record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers>`
 
 ```JSON
 {  
@@ -113,8 +112,6 @@ Edit a specific business customer record.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/27>`
-
 ```JSON
 {  
    "data":{  
@@ -168,7 +165,6 @@ Example:
 ### delete_list
 
 Delete a collection of business customer records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -309,8 +305,6 @@ Replace the accounts that a specific business customer is assigned to.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/1/relationships/account>`
-
 ```JSON
 {
   "data": {
@@ -337,8 +331,6 @@ Replace the billing address for a specific business customer.
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers/1/relationships/billingAddress>`
 
 ```JSON
 {
@@ -367,8 +359,6 @@ Replace the contact for a specific business customer.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/27/relationships/contact>`
-
 ```JSON
 {
   "data": {
@@ -395,8 +385,6 @@ Replace the channel for a specific business customer.
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers/1/relationships/dataChannel>`
 
 ```JSON
 {
@@ -425,8 +413,6 @@ Set the leads that a specific business customer will be assinged to.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/1/relationships/leads>`
-
 ```JSON
 {  
    "data":[  
@@ -449,8 +435,6 @@ Replace the leads that a specific business customer is assigned to.
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers/1/relationships/leads>`
 
 ```JSON
 {  
@@ -489,8 +473,6 @@ Set the opportunities that a specific business customer will be assigned to.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/27/relationships/opportunities>`
-
 ```JSON
 {
   "data": [
@@ -509,8 +491,6 @@ Replace the opportunities that a specific business customer is assigned to.
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers/27/relationships/opportunities>`
 
 ```JSON
 {
@@ -545,8 +525,6 @@ Replace the organization that a specific business customer belongs to.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/1/relationships/organization>`
-
 ```JSON
 {
   "data": {
@@ -574,8 +552,6 @@ Replace the owner of a specific business customer record.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -602,8 +578,6 @@ Replace the shipping address for a specific business customer.
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers/1/relationships/shippingAddress>`
 
 ```JSON
 {

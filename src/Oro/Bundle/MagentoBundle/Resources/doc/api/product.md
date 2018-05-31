@@ -17,14 +17,13 @@ Retrieve a collection of Magento product records.
 ### create
 
 Create a new Magento product record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentoproducts>`
 
 ```JSON
 {  
@@ -66,8 +65,6 @@ Edit a specific Magento product record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoproducts/1>`
 
 ```JSON
 {  
@@ -111,7 +108,6 @@ Delete a specific Magento product record.
 ### delete_list
 
 Delete a collection of Magento product records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -176,8 +172,6 @@ Set Magento websites from which information about a specific Magento product is 
 {@request:json_api}
 Example:
 
-`</api/magentoproducts/1/relationships/websites>`
-
 ```JSON
 {  
    "data":[  
@@ -200,8 +194,6 @@ Replace Magento websites from which information about a specific Magento product
 
 {@request:json_api}
 Example:
-
-`</api/magentoproducts/1/relationships/websites>`
 
 ```JSON
 {  
@@ -239,8 +231,6 @@ Replace an integration channel via which information about the Magento product i
 
 {@request:json_api}
 Example:
-
-`</api/magentoproducts/1/relationships/channel>`
 
 ```JSON
 {

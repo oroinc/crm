@@ -17,14 +17,13 @@ The regions specified for Magento orders by Magento customers.
 ### create
 
 Create a new Magento region record.
+
 The created record is returned in the response.
 
 The regions specified for Magento orders by Magento customers.
 
 {@request:json_api}
 Example:
-
-`</api/magentoregions>`
 
 ```JSON
 {
@@ -50,8 +49,6 @@ The regions specified for Magento orders by Magento customers.
 
 {@request:json_api}
 Example:
-
-`</api/magentoregions/1>`
 
 ```JSON
 {
@@ -79,7 +76,6 @@ The regions specified for Magento orders by Magento customers.
 ### delete_list
 
 Delete a collection of records represented by Magento regions.
-The list of records that will be deleted, could be limited by filters.
 
 The regions specified for Magento orders by Magento customers.
 

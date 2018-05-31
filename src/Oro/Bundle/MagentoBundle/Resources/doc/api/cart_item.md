@@ -17,14 +17,13 @@ Retrieve a collection records that represent Magento shopping cart items.
 ### create
 
 Create a new Magento shopping cart item record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentocartitems>`
 
 ```JSON
 {  
@@ -76,8 +75,6 @@ Edit a specific Magento shopping cart item record.
 
 {@request:json_api}
 Example:
-
-`</api/magentocartitems/1>`
 
 ```JSON
 {  
@@ -131,7 +128,6 @@ Delete a specific Magento shopping cart item record.
 ### delete_list
 
 Delete a collection of Magento shopping cart items records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -308,8 +304,6 @@ Replace the Magento cart record configured for a specific Magento shopping cart 
 {@request:json_api}
 Example:
 
-`</api/magentocartitems/1/relationships/cart>`
-
 ```JSON
 {
   "data": {
@@ -337,8 +331,6 @@ Replace the owner of a specific Magento shopping cart item record.
 {@request:json_api}
 Example:
 
-`</api/magentocartitems/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -365,8 +357,6 @@ Replace an integration channel via which information about the Magento shopping 
 
 {@request:json_api}
 Example:
-
-`</api/magentocartitems/1/relationships/channel>`
 
 ```JSON
 {
