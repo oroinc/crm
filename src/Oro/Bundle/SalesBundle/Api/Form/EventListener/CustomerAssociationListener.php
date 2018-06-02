@@ -19,17 +19,17 @@ use Symfony\Component\Validator\Constraints\NotNull;
  */
 class CustomerAssociationListener implements EventSubscriberInterface
 {
-    const ACCOUNT_FIELD_NAME  = 'account';
-    const CUSTOMER_FIELD_NAME = 'customer';
+    private const ACCOUNT_FIELD_NAME  = 'account';
+    private const CUSTOMER_FIELD_NAME = 'customer';
+
+    /** @var AccountCustomerManager */
+    private $accountCustomerManager;
+
+    /** @var FieldAclHelper */
+    private $fieldAclHelper;
 
     /** @var bool */
     private $isRelationOptional = false;
-
-    /** @var AccountCustomerManager */
-    protected $accountCustomerManager;
-
-    /** @var FieldAclHelper */
-    protected $fieldAclHelper;
 
     /**
      * @param AccountCustomerManager $accountCustomerManager
@@ -41,6 +41,14 @@ class CustomerAssociationListener implements EventSubscriberInterface
     ) {
         $this->accountCustomerManager = $accountCustomerManager;
         $this->fieldAclHelper = $fieldAclHelper;
+    }
+
+    /**
+     * @param bool $isRelationOptional
+     */
+    public function setIsRelationOptional(bool $isRelationOptional)
+    {
+        $this->isRelationOptional = $isRelationOptional;
     }
 
     /**
@@ -74,7 +82,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
     /**
      * @param FormInterface $form
      */
-    protected function handleAccountRelationship(FormInterface $form)
+    private function handleAccountRelationship(FormInterface $form)
     {
         $accountField = $form->get(self::ACCOUNT_FIELD_NAME);
         if (FormUtil::isSubmittedAndValid($accountField)) {
@@ -85,7 +93,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
     /**
      * @param FormInterface $form
      */
-    protected function handleCustomerRelationship(FormInterface $form)
+    private function handleCustomerRelationship(FormInterface $form)
     {
         $customerField = $form->get(self::CUSTOMER_FIELD_NAME);
         if (FormUtil::isSubmittedAndValid($customerField)) {
@@ -96,7 +104,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
     /**
      * @param FormInterface $form
      */
-    protected function handlePrimaryForm(FormInterface $form)
+    private function handlePrimaryForm(FormInterface $form)
     {
         $accountField = $form->get(self::ACCOUNT_FIELD_NAME);
         $customerField = $form->get(self::CUSTOMER_FIELD_NAME);
@@ -113,7 +121,9 @@ class CustomerAssociationListener implements EventSubscriberInterface
             $hasSubmittedData = true;
         }
 
-        if ($hasSubmittedData
+        if (null === $form->getData()->getId()) {
+            $this->changeCustomerAssociation($form, $submittedAccount, $submittedCustomer);
+        } elseif ($hasSubmittedData
             && FormUtil::isNotSubmittedOrSubmittedAndValid($accountField)
             && FormUtil::isNotSubmittedOrSubmittedAndValid($customerField)
         ) {
@@ -126,7 +136,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
      *
      * @return Customer|null
      */
-    public function getCustomerAssociation($ownerEntity)
+    private function getCustomerAssociation($ownerEntity)
     {
         return $ownerEntity->getCustomerAssociation();
     }
@@ -135,7 +145,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
      * @param object   $ownerEntity
      * @param Customer $customerAssociation
      */
-    public function setCustomerAssociation($ownerEntity, Customer $customerAssociation = null)
+    private function setCustomerAssociation($ownerEntity, Customer $customerAssociation = null)
     {
         $ownerEntity->setCustomerAssociation($customerAssociation);
     }
@@ -145,10 +155,10 @@ class CustomerAssociationListener implements EventSubscriberInterface
      * @param Account|null  $account
      * @param FormInterface $accountField
      */
-    public function setCustomerAssociationForAccount($ownerEntity, $account, FormInterface $accountField)
+    private function setCustomerAssociationForAccount($ownerEntity, $account, FormInterface $accountField)
     {
         if (!$this->isCustomerAssociationModificationGranted($ownerEntity)) {
-            $this->addFieldModificationDeniedFormError($accountField);
+            $this->fieldAclHelper->addFieldModificationDeniedFormError($accountField);
         } elseif (null === $account) {
             FormUtil::addFormConstraintViolation($accountField, new NotNull());
         } else {
@@ -170,10 +180,10 @@ class CustomerAssociationListener implements EventSubscriberInterface
      * @param object|null   $customer
      * @param FormInterface $customerField
      */
-    public function setCustomerAssociationForCustomer($ownerEntity, $customer, FormInterface $customerField)
+    private function setCustomerAssociationForCustomer($ownerEntity, $customer, FormInterface $customerField)
     {
         if (!$this->isCustomerAssociationModificationGranted($ownerEntity)) {
-            $this->addFieldModificationDeniedFormError($customerField);
+            $this->fieldAclHelper->addFieldModificationDeniedFormError($customerField);
         } elseif (null === $customer) {
             FormUtil::addFormConstraintViolation($customerField, new NotNull());
         } else {
@@ -190,7 +200,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
      *
      * @return Customer|null
      */
-    protected function findCustomerAssociationForCustomer($customer)
+    private function findCustomerAssociationForCustomer($customer)
     {
         return $this->accountCustomerManager->getAccountCustomerByTarget($customer, false);
     }
@@ -200,7 +210,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
      *
      * @return Customer
      */
-    protected function createCustomerAssociationForAccount($account)
+    private function createCustomerAssociationForAccount($account)
     {
         return AccountCustomerManager::createCustomer($account);
     }
@@ -210,7 +220,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
      *
      * @return Customer
      */
-    protected function createCustomerAssociationForCustomer($customer)
+    private function createCustomerAssociationForCustomer($customer)
     {
         return AccountCustomerManager::createCustomer(
             $this->accountCustomerManager->createAccountForTarget($customer),
@@ -224,7 +234,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
      *
      * @return bool
      */
-    protected function isCustomerAssociationForAccountEquals(Customer $existingCustomerAssociation, Account $account)
+    private function isCustomerAssociationForAccountEquals(Customer $existingCustomerAssociation, Account $account)
     {
         $existingAccount = $existingCustomerAssociation->getAccount();
 
@@ -240,7 +250,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
      * @param Account|null  $submittedAccount
      * @param object|null   $submittedCustomer
      */
-    protected function changeCustomerAssociation(
+    private function changeCustomerAssociation(
         FormInterface $form,
         Account $submittedAccount = null,
         $submittedCustomer = null
@@ -282,32 +292,12 @@ class CustomerAssociationListener implements EventSubscriberInterface
      *
      * @return bool
      */
-    protected function isCustomerAssociationModificationGranted($entity)
+    private function isCustomerAssociationModificationGranted($entity)
     {
         if (!$this->fieldAclHelper->isFieldAclEnabled(ClassUtils::getClass($entity))) {
             return true;
         }
 
         return $this->fieldAclHelper->isFieldModificationGranted($entity, 'customerAssociation');
-    }
-
-    /**
-     * @param FormInterface $form
-     */
-    protected function addFieldModificationDeniedFormError(FormInterface $form)
-    {
-        $this->fieldAclHelper->addFieldModificationDeniedFormError($form);
-    }
-
-    /**
-     * @param bool $isRelationOptional
-     *
-     * @return $this
-     */
-    public function setIsRelationOptional(bool $isRelationOptional)
-    {
-        $this->isRelationOptional = $isRelationOptional;
-
-        return $this;
     }
 }
