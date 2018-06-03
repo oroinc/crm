@@ -7,7 +7,7 @@ services:
             - '@oro_security.form.field_acl_helper'
 
     oro_sales.api.form_listener.optional_customer_association:
-        parent: 'oro_sales.api.form_listener.customer_association'
+        parent: oro_sales.api.form_listener.customer_association
         calls:
             - [setIsRelationOptional, [true]]
 

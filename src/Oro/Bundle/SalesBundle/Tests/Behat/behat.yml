@@ -173,6 +173,7 @@ oro_behat_extension:
         - OroSalesBundle::SalesContext
         - OroSalesBundle::FeatureContext
         - OroNavigationBundle::FeatureContext
+        - OroNavigationBundle::PinbarContext
         - OroSalesBundle::SalesFeatureToggleContext
         - OroConfigBundle::FeatureContext
         - OroQueryDesignerBundle::QueryDesignerContext

@@ -1,0 +1,6 @@
+services:
+    Oro\Bundle\SalesBundle\Command\RecalculateLifetimeCommand:
+        public: false
+        class: Oro\Bundle\SalesBundle\Command\RecalculateLifetimeCommand
+        tags:
+            - { name: console.command }
