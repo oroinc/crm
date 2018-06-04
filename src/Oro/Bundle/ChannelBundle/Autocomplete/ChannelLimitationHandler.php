@@ -4,7 +4,12 @@ namespace Oro\Bundle\ChannelBundle\Autocomplete;
 
 use Oro\Bundle\FormBundle\Autocomplete\SearchHandler;
 use Oro\Bundle\SearchBundle\Engine\Indexer;
+use Oro\Bundle\SearchBundle\Query\Criteria\Criteria;
+use Oro\Bundle\SearchBundle\Query\Query;
 
+/**
+ * Adds restriction to search query to get documents only from passed channel
+ */
 class ChannelLimitationHandler extends SearchHandler
 {
     /** @var string */
@@ -40,16 +45,19 @@ class ChannelLimitationHandler extends SearchHandler
         $channelId    = !empty($parts[1]) ? $parts[1] : false;
 
         $queryObj = $this->indexer->select()
-            ->from($this->entitySearchAlias)
-            ->setMaxResults($maxResults)
-            ->setFirstResult($firstResult);
+            ->from($this->entitySearchAlias);
+        $queryObj->getCriteria()
+            ->setMaxResults((int)$maxResults)
+            ->setFirstResult((int)$firstResult);
 
         if (false !== $channelId) {
-            $queryObj->andWhere($this->channelSearchPropertyName, '=', $channelId, 'integer');
+            $field = Criteria::implodeFieldTypeName(Query::TYPE_INTEGER, $this->channelSearchPropertyName);
+            $queryObj->getCriteria()->andWhere(Criteria::expr()->eq($field, $channelId));
         }
 
         if ($searchString) {
-            $queryObj->andWhere(Indexer::TEXT_ALL_DATA_FIELD, '~', $searchString);
+            $field = Criteria::implodeFieldTypeName(Query::TYPE_TEXT, Indexer::TEXT_ALL_DATA_FIELD);
+            $queryObj->getCriteria()->andWhere(Criteria::expr()->contains($field, $searchString));
         }
 
         $ids      = [];
