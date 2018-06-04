@@ -1,0 +1,24 @@
+services:
+    Oro\Bundle\MagentoBundle\Command\AddContactsToMagentoCustomersCommand:
+        public: false
+        class: Oro\Bundle\MagentoBundle\Command\AddContactsToMagentoCustomersCommand
+        tags:
+            - { name: console.command }
+
+    Oro\Bundle\MagentoBundle\Command\CopyCustomerAddressesToContactCommand:
+        public: false
+        class: Oro\Bundle\MagentoBundle\Command\CopyCustomerAddressesToContactCommand
+        tags:
+            - { name: console.command }
+
+    Oro\Bundle\MagentoBundle\Command\RecalculateLifetimeCommand:
+        public: false
+        class: Oro\Bundle\MagentoBundle\Command\RecalculateLifetimeCommand
+        tags:
+            - { name: console.command }
+
+    Oro\Bundle\MagentoBundle\Command\SyncCartExpirationCommand:
+        public: false
+        class: Oro\Bundle\MagentoBundle\Command\SyncCartExpirationCommand
+        tags:
+            - { name: console.command }

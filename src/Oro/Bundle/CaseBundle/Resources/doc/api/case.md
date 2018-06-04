@@ -18,14 +18,13 @@ Retrieve a collection of case records.
 ### create
 
 Create a new case record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/cases>`
 
 ```JSON
 {  
@@ -105,8 +104,6 @@ Edit a specific case record.
 
 {@request:json_api}
 Example:
-
-`</api/cases/22>`
 
 ```JSON
 {  
@@ -188,7 +185,6 @@ Delete a specific case record.
 ### delete_list
 
 Delete a collection of case records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -285,8 +281,6 @@ Replace the user that a specific case is assigned to.
 {@request:json_api}
 Example:
 
-`</api/cases/1/relationships/assignedTo>`
-
 ```JSON
 {
   "data": {
@@ -314,8 +308,6 @@ Set comments made on a specific case.
 {@request:json_api}
 Example:
 
-`</api/cases/1/relationships/comments>`
-
 ```JSON
 {
   "data": [
@@ -338,8 +330,6 @@ Replace comments made on a specific case.
 
 {@request:json_api}
 Example:
-
-`</api/cases/1/relationships/comments>`
 
 ```JSON
 {
@@ -378,8 +368,6 @@ Replace the organization that a specific case belongs to.
 {@request:json_api}
 Example:
 
-`</api/cases/1/relationships/organization>`
-
 ```JSON
 {
   "data": {
@@ -406,8 +394,6 @@ Replace the owner of a specific case record.
 
 {@request:json_api}
 Example:
-
-`</api/cases/1/relationships/owner>`
 
 ```JSON
 {
@@ -436,8 +422,6 @@ Replace the priority configured for a specific case.
 {@request:json_api}
 Example:
 
-`</api/cases/1/relationships/priority>`
-
 ```JSON
 {
   "data": {
@@ -464,8 +448,6 @@ Replace the account that is related to a specific case.
 
 {@request:json_api}
 Example:
-
-`</api/cases/1/relationships/relatedAccount>`
 
 ```JSON
 {
@@ -494,8 +476,6 @@ Replace the contact that is related to a specific case.
 {@request:json_api}
 Example:
 
-`</api/cases/1/relationships/relatedContact>`
-
 ```JSON
 {
   "data": {
@@ -523,8 +503,6 @@ Replace the source configured for a specific case.
 {@request:json_api}
 Example:
 
-`</api/cases/1/relationships/source>`
-
 ```JSON
 {
   "data": {
@@ -551,8 +529,6 @@ Replace the status configured for a specific case.
 
 {@request:json_api}
 Example:
-
-`</api/cases/1/relationships/status>`
 
 ```JSON
 {

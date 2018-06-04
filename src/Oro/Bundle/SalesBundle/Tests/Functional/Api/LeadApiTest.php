@@ -93,22 +93,14 @@ class LeadApiTest extends RestJsonApiTestCase
     {
         $response = $this->post(
             ['entity' => 'leads'],
-            $this->getRequestData('lead_post_no_account_and_customer.yml'),
-            [],
-            false
+            'lead_post_no_account_and_customer.yml'
         );
 
-        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
-        self::assertEquals(
-            [
-                [
-                    'status' => '400',
-                    'title'  => 'form constraint',
-                    'detail' => 'Either an account or a customer should be set.'
-                ]
-            ],
-            $this->getResponseErrors($response)
-        );
+        $this->assertResponseContains('lead_post_no_account_and_customer.yml', $response);
+
+        // test that the entity was created
+        $entity = $this->getEntityManager()->find(Lead::class, $this->getResourceId($response));
+        self::assertNotNull($entity);
     }
 
     public function testPostWithInconsistentCustomer()
