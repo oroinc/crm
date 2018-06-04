@@ -18,6 +18,7 @@ class OroMagentoExtension extends Extension
         $loader->load('services.yml');
         $loader->load('orm.yml');
         $loader->load('importexport.yml');
+        $loader->load('commands.yml');
 
         $config  = $this->processConfiguration(new Configuration(), $configs);
         $services = $container->findTaggedServiceIds('oro_magento.bundle_config.aware');

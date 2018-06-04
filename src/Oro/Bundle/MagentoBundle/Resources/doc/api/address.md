@@ -17,14 +17,13 @@ Retrieve a collection of Magento customer address records.
 ### create
 
 Create a new Magento customer address record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentoaddresses>`
 
 ```JSON
 {  
@@ -77,8 +76,6 @@ Edit a specific Magento customer address record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoaddresses/1>`
 
 ```JSON
 {  
@@ -134,7 +131,6 @@ Delete a specific Magento customer address record.
 ### delete_list
 
 Delete a collection of Magento customer address records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -183,8 +179,6 @@ Replace the contact address configured for a specific Magento customer address r
 {@request:json_api}
 Example:
 
-`</api/magentoaddresses/1/relationships/contactAddress>`
-
 ```JSON
 {
   "data": {
@@ -211,8 +205,6 @@ Replace the country configured for a specific Magento customer address record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoaddresses/1/relationships/country>`
 
 ```JSON
 {
@@ -241,8 +233,6 @@ Replace the owner of a specific Magento customer address record.
 {@request:json_api}
 Example:
 
-`</api/magentoaddresses/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -269,8 +259,6 @@ Replace the region configured for a specific Magento customer address record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoaddresses/1/relationships/region>`
 
 ```JSON
 {
@@ -299,8 +287,6 @@ Set the address types for a specific Magento customer address record.
 {@request:json_api}
 Example:
 
-`</api/magentoaddresses/1/relationships/types>`
-
 ```JSON
 {  
    "data":[  
@@ -323,8 +309,6 @@ Replace the address types for a specific Magento customer address record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoaddresses/1/relationships/types>`
 
 ```JSON
 {  
@@ -362,8 +346,6 @@ Replace an integration channel via which information about the Magento customer 
 
 {@request:json_api}
 Example:
-
-`</api/magentoaddresses/1/relationships/channel>`
 
 ```JSON
 {
