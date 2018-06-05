@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "7.1.*",
-        "symfony/symfony": "^3.4 <3.4.11"
+        "symfony/symfony": "^3.4"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\CaseBundle": "" }
