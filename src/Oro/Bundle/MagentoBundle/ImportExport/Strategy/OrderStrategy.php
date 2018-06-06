@@ -15,6 +15,7 @@ use Oro\Bundle\MagentoBundle\Provider\Connector\MagentoConnectorInterface;
 class OrderStrategy extends AbstractImportStrategy
 {
     const CONTEXT_ORDER_POST_PROCESS_IDS = 'postProcessOrderIds';
+    const CONTEXT_DETACHED_ENTITIES_IDS = 'detachedEntitiesIds';
 
     /**
      * @var Order
@@ -52,6 +53,10 @@ class OrderStrategy extends AbstractImportStrategy
      */
     protected function beforeProcessEntity($entity)
     {
+        if ($this->isDetachedEntity($entity)) {
+            return null;
+        }
+
         $this->existingEntity = $this->databaseHelper->findOneByIdentity($entity);
         if (!$this->existingEntity) {
             $this->existingEntity = $entity;
@@ -292,5 +297,33 @@ class OrderStrategy extends AbstractImportStrategy
         }
 
         return parent::combineIdentityValues($entity, $entityClass, $searchContext);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function processValidationErrors($entity, array $validationErrors)
+    {
+        parent::processValidationErrors($entity, $validationErrors);
+
+        $this->appendDataToContext(self::CONTEXT_DETACHED_ENTITIES_IDS, $entity->getIncrementId());
+    }
+
+    /**
+     * Check if entity was detached
+     *
+     * @param object $entity
+     *
+     * @return bool
+     */
+    private function isDetachedEntity($entity)
+    {
+        $detachedEntitiesIds = (array) $this->getExecutionContext()->get(self::CONTEXT_DETACHED_ENTITIES_IDS);
+
+        if (in_array($entity->getIncrementId(), $detachedEntitiesIds, true)) {
+            return true;
+        }
+
+        return false;
     }
 }
