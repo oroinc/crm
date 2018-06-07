@@ -12,6 +12,7 @@ use Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
 use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Component\TestUtils\ORM\Mocks\UnitOfWork;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 
@@ -380,8 +381,12 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCollection(array $items = [])
     {
+        $uow = new UnitOfWork();
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager $em */
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
+        $em->expects($this->any())
+            ->method('getUnitOfWork')
+            ->willReturn($uow);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ClassMetadata $metadata */
         $metadata = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
