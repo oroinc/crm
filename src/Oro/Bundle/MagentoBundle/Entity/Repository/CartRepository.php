@@ -269,15 +269,19 @@ class CartRepository extends ChannelAwareEntityRepository
     protected function getAbandonedQB(\DateTime $start = null, \DateTime $end = null)
     {
         $qb = $this->createQueryBuilder('cart');
+
+        $qbWithCart =  $this->_em->getRepository('OroMagentoBundle:Order')
+            ->createQueryBuilder('mOrder')
+            ->where('mOrder.cart = cart');
+        QueryBuilderUtil::checkParameter($qbWithCart);
+
         $qb->join('cart.status', 'cstatus')
             ->andWhere('cstatus.name = :statusName')
             ->setParameter('statusName', 'open')
             ->andWhere(
                 $qb->expr()->not(
                     $qb->expr()->exists(
-                        $this->_em->getRepository('OroMagentoBundle:Order')
-                            ->createQueryBuilder('mOrder')
-                            ->where('mOrder.cart = cart')
+                        $qbWithCart
                     )
                 )
             );
