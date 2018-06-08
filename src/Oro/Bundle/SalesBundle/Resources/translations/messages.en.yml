@@ -653,7 +653,7 @@ oro:
                     feature_enabled.label:                     Enable Sales Process
                 display_relevant_opportunities:
                     label:                                     Display relevant opportunities
-                    tooltip:                                   If turned on, will display the list of other opportunities related to the same account at the opportunity view to give the sales rep quick access to deal history.
+                    tooltip:                                   Enable this option to display a list of other opportunities related to the same account on the opportunity view page and give sales reps quick access to deal history.
 
         privilege:
             category.sales_data.label: Sales Data

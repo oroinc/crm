@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Async;
 
-use Doctrine\DBAL\Driver\DriverException;
+use Doctrine\DBAL\Driver\AbstractDriverException;
 use Oro\Bundle\ContactBundle\Async\ContactPostImportProcessor;
 use Oro\Bundle\ContactBundle\Handler\ContactEmailAddressHandler;
 use Oro\Bundle\EntityBundle\ORM\DatabaseExceptionHelper;
@@ -203,7 +203,7 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($job);
 
         $exception = new \Exception();
-        $databaseDriverExceprion = $this->createMock(DriverException::class);
+        $databaseDriverExceprion = $this->createMock(AbstractDriverException::class);
         $this->contactEmailAddressHandler->expects($this->once())
             ->method('actualizeContactEmailAssociations')
             ->willThrowException(new \Exception);
@@ -246,7 +246,7 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($job);
 
         $exception = new \Exception();
-        $databaseDriverExceprion = $this->createMock(DriverException::class);
+        $databaseDriverExceprion = $this->createMock(AbstractDriverException::class);
         $this->contactEmailAddressHandler->expects($this->once())
             ->method('actualizeContactEmailAssociations')
             ->willThrowException(new \Exception);
@@ -290,7 +290,7 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($job);
 
         $exception = new \Exception();
-        $databaseDriverExceprion = $this->createMock(DriverException::class);
+        $databaseDriverExceprion = $this->createMock(AbstractDriverException::class);
         $this->contactEmailAddressHandler->expects($this->once())
             ->method('actualizeContactEmailAssociations');
 
