@@ -104,6 +104,34 @@ class LeadApiTest extends RestJsonApiTestCase
         self::assertNotNull($entity);
     }
 
+    public function testPostWithoutStatus()
+    {
+        $response = $this->post(
+            ['entity' => 'leads'],
+            'lead_post_no_status.yml'
+        );
+
+        $this->assertResponseContains('lead_post_no_status.yml', $response);
+
+        // test that the entity was created
+        $entity = $this->getEntityManager()->find(Lead::class, $this->getResourceId($response));
+        self::assertNotNull($entity);
+    }
+
+    public function testPostWithNullStatus()
+    {
+        $response = $this->post(
+            ['entity' => 'leads'],
+            'lead_post_null_status.yml'
+        );
+
+        $this->assertResponseContains('lead_post_no_status.yml', $response);
+
+        // test that the entity was created
+        $entity = $this->getEntityManager()->find(Lead::class, $this->getResourceId($response));
+        self::assertNotNull($entity);
+    }
+
     public function testPostWithInconsistentCustomer()
     {
         $response = $this->request(
@@ -112,19 +140,16 @@ class LeadApiTest extends RestJsonApiTestCase
             $this->getRequestData('lead_post_inconsistent_customer.yml')
         );
 
-        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
-        self::assertEquals(
+        self::assertResponseValidationError(
             [
-                [
-                    'status' => '400',
-                    'title'  => 'form constraint',
-                    'detail' => 'The customer should be a part of the specified account.',
-                    'source' => [
-                        'pointer' => '/data/relationships/customer/data'
-                    ]
+                'status' => '400',
+                'title'  => 'form constraint',
+                'detail' => 'The customer should be a part of the specified account.',
+                'source' => [
+                    'pointer' => '/data/relationships/customer/data'
                 ]
             ],
-            $this->getResponseErrors($response)
+            $response
         );
     }
 
@@ -267,12 +292,12 @@ class LeadApiTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type'          => 'leads',
-                    'id'            => (string)$leadId,
+                    'id'            => (string) $leadId,
                     'relationships' => [
                         'account' => [
                             'data' => [
                                 'type' => 'accounts',
-                                'id'   => (string)$accountId,
+                                'id'   => (string) $accountId,
                             ],
                         ],
                     ],
@@ -299,12 +324,12 @@ class LeadApiTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type'          => 'leads',
-                    'id'            => (string)$leadId,
+                    'id'            => (string) $leadId,
                     'relationships' => [
                         'customer' => [
                             'data' => [
                                 'type' => 'b2bcustomers',
-                                'id'   => (string)$customerId,
+                                'id'   => (string) $customerId,
                             ],
                         ],
                     ],
@@ -333,19 +358,39 @@ class LeadApiTest extends RestJsonApiTestCase
             $this->getRequestData('lead_patch_inconsistent_customer.yml')
         );
 
-        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
-        self::assertEquals(
+        self::assertResponseValidationError(
             [
-                [
-                    'status' => '400',
-                    'title'  => 'form constraint',
-                    'detail' => 'The customer should be a part of the specified account.',
-                    'source' => [
-                        'pointer' => '/data/relationships/customer/data'
-                    ]
+                'status' => '400',
+                'title'  => 'form constraint',
+                'detail' => 'The customer should be a part of the specified account.',
+                'source' => [
+                    'pointer' => '/data/relationships/customer/data'
                 ]
             ],
-            $this->getResponseErrors($response)
+            $response
+        );
+    }
+
+    public function testPatchWithNullStatus()
+    {
+        $leadId = $this->getReference('lead1')->getId();
+        $response = $this->patch(
+            ['entity' => 'leads', 'id' => $leadId],
+            $this->getRequestData('lead_patch_null_status.yml'),
+            [],
+            false
+        );
+
+        self::assertResponseValidationError(
+            [
+                'status' => '400',
+                'title'  => 'not blank constraint',
+                'detail' => 'This value should not be blank.',
+                'source' => [
+                    'pointer' => '/data/relationships/status/data'
+                ]
+            ],
+            $response
         );
     }
 
@@ -358,7 +403,7 @@ class LeadApiTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type' => 'accounts',
-                    'id'   => (string)$accountId,
+                    'id'   => (string) $accountId,
                 ],
             ]
         );
@@ -380,7 +425,7 @@ class LeadApiTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type' => 'b2bcustomers',
-                    'id'   => (string)$customerId,
+                    'id'   => (string) $customerId,
                 ],
             ]
         );
@@ -409,16 +454,13 @@ class LeadApiTest extends RestJsonApiTestCase
             ]
         );
 
-        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
-        self::assertEquals(
+        self::assertResponseValidationError(
             [
-                [
-                    'status' => '400',
-                    'title'  => 'not null constraint',
-                    'detail' => 'This value should not be null.'
-                ]
+                'status' => '400',
+                'title'  => 'not null constraint',
+                'detail' => 'This value should not be null.'
             ],
-            $this->getResponseErrors($response)
+            $response
         );
     }
 
@@ -436,16 +478,13 @@ class LeadApiTest extends RestJsonApiTestCase
             ]
         );
 
-        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
-        self::assertEquals(
+        self::assertResponseValidationError(
             [
-                [
-                    'status' => '400',
-                    'title'  => 'not null constraint',
-                    'detail' => 'This value should not be null.'
-                ]
+                'status' => '400',
+                'title'  => 'not null constraint',
+                'detail' => 'This value should not be null.'
             ],
-            $this->getResponseErrors($response)
+            $response
         );
     }
 }

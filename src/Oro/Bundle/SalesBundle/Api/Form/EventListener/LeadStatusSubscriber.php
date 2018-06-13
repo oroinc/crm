@@ -2,12 +2,13 @@
 
 namespace Oro\Bundle\SalesBundle\Api\Form\EventListener;
 
+use Oro\Bundle\ApiBundle\Form\FormUtil;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 
 /**
  * The form event subscriber responsible for setting default Lead status if Lead doesn't have it,
@@ -16,7 +17,7 @@ use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 class LeadStatusSubscriber implements EventSubscriberInterface
 {
     /** @var EnumValueProvider */
-    protected $enumProvider;
+    private $enumProvider;
 
     /**
      * @param EnumValueProvider $enumProvider
@@ -26,11 +27,12 @@ class LeadStatusSubscriber implements EventSubscriberInterface
         $this->enumProvider = $enumProvider;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
-        return array(
-            FormEvents::SUBMIT   => 'onSubmit',
-        );
+        return [FormEvents::SUBMIT => 'onSubmit'];
     }
 
     /**
@@ -39,16 +41,24 @@ class LeadStatusSubscriber implements EventSubscriberInterface
     public function onSubmit(FormEvent $event)
     {
         $lead = $event->getData();
-        if ($lead->getStatus() !== null) {
-            return;
+        if (null === $lead->getId() && null === $lead->getStatus()) {
+            $defaultStatus = $this->getDefaultStatus();
+            if (null !== $defaultStatus) {
+                $lead->setStatus($defaultStatus);
+            }
+        }
+    }
+
+    /**
+     * @return AbstractEnumValue|null
+     */
+    private function getDefaultStatus(): ?AbstractEnumValue
+    {
+        $defaultStatuses = $this->enumProvider->getDefaultEnumValuesByCode(Lead::INTERNAL_STATUS_CODE);
+        if (empty($defaultStatuses)) {
+            return null;
         }
 
-        $leadDefaultStatus = $this->enumProvider->getDefaultEnumValuesByCode(Lead::INTERNAL_STATUS_CODE)[0] ?? null;
-        if (!$leadDefaultStatus) {
-            return;
-        }
-
-        $lead->setStatus($leadDefaultStatus);
-        $event->setData($lead);
+        return \reset($defaultStatuses);
     }
 }

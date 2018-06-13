@@ -22,11 +22,6 @@ The created record is returned in the response.
 
 {@inheritdoc}
 
-**Please note:**
-
-*An **account** and **customer** fields are optional. In case when both fields are provided
-the customer should be a part of the specified account.*
-
 {@request:json_api}
 Example:
 
@@ -86,12 +81,6 @@ Edit a specific lead record.
 The updated record is returned in the response.
 
 {@inheritdoc}
-
-**Please note:**
-
-*The **account** and **customer** fields are related and you cannot pass them together if
-the customer is not a part of the specified account.
-These fields could be used independent from each other, but must be correlated if both of them are specified.*
 
 {@request:json_api}
 Example:
@@ -183,6 +172,11 @@ The list of records that will be deleted, could be limited by filters.
 {@inheritdoc}
 
 **The required field**
+
+**Please note:**
+
+*This field is optional if the default value is set in the Lead entity configuration.
+If this field is missing in the request, the default value is applied.*
 
 #### update
 
@@ -280,25 +274,30 @@ The phone number that should be set as the primary one.
 
 A customer the lead is assigned to.
 
-#### create
+#### create, update
 
 {@inheritdoc}
 
 **Please note:**
 
-*If both **customer** and **account** fields are provided the customer should be a part of the specified account.*
+*The **customer** is related to the specific **account**.
+In case when both fields (**account** and **customer**) are provided
+the **customer** should be assigned to the specified **account**.*
 
 ### account
 
 An account the lead is assigned to.
 
-#### create
+#### create, update
 
 {@inheritdoc}
 
 **Please note:**
 
-*This field is **required** if the **customer** field is not specified.*
+*The **account** is related to the specific **customer**.
+In case when both fields (**account** and **customer**) are provided
+the **customer** should be assigned to the specified **account**.*
+
 
 ### campaign
 

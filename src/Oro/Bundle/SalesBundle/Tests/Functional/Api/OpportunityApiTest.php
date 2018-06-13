@@ -116,16 +116,13 @@ class OpportunityApiTest extends RestJsonApiTestCase
             $this->getRequestData('opportunity_post_no_account_and_customer.yml')
         );
 
-        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
-        self::assertEquals(
+        self::assertResponseValidationError(
             [
-                [
-                    'status' => '400',
-                    'title'  => 'form constraint',
-                    'detail' => 'Either an account or a customer should be set.'
-                ]
+                'status' => '400',
+                'title'  => 'form constraint',
+                'detail' => 'Either an account or a customer should be set.'
             ],
-            $this->getResponseErrors($response)
+            $response
         );
     }
 
@@ -137,19 +134,16 @@ class OpportunityApiTest extends RestJsonApiTestCase
             $this->getRequestData('opportunity_post_inconsistent_customer.yml')
         );
 
-        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
-        self::assertEquals(
+        self::assertResponseValidationError(
             [
-                [
-                    'status' => '400',
-                    'title'  => 'form constraint',
-                    'detail' => 'The customer should be a part of the specified account.',
-                    'source' => [
-                        'pointer' => '/data/relationships/customer/data'
-                    ]
+                'status' => '400',
+                'title'  => 'form constraint',
+                'detail' => 'The customer should be a part of the specified account.',
+                'source' => [
+                    'pointer' => '/data/relationships/customer/data'
                 ]
             ],
-            $this->getResponseErrors($response)
+            $response
         );
     }
 
@@ -318,12 +312,12 @@ class OpportunityApiTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type'          => 'opportunities',
-                    'id'            => (string)$opportunityId,
+                    'id'            => (string) $opportunityId,
                     'relationships' => [
                         'lead' => [
                             'data' => [
                                 'type' => 'leads',
-                                'id'   => (string)$leadId,
+                                'id'   => (string) $leadId,
                             ],
                         ],
                     ],
@@ -349,12 +343,12 @@ class OpportunityApiTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type'          => 'opportunities',
-                    'id'            => (string)$opportunityId,
+                    'id'            => (string) $opportunityId,
                     'relationships' => [
                         'account' => [
                             'data' => [
                                 'type' => 'accounts',
-                                'id'   => (string)$accountId,
+                                'id'   => (string) $accountId,
                             ],
                         ],
                     ],
@@ -381,12 +375,12 @@ class OpportunityApiTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type'          => 'opportunities',
-                    'id'            => (string)$opportunityId,
+                    'id'            => (string) $opportunityId,
                     'relationships' => [
                         'customer' => [
                             'data' => [
                                 'type' => 'b2bcustomers',
-                                'id'   => (string)$customerId,
+                                'id'   => (string) $customerId,
                             ],
                         ],
                     ],
@@ -415,19 +409,16 @@ class OpportunityApiTest extends RestJsonApiTestCase
             $this->getRequestData('opportunity_patch_inconsistent_customer.yml')
         );
 
-        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
-        self::assertEquals(
+        self::assertResponseValidationError(
             [
-                [
-                    'status' => '400',
-                    'title'  => 'form constraint',
-                    'detail' => 'The customer should be a part of the specified account.',
-                    'source' => [
-                        'pointer' => '/data/relationships/customer/data'
-                    ]
+                'status' => '400',
+                'title'  => 'form constraint',
+                'detail' => 'The customer should be a part of the specified account.',
+                'source' => [
+                    'pointer' => '/data/relationships/customer/data'
                 ]
             ],
-            $this->getResponseErrors($response)
+            $response
         );
     }
 
@@ -440,7 +431,7 @@ class OpportunityApiTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type' => 'leads',
-                    'id'   => (string)$leadId,
+                    'id'   => (string) $leadId,
                 ],
             ]
         );
@@ -461,7 +452,7 @@ class OpportunityApiTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type' => 'accounts',
-                    'id'   => (string)$accountId,
+                    'id'   => (string) $accountId,
                 ],
             ]
         );
@@ -483,7 +474,7 @@ class OpportunityApiTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type' => 'b2bcustomers',
-                    'id'   => (string)$customerId,
+                    'id'   => (string) $customerId,
                 ],
             ]
         );
@@ -512,16 +503,13 @@ class OpportunityApiTest extends RestJsonApiTestCase
             ]
         );
 
-        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
-        self::assertEquals(
+        self::assertResponseValidationError(
             [
-                [
-                    'status' => '400',
-                    'title'  => 'not null constraint',
-                    'detail' => 'This value should not be null.'
-                ]
+                'status' => '400',
+                'title'  => 'not null constraint',
+                'detail' => 'This value should not be null.'
             ],
-            $this->getResponseErrors($response)
+            $response
         );
     }
 
@@ -539,16 +527,14 @@ class OpportunityApiTest extends RestJsonApiTestCase
             ]
         );
 
-        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
-        self::assertEquals(
+        self::assertResponseValidationError(
             [
-                [
-                    'status' => '400',
-                    'title'  => 'not null constraint',
-                    'detail' => 'This value should not be null.'
-                ]
+                'status' => '400',
+                'title'  => 'not null constraint',
+                'detail' => 'This value should not be null.'
+
             ],
-            $this->getResponseErrors($response)
+            $response
         );
     }
 }
