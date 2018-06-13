@@ -1,0 +1,52 @@
+data:
+    type: leads
+    attributes:
+        lastContactedDate: null
+        lastContactedDateIn: null
+        lastContactedDateOut: null
+        timesContacted: null
+        timesContactedIn: null
+        timesContactedOut: null
+        name: 'New Lead'
+        namePrefix: null
+        firstName: null
+        middleName: null
+        lastName: null
+        nameSuffix: null
+        jobTitle: null
+        companyName: null
+        website: null
+        numberOfEmployees: null
+        industry: null
+        notes: null
+        twitter: null
+        linkedIn: null
+        primaryPhone: null
+        primaryEmail: null
+        phones: {  }
+        emails: {  }
+    relationships:
+        contact:
+            data: null
+        addresses:
+            data: []
+        owner:
+            data:
+                type: users
+                id: '<toString(@user->id)>'
+        opportunities:
+            data: []
+        organization:
+            data:
+                type: organizations
+                id: '<toString(@organization->id)>'
+        source:
+            data: null
+        status:
+            data:
+                type: leadstatuses
+                id: new
+        account:
+            data: null
+        customer:
+            data: null
