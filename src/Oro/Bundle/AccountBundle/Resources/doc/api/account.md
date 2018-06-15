@@ -17,14 +17,13 @@ Retrieve a collection of account records.
 ### create
 
 Create a new account record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/accounts>`
 
 ```JSON
 {  
@@ -78,14 +77,13 @@ Example:
 ### update
 
 Edit a specific account record.
+
 The updated record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/accounts/51>`
 
 ```JSON
 {  
@@ -146,7 +144,6 @@ Delete a specific account record.
 ### delete_list
 
 Delete a collection of account records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -195,8 +192,6 @@ Set contacts records for a specific account record.
 {@request:json_api}
 Example:
 
-`</api/accounts/1/relationships/contacts>`
-
 ```JSON
 {
   "data": [
@@ -223,8 +218,6 @@ Replace the list of contacts assigned to a specific account record.
 
 {@request:json_api}
 Example:
-
-`</api/accounts/1/relationships/contacts>`
 
 ```JSON
 {
@@ -267,8 +260,6 @@ Replace the default contact record assigned to a specific account record.
 {@request:json_api}
 Example:
 
-`</api/accounts/1/relationships/defaultContact>`
-
 ```JSON
 {
   "data": {
@@ -296,8 +287,6 @@ Replace the organization a specific account belongs to.
 {@request:json_api}
 Example:
 
-`</api/accounts/1/relationships/organization>`
-
 ```JSON
 {
   "data": {
@@ -324,8 +313,6 @@ Replace the owner of a specific account record.
 
 {@request:json_api}
 Example:
-
-`</api/accounts/1/relationships/owner>`
 
 ```JSON
 {
@@ -365,8 +352,6 @@ Replace the account records that refer to a specific account record.
 
 {@request:json_api}
 Example:
-
-`</api/accounts/1/relationships/referredBy>`
 
 ```JSON
 {

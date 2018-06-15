@@ -21,7 +21,8 @@ class UpdateContactFormType implements Migration
                 Contact::class,
                 'form',
                 'form_type',
-                ContactSelectType::class
+                ContactSelectType::class,
+                'oro_contact_select'
             )
         );
     }

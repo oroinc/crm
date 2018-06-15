@@ -22,7 +22,8 @@ class UpdateFormTypeForExtendDescription implements Migration
                 'extend_description',
                 'form',
                 'type',
-                OroResizeableRichTextType::class
+                OroResizeableRichTextType::class,
+                'oro_resizeable_rich_text'
             )
         );
     }

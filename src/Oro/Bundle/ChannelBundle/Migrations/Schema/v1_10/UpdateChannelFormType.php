@@ -21,7 +21,8 @@ class UpdateChannelFormType implements Migration
                 Channel::class,
                 'form',
                 'form_type',
-                ChannelSelectType::class
+                ChannelSelectType::class,
+                'oro_channel_select_type'
             )
         );
     }

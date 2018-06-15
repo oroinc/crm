@@ -53,7 +53,7 @@ class ChannelIntegrationHandler
         if ('POST' === $request->getMethod()) {
             $this->form->handleRequest($request);
 
-            return ($this->form->isValid());
+            return ($this->form->isSubmitted() && $this->form->isValid());
         } elseif ('GET' === $request->getMethod() && $data) {
             $request->query->set(IntegrationChannelHandler::UPDATE_MARKER, true);
             $this->form->submit($data);

@@ -17,14 +17,13 @@ Retrieve a collection of Magento website records.
 ### create
 
 Create a new Magento website record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentowebsites>`
 
 ```JSON
 {  
@@ -52,8 +51,6 @@ Edit a specific Magento website record.
 {@request:json_api}
 Example:
 
-`</api/magentowebsites/1>`
-
 ```JSON
 {  
    "data":{  
@@ -80,7 +77,6 @@ Delete a specific Magento website record.
 ### delete_list
 
 Delete a collection of Magento website records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -144,8 +140,6 @@ Replace an integration channel via which information about the Magento website i
 
 {@request:json_api}
 Example:
-
-`</api/magentowebsites/1/relationships/channel>`
 
 ```JSON
 {

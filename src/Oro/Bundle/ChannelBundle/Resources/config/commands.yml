@@ -1,0 +1,6 @@
+services:
+    Oro\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand:
+        public: false
+        class: Oro\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand
+        tags:
+            - { name: console.command }

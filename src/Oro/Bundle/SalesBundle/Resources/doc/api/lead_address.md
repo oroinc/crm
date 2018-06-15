@@ -17,14 +17,13 @@ Retrieve a collection of lead address records.
 ### create
 
 Create a new lead address record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/leadaddresses>`
 
 ```JSON
 {  
@@ -72,8 +71,6 @@ Edit a specific lead address record.
 
 {@request:json_api}
 Example:
-
-`</api/leadaddresses/106>`
 
 ```JSON
 {  
@@ -123,7 +120,6 @@ Delete a specific lead address record.
 ### delete_list
 
 Delete a collection of lead address records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -176,8 +172,6 @@ Replace the country configured for a specific lead address record.
 {@request:json_api}
 Example:
 
-`</api/leadaddresses/1/relationships/country>`
-
 ```JSON
 {
   "data": {
@@ -205,8 +199,6 @@ Replace the owner of a specific lead address record.
 {@request:json_api}
 Example:
 
-`</api/leadaddresses/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -233,8 +225,6 @@ Replace the region that is configured for a specific lead address record.
 
 {@request:json_api}
 Example:
-
-`</api/leadaddresses/1/relationships/region>`
 
 ```JSON
 {

@@ -17,14 +17,13 @@ Retrieve a collection of records represented by Magento cart addresses.
 ### create
 
 Create a new Magento cart address record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentocartaddresses>`
 
 ```JSON
 {  
@@ -71,8 +70,6 @@ Edit a specific Magento cart address record.
 {@request:json_api}
 Example:
 
-`</api/magentocartaddresses/4>`
-
 ```JSON
 {  
    "data":{  
@@ -118,7 +115,6 @@ Delete a specific Magento cart address record.
 ### delete_list
 
 Delete a collection of Magento cart addresses records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -151,8 +147,6 @@ Replace the country configured for a specific Magento cart address record.
 {@request:json_api}
 Example:
 
-`</api/magentocartaddresses/1/relationships/country>`
-
 ```JSON
 {
   "data": {
@@ -180,8 +174,6 @@ Replace the region configured for a specific Magento cart address record.
 {@request:json_api}
 Example:
 
-`</api/magentocartaddresses/1/relationships/region>`
-
 ```JSON
 {
   "data": {
@@ -208,8 +200,6 @@ Replace an integration channel via which information about the Magento cart addr
 
 {@request:json_api}
 Example:
-
-`</api/magentocartaddresses/1/relationships/channel>`
 
 ```JSON
 {

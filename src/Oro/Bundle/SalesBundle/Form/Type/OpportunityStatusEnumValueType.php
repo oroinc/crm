@@ -43,12 +43,18 @@ class OpportunityStatusEnumValueType extends AbstractType
         $disabled = isset($data['id']) && in_array($data['id'], self::$immutableProbabilityStatuses);
 
         $form = $event->getForm();
+        $attr = [];
+
+        if ($disabled) {
+            $attr['readonly'] = true;
+        }
+
         $form->add(
             'probability',
             OroPercentType::class,
             [
                 'disabled' => $disabled,
-                'attr' => ['readonly' => $disabled],
+                'attr' => $attr,
                 'constraints' => new Range(['min' => 0, 'max' => 100]),
             ]
         );

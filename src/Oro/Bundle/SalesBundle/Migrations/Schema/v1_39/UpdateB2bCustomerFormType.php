@@ -21,7 +21,8 @@ class UpdateB2bCustomerFormType implements Migration
                 B2bCustomer::class,
                 'form',
                 'form_type',
-                B2bCustomerSelectType::class
+                B2bCustomerSelectType::class,
+                'oro_sales_b2bcustomer_select'
             )
         );
     }

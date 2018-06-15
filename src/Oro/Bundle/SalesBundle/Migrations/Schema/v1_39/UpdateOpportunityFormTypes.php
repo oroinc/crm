@@ -25,29 +25,35 @@ class UpdateOpportunityFormTypes implements Migration
                 Opportunity::class,
                 'form',
                 'form_type',
-                OpportunitySelectType::class
+                OpportunitySelectType::class,
+                'oro_sales_opportunity_select'
             )
         );
 
-        $queries->addQuery($this->getFieldUpdateQuery('contact', ContactSelectType::class));
-        $queries->addQuery($this->getFieldUpdateQuery('probability', OroPercentType::class));
-        $queries->addQuery($this->getFieldUpdateQuery('budgetAmountValue', OroMoneyType::class));
-        $queries->addQuery($this->getFieldUpdateQuery('closeRevenueValue', OroMoneyType::class));
+        $queries->addQuery($this->getFieldUpdateQuery('contact', ContactSelectType::class, 'oro_contact_select'));
+        $queries->addQuery($this->getFieldUpdateQuery('probability', OroPercentType::class, 'oro_percent'));
+        $queries->addQuery($this->getFieldUpdateQuery('budgetAmountValue', OroMoneyType::class, 'oro_money'));
+        $queries->addQuery($this->getFieldUpdateQuery('closeRevenueValue', OroMoneyType::class, 'oro_money'));
     }
 
     /**
      * @param string $column
      * @param string $formType
+     * @param string $replaceValue
      * @return UpdateEntityConfigFieldValueQuery
      */
-    private function getFieldUpdateQuery(string $column, string $formType): UpdateEntityConfigFieldValueQuery
-    {
+    private function getFieldUpdateQuery(
+        string $column,
+        string $formType,
+        string $replaceValue
+    ): UpdateEntityConfigFieldValueQuery {
         return new UpdateEntityConfigFieldValueQuery(
             Opportunity::class,
             $column,
             'form',
             'form_type',
-            $formType
+            $formType,
+            $replaceValue
         );
     }
 }

@@ -34,8 +34,6 @@ class CustomerDataGridListener
                 'data_name' => 'isSubscriber',
                 'options'   => [
                     'field_options' => [
-                        // TODO: Remove 'choices_as_values' option in scope of BAP-15236
-                        'choices_as_values' => true,
                         'choices' => [
                             'oro.magento.datagrid.columns.is_subscriber.unknown' => 'unknown',
                             'oro.magento.datagrid.columns.is_subscriber.no' => 'no',

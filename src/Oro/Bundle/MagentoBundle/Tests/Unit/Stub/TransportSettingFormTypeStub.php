@@ -18,14 +18,7 @@ class TransportSettingFormTypeStub extends AbstractType
     {
         $builder
             ->add('apiKey', PasswordType::class)
-            ->add(
-                'websiteId',
-                WebsiteSelectType::class,
-                [
-                    // TODO: Remove 'choices_as_values' option in scope of BAP-15236
-                    'choices_as_values' => true,
-                ]
-            );
+            ->add('websiteId', WebsiteSelectType::class);
     }
 
     /**

@@ -128,7 +128,7 @@ connector:
                     parameters:
                         batch_size: 25
                         post_processing_jobs: mage_order_import_post_process_customers_and_info
-                        context_shared_keys: postProcessGuestCustomers,postProcessOrders,postProcessCustomerIds,postProcessCartsIds,postProcessOrderIds
+                        context_shared_keys: postProcessGuestCustomers,postProcessOrders,postProcessCustomerIds,postProcessCartsIds,postProcessOrderIds,detachedEntitiesIds
 
         mage_order_import_post_process_customers_and_info:
             title: "Import customers and postponded orders"
@@ -221,7 +221,7 @@ connector:
                     parameters:
                         batch_size: 25
                         post_processing_jobs: mage_order_import_post_process_customers_and_info
-                        context_shared_keys: postProcessGuestCustomers,postProcessOrders,postProcessCustomerIds,postProcessCartsIds,postProcessOrderIds
+                        context_shared_keys: postProcessGuestCustomers,postProcessOrders,postProcessCustomerIds,postProcessCartsIds,postProcessOrderIds,detachedEntitiesIds
                 import_with_new_order:
                     title:     import credit memos from new orders
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
