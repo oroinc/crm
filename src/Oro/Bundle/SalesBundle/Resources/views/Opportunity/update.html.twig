@@ -126,7 +126,7 @@
 
     {% set dataBlocks = [{
         'title': 'General'|trans,
-        'class': 'active',
+        'class': 'nav-item active',
         'subblocks': [
             {
                 'title': 'Opportunity Information'|trans,
@@ -150,6 +150,7 @@
     {% if additionalData is not empty %}
         {% set dataBlocks = dataBlocks|merge([{
             'title': 'Additional'|trans,
+            'class': 'nav-item',
             'subblocks': [{
                 'title': '',
                 'useSpan': false,
