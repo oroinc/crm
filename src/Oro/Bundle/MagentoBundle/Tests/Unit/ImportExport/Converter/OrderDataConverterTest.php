@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\ImportExport\Converter\OrderDataConverter;
 /**
  * @SuppressWarnings("PHPMD.ExcessiveMethodLength")
  */
-class OrderDataConverterTest extends \PHPUnit_Framework_TestCase
+class OrderDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OrderDataConverter */
     protected $converter;

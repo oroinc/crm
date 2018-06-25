@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 use Oro\Bundle\MagentoBundle\Provider\OrderAddressPhoneProvider;
 
-class OrderAddressPhoneProviderTest extends \PHPUnit_Framework_TestCase
+class OrderAddressPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OrderAddressPhoneProvider */
     protected $provider;

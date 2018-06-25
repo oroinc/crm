@@ -10,7 +10,7 @@ use Oro\Bundle\SalesBundle\EventListener\DefaultProbabilityListener;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub;
 use Oro\Bundle\WorkflowBundle\Restriction\RestrictionManager;
 
-class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
+class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider statusDataProvider

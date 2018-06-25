@@ -8,7 +8,7 @@ use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 
-class ContactNameFormatterTest extends \PHPUnit_Framework_TestCase
+class ContactNameFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var NameFormatter */
     protected $nameFormatter;

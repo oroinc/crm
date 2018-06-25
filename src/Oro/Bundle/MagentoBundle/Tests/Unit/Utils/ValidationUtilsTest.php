@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 
-class ValidationUtilsTest extends \PHPUnit_Framework_TestCase
+class ValidationUtilsTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_INCREMENT_ID    = '1000001232';
     const TEST_ORIGIN_ID       = 12;

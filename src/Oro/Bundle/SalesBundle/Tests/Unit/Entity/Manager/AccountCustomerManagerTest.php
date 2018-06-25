@@ -13,21 +13,21 @@ use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub as Customer;
 use Oro\Bundle\SalesBundle\Tests\Unit\Stub\AccountCustomerManager;
 
-class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
+class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AccountCustomerManager */
     protected $manager;
 
-    /** @var DoctrineHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
     protected $doctrineHelper;
 
-    /** @var ConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $configProvider;
 
-    /** @var AccountProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AccountProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $accountProvider;
 
-    /** @var CustomerRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerRepository|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerRepo;
 
     protected function setUp()

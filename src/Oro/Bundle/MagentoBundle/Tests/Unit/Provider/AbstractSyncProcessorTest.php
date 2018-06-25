@@ -17,7 +17,7 @@ use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestContext;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractSyncProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AbstractSyncProcessor
@@ -25,42 +25,42 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
     protected $processor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ManagerRegistry
+     * @var \PHPUnit\Framework\MockObject\MockObject|ManagerRegistry
      */
     protected $registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ProcessorRegistry
+     * @var \PHPUnit\Framework\MockObject\MockObject|ProcessorRegistry
      */
     protected $processorRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Executor
+     * @var \PHPUnit\Framework\MockObject\MockObject|Executor
      */
     protected $jobExecutor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|TypesRegistry
+     * @var \PHPUnit\Framework\MockObject\MockObject|TypesRegistry
      */
     protected $typesRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|EventDispatcherInterface
      */
     protected $eventDispatcher;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerStrategy
+     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerStrategy
      */
     protected $logger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|EntityManager
      */
     protected $em;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelRepository
+     * @var \PHPUnit\Framework\MockObject\MockObject|ChannelRepository
      */
     protected $repository;
 
@@ -187,7 +187,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
      * @param array $connectors
      * @param \DateTime $syncStartDate
      * @param object|null $realConnector
-     * @return Channel|\PHPUnit_Framework_MockObject_MockObject
+     * @return Channel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getIntegration(array $connectors = [], \DateTime $syncStartDate = null, $realConnector = null)
     {
@@ -237,7 +237,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $integration
+     * @param \PHPUnit\Framework\MockObject\MockObject $integration
      * @param string $connector
      * @param null|object $status
      */

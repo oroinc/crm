@@ -14,7 +14,7 @@ use Oro\Bundle\ContactBundle\Entity\Group;
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  */
-class ContactTest extends \PHPUnit_Framework_TestCase
+class ContactTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetGroupLabels()
     {

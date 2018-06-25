@@ -129,7 +129,7 @@ class CustomerHandlerTest extends UpdateHandlerTest
 
     public function testHandleUpdateWorksWithInvalidForm()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Form $form */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Form $form */
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
             ->getMock();

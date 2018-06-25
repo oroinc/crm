@@ -6,7 +6,7 @@ use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilderInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
-class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
+class AnalyticsBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AnalyticsBuilder
@@ -25,7 +25,7 @@ class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuild(array $builders)
     {
-        /** @var Channel|\PHPUnit_Framework_MockObject_MockObject $entity */
+        /** @var Channel|\PHPUnit\Framework\MockObject\MockObject $entity */
         $entity = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         foreach ($builders as $builder) {
@@ -58,7 +58,7 @@ class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $supported
-     * @return AnalyticsBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return AnalyticsBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSupportedBuilder($supported = true)
     {
@@ -79,7 +79,7 @@ class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|AnalyticsBuilderInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|AnalyticsBuilderInterface
      */
     protected function getNotSupportedBuilder()
     {
@@ -87,7 +87,7 @@ class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|AnalyticsBuilderInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|AnalyticsBuilderInterface
      */
     protected function getBuilderMock()
     {

@@ -5,9 +5,9 @@ namespace Oro\Bundle\AccountBundle\Tests\Unit\Provider;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AccountBundle\Provider\AccountPhoneProvider;
 
-class AccountPhoneProviderTest extends \PHPUnit_Framework_TestCase
+class AccountPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $rootProvider;
 
     /** @var AccountPhoneProvider */

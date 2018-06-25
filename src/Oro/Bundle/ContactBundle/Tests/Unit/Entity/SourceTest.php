@@ -4,7 +4,7 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\ContactBundle\Entity\Source;
 
-class SourceTest extends \PHPUnit_Framework_TestCase
+class SourceTest extends \PHPUnit\Framework\TestCase
 {
     public function testName()
     {

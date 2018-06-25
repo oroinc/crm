@@ -7,7 +7,7 @@ use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
 use Oro\Bundle\MagentoBundle\EventListener\CustomerDataGridListener;
 
-class CustomerDataGridListenerTest extends \PHPUnit_Framework_TestCase
+class CustomerDataGridListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomerDataGridListener

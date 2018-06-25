@@ -10,10 +10,10 @@ use Oro\Bundle\EmailBundle\Event\MailboxSaved;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\TagBundle\Entity\TagManager;
 
-class MailboxSavedListenerTest extends \PHPUnit_Framework_TestCase
+class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var TagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var TagManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $tagManager;
 
@@ -86,7 +86,7 @@ class MailboxSavedListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return MailboxSaved|\PHPUnit_Framework_MockObject_MockObject
+     * @return MailboxSaved|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createMailboxSavedEventMock()
     {
@@ -94,7 +94,7 @@ class MailboxSavedListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Mailbox|\PHPUnit_Framework_MockObject_MockObject
+     * @return Mailbox|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createMailboxMock()
     {
@@ -102,7 +102,7 @@ class MailboxSavedListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Organization|\PHPUnit_Framework_MockObject_MockObject
+     * @return Organization|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createOrganizationMock()
     {
@@ -110,7 +110,7 @@ class MailboxSavedListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return CaseMailboxProcessSettings|\PHPUnit_Framework_MockObject_MockObject
+     * @return CaseMailboxProcessSettings|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createCaseMailboxProcessSettingsMock()
     {
@@ -118,7 +118,7 @@ class MailboxSavedListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @return Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createCollectionMock()
     {

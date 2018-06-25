@@ -11,12 +11,12 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
+class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const FORM_DATA = ['field' => 'value'];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|FormInterface
      */
     protected $form;
 
@@ -26,7 +26,7 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|ObjectManager
      */
     protected $manager;
 
@@ -41,7 +41,7 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
     protected $entity;
 
     /**
-     * @var RequestChannelProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestChannelProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestChannelProvider;
 

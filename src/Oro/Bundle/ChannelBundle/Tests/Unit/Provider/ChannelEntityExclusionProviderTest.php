@@ -5,7 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 use Oro\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
-class ChannelEntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
+class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_ENTITY_NAME = 'TestBundle\Entity\Test';
     const TEST_ASSOC_NAME  = 'relation';
@@ -14,7 +14,7 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
     /** @var ChannelEntityExclusionProvider */
     protected $exclusionProvider;
 
-    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $settingsProvider;
 
     public function setUp()

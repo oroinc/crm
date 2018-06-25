@@ -9,10 +9,10 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\EventListener\ImportEventListener;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
 
-class ImportEventListenerTest extends \PHPUnit_Framework_TestCase
+class ImportEventListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var OptionalListenerManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var OptionalListenerManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $listenerManager;
 
@@ -77,14 +77,14 @@ class ImportEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function getEvent($entityClass): JobExecutionEvent
     {
-        /** @var ExecutionContext|\PHPUnit_Framework_MockObject_MockObject $context */
+        /** @var ExecutionContext|\PHPUnit\Framework\MockObject\MockObject $context */
         $context = $this->createMock(ExecutionContext::class);
         $context->expects($this->any())
             ->method('get')
             ->with('entityName')
             ->willReturn($entityClass);
 
-        /** @var JobExecution|\PHPUnit_Framework_MockObject_MockObject $jobExecution */
+        /** @var JobExecution|\PHPUnit\Framework\MockObject\MockObject $jobExecution */
         $jobExecution = $this->createMock(JobExecution::class);
         $jobExecution->expects($this->any())
             ->method('getExecutionContext')

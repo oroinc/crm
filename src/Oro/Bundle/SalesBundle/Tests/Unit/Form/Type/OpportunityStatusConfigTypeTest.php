@@ -16,7 +16,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 
-class OpportunityStatusConfigTypeTest extends \PHPUnit_Framework_TestCase
+class OpportunityStatusConfigTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldPopulateProbabilityFieldsFromSystemConfig()
     {
@@ -195,7 +195,7 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFormEvent(array $data)
     {
-        /* @var $form FormInterface|\PHPUnit_Framework_MockObject_MockObject*/
+        /* @var $form FormInterface|\PHPUnit\Framework\MockObject\MockObject*/
         $form = $this->createMock(FormInterface::class);
 
         return new FormEvent($form, $data);

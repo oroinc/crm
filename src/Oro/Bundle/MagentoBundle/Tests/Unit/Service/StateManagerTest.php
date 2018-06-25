@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 
 use Oro\Bundle\MagentoBundle\Service\StateManager;
 
-class StateManagerTest extends \PHPUnit_Framework_TestCase
+class StateManagerTest extends \PHPUnit\Framework\TestCase
 {
     const STATE_REQUIRE_INFO = 1;
     const STATE_REQUIRE_ADDRESS = 2;

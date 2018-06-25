@@ -8,27 +8,27 @@ use Oro\Bundle\MagentoBundle\EventListener\CustomerGroupGridListener;
 use Oro\Bundle\MagentoBundle\EventListener\StoreGridListener;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class CustomerGroupGridListenerTest extends \PHPUnit_Framework_TestCase
+class CustomerGroupGridListenerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var StoreGridListener */
     protected $listener;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $authorizationChecker;
 
     /** @var string */
     protected $dataChannelClass;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $entityManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $datagrid;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $qb;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $datasource;
 
     protected function setUp()
@@ -105,7 +105,7 @@ class CustomerGroupGridListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createParameterBag(array $data)
     {

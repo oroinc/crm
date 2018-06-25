@@ -17,7 +17,7 @@ use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 
-class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
+class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldNotOverwriteProbability()
     {
@@ -95,7 +95,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFormType(array $defaultStatuses = [])
     {
-        /** @var ConfigManager|\PHPUnit_Framework_MockObject_MockObject $configManager */
+        /** @var ConfigManager|\PHPUnit\Framework\MockObject\MockObject $configManager */
         $configManager = $this->getMockBuilder(ConfigManager::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -111,7 +111,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         }, $defaultStatuses);
 
         $doctrineHelper = $this->getDoctrineHelperMock($defaultStatuses);
-        /** @var EnumTranslationCache|\PHPUnit_Framework_MockObject_MockObject $cache */
+        /** @var EnumTranslationCache|\PHPUnit\Framework\MockObject\MockObject $cache */
         $cache = $this->createMock(EnumTranslationCache::class);
         $enumProvider = new EnumValueProvider($doctrineHelper, $cache);
         $helper = $this->getEnumTypeHelperMock();

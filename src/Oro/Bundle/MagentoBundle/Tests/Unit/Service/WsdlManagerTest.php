@@ -6,15 +6,15 @@ use Guzzle\Http\ClientInterface;
 use Oro\Bundle\MagentoBundle\Service\WsdlManager;
 use Symfony\Component\Filesystem\Filesystem;
 
-class WsdlManagerTest extends \PHPUnit_Framework_TestCase
+class WsdlManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|Filesystem
      */
     protected $fs;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ClientInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ClientInterface
      */
     protected $guzzleClient;
 

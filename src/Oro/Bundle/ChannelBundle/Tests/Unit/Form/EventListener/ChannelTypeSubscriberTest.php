@@ -16,7 +16,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
     const TEST_CHANNEL_TYPE = 'test_type';
     const TEST_CUSTOMER_IDENTITY = 'Oro\Bundle\AcmeBundle\Entity\Test1';
 
-    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $settingsProvider;
 
     /** @var ChannelTypeSubscriber */

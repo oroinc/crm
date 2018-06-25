@@ -7,7 +7,7 @@ use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
-class ChannelsByEntitiesProviderTest extends \PHPUnit_Framework_TestCase
+class ChannelsByEntitiesProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ChannelsByEntitiesProvider
@@ -15,12 +15,12 @@ class ChannelsByEntitiesProviderTest extends \PHPUnit_Framework_TestCase
     protected $provider;
 
     /**
-     * @var ChannelRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChannelRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $repo;
 
     /**
-     * @var AclHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var AclHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $aclHelper;
 

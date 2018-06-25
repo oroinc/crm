@@ -11,15 +11,15 @@ use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport;
 
-class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
+class RestTransportSettingFormTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  RestTransport | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  RestTransport | \PHPUnit\Framework\MockObject\MockObject */
     protected $restTransport;
 
-    /** @var  TypesRegistry| \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  TypesRegistry| \PHPUnit\Framework\MockObject\MockObject */
     protected $typesRegistry;
 
-    /** @var SettingsFormSubscriber | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var SettingsFormSubscriber | \PHPUnit\Framework\MockObject\MockObject */
     protected $settingFormSubscriber;
 
     /** @var  RestTransportSettingFormType */

@@ -11,7 +11,7 @@ use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\Context;
 use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\ValidationNoteProcessor;
 use Oro\Component\Testing\Unit\EntityTrait;
 
-class ValidationNoteProcessorTest extends \PHPUnit_Framework_TestCase
+class ValidationNoteProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use EntityTrait;
 
@@ -21,12 +21,12 @@ class ValidationNoteProcessorTest extends \PHPUnit_Framework_TestCase
     private $processor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | DoctrineHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject | DoctrineHelper
      */
     private $doctrineHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ImportStrategyHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject | ImportStrategyHelper
      */
     private $importStrategyHelper;
 

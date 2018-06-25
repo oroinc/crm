@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener;
 
-class AccountWidgetsDataGridListenerTest extends \PHPUnit_Framework_TestCase
+class AccountWidgetsDataGridListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AccountWidgetsDataGridListener
@@ -12,27 +12,27 @@ class AccountWidgetsDataGridListenerTest extends \PHPUnit_Framework_TestCase
     protected $target;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $parameters;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $event;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataSource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataGrid;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $queryBuilder;
 

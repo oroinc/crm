@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Range;
 
-class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
+class OpportunityProbabilityTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testConfigureOptions()
     {
@@ -32,7 +32,7 @@ class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildForm(array $enumOptions)
     {
-        /** @var $builder FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $builder FormBuilderInterface|\PHPUnit\Framework\MockObject\MockObject */
         $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
 
         $builder->expects($this->exactly(count($enumOptions)))
@@ -96,11 +96,11 @@ class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFormType(array $enumOptions)
     {
-        /** @var $enumTypeHelper EnumTypeHelper|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $enumTypeHelper EnumTypeHelper|\PHPUnit\Framework\MockObject\MockObject */
         $enumTypeHelper = $this->getMockBuilder(EnumTypeHelper::class)->disableOriginalConstructor()->getMock();
-        /** @var $objectRepository ObjectRepository|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $objectRepository ObjectRepository|\PHPUnit\Framework\MockObject\MockObject */
         $objectRepository = $this->getMockBuilder(ObjectRepository::class)->disableOriginalConstructor()->getMock();
-        /** @var $registry Registry|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $registry Registry|\PHPUnit\Framework\MockObject\MockObject */
         $registry = $this->getMockBuilder(Registry::class)->disableOriginalConstructor()->getMock();
 
         $enumTypeHelper->expects($this->once())

@@ -17,7 +17,7 @@ class SharedEmailListSubscriberTest extends FormIntegrationTestCase
 {
     use EntityTrait;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | FormEvent */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | FormEvent */
     protected $event;
 
     /** @var FormInterface */

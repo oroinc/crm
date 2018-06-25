@@ -12,25 +12,25 @@ use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Psr\Log\LoggerInterface;
 
-class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
+class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ContactEmailAddressHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContactEmailAddressHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contactEmailAddressHandler;
 
     /**
-     * @var DatabaseExceptionHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DatabaseExceptionHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $databaseExceptionHelper;
 
     /**
-     * @var JobStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var JobStorage|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jobStorage;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -60,9 +60,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessRejectUnsupportedMessage($messageBody)
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $message->expects($this->once())
@@ -87,9 +87,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessNoParentJob()
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [
@@ -114,9 +114,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessParentJobUnsupportedImportType($jobName)
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [
@@ -150,9 +150,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessException()
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [
@@ -182,9 +182,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessDatabaseDriverException()
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [
@@ -225,9 +225,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessDeadlock()
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [
@@ -269,9 +269,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessSuccess()
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [

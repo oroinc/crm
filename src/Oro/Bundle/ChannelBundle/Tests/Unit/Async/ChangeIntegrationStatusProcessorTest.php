@@ -16,7 +16,7 @@ use Oro\Component\Testing\ClassExtensionTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
+class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;
 
@@ -328,7 +328,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|EntityManagerInterface
      */
     private function createEntityManagerMock()
     {
@@ -336,7 +336,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|RegistryInterface
      */
     private function createRegistryStub($entityManager = null)
     {
@@ -351,7 +351,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject | LoggerInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject | LoggerInterface
      */
     private function createLoggerMock()
     {

@@ -153,7 +153,7 @@ class GuestCustomerStrategyTest extends AbstractStrategyTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EntityManager
+     * @return \PHPUnit\Framework\MockObject\MockObject|EntityManager
      */
     private function getMockEntityManager()
     {

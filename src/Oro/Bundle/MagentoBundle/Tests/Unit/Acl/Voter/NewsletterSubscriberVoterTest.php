@@ -8,15 +8,15 @@ use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class NewsletterSubscriberVoterTest extends \PHPUnit_Framework_TestCase
+class NewsletterSubscriberVoterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     private $doctrineHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelSettingsProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject|ChannelSettingsProvider
      */
     private $settingsProvider;
 
@@ -203,7 +203,7 @@ class NewsletterSubscriberVoterTest extends \PHPUnit_Framework_TestCase
      * @param string $objectIdentityClass
      * @param string $className
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|NewsletterSubscriber
+     * @return \PHPUnit\Framework\MockObject\MockObject|NewsletterSubscriber
      */
     public function getObjectIdentity($objectIdentityClass, $className)
     {
@@ -219,7 +219,7 @@ class NewsletterSubscriberVoterTest extends \PHPUnit_Framework_TestCase
      * @param bool $hasCustomer
      * @param int $customerOriginId
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|NewsletterSubscriber
+     * @return \PHPUnit\Framework\MockObject\MockObject|NewsletterSubscriber
      */
     protected function getSubscriber($hasCustomer = false, $customerOriginId = null)
     {

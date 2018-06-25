@@ -13,10 +13,10 @@ use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|TypesRegistry */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|TypesRegistry */
     protected $typesRegistry;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransportInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|MagentoTransportInterface */
     protected $transport;
 
     protected function setUp()

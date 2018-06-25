@@ -6,12 +6,12 @@ use Oro\Bridge\CallCRM\Provider\CallDirectionProvider;
 use Oro\Bundle\CallBundle\Entity\Call;
 use Oro\Bundle\CallBundle\Entity\CallDirection;
 
-class CallDirectionProviderTest extends \PHPUnit_Framework_TestCase
+class CallDirectionProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CallDirectionProvider */
     protected $provider;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $activityManager;
 
     public function setUp()

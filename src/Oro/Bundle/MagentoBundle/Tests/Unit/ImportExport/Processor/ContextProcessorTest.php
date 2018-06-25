@@ -8,7 +8,7 @@ use Oro\Bundle\MagentoBundle\ImportExport\Processor\ContextProcessor;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ContextProcessorTest extends \PHPUnit_Framework_TestCase
+class ContextProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ContextProcessor */
     protected $processor;
@@ -24,7 +24,7 @@ class ContextProcessorTest extends \PHPUnit_Framework_TestCase
         $expectedProperty = 'property2';
         $expectedValue = 'value2';
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface $serializer */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|SerializerInterface $serializer */
         $serializer = $this->createMock('Symfony\Component\Serializer\SerializerInterface');
         $serializer->expects($this->once())
             ->method('deserialize')
@@ -38,7 +38,7 @@ class ContextProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->processor->setSerializer($serializer);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|StrategyInterface $strategy */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|StrategyInterface $strategy */
         $strategy = $this->createMock('Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface');
         $strategy->expects($this->once())
             ->method('process')
@@ -57,7 +57,7 @@ class ContextProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->processor->setEntityName('\stdClass');
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ContextInterface $context */
         $context = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $context->expects($this->once())->method('getConfiguration')->will($this->returnValue([]));
 

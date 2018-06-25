@@ -10,17 +10,17 @@ use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
+class CartExpirationProcessorTest extends \PHPUnit\Framework\TestCase
 {
     const BATCH_SIZE = 2;
 
     /** @var CartExpirationProcessor */
     protected $processor;
 
-    /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $em;
 
-    /** @var ConnectorContextMediator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConnectorContextMediator|\PHPUnit\Framework\MockObject\MockObject */
     protected $helper;
 
     protected function setUp()

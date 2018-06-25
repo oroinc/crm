@@ -5,7 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-class ChannelEntityTypeTest extends \PHPUnit_Framework_TestCase
+class ChannelEntityTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ChannelEntityType */
     protected $type;

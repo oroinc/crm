@@ -6,7 +6,7 @@ use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Oro\Bundle\SalesBundle\Form\Type\LeadAddressType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
-class LeadAddressTypeTest extends \PHPUnit_Framework_TestCase
+class LeadAddressTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LeadAddressType

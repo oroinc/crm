@@ -6,7 +6,7 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\AbstractLoadeableSoapIterato
 
 class AbstractLoadeableSoapIteratorTest extends BaseSoapIteratorTestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|AbstractLoadeableSoapIterator */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|AbstractLoadeableSoapIterator */
     protected $iterator;
 
     protected function setUp()

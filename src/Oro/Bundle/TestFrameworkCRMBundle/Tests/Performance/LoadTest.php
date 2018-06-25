@@ -43,7 +43,7 @@ class LoadTest extends WebTestCase
 
         echo "\n Average Time: " . $container->averageTime;
         //export result
-        $this->resultLimit = PHPUNIT_LOAD_LIMIT ;
+        $this->resultLimit = PHPUNIT\LOAD\LIMIT ;
         $this->resultData = $container->averageTime;
     }
 
@@ -80,7 +80,7 @@ class LoadTest extends WebTestCase
         echo "\n>> Memory usage: " . memory_get_peak_usage(true)/1024;
 
         //export result
-        $this->resultLimit = PHPUNIT_PAGE_LIMIT;
+        $this->resultLimit = PHPUNIT\PAGE\LIMIT;
         $this->resultData = $averageTime/self::MAX_PAGE_TESTS;
     }
 }

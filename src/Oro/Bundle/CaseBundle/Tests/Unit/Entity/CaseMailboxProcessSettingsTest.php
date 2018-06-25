@@ -9,7 +9,7 @@ use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\Testing\Unit\EntityTestCaseTrait;
 
-class CaseMailboxProcessSettingsTest extends \PHPUnit_Framework_TestCase
+class CaseMailboxProcessSettingsTest extends \PHPUnit\Framework\TestCase
 {
     use EntityTestCaseTrait;
 

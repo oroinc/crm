@@ -6,11 +6,11 @@ use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
 use Oro\Bundle\ChannelBundle\Twig\LifetimeValueExtension;
 use Oro\Component\Testing\Unit\TwigExtensionTestCaseTrait;
 
-class LifetimeValueExtensionTest extends \PHPUnit_Framework_TestCase
+class LifetimeValueExtensionTest extends \PHPUnit\Framework\TestCase
 {
     use TwigExtensionTestCaseTrait;
 
-    /** @var AmountProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AmountProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $provider;
 
     /** @var LifetimeValueExtension */

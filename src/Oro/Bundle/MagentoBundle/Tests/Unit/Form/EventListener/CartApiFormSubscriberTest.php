@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\MagentoBundle\Form\EventListener\CartApiFormSubscriber;
 use Symfony\Component\Form\FormEvents;
 
-class CartApiFormSubscriberTest extends \PHPUnit_Framework_TestCase
+class CartApiFormSubscriberTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CartApiFormSubscriber */
     protected $subscriber;

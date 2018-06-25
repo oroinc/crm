@@ -10,12 +10,12 @@ use Oro\Bundle\ContactBundle\EventListener\ContactListener;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class ContactListenerTest extends \PHPUnit_Framework_TestCase
+class ContactListenerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ContactListener */
     protected $contactListener;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $tokenStorage;
 
     protected function setUp()
@@ -192,7 +192,7 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param bool $reloadUser
      * @param object $newUser
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getEntityManagerMock($reloadUser = false, $newUser = null)
     {

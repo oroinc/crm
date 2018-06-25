@@ -148,7 +148,7 @@ class WebsiteSoapIteratorTest extends BaseSoapIteratorTestCase
      *
      * @param WebsiteSoapIterator $iterator
      *
-     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit\Framework\AssertionFailedError
      */
     protected function assertResponseFormat(WebsiteSoapIterator $iterator)
     {

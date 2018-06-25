@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormView;
 
-class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
+class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SingleChannelModeExtension
@@ -18,7 +18,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
     protected $extension;
 
     /**
-     * @var ChannelsByEntitiesProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChannelsByEntitiesProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $channelsProvider;
 

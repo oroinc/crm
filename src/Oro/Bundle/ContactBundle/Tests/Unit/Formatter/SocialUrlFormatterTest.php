@@ -5,7 +5,7 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Formatter;
 use Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
 use Oro\Bundle\ContactBundle\Model\Social;
 
-class SocialUrlFormatterTest extends \PHPUnit_Framework_TestCase
+class SocialUrlFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $format

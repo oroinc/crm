@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason;
 
-class OpportunityCloseReasonStatusTest extends \PHPUnit_Framework_TestCase
+class OpportunityCloseReasonStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetName()
     {
