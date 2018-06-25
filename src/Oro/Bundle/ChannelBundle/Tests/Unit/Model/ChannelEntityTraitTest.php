@@ -5,7 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Model;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Event\ChannelEventAbstractTest;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Model\StubChannelEntity;
 
-class ChannelEntityTraitTest extends \PHPUnit_Framework_TestCase
+class ChannelEntityTraitTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruction()
     {

@@ -8,7 +8,7 @@ use Oro\Bundle\EntityBundle\Provider\EntityProvider;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Symfony\Component\Routing\RouterInterface;
 
-class MetadataProviderTest extends \PHPUnit_Framework_TestCase
+class MetadataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var int */
     protected $entityId1 = 35;
@@ -67,16 +67,16 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
         'icon'         => '',
     ];
 
-    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $settingsProvider;
 
-    /** @var  EntityProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  EntityProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $entityProvider;
 
-    /** @var ConfigManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $configManager;
 
-    /** @var RouterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RouterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $router;
 
     public function setUp()

@@ -9,7 +9,7 @@ use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
 use Oro\Component\DependencyInjection\ServiceLink;
 
-class ContactEntityNameProviderTest extends \PHPUnit_Framework_TestCase
+class ContactEntityNameProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ContactEntityNameProvider */
     protected $provider;

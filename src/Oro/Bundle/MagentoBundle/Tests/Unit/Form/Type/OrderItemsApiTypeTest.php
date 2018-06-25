@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class OrderItemsApiTypeTest extends \PHPUnit_Framework_TestCase
+class OrderItemsApiTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OrderItemsApiType */
     protected $type;

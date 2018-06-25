@@ -10,7 +10,7 @@ use Oro\Bundle\EmailBundle\Entity\EmailRecipient;
 use Oro\Bundle\EmailBundle\Tests\Unit\Entity\TestFixtures\EmailAddress;
 use Oro\Bundle\EmailBundle\Tests\Unit\Fixtures\Entity\TestEmailHolder;
 
-class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
+class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
 {
     const FROM_EMAIL = 'from@example.com';
     const TO_EMAIL = 'to@example.com';

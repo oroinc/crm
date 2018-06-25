@@ -8,7 +8,7 @@ use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class ChannelVoterTest extends \PHPUnit_Framework_TestCase
+class ChannelVoterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ChannelVoter
@@ -16,12 +16,12 @@ class ChannelVoterTest extends \PHPUnit_Framework_TestCase
     protected $voter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     protected $doctrineHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SettingsProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject|SettingsProvider
      */
     protected $settingsProvider;
 
@@ -103,7 +103,7 @@ class ChannelVoterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Channel
+     * @return \PHPUnit\Framework\MockObject\MockObject|Channel
      */
     protected function getChannel()
     {

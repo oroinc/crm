@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Test\Unit\ImportExport\Serializer\Normalizer;
 
 use Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\DateTimeNormalizer;
 
-class DateTimeNormalizerTest extends \PHPUnit_Framework_TestCase
+class DateTimeNormalizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DateTimeNormalizer

@@ -20,7 +20,7 @@ use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Psr\Log\LoggerInterface;
 
-class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
+class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;
 
@@ -355,7 +355,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|EntityManagerInterface
      */
     private function createEntityManagerStub()
     {
@@ -379,7 +379,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|AnalyticsBuilder
+     * @return \PHPUnit\Framework\MockObject\MockObject|AnalyticsBuilder
      */
     private function createAnalyticsBuilder()
     {
@@ -387,7 +387,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @return \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     private function createDoctrineHelperStub($entityManager = null)
     {
@@ -402,7 +402,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject | LoggerInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject | LoggerInterface
      */
     private function createLoggerMock()
     {

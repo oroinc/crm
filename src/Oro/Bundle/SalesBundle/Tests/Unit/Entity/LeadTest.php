@@ -8,7 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\LeadAddress;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 
-class LeadTest extends \PHPUnit_Framework_TestCase
+class LeadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider getSetDataProvider

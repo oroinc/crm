@@ -4,7 +4,7 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\DependencyInjection\Compiler;
 
 use Oro\Bundle\ContactBundle\DependencyInjection\Compiler\EmailHolderHelperConfigPass;
 
-class EmailHolderHelperConfigPassTest extends \PHPUnit_Framework_TestCase
+class EmailHolderHelperConfigPassTest extends \PHPUnit\Framework\TestCase
 {
     public function testNoTargetService()
     {

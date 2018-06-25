@@ -14,21 +14,21 @@ use Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
+class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var RegistryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RegistryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $registry;
 
-    /** @var AclHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
     protected $aclHelper;
 
-    /** @var WidgetProviderFilterManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var WidgetProviderFilterManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $widgetProviderFilter;
 
-    /** @var DateFilterProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DateFilterProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $dateFilterProcessor;
 
-    /** @var  CurrencyQueryBuilderTransformerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CurrencyQueryBuilderTransformerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $qbTransformer;
 
     protected $opportunityStatuses = [
@@ -333,7 +333,7 @@ DQL
     }
 
     /**
-     * @return EntityRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @return EntityRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockRepository()
     {
@@ -344,7 +344,7 @@ DQL
     }
 
     /**
-     * @return QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return QueryBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockQueryBuilder()
     {

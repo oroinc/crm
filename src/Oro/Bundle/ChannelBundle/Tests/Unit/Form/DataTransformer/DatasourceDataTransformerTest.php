@@ -9,12 +9,12 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class DatasourceDataTransformerTest extends \PHPUnit_Framework_TestCase
+class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_TYPE = 'testType';
     const TEST_NAME = 'testName';
 
-    /** @var FormFactoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FormFactoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $formFactory;
 
     /** @var DatasourceDataTransformer */

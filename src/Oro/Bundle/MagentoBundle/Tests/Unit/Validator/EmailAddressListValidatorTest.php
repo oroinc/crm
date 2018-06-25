@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\Validator\EmailAddressListValidator;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-class EmailAddressListValidatorTest extends \PHPUnit_Framework_TestCase
+class EmailAddressListValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var EmailAddressListValidator
@@ -20,12 +20,12 @@ class EmailAddressListValidatorTest extends \PHPUnit_Framework_TestCase
     protected $constraint;
 
     /**
-     * @var ExecutionContextInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ExecutionContextInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var ConstraintViolationBuilderInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ConstraintViolationBuilderInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $violationBuilder;
 

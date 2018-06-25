@@ -9,25 +9,25 @@ use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProviderInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
-class PrecalculatedTrackingVisitProviderTest extends \PHPUnit_Framework_TestCase
+class PrecalculatedTrackingVisitProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registry;
 
     /**
-     * @var AclHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var AclHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aclHelper;
 
     /**
-     * @var ConfigManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configManager;
 
     /**
-     * @var FeatureChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var FeatureChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $featureChecker;
 
@@ -37,7 +37,7 @@ class PrecalculatedTrackingVisitProviderTest extends \PHPUnit_Framework_TestCase
     private $provider;
 
     /**
-     * @var TrackingVisitProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TrackingVisitProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $visitProvider;
 

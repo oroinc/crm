@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 
-class CaseEntityTest extends \PHPUnit_Framework_TestCase
+class CaseEntityTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_ID = 12;
 

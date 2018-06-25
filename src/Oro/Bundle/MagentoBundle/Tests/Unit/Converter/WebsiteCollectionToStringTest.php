@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 use Oro\Bundle\MagentoBundle\Converter\WebsiteCollectionToString;
 
-class WebsiteCollectionToStringTest extends \PHPUnit_Framework_TestCase
+class WebsiteCollectionToStringTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider converterCallbackDataProvider

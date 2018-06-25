@@ -5,7 +5,7 @@ namespace Oro\Bundle\ActivityContactBundle\Bundle\Tests\Unit\DependencyInjection
 use Oro\Bundle\ActivityContactBundle\DependencyInjection\OroActivityContactExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class OroActivityContactExtensionTest extends \PHPUnit_Framework_TestCase
+class OroActivityContactExtensionTest extends \PHPUnit\Framework\TestCase
 {
     public function testLoad()
     {

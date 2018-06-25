@@ -18,15 +18,15 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class SoapTransportTest extends \PHPUnit_Framework_TestCase
+class SoapTransportTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var SoapTransport|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SoapTransport|\PHPUnit\Framework\MockObject\MockObject */
     protected $transport;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $soapClientMock;
 
-    /** @var Transport|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Transport|\PHPUnit\Framework\MockObject\MockObject */
     protected $transportEntity;
 
     /** @var ParameterBag */

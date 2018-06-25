@@ -4,7 +4,7 @@ namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 
-class CaseStatusTest extends \PHPUnit_Framework_TestCase
+class CaseStatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CaseStatus

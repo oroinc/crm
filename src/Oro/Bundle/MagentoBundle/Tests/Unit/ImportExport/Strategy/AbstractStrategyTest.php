@@ -21,50 +21,50 @@ use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
-abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ImportStrategyHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|ImportStrategyHelper
      */
     protected $strategyHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StepExecution
+     * @var \PHPUnit\Framework\MockObject\MockObject|StepExecution
      */
     protected $stepExecution;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|JobExecution
+     * @var \PHPUnit\Framework\MockObject\MockObject|JobExecution
      */
     protected $jobExecution;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|EventDispatcherInterface
      */
     protected $eventDispatcher;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FieldHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|FieldHelper
      */
     protected $fieldHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DatabaseHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DatabaseHelper
      */
     protected $databaseHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DefaultOwnerHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DefaultOwnerHelper
      */
     protected $defaultOwnerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|ChannelHelper
      */
     protected $channelHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AddressImportHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|AddressImportHelper
      */
     protected $addressHelper;
 
@@ -74,17 +74,17 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
     protected $logger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ChainEntityClassNameProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject|ChainEntityClassNameProvider
      */
     protected $chainEntityClassNameProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|TranslatorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|TranslatorInterface
      */
     protected $translator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     protected $doctrineHelper;
 
@@ -94,7 +94,7 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
     protected $newEntitiesHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OwnerChecker $channel
+     * @var \PHPUnit\Framework\MockObject\MockObject|OwnerChecker $channel
      */
     protected $ownerChecker;
 

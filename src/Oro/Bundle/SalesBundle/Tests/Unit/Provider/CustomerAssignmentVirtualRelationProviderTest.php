@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider;
 
-class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
+class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
 {
     const CLASS_NAME = 'Oro\Bundle\SalesBundle\Entity\B2bCustomer';
 

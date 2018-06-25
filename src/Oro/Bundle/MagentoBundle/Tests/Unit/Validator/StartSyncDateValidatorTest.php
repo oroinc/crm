@@ -12,7 +12,7 @@ use Oro\Bundle\MagentoBundle\Validator\StartSyncDateValidator;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
+class StartSyncDateValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StartSyncDateValidator
@@ -20,7 +20,7 @@ class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ManagerRegistry
+     * @var \PHPUnit\Framework\MockObject\MockObject|ManagerRegistry
      */
     protected $registry;
 
@@ -45,7 +45,7 @@ class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate($value, $formData, $queryResult = null, $expectsViolation = false)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContextInterface $context */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ExecutionContextInterface $context */
         $context = $this->createMock(ExecutionContextInterface::class);
 
         $form = $this->createMock('Symfony\Component\Form\FormInterface');
@@ -118,7 +118,7 @@ class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
         $integration = new $integrationClass();
 
         if ($transportClass) {
-            /** @var \PHPUnit_Framework_MockObject_MockObject|MagentoRestTransport $transport */
+            /** @var \PHPUnit\Framework\MockObject\MockObject|MagentoRestTransport $transport */
             $transport = $this->createMock($transportClass);
             if ($transportId) {
                 $transport->expects($this->any())->method('getId')->willReturn($transportId);
@@ -132,7 +132,7 @@ class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param mixed $result
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|QueryBuilder
+     * @return \PHPUnit\Framework\MockObject\MockObject|QueryBuilder
      */
     protected function getQueryBuilder($result = null)
     {

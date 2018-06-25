@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\EventListener;
 use Oro\Bundle\MagentoBundle\Form\EventListener\OrderApiFormSubscriber;
 use Symfony\Component\Form\FormEvents;
 
-class OrderApiFormSubscriberTest extends \PHPUnit_Framework_TestCase
+class OrderApiFormSubscriberTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OrderApiFormSubscriber */
     protected $subscriber;

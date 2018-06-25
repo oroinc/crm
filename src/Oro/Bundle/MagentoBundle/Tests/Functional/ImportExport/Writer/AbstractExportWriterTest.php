@@ -9,7 +9,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 abstract class AbstractExportWriterTest extends WebTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransportInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|MagentoTransportInterface
      */
     protected $transport;
 

@@ -11,21 +11,21 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class TransportEntityProviderTest extends \PHPUnit_Framework_TestCase
+class TransportEntityProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  TransportEntityProvider */
     protected $transportEntityProvider;
 
-    /** @var  ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registry;
 
-    /** @var  FormFactoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  FormFactoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $formFactory;
 
-    /** @var  FormInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  FormInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $form;
 
-    /** @var  Request|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Request|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
     /** @var  MagentoSoapTransport */

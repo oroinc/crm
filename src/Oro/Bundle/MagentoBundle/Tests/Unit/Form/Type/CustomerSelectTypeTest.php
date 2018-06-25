@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\FormBundle\Form\Type\OroJquerySelect2HiddenType;
 use Oro\Bundle\MagentoBundle\Form\Type\CustomerSelectType;
 
-class CustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
+class CustomerSelectTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerSelectType */
     protected $type;

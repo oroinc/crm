@@ -8,7 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
-class B2bCustomerTest extends \PHPUnit_Framework_TestCase
+class B2bCustomerTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_ID = 12;
     const TEST_NAME = 'test name';

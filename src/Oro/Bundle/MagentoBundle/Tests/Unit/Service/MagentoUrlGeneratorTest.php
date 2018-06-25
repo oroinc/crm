@@ -5,10 +5,10 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Service\MagentoUrlGenerator;
 
-class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
+class MagentoUrlGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $router;
 
@@ -18,12 +18,12 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
     private $urlGenerator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $channel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $transport;
 

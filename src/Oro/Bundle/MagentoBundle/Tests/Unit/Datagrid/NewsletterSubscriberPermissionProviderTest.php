@@ -16,7 +16,7 @@ class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActio
     /** @var NewsletterSubscriberPermissionProvider */
     protected $provider;
 
-    /** @var AuthorizationCheckerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $authorizationChecker;
 
     protected function setUp()

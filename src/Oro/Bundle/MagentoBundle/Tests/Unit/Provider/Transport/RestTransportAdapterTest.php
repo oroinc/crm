@@ -6,7 +6,7 @@ use Oro\Bundle\IntegrationBundle\Provider\Rest\Transport\RestTransportSettingsIn
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Provider\Transport\RestTransportAdapter;
 
-class RestTransportAdapterTest extends \PHPUnit_Framework_TestCase
+class RestTransportAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  RestTransportAdapter */
     protected $instance;

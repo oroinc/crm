@@ -9,7 +9,7 @@ use Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
-class RFMBuilderTest extends \PHPUnit_Framework_TestCase
+class RFMBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RFMBuilder
@@ -17,7 +17,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
     protected $builder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     protected $doctrineHelper;
 
@@ -36,7 +36,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddProviderFailed()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|RFMProviderInterface $provider */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|RFMProviderInterface $provider */
         $provider = $this->createMock('Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface');
         $provider->expects($this->once())
             ->method('getType')
@@ -47,7 +47,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testAddProviderSuccess()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|RFMProviderInterface $provider */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|RFMProviderInterface $provider */
         $provider = $this->createMock('Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface');
         $provider->expects($this->once())
             ->method('getType')

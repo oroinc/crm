@@ -21,27 +21,27 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class CartStrategyTest extends AbstractStrategyTest
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context
+     * @var \PHPUnit\Framework\MockObject\MockObject|ContextInterface $context
      */
     protected $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransport $transport
+     * @var \PHPUnit\Framework\MockObject\MockObject|MagentoTransport $transport
      */
     protected $transport;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Channel $channel
+     * @var \PHPUnit\Framework\MockObject\MockObject|Channel $channel
      */
     protected $channel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContext $execution
+     * @var \PHPUnit\Framework\MockObject\MockObject|ExecutionContext $execution
      */
     protected $execution;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|GuestCustomerStrategyHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|GuestCustomerStrategyHelper
      */
     protected $guestCustomerStrategyHelper;
 

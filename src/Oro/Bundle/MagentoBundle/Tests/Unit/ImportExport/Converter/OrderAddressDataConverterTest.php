@@ -5,10 +5,10 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Converter;
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\OrderAddressDataConverter;
 use Oro\Bundle\MagentoBundle\Provider\Iso2CodeProvider;
 
-class OrderAddressDataConverterTest extends \PHPUnit_Framework_TestCase
+class OrderAddressDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Iso2CodeProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var Iso2CodeProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $iso2CodeProvider;
 

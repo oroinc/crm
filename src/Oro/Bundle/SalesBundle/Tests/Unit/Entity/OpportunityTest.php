@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
-class OpportunityTest extends \PHPUnit_Framework_TestCase
+class OpportunityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider getSetDataProvider

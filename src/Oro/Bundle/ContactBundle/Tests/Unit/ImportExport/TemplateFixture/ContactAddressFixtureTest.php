@@ -11,7 +11,7 @@ use Oro\Bundle\ContactBundle\ImportExport\TemplateFixture\ContactAddressFixture;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateEntityRegistry;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateManager;
 
-class ContactAddressFixtureTest extends \PHPUnit_Framework_TestCase
+class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContactAddressFixture

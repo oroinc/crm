@@ -10,7 +10,7 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\Testing\ClassExtensionTrait;
 
-class ProcessChannelStateProcessorTest extends \PHPUnit_Framework_TestCase
+class ProcessChannelStateProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;
 
@@ -48,7 +48,7 @@ class ProcessChannelStateProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StateProvider
+     * @return \PHPUnit\Framework\MockObject\MockObject|StateProvider
      */
     protected function createStateProvider()
     {

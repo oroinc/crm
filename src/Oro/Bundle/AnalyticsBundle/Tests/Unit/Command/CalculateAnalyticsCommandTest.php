@@ -8,7 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class CalculateAnalyticsCommandTest extends \PHPUnit_Framework_TestCase
+class CalculateAnalyticsCommandTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;
 

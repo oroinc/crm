@@ -16,18 +16,18 @@ use Psr\Log\NullLogger;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
+class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
 {
     const TOKEN = 'token';
     const TOKEN_ENCRYPTED = 'token_encrypted';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | MagentoRestTransport
+     * @var \PHPUnit\Framework\MockObject\MockObject | MagentoRestTransport
      */
     protected $transportEntity;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | EntityManager
+     * @var \PHPUnit\Framework\MockObject\MockObject | EntityManager
      */
     protected $entityManager;
 
@@ -47,7 +47,7 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
     protected $client;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |  Mcrypt
+     * @var \PHPUnit\Framework\MockObject\MockObject |  Mcrypt
      */
     protected $mcrypt;
 

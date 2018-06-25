@@ -8,7 +8,7 @@ use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\PaymentDetailsNormalizer;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class PaymentDetailsNormalizerTest extends \PHPUnit_Framework_TestCase
+class PaymentDetailsNormalizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PaymentDetailsNormalizer
@@ -16,7 +16,7 @@ class PaymentDetailsNormalizerTest extends \PHPUnit_Framework_TestCase
     protected $normalizer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FieldHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|FieldHelper
      */
     protected $fieldHelper;
 

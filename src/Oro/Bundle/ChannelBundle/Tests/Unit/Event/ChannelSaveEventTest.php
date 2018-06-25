@@ -5,7 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Event;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
-class ChannelSaveEventTest extends \PHPUnit_Framework_TestCase
+class ChannelSaveEventTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetter()
     {

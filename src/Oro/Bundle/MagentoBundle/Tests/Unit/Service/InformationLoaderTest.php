@@ -8,10 +8,10 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\MagentoBundle\Service\InformationLoader;
 
-class InformationLoaderTest extends \PHPUnit_Framework_TestCase
+class InformationLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ConnectorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ConnectorInterface
      */
     protected $connector;
 
@@ -21,7 +21,7 @@ class InformationLoaderTest extends \PHPUnit_Framework_TestCase
     protected $processorAlias;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|JobExecutor
+     * @var \PHPUnit\Framework\MockObject\MockObject|JobExecutor
      */
     protected $jobExecutor;
 
@@ -78,7 +78,7 @@ class InformationLoaderTest extends \PHPUnit_Framework_TestCase
             ->with(ProcessorRegistry::TYPE_IMPORT, 'test_import', $expectedConfig)
             ->will($this->returnValue($jobResult));
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Channel $channel */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Channel $channel */
         $channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();

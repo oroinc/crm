@@ -13,27 +13,27 @@ use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Psr\Log\NullLogger;
 
-abstract class AbstractInfoReaderTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractInfoReaderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|ContextRegistry */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ContextRegistry */
     protected $contextRegistry;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|ConnectorContextMediator */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ConnectorContextMediator */
     protected $contextMediator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|StepExecution */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|StepExecution */
     protected $stepExecutionMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ContextInterface */
     protected $context;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransportInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|MagentoTransportInterface */
     protected $transport;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContext */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ExecutionContext */
     protected $jobExecution;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContext */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ExecutionContext */
     protected $executionContext;
 
     /** @var LoggerStrategy */

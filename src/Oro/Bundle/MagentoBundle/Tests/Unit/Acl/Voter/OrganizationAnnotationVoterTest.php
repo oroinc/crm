@@ -8,15 +8,15 @@ use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class OrganizationAnnotationVoterTest extends \PHPUnit_Framework_TestCase
+class OrganizationAnnotationVoterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     private $doctrineHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelSettingsProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject|ChannelSettingsProvider
      */
     private $settingsProvider;
 

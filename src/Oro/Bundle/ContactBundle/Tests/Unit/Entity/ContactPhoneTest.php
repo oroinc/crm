@@ -5,7 +5,7 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 
-class ContactPhoneTest extends \PHPUnit_Framework_TestCase
+class ContactPhoneTest extends \PHPUnit\Framework\TestCase
 {
     protected $phone;
 

@@ -11,7 +11,7 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\SearchBundle\Query\Result\Item;
 
-class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
+class PrepareResultItemListenerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ContactNameFormatter */
     protected $nameFormatter;
@@ -149,7 +149,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
             ->method('find')
             ->will($this->returnValue($entity));
 
-        /** @var DoctrineHelper|\PHPUnit_Framework_MockObject_MockObject $doctrineHelper */
+        /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject $doctrineHelper */
         $doctrineHelper = $this->getMockBuilder(DoctrineHelper::class)
             ->disableOriginalConstructor()
             ->getMock();

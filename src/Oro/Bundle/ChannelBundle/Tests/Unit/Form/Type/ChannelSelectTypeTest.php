@@ -22,7 +22,7 @@ class ChannelSelectTypeTest extends OrmTestCase
     protected $factory;
 
     /**
-     * @var ChannelsByEntitiesProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChannelsByEntitiesProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $channelsProvider;
 

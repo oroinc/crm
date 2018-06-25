@@ -4,7 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Validator;
 
 use Oro\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraint;
 
-class ChannelCustomerIdentityConstraintTest extends \PHPUnit_Framework_TestCase
+class ChannelCustomerIdentityConstraintTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetTargets()
     {

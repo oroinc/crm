@@ -11,15 +11,15 @@ use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
-class SoapTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
+class SoapTransportSettingFormTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  SoapTransport | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  SoapTransport | \PHPUnit\Framework\MockObject\MockObject */
     protected $soapTransport;
 
-    /** @var  SettingsFormSubscriber | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  SettingsFormSubscriber | \PHPUnit\Framework\MockObject\MockObject */
     protected $settingsFormSubscriber;
 
-    /** @var  TypesRegistry| \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  TypesRegistry| \PHPUnit\Framework\MockObject\MockObject */
     protected $typesRegistry;
 
     /** @var  SoapTransportSettingFormType */

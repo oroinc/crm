@@ -8,10 +8,10 @@ use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\MagentoBundle\EventListener\OrderGridListener;
 
-class OrderGridListenerTest extends \PHPUnit_Framework_TestCase
+class OrderGridListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var OrderGridListener|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderGridListener|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $listener;
 

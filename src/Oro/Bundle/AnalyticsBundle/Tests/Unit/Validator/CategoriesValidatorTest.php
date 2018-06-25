@@ -12,7 +12,7 @@ use Oro\Bundle\AnalyticsBundle\Validator\CategoriesValidator;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
+class CategoriesValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CategoriesValidator
@@ -39,7 +39,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate($collection, $type, $expectedViolationsMessages = [], $withParams = false)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContextInterface $context */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ExecutionContextInterface $context */
         $context = $this->getMockForAbstractClass(ExecutionContextInterface::class);
 
         if (!$expectedViolationsMessages) {
@@ -65,7 +65,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|CategoriesConstraint $constraint */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|CategoriesConstraint $constraint */
         $constraint = $this->createMock('Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint');
         $constraint->expects($this->any())
             ->method('getType')
@@ -295,10 +295,10 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCollection(array $items = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager $em */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager $em */
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ClassMetadata $metadata */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ClassMetadata $metadata */
         $metadata = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
             ->disableOriginalConstructor()
             ->getMock();

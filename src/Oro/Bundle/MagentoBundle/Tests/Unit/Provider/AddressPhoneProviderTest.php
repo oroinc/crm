@@ -6,7 +6,7 @@ use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\MagentoBundle\Provider\AddressPhoneProvider;
 
-class AddressPhoneProviderTest extends \PHPUnit_Framework_TestCase
+class AddressPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AddressPhoneProvider */
     protected $provider;

@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Converter;
 
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\OrderNotesDataConverter;
 
-class OrderNotesDataConverterTest extends \PHPUnit_Framework_TestCase
+class OrderNotesDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     const PHP_DATETIME_FORMAT = 'Y-m-d H:i:s';
 

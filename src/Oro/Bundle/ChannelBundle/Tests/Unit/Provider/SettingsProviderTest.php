@@ -4,7 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
-class SettingsProviderTest extends \PHPUnit_Framework_TestCase
+class SettingsProviderTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_ENTITY_NAME         = 'TestBundle\Entity\Test';
     const TEST_ANOTHER_ENTITY_NAME = 'TestBundle\Entity\Test2';

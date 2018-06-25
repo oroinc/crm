@@ -21,7 +21,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
     protected $processor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     protected $doctrineHelper;
 

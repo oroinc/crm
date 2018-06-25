@@ -15,7 +15,7 @@ use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
+class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;
 
@@ -227,7 +227,7 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LocaleSettings
+     * @return \PHPUnit\Framework\MockObject\MockObject|LocaleSettings
      */
     private function createLocaleSettingsMock()
     {
@@ -235,7 +235,7 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LifetimeValueAverageAggregationRepository
+     * @return \PHPUnit\Framework\MockObject\MockObject|LifetimeValueAverageAggregationRepository
      */
     private function createLifetimeValueAverageAggregationRepositoryMock()
     {
@@ -243,7 +243,7 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|RegistryInterface
      */
     private function createRegistryStub($entityRepository = null)
     {

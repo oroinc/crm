@@ -17,7 +17,7 @@ use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class ContactTypeTest extends \PHPUnit_Framework_TestCase
+class ContactTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContactType
