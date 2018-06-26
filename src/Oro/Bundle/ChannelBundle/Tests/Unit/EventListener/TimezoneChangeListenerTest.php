@@ -9,7 +9,7 @@ use Oro\Bundle\MessageQueueBundle\Test\Unit\MessageQueueExtension;
 use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 
-class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
+class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
 {
     use MessageQueueExtension;
 

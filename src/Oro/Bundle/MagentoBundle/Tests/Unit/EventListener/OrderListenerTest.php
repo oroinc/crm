@@ -11,15 +11,15 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\EventListener\OrderListener;
 
-class OrderListenerTest extends \PHPUnit_Framework_TestCase
+class OrderListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelDoctrineListener
+     * @var \PHPUnit\Framework\MockObject\MockObject|ChannelDoctrineListener
      */
     protected $listener;
 
@@ -169,7 +169,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
      * @param Order|null $order
      *
      * @return EntityManager
-     * @throws \PHPUnit_Framework_Exception
+     * @throws \PHPUnit\Framework\Exception
      */
     protected function createEntityManagerMock($order = null)
     {

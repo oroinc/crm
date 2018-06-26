@@ -7,14 +7,14 @@ use Oro\Bundle\ContactBundle\Model\Social;
 use Oro\Bundle\ContactBundle\Twig\ContactExtension;
 use Oro\Component\Testing\Unit\TwigExtensionTestCaseTrait;
 
-class ContactExtensionTest extends \PHPUnit_Framework_TestCase
+class ContactExtensionTest extends \PHPUnit\Framework\TestCase
 {
     use TwigExtensionTestCaseTrait;
 
     /** @var ContactExtension */
     protected $extension;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $urlFormatter;
 
     protected function setUp()

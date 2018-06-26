@@ -5,7 +5,7 @@ use Oro\Bundle\FormBundle\Form\Type\CollectionType;
 use Oro\Bundle\MagentoBundle\Form\Type\CartItemCollectionType;
 use Symfony\Component\OptionsResolver\Options;
 
-class CartItemCollectionTypeTest extends \PHPUnit_Framework_TestCase
+class CartItemCollectionTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CartItemCollectionType */
     protected $type;

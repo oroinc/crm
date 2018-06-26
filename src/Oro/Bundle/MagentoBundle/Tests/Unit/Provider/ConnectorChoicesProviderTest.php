@@ -7,15 +7,15 @@ use Oro\Bundle\MagentoBundle\Provider\ConnectorChoicesProvider;
 use Oro\Bundle\TranslationBundle\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class ConnectorChoicesProviderTest extends \PHPUnit_Framework_TestCase
+class ConnectorChoicesProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  ConnectorChoicesProvider */
     protected $connectorChoicesProvider;
 
-    /** @var  TypesRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  TypesRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $typesRegistry;
 
-    /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $translator;
 
     public function setUp()

@@ -8,7 +8,7 @@ use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Component\Config\Common\ConfigObject;
 
-class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
+class ChannelSettingsProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ChannelSettingsProvider
@@ -16,7 +16,7 @@ class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
     protected $provider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     protected $doctrineHelper;
 
@@ -209,7 +209,7 @@ class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
      * @param bool $isSupportedExtensionVersion
      * @param int $channelId
      *
-     * @return Channel|\PHPUnit_Framework_MockObject_MockObject
+     * @return Channel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getChannel(
         $isEnabled = false,

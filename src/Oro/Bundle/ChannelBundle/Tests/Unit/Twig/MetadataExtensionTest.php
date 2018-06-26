@@ -6,11 +6,11 @@ use Oro\Bundle\ChannelBundle\Provider\MetadataProvider;
 use Oro\Bundle\ChannelBundle\Twig\MetadataExtension;
 use Oro\Component\Testing\Unit\TwigExtensionTestCaseTrait;
 
-class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
+class MetadataExtensionTest extends \PHPUnit\Framework\TestCase
 {
     use TwigExtensionTestCaseTrait;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $provider;
 
     /** @var MetadataExtension */

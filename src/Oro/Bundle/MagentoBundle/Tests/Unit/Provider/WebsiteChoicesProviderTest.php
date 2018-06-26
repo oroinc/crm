@@ -6,15 +6,15 @@ use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class WebsiteChoicesProviderTest extends \PHPUnit_Framework_TestCase
+class WebsiteChoicesProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  WebsiteChoicesProvider */
     protected $websiteChoicesProvider;
 
-    /** @var  MagentoTransportInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  MagentoTransportInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $transport;
 
-    /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $translator;
 
     public function setUp()

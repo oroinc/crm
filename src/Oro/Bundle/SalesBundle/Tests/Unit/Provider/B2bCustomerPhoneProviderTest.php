@@ -6,9 +6,9 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 use Oro\Bundle\SalesBundle\Provider\B2bCustomerPhoneProvider;
 
-class B2bCustomerPhoneProviderTest extends \PHPUnit_Framework_TestCase
+class B2bCustomerPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $rootProvider;
 
     /** @var B2bCustomerPhoneProvider */

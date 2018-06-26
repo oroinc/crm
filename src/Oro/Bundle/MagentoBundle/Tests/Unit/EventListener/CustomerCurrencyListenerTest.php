@@ -4,10 +4,10 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener;
 
-class CustomerCurrencyListenerTest extends \PHPUnit_Framework_TestCase
+class CustomerCurrencyListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeSettings;
 

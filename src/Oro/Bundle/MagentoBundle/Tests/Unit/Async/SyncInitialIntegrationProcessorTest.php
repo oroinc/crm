@@ -27,29 +27,29 @@ use Oro\Component\Testing\ClassExtensionTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
+class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;
 
     /** @var SyncInitialIntegrationProcessor */
     private $processor;
 
-    /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
     private $entityManager;
 
-    /** @var EntityRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EntityRepository|\PHPUnit\Framework\MockObject\MockObject */
     private $entityRepository;
 
-    /** @var InitialSyncProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var InitialSyncProcessor|\PHPUnit\Framework\MockObject\MockObject */
     private $initialSyncProcessor;
 
-    /** @var OptionalListenerManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var OptionalListenerManager|\PHPUnit\Framework\MockObject\MockObject */
     private $optionalListenerManager;
 
     /** @var JobRunner */
     private $jobRunner;
 
-    /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $logger;
 
     /**

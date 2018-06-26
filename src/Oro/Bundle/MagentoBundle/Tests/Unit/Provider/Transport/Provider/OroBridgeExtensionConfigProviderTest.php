@@ -9,15 +9,15 @@ use Oro\Bundle\IntegrationBundle\Test\FakeRestResponse;
 use Oro\Bundle\MagentoBundle\Model\OroBridgeExtension\Config;
 use Oro\Bundle\MagentoBundle\Provider\Transport\Provider\OroBridgeExtensionConfigProvider;
 
-class OroBridgeExtensionConfigProviderTest extends \PHPUnit_Framework_TestCase
+class OroBridgeExtensionConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OroBridgeExtensionConfigProvider */
     protected $oroBridgeExtensionConfigProvider;
 
-    /** @var  RestClientInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  RestClientInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $client;
 
-    /** @var  RestResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  RestResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $clientResponse;
 
     protected function setUp()
@@ -128,7 +128,7 @@ class OroBridgeExtensionConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->client->expects($this->exactly(1))->method('get')->willThrowException($exception);
 
         if ($code !== 404) {
-            $this->setExpectedException(RestException::class);
+            $this->expectException(RestException::class);
         }
 
         $config = $this->oroBridgeExtensionConfigProvider->getConfig($this->client, $headers, false);

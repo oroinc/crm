@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\AddressWithCountryTextStub;
 
-class CountryTextTraitTest extends \PHPUnit_Framework_TestCase
+class CountryTextTraitTest extends \PHPUnit\Framework\TestCase
 {
     public function testCountryText()
     {

@@ -4,10 +4,10 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Datagrid;
 
 use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 
-abstract class AbstractTwoWaySyncActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractTwoWaySyncActionPermissionProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelSettingsProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject|ChannelSettingsProvider
      */
     protected $settingsProvider;
 

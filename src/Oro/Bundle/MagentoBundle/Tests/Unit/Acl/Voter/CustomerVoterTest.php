@@ -8,15 +8,15 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class CustomerVoterTest extends \PHPUnit_Framework_TestCase
+class CustomerVoterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     private $doctrineHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelSettingsProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject|ChannelSettingsProvider
      */
     private $settingsProvider;
 
@@ -161,7 +161,7 @@ class CustomerVoterTest extends \PHPUnit_Framework_TestCase
      * @param string $objectIdentityClass
      * @param string $className
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Customer
+     * @return \PHPUnit\Framework\MockObject\MockObject|Customer
      */
     public function getObjectIdentity($objectIdentityClass, $className)
     {
@@ -176,7 +176,7 @@ class CustomerVoterTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int $originId
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Customer
+     * @return \PHPUnit\Framework\MockObject\MockObject|Customer
      */
     protected function getCustomer($originId = null)
     {

@@ -17,13 +17,13 @@ class SettingsFormSubscriberTest extends FormIntegrationTestCase
     /** @var  SettingsFormSubscriber */
     protected $subscriber;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | FormEvent */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | FormEvent */
     protected $event;
 
     /** @var FormInterface */
     protected $form;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | Mcrypt */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | Mcrypt */
     protected $mcrypt;
 
     /**

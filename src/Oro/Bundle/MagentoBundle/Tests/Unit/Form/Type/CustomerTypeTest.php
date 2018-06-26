@@ -6,7 +6,7 @@ use Oro\Bundle\MagentoBundle\Form\Type\CustomerType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormEvents;
 
-class CustomerTypeTest extends \PHPUnit_Framework_TestCase
+class CustomerTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerType */
     protected $type;
@@ -34,7 +34,7 @@ class CustomerTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildForm()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FormBuilder $builder */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|FormBuilder $builder */
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();

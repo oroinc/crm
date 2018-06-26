@@ -8,7 +8,7 @@ use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider;
 
-class UniqueCustomerEmailSoapProviderTest extends \PHPUnit_Framework_TestCase
+class UniqueCustomerEmailSoapProviderTest extends \PHPUnit\Framework\TestCase
 {
     const ORIGIN_ID = 1;
 

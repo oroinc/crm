@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
-class LeadTypeTest extends \PHPUnit_Framework_TestCase
+class LeadTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LeadType

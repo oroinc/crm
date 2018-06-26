@@ -10,9 +10,9 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestCase
+class ChannelIntegrationConstraintValidatorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $provider;
 
     public function setUp()

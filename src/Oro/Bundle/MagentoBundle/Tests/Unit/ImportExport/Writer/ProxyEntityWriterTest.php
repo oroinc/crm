@@ -11,21 +11,21 @@ use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 use Oro\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter;
 
-class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
+class ProxyEntityWriterTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ItemWriterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ItemWriterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $wrapped;
 
     /** @var ProxyEntityWriter */
     protected $writer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DatabaseHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DatabaseHelper
      */
     protected $databaseHelper;
 
     /**
-     * @var GuestCustomerStrategyHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var GuestCustomerStrategyHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $guestCustomerStrategyHelper;
 
@@ -176,7 +176,7 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
      * @param bool $isInSharedEmailList
      * @param array $nameArray
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     public function getCustomer(
         $customerEmail,

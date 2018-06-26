@@ -4,7 +4,7 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Placeholder;
 
 use Oro\Bundle\AnalyticsBundle\Placeholder\RFMAwareFilter;
 
-class RFMAwareFilterTest extends \PHPUnit_Framework_TestCase
+class RFMAwareFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

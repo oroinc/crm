@@ -8,20 +8,20 @@ use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
-class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
+class AverageLifetimeWidgetProviderTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_TZ = 'UTC';
 
-    /** @var ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registry;
 
-    /** @var AclHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
     protected $aclHelper;
 
-    /** @var LocaleSettings|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LocaleSettings|\PHPUnit\Framework\MockObject\MockObject */
     protected $localeSettings;
 
-    /** @var DateFilterProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DateFilterProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $dateFilterProcessor;
 
     /** @var AverageLifetimeWidgetProvider */

@@ -12,14 +12,14 @@ use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 use Oro\Component\Testing\Unit\EntityTrait;
 
-class GuestCustomerStrategyHelperTest extends \PHPUnit_Framework_TestCase
+class GuestCustomerStrategyHelperTest extends \PHPUnit\Framework\TestCase
 {
     use EntityTrait;
 
-    /** @var  GuestCustomerStrategyHelper | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  GuestCustomerStrategyHelper | \PHPUnit\Framework\MockObject\MockObject */
     protected $strategyHelper;
 
-    /** @var  DatabaseHelper | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  DatabaseHelper | \PHPUnit\Framework\MockObject\MockObject */
     protected $databaseHelper;
 
     /**
@@ -261,7 +261,7 @@ class GuestCustomerStrategyHelperTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $sharedGuestEmailList
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject | MagentoTransport
+     * @return \PHPUnit\Framework\MockObject\MockObject | MagentoTransport
      */
     private function getTransport($sharedGuestEmailList = '')
     {

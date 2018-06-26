@@ -11,15 +11,15 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider;
 use Oro\Bundle\UIBundle\Model\Image;
 
-class CustomerIconProviderTest extends \PHPUnit_Framework_TestCase
+class CustomerIconProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerIconProvider */
     protected $customerIconProvider;
 
-    /** @var CacheManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CacheManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $cacheManager;
 
-    /** @var TypesRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TypesRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $channelTypeRegistry;
 
     public function setUp()

@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\Provider\TrackingVisitEventProvider;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Translation\Translator;
 
-abstract class WebsiteChartProviderTest extends \PHPUnit_Framework_TestCase
+abstract class WebsiteChartProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $method Mocked method

@@ -8,7 +8,7 @@ use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ChangeLeadStatusTest extends \PHPUnit_Framework_TestCase
+class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var EntityManager
@@ -16,7 +16,7 @@ class ChangeLeadStatusTest extends \PHPUnit_Framework_TestCase
     protected $entityManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ValidatorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ValidatorInterface
      */
     protected $validator;
 

@@ -8,7 +8,7 @@ use Oro\Component\ConfigExpression\ContextAccessor;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
-class AutomaticDiscoveryActionTest extends \PHPUnit_Framework_TestCase
+class AutomaticDiscoveryActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextAccessor
@@ -16,7 +16,7 @@ class AutomaticDiscoveryActionTest extends \PHPUnit_Framework_TestCase
     protected $contextAccessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AutomaticDiscovery
+     * @var \PHPUnit\Framework\MockObject\MockObject|AutomaticDiscovery
      */
     protected $automaticDiscovery;
 
@@ -34,7 +34,7 @@ class AutomaticDiscoveryActionTest extends \PHPUnit_Framework_TestCase
 
         $this->action = new AutomaticDiscoveryAction($this->contextAccessor, $this->automaticDiscovery);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcher $dispatcher */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|EventDispatcher $dispatcher */
         $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcher')
             ->disableOriginalConstructor()
             ->getMock();

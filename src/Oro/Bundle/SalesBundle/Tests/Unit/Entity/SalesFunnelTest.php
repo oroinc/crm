@@ -10,7 +10,7 @@ use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 
-class SalesFunnelTest extends \PHPUnit_Framework_TestCase
+class SalesFunnelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider getSetDataProvider

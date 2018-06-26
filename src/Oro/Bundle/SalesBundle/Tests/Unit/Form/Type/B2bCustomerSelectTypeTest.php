@@ -6,7 +6,7 @@ use Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType;
 use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class B2bCustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
+class B2bCustomerSelectTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var B2bCustomerSelectType */
     protected $type;
@@ -26,7 +26,7 @@ class B2bCustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigureOptions()
     {
-        /** @var OptionsResolver|\PHPUnit_Framework_MockObject_MockObject $resolver */
+        /** @var OptionsResolver|\PHPUnit\Framework\MockObject\MockObject $resolver */
         $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
         $resolver->expects($this->once())
             ->method('setDefaults')

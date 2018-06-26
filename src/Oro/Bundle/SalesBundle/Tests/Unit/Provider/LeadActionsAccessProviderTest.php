@@ -11,15 +11,15 @@ use Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 use Oro\Component\Testing\Unit\Entity\Stub\StubEnumValue;
 
-class LeadActionsAccessProviderTest extends \PHPUnit_Framework_TestCase
+class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var LeadActionsAccessProvider */
     protected $provider;
 
-    /** @var FeatureChecker|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FeatureChecker|\PHPUnit\Framework\MockObject\MockObject */
     protected $featureChecker;
 
-    /** @var WorkflowRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var WorkflowRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $wfRegistry;
 
     public function setUp()
@@ -113,7 +113,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Lead|\PHPUnit_Framework_MockObject_MockObject
+     * @return Lead|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getValidLead()
     {
@@ -148,7 +148,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Lead|\PHPUnit_Framework_MockObject_MockObject
+     * @return Lead|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getDisqualifiedLead()
     {
@@ -165,7 +165,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Lead|\PHPUnit_Framework_MockObject_MockObject
+     * @return Lead|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLeadWithOpportunities()
     {

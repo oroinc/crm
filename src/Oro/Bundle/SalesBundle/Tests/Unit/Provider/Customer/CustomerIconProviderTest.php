@@ -8,7 +8,7 @@ use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProvider;
 use Oro\Bundle\UIBundle\Model\Image;
 
-class CustomerIconProviderTest extends \PHPUnit_Framework_TestCase
+class CustomerIconProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerIconProvider */
     protected $customerIconProvider;

@@ -9,7 +9,7 @@ use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\Context;
 use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\ProcessorInterface;
 use Oro\Component\Testing\Unit\EntityTrait;
 
-class ChainProcessorTest extends \PHPUnit_Framework_TestCase
+class ChainProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use EntityTrait;
 

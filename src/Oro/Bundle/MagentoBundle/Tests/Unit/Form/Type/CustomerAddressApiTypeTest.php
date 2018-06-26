@@ -8,7 +8,7 @@ use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class CustomerAddressApiTypeTest extends \PHPUnit_Framework_TestCase
+class CustomerAddressApiTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerAddressApiType */
     protected $type;

@@ -10,10 +10,10 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub as Opportunity;
 
-class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
+class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OpportunityRelationsBuilder
+     * @var \PHPUnit\Framework\MockObject\MockObject|OpportunityRelationsBuilder
      */
     protected $relationsBuilder;
 

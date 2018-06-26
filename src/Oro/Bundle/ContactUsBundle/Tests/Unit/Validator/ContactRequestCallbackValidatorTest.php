@@ -7,7 +7,7 @@ use Oro\Bundle\ContactUsBundle\Validator\ContactRequestCallbackValidator;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-class ContactRequestCallbackValidatorTest extends \PHPUnit_Framework_TestCase
+class ContactRequestCallbackValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider validationDataProvider

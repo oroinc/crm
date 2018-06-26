@@ -11,12 +11,12 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Customer\AccountProvider;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 
-class AccountProviderTest extends \PHPUnit_Framework_TestCase
+class AccountProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var AutomaticDiscovery|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AutomaticDiscovery|\PHPUnit\Framework\MockObject\MockObject */
     private $automaticDiscovery;
 
-    /** @var NewEntitiesHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var NewEntitiesHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $newEntitiesHelper;
 
     /** @var AccountProvider */
@@ -89,7 +89,7 @@ class AccountProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @return ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getDoctrineMock()
     {

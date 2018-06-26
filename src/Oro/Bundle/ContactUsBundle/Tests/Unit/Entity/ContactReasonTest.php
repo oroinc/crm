@@ -4,7 +4,7 @@ namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 
-class ContactReasonTest extends \PHPUnit_Framework_TestCase
+class ContactReasonTest extends \PHPUnit\Framework\TestCase
 {
     public function testSettersAndGetters()
     {

@@ -65,7 +65,7 @@ class OrderDataProviderTest extends WebTestCase
     public function testGetRevenueOverTimeChartViewWithNonUTCTimezoneOnSelectedDate()
     {
         /**
-         * @var $chartViewBuilder ChartViewBuilder | \PHPUnit_Framework_MockObject_MockObject
+         * @var $chartViewBuilder ChartViewBuilder | \PHPUnit\Framework\MockObject\MockObject
          */
         $chartViewBuilder = $this
             ->getMockBuilder(ChartViewBuilder::class)

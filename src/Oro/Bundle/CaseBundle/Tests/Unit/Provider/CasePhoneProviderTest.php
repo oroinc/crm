@@ -5,9 +5,9 @@ namespace Oro\Bundle\CaseBundle\Tests\Unit\Provider;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\Provider\CasePhoneProvider;
 
-class CasePhoneProviderTest extends \PHPUnit_Framework_TestCase
+class CasePhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $rootProvider;
 
     /** @var CasePhoneProvider */

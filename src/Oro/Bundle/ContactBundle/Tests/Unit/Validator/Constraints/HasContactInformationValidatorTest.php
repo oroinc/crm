@@ -9,7 +9,7 @@ use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformation;
 use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformationValidator;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-class HasContactInformationValidatorTest extends \PHPUnit_Framework_TestCase
+class HasContactInformationValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ExecutionContextInterface */
     protected $context;

@@ -7,15 +7,15 @@ use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 
-class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
+class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RFMMetricStateManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|RFMMetricStateManager
      */
     protected $manager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CalculateAnalyticsScheduler
+     * @var \PHPUnit\Framework\MockObject\MockObject|CalculateAnalyticsScheduler
      */
     protected $scheduler;
 
@@ -48,7 +48,7 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
         $this->scheduler->expects($this->never())
             ->method('scheduleForAllChannels');
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ConfigUpdateEvent $event */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ConfigUpdateEvent $event */
         $event = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent')
             ->disableOriginalConstructor()
             ->getMock();
@@ -63,7 +63,7 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testSuccessChange()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ConfigUpdateEvent $event */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ConfigUpdateEvent $event */
         $event = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent')
             ->disableOriginalConstructor()
             ->getMock();
@@ -86,7 +86,7 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CalculateAnalyticsScheduler
+     * @return \PHPUnit\Framework\MockObject\MockObject|CalculateAnalyticsScheduler
      */
     private function createCalculateAnalyticsSchedulerMock()
     {

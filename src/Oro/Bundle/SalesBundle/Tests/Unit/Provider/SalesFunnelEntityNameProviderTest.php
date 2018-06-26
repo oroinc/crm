@@ -8,7 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SalesBundle\Provider\SalesFunnelEntityNameProvider;
 use Oro\Component\DependencyInjection\ServiceLink;
 
-class SalesFunnelEntityNameProviderTest extends \PHPUnit_Framework_TestCase
+class SalesFunnelEntityNameProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var SalesFunnelEntityNameProvider */
     protected $provider;

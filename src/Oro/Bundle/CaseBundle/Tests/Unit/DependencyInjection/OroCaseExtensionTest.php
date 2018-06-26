@@ -5,7 +5,7 @@ namespace Oro\Bundle\CaseBundle\Tests\Unit\DependencyInjection;
 use Oro\Bundle\CaseBundle\DependencyInjection\OroCaseExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class OroCaseExtensionTest extends \PHPUnit_Framework_TestCase
+class OroCaseExtensionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OroCaseExtension

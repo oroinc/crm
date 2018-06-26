@@ -6,7 +6,7 @@ use Oro\Bundle\AddressBundle\Form\Type\TypedAddressType;
 use Oro\Bundle\MagentoBundle\Form\Type\CustomerAddressType;
 use Symfony\Component\Form\FormBuilder;
 
-class CustomerAddressTypeTest extends \PHPUnit_Framework_TestCase
+class CustomerAddressTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerAddressType */
     protected $type;
@@ -36,7 +36,7 @@ class CustomerAddressTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildForm()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FormBuilder $builder */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|FormBuilder $builder */
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
