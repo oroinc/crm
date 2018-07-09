@@ -1,13 +1,9 @@
-@import "oroui/css/scss/variables";
-@import "account-customer";
-@import "mobile/main";
-@import "board/opportunity-card";
-.form-horizontal {
-  .control-group-oro_multicurrency {
-    .selector {
-      display: block;
-      margin-top: 10px;
-    }
-  }
-}
+/* @theme: admin.oro; */
 
+@import "oroui/css/scss/variables";
+@import "oroui/css/scss/mixins";
+
+@import "./account-customer";
+@import "./board/opportunity-card";
+
+@import "./mobile/main";
