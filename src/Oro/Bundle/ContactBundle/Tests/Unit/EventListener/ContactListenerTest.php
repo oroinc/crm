@@ -2,15 +2,15 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\EventListener;
 
-use Doctrine\ORM\UnitOfWork;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
+use Doctrine\ORM\UnitOfWork;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\EventListener\ContactListener;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\ContactBundle\Entity\Contact;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class ContactListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -189,6 +189,35 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
                 'reloadUser' => true,
             ),
         );
+    }
+
+    public function testPreUpdateWhenNoUser()
+    {
+        $token = $this->createMock(TokenInterface::class);
+        $token->expects($this->once())
+            ->method('getUser')
+            ->willReturn(new \stdClass());
+        $this->tokenStorage->expects($this->once())
+            ->method('getToken')
+            ->willReturn($token);
+
+        /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject $entityManager */
+        $entityManager = $this->createMock(EntityManager::class);
+        $entityManager->expects($this->once())
+            ->method('getUnitOfWork')
+            ->willReturn($this->createMock(UnitOfWork::class));
+
+        $changeSet = [];
+        $firstUpdatedAt = new \DateTime('-1 day');
+        $firstUpdatedBy = new User();
+        $contact = new Contact();
+        $contact->setUpdatedAt($firstUpdatedAt);
+        $contact->setUpdatedBy($firstUpdatedBy);
+
+        $args = new PreUpdateEventArgs($contact, $entityManager, $changeSet);
+        $this->contactListener->preUpdate($contact, $args);
+        $this->assertGreaterThanOrEqual($firstUpdatedAt, $contact->getUpdatedAt());
+        $this->assertNull($contact->getUpdatedBy());
     }
 
     /**

@@ -90,7 +90,7 @@ class ContactListener
         }
 
         $user = $token->getUser();
-        if (!$user) {
+        if (!$user || !$user instanceof User) {
             return null;
         }
 
