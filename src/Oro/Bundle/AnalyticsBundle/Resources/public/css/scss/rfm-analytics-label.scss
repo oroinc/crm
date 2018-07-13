@@ -1,0 +1,20 @@
+/* @theme: admin.oro; */
+
+.rfm-analytics-label {
+    padding: 4px 10px;
+    cursor: default;
+
+    &-vertical {
+        margin: 5px;
+    }
+
+    span {
+        &:not(:first-child) {
+            padding-left: 7px;
+        }
+    }
+
+    p {
+        margin: 2px 0;
+    }
+}
