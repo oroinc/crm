@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
 
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\CreditMemoDataConverter;
 
-class CreditMemoDataConverterTest extends \PHPUnit_Framework_TestCase
+class CreditMemoDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CreditMemoDataConverter

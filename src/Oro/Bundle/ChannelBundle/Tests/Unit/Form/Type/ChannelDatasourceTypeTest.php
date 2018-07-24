@@ -44,16 +44,16 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
     /** @var ChannelDatasourceType */
     protected $type;
 
-    /** @var ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registry;
 
     /** @var string */
     protected $testEntityName = 'OroIntegration:Channel';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $entityConfigProvider;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $translator;
 
     public function setUp()

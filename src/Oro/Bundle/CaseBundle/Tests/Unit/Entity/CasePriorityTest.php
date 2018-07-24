@@ -4,7 +4,7 @@ namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\CaseBundle\Entity\CasePriority;
 
-class CasePriorityTest extends \PHPUnit_Framework_TestCase
+class CasePriorityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CasePriority

@@ -12,24 +12,24 @@ use Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
+class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OpportunitiesListener */
     protected $listener;
 
-    /** @var AccountConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AccountConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $provider;
 
-    /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $translator;
 
-    /** @var DoctrineHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
     protected $doctrineHelper;
 
-    /** @var \Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $configProvider;
 
-    /** @var FeatureChecker|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FeatureChecker|\PHPUnit\Framework\MockObject\MockObject */
     protected $featureChecker;
 
     public function setUp()

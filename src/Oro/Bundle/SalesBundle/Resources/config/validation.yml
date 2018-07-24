@@ -73,3 +73,4 @@ Oro\Bundle\SalesBundle\Entity\Customer:
     properties:
         account:
             - NotBlank: ~
+            - Valid: ~

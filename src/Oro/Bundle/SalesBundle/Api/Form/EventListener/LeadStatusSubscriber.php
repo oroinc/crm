@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Api\Form\EventListener;
 
+use Oro\Bundle\ApiBundle\Form\FormUtil;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\SalesBundle\Entity\Lead;
@@ -31,16 +32,20 @@ class LeadStatusSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [FormEvents::SUBMIT => 'onSubmit'];
+        return [FormEvents::POST_SUBMIT => 'onPostSubmit'];
     }
 
     /**
      * @param FormEvent $event
      */
-    public function onSubmit(FormEvent $event)
+    public function onPostSubmit(FormEvent $event)
     {
         $lead = $event->getData();
-        if (null === $lead->getId() && null === $lead->getStatus()) {
+        $statusField = FormUtil::findFormFieldByPropertyPath($event->getForm(), 'status');
+        if (null === $lead->getId()
+            && null === $lead->getStatus()
+            && !$event->getForm()->get($statusField->getName())->isSubmitted()
+        ) {
             $defaultStatus = $this->getDefaultStatus();
             if (null !== $defaultStatus) {
                 $lead->setStatus($defaultStatus);

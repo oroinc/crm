@@ -12,27 +12,27 @@ use Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
+class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ForecastOfOpportunities */
     protected $provider;
 
-    /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $translator;
 
-    /** @var NumberFormatter|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var NumberFormatter|\PHPUnit\Framework\MockObject\MockObject */
     protected $numberFormatter;
 
-    /** @var DateTimeFormatter|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DateTimeFormatter|\PHPUnit\Framework\MockObject\MockObject */
     protected $dateTimeFormatter;
 
-    /** @var ForecastProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ForecastProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $forecastProvider;
 
-    /** @var DateHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DateHelper|\PHPUnit\Framework\MockObject\MockObject */
     protected $dateHelper;
 
-    /** @var FilterDateRangeConverter|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FilterDateRangeConverter|\PHPUnit\Framework\MockObject\MockObject */
     protected $filterDateRangeConverter;
 
     protected function setUp()

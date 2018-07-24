@@ -10,15 +10,15 @@ use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class UpdateIntegrationConnectorsListenerTest extends \PHPUnit_Framework_TestCase
+class UpdateIntegrationConnectorsListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|RegistryInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|RegistryInterface */
     protected $registry;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|SettingsProvider */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|SettingsProvider */
     protected $settingProvider;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|ChannelSaveEvent */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ChannelSaveEvent */
     protected $event;
 
     /** @var Channel */
@@ -27,7 +27,7 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit_Framework_TestCas
     /** @var Integration */
     protected $integration;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager */
     protected $em;
 
     protected function setUp()

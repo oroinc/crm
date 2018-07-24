@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\MagentoBundle\Tests\Unit\Fixtures\NamesAwareEntity;
 
-class NamesAwareTraitTest extends \PHPUnit_Framework_TestCase
+class NamesAwareTraitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider updateProvider

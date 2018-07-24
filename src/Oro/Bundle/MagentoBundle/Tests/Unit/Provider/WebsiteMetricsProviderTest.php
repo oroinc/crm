@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\Provider\TrackingVisitEventProvider;
 use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteMetricsProvider;
 
-class WebsiteMetricsProviderTest extends \PHPUnit_Framework_TestCase
+class WebsiteMetricsProviderTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldCorrectlyMapData()
     {

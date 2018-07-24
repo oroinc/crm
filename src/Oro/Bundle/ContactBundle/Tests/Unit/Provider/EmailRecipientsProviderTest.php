@@ -5,7 +5,7 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Provider;
 use Oro\Bundle\ContactBundle\Provider\EmailRecipientsProvider;
 use Oro\Bundle\EmailBundle\Model\EmailRecipientsProviderArgs;
 
-class EmailRecipientsProviderTest extends \PHPUnit_Framework_TestCase
+class EmailRecipientsProviderTest extends \PHPUnit\Framework\TestCase
 {
     protected $registry;
     protected $emailRecipientsHelper;

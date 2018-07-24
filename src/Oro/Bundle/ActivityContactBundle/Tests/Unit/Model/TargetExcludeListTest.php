@@ -4,7 +4,7 @@ namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Model;
 
 use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 
-class TargetExcludeListTest extends \PHPUnit_Framework_TestCase
+class TargetExcludeListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return array

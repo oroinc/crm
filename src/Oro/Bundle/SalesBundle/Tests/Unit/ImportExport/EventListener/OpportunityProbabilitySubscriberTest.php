@@ -7,7 +7,7 @@ use Oro\Bundle\ImportExportBundle\Event\NormalizeEntityEvent;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityProbabilitySubscriber;
 
-class OpportunityProbabilitySubscriberTest extends \PHPUnit_Framework_TestCase
+class OpportunityProbabilitySubscriberTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OpportunityProbabilitySubscriber */
     protected $subscriber;

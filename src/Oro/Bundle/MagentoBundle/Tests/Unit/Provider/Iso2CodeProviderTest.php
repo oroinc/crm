@@ -7,10 +7,10 @@ use Oro\Bundle\AddressBundle\Entity\Repository\CountryRepository;
 use Oro\Bundle\MagentoBundle\Provider\Iso2CodeProvider;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class Iso2CodeProviderTest extends \PHPUnit_Framework_TestCase
+class Iso2CodeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var RegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RegistryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registry;
 

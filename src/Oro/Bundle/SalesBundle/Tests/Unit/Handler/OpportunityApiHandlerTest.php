@@ -8,7 +8,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Handler\OpportunityApiHandler;
 
-class OpportunityApiHandlerTest extends \PHPUnit_Framework_TestCase
+class OpportunityApiHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider probabilityDataProvider

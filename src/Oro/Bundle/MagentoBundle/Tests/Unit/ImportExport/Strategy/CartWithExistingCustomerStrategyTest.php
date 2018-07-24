@@ -36,7 +36,7 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
     {
         $strategy = $this->getStrategy();
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ContextInterface $context */
         $context = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $strategy->setImportExportContext($context);
 
@@ -73,7 +73,7 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
         $strategy->setStepExecution($this->stepExecution);
 
         $cartItem = ['customerId' => uniqid()];
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ContextInterface $context */
         $context = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $context->expects($this->once())
             ->method('getValue')

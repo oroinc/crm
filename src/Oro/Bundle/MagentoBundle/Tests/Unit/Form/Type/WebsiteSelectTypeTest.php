@@ -6,7 +6,7 @@ use Oro\Bundle\MagentoBundle\Form\Type\WebsiteSelectType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class WebsiteSelectTypeTest extends \PHPUnit_Framework_TestCase
+class WebsiteSelectTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testFormInterface()
     {

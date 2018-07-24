@@ -9,14 +9,14 @@ use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Twig\OrderNotesExtension;
 use Oro\Component\Testing\Unit\EntityTrait;
 
-class OrderNotesExtensionTest extends \PHPUnit_Framework_TestCase
+class OrderNotesExtensionTest extends \PHPUnit\Framework\TestCase
 {
     use EntityTrait;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|MagentoTransport */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|MagentoTransport */
     private $transport;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|Channel */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|Channel */
     private $channel;
 
     /** @var  OrderNotesExtension */

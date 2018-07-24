@@ -6,7 +6,7 @@ use Oro\Bundle\ImportExportBundle\Job\JobResult;
 use Oro\Bundle\IntegrationBundle\Event\SyncEvent;
 use Oro\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener;
 
-class IntegrationSyncAfterEventListenerTest extends \PHPUnit_Framework_TestCase
+class IntegrationSyncAfterEventListenerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var IntegrationSyncAfterEventListener */
     protected $listener;

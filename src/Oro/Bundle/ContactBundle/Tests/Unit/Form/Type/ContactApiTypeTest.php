@@ -5,7 +5,7 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Type;
 use Oro\Bundle\ContactBundle\Form\Type\ContactApiType;
 use Oro\Bundle\ContactBundle\Form\Type\ContactType;
 
-class ContactApiTypeTest extends \PHPUnit_Framework_TestCase
+class ContactApiTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContactApiType

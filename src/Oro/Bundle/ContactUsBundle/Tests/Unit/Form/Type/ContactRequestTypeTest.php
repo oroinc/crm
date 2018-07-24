@@ -54,7 +54,7 @@ class ContactRequestTypeTest extends TypeTestCase
                     function ($fieldName, $fieldType) use (&$fields) {
                         $fields[$fieldName] = $fieldType;
 
-                        return new \PHPUnit_Framework_MockObject_Stub_ReturnSelf();
+                        return new \PHPUnit\Framework\MockObject\Stub\ReturnSelf();
                     }
                 )
             );

@@ -49,12 +49,14 @@
 
     {% set dataBlocks = [{
         'title': 'General'|trans,
+        'class': 'nav-item',
         'subblocks': [{
             'title': '',
             'data':  [ channelInformationWidget ]
         }]
     }, {
         'title': 'Entities'|trans,
+        'class': 'nav-item',
         'subblocks': [{
             'title': '',
             'data':  [ channelMacro.inializeEntitiesViewComponent(entity) ]

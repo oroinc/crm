@@ -14,7 +14,7 @@ class AbstractPageableSoapIteratorTest extends BaseSoapIteratorTestCase
             'start_sync_date' => $date
         ];
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|AbstractPageableSoapIterator $iterator */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|AbstractPageableSoapIterator $iterator */
         $iterator = $this->getMockForAbstractClass(
             'Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\AbstractPageableSoapIterator',
             [$this->transport, $settings]

@@ -11,7 +11,7 @@ use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\Testing\Unit\EntityTrait;
 
-class NoteFieldsProcessorTest extends \PHPUnit_Framework_TestCase
+class NoteFieldsProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use EntityTrait;
 
@@ -21,7 +21,7 @@ class NoteFieldsProcessorTest extends \PHPUnit_Framework_TestCase
     private $processor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | HtmlTagHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject | HtmlTagHelper
      */
     private $htmlTagHelper;
 

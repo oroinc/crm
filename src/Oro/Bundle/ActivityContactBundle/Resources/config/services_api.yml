@@ -7,4 +7,4 @@ services:
             - '@oro_activity_contact.provider'
             - ['create', 'update']
         tags:
-            - { name: oro.api.processor, action: get_config, extra: !identifier_fields_only&definition, priority: -40 }
+            - { name: oro.api.processor, action: get_config, extra: '!identifier_fields_only&definition', priority: -40 }

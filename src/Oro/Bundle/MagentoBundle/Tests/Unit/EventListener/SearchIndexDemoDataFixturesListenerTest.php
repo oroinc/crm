@@ -6,9 +6,9 @@ use Oro\Bundle\MagentoBundle\EventListener\SearchIndexDemoDataFixturesListener;
 use Oro\Bundle\MigrationBundle\Event\MigrationDataFixturesEvent;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
 
-class SearchIndexDemoDataFixturesListenerTest extends \PHPUnit_Framework_TestCase
+class SearchIndexDemoDataFixturesListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $listenerManager;
 
     /** @var SearchIndexDemoDataFixturesListener */

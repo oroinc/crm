@@ -6,7 +6,7 @@ use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Oro\Bundle\MagentoBundle\Form\Type\CartAddressApiType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class CartAddressApiTypeTest extends \PHPUnit_Framework_TestCase
+class CartAddressApiTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CartAddressApiType */
     protected $type;

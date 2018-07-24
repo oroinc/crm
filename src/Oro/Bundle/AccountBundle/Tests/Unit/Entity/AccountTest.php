@@ -7,7 +7,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
-class AccountTest extends \PHPUnit_Framework_TestCase
+class AccountTest extends \PHPUnit\Framework\TestCase
 {
     public function testGettersSetters()
     {

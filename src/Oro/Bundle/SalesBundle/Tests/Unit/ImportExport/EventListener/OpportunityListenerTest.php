@@ -16,7 +16,7 @@ use Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub as Opportunity;
 
-class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
+class OpportunityListenerTest extends \PHPUnit\Framework\TestCase
 {
     public function testOnProcessAfter()
     {

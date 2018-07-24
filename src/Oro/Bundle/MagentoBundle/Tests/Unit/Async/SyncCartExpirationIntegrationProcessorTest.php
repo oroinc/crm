@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
+class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;
 
@@ -274,7 +274,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|IntegrationRepository
+     * @return \PHPUnit\Framework\MockObject\MockObject|IntegrationRepository
      */
     private function createIntegrationRepositoryStub(Integration $integration = null)
     {
@@ -289,7 +289,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|RegistryInterface
      */
     private function createRegistryStub(IntegrationRepository $integrationRepository = null)
     {
@@ -305,7 +305,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CartExpirationProcessor
+     * @return \PHPUnit\Framework\MockObject\MockObject|CartExpirationProcessor
      */
     private function createSyncProcessorMock()
     {
@@ -313,7 +313,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject | LoggerInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject | LoggerInterface
      */
     private function createLoggerMock()
     {
@@ -321,7 +321,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject | TokenStorageInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject | TokenStorageInterface
      */
     private function createTokenStorageMock()
     {

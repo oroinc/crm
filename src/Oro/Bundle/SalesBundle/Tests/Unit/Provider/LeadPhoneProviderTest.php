@@ -6,7 +6,7 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 use Oro\Bundle\SalesBundle\Provider\LeadPhoneProvider;
 
-class LeadPhoneProviderTest extends \PHPUnit_Framework_TestCase
+class LeadPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var LeadPhoneProvider */
     protected $provider;

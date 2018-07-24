@@ -15,21 +15,21 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
+class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_NAME = 'name';
     const FORM_DATA = ['field' => 'value'];
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|FormInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|FormInterface */
     protected $form;
 
     /** @var Request */
     protected $request;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|RegistryInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|RegistryInterface */
     protected $registry;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|EventDispatcherInterface */
     protected $dispatcher;
 
     /** @var ChannelHandler */
@@ -38,7 +38,7 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var Channel */
     protected $entity;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager */
     protected $em;
 
     protected function setUp()

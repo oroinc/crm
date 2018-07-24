@@ -5,9 +5,9 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\CustomerPhoneProvider;
 
-class CustomerPhoneProviderTest extends \PHPUnit_Framework_TestCase
+class CustomerPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $rootProvider;
 
     /** @var CustomerPhoneProvider */

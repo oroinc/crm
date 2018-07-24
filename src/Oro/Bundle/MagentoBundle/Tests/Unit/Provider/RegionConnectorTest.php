@@ -40,7 +40,7 @@ class RegionConnectorTest extends MagentoConnectorTestCase
 
     public function testPublicInterface()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ConnectorContextMediator $contextMediatorMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ConnectorContextMediator $contextMediatorMock */
         $contextMediatorMock = $this
             ->getMockBuilder('Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator')
             ->disableOriginalConstructor()->getMock();

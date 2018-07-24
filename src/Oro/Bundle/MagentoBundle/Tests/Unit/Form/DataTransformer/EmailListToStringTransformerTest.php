@@ -4,7 +4,7 @@ namespace Oro\Bundle\FormBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\MagentoBundle\Form\DataTransformer\EmailListToStringTransformer;
 
-class EmailListToStringTransformerTest extends \PHPUnit_Framework_TestCase
+class EmailListToStringTransformerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider transformDataProvider

@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\Converter\Rest\WebsiteConverter;
 /**
  * Class WebsiteConverterTest is a unit test class for WebsiteConverter
  */
-class WebsiteConverterTest extends \PHPUnit_Framework_TestCase
+class WebsiteConverterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var WebsiteConverter */
     private $converter;

@@ -14,7 +14,7 @@ use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub as Lead;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub as Opportunity;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
+class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LeadToOpportunityProvider

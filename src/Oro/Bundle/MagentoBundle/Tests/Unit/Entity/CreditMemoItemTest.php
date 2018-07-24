@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\Entity\CreditMemoItem;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Component\Testing\Unit\EntityTestCaseTrait;
 
-class CreditMemoItemTest extends \PHPUnit_Framework_TestCase
+class CreditMemoItemTest extends \PHPUnit\Framework\TestCase
 {
     use EntityTestCaseTrait;
 

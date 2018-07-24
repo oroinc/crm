@@ -9,7 +9,7 @@ use Oro\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
 use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
-class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
+class PurchaseDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ManagerRegistry

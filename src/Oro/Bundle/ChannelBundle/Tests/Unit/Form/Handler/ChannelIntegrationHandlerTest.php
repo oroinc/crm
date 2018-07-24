@@ -12,11 +12,11 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
+class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_NAME = 'name';
 
-    /** @var FormInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $form;
 
     /** @var Request */

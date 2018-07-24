@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
-abstract class AbstractEntityTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractEntityTestCase extends \PHPUnit\Framework\TestCase
 {
     protected $entity;
 

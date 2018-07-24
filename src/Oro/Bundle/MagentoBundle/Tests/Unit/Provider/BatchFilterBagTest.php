@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
 
-class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
+class BatchFilterBagTest extends \PHPUnit\Framework\TestCase
 {
     /** @var BatchFilterBag */
     protected $filter;

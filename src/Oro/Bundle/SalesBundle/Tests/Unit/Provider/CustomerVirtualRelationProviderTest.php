@@ -10,12 +10,12 @@ use Oro\Bundle\SalesBundle\Provider\CustomerVirtualRelationProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
 
-class CustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
+class CustomerVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $associationManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $configProvider;
 
     /** @var CustomerVirtualRelationProvider */

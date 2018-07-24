@@ -11,7 +11,7 @@ use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestCase
+class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider opportunitiesBySourceDataProvider
@@ -130,17 +130,17 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
     {
         $doctrine = $this->getDoctrineMock($data);
 
-        /** @var AclHelper|\PHPUnit_Framework_MockObject_MockObject $aclHelper */
+        /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject $aclHelper */
         $aclHelper = $this->getMockBuilder(AclHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var DateFilterProcessor|\PHPUnit_Framework_MockObject_MockObject $processor */
+        /** @var DateFilterProcessor|\PHPUnit\Framework\MockObject\MockObject $processor */
         $processor = $this->getMockBuilder(DateFilterProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject $translator */
+        /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject $translator */
         $translator = $this->getMockBuilder(TranslatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -149,7 +149,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
             ->method('trans')
             ->will($this->returnArgument(0));
 
-        /** @var EnumExtension|\PHPUnit_Framework_MockObject_MockObject $enumTranslator */
+        /** @var EnumExtension|\PHPUnit\Framework\MockObject\MockObject $enumTranslator */
         $enumTranslator = $this->getMockBuilder(EnumExtension::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -158,7 +158,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
             ->method('transEnum')
             ->will($this->returnArgument(0));
 
-        /** @var CurrencyQueryBuilderTransformerInterface|\PHPUnit_Framework_MockObject_MockObject $qbTransformer */
+        /** @var CurrencyQueryBuilderTransformerInterface|\PHPUnit\Framework\MockObject\MockObject $qbTransformer */
         $qbTransformer = $this->getMockBuilder(CurrencyQueryBuilderTransformerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -175,7 +175,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
 
     /**
      * @param array $data
-     * @return Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @return Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getDoctrineMock(array $data)
     {

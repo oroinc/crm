@@ -6,17 +6,17 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-abstract class AbstractHandlerTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const FORM_DATA = ['field' => 'value'];
 
-    /** @var FormInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $form;
 
-    /** @var Request|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Request|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var RegistryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RegistryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $manager;
 
     /** Object */

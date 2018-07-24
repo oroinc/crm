@@ -8,15 +8,15 @@ use Oro\Bundle\ContactBundle\Model\Social;
 use Oro\Bundle\ImportExportBundle\Tests\Unit\Strategy\Stub\ImportEntity;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
+class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $socialUrlFormatter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fieldHelper;
 

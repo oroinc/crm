@@ -18,16 +18,16 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     const TEST_CHANNEL_ID = 1;
     const TEST_ACCOUNT_ID = 112;
 
-    /** @var LifetimeHistoryRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LifetimeHistoryRepository|\PHPUnit\Framework\MockObject\MockObject */
     protected $lifetimeRepo;
 
-    /** @var CustomerRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerRepository|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerRepo;
 
-    /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $em;
 
-    /** @var UnitOfWork|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UnitOfWork|\PHPUnit\Framework\MockObject\MockObject */
     protected $uow;
 
     /** @var ChannelDoctrineListener */

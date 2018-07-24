@@ -11,13 +11,13 @@ use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 
 class RefreshChannelCacheListenerTest extends OrmTestCase
 {
-    /** @var StateProvider | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var StateProvider | \PHPUnit\Framework\MockObject\MockObject */
     protected $stateProvider;
 
     /** @var  RefreshChannelCacheListener */
     protected $refreshChannelCacheListener;
 
-    /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $em;
 
     protected function setUp()

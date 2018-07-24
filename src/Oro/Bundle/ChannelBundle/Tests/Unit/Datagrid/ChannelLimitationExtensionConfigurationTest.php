@@ -5,7 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Datagrid;
 use Oro\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtensionConfiguration;
 use Symfony\Component\Config\Definition\Processor;
 
-class ChannelLimitationExtensionConfigurationTest extends \PHPUnit_Framework_TestCase
+class ChannelLimitationExtensionConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     public function testDefaultConfiguration()
     {

@@ -6,7 +6,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Provider\ContactPhoneProvider;
 
-class ContactPhoneProviderTest extends \PHPUnit_Framework_TestCase
+class ContactPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ContactPhoneProvider */
     protected $provider;

@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class OpportunityStatusSelectTypeTest extends \PHPUnit_Framework_TestCase
+class OpportunityStatusSelectTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider probabilitiesDataProvider

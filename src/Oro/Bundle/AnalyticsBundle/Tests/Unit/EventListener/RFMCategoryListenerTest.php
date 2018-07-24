@@ -11,10 +11,10 @@ use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
-class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
+class RFMCategoryListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RFMMetricStateManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|RFMMetricStateManager
      */
     protected $manager;
 
@@ -60,7 +60,7 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
         $expectedResetMetrics = 0,
         $expectedScheduleRecalculation = 0
     ) {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager $em */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager $em */
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
         $uow = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')->disableOriginalConstructor()->getMock();
 
@@ -146,7 +146,7 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getChannel($channelId = 1, array $data = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Channel $channel */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Channel $channel */
         $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         $channel->expects($this->any())
@@ -175,7 +175,7 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CalculateAnalyticsScheduler
+     * @return \PHPUnit\Framework\MockObject\MockObject|CalculateAnalyticsScheduler
      */
     private function createCalculateAnalyticsSchedulerMock()
     {

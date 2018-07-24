@@ -12,12 +12,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormView;
 
-class ChannelTypeTest extends \PHPUnit_Framework_TestCase
+class ChannelTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var FormBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FormBuilder|\PHPUnit\Framework\MockObject\MockObject */
     protected $builder;
 
-    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $settingsProvider;
 
     /** @var ChannelType */
