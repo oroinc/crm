@@ -8,9 +8,9 @@ Feature: Application search related many to many entities
 
   Scenario: Search by mail parts
     Given I login as administrator
-    And I follow "Search"
+    And I click "Search"
     And type "some_email@armyspy.com" in "search"
-    When I press "Go"
+    When I click "Search Submit"
     And I should see following search results:
       | Title                | Type          |
       | Mrs. July Robertson  | Contact       |
@@ -24,9 +24,9 @@ Feature: Application search related many to many entities
    And I save and close form
 
   Scenario: Search by mail parts again
-    Given I follow "Search"
+    Given I click "Search"
     And type "changed_email@test.org" in "search"
-    And I press "Go"
+    And I click "Search Submit"
     And I should see following search results:
       | Title                | Type          |
       | Mrs. July Robertson  | Contact       |
