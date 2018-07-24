@@ -65,6 +65,7 @@
     {% set dataBlocks = [
         {
             'title': 'General'|trans,
+            'class': 'nav-item',
             'subblocks': [{
                 'title': '',
                 'data':  [
@@ -79,6 +80,7 @@
     {% if form.vars.value.entities|length > 0 %}
         {% set dataBlocks = dataBlocks|merge([{
             'title': 'Entities'|trans,
+            'class': 'nav-item',
             'subblocks': [{
                 'title': '',
                 'data':  [ form_row(form.entities) ]
@@ -90,6 +92,7 @@
     {% if additional|trim %}
         {% set dataBlocks = dataBlocks|merge([{
             'title': 'Additional'|trans,
+            'class': 'nav-item',
             'subblocks': [{
                 'title': '',
                 'data':  [ additional ]
