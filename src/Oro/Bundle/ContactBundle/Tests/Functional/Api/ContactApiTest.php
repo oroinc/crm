@@ -20,7 +20,25 @@ class ContactApiTest extends RestJsonApiTestCase
             ['entity' => 'contacts', 'id' => $this->getReference('contact1')->getId()]
         );
 
-        $this->assertResponseContains('contact_get.yml', $response);
+        $this->assertResponseContains('get_contact.yml', $response);
+    }
+
+    public function testGetListFilteredByPrimaryEmail()
+    {
+        $response = $this->cget(
+            ['entity' => 'contacts', 'filter[primaryEmail]' => 'contact1_2@example.com']
+        );
+
+        $this->assertResponseContains('get_contacts_filter_by_primary_email.yml', $response);
+    }
+
+    public function testGetListFilteredByEmail()
+    {
+        $response = $this->cget(
+            ['entity' => 'contacts', 'filter[emails]' => 'contact1_1@example.com']
+        );
+
+        $this->assertResponseContains('get_contacts_filter_by_email.yml', $response);
     }
 
     public function testPatchBirthday()
@@ -39,7 +57,7 @@ class ContactApiTest extends RestJsonApiTestCase
             ]
         );
 
-        $this->assertResponseContains('contact_patch_birthday.yml', $response);
+        $this->assertResponseContains('update_contact_birthday.yml', $response);
 
         // test that the birthday was changed
         $contact = $this->getEntityManager()->find(Contact::class, $contactId);
