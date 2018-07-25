@@ -218,16 +218,19 @@
                     }) }}
                 {% endif %}
                 {% if createCustomersData|length %}
+                    {% set togglerId = 'dropdown-'|uniqid %}
                     <div class="dropdown btn-group entity-create-dropdown">
-                        <button type="button" data-toggle="dropdown" class="dropdown-toggle btn entity-create-btn">
-                            <i class="fa-plus"></i>
-                            <span class="caret"></span>
+                        <button id="{{ togglerId }}" type="button" data-toggle="dropdown"
+                                class="dropdown-toggle btn entity-create-btn"
+                                aria-haspopup="true" aria-expanded="false">
+                            <span class="fa-plus" aria-hidden="true"></span>
+                            <span class="caret" aria-hidden="true"></span>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="{{ togglerId }}">
                             {% for customer in createCustomersData %}
                                 <li>
                                     <button type="button" data-customer="{{ customer|json_encode }}">
-                                        <i class="{{ customer.icon }}"></i>
+                                        <span class="{{ customer.icon }}" aria-hidden="true"></span>
                                         {{ customer.label|trans }}
                                     </button>
                                 </li>
