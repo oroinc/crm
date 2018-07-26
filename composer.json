@@ -14,11 +14,11 @@
         "exclude-from-classmap": ["/Tests/"]
     },
     "require": {
-        "oro/platform": "3.0.*",
-        "oro/crm-task-bundle": "3.0.*",
-        "oro/crm-call-bundle": "3.0.*",
-        "oro/calendar-bundle": "3.0.*",
-        "oro/marketing": "3.0.*"
+        "oro/platform": "3.0.x-dev",
+        "oro/crm-task-bundle": "3.0.x-dev",
+        "oro/crm-call-bundle": "3.0.x-dev",
+        "oro/calendar-bundle": "3.0.x-dev",
+        "oro/marketing": "3.0.x-dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "3.1.2",
