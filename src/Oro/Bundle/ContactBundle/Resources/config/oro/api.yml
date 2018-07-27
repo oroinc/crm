@@ -48,6 +48,12 @@ api:
                         type: primaryField
                         options:
                             data_field: email
+            sorters:
+                fields:
+                    phones:
+                        property_path: phones.phone
+                    emails:
+                        property_path: emails.email
 
         Oro\Bundle\ContactBundle\Entity\ContactAddress:
             documentation_resource: '@OroContactBundle/Resources/doc/api/contact_address.md'

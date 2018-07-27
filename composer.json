@@ -14,11 +14,11 @@
         "exclude-from-classmap": ["/Tests/"]
     },
     "require": {
-        "oro/platform": "2.x-dev",
-        "oro/crm-task-bundle": "2.x-dev",
-        "oro/crm-call-bundle": "2.x-dev",
-        "oro/calendar-bundle": "2.x-dev",
-        "oro/marketing": "2.x-dev"
+        "oro/platform": "3.1.*",
+        "oro/crm-task-bundle": "3.1.*",
+        "oro/crm-call-bundle": "3.1.*",
+        "oro/calendar-bundle": "3.1.*",
+        "oro/marketing": "3.1.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "3.1.2",
@@ -51,7 +51,7 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "2.x-dev"
+            "dev-master": "3.1-dev"
         }
     }
 }
