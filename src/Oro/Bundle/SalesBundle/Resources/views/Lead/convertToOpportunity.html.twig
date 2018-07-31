@@ -69,22 +69,19 @@
     ]) %}
 
     {% set dataBlocks = [{
-    'title': 'Opportunity Information'|trans,
-    'class': 'active',
-    'subblocks': [
-    {
-    'title': 'General'|trans,
-    'data': formFields
-    },
-    {
-    'data':
-    [
-    form_row(form.customerNeed, { 'attr': {'class': 'expanded-text-field'} }),
-    form_row(form.proposedSolution, { 'attr': {'class': 'expanded-text-field'} }),
-    form_row(form.notes, { 'attr': {'class': 'expanded-text-field'} })
-    ]
-    }
-    ]
+        'title': 'Opportunity Information'|trans,
+        'class': 'nav-item active',
+        'subblocks': [{
+            'title': 'General'|trans,
+            'data': formFields
+        },
+        {
+            'data': [
+                form_row(form.customerNeed, { 'attr': {'class': 'expanded-text-field'} }),
+                form_row(form.proposedSolution, { 'attr': {'class': 'expanded-text-field'} }),
+                form_row(form.notes, { 'attr': {'class': 'expanded-text-field'} })
+            ]
+        }]
     }] %}
 
     {% set additionalData = [] %}
@@ -93,18 +90,20 @@
     {% endfor %}
     {% if additionalData is not empty %}
         {% set dataBlocks = dataBlocks|merge([{
-        'title': 'Additional'|trans,
-        'subblocks': [{
-        'title': '',
-        'useSpan': false,
-        'data' : additionalData
-        }]
-        }] ) %}
+            'title': 'Additional'|trans,
+            'class': 'nav-item',
+            'subblocks': [{
+                'title': '',
+                'useSpan': false,
+                'data' : additionalData
+            }]
+        }]) %}
     {% endif %}
 
     {% if form.vars.use_full_contact_form %}
         {% set dataBlocks = dataBlocks|merge([{
             'title': 'New Contact Information'|trans,
+            'class': 'nav-item',
             'subblocks': [{
                 'title': 'General'|trans,
                 'data': [

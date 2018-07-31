@@ -46,6 +46,12 @@ api:
                         type: primaryField
                         options:
                             data_field: email
+            sorters:
+                fields:
+                    phones:
+                        property_path: phones.phone
+                    emails:
+                        property_path: emails.email
 
         Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone:
             # this entity does not have own Data API resource
@@ -108,6 +114,12 @@ api:
                         type: primaryField
                         options:
                             data_field: email
+            sorters:
+                fields:
+                    phones:
+                        property_path: phones.phone
+                    emails:
+                        property_path: emails.email
 
         Extend\Entity\EV_Lead_Status:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/lead.md'

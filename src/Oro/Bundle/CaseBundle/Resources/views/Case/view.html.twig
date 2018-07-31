@@ -110,7 +110,7 @@
     {% set dataBlocks = [
         {
             'title': 'oro.case.block.general'|trans,
-            'class': 'active',
+            'class': 'nav-item active',
             'subblocks': [
                 {'data' : [caseInformation]}
             ]
@@ -130,6 +130,7 @@
         {% set dataBlocks = dataBlocks|merge([
             {
                 'title': 'oro.case.block.comments'|trans,
+                'class': 'nav-item',
                 'subblocks': [
                     {'data' : [caseComments]}
                 ]

@@ -2,16 +2,14 @@
 
 namespace Oro\Bundle\CaseBundle\Provider;
 
+use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
+use Oro\Bundle\CaseBundle\Form\Type\CaseMailboxProcessSettingsType;
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
 
 /**
- * Class CaseMailboxProcessProvider
- *
  * Registers convert to case mailbox email process.
  * Actual implementation of this process can be found in processes.yml of this bundle.
- *
- * @package Oro\Bundle\CaseBundle\Provider
  */
 class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
 {
@@ -22,7 +20,7 @@ class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
      */
     public function getSettingsEntityFQCN()
     {
-        return 'Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings';
+        return CaseMailboxProcessSettings::class;
     }
 
     /**
@@ -30,7 +28,7 @@ class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
      */
     public function getSettingsFormType()
     {
-        return 'oro_case_mailbox_process_settings';
+        return CaseMailboxProcessSettingsType::class;
     }
 
     /**

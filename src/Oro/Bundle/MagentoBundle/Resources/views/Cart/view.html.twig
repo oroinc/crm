@@ -93,11 +93,12 @@
     {% set dataBlocks = [
         {
             'title': 'oro.magento.general_information'|trans,
-            'class': 'active',
+            'class': 'nav-item active',
             'subblocks': generalSubblocks
         },
         {
             'title': 'oro.magento.cart.cart_items.label'|trans,
+            'class': 'nav-item',
             'subblocks': [
                 {'data' : [itemsTabsWidget] }
             ]
