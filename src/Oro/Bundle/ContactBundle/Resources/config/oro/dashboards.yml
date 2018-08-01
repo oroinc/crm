@@ -14,7 +14,8 @@ dashboards:
             route_parameters: { bundle: OroContactBundle, name: myContactsActivity }
             acl:         oro_contact_view
             description: oro.dashboard.my_contacts_activity.description
-            icon:       bundles/orocontact/img/recently_accessed_contacts.png
+            icon:        bundles/orocontact/img/recently_accessed_contacts.png
+            icon_class:  fa-id-card-o
             configuration:
                 owners:
                     type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType

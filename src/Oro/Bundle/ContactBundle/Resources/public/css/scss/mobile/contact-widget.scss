@@ -1,0 +1,18 @@
+/* @theme: admin.oro; */
+
+.contact-widget-wrapper {
+  padding-#{$start}: 0;
+
+  .box-type1 {
+    margin-#{$start}: 0;
+    margin-#{$end}: 0;
+  }
+}
+
+.contact-box-wrapper {
+  padding: 0;
+}
+
+.contact-box {
+  width: calc(100% - 20px);
+}

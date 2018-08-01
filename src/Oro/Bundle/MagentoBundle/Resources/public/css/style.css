@@ -1,3 +1,5 @@
+/* @theme: admin.oro; */
+
 .alert.connection-status {
     margin: 10px 0;
     float: none;
@@ -102,4 +104,12 @@
     right: 0;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+}
+
+.widget-picker__icon.magento-logo {
+    background-image: url('../img/magento-logo.svg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 18px;
+    vertical-align: middle;
 }
