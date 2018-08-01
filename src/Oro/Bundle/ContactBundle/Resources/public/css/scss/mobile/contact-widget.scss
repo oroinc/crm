@@ -1,11 +1,11 @@
 /* @theme: admin.oro; */
 
 .contact-widget-wrapper {
-  padding-left: 0;
+  padding-#{$start}: 0;
 
   .box-type1 {
-    margin-left: 0;
-    margin-right: 0;
+    margin-#{$start}: 0;
+    margin-#{$end}: 0;
   }
 }
 
