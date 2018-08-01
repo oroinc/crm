@@ -43,6 +43,8 @@ Feature: Import Contacts
     And I see Addresses 1 Country ISO2 code column
     And I see Organization Name column
 
+  # Unskip after CRM-9048 is fixed
+  @skip
   Scenario: Import new Contacts
     Given I fill template with data:
       | Id | Name prefix | First name | Last name | Gender | Birthday   | Source Name | Owner Username      | Assigned to Username | Emails 1 Email              | Phones 1 Phone | Groups 1 Label           | Accounts 1 Account name | Accounts Default Contact 1 Account name | Addresses 1 Label | Addresses 1 First name | Addresses 1 Last name | Addresses 1 Street  | Addresses 1 Zip\/Postal Code | Addresses 1 City | Addresses 1 State Combined code | Addresses 1 Country ISO2 code | Organization Name |
