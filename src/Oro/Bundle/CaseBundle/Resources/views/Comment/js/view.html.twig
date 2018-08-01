@@ -1,6 +1,6 @@
 <script type="text/html" id="{{ id|e('html_attr')|raw }}">
     <div class="accordion-group">
-        <div class="accordion-heading collapse<% if (!collapsed) { %> in<% } %>">
+        <div class="accordion-heading collapse<% if (!collapsed) { %> show<% } %>">
             <div class="title-item">
                 <a href="#accordion-item<%= id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
                 <% if (createdBy) { %>
@@ -28,7 +28,7 @@
                 <button class="btn item-remove-button<% if (!permissions.delete) { %> disabled<% } %>" <% if (!permissions.delete) { %> disabled="disabled"<% } %> title="{{ 'oro.case.casecomment.action.delete'|trans|e('html_attr')|raw }}"><i class="fa-trash-o hide-text">{{ 'oro.case.casecomment.action.delete'|trans|e('html')|raw }}</i></button>
             </div>
         </div>
-        <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
+        <div class="accordion-body collapse<% if (!collapsed) { %> show<% } %>" id="accordion-item<%= id %>">
             <div class="message">
                 <%= message %>
                 <% if (updatedBy) { %>
