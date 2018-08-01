@@ -103,7 +103,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_38';
+        return 'v1_38_1';
     }
 
     /**
@@ -342,6 +342,7 @@ class OroSalesBundleInstaller implements
 
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
         $table->addIndex(['createdat', 'id'], 'lead_created_idx', []);
+        $table->addIndex(['updatedat'], 'lead_updated_idx');
         $table->addIndex(['contact_id'], 'idx_73db4633e7a1254a', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['customer_association_id'], 'IDX_73DB463376D4FC6F', []);
