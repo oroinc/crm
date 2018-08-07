@@ -265,6 +265,8 @@ datagrids:
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+            hints:
+                - HINT_TRANSLATABLE
         sorters:
             columns:
                 first_name:

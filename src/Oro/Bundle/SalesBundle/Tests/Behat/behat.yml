@@ -129,6 +129,48 @@ oro_behat_extension:
            type: xpath
            locator: '//button[text()[contains(.,"is not any of")]]/ancestor::div[contains(@class, "choice-filter")]/div[contains(@class, "value-field-frame")]/div/ul'
 
+    Leads Grid:
+      selector: 'div[data-page-component-name="sales-lead-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+
+    Business Customer Grid:
+      selector: 'div[data-page-component-name="oro-sales-b2bcustomers-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+
+    Business Customers Address Form:
+      selector: 'form[name="oro_sales_b2bcustomer_form"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Billing Address Country: 'oro_sales_b2bcustomer_form[billingAddress][country]'
+          Billing Address State: 'oro_sales_b2bcustomer_form[billingAddress][region]'
+          Shipping Address Country: 'oro_sales_b2bcustomer_form[shippingAddress][country]'
+          Shipping Address State: 'oro_sales_b2bcustomer_form[shippingAddress][region]'
+
+    Leads Tab:
+      selector:
+        locator: '//ul/li/a[text()="Leads"]'
+        type: xpath
+
+    Bussines Customer Leads Paginator:
+      selector: 'div[data-page-component-name="sales-customers-leads-grid"] div.toolbar div.pagination'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridPaginator
+
+    Business Customer Leads Grid:
+      selector: 'div[data-page-component-name="sales-customers-leads-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+      options:
+        mapping:
+          GridToolbarPaginator: 'Business Customer Leads Grid Paginator'
+
+    Business Customer Leads GridFilters:
+      selector: 'div[data-page-component-name="sales-customers-leads-grid"] div.filter-box'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilters
+
+    Business Customer Leads GridFilterItem:
+      selector: 'div.filter-item'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilterItem
+
   pages:
     Opportunity Index:
       route: 'oro_sales_opportunity_index'
@@ -176,5 +218,6 @@ oro_behat_extension:
         - OroSalesBundle::SalesFeatureToggleContext
         - OroConfigBundle::FeatureContext
         - OroQueryDesignerBundle::QueryDesignerContext
+        - OroLocaleBundle::LocalizationContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'

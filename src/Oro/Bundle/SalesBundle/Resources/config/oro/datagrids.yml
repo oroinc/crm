@@ -1209,6 +1209,8 @@ datagrids:
                         - { join: sa.country, alias: saCountry }
                         - { join: ba.region, alias: baRegion }
                         - { join: sa.region, alias: saRegion }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             ownerName:
                 label: oro.sales.b2bcustomer.owner.label
@@ -1433,6 +1435,8 @@ datagrids:
                         - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+            hints:
+                - HINT_TRANSLATABLE
         properties:
             id: ~
             view_link:

@@ -35,6 +35,8 @@ datagrids:
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
                         - { join: c.group, alias: cg }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             channelName:
                 label:            oro.magento.customer.data_channel.label
@@ -244,6 +246,8 @@ datagrids:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: cs.website, alias: cw }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             channelName:
                 label:            oro.magento.cart.data_channel.label
@@ -695,6 +699,8 @@ datagrids:
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             channelName:
                 label:            oro.magento.order.data_channel.label
@@ -1663,6 +1669,8 @@ datagrids:
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             id:
                 label:            oro.magento.order.id.label
