@@ -70,7 +70,6 @@
 
     {% set dataBlocks = [{
         'title': 'Opportunity Information'|trans,
-        'class': 'nav-item active',
         'subblocks': [{
             'title': 'General'|trans,
             'data': formFields
@@ -91,7 +90,6 @@
     {% if additionalData is not empty %}
         {% set dataBlocks = dataBlocks|merge([{
             'title': 'Additional'|trans,
-            'class': 'nav-item',
             'subblocks': [{
                 'title': '',
                 'useSpan': false,
@@ -103,7 +101,6 @@
     {% if form.vars.use_full_contact_form %}
         {% set dataBlocks = dataBlocks|merge([{
             'title': 'New Contact Information'|trans,
-            'class': 'nav-item',
             'subblocks': [{
                 'title': 'General'|trans,
                 'data': [

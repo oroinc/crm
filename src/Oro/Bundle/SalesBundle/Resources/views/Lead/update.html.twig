@@ -97,7 +97,6 @@
 
     {% set dataBlocks = [{
             'title': 'General'|trans,
-            'class': 'nav-item active',
             'subblocks': [
                 {
                     'title': 'oro.sales.lead.information'|trans,
@@ -116,7 +115,6 @@
 
     {% set dataBlocks = dataBlocks|merge([{
             'title': 'oro.sales.lead.contact_information.label'|trans,
-            'class': 'nav-item active',
             'subblocks': [
                 {
                     'data': [
@@ -154,7 +152,6 @@
     {% endfor %}
     {% set dataBlocks = dataBlocks|merge([{
             'title': 'Additional'|trans,
-            'class': 'nav-item',
             'subblocks': [{
                 'title': '',
                 'useSpan': false,

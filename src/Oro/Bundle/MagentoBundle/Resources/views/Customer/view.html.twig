@@ -156,12 +156,10 @@
     {% set dataBlocks = [
         {
             'title': 'General Information'|trans,
-            'class': 'nav-item active',
             'subblocks': generalSubBlocks
         },
         {
             'title': 'oro.magento.customer.sales.label'|trans,
-            'class': 'nav-item',
             'subblocks': [
                 {'data' : [salesTabsWidget] }
             ]
@@ -172,7 +170,6 @@
         {% set dataBlocks = dataBlocks|merge([
             {
                 'title': 'oro.magento.website_activity.label'|trans,
-                'class': 'nav-item',
                 'priority': 1050,
                 'subblocks': [
                     {'data' : [websiteActivityTabsWidget] }
@@ -194,7 +191,6 @@
             {% set dataBlocks = dataBlocks|merge([
                 {
                     'title': 'oro.magento.newslettersubscriber.label'|trans,
-                    'class': 'nav-item',
                     'subblocks': [
                         {'data' : [newsletterSubscriberBlock] }
                     ]

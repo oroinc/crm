@@ -65,7 +65,6 @@
 
     {% set dataBlocks = [{
             'title': 'General'|trans,
-            'class': 'nav-item active',
             'subblocks': [
                 {
                     'title': 'Contact Information'|trans,
@@ -111,7 +110,6 @@
     {% if additionalData is not empty %}
         {% set dataBlocks = dataBlocks|merge([{
             'title': 'Additional'|trans,
-            'class': 'nav-item',
             'subblocks': [{
                 'title': '',
                 'useSpan': false,
@@ -123,7 +121,6 @@
     {% if form.groups is defined and form.groups.children|length > 0 %}
         {% set dataBlocks = dataBlocks|merge([{
             'title' : 'oro.contact.groups.label'|trans,
-            'class': 'nav-item',
             'subblocks':
             [
                 {
@@ -139,7 +136,6 @@
 
     {% set dataBlocks = dataBlocks|merge([{
         'title' : 'oro.contact.accounts.label'|trans,
-        'class': 'nav-item',
         'subblocks':
         [
             {

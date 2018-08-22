@@ -71,7 +71,6 @@
     {% set dataBlocks = [
         {
             'title': 'oro.account.sections.general'|trans,
-            'class': 'nav-item active',
             'subblocks': generalSectionBlocks
         }
     ] %}
@@ -88,7 +87,6 @@
             {% set dataBlocks = dataBlocks|merge([
                 {
                     'title': channel.name,
-                    'class': 'nav-item',
                     'priority': 255,
                     'subblocks': [
                         {'data' : [accountChannelInfoSection]}
@@ -106,7 +104,6 @@
         {% set dataBlocks = dataBlocks|merge([
             {
                 'title': 'oro.account.sections.website_activity'|trans,
-                'class': 'nav-item',
                 'priority': 1050,
                 'subblocks': [
                     {'data' : [websiteActivity]}

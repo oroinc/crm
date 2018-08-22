@@ -53,7 +53,6 @@
     {% set dataBlocks = [
         {
             'title': 'General Information'|trans,
-            'class': 'nav-item active',
             'subblocks': [{'data' : [informationWidget] }]
         }
     ] %}
@@ -67,7 +66,6 @@
         {% endset %}
         {% set dataBlocks = dataBlocks|merge([{
             'title': 'Opportunity Information'|trans,
-            'class': 'nav-item',
             'subblocks': [{'data' : [opportunityInfoWidget] }]
         }]) %}
     {% endif %}

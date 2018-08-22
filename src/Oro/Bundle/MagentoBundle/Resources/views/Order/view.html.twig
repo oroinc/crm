@@ -49,7 +49,6 @@
     {% set dataBlocks = [
         {
             'title': 'oro.magento.general_information'|trans,
-            'class': 'nav-item active',
             'subblocks': generalSubblocks
         }
     ] %}
@@ -65,7 +64,6 @@
         {% set dataBlocks = dataBlocks|merge([
             {
                 'title': 'oro.magento.order.items.label'|trans,
-                'class': 'nav-item',
                 'subblocks': [
                     {'data' : [orderItemsWidget] }
                 ]
@@ -84,7 +82,6 @@
         {% set dataBlocks = dataBlocks|merge([
             {
                 'title': 'oro.magento.order.credit_memos.label'|trans,
-                'class': 'nav-item',
                 'subblocks': [
                     {'data' : [orderCreditMemoWidget] }
                 ]
@@ -103,7 +100,6 @@
         {% set dataBlocks = dataBlocks|merge([
             {
                 'title': 'oro.magento.order.order_notes.short_label'|trans,
-                'class': 'nav-item',
                 'subblocks': [
                     {'data' : [orderNotesWidget] }
                 ]
