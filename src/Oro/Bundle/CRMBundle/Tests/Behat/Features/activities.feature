@@ -14,7 +14,7 @@ Feature: Activities
     And fill form with:
       |Subject    |Test1           |
       |Description|test description|
-      |Due date   |2018-08-24      |
+      |Due date   |2019-08-24      |
       |Status     |Open            |
       |Priority   |Normal          |
     And set Reminders with:
@@ -25,11 +25,11 @@ Feature: Activities
     And go to Activities/ Tasks
     And I should see following grid:
       | Subject | Due date               | Status | Priority | Assigned To |
-      | Test1   | Aug 24, 2018, 12:00 AM | Open   | Normal   | John Doe    |
+      | Test1   | Aug 24, 2019, 12:00 AM | Open   | Normal   | John Doe    |
     When click My Tasks in user menu
     Then I should see following grid:
       | Subject | Due date               | Status | Priority |
-      | Test1   | Aug 24, 2018, 12:00 AM | Open   | Normal   |
+      | Test1   | Aug 24, 2019, 12:00 AM | Open   | Normal   |
 
   Scenario: Add a Task for Another Record
     Given go to Sales/ Leads
@@ -42,7 +42,7 @@ Feature: Activities
     And fill form with:
       |Subject    |Sprint Demo     |
       |Description|test description|
-      |Due date   |2018-08-24      |
+      |Due date   |2019-08-24      |
       |Status     |Open            |
       |Priority   |Normal          |
     And set Reminders with:
@@ -64,7 +64,7 @@ Feature: Activities
     And fill form with:
       |Subject    |SalesRep Task   |
       |Description|test description|
-      |Due date   |2018-08-24      |
+      |Due date   |2019-08-24      |
       |Status     |Open            |
       |Priority   |Normal          |
     And set Reminders with:
@@ -74,7 +74,7 @@ Feature: Activities
     Then should see "Task created successfully" flash message
     And I should see following grid:
       | Subject       | Due date               | Status | Priority |
-      | SalesRep Task | Aug 24, 2018, 12:00 AM | Open   | Normal   |
+      | SalesRep Task | Aug 24, 2019, 12:00 AM | Open   | Normal   |
     And go to Activities/ Tasks
     And click view "SalesRep Task" in grid
     And should see "Assigned To: Charlie Sheen (Main)"
