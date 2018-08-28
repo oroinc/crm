@@ -31,15 +31,22 @@ oro_behat_extension:
       selector:
         locator: '//input[@name="oro_contact_form[reportsTo]"]/../button[contains(@class,"entity-select-btn")]'
         type: xpath
-    Select Reports to Paginator:
+    Reports to create new:
+      selector:
+        locator: '//input[@name="oro_contact_form[reportsTo]"]/../button[contains(@class,"entity-create-btn")]'
+        type: xpath
+    Create Contact Modal Form:
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      selector: 'div.ui-dialog form[name="oro_contact_form"]'
+    Select Contact Paginator:
       selector: 'div[data-page-component-name="contacts-select-grid"] div.toolbar div.pagination'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridPaginator
-    Select Reports to:
+    Select Contact:
       selector: 'div[data-page-component-name="contacts-select-grid"]'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
       options:
         mapping:
-          GridToolbarPaginator: 'Select Reports to Paginator'
+          GridToolbarPaginator: 'Select Contact Paginator'
     Contacts Grid:
       selector: 'div[data-page-component-name="contacts-grid"]'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid

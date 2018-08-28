@@ -1,7 +1,7 @@
 @fixture-OroLocaleBundle:ZuluLocalization.yml
 @fixture-OroAddressBundle:CountryNameTranslation.yml
 @fixture-OroContactBundle:LoadContactEntitiesFixture.yml
-Feature: Country and region translations for contacts grid
+Feature: Country and region translations for contacts
   In order to manage Contacts
   As a Administrator
   I want to see translated country and region names in UI
@@ -49,3 +49,14 @@ Feature: Country and region translations for contacts grid
       | First name   | Last name    | Email          | Phone      | Country           | State       | Zip/Postal Code |
       | TestContact1 | TestContact1 | test1@test.com | 5556668888 | United StatesZulu | FloridaZulu | 10001           |
       | TestContact2 | TestContact2 | test2@test.com | 5556669999 | United StatesZulu | FloridaZulu | 10002           |
+
+  Scenario: Add Address to contact
+    Given I click view "TestContact1" in grid
+    When I press "+ Add Address"
+    And fill form with:
+      | Primary         | true          |
+      | Country         | GermanyZulu   |
+      | State           | BerlinZulu    |
+    And press "Save"
+    Then contact has 2 addresses
+    And GermanyZulu address must be primary

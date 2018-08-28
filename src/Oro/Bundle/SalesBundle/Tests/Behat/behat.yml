@@ -6,6 +6,51 @@ oro_behat_extension:
         locator: '//ul[@class="context-items-dropdown dropdown-menu"]/li[contains(text(),"Lead")]'
         type: xpath
 
+    Lead Form:
+      selector: 'form[name="oro_sales_lead_form"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Second Country:
+            locator: '//div[contains(@id,"s2id_oro_sales_lead_form_addresses_2_country-uid")]/input'
+            type: xpath
+          Second State:
+            locator: '//div[contains(@id,"s2id_oro_sales_lead_form_addresses_2_region-uid")]/input'
+            type: xpath
+
+    Business Customer Form:
+      selector: 'form[name="oro_sales_b2bcustomer_form"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Billing Address Country:
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_billingAddress_country-uid")]/input'
+            type: xpath
+          Billing Address State:
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_billingAddress_region")]/input'
+            type: xpath
+          Billing Address City: 'oro_sales_b2bcustomer_form[billingAddress][city]'
+          Billing Address Street: 'oro_sales_b2bcustomer_form[billingAddress][street]'
+          Billing Address Postal Code: 'oro_sales_b2bcustomer_form[billingAddress][postalCode]'
+          Shipping Address Country:
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_shippingAddress_country-uid")]/input'
+            type: xpath
+          Shipping Address State:
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_shippingAddress_region-uid")]/input'
+            type: xpath
+          Shipping Address City: 'oro_sales_b2bcustomer_form[shippingAddress][city]'
+          Shipping Address Street: 'oro_sales_b2bcustomer_form[shippingAddress][street]'
+          Shipping Address Postal Code: 'oro_sales_b2bcustomer_form[shippingAddress][postalCode]'
+
+    Contact create new:
+      selector:
+        locator: '//label[text()="Contact"]/../..//button[contains(@class,"entity-create-btn")]'
+        type: xpath
+    Contact hamburger:
+      selector:
+        locator: '//label[text()="Contact"]/../..//button[contains(@class,"entity-select-btn")]'
+        type: xpath
+
     Opportunity Form:
       selector: 'form[name="oro_sales_opportunity_form"]'
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
