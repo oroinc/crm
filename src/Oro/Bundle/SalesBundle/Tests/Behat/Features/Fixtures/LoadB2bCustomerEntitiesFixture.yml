@@ -1,0 +1,106 @@
+Oro\Bundle\ChannelBundle\Entity\Channel:
+    channel_b2b:
+        name: 'Sales Channel'
+        status: true
+        channelType: b2b
+        customerIdentity: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+        owner: '@organization'
+
+Oro\Bundle\ChannelBundle\Entity\EntityName:
+    channel-entity-b2bcustomer:
+        __construct: [Oro\Bundle\SalesBundle\Entity\B2bCustomer]
+        channel: '@channel_b2b'
+    channel-entity-lead:
+        __construct: [Oro\Bundle\SalesBundle\Entity\Lead]
+        channel: '@channel_b2b'
+    channel-entity-opportunity:
+        __construct: [Oro\Bundle\SalesBundle\Entity\Opportunity]
+        channel: '@channel_b2b'
+
+Oro\Bundle\AddressBundle\Entity\Address:
+    b2b_customer_address_{1..2}:
+        street: 'street'
+        city: 'city'
+        postalCode: '12345'
+        organization: 'organization'
+        region: '@florida'
+        firstName: 'firstName'
+        lastName: 'lastName'
+        country: '@united_states'
+    b2b_customer_address_{3..4}:
+        street: 'street'
+        city: 'city'
+        postalCode: '12345'
+        organization: 'organization'
+        region: '@berlin'
+        firstName: 'firstName'
+        lastName: 'lastName'
+        country: '@germany'
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+    b2b_customer_1:
+        name: 'BusinessCustomer1'
+        account: '@account_1'
+        contact: '@contact_1'
+        owner: '@admin'
+        organization: '@organization'
+        shippingAddress: '@b2b_customer_address_1'
+        billingAddress: '@b2b_customer_address_3'
+        dataChannel: '@channel_b2b'
+    b2b_customer_2:
+        name: 'BusinessCustomer2'
+        account: '@account_2'
+        contact: '@contact_2'
+        owner: '@admin'
+        organization: '@organization'
+        shippingAddress: '@b2b_customer_address_4'
+        billingAddress: '@b2b_customer_address_2'
+        dataChannel: '@channel_b2b'
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+    sales_customer_b2b_1:
+        account: '@account_1'
+        customerTarget: '@b2b_customer_1'
+    sales_customer_b2b_2:
+        account: '@account_2'
+        customerTarget: '@b2b_customer_2'
+
+Oro\Bundle\SalesBundle\Entity\LeadAddress:
+    b2b_lead_address_1:
+        primary: true
+        street: 'testStreet'
+        city: 'testCity'
+        postalCode: '10003'
+        region: '@berlin'
+        firstName: 'ContactFN1'
+        lastName: 'ContactLN1'
+        country: '@germany'
+    b2b_lead_address_2:
+        primary: true
+        street: 'testStreet'
+        city: 'testCity'
+        postalCode: '10004'
+        region: '@florida'
+        firstName: 'ContactFN2'
+        lastName: 'ContactLN2'
+        country: '@united_states'
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+    b2b_lead_1:
+        name: 'B2b Lead 1'
+        customerAssociation: '@sales_customer_b2b_1'
+        firstName: 'B2b ContactFN1'
+        lastName: 'B2b ContactLN1'
+        status: new
+        owner: '@admin'
+        organization: '@organization'
+        addresses: ['@b2b_lead_address_1']
+    b2b_lead_2:
+        name: 'B2b Lead 2'
+        customerAssociation: '@sales_customer_b2b_1'
+        firstName: 'B2b ContactFN2'
+        lastName: 'B2b ContactLN2'
+        status: new
+        owner: '@admin'
+        organization: '@organization'
+        addresses: ['@b2b_lead_address_2']

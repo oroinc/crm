@@ -1,0 +1,57 @@
+Oro\Bundle\SalesBundle\Entity\Lead:
+    lead_1:
+        name: 'testlead1'
+        firstName: 'ContactFN1'
+        lastName: 'ContactLN1'
+        owner: '@admin'
+        organization: '@organization'
+        status: new
+        phones: ['@lead_phone_1']
+        emails: ['@lead_email_1']
+        addresses: ['@lead_address_1']
+    lead_2:
+        name: 'testlead2'
+        firstName: 'ContactFN2'
+        lastName: 'ContactLN2'
+        owner: '@admin'
+        organization: '@organization'
+        status: new
+        phones: ['@lead_phone_2']
+        emails: ['@lead_email_2']
+        addresses: ['@lead_address_2']
+
+Oro\Bundle\SalesBundle\Entity\LeadPhone:
+    lead_phone_1:
+        phone: '5556668888'
+        primary: true
+    lead_phone_2:
+        phone: '5556669999'
+        primary: true
+
+Oro\Bundle\SalesBundle\Entity\LeadEmail:
+    lead_email_1:
+        email: 'testLead1@test.com'
+        primary: true
+    lead_email_2:
+        email: 'testLead2@test.com'
+        primary: true
+
+Oro\Bundle\SalesBundle\Entity\LeadAddress:
+    lead_address_1:
+        primary: true
+        street: 'testStreet'
+        city: 'testCity'
+        postalCode: '10003'
+        region: '@berlin'
+        firstName: 'ContactFN1'
+        lastName: 'ContactLN1'
+        country: '@germany'
+    lead_address_2:
+        primary: true
+        street: 'testStreet'
+        city: 'testCity'
+        postalCode: '10004'
+        region: '@florida'
+        firstName: 'ContactFN2'
+        lastName: 'ContactLN2'
+        country: '@united_states'
