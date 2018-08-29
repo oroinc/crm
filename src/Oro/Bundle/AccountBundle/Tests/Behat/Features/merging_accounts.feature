@@ -1,9 +1,10 @@
 @fixture-OroAccountBundle:merge_accounts.yml
 @ticket-@BB-12444
+@ticket-@CRM-9023
 Feature: Merging accounts
   In order to merge two accounts
   As administrator
-  I need to have mass merge action available
+  I need to have mass merge action available for accounts with activity
 
   Scenario: Merge two accounts
     Given I login as administrator
@@ -15,4 +16,3 @@ Feature: Merging accounts
     Then I should see "Entities were successfully merged" flash message
     And I should see "First_1 Last_1"
     And I should see "First_2 Last_2"
-
