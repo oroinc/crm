@@ -20,7 +20,10 @@ use Oro\Bundle\UserBundle\Entity\User;
  *
  * @ORM\Table(
  *      name="orocrm_sales_lead",
- *      indexes={@ORM\Index(name="lead_created_idx",columns={"createdAt", "id"})}
+ *      indexes={
+ *          @ORM\Index(name="lead_created_idx",columns={"createdAt", "id"}),
+ *          @ORM\Index(name="lead_updated_idx", columns={"updatedAt"})
+ *      }
  * )
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\LeadRepository")
  * @ORM\HasLifecycleCallbacks()

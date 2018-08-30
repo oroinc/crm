@@ -29,6 +29,8 @@ use Oro\Bundle\SalesBundle\Migrations\Schema\v1_29\AddCustomersTable;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 
 /**
+ * Updates the database schema during installation.
+ *
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
@@ -103,7 +105,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_39';
+        return 'v1_40';
     }
 
     /**
@@ -342,6 +344,7 @@ class OroSalesBundleInstaller implements
 
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
         $table->addIndex(['createdat', 'id'], 'lead_created_idx', []);
+        $table->addIndex(['updatedat'], 'lead_updated_idx');
         $table->addIndex(['contact_id'], 'idx_73db4633e7a1254a', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['customer_association_id'], 'IDX_73DB463376D4FC6F', []);
