@@ -46,12 +46,6 @@ Example:
                "id":"1"
             }
          },
-         "dataChannel":{  
-            "data":{  
-               "type":"channels",
-               "id":"1"
-            }
-         },
          "customer":{
             "data":{
                "type":"b2bcustomers",
@@ -182,22 +176,6 @@ If this field is missing in the request, the default value is applied.*
 
 *This field is **required** and must remain defined.*
 
-### dataChannel
-
-#### create
-
-{@inheritdoc}
-
-**The required field**
-
-#### update
-
-{@inheritdoc}
-
-**Please note:**
-
-*This field is **required** and must remain defined.*
-
 ### name
 
 #### create
@@ -293,7 +271,6 @@ An account the lead is assigned to.
 *The **account** is related to the specific **customer**.
 In case when both fields (**account** and **customer**) are provided
 the **customer** should be assigned to the specified **account**.*
-
 
 ### campaign
 
@@ -428,33 +405,6 @@ Example:
 {
   "data": {
     "type": "accounts",
-    "id": "1"
-  }
-}
-```
-{@/request}
-
-### dataChannel
-
-#### get_subresource
-
-Retrieve channel record to which a lead is assigned.
-
-#### get_relationship
-
-Retrieve the ID of a channel record assigned to a specific lead record.
-
-#### update_relationship
-
-Replace the ID of a channel assigned to a specific lead record.
-
-{@request:json_api}
-Example:
-
-```JSON
-{
-  "data": {
-    "type": "channels",
     "id": "1"
   }
 }
