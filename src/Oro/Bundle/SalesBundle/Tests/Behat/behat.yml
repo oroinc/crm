@@ -3,7 +3,7 @@ oro_behat_extension:
     Lead:
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Element
       selector:
-        locator: '//ul[@class="context-items-dropdown dropdown-menu"]/li[contains(text(),"Lead")]'
+        locator: '//ul[contains(@class, "context-items-dropdown dropdown-menu")]/li[contains(text(),"Lead")]'
         type: xpath
 
     Lead Form:
