@@ -182,7 +182,7 @@ Oro\Bundle\MagentoBundle\Entity\Customer:
         confirmed: true
         isActive: true
         currency: 'USD'
-        originId: '<randomNumber()>'
+        originId: 1
         website: '@magento_website'
         store: '@magento_store'
         group: '@magento_customer_group'
@@ -204,7 +204,7 @@ Oro\Bundle\MagentoBundle\Entity\Customer:
         confirmed: true
         isActive: true
         currency: 'USD'
-        originId: '<randomNumber()>'
+        originId: 2
         website: '@magento_website'
         store: '@magento_store'
         group: '@magento_customer_group'
