@@ -1,0 +1,11 @@
+Oro\Bundle\ContactBundle\Entity\ContactPhone:
+  contact-phone:
+    phone: '(310) 475-0859'
+    primary: true
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact:
+    phones: ['@contact-phone']
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: <dateTimeBetween('now', 'now')>

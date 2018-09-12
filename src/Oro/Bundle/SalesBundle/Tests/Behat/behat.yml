@@ -251,6 +251,7 @@ oro_behat_extension:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
         - OroDataGridBundle::GridContext
+        - OroActivityListBundle::ActivityContext
         - OroFormBundle::FormContext
         - OroSecurityBundle::ACLContext
         - OroImportExportBundle::ImportExportContext:
