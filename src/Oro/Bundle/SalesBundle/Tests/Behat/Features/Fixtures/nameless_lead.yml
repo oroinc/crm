@@ -1,0 +1,12 @@
+Oro\Bundle\SalesBundle\Entity\LeadPhone:
+  lead-phone:
+    phone: '(310) 475-0859'
+    primary: true
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+    lead:
+        owner: '@admin'
+        name: 'lead'
+        phones: ['@lead-phone']
+        status: new
+        organization: '@organization'
