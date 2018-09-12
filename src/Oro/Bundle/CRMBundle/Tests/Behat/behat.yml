@@ -25,7 +25,3 @@ oro_behat_extension:
   optional_listeners:
     required_for_fixtures:
       - 'oro_sales.customers.customer_association_listener'
-
-  optional_listeners:
-    required_for_fixtures:
-      - 'oro_sales.customers.customer_association_listener'
