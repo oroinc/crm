@@ -1,0 +1,9 @@
+include:
+    - '@OroCRMBundle:nameless_contact.yml'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+    account:
+        name: 'account'
+        owner: '@admin'
+        organization: '@organization'
+        defaultContact: '@contact'
