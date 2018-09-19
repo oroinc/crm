@@ -225,7 +225,7 @@ Oro\Bundle\SalesBundle\Entity\Customer:
 
 Oro\Bundle\MagentoBundle\Entity\Cart:
     magento_cart_1:
-        itemsQty: '<randomFloat()>'
+        itemsQty: '<randomFloat(null,10,100)>'
         itemsCount: '<randomNumber()>'
         baseCurrencyCode: 'USD'
         storeCurrencyCode: 'USD'
@@ -258,7 +258,7 @@ Oro\Bundle\MagentoBundle\Entity\Cart:
         channel: '@magento_integration'
         dataChannel: '@magento_channel'
     magento_cart_2:
-        itemsQty: '<randomFloat()>'
+        itemsQty: '<randomFloat(null,10,100)>'
         itemsCount: '<randomNumber()>'
         baseCurrencyCode: 'USD'
         storeCurrencyCode: 'USD'
