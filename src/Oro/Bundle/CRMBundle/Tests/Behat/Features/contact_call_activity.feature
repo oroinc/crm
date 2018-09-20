@@ -22,7 +22,7 @@ Feature: Contact call activity
       | Call date & time    | 2017-08-24 11:00:00                  |
       | Phone number        | (310) 475-0859                       |
       | Duration            | 00:05:30                             |
-    When I press "Log call"
+    When I click "Log call"
     Then I should see "Call saved" flash message
     And should see "Proposed Charlie to star in new film" call in activity list
 
@@ -64,7 +64,7 @@ Feature: Contact call activity
       | Call date & time    | 2017-09-01 21:30:00             |
       | Phone number        | (323) 879-6520                  |
       | Duration            | 00:03:25                        |
-    When I press "Update call"
+    When I click "Update call"
     Then I should see "Call saved" flash message
     And I collapse "Offered Charlie a drink with me" in activity list
     And I should see call with:

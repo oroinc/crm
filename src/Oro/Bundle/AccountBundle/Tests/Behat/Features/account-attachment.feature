@@ -14,11 +14,11 @@ Feature: Account attachment
     And I go to Customers/Accounts
     And click view "Charlie Sheen" in grid
     And follow "More actions"
-    And press "Add attachment"
+    And click "Add attachment"
     When I fill "Attachment Form" with:
       | File    | cat1.jpg    |
       | Comment | Sweet kitty |
-    And press "Save"
+    And click "Save"
     Then I should see "Attachment created successfully" flash message
 
   Scenario: View attachment
@@ -34,7 +34,7 @@ Feature: Account attachment
     When I fill "Attachment Form" with:
       | File    | cat2.jpg |
       | Comment | So cute  |
-    And press "Save"
+    And click "Save"
     Then I should see "Attachment updated successfully" flash message
     Then I should see cat in grid with following data:
       | File name | cat2.jpg |
@@ -45,12 +45,12 @@ Feature: Account attachment
 
   Scenario: Email attachment
     Given follow "More actions"
-    And press "Send email"
+    And click "Send email"
     And fill form with:
       | Subject    | Hello World |
       | To         | [John Doe]  |
     When select cat2 as email attachment from record
-    And press "Send"
+    And click "Send"
     Then I should see "The email was sent" flash message
     And I collapse "Hello World" in activity list
 #    Uncomment when BAP-11641 will resolved
