@@ -30,7 +30,7 @@ Feature: Managing business customer
   Scenario: Business customer create
     Given I login as administrator
     Then I go to Customers/ Business Customers
-    And I press "Create Business Customer"
+    And I click "Create Business Customer"
     And I fill "Business Customer Form" with:
       | Account                      | Marge Simpson          |
       | Customer Name                | SimpsonCustomer        |
@@ -115,13 +115,13 @@ Feature: Managing business customer
     Then I should see "Item deleted" flash message
     And there is one record in grid
     When I click view Charlie Customer in grid
-    And I press "Delete Business Customer"
+    And I click "Delete Business Customer"
     And I confirm deletion
     Then there is no records in grid
 
   Scenario: Business customer create from lead
     Given I go to Sales/ Leads
-    And I press "Create Lead"
+    And I click "Create Lead"
     Then I add new Business Customer for Account field
     And I fill "SalesB2bCustomerForm" with:
       | Account         | Marge Simpson          |
@@ -135,7 +135,7 @@ Feature: Managing business customer
       | State           | California             |
     When I submit "Sales B2b Customer Form"
     Then Account field should has "Marge Simpson" value
-    When I press "Cancel"
+    When I click "Cancel"
     And I go to Customers/ Business Customers
     Then I should see SimpsonCustomer in grid with following data:
       | Account         | Marge Simpson          |

@@ -8,7 +8,7 @@ Feature: Embedded form
   Scenario: Create new embedded form
     Given I login as administrator
     And I go to System/Integrations/Embedded Forms
-    And press "Create Embedded Form"
+    And click "Create Embedded Form"
     When I fill "Embedded Form" with:
       | Title     | Magento contact us form    |
       | Form Type | Magento Contact Us Request |
