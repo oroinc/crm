@@ -18,7 +18,4 @@ Feature: Account grid export
     And I click "Export Grid"
     And I click "CSV"
     Then I should see "Export started successfully. You will receive email notification upon completion."
-    # Temporary workaroud step
-    And Email should contains the following "Export performed successfully. 5 were exported. Download" text
-    # Remove previous step and uncomment the next one when BAP-17455 is fixed
-    #And Email should contains the following "Grid export performed successfully. Download" text
+    And Email should contains the following "Grid export performed successfully. Download" text
