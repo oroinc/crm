@@ -23,7 +23,7 @@ Feature: Check if Opportunity budget is correct after currency change
     And I should see "Configuration saved" flash message
     And I follow "System Configuration/General Setup/Currency" on configuration sidebar
     And I click "EuroAsDefaultValue"
-    And I press "Yes"
+    And I click "Yes"
     And I click "Save settings"
     And I go to Sales/Opportunities
     Then I should see "€ 50,00"

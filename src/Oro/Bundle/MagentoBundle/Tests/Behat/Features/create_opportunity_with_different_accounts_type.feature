@@ -14,14 +14,14 @@ Feature: Create opportunity with different accounts type
     And I open Opportunity Create page
     Then Opportunity Name is a required field
     Then Account is a required field
-    And press "Cancel"
+    And click "Cancel"
 
   Scenario Outline: Choose Account and Business Customer
     Given I am logged out
     And I login as "<user>" user
     And I open Opportunity Create page
     And Accounts in the control are filtered according to <user> ACL permissions
-    And press "Cancel"
+    And click "Cancel"
     Examples:
       | user     |
       | charlie  |
@@ -32,7 +32,7 @@ Feature: Create opportunity with different accounts type
     And I login as "<user>" user
     And I open Opportunity Create page
     Then Magento Customers in the control are filtered according to <user> ACL permissions
-    And press "Cancel"
+    And click "Cancel"
     Examples:
       | user     |
       | charlie  |

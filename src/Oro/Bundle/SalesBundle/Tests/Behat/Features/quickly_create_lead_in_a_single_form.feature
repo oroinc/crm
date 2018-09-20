@@ -52,7 +52,7 @@ Feature: Quickly create Lead in a single form
 
   Scenario: Delete address from lead
     When I delete 45600 Marion Drive address
-    And press "Yes, Delete"
+    And click "Yes, Delete"
     Then two addresses should be in page
     And Ukraine address must be primary
 
@@ -93,7 +93,7 @@ Feature: Quickly create Lead in a single form
   Scenario: Delete lead
     Given I click on editedName in grid
     And I should be on "editedName" Lead View page
-    When I press "Delete Lead"
+    When I click "Delete Lead"
     And confirm deletion
     Then I should see "Lead deleted" flash message
     And number of records should be 0
@@ -109,11 +109,11 @@ Feature: Quickly create Lead in a single form
 
   Scenario: Convert to opportunity
     Given I click on Jary in grid
-    And I press "Convert to Opportunity"
+    And I click "Convert to Opportunity"
     When I fill form with:
       | Account    | Charlie            |
       | First name | Jary               |
       | Emails     | [jary@example.com] |
-    And press "Save and Close"
+    And click "Save and Close"
     Then I should see "Opportunity saved" flash message
     Then I should be on "Jary" Opportunity View page

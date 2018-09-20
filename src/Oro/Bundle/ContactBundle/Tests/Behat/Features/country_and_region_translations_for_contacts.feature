@@ -52,11 +52,11 @@ Feature: Country and region translations for contacts
 
   Scenario: Add Address to contact
     Given I click view "TestContact1" in grid
-    When I press "+ Add Address"
+    When I click "+ Add Address"
     And fill form with:
       | Primary         | true          |
       | Country         | GermanyZulu   |
       | State           | BerlinZulu    |
-    And press "Save"
+    And click "Save"
     Then contact has 2 addresses
     And GermanyZulu address must be primary

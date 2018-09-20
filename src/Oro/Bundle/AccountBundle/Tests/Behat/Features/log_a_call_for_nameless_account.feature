@@ -17,7 +17,7 @@ Feature: Log a call for nameless account
       | Additional comments | Propose something interesting |
       | Call date & time    | 2017-08-24 11:00              |
       | Duration            | 00:05:30                      |
-    When I press "Log call"
+    When I click "Log call"
     Then I should see "Call saved" flash message
     And should see "Very important call" call in activity list
 

@@ -96,9 +96,9 @@ Scenario: Creating CRM Account from back-end when creating new Commerce Customer
 
     Scenario Outline: Checking that the user can change Account when editing the Customer
     Given I click "Magento Company" customer on customer grid
-    And I press "Edit"
+    And I click "Edit"
     And I select <Another Account> from the Account dropdown
-    And I press "Save And Close"
+    And I click "Save And Close"
     Then I should see <Another Account> on the Customer view
     Examples:
       | Another Account |
@@ -151,5 +151,5 @@ Scenario: Creating CRM Account from back-end when creating new Commerce Customer
     And I select Toysrus account on Accounts grid
     And I select "Add event" from "More Actions" dropdown
     And I fill out the title "Toysrus event"
-    And I press "Save"
+    And I click "Save"
     Then I should see calendar event "Toysrus event" on Activity tab
