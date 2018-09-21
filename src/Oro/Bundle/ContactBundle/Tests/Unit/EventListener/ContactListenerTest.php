@@ -201,7 +201,7 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
             ->method('getToken')
             ->willReturn($token);
 
-        /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject $entityManager */
+        /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject $entityManager */
         $entityManager = $this->createMock(EntityManager::class);
         $entityManager->expects($this->once())
             ->method('getUnitOfWork')
