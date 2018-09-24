@@ -43,5 +43,5 @@ Oro\Bundle\ContactBundle\Entity\Group:
 # Prevent required values for all child of AbstractAddress
 Oro\Bundle\ContactBundle\Entity\ContactAddress:
     constraints:
-        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequireRegion'] }
 

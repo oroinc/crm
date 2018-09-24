@@ -44,7 +44,7 @@ Oro\Bundle\SalesBundle\Entity\Lead:
 
 Oro\Bundle\SalesBundle\Entity\LeadAddress:
     constraints:
-        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequireRegion'] }
 
 Oro\Bundle\SalesBundle\Entity\SalesFunnel:
     properties:

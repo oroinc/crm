@@ -16,14 +16,14 @@ Scenario: Create new Account
     | Arthur     | Fisher    | <email()> |
     | Wanda      | Ford      | <email()> |
   And I go to Customers/Accounts
-  And I press "Create Account"
+  And I click "Create Account"
   And I fill "Account Form" with:
     | Account Name | Good Company    |
     | Description  | Our new partner |
     | Owner        | Harry           |
-  And I press "Add"
+  And I click "Add"
   And check Joan Anderson and Wanda Ford in grid
-  When I press "Select"
+  When I click "Select"
   Then two contacts added to form
   And I select Wanda contact as default
   When I save form
@@ -53,7 +53,7 @@ Scenario: Edit Account
   And Todd Greene should be an owner
 
 Scenario: Delete Account
-  And press "Delete"
+  And click "Delete"
   When confirm deletion
   Then I should see "item deleted" flash message
   And there is no records in grid
@@ -61,7 +61,7 @@ Scenario: Delete Account
 Scenario: Search for owner by email when create Account
   Given I login as administrator
   And I go to Customers/Accounts
-  And I press "Create Account"
+  And I click "Create Account"
   When I type "email" in "Owner"
   Then I should see "test.email1@example.com"
   And I should see "test.email2@example.com"

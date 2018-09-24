@@ -68,7 +68,7 @@ Feature: Managing Currency Rates
       | BASE    | CURRENCY NAME | CURRENCY CODE | CURRENCY SYMBOL | RATE FROM | RATE TO |
       | Checked | Irish Pound   | IEP           | IEP             |     5     |    5.5  |
     Then confirmation message is displayed: "You are about to change the base currency. By doing so, the values for your entire financial data using this currency will be recalculated. Do you want to continue?"
-    And I press "OK"
+    And I click "OK"
     Then I should see the following on currency grid:
       | BASE    | CURRENCY NAME | CURRENCY CODE | CURRENCY SYMBOL | RATE FROM | RATE TO |
       | Checked | Irish Pound   | IEP           | IEP             |     1     |  1      |
@@ -84,7 +84,7 @@ Feature: Managing Currency Rates
     Then I should see the following:
       | Base Budget Amount  |
       | 5,500.00 IEP        |
-    And when I press "Edit"
+    And when I click "Edit"
     Then I should see the following:
       | Base Budget Amount  |
       | 5,500.00 IEP        |
@@ -107,7 +107,7 @@ Feature: Managing Currency Rates
     When I go to Reports & Segments/ Reports/ Opportunities/ Total Forecast
     Then I should see corresponding values in IEP
     When I go to Reports & Segments/ Manage Segments
-    And I press "Create Segments"
+    And I click "Create Segments"
     And I create segment "Must see" with the following data:
       | Entity      | Type    |
       | Opportunity | Dynamic |

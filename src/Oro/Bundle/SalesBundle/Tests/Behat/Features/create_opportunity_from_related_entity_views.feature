@@ -9,7 +9,7 @@ Feature: Create Opportunity from related entity views
     And I go to Customers/Accounts
     And click View SkyNet in grid
     When I follow "More actions"
-    And press "Create Opportunity"
+    And click "Create Opportunity"
     And I fill in "Opportunity name" with "First Invasion"
     And I save and close form
     Then I should see First Invasion with:
@@ -22,7 +22,7 @@ Feature: Create Opportunity from related entity views
     Given I go to Customers/Business Customers
     And click View BusSkyNet in grid
     When I follow "More actions"
-    And press "Create Opportunity"
+    And click "Create Opportunity"
     And I fill in "Opportunity name" with "Third Invasion"
     And I save and close form
     Then I should see Third Invasion with:

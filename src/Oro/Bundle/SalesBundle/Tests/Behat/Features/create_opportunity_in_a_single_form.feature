@@ -9,7 +9,7 @@ Feature: Create opportunity in a single form
     And "First Sales Channel" is a channel with enabled Business Customer entity
     When I open Opportunity Create page
     Then Opportunity Name is a required field
-    And press "Cancel"
+    And click "Cancel"
 
   @not-automated
   Scenario: Renamed fields
@@ -42,4 +42,4 @@ Feature: Create opportunity in a single form
     And I open Opportunity Create page
     And type "Non Existent Account" into Account field
     Then I should see only existing accounts
-    And press "Cancel"
+    And click "Cancel"

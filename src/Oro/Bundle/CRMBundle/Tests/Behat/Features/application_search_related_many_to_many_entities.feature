@@ -18,7 +18,7 @@ Feature: Application search related many to many entities
 
   Scenario: Change contact email
     Given I follow "Mrs. July Robertson"
-    And I press "Edit Contact"
+    And I click "Edit Contact"
    And I fill form with:
      | Emails          | [changed_email@test.org] |
    And I save and close form
