@@ -1,11 +1,9 @@
 /* @theme: admin.oro; */
 
-.opportunity-card-view {
-    .card-probability {
-        @include text-line-truncate();
+@import "oroui/css/scss/mixins";
 
-        color: #888;
-        font-size: $base-font-size--s;
-        line-height: 17px;
-    }
+.opportunity-card-view {
+  .card-probability {
+    @include text-line-truncate();
+  }
 }
