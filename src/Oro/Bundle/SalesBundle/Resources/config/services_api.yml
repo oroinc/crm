@@ -1,5 +1,8 @@
 services:
 
+    oro_sales.api.form_listener.normalize_opportunity_probability:
+        class: Oro\Bundle\SalesBundle\Api\Form\EventListener\NormalizeOpportunityProbabilitySubscriber
+
     oro_sales.api.form_listener.customer_association:
         class: Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener
         arguments:

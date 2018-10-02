@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Api;
 
-use Symfony\Component\HttpFoundation\Response;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -106,6 +104,65 @@ class OpportunityApiTest extends RestJsonApiTestCase
         // test that the entity was created
         $entity = $this->getEntityManager()->find(Opportunity::class, $this->getResourceId($response));
         self::assertNotNull($entity);
+    }
+
+    public function testPostShouldAcceptProbabilityGreaterThan1()
+    {
+        $data = $this->getRequestData('opportunity_post.yml');
+        $data['data']['attributes']['probability'] = 100;
+        $response = $this->post(
+            ['entity' => 'opportunities'],
+            $data
+        );
+
+        $this->assertResponseContains('opportunity_post.yml', $response);
+
+        // test that the entity was created
+        $entity = $this->getEntityManager()->find(Opportunity::class, $this->getResourceId($response));
+        self::assertNotNull($entity);
+        self::assertSame(1.0, $entity->getProbability());
+    }
+
+    public function testPostShouldReturnCorrectValidationErrorIfProbabilityGreaterThan100()
+    {
+        $data = $this->getRequestData('opportunity_post.yml');
+        $data['data']['attributes']['probability'] = 110;
+        $response = $this->post(
+            ['entity' => 'opportunities'],
+            $data,
+            [],
+            false
+        );
+
+        $this->assertResponseValidationError(
+            [
+                'title'  => 'range constraint',
+                'detail' => 'This value should be 100 or less.',
+                'source' => ['pointer' => '/data/attributes/probability']
+            ],
+            $response
+        );
+    }
+
+    public function testPostShouldReturnCorrectValidationErrorIfProbabilityLessThanZero()
+    {
+        $data = $this->getRequestData('opportunity_post.yml');
+        $data['data']['attributes']['probability'] = -1;
+        $response = $this->post(
+            ['entity' => 'opportunities'],
+            $data,
+            [],
+            false
+        );
+
+        $this->assertResponseValidationError(
+            [
+                'title'  => 'range constraint',
+                'detail' => 'This value should be 0 or more.',
+                'source' => ['pointer' => '/data/attributes/probability']
+            ],
+            $response
+        );
     }
 
     public function testPostWithoutAccountAndCustomer()

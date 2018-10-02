@@ -137,7 +137,9 @@ api:
 
         Oro\Bundle\SalesBundle\Entity\Opportunity:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity.md'
-            form_event_subscriber: oro_sales.api.form_listener.customer_association
+            form_event_subscriber:
+                - oro_sales.api.form_listener.customer_association
+                - oro_sales.api.form_listener.normalize_opportunity_probability
             fields:
                 closedAt:
                     exclude: true
