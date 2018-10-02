@@ -21,7 +21,7 @@ Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
 
 Oro\Bundle\ContactUsBundle\Entity\ContactReason:
     properties:
-        label:
+        titles:
             - NotBlank: ~
             - Length:
                 min: 1

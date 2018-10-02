@@ -2,11 +2,15 @@
 
 namespace Oro\Bundle\ContactUsBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-
+use Oro\Bundle\ContactUsBundle\Model\ExtendContactReason;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\LocaleBundle\Entity\FallbackTrait;
+use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 
 /**
  * Entity that represents contact reason
@@ -32,9 +36,10 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      }
  * )
  */
-class ContactReason
+class ContactReason extends ExtendContactReason
 {
     use SoftDeleteableEntity;
+    use FallbackTrait;
 
     /**
      * @var integer
@@ -47,14 +52,36 @@ class ContactReason
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="label", type="string")
      */
     protected $label;
 
-    public function __construct($label = null)
+    /**
+     * @var Collection|LocalizedFallbackValue[]
+     * @ORM\ManyToMany(
+     *      targetEntity="Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue",
+     *      cascade={"ALL"},
+     *      orphanRemoval=true
+     * )
+     * @ORM\JoinTable(
+     *      name="orocrm_contactus_contact_rsn_t",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="contact_reason_id", referencedColumnName="id", onDelete="CASCADE")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="localized_value_id", referencedColumnName="id", onDelete="CASCADE", unique=true)
+     *      }
+     * )
+     */
+    protected $titles;
+
+    /**
+     * @param null|string $defaultTitle
+     */
+    public function __construct($defaultTitle = null)
     {
-        $this->label = $label;
+        parent::__construct();
+        $this->titles = new ArrayCollection();
+        $this->setDefaultTitle($defaultTitle);
     }
 
     /**
@@ -66,11 +93,28 @@ class ContactReason
     }
 
     /**
+     * @param Collection|LocalizedFallbackValue[] $titles
+     */
+    public function setTitles($titles)
+    {
+        $this->titles = $titles;
+        $this->setDefaultTitle($this->getDefaultFallbackValue($this->titles));
+    }
+
+    /**
+     * @return Collection|LocalizedFallbackValue[]
+     */
+    public function getTitles()
+    {
+        return $this->titles;
+    }
+
+    /**
      * @param string $label
      */
     public function setLabel($label)
     {
-        $this->label = $label;
+        $this->setDefaultTitle($label);
     }
 
     /**
@@ -78,7 +122,7 @@ class ContactReason
      */
     public function getLabel()
     {
-        return $this->label;
+        return $this->getDefaultTitle()->getString();
     }
 
     /**

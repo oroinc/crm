@@ -12,7 +12,6 @@ datagrids:
                     - cr.emailAddress
                     - cr.phone
                     - cr.createdAt
-                    - rsn.label as cntReason
                 from:
                     - { table: %oro_contact_us.contactrequest.entity.class%, alias: cr }
                 join:
@@ -66,7 +65,7 @@ datagrids:
                     data_name: cr.createdAt
                 cntReason:
                     type:      string
-                    data_name: rsn.label
+                    data_name: cntReason
         properties:
             id: ~
             view_link:
@@ -81,6 +80,10 @@ datagrids:
                 type:       url
                 route:      oro_contactus_request_delete
                 params:     [ id ]
+            cntReason:
+                type:        localized_value
+                data_name:   rsn.titles
+                allow_empty: true
         actions:
             view:
                 acl_resource: oro_contactus_request_view
@@ -113,24 +116,23 @@ datagrids:
             query:
                 select:
                     - contactReason.id
-                    - contactReason.label
                 from:
                     - { table: OroContactUsBundle:ContactReason, alias: contactReason }
                 where:
                     and:
                         - contactReason.deletedAt IS NULL
         columns:
-            label:
+            title:
                 label: oro.contactus.contactreason.label.label
         sorters:
             columns:
-                label:
-                    data_name: contactReason.label
+                title:
+                    data_name: title
         filters:
             columns:
-                label:
+                title:
                     type:      string
-                    data_name: contactReason.label
+                    data_name: title
         properties:
             id: ~
             update_link:
@@ -141,6 +143,9 @@ datagrids:
                 type:   url
                 route:  oro_contactus_reason_delete
                 params: [ id ]
+            title:
+                type: localized_value
+                data_name: titles
         actions:
             update:
                 acl_resource: oro_contactus_reason_update
