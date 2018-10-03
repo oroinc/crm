@@ -3,11 +3,15 @@
 namespace Oro\Bundle\ContactUsBundle\Form\Type;
 
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
+use Oro\Bundle\LocaleBundle\Form\Type\LocalizedFallbackValueCollectionType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * Represents ContactReason type for ContactReason entity with localizable titles
+ */
 class ContactReasonType extends AbstractType
 {
     /**
@@ -17,11 +21,13 @@ class ContactReasonType extends AbstractType
     {
         $builder
             ->add(
-                'label',
-                TextType::class,
+                'titles',
+                LocalizedFallbackValueCollectionType::class,
                 [
+                    'property_path' => 'titles',
                     'label' => 'oro.contactus.contactreason.label.label',
-                    'required' => true
+                    'required' => true,
+                    'entry_options' => ['constraints' => [new NotBlank()]]
                 ]
             );
     }

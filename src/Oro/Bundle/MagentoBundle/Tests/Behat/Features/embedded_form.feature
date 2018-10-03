@@ -10,8 +10,10 @@ Feature: Embedded form
     And I go to System/Integrations/Embedded Forms
     And click "Create Embedded Form"
     When I fill "Embedded Form" with:
-      | Title     | Magento contact us form    |
-      | Form Type | Magento Contact Us Request |
+      | Title           | Magento contact us form              |
+      | Form Type       | Magento Contact Us Request           |
+      | CSS             | #testId { position: absolute; }      |
+      | Success Message | Form has been submitted successfully |
     And I save and close form
     Then I should see "Form has been saved successfully" flash message
 
