@@ -11,6 +11,7 @@ use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 /**
+ * Executes all schema updates needed for correct work of bundle
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
@@ -32,7 +33,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
      */
     public function getMigrationVersion()
     {
-        return 'v1_17';
+        return 'v1_18';
     }
 
     /**
@@ -42,6 +43,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
     {
         /** Tables generation **/
         $this->createOrocrmContactusContactRsnTable($schema);
+        $this->createOrocrmContactReasonTitlesTable($schema);
         $this->createOrocrmContactusReqEmailsTable($schema);
         $this->createOrocrmContactusRequestTable($schema);
         
@@ -64,7 +66,6 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
     {
         $table = $schema->createTable('orocrm_contactus_contact_rsn');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('label', 'string', ['length' => 255]);
         $table->addColumn('deletedAt', 'datetime', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
     }
@@ -162,6 +163,32 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
             ['opportunity_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function createOrocrmContactReasonTitlesTable(Schema $schema)
+    {
+        $table = $schema->createTable('orocrm_contactus_contact_rsn_t');
+        $table->addColumn('contact_reason_id', 'integer', []);
+        $table->addColumn('localized_value_id', 'integer', []);
+        $table->setPrimaryKey(['contact_reason_id', 'localized_value_id']);
+        $table->addUniqueIndex(['localized_value_id']);
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_contactus_contact_rsn'),
+            ['contact_reason_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_fallback_localization_val'),
+            ['localized_value_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
     }
 }
