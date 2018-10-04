@@ -7,7 +7,7 @@ Feature: Activity cases
   Scenario: Create case
     Given I login as administrator
     Then I go to Activities/ Cases
-    And I press "Create Case"
+    And I click "Create Case"
     When I save and close form
     Then I should see validation errors:
       | Subject         | This value should not be blank.  |
@@ -68,6 +68,6 @@ Feature: Activity cases
       Then I should see "Item deleted" flash message
       And there is one record in grid
       When I click view Edited test case in grid
-      And I press "Delete Case"
+      And I click "Delete Case"
       And I confirm deletion
       Then there is no records in grid

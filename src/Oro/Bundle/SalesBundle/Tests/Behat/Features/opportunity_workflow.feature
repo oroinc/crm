@@ -37,7 +37,7 @@ Feature: Opportunity workflow
       | Budget Amount     | 1000              |
       | Customer need     | Need to be pretty |
       | Proposed solution | Make it sharp     |
-    And press "Submit"
+    And click "Submit"
     Then I should see opportunity with:
       | Budget Amount     | $1,000.00         |
       | Status            | Open              |
@@ -57,13 +57,13 @@ Feature: Opportunity workflow
       | Status        | Closed Won |
 
   Scenario: Reopen opportunity
-    Given I press "Reopen"
+    Given I click "Reopen"
     When I fill "Develop Opportunity Form" with:
       | Budget Amount     | 5000               |
       | Status            | Needs Analysis     |
       | Customer need     | We need to rethink |
       | Proposed solution | Have some beer     |
-    And press "Submit"
+    And click "Submit"
     Then I should see opportunity with:
       | Budget Amount     | $5,000.00          |
       | Status            | Needs Analysis     |
@@ -72,7 +72,7 @@ Feature: Opportunity workflow
       | Proposed solution | Have some beer     |
 
   Scenario: Close opportunity as lost
-    Given I press "Close as Lost"
+    Given I click "Close as Lost"
     When I fill "Close As Lost Opportunity Form" with:
       | Close reason      | Cancelled          |
     And I click "Submit"

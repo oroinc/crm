@@ -145,7 +145,7 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
   Scenario: Ensure that Base Budget amount and base close currency for opportunities in status "Closed Won" and "Closed
   # Lost" are not recalculated
     Given I select "Closed won" in the "Status" field
-    And I press "Save"
+    And I click "Save"
     Then I should see
       | Opportunity Name | Status     | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
       | Frank Faylen     | Closed won | €200.00       | $600.00             | €250.00       | $750.00             |
@@ -154,7 +154,7 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
     But I enter "€550.00" into "Close revenue" field
     Then I should see "$750.00" in "Base close revenue" field
     But I select "Closed lost" in the "Status" field
-    And I press "Save"
+    And I click "Save"
     Then I should see
       | Opportunity Name | Status       | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
       | Frank Faylen     | Closed lost  | €400.00       | $600.00             | €550.00       | $750.00             |
@@ -162,7 +162,7 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
     Then I should see "$600.00" in "Base Budget Amount" field
     But I enter "€150.00" into "Close revenue" field
     Then I should see "$750.00" in "Base close revenue" field
-    But I press "Save"
+    But I click "Save"
     Then I should see
       | Opportunity Name | Status       | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
       | Frank Faylen     | Closed lost  | €200.00       | $600.00             | €150.00       | $750.00             |

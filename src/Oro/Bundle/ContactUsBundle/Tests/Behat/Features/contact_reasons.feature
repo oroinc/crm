@@ -6,7 +6,7 @@ Feature: Contact Reasons
   Scenario: Create new contact reason and create contact request with it
     Given I login as administrator
     And go to System/ Contact Reasons
-    And press "Create Contact Reason"
+    And click "Create Contact Reason"
     And fill "Contact Reason Form" with:
       | Label | New reason |
     When I save and close form
@@ -17,7 +17,7 @@ Feature: Contact Reasons
       | Edit   |
       | Delete |
     When I go to Activities/ Contact Requests
-    And press "Create Contact Request"
+    And click "Create Contact Request"
     And fill form with:
       |First Name              |Test              |
       |Last Name               |Tester            |

@@ -15,7 +15,7 @@ Feature: Contact activities
     When I proceed as the Admin
     And I login as administrator
     And I go to Customers/Contacts
-    And press "Create Contact"
+    And click "Create Contact"
     And I fill form with:
       | First name | Charlie |
       | Last name  | Sheen   |
@@ -24,11 +24,11 @@ Feature: Contact activities
 
   Scenario: Add note to contact entity
     And follow "More actions"
-    And press "Add note"
+    And click "Add note"
     And fill "Note Form" with:
       | Message    | <strong>Charlie works hard</strong> |
     And I scroll to "Add Note Button"
-    And I press "Add Note Button"
+    And I click "Add Note Button"
     Then I should see "Note saved" flash message
     And I should see "Charlie works hard" note in activity list
     And I should not see "<strong>Charlie works hard</strong>"

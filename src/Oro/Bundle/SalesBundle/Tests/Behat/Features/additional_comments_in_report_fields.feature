@@ -7,7 +7,7 @@ Feature: Additional comments in report fields
   Scenario: Report with group by Additional comments
     Given I login as administrator
     And I go to Reports & Segments/ Manage Custom Reports
-    And I press "Create Report"
+    And I click "Create Report"
     And I fill "Report Form" with:
       | Name             | Grouped by additional comments |
       | Entity           | Opportunity                    |
@@ -22,7 +22,7 @@ Feature: Additional comments in report fields
 
   Scenario: Report with functions for field Additional comments
     Given I go to Reports & Segments/ Manage Custom Reports
-    And I press "Create Report"
+    And I click "Create Report"
     And I fill "Report Form" with:
       | Name             | Functions for additional comments |
       | Entity           | Opportunity                       |
