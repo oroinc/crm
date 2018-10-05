@@ -10,14 +10,10 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser;
 
@@ -47,7 +43,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     {
         $this->em = $manager;
         try {
-            $this->createOpportunity(1, 'lost');
+            $this->createOpportunity(1, 'lost', 'cancelled');
             $this->createOpportunity(2, 'won');
         } finally {
             $this->em = null;
@@ -55,10 +51,11 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     }
 
     /**
-     * @param int    $number
-     * @param string $status
+     * @param int         $number
+     * @param string      $status
+     * @param string|null $closeReason
      */
-    protected function createOpportunity($number, $status)
+    protected function createOpportunity($number, $status, $closeReason = null)
     {
         $opportunity = new Opportunity();
         $opportunity->setName(sprintf('Opportunity %d', $number));
@@ -75,6 +72,11 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
                 $status
             )
         );
+        if ($closeReason) {
+            $opportunity->setCloseReason(
+                $this->em->getReference(OpportunityCloseReason::class, $closeReason)
+            );
+        }
         $opportunity->setLead($this->getReference(sprintf('lead%d', $number)));
 
         $this->em->persist($opportunity);
