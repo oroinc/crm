@@ -5,11 +5,27 @@ namespace Oro\Bundle\MagentoBundle\EventListener;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
+use Oro\Bundle\DataGridBundle\Provider\SelectedFields\SelectedFieldsProviderInterface;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
+/**
+ * Adds "isSubscriber" filter to datagrid.
+ *
+ * Adds joins to query config only if the filter is active.
+ */
 class CustomerDataGridListener
 {
+    /** @var SelectedFieldsProviderInterface */
+    private $selectedFieldsFromFiltersProvider;
+
+    /**
+     * @param SelectedFieldsProviderInterface $selectedFieldsFromFiltersProvider
+     */
+    public function __construct(SelectedFieldsProviderInterface $selectedFieldsFromFiltersProvider)
+    {
+        $this->selectedFieldsFromFiltersProvider = $selectedFieldsFromFiltersProvider;
+    }
+
     /**
      * @param PreBuild $event
      */
@@ -44,8 +60,7 @@ class CustomerDataGridListener
             ]
         );
 
-        $filters = $parameters->get(OrmFilterExtension::FILTER_ROOT_PARAM, []);
-        if (!empty($filters['isSubscriber'])) {
+        if ($this->isSubscriberFilterActive($config, $parameters)) {
             $query = $config->getOrmQuery();
             $query->setDistinct();
             $query->addSelect(
@@ -66,5 +81,18 @@ class CustomerDataGridListener
             );
             $query->addLeftJoin('c.newsletterSubscribers', 'newsletterSubscribers');
         }
+    }
+
+    /**
+     * @param DatagridConfiguration $config
+     * @param ParameterBag $parameters
+     *
+     * @return bool
+     */
+    private function isSubscriberFilterActive(DatagridConfiguration $config, ParameterBag $parameters): bool
+    {
+        $selectedFields = $this->selectedFieldsFromFiltersProvider->getSelectedFields($config, $parameters);
+
+        return \in_array('isSubscriber', $selectedFields, false);
     }
 }

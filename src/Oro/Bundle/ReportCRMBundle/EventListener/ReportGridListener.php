@@ -7,14 +7,28 @@ use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\DataGridBundle\Extension\Formatter\Configuration as FormatterConfiguration;
 use Oro\Bundle\DataGridBundle\Extension\Formatter\Property\PropertyInterface;
 use Oro\Bundle\DataGridBundle\Extension\Sorter\Configuration as OrmSorterConfiguration;
+use Oro\Bundle\DataGridBundle\Provider\State\DatagridStateProviderInterface;
 use Oro\Bundle\FilterBundle\Filter\FilterUtility;
 use Oro\Bundle\FilterBundle\Grid\Extension\Configuration as FilterConfiguration;
-use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
 
+/**
+ * Changes data name of "period" filter according to filter value.
+ */
 class ReportGridListener
 {
     const PERIOD_COLUMN_NAME          = 'period';
     const PERIOD_FILTER_DEFAULT_VALUE = 'monthPeriod';
+
+    /** @var DatagridStateProviderInterface */
+    private $filtersStateProvider;
+
+    /**
+     * @param DatagridStateProviderInterface $filtersStateProvider
+     */
+    public function __construct(DatagridStateProviderInterface $filtersStateProvider)
+    {
+        $this->filtersStateProvider = $filtersStateProvider;
+    }
 
     /**
      * Need to change data name depends to filter value
@@ -27,10 +41,8 @@ class ReportGridListener
     {
         $config = $event->getConfig();
 
-        $filters = $event->getDatagrid()->getParameters()->get(OrmFilterExtension::FILTER_ROOT_PARAM, []);
-        $period = isset($filters[self::PERIOD_COLUMN_NAME]['value'])
-            ? $filters[self::PERIOD_COLUMN_NAME]['value']
-            : self::PERIOD_FILTER_DEFAULT_VALUE;
+        $filtersState = $this->filtersStateProvider->getState($config, $event->getDatagrid()->getParameters());
+        $period = $filtersState[self::PERIOD_COLUMN_NAME]['value'] ?? self::PERIOD_FILTER_DEFAULT_VALUE;
 
         $config->offsetSetByPath(
             sprintf(
