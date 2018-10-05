@@ -2,10 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
+use Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\Datagrid;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
+use Oro\Bundle\DataGridBundle\Provider\State\DatagridStateProviderInterface;
 use Oro\Bundle\MagentoBundle\EventListener\OrderGridListener;
 
 class OrderGridListenerTest extends \PHPUnit\Framework\TestCase
@@ -18,22 +20,26 @@ class OrderGridListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider onBuildBeforeDataProvider
      *
-     * @param array $params
+     * @param array $filtersState
      * @param array $config
      * @param array $expected
      */
-    public function testOnBuildBefore(array $params, array $config, array $expected)
+    public function testOnBuildBefore(array $filtersState, array $config, array $expected)
     {
         $gridConfig     = DatagridConfiguration::create($config);
-        $parameters     = new ParameterBag($params);
+        $parameters     = new ParameterBag();
         $datagrid       = new Datagrid('magento-order-grid', $gridConfig, $parameters);
         $event          = new BuildBefore($datagrid, $gridConfig);
-        $datagridHelper = $this->getMockBuilder('Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper')
-            ->setMethods(['getCountryFilterQueryBuilder'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $datagridHelper = $this->createMock(CountryDatagridHelper::class);
+        $filtersStateProvider = $this->createMock(DatagridStateProviderInterface::class);
 
-        $listener = new OrderGridListener($datagridHelper);
+        $filtersStateProvider
+            ->expects($this->once())
+            ->method('getState')
+            ->with($gridConfig, $parameters)
+            ->willReturn($filtersState);
+
+        $listener = new OrderGridListener($datagridHelper, $filtersStateProvider);
         $listener->onBuildBefore($event);
         $this->assertEquals($expected, $event->getDatagrid()->getConfig()->toArray());
     }
@@ -46,7 +52,7 @@ class OrderGridListenerTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'filters active'    => [
-                ['_minified' => ['f' => ['countryName' => 'US']]],
+                ['countryName' => 'US'],
                 [
                     'columns' => [
                         'test1'       => ['test1'],

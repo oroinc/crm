@@ -14,6 +14,8 @@ services:
 
     oro_reportcrm.report.grid.listener:
         class: '%oro_reportcrm.report.grid.listener.class%'
+        arguments:
+            - '@oro_filter.provider.state.filters'
         tags:
             -
                 name:   kernel.event_listener

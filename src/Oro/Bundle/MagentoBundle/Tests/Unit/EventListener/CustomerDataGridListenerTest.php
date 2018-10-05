@@ -5,18 +5,21 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
+use Oro\Bundle\DataGridBundle\Provider\SelectedFields\SelectedFieldsProviderInterface;
 use Oro\Bundle\MagentoBundle\EventListener\CustomerDataGridListener;
 
 class CustomerDataGridListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var CustomerDataGridListener
-     */
+    /** @var SelectedFieldsProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
+    protected $selectedFieldsFromFiltersProvider;
+
+    /** @var CustomerDataGridListener */
     protected $listener;
 
     protected function setUp()
     {
-        $this->listener = new CustomerDataGridListener();
+        $this->selectedFieldsFromFiltersProvider = $this->createMock(SelectedFieldsProviderInterface::class);
+        $this->listener = new CustomerDataGridListener($this->selectedFieldsFromFiltersProvider);
     }
 
     public function testAddNewsletterSubscribersWhenFilteringByIsSubscriberWasNotRequested()
@@ -38,6 +41,12 @@ class CustomerDataGridListenerTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
+
+        $this->selectedFieldsFromFiltersProvider
+            ->expects($this->once())
+            ->method('getSelectedFields')
+            ->with($config, $parameters)
+            ->willReturn([]);
 
         $this->listener->onPreBuild(new PreBuild($config, $parameters));
 
@@ -80,10 +89,6 @@ class CustomerDataGridListenerTest extends \PHPUnit\Framework\TestCase
     public function testAddNewsletterSubscribersWhenFilteringByIsSubscriberWasRequested()
     {
         $parameters = new ParameterBag();
-        $parameters->set(
-            '_filter',
-            ['isSubscriber' => ['value' => 'yes']]
-        );
 
         $config = DatagridConfiguration::create(
             [
@@ -100,6 +105,12 @@ class CustomerDataGridListenerTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
+
+        $this->selectedFieldsFromFiltersProvider
+            ->expects($this->once())
+            ->method('getSelectedFields')
+            ->with($config, $parameters)
+            ->willReturn(['isSubscriber']);
 
         $this->listener->onPreBuild(new PreBuild($config, $parameters));
 

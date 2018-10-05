@@ -36,11 +36,11 @@ class OpportunityApiTest extends RestJsonApiTestCase
     public function cgetDataProvider()
     {
         return [
-            'without parameters'                                  => [
+            'without parameters'                                         => [
                 'parameters'      => [],
                 'expectedContent' => 'opportunity_cget.yml',
             ],
-            'filter by status'                                    => [
+            'filter by status'                                           => [
                 'parameters'      => [
                     'filter' => [
                         'status' => 'won',
@@ -48,14 +48,14 @@ class OpportunityApiTest extends RestJsonApiTestCase
                 ],
                 'expectedContent' => 'opportunity_cget_filter_by_status.yml',
             ],
-            'fields and include filters for customer association' => [
+            'fields and include filters for customer association'        => [
                 'parameters'      => [
                     'fields[opportunities]' => 'account,customer',
                     'include'               => 'account,customer',
                 ],
                 'expectedContent' => 'opportunity_cget_customer_association.yml',
             ],
-            'title for customer association'                      => [
+            'title for customer association'                             => [
                 'parameters'      => [
                     'meta'                  => 'title',
                     'fields[opportunities]' => 'account,customer',
@@ -79,6 +79,14 @@ class OpportunityApiTest extends RestJsonApiTestCase
                     'include'               => 'lead.account,lead.customer',
                 ],
                 'expectedContent' => 'opportunity_cget_customer_association_nested_title.yml',
+            ],
+            'title for close reason and status'                          => [
+                'parameters'      => [
+                    'meta'                  => 'title',
+                    'fields[opportunities]' => 'closeReason,status',
+                    'include'               => 'closeReason,status',
+                ],
+                'expectedContent' => 'opportunity_cget_dictionary_title.yml',
             ],
         ];
     }

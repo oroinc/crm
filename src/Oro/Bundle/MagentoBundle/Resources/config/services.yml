@@ -492,6 +492,7 @@ services:
         class: Oro\Bundle\MagentoBundle\EventListener\OrderGridListener
         arguments:
             - "@oro_magento.country.datagrid_helper"
+            - '@oro_filter.provider.state.filters'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.magento-order-grid, method: onBuildBefore }
 
@@ -606,6 +607,8 @@ services:
 
     oro_magento.event_listener.customer_datagrid_listener:
         class: '%oro_magento.event_listener.customer_datagrid_listener.class%'
+        arguments:
+            - '@oro_datagrid.provider.selected_fields.filters'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customers-grid, method: onPreBuild, priority: 255 }
 
