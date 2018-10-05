@@ -22,7 +22,9 @@ data:
         notes: null
     relationships:
         closeReason:
-            data: null
+            data:
+                type: opportunityclosereasons
+                id: cancelled
         contact:
             data: null
         lead:

@@ -285,7 +285,7 @@ dashboards:
                         collapsible: true
                         expand_filled: true
                 subWidgets:
-                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetItemsType
                     options:
                        label: oro.dashboard.widget.big_number.choose_metrics
                        attr:
