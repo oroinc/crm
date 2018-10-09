@@ -91,7 +91,7 @@ Oro\Bundle\MagentoBundle\Entity\CartAddress:
         organization: 'organization'
         firstName: 'firstName1'
         lastName: 'lastName1'
-        originId: '<randomNumber()>'
+        originId: 1
         country: '@germany'
         region: '@berlin'
         channel: '@magento_integration'
@@ -103,7 +103,7 @@ Oro\Bundle\MagentoBundle\Entity\CartAddress:
         organization: 'organization'
         firstName: 'firstName2'
         lastName: 'lastName2'
-        originId: '<randomNumber()>'
+        originId: 2
         country: '@united_states'
         region: '@florida'
         channel: '@magento_integration'
@@ -119,7 +119,7 @@ Oro\Bundle\MagentoBundle\Entity\Address:
         phone: '5554447777'
         primary: true
         organization: '@organization'
-        originId: '<randomNumber()>'
+        originId: 1
         country: '@united_states'
         owner: '@magento_customer1'
         types: ['billing', 'shipping']
@@ -134,7 +134,7 @@ Oro\Bundle\MagentoBundle\Entity\Address:
         phone: '5554448888'
         primary: true
         organization: '@organization'
-        originId: '<randomNumber()>'
+        originId: 2
         country: '@germany'
         owner: '@magento_customer2'
         types: ['billing', 'shipping']
@@ -245,7 +245,7 @@ Oro\Bundle\MagentoBundle\Entity\Cart:
         taxAmount: '<randomFloat()>'
         createdAt: '<dateTime()>'
         updatedAt: '<dateTime()>'
-        originId: '<randomNumber()>'
+        originId: 1
         firstName: 'firstName1'
         lastName: 'lastName1'
         customer: '@magento_customer1'
@@ -278,7 +278,7 @@ Oro\Bundle\MagentoBundle\Entity\Cart:
         taxAmount: '<randomFloat()>'
         createdAt: '<dateTime()>'
         updatedAt: '<dateTime()>'
-        originId: '<randomNumber()>'
+        originId: 2
         firstName: 'firstName2'
         lastName: 'lastName2'
         customer: '@magento_customer2'
@@ -316,7 +316,7 @@ Oro\Bundle\MagentoBundle\Entity\CartItem:
         weight: '<randomFloat()>'
         createdAt: '<dateTime()>'
         updatedAt: '<dateTime()>'
-        originId: '<randomNumber()>'
+        originId: 1
         cart: '@magento_cart_1'
         owner: '@organization'
         channel: '@magento_integration'
@@ -344,7 +344,7 @@ Oro\Bundle\MagentoBundle\Entity\CartItem:
         weight: '<randomFloat()>'
         createdAt: '<dateTime()>'
         updatedAt: '<dateTime()>'
-        originId: '<randomNumber()>'
+        originId: 2
         cart: '@magento_cart_2'
         owner: '@organization'
         channel: '@magento_integration'
@@ -357,7 +357,7 @@ Oro\Bundle\MagentoBundle\Entity\Order:
         ac_contact_count: '<randomNumber()>'
         ac_contact_count_in: '<randomNumber()>'
         ac_contact_count_out: '<randomNumber()>'
-        originId: '<randomNumber()>'
+        originId: 1
         incrementId: '<randomNumber()>'
         isVirtual: '<boolean()>'
         isGuest: '<boolean()>'
@@ -402,7 +402,7 @@ Oro\Bundle\MagentoBundle\Entity\Order:
         ac_contact_count: '<randomNumber()>'
         ac_contact_count_in: '<randomNumber()>'
         ac_contact_count_out: '<randomNumber()>'
-        originId: '<randomNumber()>'
+        originId: 2
         incrementId: '<randomNumber()>'
         isVirtual: '<boolean()>'
         isGuest: '<boolean()>'
@@ -450,7 +450,7 @@ Oro\Bundle\MagentoBundle\Entity\OrderAddress:
         organization: 'organization'
         firstName: 'firstName1'
         lastName: 'lastName1'
-        originId: '<randomNumber()>'
+        originId: 1
         countryText: 'countryText'
         types: ['billing', 'shipping']
         owner: '@magento_order1'
@@ -465,7 +465,7 @@ Oro\Bundle\MagentoBundle\Entity\OrderAddress:
         organization: 'organization'
         firstName: 'firstName2'
         lastName: 'lastName2'
-        originId: '<randomNumber()>'
+        originId: 2
         countryText: 'countryText'
         types: ['billing', 'shipping']
         owner: '@magento_order2'
@@ -487,7 +487,7 @@ Oro\Bundle\MagentoBundle\Entity\OrderItem:
         taxAmount: '<randomFloat()>'
         discountAmount: '<randomFloat()>'
         rowTotal: '<randomFloat()>'
-        originId: '<randomNumber()>'
+        originId: 1
         order: '@magento_order1'
         owner: '@organization'
         channel: '@magento_integration'
@@ -504,7 +504,7 @@ Oro\Bundle\MagentoBundle\Entity\OrderItem:
         taxAmount: '<randomFloat()>'
         discountAmount: '<randomFloat()>'
         rowTotal: '<randomFloat()>'
-        originId: '<randomNumber()>'
+        originId: 2
         order: '@magento_order2'
         owner: '@organization'
         channel: '@magento_integration'
