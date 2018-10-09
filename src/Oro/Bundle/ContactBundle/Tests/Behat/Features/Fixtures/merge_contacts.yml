@@ -1,0 +1,32 @@
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+  contact_email{1..6}:
+    email: 'test<current()>@test.com'
+    primary: true
+
+Oro\Bundle\ContactBundle\Entity\ContactPhone:
+  contact_phone{1..6}:
+    phone: '555666888<current()>'
+    primary: true
+
+Oro\Bundle\ContactBundle\Entity\ContactAddress:
+  contact_address{1..6}:
+    country: '@germany'
+    primary: true
+    street: 'streetN<current()>'
+    city: 'TestCity<current()>'
+    postalCode: '1000<current()>'
+    organization: 'TestOrg<current()>'
+    region: '@berlin'
+    firstName: 'TestContact<current()>'
+    lastName: 'TestContact<current()>'
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact{1..6}:
+    firstName: 'First_<current()>'
+    lastName: 'Last_<current()>'
+    email: 'email<current()>@example.com'
+    owner: '@admin'
+    organization: '@organization'
+    addEmail: ['@contact_email<current()>']
+    addPhone: ['@contact_phone<current()>']
+    addAddress: ['@contact_address<current()>']
