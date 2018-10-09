@@ -39,13 +39,14 @@ form[name="opportunity"] {
     input[type="text"].add-on-input {
         display: inline-block;
         text-shadow: 0 1px 0 #fff;
-        margin-left: -1px;
+        margin-left: -2px;
         border-radius: 0;
         width: 40px;
     }
 
     .add-on {
         vertical-align: baseline;
+        text-align: center;
     }
 }
 
