@@ -38,11 +38,14 @@ form[name="opportunity"] {
 .oro-item-collection .input-append-sortable {
     input[type="text"].add-on-input {
         display: inline-block;
-        height: 20px;
         text-shadow: 0 1px 0 #fff;
         margin-left: -1px;
         border-radius: 0;
         width: 40px;
+    }
+
+    .add-on {
+        vertical-align: baseline;
     }
 }
 
