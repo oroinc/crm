@@ -36,7 +36,7 @@
     }
 
     &-widget-wrapper {
-        padding: 0 0 0 20px;
+        padding: side-values(0 0 0 $content-padding);
 
         .title {
             padding-left: 3px;
