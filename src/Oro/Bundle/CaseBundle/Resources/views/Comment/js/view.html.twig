@@ -4,8 +4,10 @@
             <div class="title-item">
                 <a href="#accordion-item<%= id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
                 <% if (createdBy) { %>
-                <span class="visual">
-                        <img src="<% if (createdBy.avatar) { %><%- createdBy.avatar %><% } else { %>{{ asset('bundles/oroui/img/avatar-xsmall.png')|e('html_attr')|raw }}<% } %>" />
+                    <span class="visual">
+                        <span class="avatar">
+                            <img src="<% if (createdBy.avatar) { %><%- createdBy.avatar %><% } else { %>{{ asset('bundles/oroui/img/avatar-xsmall.png')|e('html_attr')|raw }}<% } %>" />
+                        </span>
                         <% if (createdBy.url) { %>
                             <a class="user" href="<%= createdBy.url %>"><%- createdBy.fullName %></a>
                         <% } else { %>
@@ -13,15 +15,17 @@
                         <% } %>
                     </span>
                 <% } %>
-                <span class="details">
-                    <i class="date"><%= createdAt %></i>
-                </span>
-                <% if (!public) { %>
-                <span class="label"><%= _.__("oro.case.private") %></span>
-                <% } %>
             </div>
             <div class="message-item">
                 <div class="message"><%= briefMessage %></div>
+            </div>
+            <div class="labels">
+                <% if (!public) { %>
+                    <span class="label"><%= _.__("oro.case.private") %></span>
+                <% } %>
+            </div>
+            <div class="details">
+                <i class="date"><%= createdAt %></i>
             </div>
             <div class="actions">
                 <button class="btn item-edit-button<% if (!permissions.edit) { %> disabled<% } %>" <% if (!permissions.edit) { %> disabled="disabled"<% } %> title="{{ 'oro.case.casecomment.action.edit'|trans|e('html_attr')|raw }}"><i class="fa-pencil-square-o hide-text">{{ 'oro.case.casecomment.action.edit'|trans|e('html')|raw }}</i></button>
