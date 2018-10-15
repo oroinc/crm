@@ -1,7 +1,7 @@
 {
     "name": "orocrm/magento-bundle",
     "type": "symfony-bundle",
-    "description": "Oro CRM Magento Bundle",
+    "description": "OroCRM Magento Bundle",
     "keywords": ["CRM", "Magento", "Customers"],
     "license": "MIT",
     "require": {

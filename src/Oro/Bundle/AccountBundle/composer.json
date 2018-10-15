@@ -1,7 +1,7 @@
 {
     "name": "orocrm/account-bundle",
     "type": "symfony-bundle",
-    "description": "Oro CRM Accounts",
+    "description": "OroCRM Accounts",
     "keywords": ["CRM", "Accounts"],
     "homepage": "https://github.com/orocrm/AccountBundle",
     "license": "MIT",
