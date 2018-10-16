@@ -19,6 +19,14 @@ form[name="opportunity"] {
             }
         }
 
+        .control-group-oro_entity_config_scope_type.control-group {
+            display: block;
+
+            .control-group-collection > .controls {
+                margin-left: 240px;
+            }
+        }
+
         .enum-value-collection {
             width: 350px;
         }
