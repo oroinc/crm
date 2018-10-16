@@ -521,14 +521,14 @@ This changelog references the relevant changes (new features, changes and bugs) 
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-beta3 versions.
 
 * 1.0.0-beta3 (2013-11-11)
-  * Oro Platform Beta 3 dependency changes
+  * OroPlatform Beta 3 dependency changes
 
 ## 1.0.0-beta2
 
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-beta2 versions.
 
 * 1.0.0-beta2 (2013-10-28)
-  * Oro Platform Beta 2 dependency changes
+  * OroPlatform Beta 2 dependency changes
 
 ## 1.0.0-beta1
 
