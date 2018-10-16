@@ -1,7 +1,7 @@
 {
     "name": "orocrm/contact-bundle",
     "type": "symfony-bundle",
-    "description": "Oro CRM Contacts",
+    "description": "OroCRM Contacts",
     "keywords": ["CRM", "Contacts"],
     "homepage": "https://github.com/orocrm/ContactBundle",
     "license": "MIT",

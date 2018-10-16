@@ -2,7 +2,7 @@
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/oroinc/crm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/oroinc/crm/?branch=master) [![Travis CI build status](https://travis-ci.org/oroinc/crm.svg?branch=master)](https://travis-ci.org/oroinc/crm)
 
-OroCRM is an open source PHP Client Relationship Management (CRM) application that allows to create a 360° view
+OroCRM is an open source Client Relationship Management (CRM) application that allows to create a 360° view
 of your customers across multiple channels, organize the sales pipeline, manage account and contact information,
 communicate with customers, run marketing campaigns and track campaign performance.  
 
@@ -10,7 +10,7 @@ OroTeam, the team behind OroCRM, strongly believes that no two business are alik
 is very flexible and highly customizable application that was adopted in eCommerce, Retail, Financial Services
 and many other industries. 
 
-OroCRM is built on [OroPlatform](https://github.com/orocrm/platform) and [Symfony](http://symfony.com/) full-stack 
+OroCRM is built in PHP on [OroPlatform](https://github.com/orocrm/platform) and [Symfony](http://symfony.com/) full-stack 
 web framework. 
 
 ## Installation
@@ -21,4 +21,4 @@ simplifies initial project setup and configuration.
 
 ## Documentation
   
-The documentation for the OroCRM can be found on [www.orocrm.com](http://www.oroinc.com/doc/orocrm/) website.
+The documentation for OroCRM can be found on [www.orocrm.com](http://www.oroinc.com/doc/orocrm/) website.
