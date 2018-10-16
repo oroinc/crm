@@ -192,11 +192,6 @@ oro_behat_extension:
           Shipping Address Country: 'oro_sales_b2bcustomer_form[shippingAddress][country]'
           Shipping Address State: 'oro_sales_b2bcustomer_form[shippingAddress][region]'
 
-    Leads Tab:
-      selector:
-        locator: '//div[contains(@class,"scrollspy-nav")]/nav/a[text()="Leads"]'
-        type: xpath
-
     Bussines Customer Leads Paginator:
       selector: 'div[data-page-component-name="sales-customers-leads-grid"] div.toolbar div.pagination'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridPaginator
@@ -262,6 +257,7 @@ oro_behat_extension:
         - OroSalesBundle::FeatureContext
         - OroNavigationBundle::FeatureContext
         - OroNavigationBundle::PinbarContext
+        - OroNavigationBundle::ScrollspyContext
         - OroSalesBundle::SalesFeatureToggleContext
         - OroConfigBundle::FeatureContext
         - OroQueryDesignerBundle::QueryDesignerContext
