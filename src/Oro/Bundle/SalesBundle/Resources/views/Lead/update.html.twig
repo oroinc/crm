@@ -68,9 +68,9 @@
     {{ parent() }}
     <div class="pull-left">
         {% if entity.status.id != 'canceled' %}
-            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled fa-circle"></i>{{ entity.status.name }}</div>
+            <div class="badge badge-pill badge-enabled status-enabled"><i class="icon-status-enabled fa-circle"></i>{{ entity.status.name }}</div>
         {% else %}
-            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled fa-circle"></i>{{ entity.status.name  }}</div>
+            <div class="badge badge-pill badge-disabled status-disabled"><i class="icon-status-disabled fa-circle"></i>{{ entity.status.name  }}</div>
         {% endif %}
     </div>
 {% endblock breadcrumbs %}
@@ -97,7 +97,6 @@
 
     {% set dataBlocks = [{
             'title': 'General'|trans,
-            'class': 'active',
             'subblocks': [
                 {
                     'title': 'oro.sales.lead.information'|trans,
@@ -116,7 +115,6 @@
 
     {% set dataBlocks = dataBlocks|merge([{
             'title': 'oro.sales.lead.contact_information.label'|trans,
-            'class': 'active',
             'subblocks': [
                 {
                     'data': [

@@ -83,7 +83,7 @@ workflows:
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'fa-close-circle'
+                    icon: 'fa-times'
                 transition_definition: abandon_definition
                 form_options:
                     attribute_fields:
