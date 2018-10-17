@@ -1,4 +1,5 @@
 @fixture-OroSalesBundle:leads_data.yml
+@skip
 Feature: Manage dashboard widgets
   In order to manage widgets on dashboard
   as an Administrator
