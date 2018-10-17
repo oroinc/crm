@@ -318,7 +318,7 @@ dashboards:
                        value_types: true
                     show_on_widget: true
                 usePreviousInterval:
-                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetPreviousDateRangeType
                     options:
                        label: oro.dashboard.previous_date_range.label
                        required: false
@@ -335,7 +335,7 @@ dashboards:
                         collapsible: true
                         expand_filled: true
                 subWidgets:
-                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetItemsType
                     options:
                        label: oro.dashboard.widget.big_number.choose_metrics
                        attr:
@@ -425,7 +425,7 @@ dashboards:
                             - canceled
                             - qualified
                 sortBy:
-                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetSortByType
                     show_on_widget: true
                     options:
                         required: false
