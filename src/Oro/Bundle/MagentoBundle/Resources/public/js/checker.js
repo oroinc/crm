@@ -41,7 +41,7 @@ define([
         ],
 
         resultTemplate: _.template(
-            '<div class="alert alert-<%= type %> connection-status"><%= message %></div>'
+            '<div class="alert alert-<%= type %> connection-status" role="alert"><%= message %></div>'
         ),
 
         connectorTemplate: _.template(

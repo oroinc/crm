@@ -2,16 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
 
-use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\DomCrawler\Form;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadLeadStatisticsWidgetFixture;
 
-/**
- * @dbIsolationPerTest
- */
-class LeadStatistics extends BaseStatistics
+class LeadStatisticsTest extends BaseStatistics
 {
+    /** @var array */
     protected $metrics = [
         'open_leads_count' => 'Open Leads',
         'new_leads_count' => 'New Leads'
@@ -19,31 +15,16 @@ class LeadStatistics extends BaseStatistics
 
     public function setUp()
     {
-        $this->initClient(
-            ['debug' => false],
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
-        );
+        $this->initClient([], $this->generateBasicAuthHeader());
         $this->loadFixtures([
-            'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadLeadStatisticsWidgetFixture'
+            LoadLeadStatisticsWidgetFixture::class
         ]);
     }
 
-    public function testGetWidgetConfigureDialog()
-    {
-        $this->getConfigureDialog();
-    }
-
-    /**
-     * @depends testGetWidgetConfigureDialog
-     */
     public function testDefaultConfiguration()
     {
         $this->getConfigureDialog();
 
-        /**
-         * @var $crawler Crawler
-         * @var $form Form
-         */
         $crawler = $this->client->getCrawler();
         $form = $crawler->selectButton('Save')->form();
         $this->createAndSetDateRangeFormElements($form, ['type' => AbstractDateFilterType::TYPE_ALL_TIME]);
@@ -52,7 +33,7 @@ class LeadStatistics extends BaseStatistics
         $this->client->submit($form);
 
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in submit widget configuration options !");
+        $this->assertEquals($response->getStatusCode(), 200, 'Failed in submit widget configuration options!');
 
         $crawler = $this->client->request(
             'GET',
@@ -68,7 +49,7 @@ class LeadStatistics extends BaseStatistics
         );
 
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in gettting widget view !");
+        $this->assertEquals($response->getStatusCode(), 200, "Failed in getting widget view!");
         $this->assertNotEmpty($crawler->html());
 
         $openLeadsMetric = $crawler->filterXPath(
@@ -95,21 +76,24 @@ class LeadStatistics extends BaseStatistics
 
     /**
      * @dataProvider widgetProvider
+     *
+     * @param string $owners
+     * @param array $dateRange
+     * @param bool $comparePrevious
+     * @param array $advancedFilters
+     * @param array $result
+     * @param array $previousResult
      */
     public function testCustomConfiguration(
-        $owners,
-        $dateRange,
-        $comparePrevious,
-        $advancedFilters,
-        $result,
-        $previousResult
+        string $owners,
+        array $dateRange,
+        bool $comparePrevious,
+        array $advancedFilters,
+        array $result,
+        array $previousResult
     ) {
         $this->getConfigureDialog();
 
-        /**
-         * @var $crawler Crawler
-         * @var $form Form
-         */
         $crawler = $this->client->getCrawler();
         $form = $crawler->selectButton('Save')->form();
         $form['lead_statistics[owners][users]'] = $owners;
@@ -267,7 +251,7 @@ class LeadStatistics extends BaseStatistics
     protected function inspectResult(array $result, array $previousResult)
     {
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in submit widget configuration options !");
+        $this->assertEquals($response->getStatusCode(), 200, 'Failed in submit widget configuration options !');
 
         $crawler = $this->client->request(
             'GET',
@@ -284,7 +268,7 @@ class LeadStatistics extends BaseStatistics
 
         $response = $this->client->getResponse();
 
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in gettting widget view !");
+        $this->assertEquals($response->getStatusCode(), 200, 'Failed in gettting widget view !');
         $this->assertNotEmpty($crawler->html());
 
         $openLeadsMetric = $crawler->filterXPath(

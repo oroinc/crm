@@ -1,9 +1,10 @@
-<a href="{{ path('oro_sales_opportunity_customer_aware_create', {
+{{ UI.link({
+    'path': path('oro_sales_opportunity_customer_aware_create', {
         targetId: entity.id,
         targetClass: oro_class_name(entity, true)
-    }) }}">
-    <i class="fa-usd hide-text">
-        {{ 'oro.sales.opportunity.create.label'|trans }}
-    </i>
-    {{- 'oro.sales.opportunity.create.label'|trans }}
-</a>
+    }),
+    'iCss': 'fa-usd',
+    'aCss': 'dropdown-item',
+    'title': 'oro.sales.opportunity.create.label'|trans,
+    'label': 'oro.sales.opportunity.create.label'|trans
+}) }}

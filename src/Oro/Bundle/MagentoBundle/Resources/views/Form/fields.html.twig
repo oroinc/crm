@@ -45,7 +45,7 @@
                 {% endif %}
 
                 {% if messageType is defined and message is defined %}
-                    <div class="alert alert-{{ messageType }} connection-status">{{ message }}</div>
+                    <div class="alert alert-{{ messageType }} connection-status" role="alert">{{ message }}</div>
                 {% endif %}
             {% endif %}
         </div>

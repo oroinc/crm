@@ -6,6 +6,7 @@ dashboards:
             acl:         oro_magento_cart_view
             description: oro.magento.dashboard.my_sales_flow_b2c_chart.description
             icon:        bundles/oromagento/img/my_sales_flow_b2c.png
+            icon_class:  fa-building-o
             applicable:  "@oro_magento.provider.enitity_state->isEntityCartEnabled()"
             configuration:
                 dateRange:
@@ -20,6 +21,7 @@ dashboards:
             acl:         oro_magento_order_view
             description: oro.magento.dashboard.average_order_amount_chart.description
             icon:        bundles/oromagento/img/average-amount-order.png
+            icon_class:  fa-file-text
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
@@ -34,6 +36,7 @@ dashboards:
             acl:         oro_magento_cart_view
             description: oro.magento.dashboard.new_magento_customers_chart.description
             icon:        bundles/oromagento/img/number-magento-customers.png
+            icon_class:  magento-logo
             applicable:  "@oro_magento.provider.enitity_state->isEntityCustomerEnabled()"
             configuration:
                 dateRange:
@@ -49,6 +52,7 @@ dashboards:
             acl:         oro_magento_cart_view
             description: oro.magento.dashboard.e_commerce_statistic.description
             icon:        bundles/oromagento/img/icon-big_numbers.png
+            icon_class:  fa-bar-chart
             applicable:  "@oro_magento.provider.enitity_state->isEntityCartEnabled()"
             data_items:
                 revenue:
@@ -141,6 +145,7 @@ dashboards:
             acl:         oro_magento_order_view
             description: oro.magento.dashboard.revenue_over_time_chart.description
             icon:        bundles/oromagento/img/revenue.png
+            icon_class:  fa-clock-o
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
@@ -155,6 +160,7 @@ dashboards:
             acl:         oro_magento_order_view
             description: oro.magento.dashboard.orders_over_time_chart.description
             icon:        bundles/oromagento/img/number-magento-customers.png
+            icon_class:  fa-file-text
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
@@ -169,6 +175,7 @@ dashboards:
             acl:         oro_magento_order_view
             description: oro.magento.dashboard.purchase_chart.description
             icon:        bundles/oromagento/img/purchased.png
+            icon_class:  fa-filter
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:

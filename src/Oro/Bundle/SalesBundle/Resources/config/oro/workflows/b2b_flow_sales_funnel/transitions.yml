@@ -211,7 +211,7 @@ workflows:
                 step_to: lost_opportunity
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'fa-close-circle'
+                    icon: 'fa-times'
                     class: 'btn-danger'
                 transition_definition: close_as_lost_definition
                 form_options:

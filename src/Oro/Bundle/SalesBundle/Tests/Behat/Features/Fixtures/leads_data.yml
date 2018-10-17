@@ -1,0 +1,24 @@
+Oro\Bundle\SalesBundle\Entity\Lead:
+  Bruce:
+    owner: '@admin'
+    name: Bruce
+    firstName: Bruce
+    lastName: Willis
+    status: 'new'
+    organization: '@organization'
+
+  Alan:
+    owner: '@admin'
+    name: Alan
+    firstName: Alan
+    lastName: Willis
+    status: 'qualified'
+    organization: '@organization'
+
+  John:
+    owner: '@admin'
+    name: John
+    firstName: John
+    lastName: Willis
+    status: 'canceled'
+    organization: '@organization'

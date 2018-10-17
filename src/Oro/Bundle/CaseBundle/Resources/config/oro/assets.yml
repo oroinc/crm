@@ -1,4 +1,4 @@
 assets:
     css:
         'orocase':
-          - 'bundles/orocase/css/scss/comment.scss'
+          - 'bundles/orocase/css/scss/main.scss'

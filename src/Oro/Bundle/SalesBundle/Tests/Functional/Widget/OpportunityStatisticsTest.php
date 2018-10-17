@@ -3,14 +3,13 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
 
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatisticsWidgetFixture;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Form;
 
-/**
- * @dbIsolationPerTest
- */
-class OpportunityStatistics extends BaseStatistics
+class OpportunityStatisticsTest extends BaseStatistics
 {
+    /** @var array */
     protected $metrics = [
         'new_opportunities_count'          => 'New Opportunities count',
         'new_opportunities_amount'         => 'New Opportunities amount',
@@ -20,31 +19,16 @@ class OpportunityStatistics extends BaseStatistics
 
     public function setUp()
     {
-        $this->initClient(
-            ['debug' => false],
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
-        );
+        $this->initClient([], $this->generateBasicAuthHeader());
         $this->loadFixtures([
-            'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatisticsWidgetFixture'
+            LoadOpportunityStatisticsWidgetFixture::class
         ]);
     }
 
-    public function testGetWidgetConfigureDialog()
-    {
-        $this->getConfigureDialog();
-    }
-
-    /**
-     * @depends testGetWidgetConfigureDialog
-     */
     public function testDefaultConfiguration()
     {
         $this->getConfigureDialog();
 
-        /**
-         * @var $crawler Crawler
-         * @var $form Form
-         */
         $crawler = $this->client->getCrawler();
         $form = $crawler->selectButton('Save')->form();
         $this->createAndSetDateRangeFormElements($form, ['type' => AbstractDateFilterType::TYPE_ALL_TIME]);
@@ -53,7 +37,7 @@ class OpportunityStatistics extends BaseStatistics
         $this->client->submit($form);
 
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in submit widget configuration options !");
+        $this->assertEquals($response->getStatusCode(), 200, 'Failed in submit widget configuration options !');
 
         $crawler = $this->client->request(
             'GET',
@@ -69,7 +53,7 @@ class OpportunityStatistics extends BaseStatistics
         );
 
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in gettting widget view !");
+        $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting widget view !');
         $this->assertNotEmpty($crawler->html());
 
         $newOpportunityCountMetric = $crawler->filterXPath(
@@ -119,14 +103,21 @@ class OpportunityStatistics extends BaseStatistics
 
     /**
      * @dataProvider widgetProvider
+     *
+     * @param string $owners
+     * @param array $dateRange
+     * @param bool $comparePrevious
+     * @param array $advancedFilters
+     * @param array $result
+     * @param array $previousResult
      */
     public function testCustomConfiguration(
-        $owners,
-        $dateRange,
-        $comparePrevious,
-        $advancedFilters,
-        $result,
-        $previousResult
+        string $owners,
+        array $dateRange,
+        bool $comparePrevious,
+        array $advancedFilters,
+        array $result,
+        array $previousResult
     ) {
         $this->getConfigureDialog();
 
@@ -185,9 +176,9 @@ class OpportunityStatistics extends BaseStatistics
                 ],
                 'widgetItemPreviousResult' => [
                     'new_opportunities_count' => 'No changes',
-                    'new_opportunities_count' => 'No changes',
-                    'new_opportunities_count' => 'No changes',
-                    'new_opportunities_count' => 'No changes'
+                    'new_opportunities_amount' => 'No changes',
+                    'won_opportunities_to_date_count' => 'No changes',
+                    'won_opportunities_to_date_amount' => 'No changes'
                 ]
             ],
             'Apply "All time" date range filter' => [

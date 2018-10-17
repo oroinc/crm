@@ -20,6 +20,7 @@ dashboards:
             acl:         oro_sales_opportunity_view
             description: oro.sales.dashboard.opportunities_by_lead_source_chart.description
             icon:        bundles/orosales/img/opportunities_by_lead_source.png
+            icon_class:  fa-handshake-o
             configuration:
                 owners:
                     type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
@@ -59,6 +60,7 @@ dashboards:
             acl:         oro_sales_opportunity_view
             description: oro.sales.dashboard.opportunities_by_state.description
             icon:        bundles/orosales/img/opportunity_by_status.png
+            icon_class:  fa-check
             configuration:
                 owners:
                     type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
@@ -95,6 +97,7 @@ dashboards:
             acl:         oro_sales_opportunity_view
             description: oro.sales.dashboard.my_sales_flow_b2b_chart.description
             icon:        bundles/orosales/img/my_sales_flow_b2b.png
+            icon_class:  fa-globe
             configuration:
                 dateRange:
                     type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
@@ -108,6 +111,7 @@ dashboards:
             acl:         oro_campaign_view
             description: oro.campaign.dashboard.campaigns_leads.description
             icon:        bundles/orocampaign/img/Lead-generation-of-most-recently-created-campaigns.png
+            icon_class:  fa-clock-o
             configuration:
                 dateRange:
                     type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
@@ -121,6 +125,7 @@ dashboards:
             acl:         oro_campaign_view
             description: oro.campaign.dashboard.campaigns_opportunity.description
             icon:        bundles/orocampaign/img/Top-5-opportunity-generating-campaigns.png
+            icon_class:  fa-check-circle-o
             configuration:
                 dateRange:
                     type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
@@ -134,6 +139,7 @@ dashboards:
             acl:         oro_campaign_view
             description: oro.campaign.dashboard.campaigns_by_close_revenue.description
             icon:        bundles/orocampaign/img/Top-5-revenue-generating-campaigns.png
+            icon_class:  fa-money
             configuration:
                 dateRange:
                     type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
@@ -148,6 +154,7 @@ dashboards:
             acl:         oro_sales_opportunity_view
             description: oro.sales.dashboard.forecast_of_opportunities.description
             icon:        bundles/orosales/img/opportunity_by_status.png
+            icon_class:  fa-pie-chart
             configuration_dialog_options:
                 resizable: true
                 minWidth: 780
@@ -224,6 +231,7 @@ dashboards:
             acl:         oro_sales_b2bcustomer_view
             description: oro.dashboard.opportunity_statistics.description
             icon:        bundles/orosales/img/icon-big_numbers.png
+            icon_class:  fa-line-chart
             applicable:  "@oro_sales.provider.enitity_state->isEntityB2bCustomerEnabled()"
             data_items:
                 new_opportunities_count:
@@ -292,6 +300,7 @@ dashboards:
             acl:         oro_sales_lead_view
             description: oro.dashboard.lead_statistics.description
             icon:        bundles/orosales/img/icon-big_numbers.png
+            icon_class:  fa-area-chart
             applicable:  "@oro_sales.provider.enitity_state->isEntityB2bCustomerEnabled()"
             data_items:
                 open_leads_count:
@@ -318,7 +327,7 @@ dashboards:
                        value_types: true
                     show_on_widget: true
                 usePreviousInterval:
-                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetPreviousDateRangeType
                     options:
                        label: oro.dashboard.previous_date_range.label
                        required: false
@@ -335,7 +344,7 @@ dashboards:
                         collapsible: true
                         expand_filled: true
                 subWidgets:
-                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetItemsType
                     options:
                        label: oro.dashboard.widget.big_number.choose_metrics
                        attr:
@@ -349,6 +358,7 @@ dashboards:
             acl:         oro_channel_view
             description: oro.channel.dashboard.average_lifetime_sales_chart.description
             icon:        bundles/orochannel/img/average_lifetime_sales_chart.png
+            icon_class:  fa-suitcase
             configuration:
                 dateRange:
                     type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
@@ -363,7 +373,8 @@ dashboards:
             route_parameters: { bundle: OroSalesBundle, name: opportunitiesList }
             acl:         oro_sales_opportunity_view
             description: oro.sales.dashboard.opportunities_list.description
-            icon:       bundles/orosales/img/opportunity_by_status.png
+            icon:        bundles/orosales/img/opportunity_by_status.png
+            icon_class:  fa-usd
             configuration:
                 owners:
                     type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
@@ -400,7 +411,8 @@ dashboards:
             route_parameters: { bundle: OroSalesBundle, name: leadsList }
             acl:         oro_sales_lead_view
             description: oro.sales.dashboard.leads_list.description
-            icon:       bundles/orosales/img/opportunities_by_lead_source.png
+            icon:        bundles/orosales/img/opportunities_by_lead_source.png
+            icon_class:  fa-phone
             configuration:
                 owners:
                     type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
@@ -425,7 +437,7 @@ dashboards:
                             - canceled
                             - qualified
                 sortBy:
-                    type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetSortByType
                     show_on_widget: true
                     options:
                         required: false

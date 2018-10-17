@@ -24,7 +24,7 @@
                 </div>
 
                 {% if form.recency.vars.errors|length > 0 or form.frequency.vars.errors|length > 0 or form.monetary.vars.errors|length > 0 %}
-                    <div class="alert alert-error">
+                    <div class="alert alert-error" role="alert">
                         <ul>
                             {% if form.recency.vars.errors|length > 0 %}
                                 <li>
