@@ -88,14 +88,14 @@ Feature: Manage dashboard widgets
     And I should see "Won Opportunities To Date Count"
     And I should see "Won Opportunities To Date Amount"
 
-  Scenario: Add Opportunity List widget
+  Scenario: Add Opportunities List widget
     Given I click "Add widget"
     And I type "Opportunities list" in "Enter keyword"
     When I click "Add Widget Button"
     And I click "Close" in modal window
     Then I should see "Opportunities List" widget on dashboard
 
-  Scenario: Check configuration of Leads List widget
+  Scenario: Check configuration of Opportunities List widget
     Given I click "Configure" in "Opportunities List" widget
     And I fill form with:
       | Excluded statuses | Needs Analysis   |
