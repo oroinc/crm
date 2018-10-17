@@ -1,0 +1,25 @@
+/* @theme: admin.oro; */
+
+.rfm-settings-data {
+    &.control-group {
+        max-width: 890px;
+    }
+
+    input {
+        width: 70px;
+        height: 14px;
+    }
+
+    .grid {
+        span {
+            display: inline-block;
+            width: 70px;
+        }
+    }
+
+    .alert {
+        span {
+            display: block;
+        }
+    }
+}

@@ -1,0 +1,60 @@
+/* @theme: admin.oro; */
+
+.contact {
+    &-box {
+        background-color: #f6f6f6;
+        float: left;
+        margin: 3px;
+        padding: 10px 20px;
+        width: calc(50% - 6px);
+
+        &-wrapper {
+            position: relative;
+        }
+
+        &-row {
+            padding: 5px 0;
+            line-height: 24px;
+
+            &:empty {
+                display: none;
+            }
+
+            .contact-element-label {
+                padding-right: 5px;
+                line-height: 24px;
+
+                + .inline-actions-element {
+                    top: 0;
+                }
+            }
+        }
+
+        &-name-link {
+            font-weight: bold;
+        }
+    }
+
+    &-widget-wrapper {
+        padding: side-values(0 0 0 $content-padding);
+
+        .title {
+            padding-left: 3px;
+        }
+    }
+
+    &-collection-element {
+        margin-bottom: 2px;
+
+        &:last-child {
+            margin-bottom: -3px;
+        }
+
+        &.primary {
+            .phone,
+            .email {
+                font-weight: bold;
+            }
+        }
+    }
+}

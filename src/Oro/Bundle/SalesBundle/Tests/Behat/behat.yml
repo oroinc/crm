@@ -1,9 +1,8 @@
 oro_behat_extension:
   elements:
     Lead:
-      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Element
       selector:
-        locator: '//ul[@class="context-items-dropdown dropdown-menu"]/li[contains(text(),"Lead")]'
+        locator: '//ul[contains(@class, "context-items-dropdown dropdown-menu")]/li[contains(text(),"Lead")]'
         type: xpath
 
     Lead Form:
@@ -192,11 +191,6 @@ oro_behat_extension:
           Shipping Address Country: 'oro_sales_b2bcustomer_form[shippingAddress][country]'
           Shipping Address State: 'oro_sales_b2bcustomer_form[shippingAddress][region]'
 
-    Leads Tab:
-      selector:
-        locator: '//ul/li/a[text()="Leads"]'
-        type: xpath
-
     Bussines Customer Leads Paginator:
       selector: 'div[data-page-component-name="sales-customers-leads-grid"] div.toolbar div.pagination'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridPaginator
@@ -215,6 +209,26 @@ oro_behat_extension:
     Business Customer Leads GridFilterItem:
       selector: 'div.filter-item'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilterItem
+
+    Add Widget Button:
+      selector:
+        locator: '//div[not(contains(@style,"display: none"))]/table/tbody/tr/td/a[contains(@class,"widget-picker-add-btn")]'
+        type: xpath
+
+    Leads List:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Leads List"]/../..'
+
+    Lead Statistics:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Lead statistics"]/../..'
+
+    Opportunity statistics:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Opportunity statistics"]/../..'
 
   pages:
     Opportunity Index:
@@ -262,6 +276,7 @@ oro_behat_extension:
         - OroSalesBundle::FeatureContext
         - OroNavigationBundle::FeatureContext
         - OroNavigationBundle::PinbarContext
+        - OroNavigationBundle::ScrollspyContext
         - OroSalesBundle::SalesFeatureToggleContext
         - OroConfigBundle::FeatureContext
         - OroQueryDesignerBundle::QueryDesignerContext

@@ -545,7 +545,7 @@ datagrids:
                     data_name: a.owner
                     options:
                         field_options:
-                            class: OroUserBundle:User
+                            class: '%oro_user.entity.class%'
                             multiple: true
                             choice_label: fullName
                             translatable_options: false

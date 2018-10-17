@@ -45,7 +45,7 @@ class LoadLeadStatisticsWidgetFixture extends AbstractFixture
     {
         $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
         $this->em = $manager;
-        $this->createLead($manager);
+        $this->createLead();
 
         $dashboard = new Dashboard();
         $dashboard->setName('dashboard');

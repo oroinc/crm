@@ -16,7 +16,7 @@
 {% block breadcrumbMessage %}
     {% if entity.statusMessage %}
         <div class="bg-danger mess-pos pull-left">
-            <div class="badge badge-warning">{{ entity.statusMessage|trans }}</div>
+            <div class="badge badge-pill badge-warning">{{ entity.statusMessage|trans }}</div>
         </div>
     {% endif %}
 {% endblock breadcrumbMessage %}
@@ -93,7 +93,6 @@
     {% set dataBlocks = [
         {
             'title': 'oro.magento.general_information'|trans,
-            'class': 'active',
             'subblocks': generalSubblocks
         },
         {
