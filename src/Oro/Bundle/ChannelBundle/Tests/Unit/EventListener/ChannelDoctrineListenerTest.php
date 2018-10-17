@@ -11,7 +11,7 @@ use Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Customer as CustomerEntity;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
-use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
+use Oro\Component\TestUtils\ORM\OrmTestCase;
 
 class ChannelDoctrineListenerTest extends OrmTestCase
 {

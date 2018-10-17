@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Model;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\Mocks\DatabasePlatformMock;
+use Oro\Component\TestUtils\ORM\Mocks\DatabasePlatformMock;
 
 class ConnectionMock extends \Doctrine\DBAL\Connection
 {
