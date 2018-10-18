@@ -65,7 +65,7 @@ class CustomerIconProviderTest extends \PHPUnit\Framework\TestCase
                 null,
             ],
             'entity without config' => [
-                null,
+                new \stdClass(),
                 null,
             ],
         ];
