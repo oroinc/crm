@@ -12,6 +12,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Adds associated account field for customers form.
+ */
 class CustomerAssociationAccountExtension extends AbstractTypeExtension
 {
     /** @var ConfigProvider */
@@ -73,10 +76,12 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
                 $target = $event->getData();
                 if (!$target || $this->doctrineHelper->isNewEntity($target)) {
                     return;
-                }
-                $customer = $this->manager->getAccountCustomerByTarget($target, false);
-                if ($customer) {
-                    $event->getForm()->get('customer_association_account')->setData($customer->getAccount());
+                } else {
+                    $customer = $this->manager->getAccountCustomerByTarget($target, false);
+
+                    if ($customer) {
+                        $event->getForm()->get('customer_association_account')->setData($customer->getAccount());
+                    }
                 }
             }
         );
@@ -89,10 +94,8 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
                     if (!$account) {
                         return;
                     }
-                    $customer = $this->manager->getAccountCustomerByTarget($target, false);
-                    if ($customer) {
-                        $customer->setTarget($account, $target);
-                    }
+                    $customer = $this->manager->getAccountCustomerByTarget($target);
+                    $customer->setTarget($account, $target);
                 } else {
                     if (!$account) {
                         $account = $this->manager->createAccountForTarget($target);
