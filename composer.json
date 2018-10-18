@@ -26,7 +26,6 @@
         "behat/mink-extension": "2.2.*",
         "behat/mink-selenium2-driver": "1.*",
         "behat/symfony2-extension": "2.1.1",
-        "nelmio/alice": "2.2.*",
         "phpunit/phpunit": "5.7.*",
         "johnkary/phpunit-speedtrap": "1.0.*",
         "mybuilder/phpunit-accelerator": "1.2.*",

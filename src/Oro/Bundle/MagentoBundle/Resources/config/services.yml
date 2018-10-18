@@ -157,7 +157,7 @@ services:
     oro_magento.transport.soap_transport:
         class: '%oro_magento.transport.soap_transport.class%'
         arguments:
-            - "@oro_security.encoder.mcrypt"
+            - "@oro_security.encoder.default"
             - "@oro_magento.wsdl_manager"
             - "@oro_magento.provider.soap.unique_customer_email"
             - []
@@ -231,7 +231,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\RestTokenProvider
         arguments:
             - '@doctrine'
-            - '@oro_security.encoder.mcrypt'
+            - '@oro_security.encoder.default'
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 
@@ -242,7 +242,7 @@ services:
     oro_magento.form.subscriber.transport_setting:
         class: Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber
         arguments:
-            - "@oro_security.encoder.mcrypt"
+            - "@oro_security.encoder.default"
 
     oro_magento.form.type.soap_transport_setting:
         class: Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType

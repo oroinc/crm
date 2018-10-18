@@ -43,7 +43,7 @@ class SoapTransportTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $encoder = $this->createMock('Oro\Bundle\SecurityBundle\Encoder\Mcrypt');
+        $encoder = $this->createMock('Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface');
         $encoder->expects($this->any())
             ->method('decryptData')
             ->with($this->encryptedApiKey)

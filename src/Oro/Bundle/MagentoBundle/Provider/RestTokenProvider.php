@@ -10,12 +10,15 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+/**
+ * This class provides ability to get REST API tokens for magento integration
+ */
 class RestTokenProvider implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
@@ -34,18 +37,18 @@ class RestTokenProvider implements LoggerAwareInterface
     protected $doctrine;
 
     /**
-     * @var Mcrypt
+     * @var SymmetricCrypterInterface
      */
-    protected $mcrypt;
+    protected $crypter;
 
     /**
      * @param RegistryInterface $doctrine
-     * @param Mcrypt            $mcrypt
+     * @param SymmetricCrypterInterface $crypter
      */
-    public function __construct(RegistryInterface $doctrine, Mcrypt $mcrypt)
+    public function __construct(RegistryInterface $doctrine, SymmetricCrypterInterface $crypter)
     {
         $this->doctrine = $doctrine;
-        $this->mcrypt   = $mcrypt;
+        $this->crypter  = $crypter;
     }
 
     /**
@@ -61,7 +64,7 @@ class RestTokenProvider implements LoggerAwareInterface
             return $this->generateNewToken($transportEntity, $client);
         }
 
-        return $this->mcrypt->decryptData($encryptedToken);
+        return $this->crypter->decryptData($encryptedToken);
     }
 
     /**
@@ -150,7 +153,7 @@ class RestTokenProvider implements LoggerAwareInterface
             );
         }
 
-        $password = $this->mcrypt->decryptData($encryptedPassword);
+        $password = $this->crypter->decryptData($encryptedPassword);
 
         return [
             static::USER_API_PARAM     => $username,
@@ -165,7 +168,7 @@ class RestTokenProvider implements LoggerAwareInterface
     protected function updateToken(MagentoRestTransport $transportEntity, $token)
     {
         $transportEntity->setApiToken(
-            $this->mcrypt->encryptData($token)
+            $this->crypter->encryptData($token)
         );
 
         /**
