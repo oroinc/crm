@@ -11,7 +11,7 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 use Psr\Log\NullLogger;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -47,9 +47,9 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
     protected $client;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject |  Mcrypt
+     * @var \PHPUnit\Framework\MockObject\MockObject |  SymmetricCrypterInterface
      */
-    protected $mcrypt;
+    protected $crypter;
 
     /**
      * {@inheritdoc}
@@ -72,9 +72,9 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
             ->with(Transport::class)
             ->willReturn($this->entityManager);
 
-        $this->mcrypt = $this->createMock(Mcrypt::class);
+        $this->crypter = $this->createMock(SymmetricCrypterInterface::class);
 
-        $this->tokenProvider = new RestTokenProvider($doctrine, $this->mcrypt);
+        $this->tokenProvider = new RestTokenProvider($doctrine, $this->crypter);
         $this->tokenProvider->setLogger(new NullLogger());
 
         $this->client = new FakeRestClient();
@@ -165,7 +165,7 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $this->mcrypt
+        $this->crypter
             ->expects($this->atLeastOnce())
             ->method('encryptData')
             ->with(self::TOKEN)
@@ -197,7 +197,7 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
             ->method('setApiToken')
             ->with(self::TOKEN_ENCRYPTED);
 
-        $this->mcrypt
+        $this->crypter
             ->expects($this->atLeastOnce())
             ->method('encryptData')
             ->with(self::TOKEN)
@@ -237,7 +237,7 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getApiToken')
             ->willReturn(self::TOKEN_ENCRYPTED);
 
-        $this->mcrypt
+        $this->crypter
             ->expects($this->atLeastOnce())
             ->method('decryptData')
             ->with(self::TOKEN_ENCRYPTED)

@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport;
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -19,9 +19,9 @@ class RestTransportTest extends WebTestCase
     private $fakeRestClientFactory;
 
     /**
-     * @var Mcrypt
+     * @var SymmetricCrypterInterface
      */
-    protected $mcrypt;
+    protected $crypter;
 
     public function setUp()
     {
@@ -34,7 +34,7 @@ class RestTransportTest extends WebTestCase
             $this->fakeRestClientFactory
         );
 
-        $this->mcrypt = $this->client->getContainer()->get('oro_security.encoder.mcrypt');
+        $this->crypter = $this->client->getContainer()->get('oro_security.encoder.default');
     }
 
     /**
@@ -58,7 +58,7 @@ class RestTransportTest extends WebTestCase
 
         $this->assertEquals(
             'fake_token',
-            $this->mcrypt->decryptData($transportEntity->getApiToken())
+            $this->crypter->decryptData($transportEntity->getApiToken())
         );
     }
 

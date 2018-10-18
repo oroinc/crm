@@ -27,7 +27,7 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider;
 use Oro\Bundle\MagentoBundle\Service\WsdlManager;
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
@@ -94,7 +94,7 @@ class SoapTransport extends BaseSOAPTransport implements
     /** @var string */
     protected $sessionId;
 
-    /** @var Mcrypt */
+    /** @var SymmetricCrypterInterface */
     protected $encoder;
 
     /** @var bool */
@@ -140,13 +140,13 @@ class SoapTransport extends BaseSOAPTransport implements
     private $clientAdditionalParams = [];
 
     /**
-     * @param Mcrypt                          $encoder
+     * @param SymmetricCrypterInterface       $encoder
      * @param WsdlManager                     $wsdlManager
      * @param UniqueCustomerEmailSoapProvider $uniqueCustomerEmailProvider
      * @param array                           $bundleConfig
      */
     public function __construct(
-        Mcrypt $encoder,
+        SymmetricCrypterInterface $encoder,
         WsdlManager $wsdlManager,
         UniqueCustomerEmailSoapProvider $uniqueCustomerEmailProvider,
         array $bundleConfig = []
