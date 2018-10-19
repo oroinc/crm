@@ -101,6 +101,10 @@ oro_behat_extension:
         mapping:
           Close reason: 'oro_workflow_transition[close_reason_name]'
 
+    All Quotes Grid:
+      selector: 'div[data-page-component-name="quotes-grid"]'
+      class: Oro\Bundle\SalesBundle\Tests\Behat\Element\QuotesGrid
+
     Quotes Grid:
       selector: '[id^="grid-opportunity-quotes-grid"]'
       class: Oro\Bundle\SalesBundle\Tests\Behat\Element\QuotesGrid
