@@ -104,7 +104,7 @@ workflows:
                 step_to: lost
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'fa-close-circle'
+                    icon: 'fa-times'
                     class: 'btn-danger'
                 transition_definition: close_lost_definition
                 form_options:

@@ -68,7 +68,6 @@
 
     {% set dataBlocks = [{
         'title': 'oro.contactus.block.general'|trans,
-        'class': 'active',
         'subblocks': [
             {
                 'title': 'oro.contactus.block.request_information'|trans,
@@ -89,8 +88,8 @@
     {% endfor %}
     {% if additionalData is not empty %}
         {% set dataBlocks = dataBlocks|merge([{
-        'title':     'oro.contactus.block.additional'|trans,
-        'subblocks': [{ 'title': '', 'useSpan': false, 'data' : additionalData }]
+            'title': 'oro.contactus.block.additional'|trans,
+            'subblocks': [{ 'title': '', 'useSpan': false, 'data' : additionalData }]
         }] ) %}
     {% endif %}
 

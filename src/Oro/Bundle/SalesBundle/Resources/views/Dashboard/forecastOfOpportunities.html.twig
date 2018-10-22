@@ -1,13 +1,12 @@
 {% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
 
-{% set widgetType = 'quick-launchpad' %}
+{% set widgetType = 'big-numbers' %}
 
 {% block content %}
     {% if items|length %}
-        <ul class="quick-launchpad-toolbar with-subwidgets">
-            {% set itemWidth = (100 / 3)|round(2)%}
+        <ul class="big-numbers-items has-{{ items|length }}-items">
             {% for itemName, item in items %}
-                <li class="sub-widget" style="width: {{ itemWidth }}%">
+                <li>
                     {% include widgetDataItems[itemName].template with {item: item}%}
                 </li>
             {% endfor %}

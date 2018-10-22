@@ -24,7 +24,7 @@ Feature: Country and region translations for customers leads grid
   Scenario: Check Business customers UI
     Given go to Customers/  Business Customers
     And click view "BusinessCustomer1" in grid
-    When I click "Leads Tab"
+    When I click "Leads" in scrollspy
     Then should see following "Business Customer Leads Grid" grid:
       | Lead Name  | First name     | Last name      | Country           | State       | Postal Code |
       | B2b Lead 2 | B2b ContactFN2 | B2b ContactLN2 | United StatesZulu | FloridaZulu | 10004       |
@@ -47,7 +47,7 @@ Feature: Country and region translations for customers leads grid
     And save and close form
     And go to Customers/  Business Customers
     And click view "BusinessCustomer1" in grid
-    And I click "Leads Tab"
+    And I click "Leads" in scrollspy
     Then should see following "Business Customer Leads Grid" grid:
       | Lead Name  | First name     | Last name      | Country           | State       | Postal Code |
       | B2b Lead 2 | B2b ContactFN2 | B2b ContactLN2 | United StatesZulu | FloridaZulu | 10004       |

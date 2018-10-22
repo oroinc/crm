@@ -69,7 +69,7 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
         $response = $this->client->getResponse();
         $this->assertEquals($response->getStatusCode(), 200, "Failed in gettting widget view !");
 
-        $subWidgetValue = $crawler->filter('.sub-widget .value')->text();
+        $subWidgetValue = $crawler->filter('.big-numbers-items > li .value')->text();
 
         $this->assertEquals(
             $inProgressCount,
