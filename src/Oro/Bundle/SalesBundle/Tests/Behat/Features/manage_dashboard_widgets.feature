@@ -24,7 +24,7 @@ Feature: Manage dashboard widgets
     Then I should see "Leads List" widget on dashboard
 
   Scenario: Check configuration of Leads List widget
-    Given I press "Leads List Actions"
+    Given I click "Leads List Actions"
     And I click "Configure" in "Leads List" widget
     And I fill form with:
       | Excluded statuses | New        |
@@ -35,7 +35,7 @@ Feature: Manage dashboard widgets
       | Lead name     | Status       | Last contact datetime |
       | Alan          | Qualified    |                       |
       | John          | Disqualified |                       |
-    When I press "Leads List Actions"
+    When I click "Leads List Actions"
     And I click "Configure" in "Leads List" widget
     And I fill form with:
       | Excluded statuses | [New, Disqualified] |
@@ -54,13 +54,13 @@ Feature: Manage dashboard widgets
     Then I should see "Lead Statistics" widget on dashboard
 
   Scenario: Check configuration of Lead Statistics widget
-    Given I press "Leads Statistics Actions"
+    Given I click "Leads Statistics Actions"
     And I click "Configure" in "Lead Statistics" widget
     When I click "Save"
     And I should see "Widget has been successfully configured" flash message
     Then I should see "Open Leads"
     And I should see "New Leads"
-    When I press "Leads Statistics Actions"
+    When I click "Leads Statistics Actions"
     And I click "Configure" in "Lead Statistics" widget
     And I click "Delete column"
     And I click "Save"
@@ -76,7 +76,7 @@ Feature: Manage dashboard widgets
     Then I should see "Opportunity Statistics" widget on dashboard
 
   Scenario: Check configuration of Opportunity Statistics widget
-    Given I press "Opportunity Statistics Actions"
+    Given I click "Opportunity Statistics Actions"
     And I click "Configure" in "Opportunity Statistics" widget
     When I click "Save"
     And I should see "Widget has been successfully configured" flash message
@@ -84,7 +84,7 @@ Feature: Manage dashboard widgets
     And I should see "New Opportunities Amount"
     And I should see "Won Opportunities To Date Count"
     And I should see "Won Opportunities To Date Amount"
-    When I press "Opportunity Statistics Actions"
+    When I click "Opportunity Statistics Actions"
     And I click "Configure" in "Opportunity Statistics" widget
     And I click "Delete column"
     And I click "Save"
@@ -102,7 +102,7 @@ Feature: Manage dashboard widgets
     Then I should see "Opportunities List" widget on dashboard
 
   Scenario: Check configuration of Opportunities List widget
-    Given I press "Opportunities List Actions"
+    Given I click "Opportunities List Actions"
     And I click "Configure" in "Opportunities List" widget
     And I fill form with:
       | Excluded statuses | Needs Analysis   |
@@ -113,7 +113,7 @@ Feature: Manage dashboard widgets
       | Opportunity name | Budget amount | Budget amount ($) | Status     |
       | Opportunity 1    | $50.00        | $50.00            | Open       |
       | Opportunity 3    | $150.00       | $150.00           | Closed Won |
-    When I press "Opportunities List Actions"
+    When I click "Opportunities List Actions"
     And I click "Configure" in "Opportunities List" widget
     And I fill form with:
       | Excluded statuses | [Needs Analysis, Open] |
