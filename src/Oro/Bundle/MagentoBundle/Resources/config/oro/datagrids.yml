@@ -1435,6 +1435,8 @@ datagrids:
                         - { join: newsletterSubscriber.store, alias: store }
                         - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
                         - { join: store.website, alias: website }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             channelName:
                 label: oro.magento.newslettersubscriber.data_channel.label
