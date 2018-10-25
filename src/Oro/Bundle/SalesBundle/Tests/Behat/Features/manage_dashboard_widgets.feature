@@ -1,4 +1,5 @@
 @fixture-OroSalesBundle:leads_data.yml
+@fixture-OroSalesBundle:opportunities_data.yml
 Feature: Manage dashboard widgets
   In order to manage widgets on dashboard
   as an Administrator
@@ -44,8 +45,7 @@ Feature: Manage dashboard widgets
       | Alan          | Qualified    |                       |
 
   Scenario: Add Lead Statistics widget
-    Given I go to Dashboards/ Dashboard
-    And I click "Add widget"
+    Given I click "Add widget"
     And I type "Lead Statistics" in "Enter keyword"
     When I click "Add Widget Button"
     And I click "Close" in modal window
@@ -87,3 +87,31 @@ Feature: Manage dashboard widgets
     And I should see "New Opportunities Amount"
     And I should see "Won Opportunities To Date Count"
     And I should see "Won Opportunities To Date Amount"
+
+  Scenario: Add Opportunities List widget
+    Given I click "Add widget"
+    And I type "Opportunities list" in "Enter keyword"
+    When I click "Add Widget Button"
+    And I click "Close" in modal window
+    Then I should see "Opportunities List" widget on dashboard
+
+  Scenario: Check configuration of Opportunities List widget
+    Given I click "Configure" in "Opportunities List" widget
+    And I fill form with:
+      | Excluded statuses | Needs Analysis   |
+      | Sort By           | Opportunity name |
+    When I click "Save"
+    And I should see "Widget has been successfully configured" flash message
+    Then I should see following grid:
+      | Opportunity name | Budget amount | Budget amount ($) | Status     |
+      | Opportunity 1    | $50.00        | $50.00            | Open       |
+      | Opportunity 3    | $150.00       | $150.00           | Closed Won |
+    When I click "Configure" in "Opportunities List" widget
+    And I fill form with:
+      | Excluded statuses | [Needs Analysis, Open] |
+      | Sort By           | Opportunity name       |
+    And I click "Save"
+    And I should see "Widget has been successfully configured" flash message
+    Then I should see following grid:
+      | Opportunity name | Budget amount | Budget amount ($) | Status     |
+      | Opportunity 3    | $150.00       | $150.00           | Closed Won |
