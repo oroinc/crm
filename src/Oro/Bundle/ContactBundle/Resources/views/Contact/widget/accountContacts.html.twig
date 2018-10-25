@@ -8,7 +8,9 @@
                 {{ _self.render_contact_box(entity, contact, false) }}
             {% endfor %}
         {% else %}
-            <p>{{ "oro.contact.account.no_contacts_exist"|trans }}</p>
+            <div class="no-data">
+                <span>{{ "oro.contact.account.no_contacts_exist"|trans }}</span>
+            </div>
         {% endif %}
     </div>
 </div>
