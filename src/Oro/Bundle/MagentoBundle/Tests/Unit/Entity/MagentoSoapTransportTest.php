@@ -34,7 +34,7 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
         $adminUrl = 'http://localhost/admin';
 
         return [
-            'wsdl_url'               => ['wsdlUrl',              $wsdlUrl, $wsdlUrl],
+            'wsdl_url'               => ['ApiUrl',               $wsdlUrl, $wsdlUrl],
             'api_user'               => ['apiUser',              $apiUser, $apiUser],
             'api_key'                => ['apiKey',               $apiKey, $apiKey],
             'website_id'             => ['websiteId',            $websiteId, $websiteId],
@@ -70,7 +70,7 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
         $this->entity
             ->setApiUser($data['api_user'])
             ->setApiKey($data['api_key'])
-            ->setWsdlUrl($data['wsdl_url'])
+            ->setApiUrl($data['wsdl_url'])
             ->setSyncRange($data['sync_range'])
             ->setIsWsiMode($data['wsi_mode'])
             ->setGuestCustomerSync($data['guest_customer_sync'])
@@ -121,7 +121,7 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
     {
         $url = 'http://test.local/?wsdl=1';
         $cache = '/tmp/cached.wsdl';
-        $this->entity->setWsdlUrl($url);
+        $this->entity->setApiUrl($url);
 
         $this->assertEquals($url, $this->entity->getSettingsBag()->get('wsdl_url'));
 
