@@ -167,7 +167,7 @@ class SoapTransport extends BaseSOAPTransport implements
          * This should be done before parent::init as settings will be cached there.
          */
         if ($transportEntity instanceof MagentoSoapTransport) {
-            $wsdlUrl = $transportEntity->getWsdlUrl();
+            $wsdlUrl = $transportEntity->getApiUrl();
 
             // Save auth information to be able to perform requests.
             $urlParts = parse_url($wsdlUrl);
