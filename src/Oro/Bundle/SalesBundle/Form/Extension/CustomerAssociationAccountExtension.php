@@ -90,23 +90,37 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
         $builder->addEventListener(
             FormEvents::SUBMIT,
             function (FormEvent $event) {
-                $target  = $event->getData();
-                $account = $event->getForm()->get('customer_association_account')->getData();
-                if (!$this->doctrineHelper->isNewEntity($target)) {
-                    if (!$account) {
-                        return;
-                    }
-                    $customer = $this->manager->getAccountCustomerByTarget($target);
-                    $customer->setTarget($account, $target);
-                } else {
-                    if (!$account) {
-                        $account = $this->manager->createAccountForTarget($target);
-                    }
-                    $customer = AccountCustomerManager::createCustomer($account, $target);
-                    $this->doctrineHelper->getEntityManager($customer)->persist($customer);
-                }
+                $this->setAccountForCustomer($event);
             }
         );
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    private function setAccountForCustomer(FormEvent $event)
+    {
+        $target  = $event->getData();
+        $account = $event->getForm()->get('customer_association_account')->getData();
+        if (!$this->doctrineHelper->isNewEntity($target)) {
+            if (!$account) {
+                return;
+            }
+            $customer = $this->manager->getAccountCustomerByTarget($target, false);
+
+            if ($customer) {
+                $customer->setTarget($account, $target);
+            } else {
+                $customer = AccountCustomerManager::createCustomer($account, $target);
+                $this->doctrineHelper->getEntityManager($customer)->persist($customer);
+            }
+        } else {
+            if (!$account) {
+                $account = $this->manager->createAccountForTarget($target);
+            }
+            $customer = AccountCustomerManager::createCustomer($account, $target);
+            $this->doctrineHelper->getEntityManager($customer)->persist($customer);
+        }
     }
 
     /**
