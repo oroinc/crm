@@ -78,18 +78,18 @@
 .collection-remove-disabled + .removeRow {
     display: none;
 }
-.customer-info ul.inline li.magento-customer-info {
+.page-title ul.inline li.magento-customer-info {
     border-left: 0 none;
     vertical-align: middle;
     padding-left: 0;
     margin-top: 4px;
     margin-bottom: 4px;
 }
-.customer-info ul.inline li.magento-customer-info .orocrm-channel-lifetime-value-label {
+.page-title ul.inline li.magento-customer-info .orocrm-channel-lifetime-value-label {
     margin-left: 0;
     margin-right: 10px;
 }
-.customer-info ul.inline li.magento-customer-info > div {
+.page-title ul.inline li.magento-customer-info > div {
     float: none;
 }
 .place-order-transaction-dialog #orderPlaceFrame.loaded {
