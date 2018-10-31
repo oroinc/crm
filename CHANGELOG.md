@@ -1,3 +1,7 @@
+## 3.1.0-rc
+* Package `oro/crm-mail-chimp` removed from composer.json, run `composer require 'oro/mailchimp:3.1.*'` before upgrade to keep functionality working
+* Package `oro/crm-abandoned-cart` removed from composer.json, run `composer require 'oro/magento-abandoned-cart:3.1.*'` before upgrade to keep functionality working
+
 ## 3.1.0-beta (2018-09-27)
 [Show detailed list of changes](incompatibilities-3-1-beta.md)
 
