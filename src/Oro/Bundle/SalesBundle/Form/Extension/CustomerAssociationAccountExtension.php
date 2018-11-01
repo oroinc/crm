@@ -12,6 +12,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Adds associated account field for customers form.
+ */
 class CustomerAssociationAccountExtension extends AbstractTypeExtension
 {
     /** @var ConfigProvider */
@@ -74,30 +77,47 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
                 if (!$target || $this->doctrineHelper->isNewEntity($target)) {
                     return;
                 }
-                $customer = $this->manager->getAccountCustomerByTarget($target);
-                $event->getForm()->get('customer_association_account')->setData($customer->getAccount());
+
+                $customer = $this->manager->getAccountCustomerByTarget($target, false);
+                if ($customer) {
+                    $event->getForm()->get('customer_association_account')->setData($customer->getAccount());
+                }
             }
         );
         $builder->addEventListener(
             FormEvents::SUBMIT,
             function (FormEvent $event) {
-                $target  = $event->getData();
-                $account = $event->getForm()->get('customer_association_account')->getData();
-                if (!$this->doctrineHelper->isNewEntity($target)) {
-                    if (!$account) {
-                        return;
-                    }
-                    $customer = $this->manager->getAccountCustomerByTarget($target);
-                    $customer->setTarget($account, $target);
-                } else {
-                    if (!$account) {
-                        $account = $this->manager->createAccountForTarget($target);
-                    }
-                    $customer = AccountCustomerManager::createCustomer($account, $target);
-                    $this->doctrineHelper->getEntityManager($customer)->persist($customer);
-                }
+                $this->setAccountForCustomer($event);
             }
         );
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    private function setAccountForCustomer(FormEvent $event)
+    {
+        $target  = $event->getData();
+        $account = $event->getForm()->get('customer_association_account')->getData();
+        if ($this->doctrineHelper->isNewEntity($target)) {
+            $account = $account ?? $this->manager->createAccountForTarget($target);
+            $customer = AccountCustomerManager::createCustomer($account, $target);
+            $this->doctrineHelper->getEntityManager($customer)->persist($customer);
+
+            return;
+        }
+
+        if (!$account) {
+            return;
+        }
+
+        $customer = $this->manager->getAccountCustomerByTarget($target, false);
+        if ($customer) {
+            $customer->setTarget($account, $target);
+        } else {
+            $customer = AccountCustomerManager::createCustomer($account, $target);
+            $this->doctrineHelper->getEntityManager($customer)->persist($customer);
+        }
     }
 
     /**
