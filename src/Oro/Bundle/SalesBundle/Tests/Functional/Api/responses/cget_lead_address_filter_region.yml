@@ -1,0 +1,33 @@
+data:
+    -
+        type: leadaddresses
+        id: '<toString(@lead_address3->id)>'
+        attributes:
+            primary: false
+            label: 'Address 3'
+            street: null
+            street2: null
+            city: 'Tel Aviv'
+            postalCode: null
+            organization: null
+            namePrefix: null
+            firstName: John
+            middleName: null
+            lastName: Smith
+            nameSuffix: null
+            createdAt: '@lead_address3->created->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@lead_address3->updated->format("Y-m-d\TH:i:s\Z")'
+            customRegion: null
+        relationships:
+            owner:
+                data:
+                    type: leads
+                    id: '<toString(@lead1->id)>'
+            country:
+                data:
+                    type: countries
+                    id: '<toString(@country_israel->iso2Code)>'
+            region:
+                data:
+                    type: regions
+                    id: '<toString(@region_israel_telaviv->combinedCode)>'
