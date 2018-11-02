@@ -1,0 +1,161 @@
+data:
+    -
+        type: leadaddresses
+        id: '<toString(@lead_address1->id)>'
+        attributes:
+            primary: true
+            label: 'Address 1'
+            street: 'Street 1'
+            street2: 'Street 2'
+            city: 'Los Angeles'
+            postalCode: '90001'
+            organization: Acme
+            namePrefix: Mr.
+            firstName: John
+            middleName: Edgar
+            lastName: Doo
+            nameSuffix: M.D.
+            createdAt: '@lead_address1->created->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@lead_address1->updated->format("Y-m-d\TH:i:s\Z")'
+            customRegion: null
+        relationships:
+            owner:
+                data:
+                    type: leads
+                    id: '<toString(@lead1->id)>'
+            country:
+                data:
+                    type: countries
+                    id: '<toString(@country_usa->iso2Code)>'
+            region:
+                data:
+                    type: regions
+                    id: '<toString(@region_usa_california->combinedCode)>'
+    -
+        type: leadaddresses
+        id: '<toString(@lead_address2->id)>'
+        attributes:
+            primary: false
+            label: 'Address 2'
+            street: 'Street 2'
+            street2: null
+            city: 'Los Angeles'
+            postalCode: '90002'
+            organization: null
+            namePrefix: null
+            firstName: John
+            middleName: null
+            lastName: Smith
+            nameSuffix: null
+            createdAt: '@lead_address2->created->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@lead_address2->updated->format("Y-m-d\TH:i:s\Z")'
+            customRegion: null
+        relationships:
+            owner:
+                data:
+                    type: leads
+                    id: '<toString(@lead1->id)>'
+            country:
+                data:
+                    type: countries
+                    id: '<toString(@country_usa->iso2Code)>'
+            region:
+                data:
+                    type: regions
+                    id: '<toString(@region_usa_california->combinedCode)>'
+    -
+        type: leadaddresses
+        id: '<toString(@lead_address3->id)>'
+        attributes:
+            primary: false
+            label: 'Address 3'
+            street: null
+            street2: null
+            city: 'Tel Aviv'
+            postalCode: null
+            organization: null
+            namePrefix: null
+            firstName: John
+            middleName: null
+            lastName: Smith
+            nameSuffix: null
+            createdAt: '@lead_address3->created->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@lead_address3->updated->format("Y-m-d\TH:i:s\Z")'
+            customRegion: null
+        relationships:
+            owner:
+                data:
+                    type: leads
+                    id: '<toString(@lead1->id)>'
+            country:
+                data:
+                    type: countries
+                    id: '<toString(@country_israel->iso2Code)>'
+            region:
+                data:
+                    type: regions
+                    id: '<toString(@region_israel_telaviv->combinedCode)>'
+    -
+        type: leadaddresses
+        id: '<toString(@another_lead_address1->id)>'
+        attributes:
+            primary: true
+            label: 'Another Lead Address 1'
+            street: 'Street 1'
+            street2: null
+            city: 'Los Angeles'
+            postalCode: '90001'
+            organization: null
+            namePrefix: null
+            firstName: null
+            middleName: null
+            lastName: null
+            nameSuffix: null
+            createdAt: '@another_lead_address1->created->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@another_lead_address1->updated->format("Y-m-d\TH:i:s\Z")'
+            customRegion: null
+        relationships:
+            owner:
+                data:
+                    type: leads
+                    id: '<toString(@another_lead->id)>'
+            country:
+                data:
+                    type: countries
+                    id: '<toString(@country_usa->iso2Code)>'
+            region:
+                data:
+                    type: regions
+                    id: '<toString(@region_usa_california->combinedCode)>'
+    -
+        type: leadaddresses
+        id: '<toString(@another_lead_address2->id)>'
+        attributes:
+            primary: false
+            label: 'Another Lead Address 2'
+            street: 'Street 2'
+            street2: null
+            city: 'Los Angeles'
+            postalCode: '90001'
+            organization: null
+            namePrefix: null
+            firstName: null
+            middleName: null
+            lastName: null
+            nameSuffix: null
+            createdAt: '@another_lead_address2->created->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@another_lead_address2->updated->format("Y-m-d\TH:i:s\Z")'
+            customRegion: null
+        relationships:
+            owner:
+                data:
+                    type: leads
+                    id: '<toString(@another_lead->id)>'
+            country:
+                data:
+                    type: countries
+                    id: '<toString(@country_usa->iso2Code)>'
+            region:
+                data:
+                    type: regions
+                    id: '<toString(@region_usa_california->combinedCode)>'

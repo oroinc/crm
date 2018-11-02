@@ -44,7 +44,16 @@ Oro\Bundle\SalesBundle\Entity\Lead:
 
 Oro\Bundle\SalesBundle\Entity\LeadAddress:
     constraints:
-        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequireRegion'] }
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: ~
+        - Oro\Bundle\AddressBundle\Validator\Constraints\RegionText: ~
+    properties:
+        country:
+            - NotBlank: ~
+        owner:
+            - NotBlank: ~
+            - Oro\Bundle\FormBundle\Validator\Constraints\UnchangeableField:
+                message: oro.address.validation.owner_changed
+                groups: ['api']
 
 Oro\Bundle\SalesBundle\Entity\SalesFunnel:
     properties:

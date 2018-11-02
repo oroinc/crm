@@ -120,6 +120,12 @@ api:
                         property_path: phones.phone
                     emails:
                         property_path: emails.email
+            subresources:
+                addresses:
+                    actions:
+                        update_relationship: false
+                        add_relationship: false
+                        delete_relationship: false
 
         Extend\Entity\EV_Lead_Status:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/lead.md'
@@ -164,3 +170,20 @@ api:
 
         Oro\Bundle\SalesBundle\Entity\LeadAddress:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/lead_address.md'
+            fields:
+                createdAt:
+                    property_path: created
+                updatedAt:
+                    property_path: updated
+                customRegion:
+                    exclude: false # set manually because this field is marked as excluded in entity.yml
+                    property_path: regionText
+            actions:
+                update:
+                    fields:
+                        owner:
+                            exclude: true
+            subresources:
+                owner:
+                    actions:
+                        update_relationship: false

@@ -556,3 +556,30 @@ Example:
 }
 ```
 {@/request}
+
+
+# Extend\Entity\EV_Creditmemo_Status
+
+## ACTIONS
+
+### get
+
+Retrieve a specific Magento credit memo status record.
+
+### get_list
+
+Retrieve a collection of Magento credit memo status records.
+
+## FIELDS
+
+### name
+
+The name of the credit memo status (`Pending`, `Refunded` or `Canceled`, corresponding to ids 1,2 and 3 in Magento).
+
+### default
+
+Determines whether a particular status is set as default for new credit memo record.
+
+### priority
+
+The order in which credit memo statuses are ranked. First appears the status with the higher priority.

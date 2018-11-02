@@ -1,0 +1,37 @@
+data:
+    type: contactaddresses
+    id: '<toString(@contact_address2->id)>'
+    attributes:
+        primary: false
+        label: 'Address 2'
+        street: 'Street 2'
+        street2: null
+        city: 'Los Angeles'
+        postalCode: '90002'
+        organization: null
+        namePrefix: null
+        firstName: John
+        middleName: null
+        lastName: Smith
+        nameSuffix: null
+        createdAt: '@contact_address2->created->format("Y-m-d\TH:i:s\Z")'
+        updatedAt: '@contact_address2->updated->format("Y-m-d\TH:i:s\Z")'
+        customRegion: null
+    relationships:
+        owner:
+            data:
+                type: contacts
+                id: '<toString(@contact1->id)>'
+        types:
+                data:
+                    -
+                        type: addresstypes
+                        id: '<toString(@shipping->name)>'
+        country:
+            data:
+                type: countries
+                id: '<toString(@country_usa->iso2Code)>'
+        region:
+            data:
+                type: regions
+                id: '<toString(@region_usa_california->combinedCode)>'
