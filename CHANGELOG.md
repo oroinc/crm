@@ -1,3 +1,28 @@
+## 3.1.0-rc
+
+* Package `oro/crm-mail-chimp` removed from composer.json, run `composer require 'oro/mailchimp:3.1.*'` before upgrade to keep functionality working
+* Package `oro/crm-abandoned-cart` removed from composer.json, run `composer require 'oro/magento-abandoned-cart:3.1.*'` before upgrade to keep functionality working
+
+### Changed
+#### ContactBundle
+* Changes in `/api/contactaddresses` REST API resource:
+    - the attribute `created` was renamed to `createdAt`
+    - the attribute `updated` was renamed to `updatedAt`
+#### MagentoBundle
+* Changes in `/api/magentoaddresses` REST API resource:
+    - the attribute `created` was renamed to `createdAt`
+    - the attribute `updated` was renamed to `updatedAt`
+* Changes in `/api/magentocartaddresses` REST API resource:
+    - the attribute `created` was renamed to `createdAt`
+    - the attribute `updated` was renamed to `updatedAt`
+#### SalesBundle
+* Changes in `/api/leadaddresses` REST API resource:
+    - the attribute `created` was renamed to `createdAt`
+    - the attribute `updated` was renamed to `updatedAt`
+
+## 3.1.0-beta (2018-09-27)
+[Show detailed list of changes](incompatibilities-3-1-beta.md)
+
 ## 3.0.0 (2018-07-27)
 [Show detailed list of changes](incompatibilities-3-0.md)
 

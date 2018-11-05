@@ -183,7 +183,9 @@ oro:
             region:
                 label:           State
                 description:     The region specified in the contact address.
-            region_text.label:   State
+            region_text:
+                label:           State
+                description:     The region name for cases when a country does not have predefined regions.
             street:
                 label:           Street
                 description:     The first line of the street address. Usually contains the street name and the building number.

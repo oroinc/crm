@@ -23,3 +23,19 @@ services:
         arguments: ['@property_accessor', 'Unknown primary email address.', primaryEmail, emails, email]
         tags:
             - { name: oro.api.processor, action: customize_form_data, class: Oro\Bundle\ContactBundle\Entity\Contact }
+
+    oro_contact.api.contact_address.fix_primary_addresses:
+        class: Oro\Bundle\AddressBundle\Api\Processor\FixPrimaryAddresses
+        arguments:
+            - 'owner.addresses'
+            - '@oro_api.form_property_accessor'
+        tags:
+            - { name: oro.api.processor, action: customize_form_data, event: pre_validate, class: Oro\Bundle\ContactBundle\Entity\ContactAddress }
+
+    oro_contact.api.contact_address.fix_types_of_addresses:
+        class: Oro\Bundle\AddressBundle\Api\Processor\FixTypesOfAddresses
+        arguments:
+            - 'owner.addresses'
+            - '@oro_api.form_property_accessor'
+        tags:
+            - { name: oro.api.processor, action: customize_form_data, event: pre_validate, class: Oro\Bundle\ContactBundle\Entity\ContactAddress }

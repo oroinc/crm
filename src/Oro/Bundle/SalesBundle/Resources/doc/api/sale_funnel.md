@@ -160,7 +160,7 @@ Delete a collection of sales processes records.
 
 ### campaign
 
-The marketing campaign as a result of which the SalesFunnel was created.
+The marketing campaign as a result of which the sales funnel was created.
 
 ## SUBRESOURCES
 

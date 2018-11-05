@@ -1,0 +1,27 @@
+data:
+    type: contactaddresses
+    attributes:
+        label: 'New Address'
+        street: 'Street 1'
+        street2: 'Street 2'
+        city: 'Los Angeles'
+        postalCode: '90001'
+        organization: Acme
+        namePrefix: Mr.
+        firstName: John
+        middleName: Edgar
+        lastName: Doo
+        nameSuffix: M.D.
+    relationships:
+        owner:
+            data:
+                type: contacts
+                id: '<toString(@contact1->id)>'
+        country:
+            data:
+                type: countries
+                id: '<toString(@country_usa->iso2Code)>'
+        region:
+            data:
+                type: regions
+                id: '<toString(@region_usa_california->combinedCode)>'

@@ -1,0 +1,19 @@
+services:
+
+    oro_magento.api.addresses.fix_primary_addresses:
+        class: Oro\Bundle\AddressBundle\Api\Processor\FixPrimaryAddresses
+        arguments:
+            - 'owner.addresses'
+            - '@oro_api.form_property_accessor'
+        tags:
+            - { name: oro.api.processor, action: customize_form_data, event: pre_validate, class: Oro\Bundle\MagentoBundle\Entity\Address }
+            - { name: oro.api.processor, action: customize_form_data, event: pre_validate, class: Oro\Bundle\MagentoBundle\Entity\OrderAddress }
+
+    oro_magento.api.addresses.fix_types_of_addresses:
+        class: Oro\Bundle\AddressBundle\Api\Processor\FixTypesOfAddresses
+        arguments:
+            - 'owner.addresses'
+            - '@oro_api.form_property_accessor'
+        tags:
+            - { name: oro.api.processor, action: customize_form_data, event: pre_validate, class: Oro\Bundle\MagentoBundle\Entity\Address }
+            - { name: oro.api.processor, action: customize_form_data, event: pre_validate, class: Oro\Bundle\MagentoBundle\Entity\OrderAddress }
