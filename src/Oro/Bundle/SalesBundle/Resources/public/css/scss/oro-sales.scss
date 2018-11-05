@@ -1,5 +1,5 @@
 /* @theme: admin.oro; */
-
+@import "oroui/css/scss/mixins";
 /**
 * Fix form style in system configuration
 */
@@ -9,13 +9,7 @@ form[name="opportunity"] {
         .control-group-oro_sales_opportunity_probability,
         .control-group-oro_sales_opportunity_status_config {
             > .controls {
-                margin-left: 0;
-
-                .control-label.wrap {
-                    text-align: right;
-                    width: 240px;
-                    padding-right: 10px;
-                }
+                margin-#{$start}: 0;
             }
         }
 
@@ -23,7 +17,7 @@ form[name="opportunity"] {
             display: block;
 
             .control-group-collection > .controls {
-                margin-left: 240px;
+                margin-#{$start}: 206px;
             }
         }
 
@@ -37,7 +31,7 @@ form[name="opportunity"] {
             }
 
             > .controls {
-                margin-left: 0;
+                margin-#{$start}: 0;
             }
         }
     }
@@ -47,7 +41,7 @@ form[name="opportunity"] {
     input[type="text"].add-on-input {
         display: inline-block;
         text-shadow: 0 1px 0 #fff;
-        margin-left: -2px;
+        margin-#{$start}: -2px;
         border-radius: 0;
         width: 40px;
     }

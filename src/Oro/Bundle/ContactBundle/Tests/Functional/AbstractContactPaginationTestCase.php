@@ -114,7 +114,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
     {
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains($name, $crawler->filter('h1.user-name')->html());
+        $this->assertContains($name, $crawler->filter('h1.page-title__entity-title')->html());
     }
 
     /**
