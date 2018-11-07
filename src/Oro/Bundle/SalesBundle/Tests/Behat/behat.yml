@@ -239,6 +239,11 @@ oro_behat_extension:
         type: 'xpath'
         locator: '//div[@title="Opportunity statistics"]/../..'
 
+    Opportunities List:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Opportunities List"]/../..'
+
   pages:
     Opportunity Index:
       route: 'oro_sales_opportunity_index'
