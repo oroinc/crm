@@ -79,7 +79,7 @@ Oro\Bundle\ChannelBundle\Entity\EntityName:
         __construct: ['Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber']
         channel: '@magento_channel'
     channel-entity-opportunity:
-        __construct: ['Oro\Bundle\AbandonedCartBundle\Entity\AbandonedCartCampaign']
+        __construct: ['Oro\Bundle\MagentoBundle\Entity\OrderNote']
         channel: '@magento_channel'
 
 Oro\Bundle\MagentoBundle\Entity\CartAddress:

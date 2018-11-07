@@ -27,10 +27,9 @@ Example:
 
 ```JSON
 {  
-   "data":{  
-      "type":"magentocartaddresses"
-   },
-   "attributes":{  
+  "data":{
+    "type":"magentocartaddresses"
+    "attributes":{
       "street":"Lake",
       "city":"Gurdiff",
       "postalCode":"05246",
@@ -42,21 +41,22 @@ Example:
       "primary":true,
       "organization":"Sales Corp",
       "originId":"1245"
-   },
-   "relationships":{  
+    },
+    "relationships":{
       "country":{  
-         "data":{  
-            "type":"countries",
-            "id":"US"
-         }
+        "data":{
+          "type":"countries",
+          "id":"US"
+        }
       },
       "region":{  
-         "data":{  
-            "type":"regions",
-            "id":"US-MI"
-         }
+        "data":{
+          "type":"regions",
+          "id":"US-MI"
+        }
       }
-   }
+    }
+  }
 }
 ```
 {@/request}
@@ -72,36 +72,36 @@ Example:
 
 ```JSON
 {  
-   "data":{  
-      "type":"magentocartaddresses",
-      "id":"4",
-      "attributes":{  
-         "street":"Lake",
-         "city":"Gurdiff",
-         "postalCode":"05246",
-         "namePrefix":"Dr.",
-         "firstName":"Yougin",
-         "middleName":"Albert",
-         "lastName":"Martin",
-         "phone":"+14569453",
-         "organization":"Sales Corp",
-         "originId":"1245"
+  "data":{
+    "type":"magentocartaddresses",
+    "id":"4",
+    "attributes":{
+      "street":"Lake",
+      "city":"Gurdiff",
+      "postalCode":"05246",
+      "namePrefix":"Dr.",
+      "firstName":"Yougin",
+      "middleName":"Albert",
+      "lastName":"Martin",
+      "phone":"+14569453",
+      "organization":"Sales Corp",
+      "originId":"1245"
+    },
+    "relationships":{
+      "country":{
+        "data":{
+          "type":"countries",
+          "id":"US"
+        }
       },
-      "relationships":{  
-         "country":{  
-            "data":{  
-               "type":"countries",
-               "id":"US"
-            }
-         },
-         "region":{  
-            "data":{  
-               "type":"regions",
-               "id":"US-MI"
-            }
-         }
+      "region":{
+        "data":{
+          "type":"regions",
+          "id":"US-MI"
+        }
       }
-   }
+    }
+  }
 }
 ```
 {@/request}

@@ -11,7 +11,7 @@ oro_behat_extension:
         Contact Reason Form Label Fallbacks:
           selector:
             type: xpath
-            locator: '//label[text()="Label"]/../..//span[@class="fallback-status"]'
+            locator: '//label[text()="Label"]/../..//span[contains(@class, "fallback-status")]'
         Contact Email:
             class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Checkbox
             selector:

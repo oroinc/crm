@@ -2,14 +2,35 @@ api:
     entities:
         Oro\Bundle\MagentoBundle\Entity\Address:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/address.md'
+            fields:
+                createdAt:
+                    property_path: created
+                updatedAt:
+                    property_path: updated
+                customRegion:
+                    exclude: false # set manually because this field is marked as excluded in entity.yml
+                    property_path: regionText
+
         Oro\Bundle\MagentoBundle\Entity\Cart:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart.md'
+
         Oro\Bundle\MagentoBundle\Entity\CartAddress:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart_address.md'
+            fields:
+                createdAt:
+                    property_path: created
+                updatedAt:
+                    property_path: updated
+                customRegion:
+                    exclude: false # set manually because this field is marked as excluded in entity.yml
+                    property_path: regionText
+
         Oro\Bundle\MagentoBundle\Entity\CartItem:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart_item.md'
+
         Oro\Bundle\MagentoBundle\Entity\CartStatus:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart.md'
+
         Oro\Bundle\MagentoBundle\Entity\Customer:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/customer.md'
             fields:
@@ -29,9 +50,6 @@ api:
                         add_relationship: false
                         delete_relationship: false
 
-#        Oro\Bundle\MagentoBundle\Entity\CustomerGroup: ~
-#        Oro\Bundle\MagentoBundle\Entity\MagentoTransport: ~
-#        Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber: ~
         Oro\Bundle\MagentoBundle\Entity\Order:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order.md'
             subresources:
@@ -40,10 +58,17 @@ api:
                         update_relationship: false
                         add_relationship: false
                         delete_relationship: false
+
         Oro\Bundle\MagentoBundle\Entity\OrderAddress:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_address.md'
+            fields:
+                customRegion:
+                    exclude: false # set manually because this field is marked as excluded in entity.yml
+                    property_path: regionText
+
         Oro\Bundle\MagentoBundle\Entity\OrderItem:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_item.md'
+
         Oro\Bundle\MagentoBundle\Entity\OrderNote:
             actions:
                 create: false
@@ -56,29 +81,25 @@ api:
                 add_relationship: false
                 delete_relationship: false
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_note.md'
+
         Oro\Bundle\MagentoBundle\Entity\CreditMemo:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/credit_memo.md'
+
         Extend\Entity\EV_Creditmemo_Status:
-            fields:
-                name:
-                    description:  The name of the credit memo status ('Pending', 'Refunded' or 'Canceled', corresponding to ids 1,2 and 3 in Magento).
-                default:
-                    description:  Determines whether a particular status is set as default for new credit memo record.
-                priority:
-                    description:  The order in which credit memo statuses are ranked. First appears the status with the higher priority.
-            actions:
-                get:
-                    documentation: Retrieve a specific credit memo status record.
-                get_list:
-                    documentation: Retrieve a collection of credit memo status records.
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/credit_memo.md'
+
         Oro\Bundle\MagentoBundle\Entity\CreditMemoItem:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/credit_memo_item.md'
+
         Oro\Bundle\MagentoBundle\Entity\Product:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/product.md'
+
         Oro\Bundle\MagentoBundle\Entity\Region:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/region.md'
+
         Oro\Bundle\MagentoBundle\Entity\Store:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/store.md'
+
         Oro\Bundle\MagentoBundle\Entity\Website:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/website.md'
 

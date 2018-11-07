@@ -4,10 +4,13 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 
 use Guzzle\Http\ClientInterface;
 use Oro\Bundle\MagentoBundle\Service\WsdlManager;
+use Oro\Component\Testing\TempDirExtension;
 use Symfony\Component\Filesystem\Filesystem;
 
 class WsdlManagerTest extends \PHPUnit\Framework\TestCase
 {
+    use TempDirExtension;
+
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|Filesystem
      */
@@ -36,7 +39,7 @@ class WsdlManagerTest extends \PHPUnit\Framework\TestCase
         $this->guzzleClient = $this->getMockBuilder('Guzzle\Http\ClientInterface')
             ->setMethods(['get'])
             ->getMockForAbstractClass();
-        $this->cacheDir = sys_get_temp_dir();
+        $this->cacheDir = $this->getTempDir('magento_wsdl', null);
 
         $this->manager = new WsdlManager($this->fs, $this->guzzleClient, $this->cacheDir);
     }
