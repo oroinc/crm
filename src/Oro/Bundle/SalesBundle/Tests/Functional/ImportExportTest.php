@@ -44,7 +44,10 @@ class ImportExportTest extends AbstractImportExportTest
                 'Customer Customer VAT Id',
                 'Customer Customer Internal rating Id',
                 'Customer Customer Payment term Label',
-                'Channel Name'
+                'Channel Name',
+                'Customer Customer Parent Parent Id',
+                'Customer Customer Parent Owner Id',
+                'Customer Customer Owner Id',
             ]
         );
     }
@@ -69,7 +72,10 @@ class ImportExportTest extends AbstractImportExportTest
                 'Customer Customer VAT Id',
                 'Customer Customer Internal rating Id',
                 'Customer Customer Payment term Label',
-                'Channel Name'
+                'Channel Name',
+                'Customer Customer Parent Parent Id',
+                'Customer Customer Parent Owner Id',
+                'Customer Customer Owner Id',
             ]
         );
     }
