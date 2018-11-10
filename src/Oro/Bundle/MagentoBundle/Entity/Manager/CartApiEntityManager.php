@@ -7,6 +7,9 @@ use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartAddress;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
+/**
+ * The API manager for Cart entity.
+ */
 class CartApiEntityManager extends ApiEntityManager
 {
     /**
@@ -94,8 +97,8 @@ class CartApiEntityManager extends ApiEntityManager
     protected function getSerializationConfig()
     {
         return [
-            'excluded_fields' => ['relatedEmails'],
-            'fields'          => [
+            'fields' => [
+                'relatedEmails'   => ['exclude' => true],
                 'store'           => ['fields' => 'id'],
                 'dataChannel'     => ['fields' => 'id'],
                 'channel'         => ['fields' => 'id'],
