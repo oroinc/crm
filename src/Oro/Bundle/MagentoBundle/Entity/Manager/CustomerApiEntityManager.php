@@ -4,6 +4,9 @@ namespace Oro\Bundle\MagentoBundle\Entity\Manager;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
+/**
+ * The API manager for Customer entity.
+ */
 class CustomerApiEntityManager extends ApiEntityManager
 {
     /**
@@ -12,8 +15,10 @@ class CustomerApiEntityManager extends ApiEntityManager
     protected function getSerializationConfig()
     {
         return [
-            'excluded_fields' => ['carts', 'orders', 'newsletterSubscribers'],
-            'fields'          => [
+            'fields' => [
+                'carts'        => ['exclude' => true],
+                'orders'       => ['exclude' => true],
+                'newsletterSubscribers' => ['exclude' => true],
                 'birthday'     => [
                     'data_transformer' => 'oro_magento.customer_birthday_type_transformer'
                 ],
@@ -37,8 +42,8 @@ class CustomerApiEntityManager extends ApiEntityManager
     protected function getAddressSerializationConfig()
     {
         return [
-            'excluded_fields' => ['newsletterSubscribers'],
-            'fields'          => [
+            'fields' => [
+                'newsletterSubscribers' => ['exclude' => true],
                 'country' => ['fields' => 'iso2Code'],
                 'region'  => ['fields' => 'combinedCode'],
                 'owner'   => ['fields' => 'id'],

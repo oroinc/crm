@@ -4,6 +4,9 @@ namespace Oro\Bundle\MagentoBundle\Entity\Manager;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
+/**
+ * The API manager for Order entity.
+ */
 class OrderApiEntityManager extends ApiEntityManager
 {
     /**
@@ -12,8 +15,8 @@ class OrderApiEntityManager extends ApiEntityManager
     protected function getSerializationConfig()
     {
         return [
-            'excluded_fields' => ['relatedEmails'],
-            'fields'          => [
+            'fields' => [
+                'relatedEmails' => ['exclude' => true],
                 'store'        => ['fields' => 'id'],
                 'dataChannel'  => ['fields' => 'id'],
                 'channel'      => ['fields' => 'id'],
