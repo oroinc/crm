@@ -315,5 +315,6 @@ oro_behat_extension:
         - OroConfigBundle::FeatureContext
         - OroQueryDesignerBundle::QueryDesignerContext
         - OroLocaleBundle::LocalizationContext
+        - OroEmailBundle::EmailContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'

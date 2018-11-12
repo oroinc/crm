@@ -4,6 +4,9 @@ namespace Oro\Bundle\ChannelBundle\Entity\Manager;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
+/**
+ * The API manager for Channel entity.
+ */
 class ChannelApiEntityManager extends ApiEntityManager
 {
     /**
@@ -12,13 +15,11 @@ class ChannelApiEntityManager extends ApiEntityManager
     protected function getSerializationConfig()
     {
         $config = [
-            'excluded_fields' => ['data'],
-            'fields'          => [
+            'fields' => [
+                'data'       => ['exclude' => true],
                 'dataSource' => ['fields' => 'id'],
                 'entities'   => ['fields' => 'name'],
-                'status'     => [
-                    'result_name' => 'active'
-                ],
+                'active'     => ['property_path' => 'status']
             ]
         ];
 
