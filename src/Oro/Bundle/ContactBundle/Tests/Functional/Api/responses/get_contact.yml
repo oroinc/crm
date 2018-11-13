@@ -25,14 +25,18 @@ data:
         linkedIn: null
         createdAt: '@contact1->createdAt->format("Y-m-d\TH:i:s\Z")'
         updatedAt: '@contact1->updatedAt->format("Y-m-d\TH:i:s\Z")'
-        primaryPhone: null
         primaryEmail: contact1_2@example.com
+        primaryPhone: '5556661112'
         emails:
             -
                 email: contact1_1@example.com
             -
                 email: contact1_2@example.com
-        phones: {  }
+        phones:
+            -
+                phone: '5556661111'
+            -
+                phone: '5556661112'
     relationships:
         source:
             data: null

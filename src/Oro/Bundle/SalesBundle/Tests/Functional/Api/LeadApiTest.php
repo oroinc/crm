@@ -3,13 +3,33 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Api;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AddressBundle\Tests\Functional\Api\RestJsonApi\PrimaryEmailTestTrait;
+use Oro\Bundle\AddressBundle\Tests\Functional\Api\RestJsonApi\PrimaryPhoneTestTrait;
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadLeadsData;
 
+/**
+ * @dbIsolationPerTest
+ */
 class LeadApiTest extends RestJsonApiTestCase
 {
+    use PrimaryEmailTestTrait;
+    use PrimaryPhoneTestTrait;
+
+    private const ENTITY_CLASS              = Lead::class;
+    private const ENTITY_TYPE               = 'leads';
+    private const CREATE_MIN_REQUEST_DATA   = 'create_lead_min.yml';
+    private const ENTITY_WITHOUT_EMAILS_REF = 'lead2';
+    private const ENTITY_WITH_EMAILS_REF    = 'lead1';
+    private const PRIMARY_EMAIL             = 'lead1_2@example.com';
+    private const NOT_PRIMARY_EMAIL         = 'lead1_1@example.com';
+    private const ENTITY_WITHOUT_PHONES_REF = 'lead2';
+    private const ENTITY_WITH_PHONES_REF    = 'lead1';
+    private const PRIMARY_PHONE             = '5556661112';
+    private const NOT_PRIMARY_PHONE         = '5556661111';
+
     protected function setUp()
     {
         parent::setUp();
@@ -22,7 +42,7 @@ class LeadApiTest extends RestJsonApiTestCase
      *
      * @dataProvider cgetDataProvider
      */
-    public function testCget(array $parameters, $expectedDataFileName)
+    public function testGetList(array $parameters, $expectedDataFileName)
     {
         $response = $this->cget(['entity' => 'leads'], $parameters);
 
