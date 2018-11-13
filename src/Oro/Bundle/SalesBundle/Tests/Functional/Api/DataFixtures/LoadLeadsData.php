@@ -12,6 +12,8 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser;
@@ -50,7 +52,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             $this->createB2bCustomer(2);
             $this->createCustomerAssociation();
             $this->createLead(1, 'new');
-            $this->createLead(2, 'canceled');
+            $this->createLead(2, 'canceled', true);
         } finally {
             $this->em = null;
         }
@@ -122,8 +124,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /**
      * @param int    $number
      * @param string $status
+     * @param bool   $withoutEmailsAndPhones
      */
-    protected function createLead($number, $status)
+    protected function createLead($number, $status, $withoutEmailsAndPhones = false)
     {
         $lead = new Lead();
         $lead->setName(sprintf('Lead %d', $number));
@@ -136,6 +139,20 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 $status
             )
         );
+
+        if (!$withoutEmailsAndPhones) {
+            $email1 = new LeadEmail(sprintf('lead%d_1@example.com', $number));
+            $lead->addEmail($email1);
+            $email2 = new LeadEmail(sprintf('lead%d_2@example.com', $number));
+            $email2->setPrimary(true);
+            $lead->addEmail($email2);
+
+            $phone1 = new LeadPhone(sprintf('555666%d111', $number));
+            $lead->addPhone($phone1);
+            $phone2 = new LeadPhone(sprintf('555666%d112', $number));
+            $phone2->setPrimary(true);
+            $lead->addPhone($phone2);
+        }
 
         $this->em->persist($lead);
         $this->em->flush();

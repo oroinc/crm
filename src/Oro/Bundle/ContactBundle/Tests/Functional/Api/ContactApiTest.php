@@ -2,12 +2,32 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional\Api;
 
+use Oro\Bundle\AddressBundle\Tests\Functional\Api\RestJsonApi\PrimaryEmailTestTrait;
+use Oro\Bundle\AddressBundle\Tests\Functional\Api\RestJsonApi\PrimaryPhoneTestTrait;
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Tests\Functional\Api\DataFixtures\LoadContactsData;
 
+/**
+ * @dbIsolationPerTest
+ */
 class ContactApiTest extends RestJsonApiTestCase
 {
+    use PrimaryEmailTestTrait;
+    use PrimaryPhoneTestTrait;
+
+    private const ENTITY_CLASS              = Contact::class;
+    private const ENTITY_TYPE               = 'contacts';
+    private const CREATE_MIN_REQUEST_DATA   = 'create_contact_min.yml';
+    private const ENTITY_WITHOUT_EMAILS_REF = 'contact2';
+    private const ENTITY_WITH_EMAILS_REF    = 'contact1';
+    private const PRIMARY_EMAIL             = 'contact1_2@example.com';
+    private const NOT_PRIMARY_EMAIL         = 'contact1_1@example.com';
+    private const ENTITY_WITHOUT_PHONES_REF = 'contact2';
+    private const ENTITY_WITH_PHONES_REF    = 'contact1';
+    private const PRIMARY_PHONE             = '5556661112';
+    private const NOT_PRIMARY_PHONE         = '5556661111';
+
     protected function setUp()
     {
         parent::setUp();
@@ -21,6 +41,38 @@ class ContactApiTest extends RestJsonApiTestCase
         );
 
         $this->assertResponseContains('get_contact.yml', $response);
+    }
+
+    public function testGetListWithPrimaryEmailAndEmailsFieldsOnly()
+    {
+        $response = $this->cget(
+            ['entity' => 'contacts', 'fields[contacts]' => 'primaryEmail,emails']
+        );
+
+        $expectedData = [
+            'data' => [
+                [
+                    'type'       => 'contacts',
+                    'id'         => '<toString(@contact1->id)>',
+                    'attributes' => [
+                        'primaryEmail' => 'contact1_2@example.com',
+                        'emails'       => [
+                            ['email' => 'contact1_1@example.com'],
+                            ['email' => 'contact1_2@example.com']
+                        ]
+                    ]
+                ],
+                [
+                    'type'       => 'contacts',
+                    'id'         => '<toString(@contact2->id)>',
+                    'attributes' => [
+                        'primaryEmail' => null,
+                        'emails'       => []
+                    ]
+                ]
+            ]
+        ];
+        $this->assertResponseContains($expectedData, $response);
     }
 
     public function testGetListFilteredByPrimaryEmail()
@@ -41,23 +93,30 @@ class ContactApiTest extends RestJsonApiTestCase
         $this->assertResponseContains('get_contacts_filter_by_email.yml', $response);
     }
 
-    public function testPatchBirthday()
+    public function testUpdateBirthday()
     {
         $contactId = $this->getReference('contact1')->getId();
-        $response = $this->patch(
-            ['entity' => 'contacts', 'id' => $contactId],
-            [
-                'data' => [
-                    'type'       => 'contacts',
-                    'id'         => (string)$contactId,
-                    'attributes' => [
-                        'birthday' => '1995-05-25'
-                    ]
+
+        $data = [
+            'data' => [
+                'type'       => 'contacts',
+                'id'         => (string)$contactId,
+                'attributes' => [
+                    'birthday' => '1995-05-25'
                 ]
             ]
+        ];
+        $response = $this->patch(
+            ['entity' => 'contacts', 'id' => $contactId],
+            $data
         );
 
-        $this->assertResponseContains('update_contact_birthday.yml', $response);
+        $expectedData = $data;
+        $expectedData['data']['relationships']['updatedBy']['data'] = [
+            'type' => 'users',
+            'id'   => '<toString(@user->id)>'
+        ];
+        $this->assertResponseContains($expectedData, $response);
 
         // test that the birthday was changed
         $contact = $this->getEntityManager()->find(Contact::class, $contactId);

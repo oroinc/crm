@@ -24,10 +24,18 @@ data:
         notes: null
         twitter: null
         linkedIn: null
-        primaryPhone: null
-        primaryEmail: null
-        phones: {  }
-        emails: {  }
+        primaryEmail: lead1_2@example.com
+        primaryPhone: '5556661112'
+        emails:
+            -
+                email: lead1_1@example.com
+            -
+                email: lead1_2@example.com
+        phones:
+            -
+                phone: '5556661111'
+            -
+                phone: '5556661112'
     relationships:
         contact:
             data: null
