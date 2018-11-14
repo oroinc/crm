@@ -118,3 +118,24 @@ Scenario: Delete contact
   And confirm deletion
   Then I should see "Contact deleted" flash message
   And there is no records in grid
+
+Scenario: Validate Social links length
+  Given I login as administrator
+  Then I go to Customers/Contacts
+  Then I click "Create Contact"
+  Then I fill form with:
+    | First name | Charlie                                |
+    | Last name  | Sheen                                  |
+    | Phones     | [+1 415-731-9375, +1 415-656-4418]     |
+    | Twitter    | http://twitter.com/test_acc?semper=luctus&est=et&quam=ultrices&pharetra=posuere&magna=cubilia&ac=curae&consequat=nulla&metus=dapibus&sapien=dolor&ut=vel&nunc=est&vestibulum=donec&ante=odio&ipsum=justo&primis=sollicitudin&in=ut&faucibus=suscipit&orci=auhuiuhywef |
+    | Skype      | http://skype.com/test_acc?semper=luctus&est=et&quam=ultrices&pharetra=posuere&magna=cubilia&ac=curae&consequat=nulla&metus=dapibus&sapien=dolor&ut=vel&nunc=est&vestibulum=donec&ante=odio&ipsum=justo&primis=sollicitudin&in=ut&faucibus=suscipit&orci=auhuiuhywdwwe |
+    | Facebook   | http://facebook.com/test_acc?semper=luctus&est=et&quam=ultrices&pharetra=posuere&magna=cubilia&ac=curae&consequat=nulla&metus=dapibus&sapien=dolor&ut=vel&nunc=est&vestibulum=donec&ante=odio&ipsum=justo&primis=sollicitudin&in=ut&faucibus=suscipit&orci=auhuiuhywf |
+    | Google+    | http://plus.google.com/test_acc?semper=luctus&est=et&quam=ultrices&pharetra=posuere&magna=cubilia&ac=curae&consequat=nulla&metus=dapibus&sapien=dolor&ut=vel&nunc=est&vestibulum=donec&ante=odio&ipsum=justo&primis=sollicitudin&in=ut&faucibus=suscipit&orci=auhuiuh |
+    | LinkedIn   | http://plus.google.com/test_acc?semper=luctus&est=et&quam=ultrices&pharetra=posuere&magna=cubilia&ac=curae&consequat=nulla&metus=dapibus&sapien=dolor&ut=vel&nunc=est&vestibulum=donec&ante=odio&ipsum=justo&primis=sollicitudin&in=ut&faucibus=suscipit&orci=auhuiuh |
+  When I save form
+  Then I should see validation errors:
+    | Twitter  | This value is too long. It should have 255 characters or less. |
+    | Skype    | This value is too long. It should have 255 characters or less. |
+    | Facebook | This value is too long. It should have 255 characters or less. |
+    | Google+  | This value is too long. It should have 255 characters or less. |
+    | LinkedIn | This value is too long. It should have 255 characters or less. |
