@@ -34,11 +34,6 @@
     padding-left: 1px;
 }
 
-.customer-without-border-tabs .oro-tabs .tab-content{
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
-}
 
 .mess-pos {
     margin-left: 10px;
