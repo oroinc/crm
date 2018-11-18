@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Functional\ApiOld;
+namespace Oro\Bundle\ContactBundle\Tests\Functional\Api\Rest;
 
 use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEmailData;

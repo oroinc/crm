@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Functional\Api;
+namespace Oro\Bundle\ContactBundle\Tests\Functional\Api\RestJsonApi;
 
 use Oro\Bundle\AddressBundle\Tests\Functional\Api\RestJsonApi\PrimaryEmailTestTrait;
 use Oro\Bundle\AddressBundle\Tests\Functional\Api\RestJsonApi\PrimaryPhoneTestTrait;
@@ -11,7 +11,7 @@ use Oro\Bundle\ContactBundle\Tests\Functional\Api\DataFixtures\LoadContactsData;
 /**
  * @dbIsolationPerTest
  */
-class ContactApiTest extends RestJsonApiTestCase
+class ContactTest extends RestJsonApiTestCase
 {
     use PrimaryEmailTestTrait;
     use PrimaryPhoneTestTrait;
