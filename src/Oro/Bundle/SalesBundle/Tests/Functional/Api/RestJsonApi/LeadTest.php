@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tests\Functional\Api;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Api\RestJsonApi;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Tests\Functional\Api\RestJsonApi\PrimaryEmailTestTrait;
@@ -13,7 +13,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadLeadsData;
 /**
  * @dbIsolationPerTest
  */
-class LeadApiTest extends RestJsonApiTestCase
+class LeadTest extends RestJsonApiTestCase
 {
     use PrimaryEmailTestTrait;
     use PrimaryPhoneTestTrait;

@@ -1,13 +1,12 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Tests\Functional\Api;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Api\RestJsonApi;
 
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
-use Symfony\Component\HttpFoundation\Response;
 
-class CreditMemoApiTest extends RestJsonApiTestCase
+class CreditMemoTest extends RestJsonApiTestCase
 {
     /**
      * {@inheritdoc}

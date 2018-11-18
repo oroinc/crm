@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tests\Functional\Api;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Api\RestJsonApi;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
@@ -9,7 +9,7 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadOpportunitiesData;
 
-class OpportunityApiTest extends RestJsonApiTestCase
+class OpportunityTest extends RestJsonApiTestCase
 {
     protected function setUp()
     {
