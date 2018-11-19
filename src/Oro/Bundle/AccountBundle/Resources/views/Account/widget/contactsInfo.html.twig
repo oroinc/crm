@@ -1,4 +1,4 @@
-<div class="widget-content grid-widget-content">
+<div class="widget-content">
     {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
     {% set gridName = 'account-contacts-update-grid' %}
 
@@ -9,13 +9,6 @@
             'data_not_in': app.request.get('removed') ? app.request.get('removed')|split(','): []
         }
     } %}
-
-    <style type="text/css">
-        .grid-widget-content .grid,
-        .grid-widget-content .table {
-            margin-bottom: 0;
-        }
-    </style>
 
     {% block content %}
         {{ dataGrid.renderGrid(gridName, params) }}

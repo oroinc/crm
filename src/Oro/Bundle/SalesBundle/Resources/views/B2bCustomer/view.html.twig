@@ -35,8 +35,9 @@
 {% block stats %}
     {{ parent() }}
     <li>
-        <div class="label label-info orocrm-channel-lifetime-value-label">
-            {{ 'oro.sales.b2bcustomer.lifetime.label'|trans}}: {{ entity.lifetime|oro_format_currency }}
+        <div class="label label-success orocrm-channel-lifetime-value-label">
+            {{ 'oro.sales.b2bcustomer.lifetime.label'|trans}}:
+            <b>{{ entity.lifetime|oro_format_currency }}</b>
         </div>
     </li>
 {% endblock stats %}
