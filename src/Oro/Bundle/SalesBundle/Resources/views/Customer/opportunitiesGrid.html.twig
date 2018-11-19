@@ -1,4 +1,5 @@
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
 <div class="widget-content">
-    {{ dataGrid.renderGrid('sales-customers-opportunities-grid', gridParams) }}
+    {{ dataGrid.renderGrid('sales-customers-opportunities-grid', gridParams, {cssClass: 'inner-grid'}) }}
 </div>
