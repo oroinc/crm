@@ -1,0 +1,4 @@
+data:
+    type: contacts
+    attributes:
+        firstName: Bob

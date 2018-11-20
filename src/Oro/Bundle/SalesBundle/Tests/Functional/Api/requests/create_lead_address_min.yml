@@ -1,0 +1,11 @@
+data:
+    type: leadaddresses
+    relationships:
+        owner:
+            data:
+                type: leads
+                id: '<toString(@lead1->id)>'
+        country:
+            data:
+                type: countries
+                id: '<toString(@country_usa->iso2Code)>'

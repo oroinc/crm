@@ -40,8 +40,16 @@ Oro\Bundle\ContactBundle\Entity\Group:
                 min: 3
                 max: 255
 
-# Prevent required values for all child of AbstractAddress
 Oro\Bundle\ContactBundle\Entity\ContactAddress:
     constraints:
-        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: ~
+        - Oro\Bundle\AddressBundle\Validator\Constraints\RegionText: ~
+    properties:
+        country:
+            - NotBlank: ~
+        owner:
+            - NotBlank: ~
+            - Oro\Bundle\FormBundle\Validator\Constraints\UnchangeableField:
+                message: oro.address.validation.owner_changed
+                groups: ['api']
 

@@ -297,7 +297,7 @@ the **customer** should be assigned to the specified **account**.*
 
 ### campaign
 
-The marketing campaign as a result of which the Lead was created
+The marketing campaign as a result of which the lead was created
 
 ## SUBRESOURCES
 
@@ -310,48 +310,6 @@ Retrieve a record of addresses assigned to a specific lead record.
 #### get_relationship
 
 Retrieve IDs of address records assigned to a specific lead record.
-
-#### update_relationship
-
-Replace the list of addresses assigned to a specific lead record.
-
-{@request:json_api}
-Example:
-
-```JSON
-{  
-   "data":[  
-      {  
-         "type":"leadaddresses",
-         "id":"6"
-      }
-   ]
-}
-```
-{@/request}
-
-#### add_relationship
-
-Set address records for a specific lead record.
-
-{@request:json_api}
-Example:
-
-```JSON
-{  
-   "data":[  
-      {  
-         "type":"leadaddresses",
-         "id":"7"
-      }
-   ]
-}
-```
-{@/request}
-
-#### delete_relationship
-
-Remove address records from a specific lead record.
 
 ### contact
 

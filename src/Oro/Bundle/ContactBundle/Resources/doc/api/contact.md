@@ -327,48 +327,6 @@ Retrieve a record of addresses assigned to a specific contact record.
 
 Retrieve IDs of address records assigned to a specific contact record.
 
-#### update_relationship
-
-Replace the list of addresses assigned to a specific contact record.
-
-{@request:json_api}
-Example:
-
-```JSON
-{  
-   "data":[  
-      {  
-         "type":"contactaddresses",
-         "id":"6"
-      }
-   ]
-}
-```
-{@/request}
-
-#### add_relationship
-
-Set address records for a specific contact record.
-
-{@request:json_api}
-Example:
-
-```JSON
-{  
-   "data":[  
-      {  
-         "type":"contactaddresses",
-         "id":"7"
-      }
-   ]
-}
-```
-{@/request}
-
-#### delete_relationship
-
-Remove address records from a specific contact record.
-
 ### assignedTo
 
 #### get_subresource

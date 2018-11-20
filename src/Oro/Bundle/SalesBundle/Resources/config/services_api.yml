@@ -63,3 +63,11 @@ services:
         arguments: ['@property_accessor', 'Unknown primary email address.', primaryEmail, emails, email]
         tags:
             - { name: oro.api.processor, action: customize_form_data, class: Oro\Bundle\SalesBundle\Entity\Lead }
+
+    oro_sales.api.lead_address.fix_primary_addresses:
+        class: Oro\Bundle\AddressBundle\Api\Processor\FixPrimaryAddresses
+        arguments:
+            - 'owner.addresses'
+            - '@oro_api.form_property_accessor'
+        tags:
+            - { name: oro.api.processor, action: customize_form_data, event: pre_validate, class: Oro\Bundle\SalesBundle\Entity\LeadAddress }

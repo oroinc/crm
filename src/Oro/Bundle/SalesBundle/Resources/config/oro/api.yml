@@ -108,6 +108,12 @@ api:
                         type: primaryField
                         options:
                             data_field: email
+            subresources:
+                addresses:
+                    actions:
+                        update_relationship: false
+                        add_relationship: false
+                        delete_relationship: false
 
         Extend\Entity\EV_Lead_Status:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/lead.md'
@@ -152,3 +158,16 @@ api:
 
         Oro\Bundle\SalesBundle\Entity\LeadAddress:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/lead_address.md'
+            fields:
+                customRegion:
+                    exclude: false # set manually because this field is marked as excluded in entity.yml
+                    property_path: regionText
+            actions:
+                update:
+                    fields:
+                        owner:
+                            exclude: true
+            subresources:
+                owner:
+                    actions:
+                        update_relationship: false

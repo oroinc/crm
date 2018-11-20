@@ -775,7 +775,9 @@ oro:
             postal_code:
                 label:                Zip/Postal code
                 description:          The postal code specified in the Magento customer address.
-            region_text.label:        State
+            region_text:
+                label:                State
+                description:          The region name for cases when a country does not have predefined regions.
             name_prefix:
                 label:                Name prefix
                 description:          The name prefix specified in the Magento customer address.
@@ -864,7 +866,9 @@ oro:
             organization:
                 label:                Organization
                 description:          The organization specified in the Magento cart address.
-            region_text.label:        State
+            region_text:
+                label:                State
+                description:          The region name for cases when a country does not have predefined regions.
             name_prefix:
                 label:                Name prefix
                 description:          The name prefix specified in the Magento cart address.
@@ -927,7 +931,9 @@ oro:
             region:
                 label:                State
                 description:          The region specified in the Magento order address.
-            region_text.label:        State
+            region_text:
+                label:                State
+                description:          The region name for cases when a country does not have predefined regions.
             first_name:
                 label:                First name
                 description:          The first name that is specified in the Magento order address.

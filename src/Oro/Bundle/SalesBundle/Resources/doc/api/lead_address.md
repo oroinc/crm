@@ -141,6 +141,14 @@ Delete a collection of lead address records.
 
 **The required field**
 
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
 ### owner
 
 #### create
@@ -149,9 +157,13 @@ Delete a collection of lead address records.
 
 **The required field**
 
-### campaign
+#### update
 
-The marketing campaign as a result of which the LeadAddress was created.
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
 
 ## SUBRESOURCES
 
