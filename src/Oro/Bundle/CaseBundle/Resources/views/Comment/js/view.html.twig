@@ -30,11 +30,18 @@
                 <% } %>
             </div>
             <div class="details">
-                <i class="date"><%= createdAt %></i>
+                <span class="date"><%= createdAt %></span>
             </div>
             <div class="actions">
-                <button class="btn item-edit-button<% if (!permissions.edit) { %> disabled<% } %>" <% if (!permissions.edit) { %> disabled="disabled"<% } %> title="{{ 'oro.case.casecomment.action.edit'|trans|e('html_attr')|raw }}"><i class="action-button-icon fa-pencil-square-o hide-text">{{ 'oro.case.casecomment.action.edit'|trans|e('html')|raw }}</i></button>
-                <button class="btn item-remove-button<% if (!permissions.delete) { %> disabled<% } %>" <% if (!permissions.delete) { %> disabled="disabled"<% } %> title="{{ 'oro.case.casecomment.action.delete'|trans|e('html_attr')|raw }}"><i class="action-button-icon fa-trash-o hide-text">{{ 'oro.case.casecomment.action.delete'|trans|e('html')|raw }}</i></button>
+                <button class="btn btn-icon btn-lighter item-edit-button<% if (!permissions.edit) { %> disabled<% } %>"
+                    <% if (!permissions.edit) { %> disabled="disabled"<% } %> title="{{ 'oro.case.casecomment.action.edit'|trans|e('html_attr')|raw }}">
+                        <span class="action-button-icon fa-pencil-square-o" aria-label="{{ 'oro.case.casecomment.action.edit'|trans|e('html')|raw }}"></span>
+                {# Deleted extra space between elements #}
+                </button><button
+                     class="btn btn-icon btn-lighter item-remove-button<% if (!permissions.delete) { %> disabled<% } %>"
+                     <% if (!permissions.delete) { %> disabled="disabled"<% } %> title="{{ 'oro.case.casecomment.action.delete'|trans|e('html_attr')|raw }}">
+                        <span class="action-button-icon fa-trash-o" aria-label="{{ 'oro.case.casecomment.action.delete'|trans|e('html')|raw }}"></span>
+                </button>
             </div>
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> show<% } %>" id="accordion-item<%= id %>">
@@ -50,7 +57,7 @@
                         user: updatedBy.url
                         ? '<a class="user" href="' + updatedBy.url + '">' + _.escape(updatedBy.fullName) + '</a>'
                         : (updatedBy ? '<i class="user">' + _.escape(updatedBy) + '</i>' : ''),
-                        date: '<i class="date">' + updatedAt + '</i>'
+                        date: '<span class="date">' + updatedAt + '</span>'
                         }) %>
                     </div>
                 </div>
