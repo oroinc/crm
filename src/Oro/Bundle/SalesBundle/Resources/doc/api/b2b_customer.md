@@ -188,29 +188,33 @@ Delete a specific business customer record.
 
 An array of email addresses.
 
-Format of data: [{"email": first@email.com}, {"email": second@email.com}]
+The **email** property is a string contains an email address.
+
+Example of data: **\[{"email": "first@email.com"}, {"email": "second@email.com"}\]**
 
 #### create, update
 
-An array of email addresses.
+{@inheritdoc}
 
-Format of data: [{"email": first@email.com}, {"email": second@email.com}]
+**Please note:**
 
-Data should contain full collection of email addresses of the business customer.
+*Data should contain all email addresses of the business customer, including the primary email address.*
 
 ### phones
 
 An array of phone numbers.
 
-Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
+The **phone** property is a string contains a phone number.
+
+Example of data: **\[{"phone": "202-555-0141"}, {"phone": "202-555-0171"}\]**
 
 #### create, update
 
-An array of phone numbers.
+{@inheritdoc}
 
-Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
+**Please note:**
 
-Data should contain full collection of phone numbers of the business customer.
+*Data should contain all phone numbers of the business customer, including the primary phone number.*
 
 ### primaryEmail
 
@@ -222,7 +226,7 @@ The email address that should be set as the primary one.
 
 **Please note:**
 
-*The primary email address will be added to **emails** collection if it does not contain it yet.*
+*The **emails** collection should contain the primary email address if the request has this collection.*
 
 ### primaryPhone
 
@@ -233,8 +237,8 @@ Primary phone number of the business customer.
 The phone number that should be set as the primary one.
 
 **Please note:**
- 
-*The primary phone number will be added to **phones** collection if it does not contain it yet.*
+
+*The **phones** collection should contain the primary phone number if the request has this collection.*
 
 ### account
 

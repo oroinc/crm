@@ -7,6 +7,9 @@ use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
 use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
+/**
+ * The API manager for Contact entity.
+ */
 class ContactApiEntityManager extends ApiEntityManager
 {
     /** @var  AttachmentManager */
@@ -74,8 +77,8 @@ class ContactApiEntityManager extends ApiEntityManager
                 'accounts'     => ['fields' => 'id'],
                 'picture'      => ['fields' => 'id']
             ],
-            'post_serialize'  => function (array &$result) {
-                $this->postSerializeContact($result);
+            'post_serialize'  => function (array $result) {
+                return $this->postSerializeContact($result);
             }
         ];
 
@@ -84,10 +87,12 @@ class ContactApiEntityManager extends ApiEntityManager
 
     /**
      * @param array $result
+     *
+     * @return array
      */
-    protected function postSerializeContact(array &$result)
+    protected function postSerializeContact(array $result): array
     {
-        // @todo: an 'email' field is added only for backward compatibility with previous API
+        // an 'email' field is added only for backward compatibility with previous API
         $email = null;
         if (!empty($result['emails'])) {
             foreach ($result['emails'] as $item) {
@@ -106,5 +111,7 @@ class ContactApiEntityManager extends ApiEntityManager
                 $result['id']
             );
         }
+
+        return $result;
     }
 }

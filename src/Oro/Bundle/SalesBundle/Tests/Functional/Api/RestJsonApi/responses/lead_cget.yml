@@ -1,0 +1,127 @@
+data:
+    -
+        type: leads
+        id: '<toString(@lead1->id)>'
+        attributes:
+            lastContactedDate: null
+            lastContactedDateIn: null
+            lastContactedDateOut: null
+            timesContacted: null
+            timesContactedIn: null
+            timesContactedOut: null
+            name: 'Lead 1'
+            namePrefix: null
+            firstName: null
+            middleName: null
+            lastName: null
+            nameSuffix: null
+            jobTitle: null
+            companyName: null
+            website: null
+            numberOfEmployees: null
+            industry: null
+            createdAt: '@lead1->createdAt->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@lead1->updatedAt->format("Y-m-d\TH:i:s\Z")'
+            notes: null
+            twitter: null
+            linkedIn: null
+            primaryEmail: lead1_2@example.com
+            primaryPhone: '5556661112'
+            emails:
+                -
+                    email: lead1_1@example.com
+                -
+                    email: lead1_2@example.com
+            phones:
+                -
+                    phone: '5556661111'
+                -
+                    phone: '5556661112'
+        relationships:
+            contact:
+                data: null
+            addresses:
+                data: []
+            owner:
+                data:
+                    type: users
+                    id: '<toString(@user->id)>'
+            opportunities:
+                data: []
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
+            source:
+                data: null
+            status:
+                data:
+                    type: leadstatuses
+                    id: new
+            account:
+                data:
+                    type: accounts
+                    id: '<toString(@account1->id)>'
+            customer:
+                data:
+                    type: b2bcustomers
+                    id: '<toString(@b2b_customer1->id)>'
+    -
+        type: leads
+        id: '<toString(@lead2->id)>'
+        attributes:
+            lastContactedDate: null
+            lastContactedDateIn: null
+            lastContactedDateOut: null
+            timesContacted: null
+            timesContactedIn: null
+            timesContactedOut: null
+            name: 'Lead 2'
+            namePrefix: null
+            firstName: null
+            middleName: null
+            lastName: null
+            nameSuffix: null
+            jobTitle: null
+            companyName: null
+            website: null
+            numberOfEmployees: null
+            industry: null
+            createdAt: '@lead2->createdAt->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@lead2->updatedAt->format("Y-m-d\TH:i:s\Z")'
+            notes: null
+            twitter: null
+            linkedIn: null
+            primaryPhone: null
+            primaryEmail: null
+            phones: {  }
+            emails: {  }
+        relationships:
+            contact:
+                data: null
+            addresses:
+                data: []
+            owner:
+                data:
+                    type: users
+                    id: '<toString(@user->id)>'
+            opportunities:
+                data: []
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
+            source:
+                data: null
+            status:
+                data:
+                    type: leadstatuses
+                    id: canceled
+            account:
+                data:
+                    type: accounts
+                    id: '<toString(@account1->id)>'
+            customer:
+                data:
+                    type: b2bcustomers
+                    id: '<toString(@b2b_customer1->id)>'

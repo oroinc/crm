@@ -165,7 +165,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $transport->setMagentoVersion('1.9.1.0');
         $transport->setIsWsiMode(false);
         $transport->setWebsiteId('1');
-        $transport->setWsdlUrl('http://localhost/magento/api/v2_soap?wsdl=1');
+        $transport->setApiUrl('http://localhost/magento/api/v2_soap?wsdl=1');
         $transport->setWebsites([['id' => 1, 'label' => 'Website ID: 1, Stores: English, French, German']]);
 
         $this->em->persist($transport);
@@ -248,7 +248,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $customer->setAccount($account);
         $customer->setGender(Gender::MALE);
         $customer->setGroup($this->customerGroup);
-        // TODO: DateTimeZones should be removed in BAP-8710. Tests should be passed for:
+        // DateTimeZones should be removed in BAP-8710. Tests should be passed for:
         //  - Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest\CustomerControllerTest
         //  - Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest\MagentoCustomerControllerTest
         $customer->setCreatedAt(new \DateTime('now', new \DateTimezone('UTC')));

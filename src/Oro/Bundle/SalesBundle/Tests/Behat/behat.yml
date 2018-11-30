@@ -214,9 +214,14 @@ oro_behat_extension:
       selector: 'div.filter-item'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilterItem
 
-    Add Widget Button:
+    First Widget Add Button:
       selector:
-        locator: '//div[not(contains(@style,"display: none"))]/table/tbody/tr/td/a[contains(@class,"widget-picker-add-btn")]'
+        locator: '(//div[(contains(@class,"widget-picker__results"))]//div[@style="opacity: 1;"]//button[contains(text(),"Add")])[1]'
+        type: xpath
+
+    Enter keyword:
+      selector:
+        locator: '//input[contains(@class,"widget-picker__filter-search")]'
         type: xpath
 
     Leads List:
@@ -224,15 +229,40 @@ oro_behat_extension:
         type: 'xpath'
         locator: '//div[@title="Leads List"]/../..'
 
+    Leads List Actions:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Leads List"]/..//button[contains(@id,"dashboard-action")]'
+
     Lead Statistics:
       selector:
         type: 'xpath'
         locator: '//div[@title="Lead statistics"]/../..'
 
-    Opportunity statistics:
+    Leads Statistics Actions:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Lead statistics"]/..//button[contains(@id,"dashboard-action")]'
+
+    Opportunity Statistics:
       selector:
         type: 'xpath'
         locator: '//div[@title="Opportunity statistics"]/../..'
+
+    Opportunity Statistics Actions:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Opportunity statistics"]/..//button[contains(@id,"dashboard-action")]'
+
+    Opportunities List:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Opportunities List"]/../..'
+
+    Opportunities List Actions:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Opportunities List"]/..//button[contains(@id,"dashboard-action")]'
 
   pages:
     Opportunity Index:
@@ -285,5 +315,6 @@ oro_behat_extension:
         - OroConfigBundle::FeatureContext
         - OroQueryDesignerBundle::QueryDesignerContext
         - OroLocaleBundle::LocalizationContext
+        - OroEmailBundle::EmailContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'

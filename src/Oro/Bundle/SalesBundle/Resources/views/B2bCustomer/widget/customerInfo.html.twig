@@ -5,7 +5,6 @@
 {% set uniqueSuffix = '_customer_' ~ customer.id ~ '_channel_' ~ channel.id %}
 {% set customer_general_info %}
     <div class="row-fluid">
-        <br>
         <div class="responsive-block">
             {{ UI.renderHtmlProperty(
                 'oro.sales.b2bcustomer.name.label'|trans,
@@ -61,9 +60,9 @@
 
 <div class="widget-content row-fluid">
     <div class="account-customer-title">{{ customer|oro_format_name|escape }}
-        <div class="pull-right label label-info orocrm-channel-lifetime-value-label">
-            <b>{{ 'oro.sales.b2bcustomer.lifetime.label'|trans}}:
-                {{ oro_channel_account_lifetime(customer.account, channel)|oro_format_currency }}</b>
+        <div class="pull-right label label-large label-success orocrm-channel-lifetime-value-label">
+            {{ 'oro.sales.b2bcustomer.lifetime.label'|trans}}:
+            <b>{{ oro_channel_account_lifetime(customer.account, channel)|oro_format_currency }}</b>
         </div>
     </div>
     <div class="customer-without-border-tabs">

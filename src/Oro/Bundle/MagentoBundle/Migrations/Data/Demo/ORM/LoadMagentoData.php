@@ -33,6 +33,9 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
+/**
+ * Load magento demo data
+ */
 class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     use ContainerAwareTrait;
@@ -138,7 +141,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $transport->setMagentoVersion('1.9.1.0');
         $transport->setExtensionVersion('1.2.19');
         $transport->setIsDisplayOrderNotes(true);
-        $transport->setWsdlUrl('http://magento.domain');
+        $transport->setApiUrl('http://magento.domain');
         $om->persist($transport);
 
         $integrationName = static::$integrationNames[$i++];

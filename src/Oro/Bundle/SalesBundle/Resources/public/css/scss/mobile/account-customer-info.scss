@@ -38,16 +38,6 @@
         }
     }
 
-    &:not(.multicustomer) .customer-without-border-tabs {
-        margin-left: 0;
-        margin-right: 0;
-        width: 100%;
-
-        .tab-pane {
-            padding: 0;
-        }
-    }
-
     .tab-content .nav-tabs {
         width: 100%;
     }

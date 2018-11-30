@@ -1087,12 +1087,6 @@ services:
             - '@oro_magento.provider.connector_choices'
             - '@request_stack'
 
-    oro_magento.routing.options_resolver.old_options:
-        class: Oro\Bundle\MagentoBundle\Routing\OldOptionsRouteOptionsResolver
-        public: false
-        tags:
-            - { name: routing.options_resolver }
-
     oro_magento.manager.abandoned_shopping_cart_flow:
         parent: oro_workflow.abstract.workflow_aware_manager
         calls:

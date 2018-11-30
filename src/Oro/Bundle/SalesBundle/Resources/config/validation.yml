@@ -30,13 +30,15 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         emails:
             - Valid: ~
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
-                message: One of the emails must be set as primary.
+                message: oro.address.validation.emails.contains_primary
         status:
             - NotBlank: ~
         addresses:
             - Valid: ~
         phones:
             - Valid: ~
+            - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
+                message: oro.address.validation.phones.contains_primary
         numberOfEmployees:
             - Regex: # For frontend validation
                 pattern: '/^[\d+]*$/'
@@ -44,7 +46,16 @@ Oro\Bundle\SalesBundle\Entity\Lead:
 
 Oro\Bundle\SalesBundle\Entity\LeadAddress:
     constraints:
-        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequireRegion'] }
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: ~
+        - Oro\Bundle\AddressBundle\Validator\Constraints\RegionText: ~
+    properties:
+        country:
+            - NotBlank: ~
+        owner:
+            - NotBlank: ~
+            - Oro\Bundle\FormBundle\Validator\Constraints\UnchangeableField:
+                message: oro.address.validation.owner_changed
+                groups: ['api']
 
 Oro\Bundle\SalesBundle\Entity\SalesFunnel:
     properties:
@@ -66,8 +77,12 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
             - Valid: ~
         phones:
             - Valid: ~
+            - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
+                message: oro.address.validation.phones.contains_primary
         emails:
             - Valid: ~
+            - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
+                message: oro.address.validation.emails.contains_primary
 
 Oro\Bundle\SalesBundle\Entity\Customer:
     properties:

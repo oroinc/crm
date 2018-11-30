@@ -7,6 +7,9 @@ use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SalesBundle\Provider\B2bBigNumberProvider;
 
+/**
+ * Provides methods to get statistics of opportunities
+ */
 class OpportunityStatisticsProvider extends B2bBigNumberProvider
 {
     /** @var CurrencyQueryBuilderTransformerInterface */
@@ -25,7 +28,7 @@ class OpportunityStatisticsProvider extends B2bBigNumberProvider
     {
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
-        $queryBuilder = $this->getOpportunityRepository()->getNewOpportunitiesCountQB($start, $end);
+        $queryBuilder = $this->getOpportunityRepository()->getOpportunitiesCountQB($start, $end);
 
         return $this->processDataQueryBuilder($queryBuilder, $widgetOptions)->getSingleScalarResult();
     }

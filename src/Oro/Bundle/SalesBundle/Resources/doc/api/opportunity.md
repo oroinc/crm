@@ -209,7 +209,7 @@ An account the opportunity is assigned to.
 
 ### campaign
 
-The marketing campaign as a result of which the Opportunity was created.
+The marketing campaign as a result of which the opportunity was created.
 
 ## SUBRESOURCES
 

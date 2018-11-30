@@ -141,6 +141,14 @@ Delete a collection of contact address records.
 
 **The required field**
 
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
 ### owner
 
 #### create
@@ -148,6 +156,14 @@ Delete a collection of contact address records.
 {@inheritdoc}
 
 **The required field**
+
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
 
 ## SUBRESOURCES
 

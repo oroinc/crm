@@ -1,0 +1,9 @@
+data:
+    type: b2bcustomers
+    attributes:
+        name: 'New Customer'
+    relationships:
+        dataChannel:
+            data:
+                type: channels
+                id: '<toString(@default_channel->id)>'

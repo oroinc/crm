@@ -196,29 +196,33 @@ If this field is missing in the request, the default value is applied.*
 
 An array of email addresses.
 
-Format of data: [{"email": first@email.com}, {"email": second@email.com}]
+The **email** property is a string contains an email address.
+
+Example of data: **\[{"email": "first@email.com"}, {"email": "second@email.com"}\]**
 
 #### create, update
 
-An array of email addresses.
+{@inheritdoc}
 
-Format of data: [{"email": first@email.com}, {"email": second@email.com}]
+**Please note:**
 
-Data should contain full collection of email addresses of the lead.
+*Data should contain all email addresses of the lead, including the primary email address.*
 
 ### phones
 
 An array of phone numbers.
 
-Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
+The **phone** property is a string contains a phone number.
+
+Example of data: **\[{"phone": "202-555-0141"}, {"phone": "202-555-0171"}\]**
 
 #### create, update
 
-An array of phone numbers.
+{@inheritdoc}
 
-Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
+**Please note:**
 
-Data should contain full collection of phone numbers of the lead.
+*Data should contain all phone numbers of the lead, including the primary phone number.*
 
 ### primaryEmail
 
@@ -230,7 +234,7 @@ The email address that should be set as the primary one.
 
 **Please note:**
 
-*The primary email address will be added to **emails** collection if it does not contain it yet.*
+*The **emails** collection should contain the primary email address if the request has this collection.*
 
 ### primaryPhone
 
@@ -241,8 +245,8 @@ Primary phone number of the lead.
 The phone number that should be set as the primary one.
 
 **Please note:**
- 
-*The primary phone number will be added to **phones** collection if it does not contain it yet.*
+
+*The **phones** collection should contain the primary phone number if the request has this collection.*
 
 ### customer
 
@@ -274,7 +278,25 @@ the **customer** should be assigned to the specified **account**.*
 
 ### campaign
 
-The marketing campaign as a result of which the Lead was created
+The marketing campaign as a result of which the lead was created
+
+## FILTERS
+
+### emails
+
+Filter records by email address.
+
+### phones
+
+Filter records by phone number.
+
+### primaryEmail
+
+Filter records by primary email address.
+
+### primaryPhone
+
+Filter records by primary phone number.
 
 ## SUBRESOURCES
 
@@ -287,48 +309,6 @@ Retrieve a record of addresses assigned to a specific lead record.
 #### get_relationship
 
 Retrieve IDs of address records assigned to a specific lead record.
-
-#### update_relationship
-
-Replace the list of addresses assigned to a specific lead record.
-
-{@request:json_api}
-Example:
-
-```JSON
-{  
-   "data":[  
-      {  
-         "type":"leadaddresses",
-         "id":"6"
-      }
-   ]
-}
-```
-{@/request}
-
-#### add_relationship
-
-Set address records for a specific lead record.
-
-{@request:json_api}
-Example:
-
-```JSON
-{  
-   "data":[  
-      {  
-         "type":"leadaddresses",
-         "id":"7"
-      }
-   ]
-}
-```
-{@/request}
-
-#### delete_relationship
-
-Remove address records from a specific lead record.
 
 ### contact
 

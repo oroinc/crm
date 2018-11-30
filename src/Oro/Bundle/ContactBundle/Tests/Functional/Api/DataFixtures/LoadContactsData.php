@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -41,6 +42,7 @@ class LoadContactsData extends AbstractFixture implements ContainerAwareInterfac
         try {
             $this->createAccount(1);
             $this->createContact(1);
+            $this->createContact(2, true);
         } finally {
             $this->em = null;
         }
@@ -61,9 +63,10 @@ class LoadContactsData extends AbstractFixture implements ContainerAwareInterfac
     }
 
     /**
-     * @param int $number
+     * @param int  $number
+     * @param bool $withoutEmailsAndPhones
      */
-    protected function createContact($number)
+    protected function createContact($number, $withoutEmailsAndPhones = false)
     {
         $contact = new Contact();
         $contact->setFirstName(sprintf('Contact %d', $number));
@@ -72,11 +75,19 @@ class LoadContactsData extends AbstractFixture implements ContainerAwareInterfac
         $contact->setBirthday(new \DateTime('1973-03-07', new \DateTimeZone('UTC')));
         $contact->setCreatedBy($this->getReference('user'));
 
-        $email1 = new ContactEmail(sprintf('contact%d_1@example.com', $number));
-        $contact->addEmail($email1);
-        $email2 = new ContactEmail(sprintf('contact%d_2@example.com', $number));
-        $email2->setPrimary(true);
-        $contact->addEmail($email2);
+        if (!$withoutEmailsAndPhones) {
+            $email1 = new ContactEmail(sprintf('contact%d_1@example.com', $number));
+            $contact->addEmail($email1);
+            $email2 = new ContactEmail(sprintf('contact%d_2@example.com', $number));
+            $email2->setPrimary(true);
+            $contact->addEmail($email2);
+
+            $phone1 = new ContactPhone(sprintf('555666%d111', $number));
+            $contact->addPhone($phone1);
+            $phone2 = new ContactPhone(sprintf('555666%d112', $number));
+            $phone2->setPrimary(true);
+            $contact->addPhone($phone2);
+        }
 
         $this->em->persist($contact);
         $this->em->flush();
