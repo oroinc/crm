@@ -1,4 +1,4 @@
 assets:
     css:
-        'orocase':
+        inputs:
           - 'bundles/orocase/css/scss/main.scss'
