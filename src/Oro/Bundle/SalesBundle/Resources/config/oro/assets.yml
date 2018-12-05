@@ -1,6 +1,5 @@
 assets:
     css:
-      'orodatagrid':
+        inputs:
           - 'bundles/orosales/css/scss/main.scss'
-      'orosales':
           - 'bundles/orosales/css/scss/oro-sales.scss'
