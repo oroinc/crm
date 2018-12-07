@@ -161,7 +161,7 @@ Feature: Activities
     And go to Activities/ Calls
     And I should see following grid:
       | Subject          | Phone number | Call date & time      | Contexts         |
-      | Call for lead    | 0503504444   | Nov 21, 2016, 8:00 AM | OroInc, John Doe |
+      | Call for lead    | 0503504444   | Nov 21, 2016, 8:00 AM | OroInc John Doe  |
       | Call to Someone  | 0501468825   | Oct 31, 2016, 8:00 AM | John Doe         |
 
   Scenario:View and Manage Calls on the view page of a record
