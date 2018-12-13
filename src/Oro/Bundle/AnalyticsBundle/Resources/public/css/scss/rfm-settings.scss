@@ -12,6 +12,10 @@
         th {
             font-weight: normal;
 
+            .tooltip-icon {
+                margin-#{$end}: $content-padding-small;
+            }
+
             label {
                 font-weight: bold;
                 margin-bottom: 0;
