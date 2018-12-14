@@ -5,7 +5,6 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Async;
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
-use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -26,7 +25,13 @@ class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
         parent::setUp();
 
         $this->initClient();
-        $this->loadFixtures([LoadCustomerData::class]);
+
+        if (!\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
+            static::markTestSkipped('There is no suitable channel data in the system.');
+            return;
+        }
+
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\DataFixtures\LoadCustomerData']);
     }
 
     public function testCouldBeGetFromContainerAsService()
