@@ -10,8 +10,8 @@
                 'path':  path('oro_sales_lead_disqualify', {'id': entity.id}),
                 'aCss':  'btn btn-danger action-button',
                 'iCss':  'fa-ban',
-                'label': 'Disqualify',
-                'title': 'Disqualify',
+                'label': 'oro.sales.lead.disqualify'|trans,
+                'title': 'oro.sales.lead.disqualify'|trans,
             }) }}
         {% endif %}
         {% if (isConvertToOpportunityAllowed)  %}
@@ -19,8 +19,8 @@
                 'path':  path('oro_sales_lead_convert_to_opportunity', {'id': entity.id}),
                 'aCss':  'btn action-button',
                 'iCss':  'fa-usd',
-                'label': 'Convert to Opportunity',
-                'title': 'Convert to Opportunity',
+                'label': 'oro.sales.lead.convert_to_opportunity'|trans,
+                'title': 'oro.sales.lead.convert_to_opportunity'|trans,
             }) }}
         {% endif %}
         {{ UI.editButton({
@@ -71,7 +71,7 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'url': path('oro_sales_lead_info', {id: entity.id}),
-            'title': 'Lead Information'|trans
+            'title': 'oro.sales.lead.information'|trans
         }) }}
     {% endset %}
 
@@ -80,7 +80,7 @@
             'widgetType': 'block',
             'contentClasses': [],
             'url': path('oro_sales_lead_address_book', {id: entity.id}),
-            'title': 'Address Book'|trans
+            'title': 'oro.sales.lead.address_book'|trans
         }) }}
     {% endset %}
 

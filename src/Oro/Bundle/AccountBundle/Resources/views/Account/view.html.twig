@@ -3,7 +3,7 @@
 {% set hasGrantedNameView = is_granted('VIEW', entity, 'name') %}
 
 {% oro_title_set({params : {"%account.name%": hasGrantedNameView
-    ? entity.name|default('N/A')
+    ? entity.name|default('N/A'|trans)
     : 'view %fieldName% not granted'|trans({'%fieldName%': 'oro.account.name.label'|trans}) }})
 %}
 
@@ -35,7 +35,7 @@
         'indexLabel': 'oro.account.entity_plural_label'|trans,
         'rawEntityTitle': not hasGrantedNameView,
         'entityTitle': hasGrantedNameView
-            ? entity.name|default('N/A')
+            ? entity.name|default('N/A'|trans)
             : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'oro.account.name.label'|trans}))
     } %}
     {{ parent() }}

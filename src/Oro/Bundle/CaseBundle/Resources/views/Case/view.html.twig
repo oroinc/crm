@@ -3,7 +3,7 @@
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroUserBundle::macros.html.twig' as U %}
 
-{% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
+{% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A'|trans) }}) %}
 
 {% block navButtons %}
     {% if is_granted('oro_case_comment_create') and is_granted('oro_case_comment_view') %}

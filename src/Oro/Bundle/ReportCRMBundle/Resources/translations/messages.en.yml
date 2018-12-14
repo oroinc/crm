@@ -43,6 +43,11 @@ oro:
                 budgetAmount:      Budget Forecast
                 weightedForecast:  Weighted Forecast
                 ownerName:         Owner Name
+            filters:
+                period:
+                    monthly: Monthly
+                    quarterly: Quarterly
+                    qearly: Yearly
 
         controller:
             report:

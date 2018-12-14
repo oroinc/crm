@@ -3,7 +3,7 @@
 {% set name = 'N/A' %}
 {% if entity.name %}
     {% set name = is_granted('VIEW', entity, 'name')
-        ? entity.name|default('N/A')
+        ? entity.name|default('N/A'|trans)
         : 'view %fieldName% not granted'|trans({'%fieldName%': 'oro.account.name.label'|trans})
     %}
 {% endif %}
@@ -54,7 +54,7 @@
         {% set name = 'N/A' %}
         {% if form.vars.value.name %}
             {% set name = is_granted('VIEW', form.vars.value, 'name')
-            ? form.vars.value.name|default('N/A')
+            ? form.vars.value.name|default('N/A'|trans)
             : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'oro.account.name.label'|trans}))
             %}
         {% endif %}

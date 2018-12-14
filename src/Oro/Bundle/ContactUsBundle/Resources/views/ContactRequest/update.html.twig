@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
 {% set formAction = form.vars.value.id ? path('oro_contactus_request_update', { 'id': form.vars.value.id }) : path('oro_contactus_request_create') %}
-{% set fullname = form.vars.value|oro_format_name|default('N/A') %}
+{% set fullname = form.vars.value|oro_format_name|default('N/A'|trans) %}
 {% oro_title_set({ params : {"%request.clientName%": fullname} }) %}
 
 {% set formAttr = {
