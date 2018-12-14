@@ -299,6 +299,7 @@ oro:
                 label:            Contact
                 description:      A contact the lead was converted into.
             owner.label:          Owner
+            address_book:   Address Book
             address:
                 label:            Address
                 description:
@@ -352,7 +353,6 @@ oro:
             primary_addr:
                 label:            Primary Address
 
-
             convert:
                  error:           Unable to convert lead to opportunity
             feature.label:        Lead
@@ -372,7 +372,9 @@ oro:
                 update: Update
                 delete: Delete
                 views:
-                    open:            Open Leads
+                    open: Open Leads
+            disqualify: Disqualify
+            convert_to_opportunity: Convert to Opportunity
 
         #
         # Entity Oro\Bundle\SalesBundle\Entity\LeadAddress

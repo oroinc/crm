@@ -1,0 +1,26 @@
+/* @theme: admin.oro; */
+
+$contact-box-wrapper-display: flex !default;
+$contact-box-wrapper-flex-wrap: wrap !default;
+$contact-box-wrapper-offset: side-values(0 0 0 (-$content-padding-small)) !default;
+$contact-box-wrapper-position: relative !default;
+
+$contact-box-background-color: $primary-900 !default;
+$contact-box-offset: side-values(0 0 $content-padding-small $content-padding-small) !default;
+$contact-box-inner-offset: 12px $content-padding-medium !default;
+$contact-box-width: calc(50% - #{$content-padding-small}) !default;
+
+$contact-box-title-offset-bottom: $content-padding-small !default;
+
+$contact-box-row-offset-top: $content-padding-small !default;
+
+$contact-box-name-link-font-weight: bold !default;
+$contact-box-name-link-label-offset-start: $content-padding-small / 2 !default;
+$contact-box-name-link-label-vertical-align: 2px !default;
+
+$contact-widget-wrapper-inner-offset: side-values(0 0 0 $content-padding) !default;
+
+$contact-collection-element-offset-bottom: 2px !default;
+$contact-collection-element-last-child-offset-bottom: -3px !default;
+
+$contact-collection-element-primary-font-weight: bold !default;
