@@ -51,8 +51,6 @@ class OroTaskCRMBundleInstaller implements
             'orocrm_sales_opportunity',
             'orocrm_sales_b2bcustomer',
             'orocrm_case',
-            'orocrm_magento_customer',
-            'orocrm_magento_order'
         ];
         foreach ($targetTables as $targetTable) {
             $associationTableName = $this->activityExtension->getAssociationTableName('orocrm_task', $targetTable);

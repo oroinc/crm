@@ -49,9 +49,6 @@ class OroCallCRMBridgeBundleInstaller implements
             'orocrm_contact',
             'orocrm_case',
             'orocrm_contactus_request',
-            'orocrm_magento_customer',
-            'orocrm_magento_order',
-            'orocrm_magento_cart',
             'orocrm_sales_lead',
             'orocrm_sales_opportunity',
             'orocrm_sales_b2bcustomer'
