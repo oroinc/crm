@@ -87,6 +87,7 @@ oro:
                 role: Role
                 owner: Owner
                 compareToDate: Compare to Previous Period
+                compare_to: Compare to Date
                 business_unit: Business Unit
             opportunities_list:
                 title: Opportunities List

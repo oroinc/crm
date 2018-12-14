@@ -44,6 +44,8 @@ oro:
                 budgetAmount:      Budget Forecast
                 weightedForecast:  Weighted Forecast
                 ownerName:         Owner Name
+                page_total: Page Total
+                grand_total: Grand Total
             filters:
                 period:
                     monthly: Monthly
