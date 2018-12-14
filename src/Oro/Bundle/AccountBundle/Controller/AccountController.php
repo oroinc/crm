@@ -3,6 +3,7 @@
 namespace Oro\Bundle\AccountBundle\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AccountBundle\Event\CollectAccountWebsiteActivityCustomersEvent;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
@@ -31,14 +32,13 @@ class AccountController extends Controller
             ->getRepository('OroChannelBundle:Channel')
             ->findBy([], ['channelType' => 'ASC', 'name' => 'ASC']);
 
-        $customers = $this->getDoctrine()
-            ->getRepository('OroMagentoBundle:Customer')
-            ->findBy(['account' => $account->getId()]);
+        $event = new CollectAccountWebsiteActivityCustomersEvent($account->getId());
+        $this->get('event_dispatcher')->dispatch($event);
 
         return [
             'entity' => $account,
             'channels' => $channels,
-            'customers' => $customers,
+            'customers' => $event->getCustomers(),
         ];
     }
 
