@@ -357,9 +357,9 @@ datagrids:
                         populate_default: false
                         field_options:
                             choices:
-                                Monthly: monthPeriod
-                                Quarterly: quarterPeriod
-                                Yearly: yearPeriod
+                                oro.reportcrm.datagrid.filters.period.monthly: monthPeriod
+                                oro.reportcrm.datagrid.filters.period.quarterly: quarterPeriod
+                                oro.reportcrm.datagrid.filters.period.qearly: yearPeriod
                 cnt:
                     type: number-range
                     data_name: cnt
