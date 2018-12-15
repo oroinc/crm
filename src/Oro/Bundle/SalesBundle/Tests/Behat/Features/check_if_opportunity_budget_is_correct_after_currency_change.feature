@@ -14,7 +14,7 @@ Feature: Check if Opportunity budget is correct after currency change
   Scenario: Change default currency and check converted budget
     Given I go to System/Configuration
     And I follow "System Configuration/General Setup/Localization" on configuration sidebar
-    And I fill "ConfigurationLocalizationForm" with:
+    And I fill "Configuration Localization Form" with:
       | Locale Use Default           | false       |
       | Locale                       | Dutch       |
       | Primary Location Use Default | false       |
