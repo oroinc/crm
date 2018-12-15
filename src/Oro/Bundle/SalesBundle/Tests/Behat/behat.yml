@@ -147,7 +147,7 @@ oro_behat_extension:
       selector: '.oro-grid-table'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendTableGrid
 
-    ConfigurationLocalizationForm:
+    Configuration Localization Form:
       selector: 'form[name="localization"]'
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
       options:
