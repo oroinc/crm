@@ -6,20 +6,25 @@ use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 
+/**
+ * Provides customer configuration, such as registered customer classes, entity label, icon, route, etc.
+ */
 class ConfigProvider
 {
     /** @var ConfigManager */
     protected $configManager;
 
-    /** @var string */
-    private $customerClasses;
+    /** @var ConfigCache */
+    private $cache;
 
     /**
      * @param ConfigManager $configManager
+     * @param ConfigCache   $cache
      */
-    public function __construct(ConfigManager $configManager)
+    public function __construct(ConfigManager $configManager, ConfigCache $cache)
     {
         $this->configManager = $configManager;
+        $this->cache = $cache;
     }
 
     /**
@@ -42,21 +47,17 @@ class ConfigProvider
 
     /**
      * @return string[]
-     * [
-     *     className   => FQCN of a customer,
-     *     label       => entity label,
-     *     icon        => entity icon,
-     *     gridName    => customer grid name
-     *     routeCreate => route to create entity
-     * ]
      */
     public function getCustomerClasses()
     {
-        if (null === $this->customerClasses) {
-            $this->customerClasses = $this->getAssociatedCustomerClasses();
+        $cacheKey = $this->getCacheKey();
+        $customerClasses = $this->cache->getClasses($cacheKey);
+        if (null === $customerClasses) {
+            $customerClasses = $this->getAssociatedCustomerClasses();
+            $this->cache->setClasses($cacheKey, $customerClasses);
         }
 
-        return $this->customerClasses;
+        return $customerClasses;
     }
 
     /**
@@ -119,5 +120,13 @@ class ConfigProvider
         }
 
         return $classes;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCacheKey()
+    {
+        return 'default';
     }
 }
