@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Async;
 
-use Doctrine\DBAL\Driver\AbstractDriverException;
+use Doctrine\DBAL\Exception\DeadlockException;
 use Oro\Bundle\ContactBundle\Async\ContactPostImportProcessor;
 use Oro\Bundle\ContactBundle\Handler\ContactEmailAddressHandler;
-use Oro\Bundle\EntityBundle\ORM\DatabaseExceptionHelper;
 use Oro\Component\MessageQueue\Job\Job;
 use Oro\Component\MessageQueue\Job\JobStorage;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
@@ -18,11 +17,6 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
      * @var ContactEmailAddressHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contactEmailAddressHandler;
-
-    /**
-     * @var DatabaseExceptionHelper|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $databaseExceptionHelper;
 
     /**
      * @var JobStorage|\PHPUnit\Framework\MockObject\MockObject
@@ -42,13 +36,11 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->contactEmailAddressHandler = $this->createMock(ContactEmailAddressHandler::class);
-        $this->databaseExceptionHelper = $this->createMock(DatabaseExceptionHelper::class);
         $this->jobStorage = $this->createMock(JobStorage::class);
         $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->processor = new ContactPostImportProcessor(
             $this->contactEmailAddressHandler,
-            $this->databaseExceptionHelper,
             $this->jobStorage,
             $this->logger
         );
@@ -202,21 +194,9 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
             ->with(42)
             ->willReturn($job);
 
-        $exception = new \Exception();
-        $databaseDriverExceprion = $this->createMock(AbstractDriverException::class);
         $this->contactEmailAddressHandler->expects($this->once())
             ->method('actualizeContactEmailAssociations')
             ->willThrowException(new \Exception);
-
-        $this->databaseExceptionHelper->expects($this->once())
-            ->method('getDriverException')
-            ->with($exception)
-            ->willReturn($databaseDriverExceprion);
-
-        $this->databaseExceptionHelper->expects($this->once())
-            ->method('isDeadlock')
-            ->with($databaseDriverExceprion)
-            ->willReturn(false);
 
         $this->expectException(\Exception::class);
 
@@ -245,21 +225,10 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
             ->with(42)
             ->willReturn($job);
 
-        $exception = new \Exception();
-        $databaseDriverExceprion = $this->createMock(AbstractDriverException::class);
+        $exception = $this->createMock(DeadlockException::class);
         $this->contactEmailAddressHandler->expects($this->once())
             ->method('actualizeContactEmailAssociations')
-            ->willThrowException(new \Exception);
-
-        $this->databaseExceptionHelper->expects($this->once())
-            ->method('getDriverException')
-            ->with($exception)
-            ->willReturn($databaseDriverExceprion);
-
-        $this->databaseExceptionHelper->expects($this->once())
-            ->method('isDeadlock')
-            ->with($databaseDriverExceprion)
-            ->willReturn(true);
+            ->willThrowException($exception);
 
         $this->logger->expects($this->once())
             ->method('error');
@@ -289,8 +258,6 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
             ->with(42)
             ->willReturn($job);
 
-        $exception = new \Exception();
-        $databaseDriverExceprion = $this->createMock(AbstractDriverException::class);
         $this->contactEmailAddressHandler->expects($this->once())
             ->method('actualizeContactEmailAssociations');
 

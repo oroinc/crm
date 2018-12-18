@@ -1,5 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% set name = entity.name|default('N/A') %}
+{% set name = entity.name|default('N/A'|trans) %}
 {% oro_title_set({params : {"%lead.name%": name} }) %}
 
 {% set pageComponent = {

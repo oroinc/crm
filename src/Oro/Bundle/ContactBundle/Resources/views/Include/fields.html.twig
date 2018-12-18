@@ -1,12 +1,7 @@
 {% extends 'OroAddressBundle:Include:fields.html.twig' %}
 
-{% block oro_typed_address_rows %}
+{% block _oro_contact_form_addresses_entry_widget %}
     {{ form_row(form.primary, {label: 'oro.contact.contactaddress.primary.label'}) }}
-    {{ block('oro_address_rows') }}
-    {{ form_row(form.types, {label: 'oro.contact.contactaddress.types.label'}) }}
-{%  endblock %}
-
-{% block oro_address_rows %}
     {{ form_row(form.id) }}
     {{ form_row(form.label, {label: 'oro.contact.contactaddress.label.label'}) }}
     {{ form_row(form.namePrefix, {label: 'oro.contact.contactaddress.name_prefix.label'}) }}
@@ -22,5 +17,6 @@
     {{ form_row(form.region_text, {label: 'oro.contact.contactaddress.region_text.label'}) }}
     {{ form_row(form.region, {label: 'oro.contact.contactaddress.region.label'}) }}
     {{ form_row(form.postalCode, {label: 'oro.contact.contactaddress.postal_code.label'}) }}
+    {{ form_row(form.types, {label: 'oro.contact.contactaddress.types.label'}) }}
     {{ form_rest(form) }}
 {%  endblock %}

@@ -14,7 +14,7 @@
             'entity':      entity,
             'indexPath':   path('oro_channel_index'),
             'indexLabel':  'oro.channel.entity_plural_label'|trans,
-            'entityTitle': entity.name|default('N/A')
+            'entityTitle': entity.name|default('N/A'|trans)
         } %}
         {{ parent() }}
     {% else %}

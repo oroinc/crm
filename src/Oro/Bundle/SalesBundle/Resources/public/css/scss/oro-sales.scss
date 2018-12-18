@@ -22,7 +22,7 @@ form[name="opportunity"] {
         }
 
         .enum-value-collection {
-            width: 350px;
+            width: 318px;
         }
 
         .control-group-oro_entity_config_scope_type {
@@ -38,6 +38,13 @@ form[name="opportunity"] {
 }
 
 .oro-item-collection .input-append-sortable {
+
+    .system-configuration-content-wrapper & {
+        input[type="text"]:first-child {
+            width: 220px;
+        }
+    }
+
     input[type="text"].add-on-input {
         display: inline-block;
         text-shadow: 0 1px 0 #fff;

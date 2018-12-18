@@ -460,11 +460,26 @@ services:
         tags:
             - { name: oro_sales.customer_icon }
 
+    oro_sales.customer.config_cache:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\ConfigCache
+        public: false
+        arguments:
+            - '@oro_sales.customer.config_cache_impl'
+        tags:
+            - { name: kernel.event_listener, event: oro.entity_extend.entity.schema.update, method: clear }
+
+    oro_sales.customer.config_cache_impl:
+        parent: oro.cache.abstract
+        public: false
+        calls:
+            - [ setNamespace, [ 'oro_sales_customer' ] ]
+
     oro_sales.customer.config_provider:
         class: Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider
         public: false
         arguments:
             - '@oro_entity_config.config_manager'
+            - '@oro_sales.customer.config_cache'
 
     oro_sales.customer.account_config_provider:
         class: Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider

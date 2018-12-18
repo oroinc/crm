@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ContactBundle\Async;
 
+use Doctrine\DBAL\Exception\RetryableException;
 use Oro\Bundle\ContactBundle\Handler\ContactEmailAddressHandler;
-use Oro\Bundle\EntityBundle\ORM\DatabaseExceptionHelper;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Job\JobStorage;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
@@ -22,11 +22,6 @@ class ContactPostImportProcessor implements MessageProcessorInterface
     private $contactEmailAddressHandler;
 
     /**
-     * @var DatabaseExceptionHelper
-     */
-    private $databaseExceptionHelper;
-
-    /**
      * @var JobStorage
      */
     private $jobStorage;
@@ -38,18 +33,15 @@ class ContactPostImportProcessor implements MessageProcessorInterface
 
     /**
      * @param ContactEmailAddressHandler $contactEmailAddressHandler
-     * @param DatabaseExceptionHelper $databaseExceptionHelper
      * @param JobStorage $jobStorage
      * @param LoggerInterface $logger
      */
     public function __construct(
         ContactEmailAddressHandler $contactEmailAddressHandler,
-        DatabaseExceptionHelper $databaseExceptionHelper,
         JobStorage $jobStorage,
         LoggerInterface $logger
     ) {
         $this->contactEmailAddressHandler = $contactEmailAddressHandler;
-        $this->databaseExceptionHelper = $databaseExceptionHelper;
         $this->jobStorage = $jobStorage;
         $this->logger = $logger;
     }
@@ -79,21 +71,15 @@ class ContactPostImportProcessor implements MessageProcessorInterface
 
         try {
             $this->contactEmailAddressHandler->actualizeContactEmailAssociations();
-        } catch (\Exception $e) {
-            $driverException = $this->databaseExceptionHelper->getDriverException($e);
+        } catch (RetryableException $e) {
+            $this->logger->error(
+                'Deadlock occurred during actualization of contact emails',
+                [
+                    'exception' => $e
+                ]
+            );
 
-            if ($driverException && $this->databaseExceptionHelper->isDeadlock($driverException)) {
-                $this->logger->error(
-                    'Deadlock occurred during actualization of contact emails',
-                    [
-                        'exception' => $e
-                    ]
-                );
-
-                return self::REQUEUE;
-            }
-
-            throw $e;
+            return self::REQUEUE;
         }
 
         return self::ACK;
