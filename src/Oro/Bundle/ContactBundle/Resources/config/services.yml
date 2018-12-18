@@ -215,7 +215,6 @@ services:
         class: Oro\Bundle\ContactBundle\Async\ContactPostImportProcessor
         arguments:
             - '@oro_contact.handler.contact_email_address_handler'
-            - '@oro_entity.database_exception_helper'
             - '@oro_message_queue.job.storage'
             - '@monolog.logger'
         tags:
