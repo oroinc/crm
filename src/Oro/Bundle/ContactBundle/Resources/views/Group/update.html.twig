@@ -43,7 +43,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('oro_contact_group_index'),
             'indexLabel': 'oro.contact.group.entity_plural_label'|trans,
-            'entityTitle': form.vars.value.label|default('N/A')
+            'entityTitle': form.vars.value.label|default('N/A'|trans)
         }
         %}
         {{ parent() }}

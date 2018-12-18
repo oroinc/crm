@@ -1,4 +1,4 @@
 assets:
     css:
         inputs:
-            - 'bundles/oromagento/css/style.css'
+            - 'bundles/oromagento/css/style.scss'
