@@ -9,6 +9,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\MagentoBundle\Model\ExtendOrderAddress;
 
 /**
+ * Refers to the address information that was used by customer users
+ * as the billing or shipping address in their orders.
+ *
  * @ORM\Table("orocrm_magento_order_address")
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity
