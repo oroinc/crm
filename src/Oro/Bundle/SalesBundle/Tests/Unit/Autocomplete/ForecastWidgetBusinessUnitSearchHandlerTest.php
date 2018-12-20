@@ -4,16 +4,16 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Autocomplete;
 
 use Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler;
 
-class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit_Framework_TestCase
+class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_ID_FIELD = 'id';
     const TEST_ENTITY_NAME = 'OroOrganizationBundle:BusinessUnit';
     const TEST_ENTITY_ALIAS = 'business_alias';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $businessAclProvider;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $handler;
 
     public function setUp()

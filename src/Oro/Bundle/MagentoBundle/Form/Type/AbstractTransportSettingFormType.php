@@ -114,14 +114,12 @@ abstract class AbstractTransportSettingFormType extends AbstractType
             WebsiteSelectType::class,
             [
                 'label'    => 'oro.magento.magentotransport.website_id.label',
-                'required' => true,
-                // TODO: Remove 'choices_as_values' option in scope of BAP-15236
-                'choices_as_values' => true
+                'required' => true
             ]
         );
 
         $builder->add(
-            $builder->create('websites', 'hidden')
+            $builder->create('websites', HiddenType::class)
                 ->addViewTransformer(new ArrayToJsonTransformer())
         );
 
@@ -141,7 +139,7 @@ abstract class AbstractTransportSettingFormType extends AbstractType
 
         $builder->add(
             $builder
-                ->create('isExtensionInstalled', 'hidden')
+                ->create('isExtensionInstalled', HiddenType::class)
                 ->addEventSubscriber(new ConnectorsFormSubscriber($this->registry))
         );
 

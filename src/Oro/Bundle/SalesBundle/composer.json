@@ -1,13 +1,13 @@
 {
     "name": "orocrm/sales-bundle",
     "type": "symfony-bundle",
-    "description": "Oro CRM Sales",
+    "description": "OroCRM Sales",
     "keywords": ["CRM", "Sales"],
     "homepage": "https://github.com/orocrm/SalesBundle",
     "license": "MIT",
     "require": {
         "php": "7.1.*",
-        "symfony/symfony": "2.8.*, !=2.8.10",
+        "symfony/symfony": "^3.4",
 
         "oro/ui-bundle": "dev-master",
         "oro/dashboard-bundle": "dev-master",

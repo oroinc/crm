@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
+use Oro\Component\Testing\Unit\Form\Type\Stub\FormStub;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
@@ -14,21 +15,21 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
+class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_NAME = 'name';
     const FORM_DATA = ['field' => 'value'];
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|FormInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|FormInterface */
     protected $form;
 
     /** @var Request */
     protected $request;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|RegistryInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|RegistryInterface */
     protected $registry;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|EventDispatcherInterface */
     protected $dispatcher;
 
     /** @var ChannelHandler */
@@ -37,7 +38,7 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var Channel */
     protected $entity;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager */
     protected $em;
 
     protected function setUp()
@@ -134,8 +135,8 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($formFactory));
             $formConfig->expects($this->once())->method('getType')
                 ->will($this->returnValue($formType));
-            $formType->expects($this->once())->method('getName')
-                ->will($this->returnValue('type' . self::TEST_NAME));
+            $formType->expects($this->any())->method('getInnerType')
+                ->will($this->returnValue(new FormStub('type' . self::TEST_NAME)));
             $this->form->expects($this->once())->method('getName')
                 ->will($this->returnValue('form' . self::TEST_NAME));
             $this->form->expects($this->once())->method('getConfig')

@@ -17,7 +17,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         sales_funnel_owner:
-                            form_type: oro_user_organization_acl_select
+                            form_type: Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType
                             options:
                                 required: true
                                 constraints:
@@ -28,7 +28,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         lead:
-                            form_type: oro_sales_lead_select
+                            form_type: Oro\Bundle\SalesBundle\Form\Type\LeadSelectType
                             options:
                                 grid_name: 'sales-funnel-lead-grid'
                                 configs:
@@ -61,7 +61,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         sales_funnel_owner:
-                            form_type: oro_user_organization_acl_select
+                            form_type: Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType
                             options:
                                 required: true
                                 constraints:
@@ -72,7 +72,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         opportunity:
-                            form_type: oro_sales_opportunity_select
+                            form_type: Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType
                             options:
                                 grid_name: 'sales-funnel-opportunity-grid'
                                 configs:
@@ -125,14 +125,14 @@ workflows:
                                 constraints:
                                   - NotBlank: ~
                         new_customer_association:
-                            form_type: oro_sales_customer
+                            form_type: Oro\Bundle\SalesBundle\Form\Type\CustomerType
                             options:
                                 required: false
                                 parent_class: Oro\Bundle\AccountBundle\Entity\Account
                                 label: 'Test'
                         new_company_name: ~
                         new_notes:
-                            form_type: oro_resizeable_rich_text
+                            form_type: Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType
                     attribute_default_values:
                         new_opportunity_name: $lead.name
                         new_customer_association: $lead.customerAssociation
@@ -172,12 +172,12 @@ workflows:
                     attribute_fields:
                         contact: ~
                         new_customer_association:
-                            form_type: oro_sales_customer
+                            form_type: Oro\Bundle\SalesBundle\Form\Type\CustomerType
                             options:
                                 required: false
                                 parent_class: Oro\Bundle\AccountBundle\Entity\Account
                         budget_amount:
-                            form_type: oro_multicurrency
+                            form_type: Oro\Bundle\CurrencyBundle\Form\Type\MultiCurrencyType
                         probability: ~
                         customer_need: ~
                         proposed_solution: ~
@@ -191,7 +191,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         close_revenue:
-                            form_type: oro_multicurrency
+                            form_type: Oro\Bundle\CurrencyBundle\Form\Type\MultiCurrencyType
                             options:
                                 required: true
                                 constraints:
@@ -211,19 +211,19 @@ workflows:
                 step_to: lost_opportunity
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'fa-close-circle'
+                    icon: 'fa-times'
                     class: 'btn-danger'
                 transition_definition: close_as_lost_definition
                 form_options:
                     attribute_fields:
                         close_reason_name:
-                            form_type: choice
+                            form_type: Symfony\Component\Form\Extension\Core\Type\ChoiceType
                             options:
                                 required: true
                                 placeholder: false
                                 choices:
-                                    outsold: 'Outsold'
-                                    cancelled: 'Cancelled'
+                                    Outsold: outsold
+                                    Cancelled: cancelled
                                 constraints:
                                     - NotBlank: ~
                         close_date:

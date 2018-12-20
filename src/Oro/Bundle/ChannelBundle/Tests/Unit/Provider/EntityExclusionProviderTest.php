@@ -6,7 +6,7 @@ use Oro\Bundle\ChannelBundle\Provider\EntityExclusionProvider;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 
-class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
+class EntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_MAIN_ENTITY_NAME               = 'TestBundle\Entity\TestMain';
     const TEST_ENTITY_NAME                    = 'TestBundle\Entity\Test';
@@ -18,10 +18,10 @@ class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
     /** @var EntityExclusionProvider */
     protected $exclusionProvider;
 
-    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $settingsProvider;
 
-    /** @var StateProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StateProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $stateProvider;
 
     public function setUp()

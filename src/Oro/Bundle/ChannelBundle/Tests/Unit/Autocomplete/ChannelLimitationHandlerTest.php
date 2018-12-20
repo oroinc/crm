@@ -6,7 +6,7 @@ use Oro\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Query\Result;
 
-class ChannelLimitationHandlerTest extends \PHPUnit_Framework_TestCase
+class ChannelLimitationHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_ENTITY_NAME            = 'Oro\\Bundle\\ChannelBundle\\Tests\\Unit\\Stubs\\Entity\\StubEntity';
     const TEST_ENTITY_ALIAS           = 'oro_channel_stub';

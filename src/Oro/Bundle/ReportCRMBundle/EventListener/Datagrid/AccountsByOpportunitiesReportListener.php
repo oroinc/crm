@@ -50,7 +50,7 @@ class AccountsByOpportunitiesReportListener
         $sorters = $config->offsetGetByPath(self::SORTERS_PATH, array());
         $filters = $config->offsetGetByPath(self::FILTERS_PATH, array());
 
-        foreach ($enumValues as $id => $text) {
+        foreach ($enumValues as $text => $id) {
             $label = $id.'Count';
             $selects[] = sprintf($selectTemplate, $id, $label);
             $grandTotals[$label] = ['expr' => sprintf($grandTotalTemplate, $id)];

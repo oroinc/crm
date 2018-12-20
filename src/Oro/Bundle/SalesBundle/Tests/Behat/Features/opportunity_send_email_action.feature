@@ -21,7 +21,7 @@ Feature: Opportunity send email action
   Scenario: Check opportunity contact that has only name, "Send Email" dialog should have empty field "To"
     Given I click view opportunity w contact no email in grid
     And I follow "More actions"
-    And press "Send email"
+    And click "Send email"
     Then "Email Form" must contains values:
       | From | "John Doe" <admin@example.com> |
     When I click "Send"
@@ -54,10 +54,10 @@ Feature: Opportunity send email action
     Given I go to Sales/ Opportunities
     And I click view opportunity wo contact in grid
     And I follow "More actions"
-    And press "Send email"
+    And click "Send email"
     Then "Email Form" must contains values:
       | From | "John Doe" <admin@example.com> |
-    When I press "Send"
+    When I click "Send"
     Then I should see "Email Form" validation errors:
       | ToField | This value contains not valid email address. |
       | Subject | This value should not be blank.              |

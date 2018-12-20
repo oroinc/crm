@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Converter;
 use Oro\Bundle\ImportExportBundle\Context\Context;
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\AttributesConverterHelper;
 
-class AttributesConverterHelperTest extends \PHPUnit_Framework_TestCase
+class AttributesConverterHelperTest extends \PHPUnit\Framework\TestCase
 {
     public function testAddUnknownAttributesNoAttributes()
     {

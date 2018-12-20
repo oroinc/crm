@@ -5,9 +5,9 @@ namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\DependencyInjection\Compil
 use Oro\Bundle\ActivityContactBundle\DependencyInjection\Compiler\DirectionProviderPass;
 use Symfony\Component\DependencyInjection\Reference;
 
-class DirectionProviderPassTest extends \PHPUnit_Framework_TestCase
+class DirectionProviderPassTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $container;
 
     protected function setUp()

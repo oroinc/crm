@@ -17,14 +17,13 @@ Retrieve a collection of records represented by Magento shopping carts.
 ### create
 
 Create a new Magento shopping cart record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentocarts>`
 
 ```JSON
 {  
@@ -113,8 +112,6 @@ Edit a specific Magento shopping cart record.
 
 {@request:json_api}
 Example:
-
-`</api/magentocarts/546>`
 
 ```JSON
 {
@@ -219,7 +216,6 @@ Delete a specific Magento shopping cart record.
 ### delete_list
 
 Delete a collection of Magento shopping cartrecords.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -364,8 +360,6 @@ Replace the billing address for a specific Magento shopping cart record.
 {@request:json_api}
 Example:
 
-`</api/magentocarts/1/relationships/billingAddress>`
-
 ```JSON
 {
   "data": {
@@ -393,8 +387,6 @@ Set the cart items that will be assigned to a specific Magento shopping cart rec
 {@request:json_api}
 Example:
 
-`</api/magentocarts/1/relationships/cartItems>`
-
 ```JSON
 {
   "data": [
@@ -417,8 +409,6 @@ Replace the cart items that are assigned to a specific Magento shopping cart rec
 
 {@request:json_api}
 Example:
-
-`</api/magentocarts/1/relationships/cartItems>`
 
 ```JSON
 {
@@ -458,8 +448,6 @@ Replace the Magento customer to whom a specific Magento shopping cart record bel
 {@request:json_api}
 Example:
 
-`</api/magentocarts/1/relationships/customer>`
-
 ```JSON
 {
   "data": {
@@ -486,8 +474,6 @@ Replace the channel for a specific Magento shopping cart record.
 
 {@request:json_api}
 Example:
-
-`</api/magentocarts/1/relationships/dataChannel>`
 
 ```JSON
 {
@@ -516,8 +502,6 @@ Replace the opportunity record assigned to a Magento shopping cart record.
 {@request:json_api}
 Example:
 
-`</api/magentocarts/1/relationships/opportunity>`
-
 ```JSON
 {
   "data": {
@@ -544,8 +528,6 @@ Replace the organization a specific Magento shopping cart record belongs to.
 
 {@request:json_api}
 Example:
-
-`</api/magentocarts/1/relationships/organization>`
 
 ```JSON
 {
@@ -574,8 +556,6 @@ Replace the owner of a specific Magento shopping cart record.
 {@request:json_api}
 Example:
 
-`</api/magentocarts/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -602,8 +582,6 @@ Replace the store from which a specific Magento shopping cart has been received.
 
 {@request:json_api}
 Example:
-
-`</api/magentocarts/1/relationships/store>`
 
 ```JSON
 {
@@ -632,8 +610,6 @@ Replace the status of a specific Magento shopping cart record.
 {@request:json_api}
 Example:
 
-`</api/magentocarts/1/relationships/status>`
-
 ```JSON
 {
   "data": {
@@ -661,8 +637,6 @@ Replace the shipping address for a specific Magento shopping cart record.
 {@request:json_api}
 Example:
 
-`</api/magentocarts/1/relationships/shippingAddress>`
-
 ```JSON
 {
   "data": {
@@ -689,8 +663,6 @@ Replace an integration channel via which information about the Magento shopping 
 
 {@request:json_api}
 Example:
-
-`</api/magentocarts/1/relationships/channel>`
 
 ```JSON
 {

@@ -6,7 +6,7 @@ use Oro\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability;
 use Oro\Component\ConfigExpression\ContextAccessor;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
-class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
+class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ChannelEntityAvailability */
     protected $condition;

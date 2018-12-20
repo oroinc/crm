@@ -17,6 +17,7 @@ Retrieve a collection of opportunity records.
 ### create
 
 Create a new opportunity record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
@@ -28,8 +29,6 @@ the customer should be a part of the specified account.*
 
 {@request:json_api}
 Example:
-
-`</api/opportunities>`
 
 ```JSON
 {  
@@ -83,6 +82,7 @@ Example:
 ### update
 
 Edit a specific opportunity record.
+
 The updated record is returned in the response.
 
 {@inheritdoc}
@@ -95,8 +95,6 @@ These fields could be used independent from each other, but must be correlated i
 
 {@request:json_api}
 Example:
-
-`</api/opportunities/52>`
 
 ```JSON
 {  
@@ -154,7 +152,6 @@ Delete a specific opportunity record.
 ### delete_list
 
 Delete a collection of opportunity records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -212,7 +209,7 @@ An account the opportunity is assigned to.
 
 ### campaign
 
-The marketing campaign as a result of which the Opportunity was created.
+The marketing campaign as a result of which the opportunity was created.
 
 ## SUBRESOURCES
 
@@ -232,8 +229,6 @@ Update the reason for opportunity closure.
 
 {@request:json_api}
 Example:
-
-`</api/opportunities/45/relationships/closeReason>`
 
 ```JSON
 {
@@ -262,8 +257,6 @@ Update the person on the customer side who is directly related to the opportunit
 {@request:json_api}
 Example:
 
-`</api/opportunities/1/relationships/contact>`
-
 ```JSON
 {
   "data": {
@@ -290,8 +283,6 @@ Update a customer the opportunity is created for.
 
 {@request:json_api}
 Example:
-
-`</api/opportunities/1/relationships/customer>`
 
 ```JSON
 {
@@ -320,8 +311,6 @@ Update an account the opportunity is created for.
 {@request:json_api}
 Example:
 
-`</api/opportunities/1/relationships/account>`
-
 ```JSON
 {
   "data": {
@@ -348,8 +337,6 @@ Update the sale prospect that has been successfully qualified into this opportun
 
 {@request:json_api}
 Example:
-
-`</api/opportunities/54/relationships/lead>`
 
 ```JSON
 {
@@ -378,8 +365,6 @@ Update an organization to which the opportunity belongs.
 {@request:json_api}
 Example:
 
-`</api/opportunities/1/relationships/organization>`
-
 ```JSON
 {
   "data": {
@@ -406,8 +391,6 @@ Update an user who owns the opportunity.
 
 {@request:json_api}
 Example:
-
-`</api/opportunities/1/relationships/owner>`
 
 ```JSON
 {
@@ -436,8 +419,6 @@ Update a stage in the process of a sale.
 {@request:json_api}
 Example:
 
-`</api/opportunities/1/relationships/status>`
-
 ```JSON
 {
   "data": {
@@ -447,23 +428,6 @@ Example:
 }
 ```
 {@/request}
-
-# Extend\Entity\EV_Opportunity_Status
-
-## ACTIONS  
-
-### get
-
-Retrieve a specific opportunity status record.
-
-{@inheritdoc}
-
-### get_list
-
-Retrieve a collection of opportunity status records.
-
-{@inheritdoc}
-
 
 # Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
 

@@ -6,11 +6,11 @@ use Oro\Bundle\ChannelBundle\Provider\MetadataProvider;
 use Oro\Bundle\ChannelBundle\Twig\MetadataExtension;
 use Oro\Component\Testing\Unit\TwigExtensionTestCaseTrait;
 
-class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
+class MetadataExtensionTest extends \PHPUnit\Framework\TestCase
 {
     use TwigExtensionTestCaseTrait;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $provider;
 
     /** @var MetadataExtension */
@@ -50,14 +50,14 @@ class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChannelTypeMetadata()
     {
-        $expectedResult = new \stdClass();
+        $expectedResult = ['key' => 'value'];
 
         $this->provider->expects($this->once())
             ->method('getChannelTypeMetadata')
             ->will($this->returnValue($expectedResult));
 
         $this->assertSame(
-            $expectedResult,
+            array_flip($expectedResult),
             self::callTwigFunction($this->extension, 'oro_channel_type_metadata', [])
         );
     }

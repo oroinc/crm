@@ -11,7 +11,7 @@ Scenario: Required fields
     | Columbia Pictures  | @admin | @organization |
     | Paramount Pictures | @admin | @organization |
   And I go to Customers/Contacts
-  And press "Create Contact"
+  And click "Create Contact"
   When save and close form
   Then I should see "At least one of the fields First name, Last name, Emails or Phones must be defined." error message
 
@@ -66,7 +66,7 @@ Scenario: Cancel edit
     | Last name  | No name          |
     | Emails     | [fake@gmail.com] |
     | Phones     | [+0000000000000] |
-  When press "Cancel"
+  When click "Cancel"
   Then I should see Charlie Sheen in grid with following data:
     | Email   | charlie@gmail.com   |
     | Phone   | +1 415-731-9375     |
@@ -77,22 +77,22 @@ Scenario: Change primary address
   And I click view Charlie Sheen in grid
   And click edit LOS ANGELES address
   And check "Primary"
-  When I press "Save"
+  When I click "Save"
   Then LOS ANGELES address must be primary
   And contact has 2 addresses
 
 Scenario: Add/Delete address from contact view
   When I delete Ukraine address
-  And press "Yes, Delete"
+  And click "Yes, Delete"
   Then contact has one address
-  When I press "+ Add Address"
+  When I click "+ Add Address"
   And fill form with:
     | Country         | Germany       |
     | Street          | Mühlendamm 78 |
     | City            | Hamburg       |
     | Zip/Postal Code | 22087         |
     | State           | Hamburg       |
-  And press "Save"
+  And click "Save"
   Then contact has 2 addresses
   And LOS ANGELES address must be primary
 
@@ -114,7 +114,28 @@ Scenario: Assert field values of Contact view page after edit
   And avatar should not be default avatar
 
 Scenario: Delete contact
-  When I press "Delete Contact"
+  When I click "Delete Contact"
   And confirm deletion
   Then I should see "Contact deleted" flash message
   And there is no records in grid
+
+Scenario: Validate Social links length
+  Given I login as administrator
+  Then I go to Customers/Contacts
+  Then I click "Create Contact"
+  Then I fill form with:
+    | First name | Charlie                                |
+    | Last name  | Sheen                                  |
+    | Phones     | [+1 415-731-9375, +1 415-656-4418]     |
+    | Twitter    | http://twitter.com/test_acc?semper=luctus&est=et&quam=ultrices&pharetra=posuere&magna=cubilia&ac=curae&consequat=nulla&metus=dapibus&sapien=dolor&ut=vel&nunc=est&vestibulum=donec&ante=odio&ipsum=justo&primis=sollicitudin&in=ut&faucibus=suscipit&orci=auhuiuhywef |
+    | Skype      | http://skype.com/test_acc?semper=luctus&est=et&quam=ultrices&pharetra=posuere&magna=cubilia&ac=curae&consequat=nulla&metus=dapibus&sapien=dolor&ut=vel&nunc=est&vestibulum=donec&ante=odio&ipsum=justo&primis=sollicitudin&in=ut&faucibus=suscipit&orci=auhuiuhywdwwe |
+    | Facebook   | http://facebook.com/test_acc?semper=luctus&est=et&quam=ultrices&pharetra=posuere&magna=cubilia&ac=curae&consequat=nulla&metus=dapibus&sapien=dolor&ut=vel&nunc=est&vestibulum=donec&ante=odio&ipsum=justo&primis=sollicitudin&in=ut&faucibus=suscipit&orci=auhuiuhywf |
+    | Google+    | http://plus.google.com/test_acc?semper=luctus&est=et&quam=ultrices&pharetra=posuere&magna=cubilia&ac=curae&consequat=nulla&metus=dapibus&sapien=dolor&ut=vel&nunc=est&vestibulum=donec&ante=odio&ipsum=justo&primis=sollicitudin&in=ut&faucibus=suscipit&orci=auhuiuh |
+    | LinkedIn   | http://plus.google.com/test_acc?semper=luctus&est=et&quam=ultrices&pharetra=posuere&magna=cubilia&ac=curae&consequat=nulla&metus=dapibus&sapien=dolor&ut=vel&nunc=est&vestibulum=donec&ante=odio&ipsum=justo&primis=sollicitudin&in=ut&faucibus=suscipit&orci=auhuiuh |
+  When I save form
+  Then I should see validation errors:
+    | Twitter  | This value is too long. It should have 255 characters or less. |
+    | Skype    | This value is too long. It should have 255 characters or less. |
+    | Facebook | This value is too long. It should have 255 characters or less. |
+    | Google+  | This value is too long. It should have 255 characters or less. |
+    | LinkedIn | This value is too long. It should have 255 characters or less. |

@@ -14,56 +14,58 @@
 
 An array of email addresses.
 
-Format of data: [{""email"": first@email.com}, {""email"": second@email.com}]
+The **email** property is a string contains an email address.
+
+Example of data: **\[{"email": "first@email.com"}, {"email": "second@email.com"}\]**
 
 #### create
 
-An array of email addresses.
+{@inheritdoc}
 
-Format of data: [{""email"": first@email.com}, {""email"": second@email.com}]
+**Please note:**
 
-Data should contain full collection of email addresses of the contact.
+*Data should contain all email addresses of the contact, including the primary email address.*
 
 **Conditionally required field:**
 *At least one of the fields First name, Last name, Emails or Phones must be defined.*
 
 #### update
 
-An array of email addresses.
-
-Format of data: [{""email"": first@email.com}, {""email"": second@email.com}]
-
-Data should contain full collection of email addresses of the contact.
+{@inheritdoc}
 
 **Please note:**
+
+*Data should contain all email addresses of the contact, including the primary email address.*
+
 *At least one of the fields First name, Last name, Emails or Phones must remain defined.*
 
 ### phones
 
 An array of phone numbers.
 
-Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
+The **phone** property is a string contains a phone number.
+
+Example of data: **\[{"phone": "202-555-0141"}, {"phone": "202-555-0171"}\]**
 
 #### create
 
-An array of phone numbers.
+{@inheritdoc}
 
-Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
+**Please note:**
 
-Data should contain full collection of phone numbers of the contact.
+*Data should contain all phone numbers of the contact, including the primary phone number.*
 
 **Conditionally required field:**
 *At least one of the fields First name, Last name, Emails or Phones must be defined.*
 
 #### update
 
-An array of phone numbers.
-
-Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
-
-Data should contain full collection of phone numbers of the contact.
+{@inheritdoc}
 
 **Please note:**
+
+*Data should contain all phone numbers of the contact, including the primary phone number.*
+
 *At least one of the fields First name, Last name, Emails or Phones must remain defined.*
 
 ### primaryEmail
@@ -74,7 +76,9 @@ Primary email address of the contact.
 
 The email address that should be set as the primary one.
 
-**Please note:** The primary email address will be added to **emails** collection if it does not contain it yet.
+**Please note:**
+
+*The **emails** collection should contain the primary email address if the request has this collection.*
 
 ### primaryPhone
 
@@ -84,7 +88,9 @@ Primary phone number of the contact.
 
 The phone number that should be set as the primary one.
 
-**Please note:** The primary phone number will be added to **phones** collection if it does not contain it yet.
+**Please note:**
+
+*The **phones** collection should contain the primary phone number if the request has this collection.*
 
 ### firstName
 
@@ -100,6 +106,7 @@ The phone number that should be set as the primary one.
 {@inheritdoc}
  
 **Please note:**
+
 *At least one of the fields First name, Last name, Emails or Phones must remain defined.*
 
 ### lastName
@@ -116,6 +123,7 @@ The phone number that should be set as the primary one.
 {@inheritdoc}
  
 **Please note:**
+
 *At least one of the fields First name, Last name, Emails or Phones must remain defined.*
 
 ## FILTERS
@@ -123,6 +131,10 @@ The phone number that should be set as the primary one.
 ### emails
 
 Filter records by email address.
+
+### firstName
+
+Filter records by first name.
 
 ### phones
 
@@ -153,14 +165,13 @@ Retrieve a collection of contact records.
 ### create
 
 Create a new contact record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/contacts>`
 
 ```JSON
 {  
@@ -199,8 +210,6 @@ Edit a specific contact record.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1>`
 
 ```JSON
 {  
@@ -259,7 +268,6 @@ Delete a specific contact record.
 ### delete_list
 
 Delete a collection of contact records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -282,8 +290,6 @@ Replace accounts assigned to a specific contact record
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/accounts>`
-
 ```JSON
 {
   "data": [
@@ -302,8 +308,6 @@ Set account records for a specific contact.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/accounts>`
 
 ```JSON
 {
@@ -331,52 +335,6 @@ Retrieve a record of addresses assigned to a specific contact record.
 
 Retrieve IDs of address records assigned to a specific contact record.
 
-#### update_relationship
-
-Replace the list of addresses assigned to a specific contact record.
-
-{@request:json_api}
-Example:
-
-`</api/contacts/1/relationships/addresses>`
-
-```JSON
-{  
-   "data":[  
-      {  
-         "type":"contactaddresses",
-         "id":"6"
-      }
-   ]
-}
-```
-{@/request}
-
-#### add_relationship
-
-Set address records for a specific contact record.
-
-{@request:json_api}
-Example:
-
-`</api/contacts/1/relationships/addresses>`
-
-```JSON
-{  
-   "data":[  
-      {  
-         "type":"contactaddresses",
-         "id":"7"
-      }
-   ]
-}
-```
-{@/request}
-
-#### delete_relationship
-
-Remove address records from a specific contact record.
-
 ### assignedTo
 
 #### get_subresource
@@ -393,8 +351,6 @@ Replace the user a specific contact record is assigned to.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/assignedTo>`
 
 ```JSON
 {
@@ -423,8 +379,6 @@ Replace the user who created a specific contact record.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/createdBy>`
-
 ```JSON
 {
   "data": {
@@ -452,8 +406,6 @@ Set accounts for which a specific contact record will be default.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/defaultInAccounts>`
-
 ```JSON
 {
   "data": [
@@ -472,8 +424,6 @@ Replace accounts for which a specific contact record is default.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/defaultInAccounts>`
 
 ```JSON
 {
@@ -508,8 +458,6 @@ Set groups a specific contact will belong to.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/groups>`
-
 ```JSON
 {
   "data": [
@@ -528,8 +476,6 @@ Replace the groups a specific contact record belongs to.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/groups>`
 
 ```JSON
 {
@@ -564,8 +510,6 @@ Replace the contact method configured for a specific contact record.
 {@request:json_api}
 Example:
 
-`</api/contacts/49/relationships/method>`
-
 ```JSON
 {
   "data": {
@@ -592,8 +536,6 @@ Replace the organization a specific contact record belongs to.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/organization>`
 
 ```JSON
 {
@@ -622,8 +564,6 @@ Replace the owner of a specific contact record.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -642,7 +582,7 @@ Retrieve the picture configured for a specific contact record.
 
 #### get_relationship
 
-Retrive the ID of the picture configured for a specific contact record.
+Retrieve the ID of the picture configured for a specific contact record.
 
 #### update_relationship
 
@@ -650,8 +590,6 @@ Replace the picture for a specific contact record.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/picture>`
 
 ```JSON
 {
@@ -680,8 +618,6 @@ Replace the contact a specific contact record reports to.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/reportsTo>`
-
 ```JSON
 {
   "data": {
@@ -709,8 +645,6 @@ Replace the source of a specific contact record.
 {@request:json_api}
 Example:
 
-`</api/contacts/1/relationships/source>`
-
 ```JSON
 {
   "data": {
@@ -737,8 +671,6 @@ Replace the user who updated a specific contact record.
 
 {@request:json_api}
 Example:
-
-`</api/contacts/1/relationships/updatedBy>`
 
 ```JSON
 {

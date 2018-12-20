@@ -1,12 +1,12 @@
 {
     "name": "orocrm/report-bundle",
     "type": "symfony-bundle",
-    "description": "Oro CRM Report Bundle",
+    "description": "OroCRM Report Bundle",
     "keywords": ["Oro"],
     "license": "MIT",
     "require": {
         "php": "7.1.*",
-        "symfony/symfony": "2.8.*, !=2.8.10",
+        "symfony/symfony": "^3.4",
 
         "oro/ui-bundle": "dev-master",
         "orocrm/account-bundle": "dev-master",

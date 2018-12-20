@@ -7,17 +7,17 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\EventListener\ORM\RefreshChannelCacheListener;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
-use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
+use Oro\Component\TestUtils\ORM\OrmTestCase;
 
 class RefreshChannelCacheListenerTest extends OrmTestCase
 {
-    /** @var StateProvider | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var StateProvider | \PHPUnit\Framework\MockObject\MockObject */
     protected $stateProvider;
 
     /** @var  RefreshChannelCacheListener */
     protected $refreshChannelCacheListener;
 
-    /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $em;
 
     protected function setUp()

@@ -4,7 +4,7 @@ namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Form;
 
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 
-class ContactRequestTest extends \PHPUnit_Framework_TestCase
+class ContactRequestTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {

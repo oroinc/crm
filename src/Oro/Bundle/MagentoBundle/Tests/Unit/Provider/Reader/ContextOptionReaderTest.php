@@ -6,22 +6,22 @@ use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\MagentoBundle\Provider\Reader\ContextOptionReader;
 
-class ContextOptionReaderTest extends \PHPUnit_Framework_TestCase
+class ContextOptionReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextOptionReader
      */
     protected $reader;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ContextRegistry
+     * @var \PHPUnit\Framework\MockObject\MockObject|ContextRegistry
      */
     protected $contextRegistry;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StepExecution
+     * @var \PHPUnit\Framework\MockObject\MockObject|StepExecution
      */
     protected $stepExecution;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ContextInterface
      */
     protected $context;
 

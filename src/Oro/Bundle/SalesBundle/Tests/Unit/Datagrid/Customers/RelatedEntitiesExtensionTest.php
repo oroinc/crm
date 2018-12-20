@@ -14,12 +14,12 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
-class RelatedEntitiesExtensionTest extends \PHPUnit_Framework_TestCase
+class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var RelatedEntitiesExtension */
     protected $extension;
 
-    /** @var ConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $configProvider;
 
     public function setUp()
@@ -166,7 +166,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit_Framework_TestCase
      * @param string|null $customerIdParam
      * @param string|null $alias
      *
-     * @return QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return QueryBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     public function prepareQueryBuilder(
         $opportunityClass,
@@ -210,9 +210,9 @@ class RelatedEntitiesExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param QueryBuilder|\PHPUnit_Framework_MockObject_MockObject $qb
+     * @param QueryBuilder|\PHPUnit\Framework\MockObject\MockObject $qb
      *
-     * @return OrmDatasource|\PHPUnit_Framework_MockObject_MockObject
+     * @return OrmDatasource|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getDatasource($qb)
     {

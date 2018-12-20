@@ -4,7 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Validator;
 
 use Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint;
 
-class ChannelIntegrationConstraintTest extends \PHPUnit_Framework_TestCase
+class ChannelIntegrationConstraintTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetTargets()
     {

@@ -17,14 +17,13 @@ Retrieve a collection of contact address records.
 ### create
 
 Create a new contact address record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/contactaddresses>`
 
 ```JSON
 {  
@@ -72,8 +71,6 @@ Edit a specific contact address record.
 
 {@request:json_api}
 Example:
-
-`</api/contactaddresses/79>`
 
 ```JSON
 {  
@@ -123,7 +120,6 @@ Delete a specific contact address record.
 ### delete_list
 
 Delete a collection of contact address records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -145,6 +141,14 @@ The list of records that will be deleted, could be limited by filters.
 
 **The required field**
 
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
 ### owner
 
 #### create
@@ -152,6 +156,14 @@ The list of records that will be deleted, could be limited by filters.
 {@inheritdoc}
 
 **The required field**
+
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
 
 ## SUBRESOURCES
 
@@ -171,8 +183,6 @@ Replace the country configured for a specific contact address record.
 
 {@request:json_api}
 Example:
-
-`</api/contactaddresses/1/relationships/country>`
 
 ```JSON
 {
@@ -201,8 +211,6 @@ Replace the owner of a specific contact address record.
 {@request:json_api}
 Example:
 
-`</api/contactaddresses/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -229,8 +237,6 @@ Replace the region that is configured for a specific contact address record.
 
 {@request:json_api}
 Example:
-
-`</api/contactaddresses/1/relationships/region>`
 
 ```JSON
 {
@@ -259,8 +265,6 @@ Set the address types for a specific contact address record.
 {@request:json_api}
 Example:
 
-`</api/contactaddresses/1/relationships/types>`
-
 ```JSON
 {  
    "data":[  
@@ -279,8 +283,6 @@ Replace the address types for a specific contact address record.
 
 {@request:json_api}
 Example:
-
-`</api/contactaddresses/1/relationships/types>`
 
 ```JSON
 {  

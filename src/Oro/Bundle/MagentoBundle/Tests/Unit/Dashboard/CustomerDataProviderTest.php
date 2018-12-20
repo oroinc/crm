@@ -4,21 +4,21 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Converter;
 
 use Oro\Bundle\MagentoBundle\Dashboard\CustomerDataProvider;
 
-class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
+class CustomerDataProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $registry;
 
     /** @var CustomerDataProvider */
     protected $dataProvider;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $aclHelper;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $configProvider;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $dateHelper;
 
     /**

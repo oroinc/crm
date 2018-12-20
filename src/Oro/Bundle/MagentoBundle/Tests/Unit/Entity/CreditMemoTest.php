@@ -10,7 +10,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\Testing\Unit\EntityTestCaseTrait;
 
-class CreditMemoTest extends \PHPUnit_Framework_TestCase
+class CreditMemoTest extends \PHPUnit\Framework\TestCase
 {
     use EntityTestCaseTrait;
 

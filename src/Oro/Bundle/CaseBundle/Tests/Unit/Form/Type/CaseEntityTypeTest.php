@@ -4,7 +4,7 @@ namespace Oro\Bundle\CaseBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\CaseBundle\Form\Type\CaseEntityType;
 
-class CaseEntityTypeTest extends \PHPUnit_Framework_TestCase
+class CaseEntityTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CaseEntityType
@@ -58,11 +58,6 @@ class CaseEntityTypeTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-    }
-
-    public function testGetName()
-    {
-        $this->assertEquals('oro_case_entity', $this->formType->getName());
     }
 
     public function testConfigureOptions()

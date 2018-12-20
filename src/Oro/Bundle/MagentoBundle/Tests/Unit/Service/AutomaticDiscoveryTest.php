@@ -10,20 +10,20 @@ use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface;
 use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 
-class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
+class AutomaticDiscoveryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     protected $doctrineHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DiscoveryStrategyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|DiscoveryStrategyInterface
      */
     protected $defaultStrategy;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OwnershipMetadataProviderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|OwnershipMetadataProviderInterface
      */
     protected $metadataProvider;
 
@@ -162,7 +162,7 @@ class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $qb
+     * @param \PHPUnit\Framework\MockObject\MockObject $qb
      * @param object $entity
      * @param int|null $id
      * @param array $config
@@ -218,7 +218,7 @@ class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
             ->method('apply')
             ->with($qb, AutomaticDiscovery::ROOT_ALIAS, 'test1', $config[Configuration::DISCOVERY_NODE], $entity);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DiscoveryStrategyInterface $customStrategy */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DiscoveryStrategyInterface $customStrategy */
         $customStrategy = $this
             ->createMock('Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface');
         $customStrategy->expects($this->once())

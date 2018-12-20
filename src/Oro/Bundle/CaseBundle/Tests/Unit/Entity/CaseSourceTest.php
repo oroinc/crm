@@ -4,7 +4,7 @@ namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
 
-class CaseSourceTest extends \PHPUnit_Framework_TestCase
+class CaseSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CaseSource

@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\FormBundle\Form\Type\OroJquerySelect2HiddenType;
 use Oro\Bundle\MagentoBundle\Form\Type\CartSelectType;
 
-class CartSelectTypeTest extends \PHPUnit_Framework_TestCase
+class CartSelectTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CartSelectType */
     protected $type;
@@ -37,11 +37,6 @@ class CartSelectTypeTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->type->configureOptions($resolver);
-    }
-
-    public function testGetName()
-    {
-        $this->assertEquals('oro_cart_select', $this->type->getName());
     }
 
     public function testGetParent()

@@ -12,7 +12,7 @@ use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestTarget;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class ActivityListenerTest extends \PHPUnit_Framework_TestCase
+class ActivityListenerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ActivityListener */
     protected $listener;
@@ -26,13 +26,13 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
     /** @var \DateTime */
     protected $testDate;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $doctrineHelper;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $configManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $configProvider;
 
     public function setUp()

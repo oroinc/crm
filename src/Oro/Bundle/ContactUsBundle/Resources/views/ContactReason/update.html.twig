@@ -38,7 +38,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('oro_contactus_reason_index'),
             'indexLabel': 'oro.contactus.contactreason.entity_plural_label'|trans,
-            'entityTitle': entity.label
+            'entityTitle': entity.defaultTitle
         } %}
         {{ parent() }}
     {% else %}
@@ -52,11 +52,11 @@
 
     {% set dataBlocks = [{
         'title': 'oro.contactus.block.general'|trans,
-        'class': 'active',
+        'class': 'nav-item active',
         'subblocks': [
             {
                 'data': [
-                    form_row(form.label),
+                    form_row(form.titles)
                 ]
             }
         ]

@@ -1,0 +1,29 @@
+.account-customer-info {
+  > .oro-tabs {
+    > .nav-tabs {
+      margin-bottom: 20px;
+    }
+    > .tab-content {
+      padding-bottom: 20px;
+    }
+  }
+  .tabs-subtitle, .account-customer-title {
+    padding-bottom: 10px;
+  }
+  .account-customer-title {
+    overflow: hidden;
+    .orocrm-channel-lifetime-value-label {
+      float: right;
+    }
+  }
+  .tabs-subtitle {
+    margin-bottom: 2px;
+  }
+  &.multicustomer {
+    margin: -9px 0 -17px;
+    .tabs-subtitle,
+    .account-customer-title{
+      padding-top: 10px;
+    }
+  }
+}

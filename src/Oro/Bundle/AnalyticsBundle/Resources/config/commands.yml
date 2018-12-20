@@ -1,0 +1,6 @@
+services:
+    Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand:
+        public: false
+        class: Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand
+        tags:
+            - { name: console.command }

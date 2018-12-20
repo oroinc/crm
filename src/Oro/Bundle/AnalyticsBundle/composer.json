@@ -1,13 +1,13 @@
 {
     "name": "orocrm/analytics-bundle",
     "type": "symfony-bundle",
-    "description": "Oro CRM Analytics",
+    "description": "OroCRM Analytics",
     "keywords": ["CRM", "Analytics"],
     "homepage": "https://github.com/orocrm/AnalyticsBundle",
     "license": "MIT",
     "require": {
         "php": "7.1.*",
-        "symfony/symfony": "2.8.*, !=2.8.10",
+        "symfony/symfony": "^3.4",
         "doctrine/orm": ">=2.3,<2.4-dev",
 
         "oro/entity-config-bundle": "dev-master",

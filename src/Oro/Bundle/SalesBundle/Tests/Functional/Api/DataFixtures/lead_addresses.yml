@@ -1,0 +1,65 @@
+dependencies:
+  - Oro\Bundle\AddressBundle\Tests\Functional\DataFixtures\LoadCountriesAndRegions
+  - Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadLeadsData
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+    another_lead:
+        name: Another Lead
+        organization: '@organization'
+        owner: '@user'
+
+Oro\Bundle\SalesBundle\Entity\LeadAddress:
+    lead_address1:
+        owner: '@lead1'
+        primary: true
+        label: 'Address 1'
+        street: 'Street 1'
+        street2: 'Street 2'
+        city: 'Los Angeles'
+        postalCode: '90001'
+        country: '@country_usa'
+        region: '@region_usa_california'
+        organization: 'Acme'
+        namePrefix: 'Mr.'
+        nameSuffix: 'M.D.'
+        firstName: 'John'
+        middleName: 'Edgar'
+        lastName: 'Doo'
+    lead_address2:
+        owner: '@lead1'
+        primary: false
+        label: 'Address 2'
+        street: 'Street 2'
+        city: 'Los Angeles'
+        postalCode: '90002'
+        country: '@country_usa'
+        region: '@region_usa_california'
+        firstName: 'John'
+        lastName: 'Smith'
+    lead_address3:
+        owner: '@lead1'
+        primary: false
+        label: 'Address 3'
+        city: 'Tel Aviv'
+        country: '@country_israel'
+        region: '@region_israel_telaviv'
+        firstName: 'John'
+        lastName: 'Smith'
+    another_lead_address1:
+        owner: '@another_lead'
+        primary: true
+        label: 'Another Lead Address 1'
+        street: 'Street 1'
+        city: 'Los Angeles'
+        postalCode: '90001'
+        country: '@country_usa'
+        region: '@region_usa_california'
+    another_lead_address2:
+        owner: '@another_lead'
+        primary: false
+        label: 'Another Lead Address 2'
+        street: 'Street 2'
+        city: 'Los Angeles'
+        postalCode: '90001'
+        country: '@country_usa'
+        region: '@region_usa_california'

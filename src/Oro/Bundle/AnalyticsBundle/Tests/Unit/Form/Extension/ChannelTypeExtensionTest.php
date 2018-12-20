@@ -12,10 +12,11 @@ use Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
 use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Component\TestUtils\ORM\Mocks\UnitOfWork;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 
-class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
+class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ChannelTypeExtension
@@ -23,7 +24,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
     protected $extension;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     protected $doctrineHelper;
 
@@ -42,7 +43,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildForm()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FormBuilderInterface $builder */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|FormBuilderInterface $builder */
         $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
 
         $builder->expects($this->atLeastOnce())->method('addEventListener');
@@ -51,7 +52,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $channel
+     * @param \PHPUnit\Framework\MockObject\MockObject $channel
      * @param int $expectedPersist
      * @param int $expectedRemove
      *
@@ -59,7 +60,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testPostSubmit($channel, $expectedPersist = null, $expectedRemove = null)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FormEvent $event */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|FormEvent $event */
         $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')->disableOriginalConstructor()->getMock();
 
         $event->expects($this->once())
@@ -80,7 +81,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('has')
             ->will($this->returnValue(true));
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager $em */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager $em */
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
 
         $removeEntity = new RFMMetricCategory();
@@ -133,7 +134,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $identityClass
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getChannelMock($identityClass = null)
     {
@@ -157,7 +158,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $channel = $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub');
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FormEvent $event */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|FormEvent $event */
         $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')->disableOriginalConstructor()->getMock();
 
         $event->expects($this->once())
@@ -264,7 +265,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $channel
+     * @param \PHPUnit\Framework\MockObject\MockObject $channel
      * @param bool $hasStateForm
      * @param bool $isEnabled
      * @param array $actualData
@@ -279,7 +280,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
         $actualData = null,
         $expectedData = null
     ) {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FormEvent $event */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|FormEvent $event */
         $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')->disableOriginalConstructor()->getMock();
 
         $event->expects($this->once())
@@ -380,10 +381,14 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCollection(array $items = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager $em */
+        $uow = new UnitOfWork();
+        /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager $em */
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
+        $em->expects($this->any())
+            ->method('getUnitOfWork')
+            ->willReturn($uow);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ClassMetadata $metadata */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ClassMetadata $metadata */
         $metadata = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
             ->disableOriginalConstructor()
             ->getMock();

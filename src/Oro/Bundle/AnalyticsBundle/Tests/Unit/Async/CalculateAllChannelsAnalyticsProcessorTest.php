@@ -10,7 +10,7 @@ use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
 use Oro\Component\Testing\ClassExtensionTrait;
 
-class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
+class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;
 
@@ -42,7 +42,7 @@ class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit_Framework_Test
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CalculateAnalyticsScheduler
+     * @return \PHPUnit\Framework\MockObject\MockObject|CalculateAnalyticsScheduler
      */
     private function createCalculateAnalyticsSchedulerMock()
     {
@@ -50,7 +50,7 @@ class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit_Framework_Test
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     * @return \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     private function createDoctrineHelperMock()
     {

@@ -48,9 +48,38 @@ api:
                         type: primaryField
                         options:
                             data_field: email
+            sorters:
+                fields:
+                    phones:
+                        property_path: phones.phone
+                    emails:
+                        property_path: emails.email
+            subresources:
+                addresses:
+                    actions:
+                        update_relationship: false
+                        add_relationship: false
+                        delete_relationship: false
 
         Oro\Bundle\ContactBundle\Entity\ContactAddress:
             documentation_resource: '@OroContactBundle/Resources/doc/api/contact_address.md'
+            fields:
+                createdAt:
+                    property_path: created
+                updatedAt:
+                    property_path: updated
+                customRegion:
+                    exclude: false # set manually because this field is marked as excluded in entity.yml
+                    property_path: regionText
+            actions:
+                update:
+                    fields:
+                        owner:
+                            exclude: true
+            subresources:
+                owner:
+                    actions:
+                        update_relationship: false
 
         Oro\Bundle\ContactBundle\Entity\ContactEmail:
             # this entity does not have own Data API resource

@@ -81,8 +81,8 @@ class OrderApiType extends AbstractType
             'owner',
             TranslatableEntityType::class,
             [
-                'class'    => 'Oro\Bundle\UserBundle\Entity\User',
-                'property' => 'username',
+                'class' => 'Oro\Bundle\UserBundle\Entity\User',
+                'choice_label' => 'username',
                 'required' => false
             ]
         );
@@ -91,8 +91,8 @@ class OrderApiType extends AbstractType
             'dataChannel',
             TranslatableEntityType::class,
             [
-                'class'    => 'OroChannelBundle:Channel',
-                'property' => 'name',
+                'class' => 'OroChannelBundle:Channel',
+                'choice_label' => 'name',
                 'required' => false
             ]
         );
@@ -102,7 +102,7 @@ class OrderApiType extends AbstractType
             TranslatableEntityType::class,
             [
                 'class'    => 'OroMagentoBundle:Store',
-                'property' => 'name'
+                'choice_label' => 'name'
             ]
         );
 

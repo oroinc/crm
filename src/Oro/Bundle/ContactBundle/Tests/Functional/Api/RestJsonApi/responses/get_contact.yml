@@ -1,0 +1,72 @@
+data:
+    type: contacts
+    id: '<toString(@contact1->id)>'
+    attributes:
+        lastContactedDate: null
+        lastContactedDateIn: null
+        lastContactedDateOut: null
+        timesContacted: null
+        timesContactedIn: null
+        timesContactedOut: null
+        namePrefix: null
+        firstName: 'Contact 1'
+        middleName: null
+        lastName: null
+        nameSuffix: null
+        gender: null
+        birthday: '1973-03-07'
+        description: null
+        jobTitle: null
+        fax: null
+        skype: null
+        twitter: null
+        facebook: null
+        googlePlus: null
+        linkedIn: null
+        createdAt: '@contact1->createdAt->format("Y-m-d\TH:i:s\Z")'
+        updatedAt: '@contact1->updatedAt->format("Y-m-d\TH:i:s\Z")'
+        primaryEmail: contact1_2@example.com
+        primaryPhone: '5556661112'
+        emails:
+            -
+                email: contact1_1@example.com
+            -
+                email: contact1_2@example.com
+        phones:
+            -
+                phone: '5556661111'
+            -
+                phone: '5556661112'
+    relationships:
+        source:
+            data: null
+        method:
+            data: null
+        owner:
+            data:
+                type: users
+                id: '<toString(@user->id)>'
+        assignedTo:
+            data: null
+        reportsTo:
+            data: null
+        addresses:
+            data: []
+        groups:
+            data: []
+        accounts:
+            data: []
+        createdBy:
+            data:
+                type: users
+                id: '<toString(@user->id)>'
+        updatedBy:
+            data: null
+        organization:
+            data:
+                type: organizations
+                id: '<toString(@organization->id)>'
+        defaultInAccounts:
+            data: []
+        picture:
+            data: null

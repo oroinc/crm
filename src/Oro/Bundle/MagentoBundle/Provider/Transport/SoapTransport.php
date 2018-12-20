@@ -11,6 +11,7 @@ use Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
+use Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CreditMemoSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator;
@@ -26,7 +27,7 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider;
 use Oro\Bundle\MagentoBundle\Service\WsdlManager;
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
@@ -93,7 +94,7 @@ class SoapTransport extends BaseSOAPTransport implements
     /** @var string */
     protected $sessionId;
 
-    /** @var Mcrypt */
+    /** @var SymmetricCrypterInterface */
     protected $encoder;
 
     /** @var bool */
@@ -139,13 +140,13 @@ class SoapTransport extends BaseSOAPTransport implements
     private $clientAdditionalParams = [];
 
     /**
-     * @param Mcrypt                          $encoder
+     * @param SymmetricCrypterInterface       $encoder
      * @param WsdlManager                     $wsdlManager
      * @param UniqueCustomerEmailSoapProvider $uniqueCustomerEmailProvider
      * @param array                           $bundleConfig
      */
     public function __construct(
-        Mcrypt $encoder,
+        SymmetricCrypterInterface $encoder,
         WsdlManager $wsdlManager,
         UniqueCustomerEmailSoapProvider $uniqueCustomerEmailProvider,
         array $bundleConfig = []
@@ -166,7 +167,7 @@ class SoapTransport extends BaseSOAPTransport implements
          * This should be done before parent::init as settings will be cached there.
          */
         if ($transportEntity instanceof MagentoSoapTransport) {
-            $wsdlUrl = $transportEntity->getWsdlUrl();
+            $wsdlUrl = $transportEntity->getApiUrl();
 
             // Save auth information to be able to perform requests.
             $urlParts = parse_url($wsdlUrl);
@@ -752,7 +753,7 @@ class SoapTransport extends BaseSOAPTransport implements
      */
     public function getSettingsFormType()
     {
-        return 'oro_magento_soap_transport_setting_form_type';
+        return SoapTransportSettingFormType::class;
     }
 
     /**

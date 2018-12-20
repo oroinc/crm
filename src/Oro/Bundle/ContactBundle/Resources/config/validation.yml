@@ -16,6 +16,21 @@ Oro\Bundle\ContactBundle\Entity\Contact:
             - LessThanOrEqual:
                 value: now UTC
                 message: This value cannot be in the future.
+        skype:
+            - Length:
+                max: 255
+        twitter:
+            - Length:
+                max: 255
+        facebook:
+            - Length:
+                max: 255
+        googlePlus:
+            - Length:
+                max: 255
+        linkedIn:
+            - Length:
+                max: 255
         addresses:
             - Valid: ~
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
@@ -40,8 +55,16 @@ Oro\Bundle\ContactBundle\Entity\Group:
                 min: 3
                 max: 255
 
-# Prevent required values for all child of AbstractAddress
 Oro\Bundle\ContactBundle\Entity\ContactAddress:
     constraints:
-        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: ~
+        - Oro\Bundle\AddressBundle\Validator\Constraints\RegionText: ~
+    properties:
+        country:
+            - NotBlank: ~
+        owner:
+            - NotBlank: ~
+            - Oro\Bundle\FormBundle\Validator\Constraints\UnchangeableField:
+                message: oro.address.validation.owner_changed
+                groups: ['api']
 

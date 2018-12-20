@@ -17,14 +17,13 @@ Retrieve a collection of Magento order addresses.
 ### create
 
 Create a new Magento order address record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentoorderaddresses>`
 
 ```JSON
 {  
@@ -70,8 +69,6 @@ Edit a specific Magento order address record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoorderaddresses/1>`
 
 ```JSON
 {  
@@ -119,7 +116,6 @@ Delete a specific Magento order address record.
 ### delete_list
 
 Delete a collection of Magento order address records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -152,8 +148,6 @@ Set the address types for a specific Magento order address record.
 {@request:json_api}
 Example:
 
-`</api/magentoorderaddresses/1/relationships/types>`
-
 ```JSON
 {  
    "data":[  
@@ -176,8 +170,6 @@ Replace the address types for a specific Magento order address record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoorderaddresses/1/relationships/types>`
 
 ```JSON
 {  
@@ -216,8 +208,6 @@ Replace the region that is configured for a specific magento order address recor
 {@request:json_api}
 Example:
 
-`</api/magentoorderaddresses/1/relationships/region>`
-
 ```JSON
 {
   "data": {
@@ -244,8 +234,6 @@ Replace the owner of a specific Magento order address record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoorderaddresses/1/relationships/owner>`
 
 ```JSON
 {
@@ -274,8 +262,6 @@ Replace the country configured for a specific Magento order address record.
 {@request:json_api}
 Example:
 
-`</api/magentoorderaddresses/1/relationships/country>`
-
 ```JSON
 {
   "data": {
@@ -302,8 +288,6 @@ Replace an integration channel via which information about the Magento order add
 
 {@request:json_api}
 Example:
-
-`</api/magentoorderaddresses/1/relationships/channel>`
 
 ```JSON
 {

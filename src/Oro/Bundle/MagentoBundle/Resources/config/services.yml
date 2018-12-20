@@ -157,7 +157,7 @@ services:
     oro_magento.transport.soap_transport:
         class: '%oro_magento.transport.soap_transport.class%'
         arguments:
-            - "@oro_security.encoder.mcrypt"
+            - "@oro_security.encoder.default"
             - "@oro_magento.wsdl_manager"
             - "@oro_magento.provider.soap.unique_customer_email"
             - []
@@ -231,7 +231,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\RestTokenProvider
         arguments:
             - '@doctrine'
-            - '@oro_security.encoder.mcrypt'
+            - '@oro_security.encoder.default'
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 
@@ -242,7 +242,7 @@ services:
     oro_magento.form.subscriber.transport_setting:
         class: Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber
         arguments:
-            - "@oro_security.encoder.mcrypt"
+            - "@oro_security.encoder.default"
 
     oro_magento.form.type.soap_transport_setting:
         class: Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
@@ -492,6 +492,7 @@ services:
         class: Oro\Bundle\MagentoBundle\EventListener\OrderGridListener
         arguments:
             - "@oro_magento.country.datagrid_helper"
+            - '@oro_filter.provider.state.filters'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.magento-order-grid, method: onBuildBefore }
 
@@ -606,6 +607,8 @@ services:
 
     oro_magento.event_listener.customer_datagrid_listener:
         class: '%oro_magento.event_listener.customer_datagrid_listener.class%'
+        arguments:
+            - '@oro_datagrid.provider.selected_fields.filters'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customers-grid, method: onPreBuild, priority: 255 }
 
@@ -1084,12 +1087,6 @@ services:
             - '@oro_magento.provider.connector_choices'
             - '@request_stack'
 
-    oro_magento.routing.options_resolver.old_options:
-        class: Oro\Bundle\MagentoBundle\Routing\OldOptionsRouteOptionsResolver
-        public: false
-        tags:
-            - { name: routing.options_resolver }
-
     oro_magento.manager.abandoned_shopping_cart_flow:
         parent: oro_workflow.abstract.workflow_aware_manager
         calls:
@@ -1142,11 +1139,11 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Customer\AccountProvider
         arguments:
             - '@oro_magento.provider.customer.account.new_entities_helper'
+            - '@oro_magento.service.automatic_discovery'
+            - '@doctrine'
         public: false
-        calls:
-            - [setContainer, ["@service_container"]]
         tags:
-         - { name: oro_sales.provider.customer.account_creation, priority: 10 }
+            - { name: oro_sales.provider.customer.account_creation, priority: 10 }
 
     oro_magento.provider.customer.account.new_entities_helper:
         class: Oro\Bundle\ImportExportBundle\Strategy\Import\NewEntitiesHelper

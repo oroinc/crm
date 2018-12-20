@@ -52,9 +52,9 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
      */
     public function avatarShouldBeDefaultAvatar()
     {
-        $img = $this->getSession()->getPage()->find('css', 'div.customer-info div.visual img');
+        $icon = $this->getSession()->getPage()->find('css', 'div.page-title div.page-title__icon');
 
-        self::assertNotFalse(stripos($img->getAttribute('src'), 'info-user.png'), 'Avatar is not default avatar');
+        self::assertNull($icon->find('css', 'img'), 'Avatar is not default avatar');
     }
 
     /**
@@ -64,9 +64,9 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
      */
     public function avatarShouldNotBeDefaultAvatar()
     {
-        $img = $this->getSession()->getPage()->find('css', 'div.customer-info div.visual img');
+        $img = $this->getSession()->getPage()->find('css', 'div.page-title div.page-title__icon img');
 
-        self::assertFalse(stripos($img->getAttribute('src'), 'info-user.png'), 'Avatar is not default avatar');
+        self::assertFalse(stripos($img->getAttribute('src'), 'info-user.png'), 'Avatar is not expected image');
     }
 
     /**

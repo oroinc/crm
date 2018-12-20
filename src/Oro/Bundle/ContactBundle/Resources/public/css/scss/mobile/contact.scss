@@ -1,0 +1,11 @@
+/* @theme: admin.oro; */
+
+.contact {
+    &-collection-element {
+        margin-bottom: 8px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}

@@ -22,6 +22,68 @@ oro_behat_extension:
           Email: 'oro_magento_contactus_contact_request[emailAddress]'
           Comment: 'oro_magento_contactus_contact_request[comment]'
 
+    Magento Customer Grid:
+      selector: 'div[data-page-component-name="magento-customers-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+
+    Magento Customer GridFilters:
+      selector: 'div[data-page-component-name="magento-customers-grid"] div.filter-box'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilters
+
+    Magento Customer GridFilterItem:
+      selector: 'div.filter-item'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilterItem
+
+    Magento Orders Grid:
+      selector: 'div[data-page-component-name="magento-order-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+
+    Magento Orders GridFilters:
+      selector: 'div[data-page-component-name="magento-order-grid"] div.filter-box'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilters
+
+    Magento Orders GridFilterItem:
+      selector: 'div.filter-item'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilterItem
+
+    Magento Shopping Carts Paginator:
+      selector: 'div[data-page-component-name="magento-cart-grid"] div.toolbar div.pagination'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridPaginator
+
+    Magento Shopping Carts Grid:
+      selector: 'div[data-page-component-name="magento-cart-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+      options:
+        mapping:
+          GridToolbarPaginator: 'Magento Shopping Carts Paginator'
+
+    Magento Shopping Carts GridFilters:
+      selector: 'div[data-page-component-name="magento-cart-grid"] div.filter-box'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilters
+
+    Magento Shopping Carts GridFilterItem:
+      selector: 'div.filter-item'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilterItem
+
+    Add Context Magento Order Paginator:
+      selector: 'div[data-page-component-name="magento-order-for-context-grid"] div.toolbar div.pagination'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridPaginator
+
+    Add Context Magento Order Grid:
+      selector: 'div[data-page-component-name="magento-order-for-context-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+      options:
+        mapping:
+          GridToolbarPaginator: 'Add Context Magento Order Paginator'
+
+    Add Context Magento Order GridFilters:
+      selector: 'div[data-page-component-name="magento-order-for-context-grid"] div.filter-box'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilters
+
+    Add Context Magento Order GridFilterItem:
+      selector: 'div.filter-item'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilterItem
+
   suites:
     OroMagentoBundle:
       contexts:
@@ -33,5 +95,8 @@ oro_behat_extension:
         - OroFormBundle::FormContext
         - OroMagentoBundle::FeatureContext
         - OroQueryDesignerBundle::QueryDesignerContext
+        - OroConfigBundle::FeatureContext
+        - OroNavigationBundle::FeatureContext
+        - OroLocaleBundle::LocalizationContext
       paths:
         - '@OroMagentoBundle/Tests/Behat/Features'

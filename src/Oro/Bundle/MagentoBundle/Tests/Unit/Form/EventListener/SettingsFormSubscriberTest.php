@@ -6,7 +6,7 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\WebsiteSelectType;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\TransportSettingFormTypeStub;
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
@@ -17,14 +17,14 @@ class SettingsFormSubscriberTest extends FormIntegrationTestCase
     /** @var  SettingsFormSubscriber */
     protected $subscriber;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | FormEvent */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | FormEvent */
     protected $event;
 
     /** @var FormInterface */
     protected $form;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | Mcrypt */
-    protected $mcrypt;
+    /** @var \PHPUnit\Framework\MockObject\MockObject | SymmetricCrypterInterface */
+    protected $crypter;
 
     /**
      * {@inheritdoc}
@@ -33,9 +33,9 @@ class SettingsFormSubscriberTest extends FormIntegrationTestCase
     {
         parent::setUp();
 
-        $this->mcrypt = $this->createMock(Mcrypt::class);
+        $this->crypter = $this->createMock(SymmetricCrypterInterface::class);
 
-        $this->subscriber = new SettingsFormSubscriber($this->mcrypt);
+        $this->subscriber = new SettingsFormSubscriber($this->crypter);
 
         $this->event = $this
             ->getMockBuilder('Symfony\Component\Form\FormEvent')
@@ -179,7 +179,7 @@ class SettingsFormSubscriberTest extends FormIntegrationTestCase
             ->with($expected);
 
         if (!empty($data['apiKey'])) {
-            $this->mcrypt
+            $this->crypter
                 ->expects($this->once())
                 ->method('encryptData')
                 ->with($data['apiKey'])
@@ -253,7 +253,7 @@ class SettingsFormSubscriberTest extends FormIntegrationTestCase
             $this->subscriber,
             $this->event,
             $this->form,
-            $this->mcrypt
+            $this->crypter
         );
     }
 }

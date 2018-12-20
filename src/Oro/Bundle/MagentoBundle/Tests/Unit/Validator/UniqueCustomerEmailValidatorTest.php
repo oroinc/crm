@@ -13,12 +13,12 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
+class UniqueCustomerEmailValidatorTest extends \PHPUnit\Framework\TestCase
 {
     const INTEGRATION_TYPE = '__INTEGRATION_TYPE__';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $typesRegistry;
 
@@ -28,7 +28,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $transport;
 
@@ -170,7 +170,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getCustomer()
     {

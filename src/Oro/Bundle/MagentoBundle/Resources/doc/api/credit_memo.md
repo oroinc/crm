@@ -17,14 +17,13 @@ Retrieve a collection of Magento credit memos records.
 ### create
 
 Create a new Magento credit memo record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentocreditmemos>`
 
 ```JSON
 {  
@@ -114,8 +113,6 @@ Edit a specific Magento credit memo record.
 {@request:json_api}
 Example:
 
-`</api/magentocreditmemos/1>`
-
 ```JSON
 {  
    "data":{  
@@ -204,7 +201,6 @@ Delete a specific Magento credit memo record.
 ### delete_list
 
 Delete a collection of Magento credit memo records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -329,8 +325,6 @@ Set item records for a specific Magento credit memo record.
 {@request:json_api}
 Example:
 
-`</api/magentocreditmemos/1/relationships/items>`
-
 ```JSON
 {  
    "data":[  
@@ -353,8 +347,6 @@ Replace records of items assigned to a specific Magento credit memo record.
 
 {@request:json_api}
 Example:
-
-`</api/magentocreditmemos/1/relationships/items>`
 
 ```JSON
 {  
@@ -393,8 +385,6 @@ Replace an order record assigned to a specific Magento credit memo record.
 {@request:json_api}
 Example:
 
-`</api/magentocreditmemos/1/relationships/order>`
-
 ```JSON
 {
   "data": {
@@ -421,8 +411,6 @@ Replace the channel for a specific Magento credit memo record.
 
 {@request:json_api}
 Example:
-
-`</api/magentocreditmemos/1/relationships/dataChannel>`
 
 ```JSON
 {
@@ -451,8 +439,6 @@ Replace the owner of a specific Magento credit memo record.
 {@request:json_api}
 Example:
 
-`</api/magentocreditmemos/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -479,8 +465,6 @@ Replace the store from which a specific Magento credit memo records have been re
 
 {@request:json_api}
 Example:
-
-`</api/magentocreditmemos/1/relationships/store>`
 
 ```JSON
 {
@@ -509,8 +493,6 @@ Replace the status of a specific Magento credit memo record.
 {@request:json_api}
 Example:
 
-`</api/magentocreditmemos/1/relationships/status>`
-
 ```JSON
 {
   "data": {
@@ -537,8 +519,6 @@ Replace an integration channel via which information about the Magento credit me
 
 {@request:json_api}
 Example:
-
-`</api/magentocreditmemos/1/relationships/channel>`
 
 ```JSON
 {
@@ -567,8 +547,6 @@ Replace the organization a specific Magento credit memo record belongs to.
 {@request:json_api}
 Example:
 
-`</api/magentocreditmemos/1/relationships/organization>`
-
 ```JSON
 {
   "data": {
@@ -578,3 +556,30 @@ Example:
 }
 ```
 {@/request}
+
+
+# Extend\Entity\EV_Creditmemo_Status
+
+## ACTIONS
+
+### get
+
+Retrieve a specific Magento credit memo status record.
+
+### get_list
+
+Retrieve a collection of Magento credit memo status records.
+
+## FIELDS
+
+### name
+
+The name of the credit memo status (`Pending`, `Refunded` or `Canceled`, corresponding to ids 1,2 and 3 in Magento).
+
+### default
+
+Determines whether a particular status is set as default for new credit memo record.
+
+### priority
+
+The order in which credit memo statuses are ranked. First appears the status with the higher priority.

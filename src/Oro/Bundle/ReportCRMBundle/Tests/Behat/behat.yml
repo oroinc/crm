@@ -8,3 +8,16 @@ oro_behat_extension:
         - OroReportCRMBundle::FeatureContext
       paths:
         - '@OroReportCRMBundle/Tests/Behat/Features'
+
+  elements:
+    Accounts By Opportunities Grid:
+      selector: 'div[data-page-component-name="oro_reportcrm-accounts-by_opportunities"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+
+    Leads By Date Grid:
+      selector: 'div[data-page-component-name="oro_reportcrm-leads-by_date"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+
+    Opportunities By Status Grid:
+      selector: 'div[data-page-component-name="oro_reportcrm-opportunities-by_status"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid

@@ -265,6 +265,8 @@ datagrids:
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+            hints:
+                - HINT_TRANSLATABLE
         sorters:
             columns:
                 first_name:
@@ -356,7 +358,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
@@ -543,9 +545,9 @@ datagrids:
                     data_name: a.owner
                     options:
                         field_options:
-                            class: OroUserBundle:User
+                            class: '%oro_user.entity.class%'
                             multiple: true
-                            property: fullName
+                            choice_label: fullName
                             translatable_options: false
         options:
             entityHint: accounts

@@ -5,7 +5,13 @@ oro_behat_extension:
             class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
             options:
                 mapping:
-                    Label: 'oro_contactus_contact_reason[label]'
+                    Label: 'oro_contactus_contact_reason[titles][values][default]'
+                    Label Second: 'oro_contactus_contact_reason[titles][values][localizations][2][value]'
+                    Label Second Use Default: 'oro_contactus_contact_reason[titles][values][localizations][2][use_fallback]'
+        Contact Reason Form Label Fallbacks:
+          selector:
+            type: xpath
+            locator: '//label[text()="Label"]/../..//button[contains(@class, "fallback-status")]'
         Contact Email:
             class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Checkbox
             selector:

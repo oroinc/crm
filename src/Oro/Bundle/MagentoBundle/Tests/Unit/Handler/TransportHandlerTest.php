@@ -13,26 +13,26 @@ use Oro\Component\Testing\Unit\EntityTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class TransportHandlerTest extends \PHPUnit_Framework_TestCase
+class TransportHandlerTest extends \PHPUnit\Framework\TestCase
 {
     use EntityTrait;
 
     /** @var TransportHandler */
     protected $transportHandler;
 
-    /** @var  TypesRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  TypesRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $typesRegistry;
 
-    /** @var  TransportEntityProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  TransportEntityProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $transportEntityProvider;
 
-    /** @var  WebsiteChoicesProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  WebsiteChoicesProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $websiteChoicesProvider;
 
-    /** @var ConnectorChoicesProvider|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var ConnectorChoicesProvider|\PHPUnit\Framework\MockObject\MockObject  */
     protected $connectorChoicesProvider;
 
-    /** @var  Request|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Request|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
     /** @var  MagentoTransportProviderStub */

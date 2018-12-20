@@ -7,7 +7,7 @@ use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
 
-class ActivityContactProviderTest extends \PHPUnit_Framework_TestCase
+class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ActivityContactProvider */
     protected $provider;

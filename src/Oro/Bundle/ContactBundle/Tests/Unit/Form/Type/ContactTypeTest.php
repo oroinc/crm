@@ -17,7 +17,7 @@ use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class ContactTypeTest extends \PHPUnit_Framework_TestCase
+class ContactTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContactType
@@ -36,11 +36,6 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with($this->isType('array'));
         $this->type->configureOptions($resolver);
-    }
-
-    public function testGetName()
-    {
-        $this->assertEquals('oro_contact', $this->type->getName());
     }
 
     public function testBuildForm()

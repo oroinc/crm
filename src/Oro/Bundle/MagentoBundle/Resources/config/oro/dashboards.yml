@@ -6,10 +6,11 @@ dashboards:
             acl:         oro_magento_cart_view
             description: oro.magento.dashboard.my_sales_flow_b2c_chart.description
             icon:        bundles/oromagento/img/my_sales_flow_b2c.png
+            icon_class:  fa-building-o
             applicable:  "@oro_magento.provider.enitity_state->isEntityCartEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -20,10 +21,11 @@ dashboards:
             acl:         oro_magento_order_view
             description: oro.magento.dashboard.average_order_amount_chart.description
             icon:        bundles/oromagento/img/average-amount-order.png
+            icon_class:  fa-file-text
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -34,10 +36,11 @@ dashboards:
             acl:         oro_magento_cart_view
             description: oro.magento.dashboard.new_magento_customers_chart.description
             icon:        bundles/oromagento/img/number-magento-customers.png
+            icon_class:  magento-logo
             applicable:  "@oro_magento.provider.enitity_state->isEntityCustomerEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -49,6 +52,7 @@ dashboards:
             acl:         oro_magento_cart_view
             description: oro.magento.dashboard.e_commerce_statistic.description
             icon:        bundles/oromagento/img/icon-big_numbers.png
+            icon_class:  fa-bar-chart
             applicable:  "@oro_magento.provider.enitity_state->isEntityCartEnabled()"
             data_items:
                 revenue:
@@ -113,13 +117,13 @@ dashboards:
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
                 usePreviousInterval:
-                    type: oro_type_widget_previous_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetPreviousDateRangeType
                     options:
                        label: oro.dashboard.previous_date_range.label
                        required: false
@@ -127,7 +131,7 @@ dashboards:
                         dateRangeField: dateRange
                         default_checked: true
                 subWidgets:
-                    type: oro_type_widget_items
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetItemsType
                     options:
                         label: oro.dashboard.widget.big_number.metrics
                         attr:
@@ -141,10 +145,11 @@ dashboards:
             acl:         oro_magento_order_view
             description: oro.magento.dashboard.revenue_over_time_chart.description
             icon:        bundles/oromagento/img/revenue.png
+            icon_class:  fa-clock-o
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -155,10 +160,11 @@ dashboards:
             acl:         oro_magento_order_view
             description: oro.magento.dashboard.orders_over_time_chart.description
             icon:        bundles/oromagento/img/number-magento-customers.png
+            icon_class:  fa-file-text
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true
@@ -169,10 +175,11 @@ dashboards:
             acl:         oro_magento_order_view
             description: oro.magento.dashboard.purchase_chart.description
             icon:        bundles/oromagento/img/purchased.png
+            icon_class:  fa-filter
             applicable:  "@oro_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
-                    type: oro_type_widget_date_range
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
                     options:
                        label: oro.dashboard.date_range.label
                        value_types: true

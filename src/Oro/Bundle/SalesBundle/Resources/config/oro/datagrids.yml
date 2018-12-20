@@ -233,7 +233,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroSalesBundle:OpportunityCloseReason
-                            property: label
+                            choice_label: label
                             translatable_options: false
                 closeDate:
                     type: date
@@ -635,7 +635,7 @@ datagrids:
                         lazy: true
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
@@ -961,7 +961,7 @@ datagrids:
                          lazy: true
                          field_options:
                              class: OroAddressBundle:Country
-                             property: name
+                             choice_label: name
                              query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                              translatable_options: false
                  regionLabel:
@@ -1151,7 +1151,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                  name:
                     type:      string
@@ -1209,6 +1209,8 @@ datagrids:
                         - { join: sa.country, alias: saCountry }
                         - { join: ba.region, alias: baRegion }
                         - { join: sa.region, alias: saRegion }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             ownerName:
                 label: oro.sales.b2bcustomer.owner.label
@@ -1296,7 +1298,7 @@ datagrids:
                         lazy: true
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 baRegionLabel:
@@ -1323,7 +1325,7 @@ datagrids:
                         lazy: true
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 saRegionLabel:
@@ -1433,6 +1435,8 @@ datagrids:
                         - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+            hints:
+                - HINT_TRANSLATABLE
         properties:
             id: ~
             view_link:
@@ -1559,7 +1563,7 @@ datagrids:
                         lazy: true
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                  regionLabel:
@@ -1907,7 +1911,7 @@ datagrids:
                         field_options:
                             class: OroUserBundle:User
                             multiple: true
-                            property: fullName
+                            choice_label: fullName
                             translatable_options: false
 
     oro-sales-b2bcustomers-for-context-grid:
@@ -1951,7 +1955,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                  name:
                     type:      string
@@ -2166,7 +2170,7 @@ datagrids:
                         field_options:
                             class: OroUserBundle:User
                             multiple: true
-                            property: fullName
+                            choice_label: fullName
                             translatable_options: false
 
         columns:
@@ -2296,7 +2300,7 @@ datagrids:
                         lazy: true
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                  regionLabel:

@@ -46,6 +46,7 @@ class ChannelControllerTest extends WebTestCase
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Channel saved', $crawler->html());
 
+        $channelType  = ucfirst('custom');
         return compact('name', 'channelType');
     }
 

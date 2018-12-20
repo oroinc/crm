@@ -9,9 +9,9 @@ use Oro\Bundle\SearchBundle\Event\PrepareEntityMapEvent;
 use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class SearchIndexDataListenerTest extends \PHPUnit_Framework_TestCase
+class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ObjectMapper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectMapper|\PHPUnit\Framework\MockObject\MockObject */
     protected $mapper;
 
     /** @var SearchIndexDataListener */
@@ -19,13 +19,29 @@ class SearchIndexDataListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var HtmlTagHelper|\PHPUnit_Framework_MockObject_MockObject $htmlTagHelper */
+        /** @var HtmlTagHelper|\PHPUnit\Framework\MockObject\MockObject $htmlTagHelper */
         $htmlTagHelper = $this->createMock(HtmlTagHelper::class);
         $htmlTagHelper->expects($this->any())
             ->method('stripTags')
             ->willReturnCallback(
                 function ($value) {
                     return trim(strip_tags($value));
+                }
+            );
+        $htmlTagHelper->expects($this->any())
+            ->method('stripLongWords')
+            ->willReturnCallback(
+                function ($value) {
+                    $words = preg_split('/\s+/', $value);
+
+                    $words = array_filter(
+                        $words,
+                        function ($item) {
+                            return \strlen($item) <= HtmlTagHelper::MAX_STRING_LENGTH;
+                        }
+                    );
+
+                    return implode(' ', $words);
                 }
             );
 

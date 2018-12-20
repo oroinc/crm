@@ -4,10 +4,8 @@ namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
-use Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface;
-use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
-use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
+use Oro\Bundle\DataGridBundle\Provider\State\DatagridStateProviderInterface;
 
 /**
  * The aim of this listener is to replace sub-selects of country and region of order's billing addresses
@@ -19,12 +17,19 @@ class OrderGridListener
     /** @var CountryDatagridHelper */
     protected $datagridHelper;
 
+    /** @var DatagridStateProviderInterface */
+    private $filtersStateProvider;
+
     /**
      * @param CountryDatagridHelper $datagridHelper
+     * @param DatagridStateProviderInterface $filtersStateProvider
      */
-    public function __construct(CountryDatagridHelper $datagridHelper)
-    {
+    public function __construct(
+        CountryDatagridHelper $datagridHelper,
+        DatagridStateProviderInterface $filtersStateProvider
+    ) {
         $this->datagridHelper = $datagridHelper;
+        $this->filtersStateProvider = $filtersStateProvider;
     }
 
     const COUNTRY_NAME_COLUMN = 'countryName';
@@ -37,66 +42,98 @@ class OrderGridListener
      */
     public function onBuildBefore(BuildBefore $event)
     {
-        $datagrid = $event->getDatagrid();
-        $config   = $event->getConfig();
-        $columns  = $config->offsetGetByPath('[columns]', []);
+        $config = $event->getConfig();
+        $columnsIndexes = $this->getColumnsIndexes($config);
 
-        $countryPos     = array_search(self::COUNTRY_NAME_COLUMN, array_keys($columns));
-        $regionPos      = array_search(self::REGION_NAME_COLUMN, array_keys($columns));
-        $processFilters = [];
-        if (false !== $countryPos) {
-            $processFilters[$countryPos] = [
-                'name'       => self::COUNTRY_NAME_COLUMN,
-                'definition' => [
-                    self::COUNTRY_NAME_COLUMN => $this->getCountryFilterDefinition(
-                        $this->isFilterEnabled($datagrid->getParameters(), self::COUNTRY_NAME_COLUMN)
-                    )
-                ]
-            ];
-        }
-        if (false !== $regionPos) {
-            $processFilters[$regionPos] = [
-                'name'       => self::REGION_NAME_COLUMN,
-                'definition' => [
-                    self::REGION_NAME_COLUMN => $this->getRegionFilterDefinition(
-                        $this->isFilterEnabled($datagrid->getParameters(), self::REGION_NAME_COLUMN)
-                    )
-                ]
-            ];
-        }
-        ksort($processFilters);
-
-        foreach ($processFilters as $columnPos => $data) {
-            $this->addToArrayByPos($config, self::FILTERS_PATH, $columnPos, $data['definition']);
+        // Adds filters to datagrid config.
+        foreach ($columnsIndexes as $columnName => $index) {
+            $this->addToArrayByPos(
+                $config,
+                self::FILTERS_PATH,
+                $index,
+                [$columnName => $this->getFilterDefinition($columnName)]
+            );
         }
 
-        $activeFilters = $this->getActiveFilters($datagrid);
-        if (isset($activeFilters[self::COUNTRY_NAME_COLUMN]) || isset($activeFilters[self::REGION_NAME_COLUMN])) {
+        $filtersState = $this->filtersStateProvider->getState($config, $event->getDatagrid()->getParameters());
+
+        // Marks filters as enabled according to state.
+        foreach ($columnsIndexes as $columnName => $index) {
+            $config->offsetSetByPath(
+                sprintf('%s[%s][enabled]', self::FILTERS_PATH, $columnName),
+                $this->isFilterEnabled($filtersState, $columnName)
+            );
+        }
+
+        if (isset($filtersState[self::COUNTRY_NAME_COLUMN]) || isset($filtersState[self::REGION_NAME_COLUMN])) {
             $this->replaceAddressSelects($config);
         }
     }
 
     /**
-     * @param DatagridInterface $datagrid
+     * Find indexes of countryName and regionName columns.
+     * Sorts columns as per their index.
+     *
+     * @param DatagridConfiguration $config
      *
      * @return array
      */
-    protected function getActiveFilters(DatagridInterface $datagrid)
+    private function getColumnsIndexes(DatagridConfiguration $config): array
     {
-        $parameters = $datagrid->getParameters();
+        $columns = $config->offsetGetByPath('[columns]', []);
 
-        if ($parameters->has(ParameterBag::MINIFIED_PARAMETERS)) {
-            $minifiedParameters = $parameters->get(ParameterBag::MINIFIED_PARAMETERS);
-            $filters            = [];
+        // Find indexes of countryName and regionName columns.
+        $columnsIndexes = array_reduce(
+            [self::COUNTRY_NAME_COLUMN, self::REGION_NAME_COLUMN],
+            function (array $columnsIndexes, string $columnName) use ($columns) {
+                $columnsIndexes[$columnName] = array_search($columnName, array_keys($columns), false);
 
-            if (array_key_exists('f', $minifiedParameters)) {
-                $filters = $minifiedParameters['f'];
-            }
+                return $columnsIndexes;
+            },
+            []
+        );
 
-            return $filters;
+        // Removes absent columns - with index === false.
+        $columnsIndexes = array_filter($columnsIndexes, '\strlen');
+
+        // Sorts columns as per their index.
+        asort($columnsIndexes);
+
+        return $columnsIndexes;
+    }
+
+    /**
+     * @param string $filterName
+     *
+     * @return array
+     */
+    private function getFilterDefinition(string $filterName): array
+    {
+        switch ($filterName) {
+            case self::COUNTRY_NAME_COLUMN:
+                return [
+                    'type' => 'entity',
+                    'data_name' => 'address.country',
+                    'enabled' => false,
+                    'options' => [
+                        'field_options' => [
+                            'class' => 'OroAddressBundle:Country',
+                            'choice_label' => 'name',
+                            'query_builder' => $this->datagridHelper->getCountryFilterQueryBuilder(),
+                            'translatable_options' => false
+                        ]
+                    ]
+                ];
+                break;
+            case self::REGION_NAME_COLUMN:
+                return [
+                    'type' => 'string',
+                    'data_name' => 'regionName',
+                    'enabled' => false,
+                ];
         }
 
-        return $parameters->get(OrmFilterExtension::FILTER_ROOT_PARAM, []);
+        throw new \InvalidArgumentException(sprintf('Fitler %s is not supported', $filterName));
     }
 
     /**
@@ -113,7 +150,7 @@ class OrderGridListener
             'options'   => [
                 'field_options' => [
                     'class'                => 'OroAddressBundle:Country',
-                    'property'             => 'name',
+                    'choice_label'         => 'name',
                     'query_builder'        => $this->datagridHelper->getCountryFilterQueryBuilder(),
                     'translatable_options' => false
                 ]
@@ -136,20 +173,14 @@ class OrderGridListener
     }
 
     /**
-     * @param ParameterBag $datagridParameters
-     * @param string       $fieldName
+     * @param array $filtersState
+     * @param string $filterName
      *
      * @return bool
      */
-    protected function isFilterEnabled(ParameterBag $datagridParameters, $fieldName)
+    protected function isFilterEnabled(array $filtersState, string $filterName): bool
     {
-        $enabled  = false;
-        $minified = $datagridParameters->get(ParameterBag::MINIFIED_PARAMETERS);
-        if (isset($minified['f']['__' . $fieldName])) {
-            $enabled = (bool)$minified['f']['__' . $fieldName];
-        }
-
-        return $enabled;
+        return !empty($filtersState['__' . $filterName]);
     }
 
     /**

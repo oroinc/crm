@@ -14,18 +14,18 @@ use Oro\Bundle\MagentoBundle\Service\CustomerStateHandler;
 use Oro\Bundle\MagentoBundle\Service\StateManager;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class CustomerAddressExportProcessorTest extends \PHPUnit_Framework_TestCase
+class CustomerAddressExportProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerAddressExportProcessor */
     protected $processor;
 
-    /** @var MagentoTransportInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var MagentoTransportInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $transport;
 
     /** @var CustomerStateHandler */
     protected $stateHandler;
 
-    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $serializer;
 
     protected function setUp()

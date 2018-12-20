@@ -5,9 +5,9 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Provider\OpportunityPhoneProvider;
 
-class OpportunityPhoneProviderTest extends \PHPUnit_Framework_TestCase
+class OpportunityPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $rootProvider;
 
     /** @var OpportunityPhoneProvider */

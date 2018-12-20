@@ -1,0 +1,49 @@
+data:
+    -
+        type: opportunities
+        id: '<toString(@opportunity1->id)>'
+        meta:
+            title: 'Opportunity 1'
+        relationships:
+            closeReason:
+                data:
+                    type: opportunityclosereasons
+                    id: cancelled
+            status:
+                data:
+                    type: opportunitystatuses
+                    id: lost
+    -
+        type: opportunities
+        id: '<toString(@opportunity2->id)>'
+        meta:
+            title: 'Opportunity 2'
+        relationships:
+            closeReason:
+                data: null
+            status:
+                data:
+                    type: opportunitystatuses
+                    id: won
+included:
+    -
+        type: opportunityclosereasons
+        id: cancelled
+        meta:
+            title: 'Cancelled'
+        attributes:
+            label: 'Cancelled'
+    -
+        type: opportunitystatuses
+        id: lost
+        meta:
+            title: 'Closed Lost'
+        attributes:
+            name: 'Closed Lost'
+    -
+        type: opportunitystatuses
+        id: won
+        meta:
+            title: 'Closed Won'
+        attributes:
+            name: 'Closed Won'

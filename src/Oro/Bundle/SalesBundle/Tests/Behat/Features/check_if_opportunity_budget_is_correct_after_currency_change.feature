@@ -14,7 +14,7 @@ Feature: Check if Opportunity budget is correct after currency change
   Scenario: Change default currency and check converted budget
     Given I go to System/Configuration
     And I follow "System Configuration/General Setup/Localization" on configuration sidebar
-    And I fill "ConfigurationLocalizationForm" with:
+    And I fill "Configuration Localization Form" with:
       | Locale Use Default           | false       |
       | Locale                       | Dutch       |
       | Primary Location Use Default | false       |
@@ -23,7 +23,7 @@ Feature: Check if Opportunity budget is correct after currency change
     And I should see "Configuration saved" flash message
     And I follow "System Configuration/General Setup/Currency" on configuration sidebar
     And I click "EuroAsDefaultValue"
-    And I press "Yes"
+    And I click "Yes"
     And I click "Save settings"
     And I go to Sales/Opportunities
     Then I should see "€ 50,00"

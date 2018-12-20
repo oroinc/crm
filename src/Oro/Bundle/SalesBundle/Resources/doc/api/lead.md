@@ -11,26 +11,19 @@ Retrieve a specific lead record.
 ### get_list
 
 Retrieve a collection of lead records.
-The list of records that will be returned, could be limited by filters.
 
 {@inheritdoc}
 
 ### create
 
 Create a new lead record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
-**Please note:**
-
-*Either **account** or **customer** field should be specified. In case when both fields are provided
-the customer should be a part of the specified account.*
-
 {@request:json_api}
 Example:
-
-`</api/leads>`
 
 ```JSON
 {  
@@ -50,12 +43,6 @@ Example:
          "organization":{  
             "data":{  
                "type":"organizations",
-               "id":"1"
-            }
-         },
-         "dataChannel":{  
-            "data":{  
-               "type":"channels",
                "id":"1"
             }
          },
@@ -83,20 +70,13 @@ Example:
 ### update
 
 Edit a specific lead record.
+
 The updated record is returned in the response.
 
 {@inheritdoc}
 
-**Please note:**
-
-*The **account** and **customer** fields are related and you cannot pass them together if
-the customer is not a part of the specified account.
-These fields could be used independent from each other, but must be correlated if both of them are specified.*
-
 {@request:json_api}
 Example:
-
-`</api/leads/1>`
 
 ```JSON
 {  
@@ -162,7 +142,6 @@ Delete a specific lead record.
 ### delete_list
 
 Delete a collection of lead records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -184,21 +163,10 @@ The list of records that will be deleted, could be limited by filters.
 
 **The required field**
 
-#### update
-
-{@inheritdoc}
-
 **Please note:**
 
-*This field is **required** and must remain defined.*
-
-### dataChannel
-
-#### create
-
-{@inheritdoc}
-
-**The required field**
+*This field is optional if the default value is set in the Lead entity configuration.
+If this field is missing in the request, the default value is applied.*
 
 #### update
 
@@ -228,29 +196,33 @@ The list of records that will be deleted, could be limited by filters.
 
 An array of email addresses.
 
-Format of data: [{"email": first@email.com}, {"email": second@email.com}]
+The **email** property is a string contains an email address.
+
+Example of data: **\[{"email": "first@email.com"}, {"email": "second@email.com"}\]**
 
 #### create, update
 
-An array of email addresses.
+{@inheritdoc}
 
-Format of data: [{"email": first@email.com}, {"email": second@email.com}]
+**Please note:**
 
-Data should contain full collection of email addresses of the lead.
+*Data should contain all email addresses of the lead, including the primary email address.*
 
 ### phones
 
 An array of phone numbers.
 
-Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
+The **phone** property is a string contains a phone number.
+
+Example of data: **\[{"phone": "202-555-0141"}, {"phone": "202-555-0171"}\]**
 
 #### create, update
 
-An array of phone numbers.
+{@inheritdoc}
 
-Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
+**Please note:**
 
-Data should contain full collection of phone numbers of the lead.
+*Data should contain all phone numbers of the lead, including the primary phone number.*
 
 ### primaryEmail
 
@@ -262,7 +234,7 @@ The email address that should be set as the primary one.
 
 **Please note:**
 
-*The primary email address will be added to **emails** collection if it does not contain it yet.*
+*The **emails** collection should contain the primary email address if the request has this collection.*
 
 ### primaryPhone
 
@@ -273,38 +245,58 @@ Primary phone number of the lead.
 The phone number that should be set as the primary one.
 
 **Please note:**
- 
-*The primary phone number will be added to **phones** collection if it does not contain it yet.*
+
+*The **phones** collection should contain the primary phone number if the request has this collection.*
 
 ### customer
 
 A customer the lead is assigned to.
 
-#### create
+#### create, update
 
 {@inheritdoc}
 
 **Please note:**
 
-*This field is **required** if the **account** field is not specified.*
-
-*If both **customer** and **account** fields are provided the customer should be a part of the specified account.*
+*The **customer** is related to the specific **account**.
+In case when both fields (**account** and **customer**) are provided
+the **customer** should be assigned to the specified **account**.*
 
 ### account
 
 An account the lead is assigned to.
 
-#### create
+#### create, update
 
 {@inheritdoc}
 
 **Please note:**
 
-*This field is **required** if the **customer** field is not specified.*
+*The **account** is related to the specific **customer**.
+In case when both fields (**account** and **customer**) are provided
+the **customer** should be assigned to the specified **account**.*
 
 ### campaign
 
-The marketing campaign as a result of which the Lead was created
+The marketing campaign as a result of which the lead was created
+
+## FILTERS
+
+### emails
+
+Filter records by email address.
+
+### phones
+
+Filter records by phone number.
+
+### primaryEmail
+
+Filter records by primary email address.
+
+### primaryPhone
+
+Filter records by primary phone number.
 
 ## SUBRESOURCES
 
@@ -317,52 +309,6 @@ Retrieve a record of addresses assigned to a specific lead record.
 #### get_relationship
 
 Retrieve IDs of address records assigned to a specific lead record.
-
-#### update_relationship
-
-Replace the list of addresses assigned to a specific lead record.
-
-{@request:json_api}
-Example:
-
-`</api/leads/1/relationships/addresses>`
-
-```JSON
-{  
-   "data":[  
-      {  
-         "type":"leadaddresses",
-         "id":"6"
-      }
-   ]
-}
-```
-{@/request}
-
-#### add_relationship
-
-Set address records for a specific lead record.
-
-{@request:json_api}
-Example:
-
-`</api/leads/1/relationships/addresses>`
-
-```JSON
-{  
-   "data":[  
-      {  
-         "type":"leadaddresses",
-         "id":"7"
-      }
-   ]
-}
-```
-{@/request}
-
-#### delete_relationship
-
-Remove address records from a specific lead record.
 
 ### contact
 
@@ -380,8 +326,6 @@ Replace a contact record assigned to a specific lead record.
 
 {@request:json_api}
 Example:
-
-`</api/leads/1/relationships/contact>`
 
 ```JSON
 {
@@ -410,8 +354,6 @@ Update a customer the opportunity is created for.
 {@request:json_api}
 Example:
 
-`</api/leads/1/relationships/customer>`
-
 ```JSON
 {
   "data": {
@@ -439,41 +381,10 @@ Update an account the opportunity is created for.
 {@request:json_api}
 Example:
 
-`</api/leads/1/relationships/account>`
-
 ```JSON
 {
   "data": {
     "type": "accounts",
-    "id": "1"
-  }
-}
-```
-{@/request}
-
-### dataChannel
-
-#### get_subresource
-
-Retrieve channel record to which a lead is assigned.
-
-#### get_relationship
-
-Retrieve the ID of a channel record assigned to a specific lead record.
-
-#### update_relationship
-
-Replace the ID of a channel assigned to a specific lead record.
-
-{@request:json_api}
-Example:
-
-`</api/leads/1/relationships/dataChannel>`
-
-```JSON
-{
-  "data": {
-    "type": "channels",
     "id": "1"
   }
 }
@@ -497,8 +408,6 @@ Replace the opportunity record assigned to a specific lead record.
 {@request:json_api}
 Example:
 
-`</api/leads/88/relationships/opportunities>`
-
 ```JSON
 {
   "data": [
@@ -517,8 +426,6 @@ Set an opportunity record for a specific lead record.
 
 {@request:json_api}
 Example:
-
-`</api/leads/88/relationships/opportunities>`
 
 ```JSON
 {
@@ -553,8 +460,6 @@ Replace the organization a specific lead belongs to
 {@request:json_api}
 Example:
 
-`</api/leads/1/relationships/organization>`
-
 ```JSON
 {
   "data": {
@@ -581,8 +486,6 @@ Replace the owner of a specific lead record.
 
 {@request:json_api}
 Example:
-
-`</api/leads/1/relationships/owner>`
 
 ```JSON
 {
@@ -611,8 +514,6 @@ Replace the source of a specific lead record.
 {@request:json_api}
 Example:
 
-`</api/leads/1/relationships/source>`
-
 ```JSON
 {
   "data": {
@@ -639,8 +540,6 @@ Replace the status of a specific lead record.
 
 {@request:json_api}
 Example:
-
-`</api/leads/1/relationships/status>`
 
 ```JSON
 {

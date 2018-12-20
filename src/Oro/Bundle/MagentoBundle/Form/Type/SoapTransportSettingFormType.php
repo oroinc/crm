@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -18,17 +21,17 @@ class SoapTransportSettingFormType extends AbstractTransportSettingFormType
 
         $builder->add(
             'apiUrl',
-            'text',
+            TextType::class,
             ['label' => 'oro.magento.magentotransport.soap.wsdl_url.label', 'required' => true]
         );
         $builder->add(
             'apiUser',
-            'text',
+            TextType::class,
             ['label' => 'oro.magento.magentotransport.soap.api_user.label', 'required' => true]
         );
         $builder->add(
             'apiKey',
-            'password',
+            PasswordType::class,
             [
                 'label'       => 'oro.magento.magentotransport.soap.api_key.label',
                 'required'    => true,
@@ -37,7 +40,7 @@ class SoapTransportSettingFormType extends AbstractTransportSettingFormType
         );
         $builder->add(
             'isWsiMode',
-            'checkbox',
+            CheckboxType::class,
             ['label' => 'oro.magento.magentotransport.soap.is_wsi_mode.label', 'required' => false]
         );
 
@@ -59,14 +62,12 @@ class SoapTransportSettingFormType extends AbstractTransportSettingFormType
             WebsiteSelectType::class,
             [
                 'label'    => 'oro.magento.magentotransport.website_id.label',
-                'required' => true,
-                // TODO: Remove 'choices_as_values' option in scope of BAP-15236
-                'choices_as_values' => true
+                'required' => true
             ]
         );
         $builder->add(
             'adminUrl',
-            'text',
+            TextType::class,
             ['label' => 'oro.magento.magentotransport.admin_url.label', 'required' => false]
         );
 

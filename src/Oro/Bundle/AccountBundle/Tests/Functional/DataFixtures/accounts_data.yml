@@ -1,0 +1,26 @@
+dependencies:
+  - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser
+  - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact{1..2}:
+    firstName: 'First_<current()>'
+    lastName: 'Last_<current()>'
+    owner: '@user'
+    organization: '@organization'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  account{1..2}:
+    name: 'Account <current()>'
+    defaultContact: '@contact<current()>'
+    owner: '@user'
+    organization: '@organization'
+
+Oro\Bundle\NoteBundle\Entity\Note:
+  note:
+    message: '<p><strong>New note</strong></p>'
+    addActivityTarget: ['@account2']
+    createdAt: '<dateTimeBetween("-200 days", "now")>'
+    updatedAt: '<dateTimeBetween($createdAt, "now")>'
+    owner: '@user'
+    organization: '@organization'

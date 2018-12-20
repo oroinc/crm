@@ -12,10 +12,10 @@ workflows:
                 form_options:
                     attribute_fields:
                         feedback:
-                            form_type: textarea
+                            form_type: Symfony\Component\Form\Extension\Core\Type\TextareaType
                             options:
                                 required: false
                         notes:
-                            form_type: oro_resizeable_rich_text
+                            form_type: Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType
                             options:
                                 required: false

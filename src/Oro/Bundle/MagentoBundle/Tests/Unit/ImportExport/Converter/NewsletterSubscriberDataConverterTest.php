@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Converter;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\NewsletterSubscriberDataConverter;
 
-class NewsletterSubscriberDataConverterTest extends \PHPUnit_Framework_TestCase
+class NewsletterSubscriberDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var NewsletterSubscriberDataConverter
@@ -27,7 +27,7 @@ class NewsletterSubscriberDataConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertToImportFormat()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ContextInterface $context */
         $context = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $context->expects($this->atLeastOnce())->method('hasOption')->with($this->isType('string'))->willReturn(true);
         $context->expects($this->atLeastOnce())->method('getOption')->with($this->isType('string'))->willReturn(1);

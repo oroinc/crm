@@ -5,8 +5,8 @@ namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
@@ -14,6 +14,9 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Loads ContactRequest data
+ */
 class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
     /** @var ContainerInterface */
@@ -93,7 +96,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
         $embeddedForm = new EmbeddedForm();
         /** @var ContactRequestType $contactUs */
         $contactUs = $this->container->get('oro_contact_us.embedded_form');
-        $embeddedForm->setFormType('oro_contact_us.embedded_form');
+        $embeddedForm->setFormType(ContactRequestType::class);
         $embeddedForm->setCss($contactUs->getDefaultCss());
         $embeddedForm->setSuccessMessage($contactUs->getDefaultSuccessMessage());
         $embeddedForm->setTitle('Contact Us Form');
@@ -106,10 +109,22 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
      */
     protected function persistDemoContactUsForm(ObjectManager $om)
     {
+        /** @var ContactReason[] $contactReasons */
+        $contactReasons = $om->getRepository('OroContactUsBundle:ContactReason')
+            ->getExistedContactReasonsQB()
+            ->addSelect('titles')
+            ->leftJoin('cr.titles', 'titles');
+
+        $contactReasonDefaultTitles = [];
+
+        foreach ($contactReasons as $contactReason) {
+            $contactReasonDefaultTitles[$contactReason->getDefaultTitle()->getString()] = $contactReason;
+        }
+
         foreach ($this->contactRequests as $contactRequest) {
             $request = new ContactRequest();
-            $contactRequest['contactReason'] = $om->getRepository('OroContactUsBundle:ContactReason')
-                ->findOneBy(array('label' => $contactRequest['contactReason']));
+            $contactRequest['contactReason'] = $contactReasonDefaultTitles[$contactRequest['contactReason']] ?? null;
+
             foreach ($contactRequest as $property => $value) {
                 call_user_func_array(array($request, 'set' . ucfirst($property)), array($value));
             }

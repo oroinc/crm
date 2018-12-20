@@ -293,10 +293,6 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
      */
     protected function getCounty()
     {
-        $country = $this->em->getRepository('OroAddressBundle:Country')->findOneBy([
-            'iso2Code'=>'US'
-        ]);
-
-        return $country;
+        return $this->em->find(Country::class, 'IM');
     }
 }

@@ -24,6 +24,45 @@ oro_behat_extension:
     Contact Accounts Grid:
       selector: 'div[data-page-component-name="contact-accounts-grid"]'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+    Select Contacts Grid:
+      selector: 'div[data-page-component-name="account-contacts-update-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+    Reports to hamburger:
+      selector:
+        locator: '//input[@name="oro_contact_form[reportsTo]"]/../button[contains(@class,"entity-select-btn")]'
+        type: xpath
+    Reports to create new:
+      selector:
+        locator: '//input[@name="oro_contact_form[reportsTo]"]/../button[contains(@class,"entity-create-btn")]'
+        type: xpath
+    Create Contact Modal Form:
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      selector: 'div.ui-dialog form[name="oro_contact_form"]'
+    Select Contact Paginator:
+      selector: 'div[data-page-component-name="contacts-select-grid"] div.toolbar div.pagination'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridPaginator
+    Select Contact:
+      selector: 'div[data-page-component-name="contacts-select-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+      options:
+        mapping:
+          GridToolbarPaginator: 'Select Contact Paginator'
+    Contacts Grid:
+      selector: 'div[data-page-component-name="contacts-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+    Add Context Contact Grid Paginator:
+      selector: 'div[data-page-component-name="contacts-for-context-grid"] div.toolbar div.pagination'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridPaginator
+    Add Context Contact Grid:
+      selector: 'div[data-page-component-name="contacts-for-context-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+      options:
+        mapping:
+          GridToolbarPaginator: 'Add Context Contact Grid Paginator'
+    Add Context Contact GridFilters:
+      selector: 'div[data-page-component-name="contacts-for-context-grid"] div.filter-box'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilters
+
   suites:
     OroContactBundle:
       contexts:
@@ -41,5 +80,8 @@ oro_behat_extension:
         - OroContactBundle::FeatureContext
         - OroActivityListBundle::ActivityContext
         - OroUIBundle::ContextSelectorContext
+        - OroConfigBundle::FeatureContext
+        - OroNavigationBundle::FeatureContext
+        - OroLocaleBundle::LocalizationContext
       paths:
         - '@OroContactBundle/Tests/Behat/Features'

@@ -1,0 +1,9 @@
+/* @theme: admin.oro; */
+
+@import "oroui/css/scss/mixins";
+
+.opportunity-card-view {
+  .card-probability {
+    @include text-line-truncate();
+  }
+}

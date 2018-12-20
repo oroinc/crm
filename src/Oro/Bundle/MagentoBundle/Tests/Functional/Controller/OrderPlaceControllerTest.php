@@ -37,7 +37,7 @@ class OrderPlaceControllerTest extends WebTestCase
     /** @var Customer */
     protected $customer;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $soapTransport;
 
     /** @var SoapTransport */

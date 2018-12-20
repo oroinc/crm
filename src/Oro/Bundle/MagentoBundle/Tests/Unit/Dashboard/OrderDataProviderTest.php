@@ -7,15 +7,15 @@ use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 
-class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
+class OrderDataProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $registry;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $aclHelper;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $configProvider;
 
     /** @var OrderDataProvider */

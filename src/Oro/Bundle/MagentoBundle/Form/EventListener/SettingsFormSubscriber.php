@@ -4,16 +4,19 @@ namespace Oro\Bundle\MagentoBundle\Form\EventListener;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * Class handles settings modification on integration page
+ */
 class SettingsFormSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var Mcrypt
+     * @var SymmetricCrypterInterface
      */
     protected $encryptor;
 
@@ -29,9 +32,9 @@ class SettingsFormSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param Mcrypt $encryptor
+     * @param SymmetricCrypterInterface $encryptor
      */
-    public function __construct(Mcrypt $encryptor)
+    public function __construct(SymmetricCrypterInterface $encryptor)
     {
         $this->encryptor = $encryptor;
     }
@@ -122,6 +125,6 @@ class SettingsFormSubscriber implements EventSubscriberInterface
             $choices[$website['label']] = $website['id'];
         }
 
-        FormUtils::replaceField($form, 'websiteId', ['choices' => $choices], ['choice_list']);
+        FormUtils::replaceField($form, 'websiteId', ['choices' => $choices]);
     }
 }

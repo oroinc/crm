@@ -7,7 +7,7 @@ use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareExport
 use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareImportProcessor;
 use Oro\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy;
 
-class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
+class TwoWaySyncStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TwoWaySyncStrategy
@@ -15,12 +15,12 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
     protected $strategy;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StepExecutionAwareImportProcessor
+     * @var \PHPUnit\Framework\MockObject\MockObject|StepExecutionAwareImportProcessor
      */
     protected $importProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StepExecutionAwareExportProcessor
+     * @var \PHPUnit\Framework\MockObject\MockObject|StepExecutionAwareExportProcessor
      */
     protected $exportProcessor;
 

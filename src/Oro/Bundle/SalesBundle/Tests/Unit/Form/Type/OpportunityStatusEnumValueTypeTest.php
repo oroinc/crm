@@ -10,18 +10,11 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\Range;
 
-class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
+class OpportunityStatusEnumValueTypeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetName()
-    {
-        $type = $this->getFormType();
-
-        $this->assertEquals('oro_sales_opportunity_status_enum_value', $type->getName());
-    }
-
     public function testBuildForm()
     {
-        /** @var $builder FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $builder FormBuilderInterface|\PHPUnit\Framework\MockObject\MockObject */
         $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
 
         $type = $this->getFormType();
@@ -38,8 +31,14 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
     {
         $type = $this->getFormType();
 
-        /** @var $form FormInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $form FormInterface|\PHPUnit\Framework\MockObject\MockObject */
         $form = $this->createMock('Symfony\Component\Form\FormInterface');
+        $attr = [];
+
+        if ($shouldBeDisabled) {
+            $attr['readonly'] = true;
+        }
+
         $form->expects($this->once())
             ->method('add')
             ->with(
@@ -47,7 +46,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
                 OroPercentType::class,
                 [
                     'disabled' => $shouldBeDisabled,
-                    'attr' => ['readonly' => $shouldBeDisabled],
+                    'attr' => $attr,
                     'constraints' => new Range(['min' => 0, 'max' => 100]),
                 ]
             );
@@ -67,7 +66,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
 
     protected function getFormType()
     {
-        /** @var $configProvider ConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $configProvider ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
         $configProvider = $this->getMockBuilder(ConfigProvider::class)->disableOriginalConstructor()->getMock();
 
         return new OpportunityStatusEnumValueType($configProvider);

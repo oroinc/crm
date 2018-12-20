@@ -1,0 +1,57 @@
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+    contact_email_1:
+        email: 'test1@test.com'
+        primary: true
+    contact_email_2:
+        email: 'test2@test.com'
+        primary: true
+
+Oro\Bundle\ContactBundle\Entity\ContactPhone:
+    contact_phone_1:
+        phone: '5556668888'
+        primary: true
+    contact_phone_2:
+        phone: '5556669999'
+        primary: true
+
+Oro\Bundle\ContactBundle\Entity\ContactAddress:
+    contact_address_1:
+        country: '@germany'
+        primary: true
+        street: 'streetN1'
+        city: 'TestCity1'
+        postalCode: '10001'
+        organization: 'TestOrg1'
+        region: '@berlin'
+        firstName: 'TestContact1'
+        lastName: 'TestContact1'
+        types: ['billing', 'shipping']
+    contact_address_2:
+        country: '@united_states'
+        primary: true
+        street: 'streetN2'
+        city: 'TestCity2'
+        postalCode: '10002'
+        organization: 'TestOrg2'
+        region: '@florida'
+        firstName: 'TestContact2'
+        lastName: 'TestContact2'
+        types: ['billing', 'shipping']
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+    contact_1:
+        owner: '@admin'
+        organization: '@organization'
+        firstName: 'TestContact1'
+        lastName: 'TestContact1'
+        addEmail: ['@contact_email_1']
+        addPhone: ['@contact_phone_1']
+        addAddress: ['@contact_address_1']
+    contact_2:
+        owner: '@admin'
+        organization: '@organization'
+        firstName: 'TestContact2'
+        lastName: 'TestContact2'
+        addEmail: ['@contact_email_2']
+        addPhone: ['@contact_phone_2']
+        addAddress: ['@contact_address_2']

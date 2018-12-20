@@ -17,14 +17,13 @@ Retrieve a collection of sales processes records.
 ### create
 
 Create a new sales process record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/salesfunnels>`
 
 ```JSON
 {  
@@ -70,8 +69,6 @@ Edit a specific sales process record.
 {@request:json_api}
 Example:
 
-`</api/salesfunnels/1>`
-
 ```JSON
 {  
    "data":{  
@@ -114,7 +111,6 @@ Delete a specific sales process record.
 ### delete_list
 
 Delete a collection of sales processes records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -164,7 +160,7 @@ The list of records that will be deleted, could be limited by filters.
 
 ### campaign
 
-The marketing campaign as a result of which the SalesFunnel was created.
+The marketing campaign as a result of which the sales funnel was created.
 
 ## SUBRESOURCES
 
@@ -184,8 +180,6 @@ Replace a lead record the belongs to a specific sales process record.
 
 {@request:json_api}
 Example:
-
-`</api/salesfunnels/1/relationships/lead>`
 
 ```JSON
 {
@@ -214,8 +208,6 @@ Replace an opportunity record that belongs to a specific sales process record.
 {@request:json_api}
 Example:
 
-`</api/salesfunnels/2/relationships/opportunity>`
-
 ```JSON
 {
   "data": {
@@ -243,8 +235,6 @@ Replace the organization a specific sales process belongs to.
 {@request:json_api}
 Example:
 
-`</api/salesfunnels/1/relationships/organization>`
-
 ```JSON
 {
   "data": {
@@ -271,8 +261,6 @@ Replace the owner of a specific sales process record.
 
 {@request:json_api}
 Example:
-
-`</api/salesfunnels/1/relationships/owner>`
 
 ```JSON
 {

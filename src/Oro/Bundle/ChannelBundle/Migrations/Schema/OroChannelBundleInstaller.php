@@ -32,7 +32,7 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
      */
     public function getMigrationVersion()
     {
-        return 'v1_9';
+        return 'v1_11';
     }
 
     /**
@@ -72,7 +72,7 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('status', 'boolean', []);
         $table->addColumn('channel_type', 'string', ['length' => 255]);
-        $table->addColumn('data', Type::JSON_ARRAY, ['notnull' => false]);
+        $table->addColumn('data', Type::JSON_ARRAY, ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
         $table->addColumn('customer_identity', 'string', ['length' => 255]);
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);

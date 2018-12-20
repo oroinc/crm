@@ -1,0 +1,112 @@
+/* @theme: admin.oro; */
+
+@import "oroui/css/scss/variables";
+
+.alert.connection-status {
+    margin: 10px 0;
+    float: none;
+}
+
+.magento-website-selector-container {
+    position: relative;
+}
+
+.magento-website-selector-container .selector > span {
+    overflow: hidden;
+}
+
+.magento-website-selector-container .sync-website-list-link {
+    line-height: 28px;
+    position: absolute;
+    top: 0;
+    #{$start}: 305px;
+    white-space: nowrap;
+}
+
+.customer-without-border-tabs {
+    padding-#{$start}: 0;
+}
+
+.customer-without-border-tabs.responsive-cell {
+    margin-top: -1px;
+}
+
+.customer-without-border-tabs .oro-tabs {
+    padding-#{$start}: 1px;
+}
+
+.mess-pos {
+    margin-#{$start}: 10px;
+}
+
+.ui-dialog-minimized.place-order-transaction-dialog {
+    min-width: 0;
+    min-height: 0;
+}
+
+/* fix FF block height */
+.place-order-transaction-dialog .form-dialog,
+.place-order-transaction-dialog .form-dialog > div,
+.place-order-transaction-dialog .form-dialog > div > div,
+.place-order-transaction-dialog .form-dialog > div > div > div {
+    height: 100%;
+}
+
+.place-order-transaction-dialog .ui-dialog-content {
+    /* prevent JS resizing */
+    overflow: hidden;
+    padding: 0;
+}
+
+.place-order-transaction-dialog .ui-dialog-content .widget-content {
+    height: 100%;
+}
+
+.place-order-transaction-dialog .ui-dialog-buttonpane {
+    /* hide empty button pane */
+    display: none;
+}
+
+.collection-remove-disabled + .removeRow {
+    display: none;
+}
+
+.page-title ul.inline li.magento-customer-info {
+    border-#{$start}: 0 none;
+    vertical-align: middle;
+    padding-#{$start}: 0;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.page-title ul.inline li.magento-customer-info .orocrm-channel-lifetime-value-label {
+    margin-#{$start}: 0;
+    margin-#{$end}: 10px;
+}
+
+.page-title ul.inline li.magento-customer-info > div {
+    float: none;
+}
+
+.place-order-transaction-dialog #orderPlaceFrame.loaded {
+    height: 100%;
+    width: 100%;
+}
+
+.mobile-version .place-order-transaction-dialog .order-form-widget.widget-content {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    #{$start}: 0;
+    #{$end}: 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.widget-picker__icon.magento-logo {
+    background-image: url('../img/magento-logo.svg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 18px;
+    vertical-align: middle;
+}

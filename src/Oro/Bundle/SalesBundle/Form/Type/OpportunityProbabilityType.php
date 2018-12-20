@@ -61,6 +61,12 @@ class OpportunityProbabilityType extends AbstractType
         foreach ($this->enumStatuses as $status) {
             $disabled = in_array($status->getId(), self::$immutableProbabilityStatuses);
 
+            $attr = [];
+
+            if ($disabled) {
+                $attr['readonly'] = true;
+            }
+
             $builder
                 ->add(
                     $status->getId(),
@@ -69,7 +75,7 @@ class OpportunityProbabilityType extends AbstractType
                         'required' => false,
                         'disabled' => $disabled,
                         'label' => $status->getName(),
-                        'attr' => ['readonly' => $disabled],
+                        'attr' => $attr,
                         'constraints' => $constraint,
                     ]
                 );

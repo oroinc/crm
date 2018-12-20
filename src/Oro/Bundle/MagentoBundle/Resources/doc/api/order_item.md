@@ -17,14 +17,13 @@ Retrieve a collection of records represented by Magento order items.
 ### create
 
 Create a new Magento order item record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentoorderitems>`
 
 ```JSON
 {  
@@ -69,8 +68,6 @@ Edit a specific Magento order item record.
 
 {@request:json_api}
 Example:
-
-`</api/magentoorderitems/1>`
 
 ```JSON
 {  
@@ -117,7 +114,6 @@ Delete a specific Magento order item record.
 ### delete_list
 
 Delete a collection of records represented by Magento order items.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -182,8 +178,6 @@ Replace the Magento order to which a specific Magento order item belongs.
 {@request:json_api}
 Example:
 
-`</api/magentoorderitems/1/relationships/order>`
-
 ```JSON
 {
   "data": {
@@ -211,8 +205,6 @@ Replace the organization to which a specific Magento order item belongs.
 {@request:json_api}
 Example:
 
-`</api/magentoorderitems/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -239,8 +231,6 @@ Replace an integration channel via which information about the Magento order ite
 
 {@request:json_api}
 Example:
-
-`</api/magentoorderitems/1/relationships/channel>`
 
 ```JSON
 {

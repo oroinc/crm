@@ -12,14 +12,14 @@ use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
 use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\Forms;
 
-class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
+class TransitionsAttributeListenerTest extends \PHPUnit\Framework\TestCase
 {
     const EXPECTED_CHANNEL_ID = 7;
 
     /** @var TransitionsAttributeListener */
     protected $listener;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $contextAccessor;
 
     protected function setUp()
@@ -62,7 +62,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
     public function testNotAbstractChannelAwareType()
     {
         $attribute = new Attribute();
-        $attributeOptions = ['form_type' => 'oro_channel_entities'];
+        $attributeOptions = ['form_type' => ChannelEntityType::class];
         $options = ['option1', 'option2'];
 
         $event = new TransitionsAttributeEvent($attribute, $attributeOptions, $options);

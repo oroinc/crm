@@ -5,7 +5,7 @@ use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ContactSelectTypeTest extends \PHPUnit_Framework_TestCase
+class ContactSelectTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContactSelectType

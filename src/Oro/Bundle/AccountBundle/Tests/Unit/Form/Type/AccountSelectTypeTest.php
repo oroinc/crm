@@ -5,7 +5,7 @@ namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
 use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 
-class AccountSelectTypeTest extends \PHPUnit_Framework_TestCase
+class AccountSelectTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AccountSelectType

@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
+ * Handler has method getCheckResponse which allows to check configuration of the integration
+ *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -100,7 +102,7 @@ class TransportHandler
         MagentoTransport $transportEntity
     ) {
         if ($transport instanceof TransportCacheClearInterface) {
-            $transport->cacheClear($transportEntity->getWsdlUrl());
+            $transport->cacheClear($transportEntity->getApiUrl());
         }
 
         $transport->initWithExtraOptions($transportEntity, MultiAttemptsConfigTrait::getMultiAttemptsDisabledConfig());

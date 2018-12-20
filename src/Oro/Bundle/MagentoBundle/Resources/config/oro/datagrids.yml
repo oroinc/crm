@@ -35,6 +35,8 @@ datagrids:
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
                         - { join: c.group, alias: cg }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             channelName:
                 label:            oro.magento.customer.data_channel.label
@@ -107,7 +109,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                 websiteName:
                     type: entity
@@ -115,7 +117,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroMagentoBundle:Website
-                            property: name
+                            choice_label: name
                             translatable_options: false
                     enabled: false
                 firstName:
@@ -133,7 +135,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder:  "@oro_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
@@ -244,6 +246,8 @@ datagrids:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: cs.website, alias: cw }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             channelName:
                 label:            oro.magento.cart.data_channel.label
@@ -309,7 +313,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                 websiteName:
                     type: entity
@@ -317,7 +321,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroMagentoBundle:Website
-                            property: name
+                            choice_label: name
                     enabled:   false
                 originId:
                     type: number-range
@@ -341,7 +345,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder:  "@oro_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
@@ -354,7 +358,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroMagentoBundle:CartStatus
-                            property: label
+                            choice_label: label
                             translatable_options: false
                 createdAt:
                     type:      datetime
@@ -631,7 +635,7 @@ datagrids:
                         field_options:
                             class: OroMagentoBundle:Website
                             multiple: true
-                            property: name
+                            choice_label: name
                             translatable_options: false
                 createdAt:
                     type:      datetime
@@ -695,6 +699,8 @@ datagrids:
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             channelName:
                 label:            oro.magento.order.data_channel.label
@@ -770,7 +776,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                 websiteName:
                     type: entity
@@ -778,7 +784,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroMagentoBundle:Website
-                            property: name
+                            choice_label: name
                             translatable_options: false
                     enabled:   false
                 incrementId:
@@ -1305,7 +1311,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroMagentoBundle:CartStatus
-                            property: label
+                            choice_label: label
         actions:
             view:
                 type:         navigate
@@ -1429,6 +1435,8 @@ datagrids:
                         - { join: newsletterSubscriber.store, alias: store }
                         - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
                         - { join: store.website, alias: website }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             channelName:
                 label: oro.magento.newslettersubscriber.data_channel.label
@@ -1465,7 +1473,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                 websiteName:
                     type: string
@@ -1597,7 +1605,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                 websiteName:
                     type: entity
@@ -1605,7 +1613,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroMagentoBundle:Website
-                            property: name
+                            choice_label: name
                             translatable_options: false
                     enabled: false
                 firstName:
@@ -1663,6 +1671,8 @@ datagrids:
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
+            hints:
+                - HINT_TRANSLATABLE
         columns:
             id:
                 label:            oro.magento.order.id.label
@@ -1719,7 +1729,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                 websiteName:
                     type: entity
@@ -1727,7 +1737,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroMagentoBundle:Website
-                            property: name
+                            choice_label: name
                             translatable_options: false
                     enabled:   false
                 incrementId:
@@ -1749,7 +1759,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroAddressBundle:Country
-                            property: name
+                            choice_label: name
                             query_builder:  "@oro_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
@@ -1859,7 +1869,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                 websiteName:
                     type: entity
@@ -1867,7 +1877,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroMagentoBundle:Website
-                            property: name
+                            choice_label: name
                     enabled:   false
                 firstName:
                     type: string
@@ -1887,7 +1897,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroMagentoBundle:CartStatus
-                            property: label
+                            choice_label: label
                             translatable_options: false
                 createdAt:
                     type:      datetime
@@ -2041,7 +2051,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroChannelBundle:Channel
-                            property: name
+                            choice_label: name
                             translatable_options: false
                 websiteName:
                     type: entity
@@ -2049,7 +2059,7 @@ datagrids:
                     options:
                         field_options:
                             class: OroMagentoBundle:Website
-                            property: name
+                            choice_label: name
                             translatable_options: false
                     enabled:   false
                 firstName:

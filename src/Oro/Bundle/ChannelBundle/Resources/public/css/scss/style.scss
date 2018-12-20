@@ -1,0 +1,32 @@
+/* @theme: admin.oro; */
+
+.form-element-text {
+    display: inline-block;
+    padding-top: 3px;
+}
+
+.form-horizontal .entities-form-container .controls .select2-container {
+    width: 250px !important;
+}
+
+.form-horizontal .entities-form-container .entities-form-action-container {
+    margin-left: 20px;
+}
+
+.control-group .controls .inline-text {
+    display: inline-block;
+    padding-top: 4px;
+}
+
+.entities-component .grid-container .grid .action-cell {
+    text-align: right;
+}
+
+.orocrm-channel-datasource-field {
+    padding-top: 3px;
+}
+
+.orocrm-channel-datasource-field.error {
+    border: none;
+    box-shadow: none;
+}

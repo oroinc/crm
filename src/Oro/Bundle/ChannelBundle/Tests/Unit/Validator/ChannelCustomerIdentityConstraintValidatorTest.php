@@ -7,7 +7,7 @@ use Oro\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraintValidato
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-class ChannelCustomerIdentityConstraintValidatorTest extends \PHPUnit_Framework_TestCase
+class ChannelCustomerIdentityConstraintValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException

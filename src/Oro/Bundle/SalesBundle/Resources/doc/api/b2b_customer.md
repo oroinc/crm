@@ -17,14 +17,13 @@ Retrieve a collection of business customer records.
 ### create
 
 Create a new business customer record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers>`
 
 ```JSON
 {  
@@ -113,8 +112,6 @@ Edit a specific business customer record.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/27>`
-
 ```JSON
 {  
    "data":{  
@@ -168,7 +165,6 @@ Example:
 ### delete_list
 
 Delete a collection of business customer records.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -192,29 +188,33 @@ Delete a specific business customer record.
 
 An array of email addresses.
 
-Format of data: [{"email": first@email.com}, {"email": second@email.com}]
+The **email** property is a string contains an email address.
+
+Example of data: **\[{"email": "first@email.com"}, {"email": "second@email.com"}\]**
 
 #### create, update
 
-An array of email addresses.
+{@inheritdoc}
 
-Format of data: [{"email": first@email.com}, {"email": second@email.com}]
+**Please note:**
 
-Data should contain full collection of email addresses of the business customer.
+*Data should contain all email addresses of the business customer, including the primary email address.*
 
 ### phones
 
 An array of phone numbers.
 
-Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
+The **phone** property is a string contains a phone number.
+
+Example of data: **\[{"phone": "202-555-0141"}, {"phone": "202-555-0171"}\]**
 
 #### create, update
 
-An array of phone numbers.
+{@inheritdoc}
 
-Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
+**Please note:**
 
-Data should contain full collection of phone numbers of the business customer.
+*Data should contain all phone numbers of the business customer, including the primary phone number.*
 
 ### primaryEmail
 
@@ -226,7 +226,7 @@ The email address that should be set as the primary one.
 
 **Please note:**
 
-*The primary email address will be added to **emails** collection if it does not contain it yet.*
+*The **emails** collection should contain the primary email address if the request has this collection.*
 
 ### primaryPhone
 
@@ -237,8 +237,8 @@ Primary phone number of the business customer.
 The phone number that should be set as the primary one.
 
 **Please note:**
- 
-*The primary phone number will be added to **phones** collection if it does not contain it yet.*
+
+*The **phones** collection should contain the primary phone number if the request has this collection.*
 
 ### account
 
@@ -309,8 +309,6 @@ Replace the accounts that a specific business customer is assigned to.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/1/relationships/account>`
-
 ```JSON
 {
   "data": {
@@ -337,8 +335,6 @@ Replace the billing address for a specific business customer.
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers/1/relationships/billingAddress>`
 
 ```JSON
 {
@@ -367,8 +363,6 @@ Replace the contact for a specific business customer.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/27/relationships/contact>`
-
 ```JSON
 {
   "data": {
@@ -395,8 +389,6 @@ Replace the channel for a specific business customer.
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers/1/relationships/dataChannel>`
 
 ```JSON
 {
@@ -425,8 +417,6 @@ Set the leads that a specific business customer will be assinged to.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/1/relationships/leads>`
-
 ```JSON
 {  
    "data":[  
@@ -449,8 +439,6 @@ Replace the leads that a specific business customer is assigned to.
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers/1/relationships/leads>`
 
 ```JSON
 {  
@@ -489,8 +477,6 @@ Set the opportunities that a specific business customer will be assigned to.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/27/relationships/opportunities>`
-
 ```JSON
 {
   "data": [
@@ -509,8 +495,6 @@ Replace the opportunities that a specific business customer is assigned to.
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers/27/relationships/opportunities>`
 
 ```JSON
 {
@@ -545,8 +529,6 @@ Replace the organization that a specific business customer belongs to.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/1/relationships/organization>`
-
 ```JSON
 {
   "data": {
@@ -574,8 +556,6 @@ Replace the owner of a specific business customer record.
 {@request:json_api}
 Example:
 
-`</api/b2bcustomers/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -602,8 +582,6 @@ Replace the shipping address for a specific business customer.
 
 {@request:json_api}
 Example:
-
-`</api/b2bcustomers/1/relationships/shippingAddress>`
 
 ```JSON
 {

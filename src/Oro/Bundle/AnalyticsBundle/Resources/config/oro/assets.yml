@@ -1,4 +1,4 @@
 assets:
     css:
-        oroanalytics:
-            - bundles/oroanalytics/css/styles.css
+        inputs:
+            - bundles/oroanalytics/css/scss/main.scss

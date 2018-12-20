@@ -8,7 +8,7 @@ use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
-class GroupTest extends \PHPUnit_Framework_TestCase
+class GroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Group

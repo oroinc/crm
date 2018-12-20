@@ -1,13 +1,13 @@
 {
     "name": "orocrm/contact-bundle",
     "type": "symfony-bundle",
-    "description": "Oro CRM Contacts",
+    "description": "OroCRM Contacts",
     "keywords": ["CRM", "Contacts"],
     "homepage": "https://github.com/orocrm/ContactBundle",
     "license": "MIT",
     "require": {
         "php": "7.1.*",
-        "symfony/symfony": "2.8.*, !=2.8.10",
+        "symfony/symfony": "^3.4",
         "friendsofsymfony/rest-bundle": "1.5.0-RC2",
         "nelmio/api-doc-bundle": "dev-master",
 

@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
+class AccountApiTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AccountApiType */
     private $type;

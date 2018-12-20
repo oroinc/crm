@@ -471,28 +471,4 @@ abstract class MagentoTransport extends Transport
 
         return $this;
     }
-
-    /**
-     * @deprecated since 2.3 version. Use getApiUrl() instead
-     *
-     * @return string
-     */
-    public function getWsdlUrl()
-    {
-        return $this->apiUrl;
-    }
-
-    /**
-     * @deprecated since 2.3 version. Use setApiUrl() instead
-     *
-     * @param $wsdlUrl
-     *
-     * @return MagentoTransport
-     */
-    public function setWsdlUrl($wsdlUrl)
-    {
-        $this->apiUrl = $wsdlUrl;
-
-        return $this;
-    }
 }

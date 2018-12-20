@@ -10,12 +10,12 @@ use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 use Oro\Component\Config\Resolver\ResolverInterface;
 
-class NavigationListenerTest extends \PHPUnit_Framework_TestCase
+class NavigationListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $resolver;
 
-    /** @var StateProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StateProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $state;
 
     protected function setUp()

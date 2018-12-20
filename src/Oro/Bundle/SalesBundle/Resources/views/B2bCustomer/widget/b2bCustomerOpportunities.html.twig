@@ -4,6 +4,7 @@
     {% set scope = 'customer-' ~ entity.id %}
     {{ dataGrid.renderGrid(
         oro_datagrid_build_fullname('sales-b2bcustomer-opportunities-grid', scope),
-        {customerId: entity.id}
+        {customerId: entity.id},
+        {cssClass: 'inner-grid'}
     ) }}
 </div>

@@ -18,7 +18,7 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
     /** @var IntegrationTypeExtension */
     protected $extension;
 
-    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject $settingsProvider */
+    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject $settingsProvider */
     protected $settingsProvider;
 
     /**

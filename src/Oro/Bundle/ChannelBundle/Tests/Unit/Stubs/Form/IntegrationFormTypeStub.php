@@ -15,7 +15,7 @@ class IntegrationFormTypeStub extends AbstractType
      *
      * @return string The name of this type
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'oro_integration_channel_form';
     }
@@ -26,9 +26,7 @@ class IntegrationFormTypeStub extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('type', ChoiceType::class, [
-            'choices' => IntegrationTypeExtensionTest::$allChoices,
-            // TODO: Remove 'choices_as_values' option in scope of BAP-15236
-            'choices_as_values' => true
+            'choices' => IntegrationTypeExtensionTest::$allChoices
         ]);
     }
 

@@ -2,35 +2,29 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Async;
 
-use Doctrine\DBAL\Driver\DriverException;
+use Doctrine\DBAL\Exception\DeadlockException;
 use Oro\Bundle\ContactBundle\Async\ContactPostImportProcessor;
 use Oro\Bundle\ContactBundle\Handler\ContactEmailAddressHandler;
-use Oro\Bundle\EntityBundle\ORM\DatabaseExceptionHelper;
 use Oro\Component\MessageQueue\Job\Job;
 use Oro\Component\MessageQueue\Job\JobStorage;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Psr\Log\LoggerInterface;
 
-class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
+class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ContactEmailAddressHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContactEmailAddressHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contactEmailAddressHandler;
 
     /**
-     * @var DatabaseExceptionHelper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $databaseExceptionHelper;
-
-    /**
-     * @var JobStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var JobStorage|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jobStorage;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -42,13 +36,11 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contactEmailAddressHandler = $this->createMock(ContactEmailAddressHandler::class);
-        $this->databaseExceptionHelper = $this->createMock(DatabaseExceptionHelper::class);
         $this->jobStorage = $this->createMock(JobStorage::class);
         $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->processor = new ContactPostImportProcessor(
             $this->contactEmailAddressHandler,
-            $this->databaseExceptionHelper,
             $this->jobStorage,
             $this->logger
         );
@@ -60,9 +52,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessRejectUnsupportedMessage($messageBody)
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $message->expects($this->once())
@@ -87,9 +79,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessNoParentJob()
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [
@@ -114,9 +106,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessParentJobUnsupportedImportType($jobName)
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [
@@ -150,9 +142,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessException()
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [
@@ -182,9 +174,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessDatabaseDriverException()
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [
@@ -202,21 +194,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(42)
             ->willReturn($job);
 
-        $exception = new \Exception();
-        $databaseDriverExceprion = $this->createMock(DriverException::class);
         $this->contactEmailAddressHandler->expects($this->once())
             ->method('actualizeContactEmailAssociations')
             ->willThrowException(new \Exception);
-
-        $this->databaseExceptionHelper->expects($this->once())
-            ->method('getDriverException')
-            ->with($exception)
-            ->willReturn($databaseDriverExceprion);
-
-        $this->databaseExceptionHelper->expects($this->once())
-            ->method('isDeadlock')
-            ->with($databaseDriverExceprion)
-            ->willReturn(false);
 
         $this->expectException(\Exception::class);
 
@@ -225,9 +205,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessDeadlock()
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [
@@ -245,21 +225,10 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(42)
             ->willReturn($job);
 
-        $exception = new \Exception();
-        $databaseDriverExceprion = $this->createMock(DriverException::class);
+        $exception = $this->createMock(DeadlockException::class);
         $this->contactEmailAddressHandler->expects($this->once())
             ->method('actualizeContactEmailAssociations')
-            ->willThrowException(new \Exception);
-
-        $this->databaseExceptionHelper->expects($this->once())
-            ->method('getDriverException')
-            ->with($exception)
-            ->willReturn($databaseDriverExceprion);
-
-        $this->databaseExceptionHelper->expects($this->once())
-            ->method('isDeadlock')
-            ->with($databaseDriverExceprion)
-            ->willReturn(true);
+            ->willThrowException($exception);
 
         $this->logger->expects($this->once())
             ->method('error');
@@ -269,9 +238,9 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessSuccess()
     {
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(MessageInterface::class);
-        /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
 
         $messageBody = [
@@ -289,8 +258,6 @@ class ContactPostImportProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(42)
             ->willReturn($job);
 
-        $exception = new \Exception();
-        $databaseDriverExceprion = $this->createMock(DriverException::class);
         $this->contactEmailAddressHandler->expects($this->once())
             ->method('actualizeContactEmailAssociations');
 

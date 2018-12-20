@@ -1,0 +1,6 @@
+data:
+    type: leads
+    id: '<toString(@lead1->id)>'
+    relationships:
+        status:
+            data: null

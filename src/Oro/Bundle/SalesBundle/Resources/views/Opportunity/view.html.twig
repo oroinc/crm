@@ -3,7 +3,7 @@
 {% set hasGrantedNameView = is_granted('VIEW', entity, 'name') %}
 
 {% oro_title_set({params : {"%opportunity.name%": hasGrantedNameView
-    ? entity.name|default('N/A')
+    ? entity.name|default('N/A'|trans)
     : 'view %fieldName% not granted'|trans({'%fieldName%': 'oro.sales.opportunity.name.label'|trans}) }})
 %}
 
@@ -33,7 +33,7 @@
         'indexLabel': 'oro.sales.opportunity.entity_plural_label'|trans,
         'rawEntityTitle': not hasGrantedNameView,
         'entityTitle': hasGrantedNameView
-            ? entity.name|default('N/A')
+            ? entity.name|default('N/A'|trans)
             : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'oro.sales.opportunity.name.label'|trans}))
     } %}
     {{ parent() }}
@@ -53,10 +53,10 @@
     {% if entity.status and is_granted('VIEW', entity, 'status') %}
         <div class="pull-left">
             {% if entity.status.id != 'lost' %}
-                <div class="badge badge-enabled status-enabled">
+                <div class="badge badge-pill badge-enabled status-enabled">
                     <i class="icon-status-enabled fa-circle"></i>{{ entity.status.name }}</div>
             {% else %}
-                <div class="badge badge-disabled status-disabled">
+                <div class="badge badge-pill badge-disabled status-disabled">
                     <i class="icon-status-disabled fa-circle"></i>{{ entity.status.name  }}</div>
             {% endif %}
         </div>
@@ -75,7 +75,6 @@
     {% set dataBlocks = [
     {
         'title': 'General Information'|trans,
-        'class': 'active',
         'subblocks': generalSubblocks
         }
     ] %}

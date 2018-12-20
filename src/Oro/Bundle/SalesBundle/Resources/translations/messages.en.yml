@@ -299,6 +299,7 @@ oro:
                 label:            Contact
                 description:      A contact the lead was converted into.
             owner.label:          Owner
+            address_book:   Address Book
             address:
                 label:            Address
                 description:
@@ -352,7 +353,6 @@ oro:
             primary_addr:
                 label:            Primary Address
 
-
             convert:
                  error:           Unable to convert lead to opportunity
             feature.label:        Lead
@@ -372,7 +372,9 @@ oro:
                 update: Update
                 delete: Delete
                 views:
-                    open:            Open Leads
+                    open: Open Leads
+            disqualify: Disqualify
+            convert_to_opportunity: Convert to Opportunity
 
         #
         # Entity Oro\Bundle\SalesBundle\Entity\LeadAddress
@@ -422,7 +424,9 @@ oro:
             region:
                 label:           State
                 description:     The region specified in the lead address.
-            region_text.label:   State
+            region_text:
+                label:           State
+                description:     The region name for cases when a country does not have predefined regions.
             street:
                 label:           Street
                 description:     The first line of the street address. Usually contains the street name and the building number.
@@ -653,7 +657,7 @@ oro:
                     feature_enabled.label:                     Enable Sales Process
                 display_relevant_opportunities:
                     label:                                     Display relevant opportunities
-                    tooltip:                                   If turned on, will display the list of other opportunities related to the same account at the opportunity view to give the sales rep quick access to deal history.
+                    tooltip:                                   Enable this option to display a list of other opportunities related to the same account on the opportunity view page and give sales reps quick access to deal history.
 
         privilege:
             category.sales_data.label: Sales Data

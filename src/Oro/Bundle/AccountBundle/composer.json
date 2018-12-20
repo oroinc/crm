@@ -1,13 +1,13 @@
 {
     "name": "orocrm/account-bundle",
     "type": "symfony-bundle",
-    "description": "Oro CRM Accounts",
+    "description": "OroCRM Accounts",
     "keywords": ["CRM", "Accounts"],
     "homepage": "https://github.com/orocrm/AccountBundle",
     "license": "MIT",
     "require": {
         "php": "7.1.*",
-        "symfony/symfony": "2.8.*, !=2.8.10",
+        "symfony/symfony": "^3.4",
         "friendsofsymfony/rest-bundle": "1.5.0-RC2",
         "nelmio/api-doc-bundle": "dev-master",
 

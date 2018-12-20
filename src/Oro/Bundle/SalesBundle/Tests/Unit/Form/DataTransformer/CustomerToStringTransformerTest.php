@@ -8,15 +8,15 @@ use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub as Customer;
 use Oro\Bundle\SalesBundle\Tests\Unit\Stub\AccountCustomerManager;
 use Symfony\Component\Form\DataTransformerInterface;
 
-class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
+class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerToStringTransformer */
     protected $transformer;
 
-    /** @var DataTransformerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataTransformerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $dataTransformer;
 
-    /** @var AccountCustomerManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AccountCustomerManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $accountCustomerManager;
 
     public function setUp()

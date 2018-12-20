@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\MagentoBundle\Form\Type\OrderPlaceType;
 use Oro\Bundle\WorkflowBundle\Form\Type\WorkflowTransitionType;
 
-class OrderPlaceTypeTest extends \PHPUnit_Framework_TestCase
+class OrderPlaceTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OrderPlaceType */
     protected $type;

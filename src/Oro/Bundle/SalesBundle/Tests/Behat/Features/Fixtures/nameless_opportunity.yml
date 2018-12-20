@@ -1,0 +1,10 @@
+include:
+    - '@OroCRMBundle:nameless_contact.yml'
+
+Oro\Bundle\SalesBundle\Entity\Opportunity:
+  opportunity:
+    name: 'opportunity'
+    organization: '@organization'
+    contact: '@contact'
+    status: in_progress
+    owner: '@admin'

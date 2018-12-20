@@ -1,0 +1,35 @@
+/* @theme: admin.oro; */
+
+.rfm-settings {
+    .rfm-settings-data {
+        display: none;
+
+        .grid {
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        th {
+            font-weight: normal;
+
+            .tooltip-icon {
+                margin-#{$end}: $content-padding-small;
+            }
+
+            label {
+                font-weight: bold;
+                margin-bottom: 0;
+
+                .oro-popover-content {
+                    font-weight: normal;
+                }
+            }
+        }
+    }
+
+    &.rfm-enabled {
+        .rfm-settings-data {
+            display: block;
+        }
+    }
+}

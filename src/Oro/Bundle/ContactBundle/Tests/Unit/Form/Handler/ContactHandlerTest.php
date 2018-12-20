@@ -11,12 +11,12 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ContactHandlerTest extends \PHPUnit_Framework_TestCase
+class ContactHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const FORM_DATA = ['field' => 'value'];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|FormInterface
      */
     protected $form;
 
@@ -26,7 +26,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|EntityManagerInterface
      */
     protected $manager;
 

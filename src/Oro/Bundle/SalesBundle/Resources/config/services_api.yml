@@ -6,6 +6,16 @@ services:
             - '@oro_sales.manager.account_customer'
             - '@oro_security.form.field_acl_helper'
 
+    oro_sales.api.form_listener.optional_customer_association:
+        parent: oro_sales.api.form_listener.customer_association
+        calls:
+            - [setIsRelationOptional, [true]]
+
+    oro_sales.api.form_listener.lead_status:
+        class: Oro\Bundle\SalesBundle\Api\Form\EventListener\LeadStatusSubscriber
+        arguments:
+            - '@oro_entity_extend.enum_value_provider'
+
     oro_sales.api.b2bcustomer.customize_loaded_data.compute_primary_phone:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\ComputePrimaryField
         arguments: [primaryPhone, phones, phone]
@@ -53,3 +63,11 @@ services:
         arguments: ['@property_accessor', 'Unknown primary email address.', primaryEmail, emails, email]
         tags:
             - { name: oro.api.processor, action: customize_form_data, class: Oro\Bundle\SalesBundle\Entity\Lead }
+
+    oro_sales.api.lead_address.fix_primary_addresses:
+        class: Oro\Bundle\AddressBundle\Api\Processor\FixPrimaryAddresses
+        arguments:
+            - 'owner.addresses'
+            - '@oro_api.form_property_accessor'
+        tags:
+            - { name: oro.api.processor, action: customize_form_data, event: pre_validate, class: Oro\Bundle\SalesBundle\Entity\LeadAddress }

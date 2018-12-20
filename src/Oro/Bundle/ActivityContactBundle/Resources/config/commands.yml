@@ -1,0 +1,6 @@
+services:
+    Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand:
+        public: false
+        class: Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand
+        tags:
+            - { name: console.command }

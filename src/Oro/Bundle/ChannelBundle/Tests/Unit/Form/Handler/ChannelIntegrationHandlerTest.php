@@ -5,17 +5,18 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Handler;
 use Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
+use Oro\Component\Testing\Unit\Form\Type\Stub\FormStub;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
+class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_NAME = 'name';
 
-    /** @var FormInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $form;
 
     /** @var Request */
@@ -87,6 +88,8 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->form->expects($this->once())->method('handleRequest')
             ->with($this->equalTo($this->request));
+        $this->form->expects($this->any())->method('isSubmitted')
+            ->will($this->returnValue(true));
         $this->form->expects($this->any())->method('isValid')
             ->will($this->returnValue($isFormValid));
 
@@ -182,8 +185,8 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($formFactory));
             $formConfig->expects($this->once())->method('getType')
                 ->will($this->returnValue($formType));
-            $formType->expects($this->once())->method('getName')
-                ->will($this->returnValue('type' . self::TEST_NAME));
+            $formType->expects($this->once())->method('getInnerType')
+                ->will($this->returnValue(new FormStub('type' . self::TEST_NAME)));
             $this->form->expects($this->once())->method('getName')
                 ->will($this->returnValue('form' . self::TEST_NAME));
             $this->form->expects($this->once())->method('getConfig')

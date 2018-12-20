@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\EventListener;
 use Oro\Bundle\MagentoBundle\Form\EventListener\CartItemApiFormSubscriber;
 use Symfony\Component\Form\FormEvents;
 
-class CartItemApiFormSubscriberTest extends \PHPUnit_Framework_TestCase
+class CartItemApiFormSubscriberTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CartItemApiFormSubscriber */
     protected $subscriber;

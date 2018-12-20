@@ -11,7 +11,7 @@ use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
 use Oro\Bundle\UserBundle\Form\Type\GenderType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class CustomerApiTypeTest extends \PHPUnit_Framework_TestCase
+class CustomerApiTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerApiType */
     protected $type;
@@ -84,10 +84,5 @@ class CustomerApiTypeTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->type->configureOptions($resolver);
-    }
-
-    public function testGetName()
-    {
-        $this->assertEquals('api_customer_type', $this->type->getName());
     }
 }

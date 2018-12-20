@@ -1,12 +1,12 @@
 {
     "name": "orocrm/channel-bundle",
     "type": "symfony-bundle",
-    "description": "Oro CRM Channel Bundle",
+    "description": "OroCRM Channel Bundle",
     "keywords": ["CRM", "Channel"],
     "license": "MIT",
     "require": {
         "php": "7.1.*",
-        "symfony/symfony": "2.8.*, !=2.8.10",
+        "symfony/symfony": "^3.4",
         "doctrine/orm": ">=2.3,<2.4-dev",
         "oro/ui-bundle": "dev-master"
     },

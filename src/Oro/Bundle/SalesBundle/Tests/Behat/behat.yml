@@ -1,9 +1,53 @@
 oro_behat_extension:
   elements:
     Lead:
-      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Element
       selector:
-        locator: '//ul[@class="context-items-dropdown dropdown-menu"]/li[contains(text(),"Lead")]'
+        locator: '//ul[contains(@class, "context-items-dropdown dropdown-menu")]/li[contains(text(),"Lead")]'
+        type: xpath
+
+    Lead Form:
+      selector: 'form[name="oro_sales_lead_form"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Second Country:
+            locator: '//div[contains(@id,"s2id_oro_sales_lead_form_addresses_2_country-uid")]/input'
+            type: xpath
+          Second State:
+            locator: '//div[contains(@id,"s2id_oro_sales_lead_form_addresses_2_region-uid")]/input'
+            type: xpath
+
+    Business Customer Form:
+      selector: 'form[name="oro_sales_b2bcustomer_form"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Billing Address Country:
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_billingAddress_country-uid")]/input'
+            type: xpath
+          Billing Address State:
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_billingAddress_region")]/input'
+            type: xpath
+          Billing Address City: 'oro_sales_b2bcustomer_form[billingAddress][city]'
+          Billing Address Street: 'oro_sales_b2bcustomer_form[billingAddress][street]'
+          Billing Address Postal Code: 'oro_sales_b2bcustomer_form[billingAddress][postalCode]'
+          Shipping Address Country:
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_shippingAddress_country-uid")]/input'
+            type: xpath
+          Shipping Address State:
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_shippingAddress_region-uid")]/input'
+            type: xpath
+          Shipping Address City: 'oro_sales_b2bcustomer_form[shippingAddress][city]'
+          Shipping Address Street: 'oro_sales_b2bcustomer_form[shippingAddress][street]'
+          Shipping Address Postal Code: 'oro_sales_b2bcustomer_form[shippingAddress][postalCode]'
+
+    Contact create new:
+      selector:
+        locator: '//label[text()="Contact"]/../..//button[contains(@class,"entity-create-btn")]'
+        type: xpath
+    Contact hamburger:
+      selector:
+        locator: '//label[text()="Contact"]/../..//button[contains(@class,"entity-select-btn")]'
         type: xpath
 
     Opportunity Form:
@@ -57,6 +101,10 @@ oro_behat_extension:
         mapping:
           Close reason: 'oro_workflow_transition[close_reason_name]'
 
+    All Quotes Grid:
+      selector: 'div[data-page-component-name="quotes-grid"]'
+      class: Oro\Bundle\SalesBundle\Tests\Behat\Element\QuotesGrid
+
     Quotes Grid:
       selector: '[id^="grid-opportunity-quotes-grid"]'
       class: Oro\Bundle\SalesBundle\Tests\Behat\Element\QuotesGrid
@@ -99,7 +147,7 @@ oro_behat_extension:
       selector: '.oro-grid-table'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendTableGrid
 
-    ConfigurationLocalizationForm:
+    Configuration Localization Form:
       selector: 'form[name="localization"]'
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
       options:
@@ -128,6 +176,93 @@ oro_behat_extension:
        selector:
            type: xpath
            locator: '//button[text()[contains(.,"is not any of")]]/ancestor::div[contains(@class, "choice-filter")]/div[contains(@class, "value-field-frame")]/div/ul'
+
+    Leads Grid:
+      selector: 'div[data-page-component-name="sales-lead-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+
+    Business Customer Grid:
+      selector: 'div[data-page-component-name="oro-sales-b2bcustomers-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+
+    Business Customers Address Form:
+      selector: 'form[name="oro_sales_b2bcustomer_form"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Billing Address Country: 'oro_sales_b2bcustomer_form[billingAddress][country]'
+          Billing Address State: 'oro_sales_b2bcustomer_form[billingAddress][region]'
+          Shipping Address Country: 'oro_sales_b2bcustomer_form[shippingAddress][country]'
+          Shipping Address State: 'oro_sales_b2bcustomer_form[shippingAddress][region]'
+
+    Bussines Customer Leads Paginator:
+      selector: 'div[data-page-component-name="sales-customers-leads-grid"] div.toolbar div.pagination'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridPaginator
+
+    Business Customer Leads Grid:
+      selector: 'div[data-page-component-name="sales-customers-leads-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+      options:
+        mapping:
+          GridToolbarPaginator: 'Business Customer Leads Grid Paginator'
+
+    Business Customer Leads GridFilters:
+      selector: 'div[data-page-component-name="sales-customers-leads-grid"] div.filter-box'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilters
+
+    Business Customer Leads GridFilterItem:
+      selector: 'div.filter-item'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilterItem
+
+    First Widget Add Button:
+      selector:
+        locator: '(//div[(contains(@class,"widget-picker__results"))]//div[@style="opacity: 1;"]//button[contains(text(),"Add")])[1]'
+        type: xpath
+
+    Enter keyword:
+      selector:
+        locator: '//input[contains(@class,"widget-picker__filter-search")]'
+        type: xpath
+
+    Leads List:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Leads List"]/../..'
+
+    Leads List Actions:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Leads List"]/..//button[contains(@id,"dashboard-action")]'
+
+    Lead Statistics:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Lead statistics"]/../..'
+
+    Leads Statistics Actions:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Lead statistics"]/..//button[contains(@id,"dashboard-action")]'
+
+    Opportunity Statistics:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Opportunity statistics"]/../..'
+
+    Opportunity Statistics Actions:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Opportunity statistics"]/..//button[contains(@id,"dashboard-action")]'
+
+    Opportunities List:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Opportunities List"]/../..'
+
+    Opportunities List Actions:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Opportunities List"]/..//button[contains(@id,"dashboard-action")]'
 
   pages:
     Opportunity Index:
@@ -164,6 +299,7 @@ oro_behat_extension:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
         - OroDataGridBundle::GridContext
+        - OroActivityListBundle::ActivityContext
         - OroFormBundle::FormContext
         - OroSecurityBundle::ACLContext
         - OroImportExportBundle::ImportExportContext:
@@ -173,8 +309,12 @@ oro_behat_extension:
         - OroSalesBundle::SalesContext
         - OroSalesBundle::FeatureContext
         - OroNavigationBundle::FeatureContext
+        - OroNavigationBundle::PinbarContext
+        - OroNavigationBundle::ScrollspyContext
         - OroSalesBundle::SalesFeatureToggleContext
         - OroConfigBundle::FeatureContext
         - OroQueryDesignerBundle::QueryDesignerContext
+        - OroLocaleBundle::LocalizationContext
+        - OroEmailBundle::EmailContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'

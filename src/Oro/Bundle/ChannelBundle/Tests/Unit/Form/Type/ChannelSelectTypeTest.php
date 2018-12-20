@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Oro\Bundle\FormBundle\Form\Type\Select2EntityType;
-use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 use Oro\Component\Testing\Unit\PreloadedExtension;
+use Oro\Component\TestUtils\ORM\OrmTestCase;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
@@ -22,7 +22,7 @@ class ChannelSelectTypeTest extends OrmTestCase
     protected $factory;
 
     /**
-     * @var ChannelsByEntitiesProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChannelsByEntitiesProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $channelsProvider;
 
@@ -70,14 +70,6 @@ class ChannelSelectTypeTest extends OrmTestCase
     public function tearDown()
     {
         unset($this->type, $this->factory);
-    }
-
-    public function testGetName()
-    {
-        $this->assertEquals(
-            'oro_channel_select_type',
-            $this->type->getName()
-        );
     }
 
     public function testGetParent()

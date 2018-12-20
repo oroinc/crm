@@ -263,7 +263,7 @@ class ForecastProvider
             $this->statuses = $this->enumProvider->getEnumChoicesByCode('opportunity_status');
         }
 
-        return $this->statuses[$key];
+        return array_search($key, $this->statuses, false);
     }
 
     /**

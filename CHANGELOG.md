@@ -1,3 +1,34 @@
+## 3.1.0-rc
+
+* Package `oro/crm-mail-chimp` removed from composer.json, run `composer require 'oro/mailchimp:3.1.*'` before upgrade to keep functionality working
+* Package `oro/crm-abandoned-cart` removed from composer.json, run `composer require 'oro/magento-abandoned-cart:3.1.*'` before upgrade to keep functionality working
+
+### Changed
+#### ContactBundle
+* Changes in `/api/contactaddresses` REST API resource:
+    - the attribute `created` was renamed to `createdAt`
+    - the attribute `updated` was renamed to `updatedAt`
+#### MagentoBundle
+* Changes in `/api/magentoaddresses` REST API resource:
+    - the attribute `created` was renamed to `createdAt`
+    - the attribute `updated` was renamed to `updatedAt`
+* Changes in `/api/magentocartaddresses` REST API resource:
+    - the attribute `created` was renamed to `createdAt`
+    - the attribute `updated` was renamed to `updatedAt`
+#### SalesBundle
+* Changes in `/api/leadaddresses` REST API resource:
+    - the attribute `created` was renamed to `createdAt`
+    - the attribute `updated` was renamed to `updatedAt`
+
+## 3.1.0-beta (2018-09-27)
+[Show detailed list of changes](incompatibilities-3-1-beta.md)
+
+## 3.0.0 (2018-07-27)
+[Show detailed list of changes](incompatibilities-3-0.md)
+
+## 3.0.0-rc (2018-05-31)
+[Show detailed list of changes](incompatibilities-3-0-rc.md)
+
 ## 3.0.0-beta (2018-03-30)
 [Show detailed list of changes](incompatibilities-3-0-beta.md)
 
@@ -512,14 +543,14 @@ This changelog references the relevant changes (new features, changes and bugs) 
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-beta3 versions.
 
 * 1.0.0-beta3 (2013-11-11)
-  * Oro Platform Beta 3 dependency changes
+  * OroPlatform Beta 3 dependency changes
 
 ## 1.0.0-beta2
 
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-beta2 versions.
 
 * 1.0.0-beta2 (2013-10-28)
-  * Oro Platform Beta 2 dependency changes
+  * OroPlatform Beta 2 dependency changes
 
 ## 1.0.0-beta1
 

@@ -17,14 +17,13 @@ Retrieve a collection of records represented by Magento credit memo items.
 ### create
 
 Create a new Magento credit memo item record.
+
 The created record is returned in the response.
 
 {@inheritdoc}
 
 {@request:json_api}
 Example:
-
-`</api/magentocreditmemoitems>`
 
 ```JSON
 {  
@@ -69,8 +68,6 @@ Edit a specific Magento credit memo item record.
 
 {@request:json_api}
 Example:
-
-`</api/magentocreditmemoitems/1>`
 
 ```JSON
 {  
@@ -117,7 +114,6 @@ Delete a specific Magento credit memo item record.
 ### delete_list
 
 Delete a collection of records represented by Magento credit memo items.
-The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
 
@@ -150,8 +146,6 @@ Replace the Magento credit memo to which a specific Magento credit memo item bel
 {@request:json_api}
 Example:
 
-`</api/magentocreditmemoitems/1/relationships/parent>`
-
 ```JSON
 {
   "data": {
@@ -179,8 +173,6 @@ Replace the organization to which a specific Magento credit memo item belongs.
 {@request:json_api}
 Example:
 
-`</api/magentocreditmemoitems/1/relationships/owner>`
-
 ```JSON
 {
   "data": {
@@ -207,8 +199,6 @@ Replace an integration channel via which information about the Magento credit me
 
 {@request:json_api}
 Example:
-
-`</api/magentocreditmemoitems/1/relationships/channel>`
 
 ```JSON
 {

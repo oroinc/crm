@@ -1,0 +1,72 @@
+dependencies:
+  - Oro\Bundle\AddressBundle\Tests\Functional\DataFixtures\LoadCountriesAndRegions
+  - Oro\Bundle\AddressBundle\Tests\Functional\DataFixtures\LoadAddressTypes
+  - Oro\Bundle\ContactBundle\Tests\Functional\Api\DataFixtures\LoadContactsData
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+    another_contact:
+        firstName: Another Contact
+        organization: '@organization'
+        owner: '@user'
+        createdBy: '@user'
+
+Oro\Bundle\ContactBundle\Entity\ContactAddress:
+    contact_address1:
+        owner: '@contact1'
+        primary: true
+        label: 'Address 1'
+        street: 'Street 1'
+        street2: 'Street 2'
+        city: 'Los Angeles'
+        postalCode: '90001'
+        country: '@country_usa'
+        region: '@region_usa_california'
+        organization: 'Acme'
+        namePrefix: 'Mr.'
+        nameSuffix: 'M.D.'
+        firstName: 'John'
+        middleName: 'Edgar'
+        lastName: 'Doo'
+        types: ['@billing']
+    contact_address2:
+        owner: '@contact1'
+        primary: false
+        label: 'Address 2'
+        street: 'Street 2'
+        city: 'Los Angeles'
+        postalCode: '90002'
+        country: '@country_usa'
+        region: '@region_usa_california'
+        firstName: 'John'
+        lastName: 'Smith'
+        types: ['@shipping']
+    contact_address3:
+        owner: '@contact1'
+        primary: false
+        label: 'Address 3'
+        city: 'Tel Aviv'
+        country: '@country_israel'
+        region: '@region_israel_telaviv'
+        firstName: 'John'
+        lastName: 'Smith'
+    another_contact_address1:
+        owner: '@another_contact'
+        primary: true
+        label: 'Another Contact Address 1'
+        street: 'Street 1'
+        city: 'Los Angeles'
+        postalCode: '90001'
+        country: '@country_usa'
+        region: '@region_usa_california'
+        organization: 'Acme'
+        types: ['@billing']
+    another_contact_address2:
+        owner: '@another_contact'
+        primary: false
+        label: 'Another Contact Address 2'
+        street: 'Street 2'
+        city: 'Los Angeles'
+        postalCode: '90001'
+        country: '@country_usa'
+        region: '@region_usa_california'
+        organization: 'Acme'

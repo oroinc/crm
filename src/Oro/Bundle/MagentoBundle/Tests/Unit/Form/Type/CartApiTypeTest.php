@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class CartApiTypeTest extends \PHPUnit_Framework_TestCase
+class CartApiTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CartApiType */
     protected $type;
@@ -94,10 +94,5 @@ class CartApiTypeTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->type->configureOptions($resolver);
-    }
-
-    public function testGetName()
-    {
-        $this->assertEquals('cart_api_type', $this->type->getName());
     }
 }

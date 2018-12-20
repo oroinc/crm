@@ -5,10 +5,10 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Oro\Bundle\MagentoBundle\EventListener\IntegrationRemoveListener;
 
-class IntegrationRemoveListenerTest extends \PHPUnit_Framework_TestCase
+class IntegrationRemoveListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $wsdlManager;
 
@@ -55,7 +55,7 @@ class IntegrationRemoveListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param null|string $url
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getEntity($url = null)
     {

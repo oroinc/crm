@@ -8,15 +8,15 @@ use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\MagentoBundle\Provider\Reader\ContextReader;
 
-class ContextReaderTest extends \PHPUnit_Framework_TestCase
+class ContextReaderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|ContextRegistry */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ContextRegistry */
     protected $contextRegistry;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContext */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ExecutionContext */
     protected $executionContext;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|JobExecution */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|JobExecution */
     protected $jobExecution;
 
     protected function setUp()
@@ -33,7 +33,7 @@ class ContextReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testInitializeAndRead()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|StepExecution $stepExecution */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|StepExecution $stepExecution */
         $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
             ->disableOriginalConstructor()
             ->getMock();
@@ -107,7 +107,7 @@ class ContextReaderTest extends \PHPUnit_Framework_TestCase
     {
         $reader = $this->getReader(null);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|StepExecution $stepExecution */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|StepExecution $stepExecution */
         $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
             ->disableOriginalConstructor()
             ->getMock();

@@ -114,6 +114,7 @@ oro:
         phones.label:        Phones
         primary_email.label: Primary Email
         primary_phone.label: Primary Phone
+        primary_addr.label:  Primary Address
         skype:
             label:           Skype
             description:     Skype profile of the contact.
@@ -182,7 +183,9 @@ oro:
             region:
                 label:           State
                 description:     The region specified in the contact address.
-            region_text.label:   State
+            region_text:
+                label:           State
+                description:     The region name for cases when a country does not have predefined regions.
             street:
                 label:           Street
                 description:     The first line of the street address. Usually contains the street name and the building number.
@@ -282,4 +285,4 @@ oro:
             account_contacts:    Contacts
 
         account:
-            no_contacts_exist: No contacts exist
+            no_contacts_exist: You have not any Contacts

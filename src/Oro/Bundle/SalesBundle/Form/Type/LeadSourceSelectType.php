@@ -29,7 +29,7 @@ class LeadSourceSelectType extends AbstractType
     {
         $choices = array_merge(
             [
-                '' => 'oro.sales.lead.source.unclassified',
+                'oro.sales.lead.source.unclassified' => '',
             ],
             $this->enumValueProvider->getEnumChoicesByCode('lead_source')
         );

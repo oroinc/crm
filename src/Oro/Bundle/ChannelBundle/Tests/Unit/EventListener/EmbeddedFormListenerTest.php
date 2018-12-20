@@ -7,7 +7,7 @@ use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
+class EmbeddedFormListenerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Request */
     protected $request;

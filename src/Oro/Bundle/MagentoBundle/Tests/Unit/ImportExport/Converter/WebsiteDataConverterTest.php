@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Converter;
 
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter;
 
-class WebsiteDataConverterTest extends \PHPUnit_Framework_TestCase
+class WebsiteDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var WebsiteDataConverter

@@ -1,0 +1,53 @@
+data:
+    type: opportunities
+    id: '<toString(@opportunity1->id)>'
+    attributes:
+        lastContactedDate: null
+        lastContactedDateIn: null
+        lastContactedDateOut: null
+        timesContacted: null
+        timesContactedIn: null
+        timesContactedOut: null
+        name: 'Opportunity 1'
+        closeDate: '2017-01-01'
+        probability: 1
+        budgetAmountCurrency: USD
+        budgetAmountValue: '50.0000'
+        closeRevenueCurrency: USD
+        closeRevenueValue: '100.0000'
+        customerNeed: null
+        proposedSolution: null
+        createdAt: '@opportunity1->createdAt->format("Y-m-d\TH:i:s\Z")'
+        updatedAt: '@opportunity1->updatedAt->format("Y-m-d\TH:i:s\Z")'
+        notes: null
+    relationships:
+        closeReason:
+            data:
+                type: opportunityclosereasons
+                id: cancelled
+        contact:
+            data: null
+        lead:
+            data:
+                type: leads
+                id: '<toString(@lead1->id)>'
+        owner:
+            data:
+                type: users
+                id: '<toString(@user->id)>'
+        organization:
+            data:
+                type: organizations
+                id: '<toString(@organization->id)>'
+        status:
+            data:
+                type: opportunitystatuses
+                id: lost
+        account:
+            data:
+                type: accounts
+                id: '<toString(@account1->id)>'
+        customer:
+            data:
+                type: b2bcustomers
+                id: '<toString(@b2b_customer1->id)>'

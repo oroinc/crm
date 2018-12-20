@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\FormBundle\Form\Type\OroJquerySelect2HiddenType;
 use Oro\Bundle\MagentoBundle\Form\Type\CustomerSelectType;
 
-class CustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
+class CustomerSelectTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerSelectType */
     protected $type;
@@ -35,11 +35,6 @@ class CustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->type->configureOptions($resolver);
-    }
-
-    public function testGetName()
-    {
-        $this->assertEquals('oro_customer_select', $this->type->getName());
     }
 
     public function testGetParent()

@@ -146,7 +146,7 @@ datagrids:
             query:
                 select:
                     - COUNT(l.id) as leadsCount
-                    - DATE(l.createdAt) as createdDate
+                    - DATE(@oro_datagrid.helper.date->getConvertTimezoneExpression(l.createdAt)) as createdDate
                 from:
                     - { table: OroSalesBundle:Lead, alias: l }
                 groupBy: createdDate
@@ -357,9 +357,9 @@ datagrids:
                         populate_default: false
                         field_options:
                             choices:
-                                monthPeriod:    Monthly
-                                quarterPeriod:  Quarterly
-                                yearPeriod:     Yearly
+                                oro.reportcrm.datagrid.filters.period.monthly: monthPeriod
+                                oro.reportcrm.datagrid.filters.period.quarterly: quarterPeriod
+                                oro.reportcrm.datagrid.filters.period.qearly: yearPeriod
                 cnt:
                     type: number-range
                     data_name: cnt

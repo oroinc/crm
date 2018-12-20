@@ -1,0 +1,510 @@
+include:
+    - '@OroAccountBundle:LoadAccountEntitiesFixture.yml'
+
+Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
+    magento_soap_transport:
+        apiUrl: 'http://test.magento.host/index.php/api/v2_soap/index/?wsdl=1'
+        apiUser: 'api_user'
+        apiKey: '69EeYPV8Xyp5SukvUyafDKmndNIyUDwBiAdCWPnuN+E='
+        syncStartDate: '2017-01-01'
+        initialSyncStartDate: '<(new DateTime("2017-01-01 01:00:00"))>'
+        website_id: -1
+        websites:
+            -
+                id: -1
+                label: 'All web sites'
+            -
+                id: 1
+                label: 'Website ID: 1, Stores: Store view 1 - website_id_1 - group_id_1'
+        isExtensionInstalled: true
+        isWsiMode: true
+        adminUrl: 'http://test.magento.host/index.php/admin'
+        extensionVersion: '1.2.19'
+        magentoVersion: '1.8.0.0'
+
+Oro\Component\Config\Common\ConfigObject(local):
+    magento_synchronization_settings:
+        __construct: { create: [isTwoWaySyncEnabled: false, syncPriority: remote] }
+
+Oro\Bundle\IntegrationBundle\Entity\Channel:
+    magento_integration:
+        type: 'magento'
+        name: 'Magento Integration'
+        enabled: true
+        editMode: 2
+        synchronizationSettings: '@magento_synchronization_settings'
+        connectors:
+            - website_dictionary
+            - store_dictionary
+            - customer_group_dictionary
+            - region_dictionary
+            - customer_initial
+            - order_initial
+            - credit_memo_initial
+            - newsletter_subscriber_initial
+            - customer
+            - cart
+            - order
+            - credit_memo
+            - newsletter_subscriber
+        transport: '@magento_soap_transport'
+        defaultUserOwner: '@admin'
+        organization: '@organization'
+
+Oro\Bundle\ChannelBundle\Entity\Channel:
+    magento_channel:
+        name: 'Magento Channel'
+        status: true
+        dataSource: '@magento_integration'
+        data:
+          rfm_enabled: false
+        channelType: magento
+        customerIdentity: 'Oro\Bundle\MagentoBundle\Entity\Customer'
+        owner: '@organization'
+
+Oro\Bundle\ChannelBundle\Entity\EntityName:
+    channel-entity-customer:
+        __construct: ['Oro\Bundle\MagentoBundle\Entity\Customer']
+        channel: '@magento_channel'
+    channel-entity-lead:
+        __construct: ['Oro\Bundle\MagentoBundle\Entity\Cart']
+        channel: '@magento_channel'
+    channel-entity-opportunity:
+        __construct: ['Oro\Bundle\MagentoBundle\Entity\Order']
+        channel: '@magento_channel'
+    channel-entity-customer:
+        __construct: ['Oro\Bundle\MagentoBundle\Entity\CreditMemo']
+        channel: '@magento_channel'
+    channel-entity-lead:
+        __construct: ['Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber']
+        channel: '@magento_channel'
+    channel-entity-opportunity:
+        __construct: ['Oro\Bundle\MagentoBundle\Entity\OrderNote']
+        channel: '@magento_channel'
+
+Oro\Bundle\MagentoBundle\Entity\CartAddress:
+    magento_cart_address{1..2}:
+        phone: '+123456789'
+        street: 'street'
+        city: 'city'
+        postalCode: '12345'
+        organization: 'organization'
+        firstName: 'firstName1'
+        lastName: 'lastName1'
+        originId: 1
+        country: '@germany'
+        region: '@berlin'
+        channel: '@magento_integration'
+    magento_cart_address{3..4}:
+        phone: '+987654321'
+        street: 'street2'
+        city: 'city2'
+        postalCode: '54321'
+        organization: 'organization'
+        firstName: 'firstName2'
+        lastName: 'lastName2'
+        originId: 2
+        country: '@united_states'
+        region: '@florida'
+        channel: '@magento_integration'
+
+Oro\Bundle\MagentoBundle\Entity\Address:
+    magento_customer_addr_1:
+        street: 'magentoStreet1'
+        city: 'magentoCity1'
+        postalCode: '20001'
+        region: '@florida'
+        firstName: 'magentoFN1'
+        lastName: 'magentoLN1'
+        phone: '5554447777'
+        primary: true
+        organization: '@organization'
+        originId: 1
+        country: '@united_states'
+        owner: '@magento_customer1'
+        types: ['billing', 'shipping']
+        channel: '@magento_integration'
+    magento_customer_addr_2:
+        street: 'magentoStreet2'
+        city: 'magentoCity2'
+        postalCode: '20002'
+        region: '@berlin'
+        firstName: 'magentoFN2'
+        lastName: 'magentoLN2'
+        phone: '5554448888'
+        primary: true
+        organization: '@organization'
+        originId: 2
+        country: '@germany'
+        owner: '@magento_customer2'
+        types: ['billing', 'shipping']
+        channel: '@magento_integration'
+
+Oro\Bundle\MagentoBundle\Entity\CartStatus:
+    magento_cart_status:
+        __construct: [ 'status' ]
+        label: 'status'
+
+Oro\Bundle\MagentoBundle\Entity\Website:
+    magento_website:
+        code: 'code'
+        name: 'name'
+        sortOrder: 1
+        default: true
+        defaultGroupId: '<randomNumber()>'
+        originId: '<randomNumber()>'
+        channel: '@magento_integration'
+
+Oro\Bundle\MagentoBundle\Entity\Store:
+    magento_store:
+        code: 'code'
+        name: 'name'
+        originId: '<randomNumber()>'
+        website: '@magento_website'
+        channel: '@magento_integration'
+
+Oro\Bundle\MagentoBundle\Entity\CustomerGroup:
+    magento_customer_group:
+        name: 'name'
+        originId: '<randomNumber()>'
+        channel: '@magento_integration'
+
+Oro\Bundle\MagentoBundle\Entity\Customer:
+    magento_customer1:
+        firstName: 'firstName1'
+        lastName: 'lastName1'
+        email: 'email1@test.com'
+        createdAt: '<dateTime()>'
+        updatedAt: '<dateTime()>'
+        importedAt: '<dateTime()>'
+        syncedAt: '<dateTime()>'
+        createdIn: 'createdIn'
+        confirmed: true
+        isActive: true
+        currency: 'USD'
+        originId: 1
+        website: '@magento_website'
+        store: '@magento_store'
+        group: '@magento_customer_group'
+        contact: '@contact_1'
+        account: '@account_1'
+        owner: '@admin'
+        organization: '@organization'
+        channel: '@magento_integration'
+        dataChannel: '@magento_channel'
+    magento_customer2:
+        firstName: 'firstName2'
+        lastName: 'lastName2'
+        email: 'email2@test.com'
+        createdAt: '<dateTime()>'
+        updatedAt: '<dateTime()>'
+        importedAt: '<dateTime()>'
+        syncedAt: '<dateTime()>'
+        createdIn: 'createdIn'
+        confirmed: true
+        isActive: true
+        currency: 'USD'
+        originId: 2
+        website: '@magento_website'
+        store: '@magento_store'
+        group: '@magento_customer_group'
+        contact: '@contact_2'
+        account: '@account_2'
+        owner: '@admin'
+        organization: '@organization'
+        channel: '@magento_integration'
+        dataChannel: '@magento_channel'
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+    sales_customer_1:
+        account: '@account_1'
+        customer_f2bbc387: '@magento_customer1'
+    sales_customer_2:
+        account: '@account_2'
+        customer_f2bbc387: '@magento_customer2'
+
+Oro\Bundle\MagentoBundle\Entity\Cart:
+    magento_cart_1:
+        itemsQty: '<randomFloat(null,10,100)>'
+        itemsCount: '<randomNumber()>'
+        baseCurrencyCode: 'USD'
+        storeCurrencyCode: 'USD'
+        quoteCurrencyCode: 'USD'
+        storeToBaseRate: 1
+        storeToQuoteRate: 1
+        email: 'testCart1@test.com'
+        giftMessage: 'gift message'
+        isGuest: false
+        paymentDetails: 'payment details'
+        notes: 'notes'
+        statusMessage: 'statusMessage'
+        importedAt: '<dateTime()>'
+        syncedAt: '<dateTime()>'
+        subTotal: '<randomFloat()>'
+        grandTotal: '<randomFloat()>'
+        taxAmount: '<randomFloat()>'
+        createdAt: '<dateTime()>'
+        updatedAt: '<dateTime()>'
+        originId: 1
+        firstName: 'firstName1'
+        lastName: 'lastName1'
+        customer: '@magento_customer1'
+        store: '@magento_store'
+        shippingAddress: '@magento_cart_address1'
+        billingAddress: '@magento_cart_address3'
+        status: '@magento_cart_status'
+        owner: '@admin'
+        organization: '@organization'
+        channel: '@magento_integration'
+        dataChannel: '@magento_channel'
+    magento_cart_2:
+        itemsQty: '<randomFloat(null,10,100)>'
+        itemsCount: '<randomNumber()>'
+        baseCurrencyCode: 'USD'
+        storeCurrencyCode: 'USD'
+        quoteCurrencyCode: 'USD'
+        storeToBaseRate: 1
+        storeToQuoteRate: 1
+        email: 'testCart2@test.com'
+        giftMessage: 'gift message'
+        isGuest: false
+        paymentDetails: 'payment details'
+        notes: 'notes'
+        statusMessage: 'statusMessage'
+        importedAt: '<dateTime()>'
+        syncedAt: '<dateTime()>'
+        subTotal: '<randomFloat()>'
+        grandTotal: '<randomFloat()>'
+        taxAmount: '<randomFloat()>'
+        createdAt: '<dateTime()>'
+        updatedAt: '<dateTime()>'
+        originId: 2
+        firstName: 'firstName2'
+        lastName: 'lastName2'
+        customer: '@magento_customer2'
+        store: '@magento_store'
+        shippingAddress: '@magento_cart_address4'
+        billingAddress: '@magento_cart_address2'
+        status: '@magento_cart_status'
+        owner: '@admin'
+        organization: '@organization'
+        channel: '@magento_integration'
+        dataChannel: '@magento_channel'
+
+Oro\Bundle\MagentoBundle\Entity\CartItem:
+    magento_cart_item_1:
+        productId: '<randomNumber()>'
+        parentItemId: '<randomNumber()>'
+        freeShipping: 'freeShipping'
+        giftMessage: 'giftMessage'
+        taxClassId: 'taxClassId'
+        description: 'description'
+        isVirtual: '<boolean()>'
+        customPrice: '<randomFloat()>'
+        priceInclTax: '<randomFloat()>'
+        rowTotal: '<randomFloat()>'
+        taxAmount: '<randomFloat()>'
+        productType: 'productType'
+        productImageUrl: 'productImageUrl'
+        productUrl: 'productUrl'
+        removed: false
+        sku: 'sku'
+        name: 'name'
+        qty: '<randomFloat()>'
+        price: '<randomFloat()>'
+        discountAmount: '<randomFloat()>'
+        weight: '<randomFloat()>'
+        createdAt: '<dateTime()>'
+        updatedAt: '<dateTime()>'
+        originId: 1
+        cart: '@magento_cart_1'
+        owner: '@organization'
+        channel: '@magento_integration'
+    magento_cart_item_2:
+        productId: '<randomNumber()>'
+        parentItemId: '<randomNumber()>'
+        freeShipping: 'freeShipping'
+        giftMessage: 'giftMessage'
+        taxClassId: 'taxClassId'
+        description: 'description'
+        isVirtual: '<boolean()>'
+        customPrice: '<randomFloat()>'
+        priceInclTax: '<randomFloat()>'
+        rowTotal: '<randomFloat()>'
+        taxAmount: '<randomFloat()>'
+        productType: 'productType'
+        productImageUrl: 'productImageUrl'
+        productUrl: 'productUrl'
+        removed: false
+        sku: 'sku'
+        name: 'name'
+        qty: '<randomFloat()>'
+        price: '<randomFloat()>'
+        discountAmount: '<randomFloat()>'
+        weight: '<randomFloat()>'
+        createdAt: '<dateTime()>'
+        updatedAt: '<dateTime()>'
+        originId: 2
+        cart: '@magento_cart_2'
+        owner: '@organization'
+        channel: '@magento_integration'
+
+Oro\Bundle\MagentoBundle\Entity\Order:
+    magento_order1:
+        ac_last_contact_date: '<dateTime()>'
+        ac_last_contact_date_in: '<dateTime()>'
+        ac_last_contact_date_out: '<dateTime()>'
+        ac_contact_count: '<randomNumber()>'
+        ac_contact_count_in: '<randomNumber()>'
+        ac_contact_count_out: '<randomNumber()>'
+        originId: 1
+        incrementId: '<randomNumber()>'
+        isVirtual: '<boolean()>'
+        isGuest: '<boolean()>'
+        giftMessage: 'giftMessage'
+        remoteIp: 'remoteIp'
+        storeName: 'storeName'
+        totalPaidAmount: '<randomFloat()>'
+        totalInvoicedAmount: '<randomFloat()>'
+        totalRefundedAmount: '<randomFloat()>'
+        totalCanceledAmount: '<randomFloat()>'
+        notes: 'notes'
+        feedback: 'feedback'
+        customerEmail: 'customerEmail'
+        couponCode: 'couponCode'
+        importedAt: '<dateTime()>'
+        syncedAt: '<dateTime()>'
+        currency: 'USD'
+        paymentMethod: 'paymentMethod'
+        paymentDetails: 'paymentDetails'
+        subtotalAmount: '<randomFloat()>'
+        shippingAmount: '<randomFloat()>'
+        shippingMethod: 'shippingMethod'
+        taxAmount: '<randomFloat()>'
+        discountAmount: '<randomFloat()>'
+        totalAmount: '<randomFloat()>'
+        status: 'status'
+        createdAt: '<dateTime()>'
+        updatedAt: '<dateTime()>'
+        firstName: 'firstName1'
+        lastName: 'lastName1'
+        customer: '@magento_customer1'
+        store: '@magento_store'
+        cart: '@magento_cart_1'
+        owner: '@admin'
+        organization: '@organization'
+        channel: '@magento_integration'
+        dataChannel: '@magento_channel'
+    magento_order2:
+        ac_last_contact_date: '<dateTime()>'
+        ac_last_contact_date_in: '<dateTime()>'
+        ac_last_contact_date_out: '<dateTime()>'
+        ac_contact_count: '<randomNumber()>'
+        ac_contact_count_in: '<randomNumber()>'
+        ac_contact_count_out: '<randomNumber()>'
+        originId: 2
+        incrementId: '<randomNumber()>'
+        isVirtual: '<boolean()>'
+        isGuest: '<boolean()>'
+        giftMessage: 'giftMessage'
+        remoteIp: 'remoteIp'
+        storeName: 'storeName'
+        totalPaidAmount: '<randomFloat()>'
+        totalInvoicedAmount: '<randomFloat()>'
+        totalRefundedAmount: '<randomFloat()>'
+        totalCanceledAmount: '<randomFloat()>'
+        notes: 'notes'
+        feedback: 'feedback'
+        customerEmail: 'customerEmail'
+        couponCode: 'couponCode'
+        importedAt: '<dateTime()>'
+        syncedAt: '<dateTime()>'
+        currency: 'USD'
+        paymentMethod: 'paymentMethod'
+        paymentDetails: 'paymentDetails'
+        subtotalAmount: '<randomFloat()>'
+        shippingAmount: '<randomFloat()>'
+        shippingMethod: 'shippingMethod'
+        taxAmount: '<randomFloat()>'
+        discountAmount: '<randomFloat()>'
+        totalAmount: '<randomFloat()>'
+        status: 'status'
+        createdAt: '<dateTime()>'
+        updatedAt: '<dateTime()>'
+        firstName: 'firstName2'
+        lastName: 'lastName2'
+        customer: '@magento_customer2'
+        store: '@magento_store'
+        cart: '@magento_cart_2'
+        owner: '@admin'
+        organization: '@organization'
+        channel: '@magento_integration'
+        dataChannel: '@magento_channel'
+
+Oro\Bundle\MagentoBundle\Entity\OrderAddress:
+    magento_order_address1:
+        phone: '+123456789'
+        street: 'street'
+        city: 'city'
+        postalCode: '12345'
+        organization: 'organization'
+        firstName: 'firstName1'
+        lastName: 'lastName1'
+        originId: 1
+        countryText: 'countryText'
+        types: ['billing', 'shipping']
+        owner: '@magento_order1'
+        country: '@germany'
+        region: '@berlin'
+        channel: '@magento_integration'
+    magento_order_address2:
+        phone: '+987654321'
+        street: 'street'
+        city: 'city'
+        postalCode: '54321'
+        organization: 'organization'
+        firstName: 'firstName2'
+        lastName: 'lastName2'
+        originId: 2
+        countryText: 'countryText'
+        types: ['billing', 'shipping']
+        owner: '@magento_order2'
+        country: '@united_states'
+        region: '@florida'
+        channel: '@magento_integration'
+
+Oro\Bundle\MagentoBundle\Entity\OrderItem:
+    magento_order_items1:
+        productType: 'productType'
+        productOptions: 'productOptions'
+        isVirtual: '<boolean()>'
+        originalPrice: '<randomFloat()>'
+        name: 'name'
+        sku: 'sku'
+        qty: '<randomFloat()>'
+        price: '<randomFloat()>'
+        weight: '<randomFloat()>'
+        taxAmount: '<randomFloat()>'
+        discountAmount: '<randomFloat()>'
+        rowTotal: '<randomFloat()>'
+        originId: 1
+        order: '@magento_order1'
+        owner: '@organization'
+        channel: '@magento_integration'
+    magento_order_items2:
+        productType: 'productType'
+        productOptions: 'productOptions'
+        isVirtual: '<boolean()>'
+        originalPrice: '<randomFloat()>'
+        name: 'name'
+        sku: 'sku'
+        qty: '<randomFloat()>'
+        price: '<randomFloat()>'
+        weight: '<randomFloat()>'
+        taxAmount: '<randomFloat()>'
+        discountAmount: '<randomFloat()>'
+        rowTotal: '<randomFloat()>'
+        originId: 2
+        order: '@magento_order2'
+        owner: '@organization'
+        channel: '@magento_integration'

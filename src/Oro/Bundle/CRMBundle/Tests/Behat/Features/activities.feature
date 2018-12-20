@@ -14,7 +14,7 @@ Feature: Activities
     And fill form with:
       |Subject    |Test1           |
       |Description|test description|
-      |Due date   |2018-08-24      |
+      |Due date   |2019-08-24      |
       |Status     |Open            |
       |Priority   |Normal          |
     And set Reminders with:
@@ -25,11 +25,11 @@ Feature: Activities
     And go to Activities/ Tasks
     And I should see following grid:
       | Subject | Due date               | Status | Priority | Assigned To |
-      | Test1   | Aug 24, 2018, 12:00 AM | Open   | Normal   | John Doe    |
+      | Test1   | Aug 24, 2019, 12:00 AM | Open   | Normal   | John Doe    |
     When click My Tasks in user menu
     Then I should see following grid:
       | Subject | Due date               | Status | Priority |
-      | Test1   | Aug 24, 2018, 12:00 AM | Open   | Normal   |
+      | Test1   | Aug 24, 2019, 12:00 AM | Open   | Normal   |
 
   Scenario: Add a Task for Another Record
     Given go to Sales/ Leads
@@ -42,7 +42,7 @@ Feature: Activities
     And fill form with:
       |Subject    |Sprint Demo     |
       |Description|test description|
-      |Due date   |2018-08-24      |
+      |Due date   |2019-08-24      |
       |Status     |Open            |
       |Priority   |Normal          |
     And set Reminders with:
@@ -64,7 +64,7 @@ Feature: Activities
     And fill form with:
       |Subject    |SalesRep Task   |
       |Description|test description|
-      |Due date   |2018-08-24      |
+      |Due date   |2019-08-24      |
       |Status     |Open            |
       |Priority   |Normal          |
     And set Reminders with:
@@ -74,7 +74,7 @@ Feature: Activities
     Then should see "Task created successfully" flash message
     And I should see following grid:
       | Subject       | Due date               | Status | Priority |
-      | SalesRep Task | Aug 24, 2018, 12:00 AM | Open   | Normal   |
+      | SalesRep Task | Aug 24, 2019, 12:00 AM | Open   | Normal   |
     And go to Activities/ Tasks
     And click view "SalesRep Task" in grid
     And should see "Assigned To: Charlie Sheen (Main)"
@@ -161,7 +161,7 @@ Feature: Activities
     And go to Activities/ Calls
     And I should see following grid:
       | Subject          | Phone number | Call date & time      | Contexts         |
-      | Call for lead    | 0503504444   | Nov 21, 2016, 8:00 AM | OroInc, John Doe |
+      | Call for lead    | 0503504444   | Nov 21, 2016, 8:00 AM | OroInc John Doe  |
       | Call to Someone  | 0501468825   | Oct 31, 2016, 8:00 AM | John Doe         |
 
   Scenario:View and Manage Calls on the view page of a record
@@ -291,7 +291,9 @@ Feature: Activities
       |Guests       |John Doe - Organizer                     |
       |Recurrence   |Daily every 1 day, end after 1 occurrence|
     And go to Activities/ Calendar Events
+    And I sort grid by "Title"
     And should see following grid:
       | Title                   | Calendar | Recurrent | Recurrence                               | Invitation status |
       | All day no repeat Event | John Doe | No        | N/A                                      | Not responded     |
+      | New event               | John Doe | No        | N/A                                      | Not responded     |
       | Stand-Up                | John Doe | Yes       |Daily every 1 day, end after 1 occurrence | Not responded     |

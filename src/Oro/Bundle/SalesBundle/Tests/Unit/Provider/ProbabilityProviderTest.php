@@ -6,7 +6,7 @@ use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
 
-class ProbabilityProviderTest extends \PHPUnit_Framework_TestCase
+class ProbabilityProviderTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldReturnProbabilityForExistingStatus()
     {

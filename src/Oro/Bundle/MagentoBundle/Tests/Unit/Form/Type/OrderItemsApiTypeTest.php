@@ -6,8 +6,11 @@ use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
 use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\MagentoBundle\Form\Type\OrderItemsApiType;
 use Oro\Bundle\MagentoBundle\Form\Type\OrderSelectType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class OrderItemsApiTypeTest extends \PHPUnit_Framework_TestCase
+class OrderItemsApiTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OrderItemsApiType */
     protected $type;
@@ -33,21 +36,21 @@ class OrderItemsApiTypeTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
 
         $expectedFields = [
-            'name'            => 'text',
-            'sku'             => 'text',
-            'qty'             => 'number',
+            'name'            => TextType::class,
+            'sku'             => TextType::class,
+            'qty'             => NumberType::class,
             'cost'            => OroMoneyType::class,
             'price'           => OroMoneyType::class,
-            'weight'          => 'number',
+            'weight'          => NumberType::class,
             'taxPercent'      => OroPercentType::class,
             'taxAmount'       => OroMoneyType::class,
             'discountPercent' => OroPercentType::class,
             'discountAmount'  => OroMoneyType::class,
             'rowTotal'        => OroMoneyType::class,
             'order'           => OrderSelectType::class,
-            'productType'     => 'text',
-            'productOptions'  => 'text',
-            'isVirtual'       => 'checkbox',
+            'productType'     => TextType::class,
+            'productOptions'  => TextType::class,
+            'isVirtual'       => CheckboxType::class,
             'originalPrice'   => OroMoneyType::class,
         ];
 
@@ -79,10 +82,5 @@ class OrderItemsApiTypeTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->type->configureOptions($resolver);
-    }
-
-    public function testGetName()
-    {
-        $this->assertEquals('order_item_api_type', $this->type->getName());
     }
 }
