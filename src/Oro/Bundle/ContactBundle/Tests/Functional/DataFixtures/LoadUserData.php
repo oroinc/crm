@@ -3,20 +3,19 @@
 namespace Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\OrganizationBundle\Entity\Manager\OrganizationManager;
 use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
+use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\UserBundle\Entity\Role;
-
-class LoadUserData extends AbstractFixture implements ContainerAwareInterface
+class LoadUserData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    const USER_NAME         = 'user';
-    const USER_PASSWORD     = 'password';
-    const USER_ORGANIZATION = 1;
+    const USER_NAME     = 'user';
+    const USER_PASSWORD = 'password';
 
     /**
      * @var ContainerInterface
@@ -39,6 +38,14 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return [LoadOrganization::class];
     }
 
     /**
@@ -74,11 +81,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface
         $userManager = $this->container->get('oro_user.manager');
 
         $user = $userManager->createUser();
-
-        /** @var OrganizationManager $organizationManager */
-        $organizationManager = $this->container->get('oro_organization.organization_manager');
-        $organization = $organizationManager->getOrganizationRepo()->getOrganizationById(self::USER_ORGANIZATION);
-
+        $organization = $this->getReference('organization');
         $user->setUsername(self::USER_NAME)
             ->setPlainPassword(self::USER_PASSWORD)
             ->setFirstName('User')
