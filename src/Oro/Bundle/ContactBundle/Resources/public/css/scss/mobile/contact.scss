@@ -2,10 +2,26 @@
 
 .contact {
     &-collection-element {
-        margin-bottom: 8px;
+        margin-bottom: $contact-collection-element-mobile-margin-bottom;
 
         &:last-child {
             margin-bottom: 0;
         }
+    }
+
+    &-box {
+        width: $contact-box-mobile-width;
+    }
+
+    &-widget-wrapper {
+        padding-#{$start}: $contact-widget-wrapper-mobile-inner-offset-start;
+
+        .box-type1 {
+            margin: $contact-box-type1-mobile-offset;
+        }
+    }
+
+    &-box-wrapper {
+        padding: $contact-box-wrapper-mobile-inner-offset;
     }
 }
