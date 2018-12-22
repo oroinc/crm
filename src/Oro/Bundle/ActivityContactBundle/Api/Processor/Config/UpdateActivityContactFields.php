@@ -14,34 +14,34 @@ use Oro\Component\ChainProcessor\ProcessorInterface;
 
 /**
  * Renames "contacting activity" (ac_*) fields to have more readable names.
- * Exclude these fields for "update" action because they are calculated automatically
- * and should not be updated manually.
+ * Excludes these fields for a specified actions, e.g. "update",
+ * because they are calculated automatically and should not be updated manually.
  */
 class UpdateActivityContactFields implements ProcessorInterface
 {
     /** @var DoctrineHelper */
-    protected $doctrineHelper;
+    private $doctrineHelper;
 
     /** @var ConfigManager */
-    protected $configManager;
+    private $configManager;
 
     /** @var  ActivityContactProvider */
-    protected $activityContactProvider;
+    private $activityContactProvider;
 
     /** @var string[] */
-    protected $excludedActions;
+    private $excludedActions;
 
     /**
      * @param DoctrineHelper          $doctrineHelper
      * @param ConfigManager           $configManager
      * @param ActivityContactProvider $activityContactProvider
-     * @param string                  $excludedActions
+     * @param string[]                $excludedActions
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         ConfigManager $configManager,
         ActivityContactProvider $activityContactProvider,
-        $excludedActions
+        array $excludedActions
     ) {
         $this->doctrineHelper = $doctrineHelper;
         $this->configManager = $configManager;
@@ -80,7 +80,7 @@ class UpdateActivityContactFields implements ProcessorInterface
      *
      * @return bool
      */
-    protected function isSupportedEntity($entityClass)
+    private function isSupportedEntity($entityClass)
     {
         if (!$this->configManager->hasConfig($entityClass)) {
             // only extended entities are supported
@@ -112,7 +112,7 @@ class UpdateActivityContactFields implements ProcessorInterface
      * @param EntityDefinitionConfig $definition
      * @param string|null            $targetAction
      */
-    protected function updateFields(EntityDefinitionConfig $definition, $targetAction)
+    private function updateFields(EntityDefinitionConfig $definition, $targetAction)
     {
         $renameMap = [
             ActivityScope::LAST_CONTACT_DATE     => 'lastContactedDate',
@@ -120,7 +120,7 @@ class UpdateActivityContactFields implements ProcessorInterface
             ActivityScope::LAST_CONTACT_DATE_OUT => 'lastContactedDateOut',
             ActivityScope::CONTACT_COUNT         => 'timesContacted',
             ActivityScope::CONTACT_COUNT_IN      => 'timesContactedIn',
-            ActivityScope::CONTACT_COUNT_OUT     => 'timesContactedOut',
+            ActivityScope::CONTACT_COUNT_OUT     => 'timesContactedOut'
         ];
         foreach ($renameMap as $fieldName => $resultFieldName) {
             if ($definition->hasField($fieldName) && !$definition->hasField($resultFieldName)) {
@@ -130,7 +130,10 @@ class UpdateActivityContactFields implements ProcessorInterface
                     $field->setPropertyPath($fieldName);
                     $definition->addField($resultFieldName, $field);
                 }
-                if ('update' === $targetAction && !$field->hasExcluded() && !$field->isExcluded()) {
+                if (in_array($targetAction, $this->excludedActions, true)
+                    && !$field->hasExcluded()
+                    && !$field->isExcluded()
+                ) {
                     $field->setExcluded();
                 }
             }
