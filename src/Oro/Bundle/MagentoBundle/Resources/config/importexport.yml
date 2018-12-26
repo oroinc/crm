@@ -359,7 +359,7 @@ services:
     oro_magento.import.strategy.abstract:
         class: '%oro_magento.import.strategy.abstract.class%'
         parent: oro_magento.import_strategy.default_magento_import
-        absract: true
+        abstract: true
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
             - [setOwnerHelper, ["@oro_integration.helper.default_owner_helper"]]

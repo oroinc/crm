@@ -22,7 +22,7 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
         self::assertTrue($attachment->isValid(), sprintf('"%s" attachment not found', $title));
 
         $attachment->find('css', 'input')->check();
-        $page->find('css', 'a.attach')->click();
+        $page->find('css', 'button.attach')->click();
     }
 
     /**
