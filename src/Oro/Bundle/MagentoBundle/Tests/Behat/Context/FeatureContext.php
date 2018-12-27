@@ -114,8 +114,6 @@ class FeatureContext extends OroFeatureContext implements
             $accountsInGrid = array_map(function (GridRow $row) {
                 $firstName = $row->getCellValue('First Name');
                 $lastName = $row->getCellValue('Last Name');
-                $firstName =  $firstName instanceof \DateTime ? $firstName->format('Y-m-d H:i:s') : $firstName;
-                $lastName =  $lastName instanceof \DateTime ? $lastName->format('Y-m-d H:i:s') : $lastName;
 
                 return $firstName.' '.$lastName;
             }, $grid->getRows());
