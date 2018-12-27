@@ -244,6 +244,11 @@ oro_behat_extension:
         type: 'xpath'
         locator: '//div[@title="Opportunities List"]/../..'
 
+    Widget Save Button:
+      selector:
+        type: 'xpath'
+        locator: '//div[@class="widget-actions-section"]/..//button[contains(text(),"Save")]'
+
   pages:
     Opportunity Index:
       route: 'oro_sales_opportunity_index'

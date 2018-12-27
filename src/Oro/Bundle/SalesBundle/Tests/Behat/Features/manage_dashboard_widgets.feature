@@ -28,7 +28,7 @@ Feature: Manage dashboard widgets
     And I fill form with:
       | Excluded statuses | New        |
       | Sort By           | First name |
-    When I click "Save"
+    When I click "Widget Save Button"
     And I should see "Widget has been successfully configured" flash message
     Then I should see following grid:
       | Lead name     | Status       | Last contact datetime |
@@ -38,7 +38,7 @@ Feature: Manage dashboard widgets
     And I fill form with:
       | Excluded statuses | [New, Disqualified] |
       | Sort By           | First name          |
-    And I click "Save"
+    And I click "Widget Save Button"
     And I should see "Widget has been successfully configured" flash message
     Then I should see following grid:
       | Lead name     | Status       | Last contact datetime |
@@ -53,13 +53,13 @@ Feature: Manage dashboard widgets
 
   Scenario: Check configuration of Lead Statistics widget
     Given I click "Configure" in "Lead Statistics" widget
-    When I click "Save"
+    When I click "Widget Save Button"
     And I should see "Widget has been successfully configured" flash message
     Then I should see "Open Leads"
     And I should see "New Leads"
     When I click "Configure" in "Lead Statistics" widget
     And I click "Delete column"
-    And I click "Save"
+    And I click "Widget Save Button"
     And I should see "Widget has been successfully configured" flash message
     Then I should not see "Open Leads"
     And I should see "New Leads"
@@ -73,7 +73,7 @@ Feature: Manage dashboard widgets
 
   Scenario: Check configuration of Opportunity Statistics widget
     Given I click "Configure" in "Opportunity statistics" widget
-    When I click "Save"
+    When I click "Widget Save Button"
     And I should see "Widget has been successfully configured" flash message
     Then I should see "New Opportunities Count"
     And I should see "New Opportunities Amount"
@@ -81,7 +81,7 @@ Feature: Manage dashboard widgets
     And I should see "Won Opportunities To Date Amount"
     When I click "Configure" in "Opportunity statistics" widget
     And I click "Delete column"
-    And I click "Save"
+    And I click "Widget Save Button"
     And I should see "Widget has been successfully configured" flash message
     Then I should not see "New Opportunities Count"
     And I should see "New Opportunities Amount"
@@ -100,7 +100,7 @@ Feature: Manage dashboard widgets
     And I fill form with:
       | Excluded statuses | Needs Analysis   |
       | Sort By           | Opportunity name |
-    When I click "Save"
+    When I click "Widget Save Button"
     And I should see "Widget has been successfully configured" flash message
     Then I should see following grid:
       | Opportunity name | Budget amount | Budget amount ($) | Status     |
@@ -110,7 +110,7 @@ Feature: Manage dashboard widgets
     And I fill form with:
       | Excluded statuses | [Needs Analysis, Open] |
       | Sort By           | Opportunity name       |
-    And I click "Save"
+    And I click "Widget Save Button"
     And I should see "Widget has been successfully configured" flash message
     Then I should see following grid:
       | Opportunity name | Budget amount | Budget amount ($) | Status     |
