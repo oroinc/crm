@@ -108,7 +108,7 @@ Feature: Quickly create Lead in a single form
     Then there are 1 records in grid
 
   Scenario: Convert to opportunity
-    Given I click on Jary in grid
+    Given I click "view" on row "Jary" in grid
     And I click "Convert to Opportunity"
     When I fill form with:
       | Account    | Charlie            |
