@@ -1,4 +1,3 @@
-assets:
-    css:
-        inputs:
-          - 'bundles/orocase/css/scss/main.scss'
+css:
+    inputs:
+      - 'bundles/orocase/css/scss/main.scss'

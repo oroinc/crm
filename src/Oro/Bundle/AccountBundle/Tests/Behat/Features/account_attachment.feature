@@ -1,5 +1,3 @@
-# TODO: remove @skip in scope of BB-11430
-@skip
 @regression
 Feature: Account attachment
   In order to have ability add attachments to account
@@ -53,8 +51,7 @@ Feature: Account attachment
     And click "Send"
     Then I should see "The email was sent" flash message
     And I collapse "Hello World" in activity list
-#    Uncomment when BAP-11641 will resolved
-#    And I should see cat2.jpg text in activity
+    And I should see cat2.jpg text in activity
 
   Scenario: Delete attachment
     Given I click Delete cat2.jpg in grid
