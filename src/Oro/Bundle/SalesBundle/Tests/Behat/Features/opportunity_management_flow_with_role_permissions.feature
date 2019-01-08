@@ -22,7 +22,7 @@ Feature: Opportunity Management Flow with role permissions
     And I click "Activate"
     And I click "Activate"
     When I go to Sales/ Opportunities
-    And I click on Summer sales in grid
+    And I click "view" on row "Summer sales" in grid
     And I click "Start Opportunity Management Flow"
     And I click "Submit"
     Then I should see "Opportunity Management Flow"
@@ -37,7 +37,7 @@ Feature: Opportunity Management Flow with role permissions
       | Opportunity Management Flow | Perform transitions:None |
     And I save and close form
     When I go to Sales/ Opportunities
-    And I click on Summer sales in grid
+    And I click "view" on row "Summer sales" in grid
     Then I should not see "Develop"
     And I should not see "Close as Won"
     And I should not see "Close as Lost"
@@ -49,5 +49,5 @@ Feature: Opportunity Management Flow with role permissions
       | Opportunity Management Flow | View Workflow:None |
     And I save and close form
     When I go to Sales/ Opportunities
-    And I click on Summer sales in grid
+    And I click "view" on row "Summer sales" in grid
     Then I should not see "Opportunity Management Flow"

@@ -19,14 +19,14 @@ Feature: Opportunity workflow
 
   Scenario: Enable opportunity workflow
     Given I go to Sales/ Opportunities
-    And I click on Summer sales in grid
+    And I click "view" on row "Summer sales" in grid
     And I should not see "Start Opportunity Management Flow"
     When I go to System/ Workflows
     And click on Opportunity Management Flow in grid
     And click "Activate"
     And click "Activate"
     And I go to Sales/ Opportunities
-    And I click on Summer sales in grid
+    And I click "view" on row "Summer sales" in grid
     Then I should see "Start Opportunity Management Flow"
 
   Scenario: Develop opportunity

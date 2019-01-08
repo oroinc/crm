@@ -56,6 +56,11 @@ form[name="opportunity"] {
     .add-on {
         vertical-align: baseline;
         text-align: center;
+        justify-content: center;
+
+        &.float-width {
+            width: auto;
+        }
     }
 }
 

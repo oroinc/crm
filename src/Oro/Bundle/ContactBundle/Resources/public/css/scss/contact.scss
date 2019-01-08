@@ -7,6 +7,10 @@
     position: $contact-box-wrapper-position;
 }
 
+.contact-element-label {
+    margin-#{$end}: $contact-element-label-offset-end;
+}
+
 .contact {
     &-box {
         background-color: $contact-box-background-color;

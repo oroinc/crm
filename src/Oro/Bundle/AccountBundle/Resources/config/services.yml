@@ -109,3 +109,9 @@ services:
         class: Oro\Bundle\AccountBundle\Provider\AccountAutocompleteProvider
         tags:
             - { name: oro_sales.provider.customer.account_autocomplete }
+
+    oro_account.provider.account_entity_name:
+        class: 'Oro\Bundle\AccountBundle\Provider\AccountEntityNameProvider'
+        public: false
+        tags:
+            - { name: oro_entity.name_provider, priority: 100 }
