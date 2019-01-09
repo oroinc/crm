@@ -8,7 +8,7 @@ branches:
     - /^\d+\.\d+$/
 
 php:
-    - 7.1
+    - 7.1.17
 
 cache:
   directories:
