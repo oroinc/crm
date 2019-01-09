@@ -10,11 +10,10 @@ Feature: Country and region translations for magento cart grid
   Scenario: Feature Background
     Given I login as administrator
     And I go to System / Configuration
-    And I follow "System Configuration/General Setup/Language Settings" on configuration sidebar
+    And I follow "System Configuration/General Setup/Localization" on configuration sidebar
     And I fill form with:
-      | Supported Languages | [English, Zulu] |
-      | Use Default         | false           |
-      | Default Language    | Zulu            |
+      | Enabled Localizations | [English, Zulu_Loc] |
+      | Default Localization  | Zulu_Loc            |
     And I submit form
     When I go to System / Localization / Translations
     And I click "Update Cache"
