@@ -66,13 +66,9 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    <div class="pull-left">
-        {% if entity.status.id != 'canceled' %}
-            <div class="badge badge-pill badge-enabled status-enabled"><i class="icon-status-enabled fa-circle"></i>{{ entity.status.name }}</div>
-        {% else %}
-            <div class="badge badge-pill badge-disabled status-disabled"><i class="icon-status-disabled fa-circle"></i>{{ entity.status.name  }}</div>
-        {% endif %}
-    </div>
+    <span class="page-title__status">
+        {{ UI.badge(entity.status.name, entity.status.id != 'canceled' ? 'enabled' : 'disabled') }}
+    </span>
 {% endblock breadcrumbs %}
 
 {% block content_data %}
