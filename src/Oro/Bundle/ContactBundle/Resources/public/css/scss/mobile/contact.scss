@@ -25,3 +25,15 @@
         padding: $contact-box-wrapper-mobile-inner-offset;
     }
 }
+
+@media screen and (min-width: $medium-devices-media-breakpoint) {
+    .contact-box {
+        width: calc(#{($contact-box-mobile-width / 2)} - #{$content-padding-small});
+    }
+}
+
+@media screen and (min-width: $tablet-devices-media-breakpoint) {
+    .contact-box {
+        width: $contact-box-mobile-width;
+    }
+}
