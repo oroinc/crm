@@ -4,44 +4,42 @@ namespace Oro\Bundle\ActivityContactBundle\Bundle\Tests\Unit\Api\Processor\Confi
 
 use Oro\Bundle\ActivityContactBundle\Api\Processor\Config\UpdateActivityContactFields;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ApiBundle\Tests\Unit\Processor\Config\ConfigProcessorTestCase;
+use Oro\Bundle\ApiBundle\Util\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\EntityConfigId;
 
 class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $doctrineHelper;
+    private const EXCLUDED_ACTIONS = ['create', 'update'];
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $configManager;
+    /** @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper */
+    private $doctrineHelper;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $activityContactProvider;
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ConfigManager */
+    private $configManager;
+
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ActivityContactProvider */
+    private $activityContactProvider;
 
     /** @var UpdateActivityContactFields */
-    protected $processor;
+    private $processor;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\ApiBundle\Util\DoctrineHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configManager = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->activityContactProvider = $this
-            ->getMockBuilder('Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $this->configManager = $this->createMock(ConfigManager::class);
+        $this->activityContactProvider = $this->createMock(ActivityContactProvider::class);
 
         $this->processor = new UpdateActivityContactFields(
             $this->doctrineHelper,
             $this->configManager,
             $this->activityContactProvider,
-            ['create', 'update']
+            self::EXCLUDED_ACTIONS
         );
     }
 
@@ -55,7 +53,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 ActivityScope::LAST_CONTACT_DATE_OUT => null,
                 ActivityScope::CONTACT_COUNT         => null,
                 ActivityScope::CONTACT_COUNT_IN      => null,
-                ActivityScope::CONTACT_COUNT_OUT     => null,
+                ActivityScope::CONTACT_COUNT_OUT     => null
             ]
         ];
 
@@ -74,7 +72,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                     ActivityScope::LAST_CONTACT_DATE_OUT => null,
                     ActivityScope::CONTACT_COUNT         => null,
                     ActivityScope::CONTACT_COUNT_IN      => null,
-                    ActivityScope::CONTACT_COUNT_OUT     => null,
+                    ActivityScope::CONTACT_COUNT_OUT     => null
                 ]
             ],
             $configObject
@@ -91,7 +89,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 ActivityScope::LAST_CONTACT_DATE_OUT => null,
                 ActivityScope::CONTACT_COUNT         => null,
                 ActivityScope::CONTACT_COUNT_IN      => null,
-                ActivityScope::CONTACT_COUNT_OUT     => null,
+                ActivityScope::CONTACT_COUNT_OUT     => null
             ]
         ];
 
@@ -113,7 +111,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                     ActivityScope::LAST_CONTACT_DATE_OUT => null,
                     ActivityScope::CONTACT_COUNT         => null,
                     ActivityScope::CONTACT_COUNT_IN      => null,
-                    ActivityScope::CONTACT_COUNT_OUT     => null,
+                    ActivityScope::CONTACT_COUNT_OUT     => null
                 ]
             ],
             $configObject
@@ -130,7 +128,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 ActivityScope::LAST_CONTACT_DATE_OUT => null,
                 ActivityScope::CONTACT_COUNT         => null,
                 ActivityScope::CONTACT_COUNT_IN      => null,
-                ActivityScope::CONTACT_COUNT_OUT     => null,
+                ActivityScope::CONTACT_COUNT_OUT     => null
             ]
         ];
 
@@ -158,7 +156,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                     ActivityScope::LAST_CONTACT_DATE_OUT => null,
                     ActivityScope::CONTACT_COUNT         => null,
                     ActivityScope::CONTACT_COUNT_IN      => null,
-                    ActivityScope::CONTACT_COUNT_OUT     => null,
+                    ActivityScope::CONTACT_COUNT_OUT     => null
                 ]
             ],
             $configObject
@@ -175,7 +173,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 ActivityScope::LAST_CONTACT_DATE_OUT => null,
                 ActivityScope::CONTACT_COUNT         => null,
                 ActivityScope::CONTACT_COUNT_IN      => null,
-                ActivityScope::CONTACT_COUNT_OUT     => null,
+                ActivityScope::CONTACT_COUNT_OUT     => null
             ]
         ];
 
@@ -208,7 +206,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                     ActivityScope::LAST_CONTACT_DATE_OUT => null,
                     ActivityScope::CONTACT_COUNT         => null,
                     ActivityScope::CONTACT_COUNT_IN      => null,
-                    ActivityScope::CONTACT_COUNT_OUT     => null,
+                    ActivityScope::CONTACT_COUNT_OUT     => null
                 ]
             ],
             $configObject
@@ -225,7 +223,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 ActivityScope::LAST_CONTACT_DATE_OUT => null,
                 ActivityScope::CONTACT_COUNT         => null,
                 ActivityScope::CONTACT_COUNT_IN      => null,
-                ActivityScope::CONTACT_COUNT_OUT     => null,
+                ActivityScope::CONTACT_COUNT_OUT     => null
             ]
         ];
 
@@ -247,7 +245,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->willReturnMap(
                 [
                     ['extend', self::TEST_CLASS_NAME, $expendConfig],
-                    ['activity', self::TEST_CLASS_NAME, $activityConfig],
+                    ['activity', self::TEST_CLASS_NAME, $activityConfig]
                 ]
             );
 
@@ -267,7 +265,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                     ActivityScope::LAST_CONTACT_DATE_OUT => null,
                     ActivityScope::CONTACT_COUNT         => null,
                     ActivityScope::CONTACT_COUNT_IN      => null,
-                    ActivityScope::CONTACT_COUNT_OUT     => null,
+                    ActivityScope::CONTACT_COUNT_OUT     => null
                 ]
             ],
             $configObject
@@ -284,7 +282,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 ActivityScope::LAST_CONTACT_DATE_OUT => null,
                 ActivityScope::CONTACT_COUNT         => null,
                 ActivityScope::CONTACT_COUNT_IN      => null,
-                ActivityScope::CONTACT_COUNT_OUT     => null,
+                ActivityScope::CONTACT_COUNT_OUT     => null
             ]
         ];
 
@@ -307,7 +305,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->willReturnMap(
                 [
                     ['extend', self::TEST_CLASS_NAME, $expendConfig],
-                    ['activity', self::TEST_CLASS_NAME, $activityConfig],
+                    ['activity', self::TEST_CLASS_NAME, $activityConfig]
                 ]
             );
 
@@ -328,7 +326,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                     ActivityScope::LAST_CONTACT_DATE_OUT => null,
                     ActivityScope::CONTACT_COUNT         => null,
                     ActivityScope::CONTACT_COUNT_IN      => null,
-                    ActivityScope::CONTACT_COUNT_OUT     => null,
+                    ActivityScope::CONTACT_COUNT_OUT     => null
                 ]
             ],
             $configObject
@@ -345,7 +343,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 ActivityScope::LAST_CONTACT_DATE_OUT => null,
                 ActivityScope::CONTACT_COUNT         => null,
                 ActivityScope::CONTACT_COUNT_IN      => null,
-                ActivityScope::CONTACT_COUNT_OUT     => null,
+                ActivityScope::CONTACT_COUNT_OUT     => null
             ]
         ];
 
@@ -368,7 +366,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->willReturnMap(
                 [
                     ['extend', self::TEST_CLASS_NAME, $expendConfig],
-                    ['activity', self::TEST_CLASS_NAME, $activityConfig],
+                    ['activity', self::TEST_CLASS_NAME, $activityConfig]
                 ]
             );
 
@@ -389,14 +387,17 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                     'lastContactedDateOut' => ['property_path' => ActivityScope::LAST_CONTACT_DATE_OUT],
                     'timesContacted'       => ['property_path' => ActivityScope::CONTACT_COUNT],
                     'timesContactedIn'     => ['property_path' => ActivityScope::CONTACT_COUNT_IN],
-                    'timesContactedOut'    => ['property_path' => ActivityScope::CONTACT_COUNT_OUT],
+                    'timesContactedOut'    => ['property_path' => ActivityScope::CONTACT_COUNT_OUT]
                 ]
             ],
             $configObject
         );
     }
 
-    public function testProcessForUpdateAction()
+    /**
+     * @dataProvider excludedActionProvider
+     */
+    public function testProcessForExcludedAction($action)
     {
         $config = [
             'exclusion_policy' => 'all',
@@ -410,7 +411,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 ],
                 ActivityScope::CONTACT_COUNT         => null,
                 ActivityScope::CONTACT_COUNT_IN      => null,
-                ActivityScope::CONTACT_COUNT_OUT     => null,
+                ActivityScope::CONTACT_COUNT_OUT     => null
             ]
         ];
 
@@ -433,7 +434,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->willReturnMap(
                 [
                     ['extend', self::TEST_CLASS_NAME, $expendConfig],
-                    ['activity', self::TEST_CLASS_NAME, $activityConfig],
+                    ['activity', self::TEST_CLASS_NAME, $activityConfig]
                 ]
             );
 
@@ -443,7 +444,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
 
         $configObject = $this->createConfigObject($config);
         $this->context->setResult($configObject);
-        $this->context->setTargetAction('update');
+        $this->context->setTargetAction($action);
         $this->processor->process($this->context);
 
         $this->assertConfig(
@@ -472,13 +473,22 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                     'timesContactedOut'    => [
                         'exclude'       => true,
                         'property_path' => ActivityScope::CONTACT_COUNT_OUT
-                    ],
+                    ]
                 ]
             ],
             $configObject
         );
     }
 
+    public static function excludedActionProvider()
+    {
+        return array_map(
+            function ($action) {
+                return [$action];
+            },
+            self::EXCLUDED_ACTIONS
+        );
+    }
     public function testProcessForEntityWithSupportedActivitiesAndHasConflicts()
     {
         $config = [
@@ -486,7 +496,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             'fields'           => [
                 ActivityScope::LAST_CONTACT_DATE => null,
                 'lastContactedDate'              => null,
-                ActivityScope::CONTACT_COUNT     => ['property_path' => 'field1'],
+                ActivityScope::CONTACT_COUNT     => ['property_path' => 'field1']
             ]
         ];
 
@@ -509,7 +519,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->willReturnMap(
                 [
                     ['extend', self::TEST_CLASS_NAME, $expendConfig],
-                    ['activity', self::TEST_CLASS_NAME, $activityConfig],
+                    ['activity', self::TEST_CLASS_NAME, $activityConfig]
                 ]
             );
 
@@ -527,7 +537,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 'fields'           => [
                     ActivityScope::LAST_CONTACT_DATE => null,
                     'lastContactedDate'              => null,
-                    ActivityScope::CONTACT_COUNT     => ['property_path' => 'field1'],
+                    ActivityScope::CONTACT_COUNT     => ['property_path' => 'field1']
                 ]
             ],
             $configObject

@@ -3,6 +3,7 @@
 .mobile-version {
     @import "oroui/css/scss/mobile/variables";
 
+    @import "variables";
+
     @import "contact";
-    @import "contact-widget";
 }

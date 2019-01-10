@@ -2,10 +2,38 @@
 
 .contact {
     &-collection-element {
-        margin-bottom: 8px;
+        margin-bottom: $contact-collection-element-mobile-margin-bottom;
 
         &:last-child {
             margin-bottom: 0;
         }
+    }
+
+    &-box {
+        width: $contact-box-mobile-width;
+    }
+
+    &-widget-wrapper {
+        padding-#{$start}: $contact-widget-wrapper-mobile-inner-offset-start;
+
+        .box-type1 {
+            margin: $contact-box-type1-mobile-offset;
+        }
+    }
+
+    &-box-wrapper {
+        padding: $contact-box-wrapper-mobile-inner-offset;
+    }
+}
+
+@media screen and (min-width: $medium-devices-media-breakpoint) {
+    .contact-box {
+        width: calc(#{($contact-box-mobile-width / 2)} - #{$content-padding-small});
+    }
+}
+
+@media screen and (min-width: $tablet-devices-media-breakpoint) {
+    .contact-box {
+        width: $contact-box-mobile-width;
     }
 }
