@@ -165,7 +165,7 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
                 [
                     'name' => 'name',
                     'contact' => 1,
-                    'dataChannel' => [],
+                    'dataChannel' => '',
                     'shippingAddress' => ['id' => 1, 'label' => 'shipping address'],
                     'billingAddress' => ['id' => 2, 'label' => 'billing address'],
                 ],
