@@ -22,6 +22,3 @@ Oro\Bundle\ContactUsBundle\Entity\ContactReason:
     properties:
         titles:
             - NotBlank: ~
-            - Length:
-                min: 1
-                max: 255

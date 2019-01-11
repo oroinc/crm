@@ -5,6 +5,7 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional\Api\Rest;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -180,6 +181,58 @@ class RestContactApiTest extends WebTestCase
 
         $this->client->request('GET', $baseUrl . '?phone<>' .$requestData['contact']['phones'][0]['phone']);
         $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
+    }
+
+    /**
+     * @depends testContactsFiltering
+     */
+    public function testCreateContactWhenCreatedAtHasMillisecondsAndTimezone()
+    {
+        $request = [
+            'contact' => [
+                'firstName' => 'Contact_fname_' . mt_rand(),
+                'createdAt' => '2014-03-04T20:00:00.123+01:00'
+            ]
+        ];
+        $this->client->request('POST', $this->getUrl('oro_api_post_contact'), $request);
+
+        $this->getEntityManager()->clear();
+        $responseContent = $this->getJsonResponseContent($this->client->getResponse(), 201);
+        $contactId = $responseContent['id'];
+
+        /** @var Contact $contact */
+        $contact = $this->getEntityManager()->find(Contact::class, $contactId);
+
+        self::assertEquals(
+            '2014-03-04T19:00:00.000+0000',
+            $contact->getCreatedAt()->format("Y-m-d\TH:i:s.vO")
+        );
+    }
+
+    /**
+     * @depends testContactsFiltering
+     */
+    public function testCreateContactWhenCreatedAtHasMillisecondsAndZTimezone()
+    {
+        $request = [
+            'contact' => [
+                'firstName' => 'Contact_fname_' . mt_rand(),
+                'createdAt' => '2014-03-04T20:00:00.123Z'
+            ]
+        ];
+        $this->client->request('POST', $this->getUrl('oro_api_post_contact'), $request);
+
+        $this->getEntityManager()->clear();
+        $responseContent = $this->getJsonResponseContent($this->client->getResponse(), 201);
+        $contactId = $responseContent['id'];
+
+        /** @var Contact $contact */
+        $contact = $this->getEntityManager()->find(Contact::class, $contactId);
+
+        self::assertEquals(
+            '2014-03-04T20:00:00.000+0000',
+            $contact->getCreatedAt()->format("Y-m-d\TH:i:s.vO")
+        );
     }
 
     /**

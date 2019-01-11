@@ -51,3 +51,6 @@ oro:
             general:                General
             additional:             Additional
             request_information:    Request Information
+
+        form:
+            choose_contact_reason: 'Choose a Contact Reason...'

@@ -1,5 +1,6 @@
 parameters:
     oro_contact_us.contactrequest.entity.class:           Oro\Bundle\ContactUsBundle\Entity\ContactRequest
+    oro_contact_us.contactreason.entity.class:            Oro\Bundle\ContactUsBundle\Entity\ContactReason
     oro_contact_us.embedded_form.class:                   Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType
     oro_contact_us.contact_request.form.handler.class:    Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler
     oro_contact_us.provider.phone.abstract_contact_request.class: Oro\Bundle\ContactUsBundle\Provider\AbstractContactRequestPhoneProvider
@@ -42,3 +43,17 @@ services:
         class: 'Oro\Bundle\ContactUsBundle\Form\Type\ContactReasonType'
         tags:
             - { name: form.type }
+
+    oro_contact_us.form.type.contact_reason_select:
+        class: Oro\Bundle\ContactUsBundle\Form\Type\ContactReasonSelectType
+        tags:
+            - { name: form.type, alias: oro_contactus_contact_reason_select }
+
+    oro_contact_us.form.autocomplete.contact_reason.search_handler:
+        class: Oro\Bundle\ContactUsBundle\Autocomplete\ContactReasonSearchHandler
+        lazy: true
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@property_accessor'
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: contact_reasons, acl_resource: oro_contactus_reason_view }

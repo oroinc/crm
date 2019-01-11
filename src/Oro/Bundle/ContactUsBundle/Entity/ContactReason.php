@@ -27,6 +27,10 @@ use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
  *          "grid"={
  *              "default"="orcrm-contact-reasons-grid"
  *          },
+ *          "form"={
+ *              "form_type"="Oro\Bundle\ContactUsBundle\Form\Type\ContactReasonSelectType",
+ *              "grid_name"="orcrm-contact-reasons-grid"
+ *          },
  *          "security"={
  *              "type"="ACL",
  *              "permissions"="All",
