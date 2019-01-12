@@ -33,4 +33,4 @@ data:
         status:
             data:
                 type: magentocreditmemostatuses
-                id: '2'
+                id: '<toString(@creditMemoStatus_Refunded->id)>'
