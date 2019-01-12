@@ -707,6 +707,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
 
         $className = ExtendHelper::buildEnumValueClassName(CreditMemo::STATUS_ENUM_CODE);
         $status = $this->em->getRepository($className)->find(CreditMemo::STATUS_REFUNDED);
+        $this->addReference('creditMemoStatus_Refunded', $status);
         $creditMemo->setStatus($status);
 
         $creditMemo->setOrder($order);
