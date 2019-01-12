@@ -9,6 +9,7 @@ use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 class ChannelLimitationExtension extends AbstractExtension
 {
@@ -79,7 +80,7 @@ class ChannelLimitationExtension extends AbstractExtension
         }
 
         $joinAlias    = false;
-        $fullJoinPath = sprintf('%s.%s', $parentAlias, $relationPath);
+        $fullJoinPath = QueryBuilderUtil::sprintf('%s.%s', $parentAlias, $relationPath);
         $joins        = $queryBuilder->getDQLPart('join');
 
         $iterator = new \RecursiveIteratorIterator(
@@ -96,6 +97,7 @@ class ChannelLimitationExtension extends AbstractExtension
 
         if (!$joinAlias) {
             $joinAlias = uniqid($relationPath);
+            QueryBuilderUtil::checkIdentifier($joinAlias);
             $queryBuilder->leftJoin($fullJoinPath, $joinAlias);
         }
 

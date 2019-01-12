@@ -9,6 +9,7 @@ use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 class RFMBuilder implements AnalyticsBuilderInterface
 {
@@ -138,6 +139,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
                 $qb = $em->createQueryBuilder();
                 $qb->update($entityFQCN, 'e');
                 foreach ($value as $metricName => $metricValue) {
+                    QueryBuilderUtil::checkIdentifier($metricName);
                     $qb->set('e.' . $metricName, ':' . $metricName);
                     $qb->setParameter($metricName, $metricValue);
                 }
@@ -164,25 +166,26 @@ class RFMBuilder implements AnalyticsBuilderInterface
         $qb = $this->doctrineHelper->getEntityRepository($entityFQCN)->createQueryBuilder('e');
 
         $metadata = $this->doctrineHelper->getEntityMetadataForClass($entityFQCN);
-        $metrics = [];
+        $metricsFields = [];
         foreach ($this->providers as $provider) {
-            if ($provider->supports($channel) && $metadata->hasField($provider->getType())) {
-                $metrics[] = $provider->getType();
+            $providerType = $provider->getType();
+            if ($provider->supports($channel) && $metadata->hasField($providerType)) {
+                $metricsFields[] = QueryBuilderUtil::getField('e', $providerType);
             }
         }
 
-        if (count($metrics) === 0) {
+        if (\count($metricsFields) === 0) {
             return new \ArrayIterator();
         }
 
         $idField = sprintf('e.%s', $this->doctrineHelper->getSingleEntityIdentifierFieldName($entityFQCN));
-        $qb->select(preg_filter('/^/', 'e.', $metrics))
+        $qb->select($metricsFields)
             ->addSelect($idField . ' as id')
             ->where('e.dataChannel = :dataChannel')
             ->orderBy($qb->expr()->asc($idField))
             ->setParameter('dataChannel', $channel);
 
-        if (count($ids) !== 0) {
+        if (\count($ids) !== 0) {
             $qb->andWhere($qb->expr()->in($idField, ':ids'))
                 ->setParameter('ids', $ids);
         }

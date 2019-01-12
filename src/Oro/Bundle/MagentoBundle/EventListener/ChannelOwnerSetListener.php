@@ -100,9 +100,10 @@ class ChannelOwnerSetListener
     {
         $qb = $this->em->createQueryBuilder();
         $qb->update($entityName, 'o')
-            ->set('o.owner', $newOwnerId)
+            ->set('o.owner', ':newOwnerId')
             ->where($qb->expr()->isNull('o.owner'))
             ->andWhere($qb->expr()->eq('o.channel', ':channel'))
+            ->setParameter('newOwnerId', $newOwnerId)
             ->setParameter('channel', $channel);
 
         $qb->getQuery()->execute();

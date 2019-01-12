@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\QueryBuilder;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 trait DateFilterTrait
 {
@@ -20,12 +21,12 @@ trait DateFilterTrait
     ) {
         if ($start) {
             $qb
-                ->andWhere(sprintf('%s >= :start', $field))
+                ->andWhere(QueryBuilderUtil::sprintf('%s >= :start', $field))
                 ->setParameter('start', $start);
         }
         if ($end) {
             $qb
-                ->andWhere(sprintf('%s < :end', $field))
+                ->andWhere(QueryBuilderUtil::sprintf('%s < :end', $field))
                 ->setParameter('end', $end);
         }
     }

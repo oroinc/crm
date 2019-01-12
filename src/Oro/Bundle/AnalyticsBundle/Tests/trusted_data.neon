@@ -1,0 +1,11 @@
+# Configuration for https://github.com/oroinc/phpstan-rules/
+trusted_data:
+    variables:
+        Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager:
+            executeResetQuery:
+                type: true
+                className: true
+    properties:
+        Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager:
+            executeResetQuery:
+                type: true
