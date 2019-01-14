@@ -1,0 +1,9 @@
+# Configuration for https://github.com/oroinc/phpstan-rules/
+trusted_data:
+    properties:
+        Oro\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler:
+            getEntitiesByIds:
+                idFieldName: true
+    safe_static_methods:
+        Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager:
+            getCustomerTargetField: true
