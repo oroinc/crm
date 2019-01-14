@@ -57,31 +57,29 @@ class LeadTest extends RestJsonApiTestCase
         return [
             'without parameters'                                  => [
                 'parameters'      => [],
-                'expectedContent' => 'lead_cget.yml',
+                'expectedContent' => 'lead_cget.yml'
             ],
             'filter by status'                                    => [
                 'parameters'      => [
-                    'filter' => [
-                        'status' => 'new',
-                    ],
+                    'filter' => ['status' => 'new']
                 ],
-                'expectedContent' => 'lead_cget_filter_by_status.yml',
+                'expectedContent' => 'lead_cget_filter_by_status.yml'
             ],
             'fields and include filters for customer association' => [
                 'parameters'      => [
                     'fields[opportunities]' => 'account,customer',
-                    'include'               => 'account,customer',
+                    'include'               => 'account,customer'
                 ],
-                'expectedContent' => 'lead_cget_customer_association.yml',
+                'expectedContent' => 'lead_cget_customer_association.yml'
             ],
             'title for customer association'                      => [
                 'parameters'      => [
                     'meta'                  => 'title',
                     'fields[opportunities]' => 'account,customer',
-                    'include'               => 'account,customer',
+                    'include'               => 'account,customer'
                 ],
-                'expectedContent' => 'lead_cget_customer_association_title.yml',
-            ],
+                'expectedContent' => 'lead_cget_customer_association_title.yml'
+            ]
         ];
     }
 
@@ -145,14 +143,11 @@ class LeadTest extends RestJsonApiTestCase
             false
         );
 
-        self::assertResponseValidationError(
+        $this->assertResponseValidationError(
             [
-                'status' => '400',
                 'title'  => 'not blank constraint',
                 'detail' => 'This value should not be blank.',
-                'source' => [
-                    'pointer' => '/data/relationships/status/data'
-                ]
+                'source' => ['pointer' => '/data/relationships/status/data']
             ],
             $response
         );
@@ -167,14 +162,11 @@ class LeadTest extends RestJsonApiTestCase
             false
         );
 
-        self::assertResponseValidationError(
+        $this->assertResponseValidationError(
             [
-                'status' => '400',
                 'title'  => 'form constraint',
                 'detail' => 'The customer should be a part of the specified account.',
-                'source' => [
-                    'pointer' => '/data/relationships/customer/data'
-                ]
+                'source' => ['pointer' => '/data/relationships/customer/data']
             ],
             $response
         );
@@ -233,21 +225,21 @@ class LeadTest extends RestJsonApiTestCase
         return [
             'without parameters'         => [
                 'parameters'      => [],
-                'expectedContent' => 'lead_get_subresource_account.yml',
+                'expectedContent' => 'lead_get_subresource_account.yml'
             ],
             'fields and include filters' => [
                 'parameters'      => [
                     'fields[accounts]' => 'organization',
-                    'include'          => 'organization',
+                    'include'          => 'organization'
                 ],
-                'expectedContent' => 'lead_get_subresource_account_include.yml',
+                'expectedContent' => 'lead_get_subresource_account_include.yml'
             ],
             'title meta'                 => [
                 'parameters'      => [
-                    'meta' => 'title',
+                    'meta' => 'title'
                 ],
-                'expectedContent' => 'lead_get_subresource_account_title.yml',
-            ],
+                'expectedContent' => 'lead_get_subresource_account_title.yml'
+            ]
         ];
     }
 
@@ -292,21 +284,21 @@ class LeadTest extends RestJsonApiTestCase
         return [
             'without parameters'         => [
                 'parameters'      => [],
-                'expectedContent' => 'lead_get_subresource_customer.yml',
+                'expectedContent' => 'lead_get_subresource_customer.yml'
             ],
             'fields and include filters' => [
                 'parameters'      => [
                     'fields[b2bcustomers]' => 'organization',
-                    'include'              => 'organization',
+                    'include'              => 'organization'
                 ],
-                'expectedContent' => 'lead_get_subresource_customer_include.yml',
+                'expectedContent' => 'lead_get_subresource_customer_include.yml'
             ],
             'title meta'                 => [
                 'parameters'      => [
-                    'meta' => 'title',
+                    'meta' => 'title'
                 ],
-                'expectedContent' => 'lead_get_subresource_customer_title.yml',
-            ],
+                'expectedContent' => 'lead_get_subresource_customer_title.yml'
+            ]
         ];
     }
 
@@ -319,16 +311,16 @@ class LeadTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type'          => 'leads',
-                    'id'            => (string) $leadId,
+                    'id'            => (string)$leadId,
                     'relationships' => [
                         'account' => [
                             'data' => [
                                 'type' => 'accounts',
-                                'id'   => (string) $accountId,
-                            ],
-                        ],
-                    ],
-                ],
+                                'id'   => (string)$accountId
+                            ]
+                        ]
+                    ]
+                ]
             ]
         );
 
@@ -351,16 +343,16 @@ class LeadTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type'          => 'leads',
-                    'id'            => (string) $leadId,
+                    'id'            => (string)$leadId,
                     'relationships' => [
                         'customer' => [
                             'data' => [
                                 'type' => 'b2bcustomers',
-                                'id'   => (string) $customerId,
-                            ],
-                        ],
-                    ],
-                ],
+                                'id'   => (string)$customerId
+                            ]
+                        ]
+                    ]
+                ]
             ]
         );
 
@@ -386,14 +378,11 @@ class LeadTest extends RestJsonApiTestCase
             false
         );
 
-        self::assertResponseValidationError(
+        $this->assertResponseValidationError(
             [
-                'status' => '400',
                 'title'  => 'form constraint',
                 'detail' => 'The customer should be a part of the specified account.',
-                'source' => [
-                    'pointer' => '/data/relationships/customer/data'
-                ]
+                'source' => ['pointer' => '/data/relationships/customer/data']
             ],
             $response
         );
@@ -409,14 +398,11 @@ class LeadTest extends RestJsonApiTestCase
             false
         );
 
-        self::assertResponseValidationError(
+        $this->assertResponseValidationError(
             [
-                'status' => '400',
                 'title'  => 'not blank constraint',
                 'detail' => 'This value should not be blank.',
-                'source' => [
-                    'pointer' => '/data/relationships/status/data'
-                ]
+                'source' => ['pointer' => '/data/relationships/status/data']
             ],
             $response
         );
@@ -431,8 +417,8 @@ class LeadTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type' => 'accounts',
-                    'id'   => (string) $accountId,
-                ],
+                    'id'   => (string)$accountId
+                ]
             ]
         );
 
@@ -453,8 +439,8 @@ class LeadTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type' => 'b2bcustomers',
-                    'id'   => (string) $customerId,
-                ],
+                    'id'   => (string)$customerId
+                ]
             ]
         );
 
@@ -478,9 +464,8 @@ class LeadTest extends RestJsonApiTestCase
             false
         );
 
-        self::assertResponseValidationError(
+        $this->assertResponseValidationError(
             [
-                'status' => '400',
                 'title'  => 'not null constraint',
                 'detail' => 'This value should not be null.'
             ],
@@ -498,9 +483,8 @@ class LeadTest extends RestJsonApiTestCase
             false
         );
 
-        self::assertResponseValidationError(
+        $this->assertResponseValidationError(
             [
-                'status' => '400',
                 'title'  => 'not null constraint',
                 'detail' => 'This value should not be null.'
             ],

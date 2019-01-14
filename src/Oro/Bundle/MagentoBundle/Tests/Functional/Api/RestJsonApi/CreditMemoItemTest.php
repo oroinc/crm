@@ -8,43 +8,39 @@ use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 
 class CreditMemoItemTest extends RestJsonApiTestCase
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         parent::setUp();
         $this->loadFixtures([LoadMagentoChannel::class]);
     }
 
-    public function testGetCreditMemoItems()
+    public function testGetList()
     {
-        $entityType = $this->getEntityType(CreditMemoItem::class);
-        $response = $this->cget(['entity' => $entityType]);
-        $this->assertResponseContains(__DIR__.'/responses/get_credit_memo_items.yml', $response);
+        $response = $this->cget(['entity' => 'magentocreditmemoitems']);
+        $this->assertResponseContains('get_credit_memo_items.yml', $response);
     }
 
-    public function testGetCreditMemoItem()
+    public function testGet()
     {
-        $response = $this->get([
-            'entity' => $this->getEntityType(CreditMemoItem::class),
-            'id' => '<toString(@creditMemoItem->id)>',
-        ]);
-        $this->assertResponseContains(__DIR__.'/responses/get_credit_memo_item.yml', $response);
+        $response = $this->get(
+            ['entity' => 'magentocreditmemoitems', 'id' => '<toString(@creditMemoItem->id)>']
+        );
+        $this->assertResponseContains('get_credit_memo_item.yml', $response);
     }
 
-    public function testCreateCreditMemoItem()
+    public function testCreate()
     {
-        $entityType = $this->getEntityType(CreditMemoItem::class);
-
         $response = $this->post(
-            ['entity' => $entityType],
-            __DIR__.'/requests/create_credit_memo_item.yml'
+            ['entity' => 'magentocreditmemoitems'],
+            'create_credit_memo_item.yml'
         );
 
+        $creditMemoItemId = (int)$this->getResourceId($response);
+        $responseContent = $this->updateResponseContent('create_credit_memo_item.yml', $response);
+        $this->assertResponseContains($responseContent, $response);
+
         /** @var CreditMemoItem $creditMemoItem */
-        $creditMemoItem = $this->doctrineHelper->getEntityRepository(CreditMemoItem::class)->findOneByOriginId('141');
-        $this->assertResponseContains(__DIR__.'/responses/create_credit_memo_item.yml', $response, $creditMemoItem);
+        $creditMemoItem = $this->getEntityManager()->find(CreditMemoItem::class, $creditMemoItemId);
         $this->assertEquals('sku', $creditMemoItem->getSku());
         $this->assertSame($this->getReference('creditMemo')->getId(), $creditMemoItem->getParent()->getId());
     }
