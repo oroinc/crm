@@ -52,7 +52,7 @@ class SalesContext extends OroFeatureContext implements
         $this->waitForAjax();
 
         /** @var Grid $grid */
-        $grid = $this->createElement('Grid');
+        $grid = $this->createElement('ChannelEntitiesGrid');
         $channelEntities = array_map('trim', explode(',', $entities));
         $rowsForDelete = [];
 
