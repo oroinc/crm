@@ -67,7 +67,7 @@ oro_behat_extension:
         type: xpath
 
     CustomerOpportunitiesGrid:
-      selector: "div[id^='grid-sales-b2bcustomer-opportunities-grid-customer'] div.grid-container"
+      selector: "div[id^='grid-sales-b2bcustomer-opportunities-grid-customer']"
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
 
     OpportunityProbabilitiesConfigForm:
@@ -140,7 +140,7 @@ oro_behat_extension:
             element: PrettyCheckbox
 
     Customer Quotes Grid:
-      selector: '.grid-container'
+      selector: '.frontend-datagrid'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendGrid
 
     Quote View Grid:
@@ -268,6 +268,10 @@ oro_behat_extension:
       selector:
         type: 'xpath'
         locator: '//div[@class="widget-actions-section"]/..//button[contains(text(),"Save")]'
+
+    ChannelEntitiesGrid:
+      selector: 'div.grid-container'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
 
   pages:
     Opportunity Index:
