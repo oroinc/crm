@@ -152,8 +152,7 @@ oro_behat_extension:
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
       options:
         mapping:
-          Locale Use Default: 'localization[oro_locale___locale][use_parent_scope_value]'
-          Locale: 'localization[oro_locale___locale][value]'
+          Default Localization: 'localization[oro_locale___default_localization][value]'
           Primary Location Use Default: 'localization[oro_locale___country][use_parent_scope_value]'
           Primary Location: 'localization[oro_locale___country][value]'
 
