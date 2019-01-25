@@ -3,56 +3,35 @@ namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Repository\BusinessUnitRepository;
+use Oro\Bundle\OrganizationBundle\Entity\Repository\OrganizationRepository;
 
-class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInterface
+/**
+ * Loads business units.
+ */
+class LoadBusinessUnitData extends AbstractFixture
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /** @var  EntityRepository */
-    protected $businessUnitRepository;
-
-    /** @var  EntityRepository */
-    protected $organizationRepository;
-
-    /** @var  EntityManager */
-    protected $organizationManager;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-
-        $this->organizationManager = $container->get('doctrine')->getManager();
-
-        $this->businessUnitRepository = $this->organizationManager->getRepository('OroOrganizationBundle:BusinessUnit');
-        $this->organizationRepository = $this->organizationManager->getRepository('OroOrganizationBundle:Organization');
-    }
-
     /**
      * {@inheritDoc}
      */
     public function load(ObjectManager $manager)
     {
+        /** @var OrganizationRepository $organizationRepository */
+        $organizationRepository = $manager->getRepository('OroOrganizationBundle:Organization');
+        /** @var BusinessUnitRepository $businessUnitRepository */
+        $businessUnitRepository = $manager->getRepository('OroOrganizationBundle:BusinessUnit');
+
         /** @var Organization $organization */
-        $organization = $this->organizationRepository->getFirst();
+        $organization = $organizationRepository->getFirst();
 
         $this->addReference('default_organization', $organization);
 
         /** @var BusinessUnit $oroMain */
-        $oroMain = $this->businessUnitRepository->findOneBy(array('name' => 'Main'));
+        $oroMain = $businessUnitRepository->findOneBy(array('name' => 'Main'));
         if (!$oroMain) {
-            $oroMain = $this->businessUnitRepository->findOneBy(array('name' => 'Acme, General'));
+            $oroMain = $businessUnitRepository->findOneBy(array('name' => 'Acme, General'));
         }
 
         if (!$oroMain) {
@@ -63,7 +42,8 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
         $oroMain->setEmail('general@acme.inc');
         $oroMain->setPhone('798-682-5917');
 
-        $this->persistAndFlush($this->organizationManager, $oroMain);
+        $manager->persist($oroMain);
+        $manager->flush();
 
         $this->addReference('default_main_business', $oroMain);
 
@@ -81,7 +61,7 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
             ->setPhone('798-682-5918')
             ->setOwner($oroMain);
 
-        $this->persist($this->organizationManager, $oroUnit);
+        $manager->persist($oroUnit);
         $this->addReference('default_crm_business', $oroUnit);
 
         $mageCoreUnit
@@ -92,26 +72,9 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
             ->setPhone('798-682-5919')
             ->setOwner($oroMain);
 
-        $this->persistAndFlush($this->organizationManager, $mageCoreUnit);
-        $this->addReference('default_core_business', $mageCoreUnit);
-    }
-
-    /**
-     * @param EntityManager $manager
-     * @param mixed         $object
-     */
-    private function persistAndFlush($manager, $object)
-    {
-        $manager->persist($object);
+        $manager->persist($mageCoreUnit);
         $manager->flush();
-    }
 
-    /**
-     * @param EntityManager $manager
-     * @param mixed         $object
-     */
-    private function persist($manager, $object)
-    {
-        $manager->persist($object);
+        $this->addReference('default_core_business', $mageCoreUnit);
     }
 }

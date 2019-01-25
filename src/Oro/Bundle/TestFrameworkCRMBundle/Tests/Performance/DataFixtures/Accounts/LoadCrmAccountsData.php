@@ -5,8 +5,7 @@ namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\DataFixtures;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
@@ -18,7 +17,6 @@ use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\ContactBundle\Entity\Source;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\UserBundle\Entity\UserManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -27,49 +25,28 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     const FLUSH_MAX = 20;
     const MAX_RECORDS = 10000;
 
-    protected $maxRecords;
+    private $maxRecords;
 
     /** @var ContainerInterface */
-    protected $container;
+    private $container;
 
-    /** @var Account Manager */
-    protected $accountManager;
-
-    /** @var EntityRepository */
-    protected $accountRepository;
-
-    /** @var EntityManager */
-    protected $contactManager;
-
-    /** @var EntityRepository */
-    protected $contactRepository;
-
-    /** @var UserManager */
-    protected $userManager;
-
-    /** @var EntityRepository */
-    protected $userRepository;
-
-    /** @var EntityRepository */
-    protected $countryRepository;
+    /** @var EntityManagerInterface */
+    private $em;
 
     /** @var Group[] */
-    protected $contactGroups;
+    private $contactGroups;
 
     /** @var Source[] */
-    protected $contactSources;
+    private $contactSources;
 
     /** @var User[] */
-    protected $users;
+    private $users;
 
     /** @var Country[] */
-    protected $countries;
-
-    /** @var EntityManager */
-    protected $organizationManager;
+    private $countries;
 
     /** @var  Organization */
-    protected $organization;
+    private $organization;
 
     /**
      * {@inheritDoc}
@@ -84,13 +61,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
             $this->maxRecords = self::MAX_RECORDS;
         }
 
-        $this->accountManager = $container->get('doctrine.orm.entity_manager');
-
-        $this->contactManager = $container->get('doctrine.orm.entity_manager');
-
-        $this->userManager = $container->get('oro_user.manager');
-
-        $this->organizationManager = $container->get('doctrine')->getManager();
+        $this->em = $container->get('doctrine')->getManager();
 
         $this->initSupportingEntities();
     }
@@ -98,18 +69,13 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     /**
      * Initialize all supporting entities
      */
-    protected function initSupportingEntities()
+    private function initSupportingEntities()
     {
-        $this->contactGroups = $this->contactManager->getRepository('OroContactBundle:Group')->findAll();
-        $this->contactSources = $this->contactManager->getRepository('OroContactBundle:Source')->findAll();
-
-        $userStorageManager = $this->userManager->getStorageManager();
-        $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $userStorageManager->getRepository('OroAddressBundle:Country')->findAll();
-
-        $this->organization = $this->organizationManager
-            ->getRepository('OroOrganizationBundle:Organization')
-            ->getFirst();
+        $this->contactGroups = $this->em->getRepository('OroContactBundle:Group')->findAll();
+        $this->contactSources = $this->em->getRepository('OroContactBundle:Source')->findAll();
+        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
+        $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
+        $this->organization = $this->em->getRepository('OroOrganizationBundle:Organization')->getFirst();
     }
 
     /**
@@ -162,14 +128,13 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                     $account->setOwner($user);
                     $account->setOrganization($this->organization);
 
-                    $this->persist($this->accountManager, $account);
-                    $this->contactManager->persist($contact);
+                    $this->em->persist($account);
+                    $this->em->persist($contact);
 
                     $loadedRecords++;
                     if ($loadedRecords % self::FLUSH_MAX == 0) {
-                        $this->flush($this->accountManager);
-                        $this->contactManager->flush();
-                        $this->contactManager->clear();
+                        $this->em->flush();
+                        $this->em->clear();
 
                         $this->initSupportingEntities();
 
@@ -185,8 +150,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                 fclose($handle);
             }
             $iteration++;
-            $this->flush($this->accountManager);
-            $this->contactManager->flush();
+            $this->em->flush();
         }
         $avg = $averageTime * self::FLUSH_MAX / $loadedRecords;
         echo ">> Average time: " . $avg . "\n";
@@ -282,26 +246,5 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
         $contact->addAddress($address);
         return $contact;
-    }
-
-    /**
-     * Persist object
-     *
-     * @param mixed $manager
-     * @param mixed $object
-     */
-    private function persist($manager, $object)
-    {
-        $manager->persist($object);
-    }
-
-    /**
-     * Flush objects
-     *
-     * @param mixed $manager
-     */
-    private function flush($manager)
-    {
-        $manager->flush();
     }
 }

@@ -5,9 +5,10 @@ namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\DataFixtures;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -17,40 +18,38 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
 {
     const USERS_NUMBER  = 200;
 
-    /**
-     * @var UserManager
-     */
-    protected $userManager;
+    /** @var EntityManagerInterface */
+    private $em;
 
-    /**
-     * @var EntityRepository
-     */
-    protected $userRepository;
+    /** @var UserManager */
+    private $userManager;
 
-    protected $firstNamesDictionary = null;
-    protected $lastNamesDictionary = null;
-    protected $role;
-    /** @var  BusinessUnit */
-    protected $businessUnit;
-    protected $businessUnitManager;
-    protected $organization;
+    /** @var array|null */
+    private $firstNamesDictionary;
+
+    /** @var array|null */
+    private $lastNamesDictionary;
+
+    /** @var Role */
+    private $role;
+
+    /** @var BusinessUnit */
+    private $businessUnit;
+
+    /** @var Organization */
+    private $organization;
 
     /**
      * {@inheritDoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->userManager         = $container->get('oro_user.manager');
-        $this->userRepository      = $this->userManager->getRepository();
-        $this->role                = $this->userManager->getStorageManager()->getRepository('OroUserBundle:Role')
+        $this->userManager = $container->get('oro_user.manager');
+        $this->em = $container->get('doctrine')->getManager();
+        $this->role = $this->em->getRepository('OroUserBundle:Role')
             ->findBy(array('role' => 'ROLE_ADMINISTRATOR'));
-        $this->businessUnitManager = $container->get('oro_organization.business_unit_manager');
-        $this->businessUnit        = $this->businessUnitManager->getBusinessUnitRepo()->findAll();
-        $this->businessUnit        = $this->businessUnit[0];
-        $organizationManager = $container->get('doctrine')->getManager();
-        $organizationRepository = $organizationManager->getRepository('OroOrganizationBundle:Organization');
-
-        $this->organization = $organizationRepository->getFirst();
+        $this->businessUnit = $this->em->getRepository('OroOrganizationBundle:BusinessUnit')->getFirst();
+        $this->organization = $this->em->getRepository('OroOrganizationBundle:Organization')->getFirst();
     }
 
     /**
@@ -59,6 +58,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
     public function load(ObjectManager $manager)
     {
         $this->loadUsers();
+        $manager->flush();
     }
 
     /**
@@ -90,7 +90,6 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
             $this->userManager->updatePassword($user);
             $this->userManager->updateUser($user);
         }
-        $this->flush();
     }
 
     /**
@@ -251,26 +250,5 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
 
         // Convert back to desired date format
         return new \DateTime(date('Y-m-d', $val), new \DateTimeZone('UTC'));
-    }
-
-    /**
-     * Persist object
-     *
-     * @param mixed $object
-     * @return void
-     */
-    private function persist($object)
-    {
-        $this->userManager->getStorageManager()->persist($object);
-    }
-
-    /**
-     * Flush objects
-     *
-     * @return void
-     */
-    private function flush()
-    {
-        $this->userManager->getStorageManager()->flush();
     }
 }

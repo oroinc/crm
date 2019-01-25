@@ -13,6 +13,9 @@ use Oro\Bundle\UserBundle\Entity\UserManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Loads pin tabs.
+ */
 class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /**
@@ -73,9 +76,8 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
 
     protected function initSupportingEntities()
     {
-        $this->em = $this->container->get('doctrine.orm.entity_manager');
-        $userStorageManager = $this->userManager->getStorageManager();
-        $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();
+        $this->em = $this->container->get('doctrine')->getManager();
+        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
     }
 
     public function loadUsersTags()
@@ -136,31 +138,10 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                 $param['user'] = $user;
                 $pinTab = $this->navigationFactory->createItem($param['type'], $param);
                 $pinTab->getItem()->setOrganization($organization);
-                $this->persist($this->em, $pinTab);
+                $this->em->persist($pinTab);
             }
             $tokenStorage->setToken(null);
         }
-        $this->flush($this->em);
-    }
-
-    /**
-     * Persist object
-     *
-     * @param mixed $manager
-     * @param mixed $object
-     */
-    private function persist($manager, $object)
-    {
-        $manager->persist($object);
-    }
-
-    /**
-     * Flush objects
-     *
-     * @param mixed $manager
-     */
-    private function flush($manager)
-    {
-        $manager->flush();
+        $this->em->flush();
     }
 }
