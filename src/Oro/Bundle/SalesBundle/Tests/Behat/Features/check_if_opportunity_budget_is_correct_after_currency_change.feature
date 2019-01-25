@@ -1,4 +1,5 @@
 @fixture-OroSalesBundle:OpportunityWithBudgetFixture.yml
+@fixture-OroLocaleBundle:DutchLocalization.yml
 Feature: Check if Opportunity budget is correct after currency change
   In order to have correct values
   as a Administrator
@@ -15,8 +16,8 @@ Feature: Check if Opportunity budget is correct after currency change
     Given I go to System/Configuration
     And I follow "System Configuration/General Setup/Localization" on configuration sidebar
     And I fill "Configuration Localization Form" with:
-      | Locale Use Default           | false       |
-      | Locale                       | Dutch       |
+      | Enabled Localizations        | Dutch       |
+      | Default Localization         | Dutch       |
       | Primary Location Use Default | false       |
       | Primary Location             | Netherlands |
     And I click "Save settings"

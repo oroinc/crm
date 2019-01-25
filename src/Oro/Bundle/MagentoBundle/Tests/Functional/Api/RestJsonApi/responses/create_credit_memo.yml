@@ -1,6 +1,6 @@
 data:
     type: magentocreditmemos
-    id: '<toString(@entity->id)>'
+    id: new
     attributes:
         incrementId: '100000002'
         originId: 2
@@ -34,4 +34,4 @@ data:
         status:
             data:
                 type: magentocreditmemostatuses
-                id: '2'
+                id: '<toString(@creditMemoStatus_Refunded->id)>'

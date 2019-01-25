@@ -8,7 +8,7 @@ branches:
     - /^\d+\.\d+$/
 
 php:
-    - 7.1
+    - 7.1.17
 
 cache:
   directories:
@@ -23,6 +23,6 @@ before_script:
 
 script:
   - ./vendor/bin/phpunit
-  - ./vendor/bin/phpcs ./src -p --encoding=utf-8 --extensions=php --standard=./vendor/oro/platform/build/phpcs.xml
+  - ./vendor/bin/phpcs ./src -p --encoding=utf-8 --extensions=php --standard=./vendor/oro/platform/build/Oro/phpcs.xml
   - ./vendor/bin/php-cs-fixer fix --dry-run --config=./vendor/oro/platform/build/.php_cs --path-mode=intersection ./src
   - if [[ $DIFF ]]; then ./vendor/bin/phpmd ${DIFF//$'\n'/,} text ./vendor/oro/platform/build/phpmd.xml --suffixes php; fi

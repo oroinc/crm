@@ -1,6 +1,6 @@
 data:
     type: magentocreditmemoitems
-    id: '<toString(@entity->id)>'
+    id: new
     attributes:
         originId: 141
         qty: 1

@@ -38,56 +38,54 @@ class OpportunityTest extends RestJsonApiTestCase
         return [
             'without parameters'                                         => [
                 'parameters'      => [],
-                'expectedContent' => 'opportunity_cget.yml',
+                'expectedContent' => 'opportunity_cget.yml'
             ],
             'filter by status'                                           => [
                 'parameters'      => [
-                    'filter' => [
-                        'status' => 'won',
-                    ],
+                    'filter' => ['status' => 'won']
                 ],
-                'expectedContent' => 'opportunity_cget_filter_by_status.yml',
+                'expectedContent' => 'opportunity_cget_filter_by_status.yml'
             ],
             'fields and include filters for customer association'        => [
                 'parameters'      => [
                     'fields[opportunities]' => 'account,customer',
-                    'include'               => 'account,customer',
+                    'include'               => 'account,customer'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association.yml',
+                'expectedContent' => 'opportunity_cget_customer_association.yml'
             ],
             'title for customer association'                             => [
                 'parameters'      => [
                     'meta'                  => 'title',
                     'fields[opportunities]' => 'account,customer',
-                    'include'               => 'account,customer',
+                    'include'               => 'account,customer'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association_title.yml',
+                'expectedContent' => 'opportunity_cget_customer_association_title.yml'
             ],
             'fields and include filters for nested customer association' => [
                 'parameters'      => [
                     'fields[opportunities]' => 'lead',
                     'fields[leads]'         => 'account,customer',
-                    'include'               => 'lead.account,lead.customer',
+                    'include'               => 'lead.account,lead.customer'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association_nested.yml',
+                'expectedContent' => 'opportunity_cget_customer_association_nested.yml'
             ],
             'title for nested customer association'                      => [
                 'parameters'      => [
                     'meta'                  => 'title',
                     'fields[opportunities]' => 'lead',
                     'fields[leads]'         => 'account,customer',
-                    'include'               => 'lead.account,lead.customer',
+                    'include'               => 'lead.account,lead.customer'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association_nested_title.yml',
+                'expectedContent' => 'opportunity_cget_customer_association_nested_title.yml'
             ],
             'title for close reason and status'                          => [
                 'parameters'      => [
                     'meta'                  => 'title',
                     'fields[opportunities]' => 'closeReason,status',
-                    'include'               => 'closeReason,status',
+                    'include'               => 'closeReason,status'
                 ],
-                'expectedContent' => 'opportunity_cget_dictionary_title.yml',
-            ],
+                'expectedContent' => 'opportunity_cget_dictionary_title.yml'
+            ]
         ];
     }
 
@@ -123,9 +121,8 @@ class OpportunityTest extends RestJsonApiTestCase
             false
         );
 
-        self::assertResponseValidationError(
+        $this->assertResponseValidationError(
             [
-                'status' => '400',
                 'title'  => 'form constraint',
                 'detail' => 'Either an account or a customer should be set.'
             ],
@@ -142,14 +139,11 @@ class OpportunityTest extends RestJsonApiTestCase
             false
         );
 
-        self::assertResponseValidationError(
+        $this->assertResponseValidationError(
             [
-                'status' => '400',
                 'title'  => 'form constraint',
                 'detail' => 'The customer should be a part of the specified account.',
-                'source' => [
-                    'pointer' => '/data/relationships/customer/data'
-                ]
+                'source' => ['pointer' => '/data/relationships/customer/data']
             ],
             $response
         );
@@ -234,21 +228,21 @@ class OpportunityTest extends RestJsonApiTestCase
         return [
             'without parameters'         => [
                 'parameters'      => [],
-                'expectedContent' => 'opportunity_get_subresource_account.yml',
+                'expectedContent' => 'opportunity_get_subresource_account.yml'
             ],
             'fields and include filters' => [
                 'parameters'      => [
                     'fields[accounts]' => 'organization',
-                    'include'          => 'organization',
+                    'include'          => 'organization'
                 ],
-                'expectedContent' => 'opportunity_get_subresource_account_include.yml',
+                'expectedContent' => 'opportunity_get_subresource_account_include.yml'
             ],
             'title meta'                 => [
                 'parameters'      => [
-                    'meta' => 'title',
+                    'meta' => 'title'
                 ],
-                'expectedContent' => 'opportunity_get_subresource_account_title.yml',
-            ],
+                'expectedContent' => 'opportunity_get_subresource_account_title.yml'
+            ]
         ];
     }
 
@@ -293,21 +287,21 @@ class OpportunityTest extends RestJsonApiTestCase
         return [
             'without parameters'         => [
                 'parameters'      => [],
-                'expectedContent' => 'opportunity_get_subresource_customer.yml',
+                'expectedContent' => 'opportunity_get_subresource_customer.yml'
             ],
             'fields and include filters' => [
                 'parameters'      => [
                     'fields[b2bcustomers]' => 'organization',
-                    'include'              => 'organization',
+                    'include'              => 'organization'
                 ],
-                'expectedContent' => 'opportunity_get_subresource_customer_include.yml',
+                'expectedContent' => 'opportunity_get_subresource_customer_include.yml'
             ],
             'title meta'                 => [
                 'parameters'      => [
-                    'meta' => 'title',
+                    'meta' => 'title'
                 ],
-                'expectedContent' => 'opportunity_get_subresource_customer_title.yml',
-            ],
+                'expectedContent' => 'opportunity_get_subresource_customer_title.yml'
+            ]
         ];
     }
 
@@ -320,16 +314,16 @@ class OpportunityTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type'          => 'opportunities',
-                    'id'            => (string) $opportunityId,
+                    'id'            => (string)$opportunityId,
                     'relationships' => [
                         'lead' => [
                             'data' => [
                                 'type' => 'leads',
-                                'id'   => (string) $leadId,
-                            ],
-                        ],
-                    ],
-                ],
+                                'id'   => (string)$leadId
+                            ]
+                        ]
+                    ]
+                ]
             ]
         );
 
@@ -351,16 +345,16 @@ class OpportunityTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type'          => 'opportunities',
-                    'id'            => (string) $opportunityId,
+                    'id'            => (string)$opportunityId,
                     'relationships' => [
                         'account' => [
                             'data' => [
                                 'type' => 'accounts',
-                                'id'   => (string) $accountId,
-                            ],
-                        ],
-                    ],
-                ],
+                                'id'   => (string)$accountId
+                            ]
+                        ]
+                    ]
+                ]
             ]
         );
 
@@ -383,16 +377,16 @@ class OpportunityTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type'          => 'opportunities',
-                    'id'            => (string) $opportunityId,
+                    'id'            => (string)$opportunityId,
                     'relationships' => [
                         'customer' => [
                             'data' => [
                                 'type' => 'b2bcustomers',
-                                'id'   => (string) $customerId,
-                            ],
-                        ],
-                    ],
-                ],
+                                'id'   => (string)$customerId
+                            ]
+                        ]
+                    ]
+                ]
             ]
         );
 
@@ -418,14 +412,11 @@ class OpportunityTest extends RestJsonApiTestCase
             false
         );
 
-        self::assertResponseValidationError(
+        $this->assertResponseValidationError(
             [
-                'status' => '400',
                 'title'  => 'form constraint',
                 'detail' => 'The customer should be a part of the specified account.',
-                'source' => [
-                    'pointer' => '/data/relationships/customer/data'
-                ]
+                'source' => ['pointer' => '/data/relationships/customer/data']
             ],
             $response
         );
@@ -440,8 +431,8 @@ class OpportunityTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type' => 'leads',
-                    'id'   => (string) $leadId,
-                ],
+                    'id'   => (string)$leadId
+                ]
             ]
         );
 
@@ -461,8 +452,8 @@ class OpportunityTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type' => 'accounts',
-                    'id'   => (string) $accountId,
-                ],
+                    'id'   => (string)$accountId
+                ]
             ]
         );
 
@@ -483,8 +474,8 @@ class OpportunityTest extends RestJsonApiTestCase
             [
                 'data' => [
                     'type' => 'b2bcustomers',
-                    'id'   => (string) $customerId,
-                ],
+                    'id'   => (string)$customerId
+                ]
             ]
         );
 
@@ -508,9 +499,8 @@ class OpportunityTest extends RestJsonApiTestCase
             false
         );
 
-        self::assertResponseValidationError(
+        $this->assertResponseValidationError(
             [
-                'status' => '400',
                 'title'  => 'not null constraint',
                 'detail' => 'This value should not be null.'
             ],
@@ -528,12 +518,10 @@ class OpportunityTest extends RestJsonApiTestCase
             false
         );
 
-        self::assertResponseValidationError(
+        $this->assertResponseValidationError(
             [
-                'status' => '400',
                 'title'  => 'not null constraint',
                 'detail' => 'This value should not be null.'
-
             ],
             $response
         );

@@ -8,43 +8,36 @@ use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 
 class CreditMemoTest extends RestJsonApiTestCase
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         parent::setUp();
         $this->loadFixtures([LoadMagentoChannel::class]);
     }
 
-    public function testGetCreditMemos()
+    public function testGetList()
     {
-        $entityType = $this->getEntityType(CreditMemo::class);
-        $response = $this->cget(['entity' => $entityType]);
-        $this->assertResponseContains(__DIR__.'/responses/get_credit_memos.yml', $response);
+        $response = $this->cget(['entity' => 'magentocreditmemos']);
+        $this->assertResponseContains('get_credit_memos.yml', $response);
     }
 
-    public function testGetCreditMemo()
+    public function testGet()
     {
-        $response = $this->get([
-            'entity' => $this->getEntityType(CreditMemo::class),
-            'id' => '<toString(@creditMemo->id)>',
-        ]);
-        $this->assertResponseContains(__DIR__.'/responses/get_credit_memo.yml', $response);
+        $response = $this->get(
+            ['entity' => 'magentocreditmemos', 'id' => '<toString(@creditMemo->id)>']
+        );
+        $this->assertResponseContains('get_credit_memo.yml', $response);
     }
 
-    public function testUpdateCreditMemo()
+    public function testUpdate()
     {
-        /** @var CreditMemo $creditMemo */
-        $creditMemo = $this->getReference('creditMemo');
+        $creditMemoId = $this->getReference('creditMemo')->getId();
 
-        $entityType = $this->getEntityType(CreditMemo::class);
         $this->patch(
-            ['entity' => $entityType, 'id' => $creditMemo->getId()],
+            ['entity' => 'magentocreditmemos', 'id' => (string)$creditMemoId],
             [
                 'data' => [
-                    'type' => $entityType,
-                    'id' => (string) $creditMemo->getId(),
+                    'type'       => 'magentocreditmemos',
+                    'id'         => (string)$creditMemoId,
                     'attributes' => [
                         'transactionId' => '100000XT'
                     ]
@@ -52,33 +45,27 @@ class CreditMemoTest extends RestJsonApiTestCase
             ]
         );
 
-        $creditMemo = $this->getCreditMemoRepository()->find($creditMemo->getId());
+        /** @var CreditMemo $creditMemo */
+        $creditMemo = $this->getEntityManager()->find(CreditMemo::class, $creditMemoId);
         $this->assertEquals('100000XT', $creditMemo->getTransactionId());
     }
 
-    public function testCreateCreditMemo()
+    public function testCreate()
     {
-        $entityType = $this->getEntityType(CreditMemo::class);
-
         $response = $this->post(
-            ['entity' => $entityType],
-            __DIR__.'/requests/create_credit_memo.yml'
+            ['entity' => 'magentocreditmemos'],
+            'create_credit_memo.yml'
         );
 
+        $creditMemoId = (int)$this->getResourceId($response);
+        $responseContent = $this->updateResponseContent('create_credit_memo.yml', $response);
+        $this->assertResponseContains($responseContent, $response);
+
         /** @var CreditMemo $creditMemo */
-        $creditMemo = $this->getCreditMemoRepository()->findOneByOriginId('2');
-        $this->assertResponseContains(__DIR__.'/responses/create_credit_memo.yml', $response, $creditMemo);
+        $creditMemo = $this->getEntityManager()->find(CreditMemo::class, $creditMemoId);
         $this->assertSame($this->getReference('organization')->getId(), $creditMemo->getOrganization()->getId());
         $this->assertSame($this->getReference('user')->getId(), $creditMemo->getOwner()->getId());
         $this->assertSame($this->getReference('guestOrder')->getId(), $creditMemo->getOrder()->getId());
         $this->assertSame($this->getReference('store')->getId(), $creditMemo->getStore()->getId());
-    }
-
-    /**
-     * @return \Doctrine\ORM\EntityRepository
-     */
-    protected function getCreditMemoRepository()
-    {
-        return $this->doctrineHelper->getEntityRepository(CreditMemo::class);
     }
 }
