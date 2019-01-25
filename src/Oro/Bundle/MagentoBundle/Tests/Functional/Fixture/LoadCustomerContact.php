@@ -37,7 +37,7 @@ class LoadCustomerContact extends AbstractFixture implements DependentFixtureInt
 
         /** @var UserManager $userManager */
         $userManager = $this->container->get('oro_user.manager');
-        $admin       = $userManager->loadUserByUsername('admin');
+        $admin = $userManager->findUserByUsername('admin');
         $this->setReference('admin_user', $admin);
         $contact->setOwner($admin);
 
