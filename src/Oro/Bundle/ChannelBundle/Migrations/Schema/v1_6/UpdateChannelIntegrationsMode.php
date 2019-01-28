@@ -4,7 +4,6 @@ namespace Oro\Bundle\ChannelBundle\Migrations\Schema\v1_6;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 use Psr\Log\LoggerInterface;

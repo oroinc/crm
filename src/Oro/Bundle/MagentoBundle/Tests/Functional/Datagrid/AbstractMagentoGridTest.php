@@ -5,7 +5,6 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Datagrid;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\UserBundle\Tests\Functional\DataFixtures\LoadUserACLData;
 
 abstract class AbstractMagentoGridTest extends WebTestCase
 {

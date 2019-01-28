@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 
 class RegionRepository extends EntityRepository

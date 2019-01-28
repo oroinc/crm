@@ -4,7 +4,6 @@ namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\MagentoBundle\Model\ExtendCreditMemoItem;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 

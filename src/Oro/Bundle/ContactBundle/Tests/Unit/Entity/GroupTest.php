@@ -2,9 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\ContactBundle\Entity\Group;
-use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 

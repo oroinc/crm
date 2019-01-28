@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
-use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableIterator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;

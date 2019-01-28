@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Builder;
 
-use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;

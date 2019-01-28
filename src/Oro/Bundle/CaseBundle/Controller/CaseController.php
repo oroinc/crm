@@ -4,7 +4,6 @@ namespace Oro\Bundle\CaseBundle\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
-use Oro\Bundle\CaseBundle\Entity\CasePriority;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

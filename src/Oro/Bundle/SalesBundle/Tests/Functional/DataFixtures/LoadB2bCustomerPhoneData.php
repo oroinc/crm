@@ -6,7 +6,6 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
-use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
 
 class LoadB2bCustomerPhoneData extends AbstractFixture implements DependentFixtureInterface
 {
