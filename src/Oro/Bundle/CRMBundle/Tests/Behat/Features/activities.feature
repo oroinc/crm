@@ -225,7 +225,7 @@ Feature: Activities
     And go to Activities/ Calendar Events
     And should see following grid:
       | Title                   | Calendar | Start                  | End                    | Recurrent | Recurrence | Invitation status |
-      | All day no repeat Event | John Doe | Jan 24, 2017, 12:00 AM | Feb 26, 2020, 12:00 AM | No        | N/A        | Not responded     |
+      | All day no repeat Event | John Doe | Jan 24, 2017, 12:00 AM | Feb 26, 2020, 11:59 PM | No        | N/A        | Not responded     |
 
   Scenario: Add an event for Another Record
     Given go to Sales/ Leads
