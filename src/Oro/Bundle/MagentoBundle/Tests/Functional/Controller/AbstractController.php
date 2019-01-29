@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 abstract class AbstractController extends WebTestCase

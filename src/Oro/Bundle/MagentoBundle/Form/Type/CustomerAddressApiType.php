@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
-use Oro\Bundle\MagentoBundle\Form\Type\CustomerSelectType;
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
 use Symfony\Component\Form\AbstractType;

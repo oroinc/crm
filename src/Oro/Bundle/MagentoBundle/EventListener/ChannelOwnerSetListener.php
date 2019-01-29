@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Query;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Event\DefaultOwnerSetEvent;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;

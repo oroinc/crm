@@ -3,7 +3,6 @@
 namespace Oro\Bundle\AccountBundle\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;

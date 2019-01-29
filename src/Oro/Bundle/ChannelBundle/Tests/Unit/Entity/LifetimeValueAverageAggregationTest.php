@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
-use Carbon\Carbon;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 
 class LifetimeValueAverageAggregationTest extends AbstractEntityTestCase

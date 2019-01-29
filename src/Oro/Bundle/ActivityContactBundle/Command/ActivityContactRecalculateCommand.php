@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Command;
 
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;

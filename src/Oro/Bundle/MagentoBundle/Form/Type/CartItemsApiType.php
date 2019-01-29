@@ -5,7 +5,6 @@ namespace Oro\Bundle\MagentoBundle\Form\Type;
 use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
 use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\MagentoBundle\Form\EventListener\CartItemApiFormSubscriber;
-use Oro\Bundle\MagentoBundle\Form\Type\CartSelectType;
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;

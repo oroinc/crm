@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
 use Oro\Bundle\CaseBundle\Entity\CasePriority;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
-use Oro\Bundle\CaseBundle\Form\Type\CaseMailboxProcessSettingsTagType;
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
