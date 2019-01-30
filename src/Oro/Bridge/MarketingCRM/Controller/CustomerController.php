@@ -29,7 +29,6 @@ class CustomerController extends Controller
         $customerIds = $request->query->filter(
             'customerIds',
             [],
-            false,
             FILTER_VALIDATE_INT,
             FILTER_REQUIRE_ARRAY
         );
