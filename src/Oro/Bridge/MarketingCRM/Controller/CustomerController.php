@@ -33,6 +33,10 @@ class CustomerController extends Controller
             FILTER_REQUIRE_ARRAY
         );
 
-        return ['customerIds' => $customerIds];
+        $customerIds = array_filter($customerIds, function ($value) {
+            return $value !== false;
+        });
+
+        return ['customerIds' => count($customerIds) ? $customerIds : false];
     }
 }
