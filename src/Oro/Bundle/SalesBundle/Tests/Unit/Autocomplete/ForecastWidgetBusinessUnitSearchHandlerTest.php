@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Autocomplete;
 
 use Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler;
+use Oro\Bundle\SearchBundle\Provider\SearchMappingProvider;
 
 class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -31,6 +32,9 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testApplyBusinessUnitAcl()
     {
         $actualElements = [
@@ -118,7 +122,13 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
         $managerRegistry->expects($this->once())->method('getManagerForClass')->with(self::TEST_ENTITY_NAME)
             ->will($this->returnValue($em));
 
-        $this->handler->initSearchIndexer($indexer, [self::TEST_ENTITY_NAME => ['alias' => self::TEST_ENTITY_ALIAS]]);
+        $searchMappingProvider = $this->createMock(SearchMappingProvider::class);
+        $searchMappingProvider->expects($this->once())
+            ->method('getEntityAlias')
+            ->with(self::TEST_ENTITY_NAME)
+            ->willReturn(self::TEST_ENTITY_ALIAS);
+
+        $this->handler->initSearchIndexer($indexer, $searchMappingProvider);
         $this->handler->initDoctrinePropertiesByManagerRegistry($managerRegistry);
 
         //the main filter check

@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Autocomplete;
 
 use Oro\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
+use Oro\Bundle\SearchBundle\Provider\SearchMappingProvider;
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Query\Result;
 
@@ -72,7 +73,13 @@ class ChannelLimitationHandlerTest extends \PHPUnit\Framework\TestCase
         $managerRegistry->expects($this->once())->method('getManagerForClass')->with(self::TEST_ENTITY_NAME)
             ->will($this->returnValue($em));
 
-        $this->handler->initSearchIndexer($indexer, [self::TEST_ENTITY_NAME => ['alias' => self::TEST_ENTITY_ALIAS]]);
+        $searchMappingProvider = $this->createMock(SearchMappingProvider::class);
+        $searchMappingProvider->expects($this->once())
+            ->method('getEntityAlias')
+            ->with(self::TEST_ENTITY_NAME)
+            ->willReturn(self::TEST_ENTITY_ALIAS);
+
+        $this->handler->initSearchIndexer($indexer, $searchMappingProvider);
         $this->handler->initDoctrinePropertiesByManagerRegistry($managerRegistry);
 
         $query        = new Query();

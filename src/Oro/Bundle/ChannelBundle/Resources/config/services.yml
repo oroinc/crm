@@ -184,7 +184,7 @@ services:
         class: '%oro_channel.autocomplete.channel_limitation_handler.class%'
         calls:
             - [initDoctrinePropertiesByManagerRegistry, ["@doctrine"]]
-            - [initSearchIndexer, ["@oro_search.index", '%oro_search.entities_config%']]
+            - [initSearchIndexer, ["@oro_search.index", '@oro_search.provider.search_mapping']]
             - [setAclHelper,["@oro_security.acl_helper"]]
 
     # config resolver
