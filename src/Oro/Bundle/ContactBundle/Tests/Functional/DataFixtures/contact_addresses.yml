@@ -1,0 +1,25 @@
+dependencies:
+  - Oro\Bundle\AddressBundle\Tests\Functional\DataFixtures\LoadCountriesAndRegions
+  - Oro\Bundle\AddressBundle\Tests\Functional\DataFixtures\LoadAddressTypes
+  - Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData
+
+Oro\Bundle\ContactBundle\Entity\ContactAddress:
+    Contact_Address_Brenda:
+        owner: '@Contact_Brenda'
+        primary: true
+        label: 'Address 1'
+        street: 'Street 1'
+        street2: 'Street 2'
+        city: 'Los Angeles'
+        postalCode: '90001'
+        country: '@country_usa'
+        region: '@region_usa_california'
+        organization: 'Acme'
+        namePrefix: 'Mr.'
+        nameSuffix: 'M.D.'
+        firstName: 'John'
+        middleName: 'Edgar'
+        lastName: 'Doo'
+        types: ['@billing']
+        customField1: val1
+        custom_field_2: val2
