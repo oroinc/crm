@@ -7,11 +7,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-/**
- * This is the class that loads and manages your bundle configuration
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
- */
 class OroContactExtension extends Extension
 {
     const PARAMETER_SOCIAL_URL_FORMAT = 'oro_contact.social_url_format';
@@ -31,5 +26,9 @@ class OroContactExtension extends Extension
         $loader->load('services_api.yml');
         $loader->load('importexport.yml');
         $loader->load('form.yml');
+
+        if ('test' === $container->getParameter('kernel.environment')) {
+            $loader->load('services_test.yml');
+        }
     }
 }
