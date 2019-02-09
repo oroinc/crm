@@ -1,3 +1,7 @@
+Please refer first to [UPGRADE.md](UPGRADE.md) for the most important items that should be addressed before attempting to upgrade or during the upgrade of a vanilla Oro application.
+
+The current file describes significant changes in the code that may affect the upgrade of your customizations.
+
 ## 3.1.0-rc
 
 * Package `oro/crm-mail-chimp` removed from composer.json, run `composer require 'oro/mailchimp:3.1.*'` before upgrade to keep functionality working
