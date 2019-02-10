@@ -13,6 +13,9 @@ use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
+/**
+ * Doctrine repository for Cart entity
+ */
 class CartRepository extends ChannelAwareEntityRepository
 {
     use WorkflowQueryTrait;
@@ -273,7 +276,6 @@ class CartRepository extends ChannelAwareEntityRepository
         $qbWithCart =  $this->_em->getRepository('OroMagentoBundle:Order')
             ->createQueryBuilder('mOrder')
             ->where('mOrder.cart = cart');
-        QueryBuilderUtil::checkParameter($qbWithCart);
 
         $qb->join('cart.status', 'cstatus')
             ->andWhere('cstatus.name = :statusName')

@@ -19,6 +19,9 @@ trusted_data:
         Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\AbstractDiscoveryStrategy:
             getFieldExpr:
                 qbFieldName: true
+        Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository:
+            getAbandonedQB:
+                qbWithCart: true
     safe_methods:
         Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\EmailDiscoveryStrategy:
             getFieldExpr: true
