@@ -28,6 +28,8 @@ Oro\Bundle\ContactBundle\Entity\ContactAddress:
         middleName: 'Edgar'
         lastName: 'Doo'
         types: ['@billing']
+        customField1: val1
+        custom_field_2: val2
     contact_address2:
         owner: '@contact1'
         primary: false

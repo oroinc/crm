@@ -1,0 +1,5 @@
+services:
+    oro_contact.tests.migration_listener:
+        class: Oro\Bundle\ContactBundle\Tests\Functional\Environment\TestEntitiesMigrationListener
+        tags:
+            - { name: kernel.event_listener, event: oro_migration.post_up, method: onPostUp }
