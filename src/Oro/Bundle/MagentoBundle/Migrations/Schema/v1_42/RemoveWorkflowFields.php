@@ -18,13 +18,14 @@ class RemoveWorkflowFields implements Migration
     {
         //workflow now has no direct relations
         $magentoTables = [
-            'orocrm_magento_order',
-            'orocrm_magento_cart',
+            'orocrm_magento_order' => 'Oro\Bundle\MagentoBundle\Entity\Order',
+            'orocrm_magento_cart' => 'Oro\Bundle\MagentoBundle\Entity\Cart'
         ];
 
-        foreach ($magentoTables as $magentoTable) {
+        foreach ($magentoTables as $magentoTable => $entityClass) {
             if ($schema->hasTable($magentoTable)) {
                 $this->removeWorkflowFields($schema->getTable($magentoTable));
+                $this->removeConfigsForWorkflowFields($entityClass, $queries);
             }
         }
     }
