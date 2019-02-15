@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
 /**
- * @deprecated since 2.2. Use {@see Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface} instead
+ * Provides interface for SOAP transport.
  */
 interface MagentoSoapTransportInterface extends MagentoTransportInterface
 {

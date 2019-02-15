@@ -41,7 +41,7 @@ class DropFields implements Migration, OrderedMigrationInterface
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
-<<<DQL
+                <<<DQL
             DELETE FROM oro_entity_config_field
             WHERE field_name = 'account'
             AND entity_id IN (
@@ -67,7 +67,7 @@ DQL
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
-<<<DQL
+                <<<DQL
             DELETE FROM oro_entity_config_field
             WHERE field_name = 'account'
             AND entity_id IN (
@@ -104,7 +104,7 @@ DQL
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
-<<<DQL
+                <<<DQL
              DELETE FROM oro_entity_config_field
                    WHERE
                     field_name IN (
