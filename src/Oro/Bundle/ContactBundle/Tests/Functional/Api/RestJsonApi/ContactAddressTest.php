@@ -169,6 +169,27 @@ class ContactAddressTest extends RestJsonApiTestCase
         self::assertTrue(null === $address->getRegion());
     }
 
+    public function testCreateWithCustomFields()
+    {
+        $data = $this->getRequestData(self::CREATE_MIN_REQUEST_DATA);
+        $data['data']['attributes']['customField1'] = 'custom field 1 value';
+        $data['data']['attributes']['custom_field_2'] = 'custom field 2 value';
+        $response = $this->post(
+            ['entity' => self::ENTITY_TYPE],
+            $data
+        );
+
+        $addressId = (int)$this->getResourceId($response);
+        $this->assertResponseContains($data, $response);
+
+        /** @var ContactAddress $address */
+        $address = $this->getEntityManager()
+            ->find(self::ENTITY_CLASS, $addressId);
+        self::assertNotNull($address);
+        self::assertEquals($data['data']['attributes']['customField1'], $address->getCustomField1());
+        self::assertEquals($data['data']['attributes']['custom_field_2'], $address->getCustomField2());
+    }
+
     public function testUpdate()
     {
         $addressId = $this->getReference('contact_address2')->getId();
@@ -194,6 +215,35 @@ class ContactAddressTest extends RestJsonApiTestCase
             ->find(self::ENTITY_CLASS, $addressId);
         self::assertNotNull($address);
         self::assertEquals('Updated Address', $address->getLabel());
+    }
+
+    public function testUpdateCustomFields()
+    {
+        $addressId = $this->getReference('contact_address2')->getId();
+        $data = [
+            'data' => [
+                'type'       => self::ENTITY_TYPE,
+                'id'         => (string)$addressId,
+                'attributes' => [
+                    'customField1'   => 'Updated Value 1',
+                    'custom_field_2' => 'Updated Value 2'
+                ]
+            ]
+        ];
+
+        $response = $this->patch(
+            ['entity' => self::ENTITY_TYPE, 'id' => (string)$addressId],
+            $data
+        );
+
+        $this->assertResponseContains($data, $response);
+
+        /** @var ContactAddress $address */
+        $address = $this->getEntityManager()
+            ->find(self::ENTITY_CLASS, $addressId);
+        self::assertNotNull($address);
+        self::assertEquals($data['data']['attributes']['customField1'], $address->getCustomField1());
+        self::assertEquals($data['data']['attributes']['custom_field_2'], $address->getCustomField2());
     }
 
     public function testDelete()

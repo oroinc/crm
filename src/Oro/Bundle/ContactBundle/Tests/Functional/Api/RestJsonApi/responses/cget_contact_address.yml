@@ -18,6 +18,8 @@ data:
             createdAt: '@contact_address1->created->format("Y-m-d\TH:i:s\Z")'
             updatedAt: '@contact_address1->updated->format("Y-m-d\TH:i:s\Z")'
             customRegion: null
+            customField1: val1
+            custom_field_2: val2
         relationships:
             owner:
                 data:

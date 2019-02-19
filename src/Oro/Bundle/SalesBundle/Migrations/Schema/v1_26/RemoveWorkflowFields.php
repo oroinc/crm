@@ -27,7 +27,10 @@ class RemoveWorkflowFields implements Migration, OrderedMigrationInterface
     {
         //workflow now has no direct relations
         $this->removeWorkflowFields($schema->getTable('orocrm_sales_lead'));
+        $this->removeConfigsForWorkflowFields('Oro\Bundle\SalesBundle\Entity\Lead', $queries);
         $this->removeWorkflowFields($schema->getTable('orocrm_sales_opportunity'));
+        $this->removeConfigsForWorkflowFields('Oro\Bundle\SalesBundle\Entity\Opportunity', $queries);
         $this->removeWorkflowFields($schema->getTable('orocrm_sales_funnel'));
+        $this->removeConfigsForWorkflowFields('Oro\Bundle\SalesBundle\Entity\SalesFunnel', $queries);
     }
 }
