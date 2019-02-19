@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Form\EventListener\AddressCountryAndRegionSubscriber;
+use Oro\Bundle\AddressBundle\Form\EventListener\AddressIdentifierSubscriber;
 use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Oro\Bundle\AddressBundle\Form\Type\CountryType;
 use Oro\Bundle\AddressBundle\Form\Type\EmailCollectionType;
@@ -100,7 +101,8 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
                     ChannelSelectType::class => new ChannelSelectType($channelsProvider),
                     Select2EntityType::class => $channelEntityType,
                     AddressType::class => new AddressType(
-                        new AddressCountryAndRegionSubscriber($objectManager, $formFactory)
+                        new AddressCountryAndRegionSubscriber($objectManager, $formFactory),
+                        new AddressIdentifierSubscriber()
                     ),
                     CountryType::class => $countryEntityType,
                     RegionType::class => $regionEntityType,
@@ -143,7 +145,6 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
     public function testSubmit($existingData, $submittedData, $expectedData)
     {
         $form = $this->factory->create(B2bCustomerType::class, $existingData);
-
         $this->assertEquals($existingData, $form->getData());
 
         $form->submit($submittedData);
@@ -167,19 +168,19 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
                     'name' => 'name',
                     'contact' => 1,
                     'dataChannel' => '',
-                    'shippingAddress' => ['id' => 1, 'label' => 'shipping address'],
-                    'billingAddress' => ['id' => 2, 'label' => 'billing address'],
+                    'shippingAddress' => ['label' => 'shipping address'],
+                    'billingAddress' => ['label' => 'billing address'],
                 ],
                 (new B2bCustomer())
                     ->setName('name')
                     ->setContact($this->getEntity(Contact::class, ['first_name' => 'first name']))
                     ->setShippingAddress($this->getEntity(
                         Address::class,
-                        ['id' => '1', 'label' => 'shipping address_stripped']
+                        ['label' => 'shipping address_stripped']
                     ))
                     ->setBillingAddress($this->getEntity(
                         Address::class,
-                        ['id' => '2', 'label' => 'billing address_stripped']
+                        ['label' => 'billing address_stripped']
                     ))
             ],
             'existing entity' => [
