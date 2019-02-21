@@ -1,4 +1,5 @@
 parameters:
+    oro_platform.collector.template: '@@OroCRM/Collector/crm.html.twig'
 
 services:
     oro_crm.extension.transtation_packages_provider:
