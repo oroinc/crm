@@ -62,6 +62,11 @@ oro_behat_extension:
     Add Context Contact GridFilters:
       selector: 'div[data-page-component-name="contacts-for-context-grid"] div.filter-box'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilters
+    Disabled Use as Identity Field:
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Element
+      selector:
+        locator: '//div[contains(@id,"oro_entity_config_type_importexport_identity") and contains(@class,"disabled")]'
+        type: xpath
 
   suites:
     OroContactBundle:
