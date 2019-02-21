@@ -2,6 +2,12 @@ Please refer first to [UPGRADE.md](UPGRADE.md) for the most important items that
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
+## 3.1.4 
+
+### Removed
+#### CRMBundle
+* Service `oro_crm.namespace_migration_provider` and the logic that used it were removed.
+
 ## 3.1.0 (2019-01-30)
 [Show detailed list of changes](incompatibilities-3-1.md)
 
