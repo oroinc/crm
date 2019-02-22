@@ -2,6 +2,12 @@ Please refer first to [UPGRADE.md](UPGRADE.md) for the most important items that
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
+## 3.1.4 
+
+### Removed
+#### CRMBundle
+* Service `oro_crm.namespace_migration_provider` and the logic that used it were removed.
+
 ## 3.1.0-rc
 
 * Package `oro/crm-mail-chimp` removed from composer.json, run `composer require 'oro/mailchimp:3.1.*'` before upgrade to keep functionality working
