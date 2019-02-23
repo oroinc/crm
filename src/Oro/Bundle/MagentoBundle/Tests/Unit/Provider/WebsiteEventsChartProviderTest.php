@@ -65,13 +65,22 @@ class WebsiteEventsChartProviderTest extends WebsiteChartProviderTest
      */
     protected function getConfigProvider()
     {
-        return new ConfigProvider([
+        $chartConfigs = [
             'stackedbar_chart' => [
                 'default_settings' => [
-                    'chartColors' => '#acd39c,#7fab90',
-                ],
+                    'chartColors' => '#acd39c,#7fab90'
+                ]
             ],
-            'website_chart' => [],
-        ]);
+            'website_chart' => []
+        ];
+
+        $configProvider = $this->createMock(ConfigProvider::class);
+        $configProvider->expects($this->any())
+            ->method('getChartConfig')
+            ->willReturnCallback(function ($name) use ($chartConfigs) {
+                return $chartConfigs[$name];
+            });
+
+        return $configProvider;
     }
 }
