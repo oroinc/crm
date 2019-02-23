@@ -1,11 +1,7 @@
-parameters:
-    oro_reportcrm.report.filter.period.class:             Oro\Bundle\ReportCRMBundle\Filter\PeriodFilter
-    oro_reportcrm.report.grid.listener.class:             Oro\Bundle\ReportCRMBundle\EventListener\ReportGridListener
-    oro_reportcrm.accounts.opportunities.listener.class:  Oro\Bundle\ReportCRMBundle\EventListener\Datagrid\AccountsByOpportunitiesReportListener
-
 services:
     oro_reportcrm.report.filter.period:
-        class: '%oro_reportcrm.report.filter.period.class%'
+        class: Oro\Bundle\ReportCRMBundle\Filter\PeriodFilter
+        public: false
         arguments:
             - '@form.factory'
             - '@oro_filter.filter_utility'
@@ -13,7 +9,7 @@ services:
             - { name: oro_filter.extension.orm_filter.filter, type: oro_period_filter }
 
     oro_reportcrm.report.grid.listener:
-        class: '%oro_reportcrm.report.grid.listener.class%'
+        class: Oro\Bundle\ReportCRMBundle\EventListener\ReportGridListener
         arguments:
             - '@oro_filter.provider.state.filters'
         tags:
@@ -32,7 +28,7 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.oro_reportcrm-opportunities-by_status, method: onBuildAfter }
 
     oro_reportcrm.accounts.opportunities.listener:
-        class: '%oro_reportcrm.accounts.opportunities.listener.class%'
+        class: Oro\Bundle\ReportCRMBundle\EventListener\Datagrid\AccountsByOpportunitiesReportListener
         arguments:
             - '@oro_entity_extend.enum_value_provider'
         tags:
