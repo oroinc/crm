@@ -114,7 +114,7 @@ class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
                     'text' => [
                         'description' => 'some description',
                         'message' => 'some',
-                        'all_text' => ' some description'
+                        'all_text' => 'some description'
                     ]
                 ],
             ],
@@ -131,7 +131,7 @@ class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
                     'text' => [
                         'description' => 'some descr',
                         'message' => 'some',
-                        'all_text' => ' some descr'
+                        'all_text' => 'some descr'
                     ]
                 ],
             ],
