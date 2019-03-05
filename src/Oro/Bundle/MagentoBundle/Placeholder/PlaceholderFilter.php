@@ -4,6 +4,10 @@ namespace Oro\Bundle\MagentoBundle\Placeholder;
 
 use Doctrine\Common\Util\ClassUtils;
 
+/**
+ * Helper class that can be used in placeholder configuration files
+ * to check is the entity an instance of Oro\Bundle\MagentoBundle\Entity\Customer
+ */
 class PlaceholderFilter
 {
     /**
@@ -14,7 +18,7 @@ class PlaceholderFilter
      */
     public function isApplicable($entity = null)
     {
-        return ClassUtils::getClass($entity) === 'Oro\Bundle\MagentoBundle\Entity\Customer';
+        return $entity ? ClassUtils::getClass($entity) === 'Oro\Bundle\MagentoBundle\Entity\Customer' : false;
     }
 
     /**
