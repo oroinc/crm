@@ -1,4 +1,5 @@
 parameters:
+    oro_platform.collector.template: '@@OroCRM/Collector/crm.html.twig'
 
 services:
     oro_crm.extension.transtation_packages_provider:
@@ -14,8 +15,3 @@ services:
             - ['addPackage', ['OroCRM', 'oro/crm-zendesk']]
         tags:
             - {name: oro_translation.extension.packages_provider}
-
-    oro_crm.namespace_migration_provider:
-        class: 'Oro\Bundle\CRMBundle\Cache\NamespaceMigrationProvider'
-        tags:
-            - {name: oro_installer.namespace_migration_provider, priority: 40}

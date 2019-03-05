@@ -16,6 +16,11 @@ Feature: Import Contacts
     And I save and close form
     Then I should see "Field saved" flash message
 
+  Scenario: Use as Identity Field value could not be changed for ID field
+    When I click edit id in grid
+    Then I should see an "Disabled Use as Identity Field" element
+    And Use as Identity Field field should has "Always" value
+
   Scenario: Data Template for Contacts
     Given I go to Customers/ Contacts
     When I download "Contacts" Data Template file
