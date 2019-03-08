@@ -21,6 +21,9 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * Loads user calendars
+ */
 class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /** @var ContainerInterface */
@@ -84,6 +87,10 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $this->connectCalendars();
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     protected function loadCalendars()
     {
         $days   = $this->getDatePeriod();
@@ -148,9 +155,13 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 $events['weekend'][] = $event;
             }
         }
+
         foreach ($this->users as $index => $user) {
             //get default calendar, each user has default calendar after creation
             $calendar = $this->calendar->findDefaultCalendar($user->getId(), $this->organization->getId());
+            if (!$calendar) {
+                continue;
+            }
             $this->setSecurityContext($calendar->getOwner());
             $events['recurring_events'] = $this->getRecurringEvents();
             foreach ($events as $typeEvents) {
