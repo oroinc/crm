@@ -118,6 +118,7 @@ oro_behat_extension:
             type: 'css'
             locator: '.quote-lineitem-product-select .select2-offscreen[type="text"]'
           Unit Price: 'oro_sale_quote[quoteProducts][0][quoteProductOffers][0][price][value]'
+          Quantity: 'oro_sale_quote[quoteProducts][0][quoteProductOffers][0][quantity]'
 
     Unit Price:
       selector: '[name="oro_sale_quote[quoteProducts][0][quoteProductOffers][0][price][value]"]'
