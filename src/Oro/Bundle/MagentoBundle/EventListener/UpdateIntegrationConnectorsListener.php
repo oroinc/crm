@@ -74,7 +74,7 @@ class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
 
         /** @var MagentoTransportInterface $transport */
         $transport = $this->typeRegistry
-                          ->getTransportTypeBySettingEntity($this->transportEntity, $this->channelType);
+            ->getTransportTypeBySettingEntity($this->transportEntity, $this->channelType);
 
         $transport->init($this->transportEntity);
 
@@ -97,8 +97,8 @@ class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
                 if ($isExtensionApplicable
                     || (!$isExtensionApplicable && !$connector instanceof ExtensionAwareInterface)
                 ) {
-                    array_push($initialConnectors, $connectorName . InitialSyncProcessor::INITIAL_CONNECTOR_SUFFIX);
-                    array_push($connectors, $connectorName);
+                    $initialConnectors[] = $connectorName . InitialSyncProcessor::INITIAL_CONNECTOR_SUFFIX;
+                    $connectors[] = $connectorName;
                 }
             }
         }

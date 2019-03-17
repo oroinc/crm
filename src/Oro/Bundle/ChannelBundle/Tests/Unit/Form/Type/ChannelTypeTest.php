@@ -37,7 +37,7 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
             ->getMockBuilder('Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber')
             ->disableOriginalConstructor()->getMock();
 
-        $this->settingsProvider->expects($this->any())->method('getSettings')
+        $this->settingsProvider->expects($this->any())->method('getChannelTypeChoiceList')
             ->will($this->returnValue([]));
         $this->settingsProvider->expects($this->any())
             ->method('getChannelTypeChoiceList')

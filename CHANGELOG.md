@@ -2,7 +2,16 @@ Please refer first to [UPGRADE.md](UPGRADE.md) for the most important items that
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
-## 3.1.4 
+## 4.0.0-beta
+
+### Changed
+
+#### SettingsProvider
+* Method `getSettings` has been removed from `Oro\Bundle\ChannelBundle\Provider\SettingsProvider`. Use `getChannelTypes` and `getEntities` methods instead.
+* Method `Oro\Bundle\ChannelBundle\Provider\SettingsProvider::getDependentEntityData` has been renamed to `getDependentEntities`.
+* Method `Oro\Bundle\ChannelBundle\Provider\SettingsProvider::isChannelSystem` has been renamed to `isSystemChannel`.
+
+## 3.1.4
 
 ### Removed
 #### CRMBundle

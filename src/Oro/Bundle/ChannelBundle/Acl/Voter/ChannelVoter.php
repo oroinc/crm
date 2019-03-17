@@ -7,6 +7,9 @@ use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\SecurityBundle\Acl\Voter\AbstractEntityVoter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * Restricts CREATE and DELETE permissions for system channels.
+ */
 class ChannelVoter extends AbstractEntityVoter
 {
     const ATTRIBUTE_CREATE = 'CREATE';
@@ -51,7 +54,7 @@ class ChannelVoter extends AbstractEntityVoter
     protected function getPermissionForAttribute($class, $identifier, $attribute)
     {
         if (is_a($this->object, $this->className, true)
-            && $this->settingsProvider->isChannelSystem($this->object->getChannelType())
+            && $this->settingsProvider->isSystemChannel($this->object->getChannelType())
         ) {
             return self::ACCESS_DENIED;
         }

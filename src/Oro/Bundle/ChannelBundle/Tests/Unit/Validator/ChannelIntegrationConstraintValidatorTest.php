@@ -47,9 +47,12 @@ class ChannelIntegrationConstraintValidatorTest extends \PHPUnit\Framework\TestC
         $channel = $this->createMock(Channel::class);
         $context = $this->createMock(ExecutionContext::class);
 
+        $channelType = 'test_channel';
+
         $channel
             ->expects($this->once())
-            ->method('getChannelType');
+            ->method('getChannelType')
+            ->willReturn($channelType);
 
         $channel
             ->expects($this->once())

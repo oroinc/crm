@@ -12,10 +12,13 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * Handles "channelType" field for the channel form.
+ */
 class ChannelTypeSubscriber implements EventSubscriberInterface
 {
     /** @var SettingsProvider */
-    protected $settingsProvider;
+    private $settingsProvider;
 
     /**
      * @param SettingsProvider $settingsProvider
@@ -34,7 +37,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             FormEvents::PRE_SET_DATA  => 'preSet',
             FormEvents::POST_SET_DATA => 'postSet',
             FormEvents::PRE_SUBMIT    => 'preSubmit',
-            FormEvents::POST_SUBMIT   => ['postSubmit', 20],
+            FormEvents::POST_SUBMIT   => ['postSubmit', 20]
         ];
     }
 
@@ -43,31 +46,28 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
      */
     public function preSet(FormEvent $event)
     {
-        $form = $event->getForm();
-
         /** @var Channel $data */
         $data = $event->getData();
-
         if ($data === null) {
             return;
         }
 
         $this->setDefaultValues($data);
 
-        // builds datasource field
-        $datasourceModifier = $this->getDatasourceModifierClosure($data->getChannelType());
-        $datasourceModifier($form);
+        $channelType = $data->getChannelType();
+        $form = $event->getForm();
 
-        $customerIdentity = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
+        $this->buildDatasourceField($form, $channelType);
+
+        $customerIdentity = $this->getCustomerIdentity($channelType);
         $data->setCustomerIdentity($customerIdentity);
-        if (!empty($customerIdentity)) {
+        if ($customerIdentity) {
             $this->addEntitiesToChannel($data, [$customerIdentity]);
         }
 
         // pre-fill entities for new instances
         if (!$data->getId()) {
-            $channelTypeEntities = $this->settingsProvider->getEntitiesByChannelType($data->getChannelType());
-            $this->addEntitiesToChannel($data, $channelTypeEntities);
+            $this->addEntitiesToChannel($data, $this->getEntities($channelType));
 
             // restrict to choose non system channels if create action
             $form->remove('channelType');
@@ -75,11 +75,11 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 'channelType',
                 Select2ChoiceType::class,
                 [
-                    'choices'  => $this->settingsProvider->getNonSystemChannelTypeChoiceList(),
-                    'required' => true,
-                    'label'    => 'oro.channel.channel_type.label',
-                    'configs'  => ['placeholder' => 'oro.channel.form.select_channel_type.label'],
-                    'placeholder' => '',
+                    'choices'     => $this->settingsProvider->getNonSystemChannelTypeChoiceList(),
+                    'required'    => true,
+                    'label'       => 'oro.channel.channel_type.label',
+                    'configs'     => ['placeholder' => 'oro.channel.form.select_channel_type.label'],
+                    'placeholder' => ''
                 ]
             );
         }
@@ -90,10 +90,8 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
      */
     public function postSet(FormEvent $event)
     {
-        $form = $event->getForm();
         /** @var Channel $data */
         $data = $event->getData();
-
         if ($data === null) {
             return;
         }
@@ -101,7 +99,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         // disable modification of customer identity and channel type after save
         if ($data->getId()) {
             FormUtils::replaceField(
-                $form,
+                $event->getForm(),
                 'channelType',
                 ['required' => false, 'disabled' => true]
             );
@@ -113,12 +111,9 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
      */
     public function preSubmit(FormEvent $event)
     {
-        $form = $event->getForm();
         $data = $event->getData();
-
-        $channelType        = !empty($data['channelType']) ? $data['channelType'] : null;
-        $datasourceModifier = $this->getDatasourceModifierClosure($channelType);
-        $datasourceModifier($form);
+        $channelType = !empty($data['channelType']) ? $data['channelType'] : null;
+        $this->buildDatasourceField($event->getForm(), $channelType);
     }
 
     /**
@@ -126,61 +121,83 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
      */
     public function postSubmit(FormEvent $event)
     {
-        $data             = $event->getData();
-        $customerIdentity = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
-
+        /** @var Channel $data */
+        $data = $event->getData();
         if (!$data->getId()) {
-            $data->setCustomerIdentity($customerIdentity);
+            $data->setCustomerIdentity($this->getCustomerIdentity($data->getChannelType()));
         }
     }
 
     /**
      * @param object $object
      */
-    protected function setDefaultValues($object)
+    private function setDefaultValues($object)
     {
-        //set default status to active
+        // set default status to active
         if ($object instanceof Channel && !$object->getChannelType()) {
             $object->setStatus(Channel::STATUS_ACTIVE);
         }
     }
 
     /**
-     * @param string $channelType
-     *
-     * @return callable
+     * @param FormInterface $form
+     * @param string|null   $channelType
      */
-    protected function getDatasourceModifierClosure($channelType)
+    private function buildDatasourceField(FormInterface $form, $channelType)
     {
-        $settingsProvider = $this->settingsProvider;
+        if (!$channelType) {
+            return;
+        }
 
-        return function (FormInterface $form) use ($settingsProvider, $channelType) {
-            if ($channelType) {
-                $integrationType = $settingsProvider->getIntegrationType($channelType);
-                if (false !== $integrationType) {
-                    $form->add(
-                        'dataSource',
-                        ChannelDatasourceType::class,
-                        [
-                            'label'          => 'oro.channel.data_source.label',
-                            'type'           => $integrationType,
-                            'required'       => true,
-                            'error_bubbling' => false
-                        ]
-                    );
-                }
-            }
-        };
+        $integrationType = $this->settingsProvider->getIntegrationType($channelType);
+        if (!$integrationType) {
+            return;
+        }
+
+        $form->add(
+            'dataSource',
+            ChannelDatasourceType::class,
+            [
+                'label'          => 'oro.channel.data_source.label',
+                'type'           => $integrationType,
+                'required'       => true,
+                'error_bubbling' => false
+            ]
+        );
+    }
+
+    /**
+     * @param string|null $channelType
+     *
+     * @return string|null
+     */
+    private function getCustomerIdentity($channelType)
+    {
+        return $channelType
+            ? $this->settingsProvider->getCustomerIdentityFromConfig($channelType)
+            : null;
+    }
+
+    /**
+     * @param string|null $channelType
+     *
+     * @return string[]
+     */
+    private function getEntities($channelType)
+    {
+        return $channelType
+            ? $this->settingsProvider->getEntitiesByChannelType($channelType)
+            : [];
     }
 
     /**
      * @param Channel $channel
      * @param array   $entitiesToAdd
      */
-    protected function addEntitiesToChannel(Channel $channel, array $entitiesToAdd)
+    private function addEntitiesToChannel(Channel $channel, array $entitiesToAdd)
     {
-        $entities         = $channel->getEntities();
-        $entities         = is_array($entities) ? $entities : [];
+        $entities = $channel->getEntities();
+        $entities = is_array($entities) ? $entities : [];
         $combinedEntities = array_unique(array_merge($entities, $entitiesToAdd));
         $channel->setEntities($combinedEntities);
     }

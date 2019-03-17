@@ -2,203 +2,162 @@
 
 namespace Oro\Bundle\ChannelBundle\Provider;
 
-use Oro\Component\Config\Resolver\ResolverInterface;
-
+/**
+ * The provider for different kind of channel settings.
+ */
 class SettingsProvider
 {
-    const DATA_PATH         = 'entity_data';
-    const CHANNEL_TYPE_PATH = 'channel_types';
+    private const INTEGRATION_TYPE  = 'integration_type';
+    private const CUSTOMER_IDENTITY = 'customer_identity';
+    private const LIFETIME_VALUE    = 'lifetime_value';
+    private const PRIORITY          = 'priority';
 
-    /** @var array */
-    protected $settings = [];
-
-    /** @var null|array */
-    protected $resolvedSettings;
-
-    /** @var ResolverInterface */
-    protected $resolver;
-
-    /** @var null|array */
-    protected $dependentEntitiesHashMap;
+    /** @var ConfigurationProvider */
+    private $configProvider;
 
     /**
-     * @param array             $settings
-     * @param ResolverInterface $resolver
+     * @param ConfigurationProvider $configProvider
      */
-    public function __construct(array $settings, ResolverInterface $resolver)
+    public function __construct(ConfigurationProvider $configProvider)
     {
-        $this->settings = $settings;
-        $this->resolver = $resolver;
+        $this->configProvider = $configProvider;
     }
 
     /**
-     * Get settings that were collected from channel_configuration config files
+     * Gets configuration of channel types.
      *
-     * @param null $section
-     *
-     * @return array|null
+     * @return array [channel type => channel config, ...]
      */
-    public function getSettings($section = null)
+    public function getChannelTypes(): array
     {
-        if (null === $this->resolvedSettings) {
-            $settings = $this->resolvedSettings = $this->resolver->resolve($this->settings);
-            $this->resolvedSettings[self::DATA_PATH] = [];
-            foreach ($settings[self::DATA_PATH] as $singleEntitySetting) {
-                $this->resolvedSettings[self::DATA_PATH][trim($singleEntitySetting['name'])] = $singleEntitySetting;
-            }
-        }
-
-        if ($section === null) {
-            return $this->resolvedSettings;
-        } elseif (isset($this->resolvedSettings[$section])) {
-            return $this->resolvedSettings[$section];
-        }
-
-        return null;
+        return $this->configProvider->getChannelTypes();
     }
 
     /**
-     * Return whether given entity is related to channel
+     * Gets configuration of entities.
      *
-     * @param string $entityFQCN entity full class name
+     * @return array [entity class => entity config, ...]
+     */
+    public function getEntities(): array
+    {
+        return $this->configProvider->getEntities();
+    }
+
+    /**
+     * Checks if the given entity is related to any channel.
+     *
+     * @param string $entityClass
      *
      * @return bool
      */
-    public function isChannelEntity($entityFQCN)
+    public function isChannelEntity(string $entityClass): bool
     {
-        $settings = $this->getSettings(self::DATA_PATH);
+        $entities = $this->configProvider->getEntities();
 
-        return array_key_exists($entityFQCN, $settings);
+        return \array_key_exists($entityClass, $entities);
     }
 
     /**
-     * Return whether given entity is related to customer
+     * Checks if the given entity is related to any customer.
      *
-     * @param string $entityFQCN entity full class name
+     * @param string $entityClass
      *
      * @return bool
      */
-    public function isCustomerEntity($entityFQCN)
+    public function isCustomerEntity(string $entityClass): bool
     {
-        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
-        $classes = array_map(function ($item) {
-            return $item['customer_identity'];
-        }, $settings);
-
-        return in_array($entityFQCN, $classes, true);
+        return \in_array($entityClass, $this->configProvider->getCustomerEntities(), true);
     }
 
     /**
-     * Return whether entity dependent to any business entity
+     * Checks if the given entity dependents on any business entity.
      *
-     * @param string $entityFQCN entity full class name
+     * @param string $entityClass
      *
      * @return bool
      */
-    public function isDependentOnChannelEntity($entityFQCN)
+    public function isDependentOnChannelEntity(string $entityClass): bool
     {
-        return $this->getDependentEntityData($entityFQCN) !== false;
+        $dependentEntitiesMap = $this->configProvider->getDependentEntitiesMap();
+
+        return isset($dependentEntitiesMap[$entityClass]);
     }
 
     /**
-     * Get entity dependencies
+     * Gets dependencies for the given entity.
      *
-     * @param string $entityFQCN entity full class name
-     *
-     * @return bool|array
-     */
-    public function getDependentEntityData($entityFQCN)
-    {
-        if (null === $this->dependentEntitiesHashMap) {
-            $settings = $this->getSettings(self::DATA_PATH);
-
-            foreach ($settings as $singleEntityData) {
-                if (empty($singleEntityData['dependent'])) {
-                    continue;
-                }
-
-                $dependentEntities = array_values($singleEntityData['dependent']);
-                foreach ($dependentEntities as $entityName) {
-                    $entityName = trim($entityName);
-
-                    if (!isset($this->dependentEntitiesHashMap[$entityName])) {
-                        $this->dependentEntitiesHashMap[$entityName] = [];
-                    }
-
-                    $this->dependentEntitiesHashMap[$entityName][] = trim($singleEntityData['name']);
-                }
-            }
-        }
-
-        return isset($this->dependentEntitiesHashMap[$entityFQCN])
-            ? $this->dependentEntitiesHashMap[$entityFQCN]
-            : false;
-    }
-
-    /**
-     * Returns integration types that could not be used out of channel scope
+     * @param string $entityClass
      *
      * @return array
      */
-    public function getSourceIntegrationTypes()
+    public function getDependentEntities(string $entityClass): array
     {
-        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
-        $types    = [];
+        $dependentEntitiesMap = $this->configProvider->getDependentEntitiesMap();
 
-        if (is_array($settings)) {
-            foreach (array_keys($settings) as $channelTypeName) {
-                $integrationType = $this->getIntegrationType($channelTypeName);
-                if ($integrationType) {
-                    $types[] = $integrationType;
-                }
-            }
-        }
-
-        return array_unique($types);
+        return $dependentEntitiesMap[$entityClass] ?? [];
     }
 
     /**
-     * Returns channel types that could be used in channel type selector
-     * sorted by priority
+     * Gets integration types that could not be used out of channel scope.
+     *
+     * @return string[]
+     */
+    public function getSourceIntegrationTypes(): array
+    {
+        $types = [];
+
+        $channelTypes = $this->configProvider->getChannelTypes();
+        foreach ($channelTypes as $config) {
+            if (isset($config[self::INTEGRATION_TYPE])) {
+                $types[] = $config[self::INTEGRATION_TYPE];
+            }
+        }
+
+        return \array_values(\array_unique($types));
+    }
+
+    /**
+     * Gets channel types that could be used in channel type selector.
+     * The returned channel types are sorted by priority.
      *
      * @return array
      */
-    public function getChannelTypeChoiceList()
+    public function getChannelTypeChoiceList(): array
     {
-        $settings     = $this->getSettings(self::CHANNEL_TYPE_PATH);
-        $channelTypes = [];
+        $result = [];
 
-        uasort(
-            $settings,
+        $channelTypes = $this->configProvider->getChannelTypes();
+        \uasort(
+            $channelTypes,
             function ($firstArray, $secondArray) {
-                if ($firstArray['priority'] == $secondArray['priority']) {
+                if ($firstArray[self::PRIORITY] === $secondArray[self::PRIORITY]) {
                     return 0;
                 }
 
-                return ($firstArray['priority'] < $secondArray['priority']) ? -1 : 1;
+                return ($firstArray[self::PRIORITY] < $secondArray[self::PRIORITY]) ? -1 : 1;
             }
         );
-
-        foreach (array_keys($settings) as $channelTypeName) {
-            $channelTypes[$settings[$channelTypeName]['label']] = $channelTypeName;
+        foreach (\array_keys($channelTypes) as $channelType) {
+            $result[$channelTypes[$channelType]['label']] = $channelType;
         }
 
-        return $channelTypes;
+        return $result;
     }
 
     /**
-     * Returns channel types that could be used in channel type selector
-     * sorted by priority
+     * Gets not system channel types that could be used in channel type selector.
+     * The returned channel types are sorted by priority.
      *
      * @return array
      */
-    public function getNonSystemChannelTypeChoiceList()
+    public function getNonSystemChannelTypeChoiceList(): array
     {
-        $channelTypes = array_filter($this->getChannelTypeChoiceList(), function ($channelTypeName) {
-            return !$this->isChannelSystem($channelTypeName);
-        });
-
-        return $channelTypes;
+        return \array_filter(
+            $this->getChannelTypeChoiceList(),
+            function ($channelType) {
+                return !$this->isSystemChannel($channelType);
+            }
+        );
     }
 
     /**
@@ -206,118 +165,91 @@ class SettingsProvider
      *
      * @param string $channelType
      *
-     * @return bool|string     Returns false if channel type does not require to include integration,
-     *                         integration type otherwise
-     * @throws \LogicException If channel type config not found
+     * @return string|null The integration type
+     *                     or FALSE if the given channel type does not require to include integration
      */
-    public function getIntegrationType($channelType)
+    public function getIntegrationType(string $channelType): ?string
     {
-        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
-
-        if (!isset($settings[$channelType])) {
-            throw new \LogicException(sprintf('Unable to find "%s" channel type\'s config', $channelType));
+        $channelTypes = $this->configProvider->getChannelTypes();
+        if (!isset($channelTypes[$channelType])) {
+            throw new \LogicException(sprintf('The channel "%s" is not defined.', $channelType));
         }
 
-        return !empty($settings[$channelType]['integration_type'])
-            ? $settings[$channelType]['integration_type'] : false;
+        return $channelTypes[$channelType][self::INTEGRATION_TYPE] ?? null;
     }
 
     /**
-     * Check system status of channel
+     * Checks whether the given channel is a system channel or not.
      *
      * @param string $channelType
      *
      * @return bool
-     *
-     * @throws \LogicException If channel type config not found
      */
-    public function isChannelSystem($channelType)
+    public function isSystemChannel(string $channelType): bool
     {
-        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
-
-        if (!isset($settings[$channelType])) {
-            throw new \LogicException(sprintf('Unable to find "%s" channel type\'s config', $channelType));
+        $channelTypes = $this->configProvider->getChannelTypes();
+        if (!isset($channelTypes[$channelType])) {
+            throw new \LogicException(sprintf('The channel "%s" is not defined.', $channelType));
         }
 
-        return !empty($settings[$channelType]['system'])
-            ? $settings[$channelType]['system'] : false;
+        return $channelTypes[$channelType]['system'] ?? false;
     }
 
     /**
-     * Returns integration connector name that entity belongs to
+     * Gets the name of integration connector to which the given entity belongs to.
      *
-     * @param string $entityFQCN entity full class name
-     *
-     * @return bool|string
-     */
-    public function getIntegrationConnectorName($entityFQCN)
-    {
-        if (!$this->isChannelEntity($entityFQCN)) {
-            return false;
-        }
-
-        $settings = $this->getSettings(self::DATA_PATH);
-
-        return isset($settings[$entityFQCN]['belongs_to'], $settings[$entityFQCN]['belongs_to']['connector']) ?
-            $settings[$entityFQCN]['belongs_to']['connector'] : false;
-    }
-
-    /**
-     * Get CustomerIdentity definition from config
-     *
-     * @param $type
+     * @param string $entityClass entity full class name
      *
      * @return string|null
      */
-    public function getCustomerIdentityFromConfig($type)
+    public function getIntegrationConnectorName(string $entityClass): ?string
     {
-        return $this->getChannelTypeConfig($type, 'customer_identity');
+        $entities = $this->configProvider->getEntities();
+
+        return $entities[$entityClass]['belongs_to']['connector'] ?? null;
     }
 
     /**
-     * Returns predefined entity list for given channel type
+     * Gets CustomerIdentity definition from config.
+     *
+     * @param string $type
+     *
+     * @return string|null
+     */
+    public function getCustomerIdentityFromConfig(string $type): ?string
+    {
+        $channelTypes = $this->configProvider->getChannelTypes();
+
+        return $channelTypes[$type][self::CUSTOMER_IDENTITY] ?? null;
+    }
+
+    /**
+     * Gets predefined entity list for given channel type.
      *
      * @param string $type
      *
      * @return array
      */
-    public function getEntitiesByChannelType($type)
+    public function getEntitiesByChannelType(string $type): array
     {
-        return $this->getChannelTypeConfig($type, 'entities') ?: [];
-    }
+        $channelTypes = $this->configProvider->getChannelTypes();
 
-    /**
-     * @param string      $type
-     * @param string|null $block
-     *
-     * @return mixed|null
-     */
-    protected function getChannelTypeConfig($type, $block = null)
-    {
-        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
-
-        if (null === $block) {
-            $config = isset($settings[$type]) ? $settings[$type] : null;
-        } else {
-            $config = isset($settings[$type], $settings[$type][$block]) ? $settings[$type][$block] : null;
-        }
-
-        return $config;
+        return $channelTypes[$type]['entities'] ?? [];
     }
 
     /**
      * @return array
      */
-    public function getLifetimeValueSettings()
+    public function getLifetimeValueSettings(): array
     {
-        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
-        $result   = [];
+        $result = [];
 
-        foreach ($settings as $channelType => $setting) {
-            if (!empty($setting['lifetime_value'])) {
+        $channelTypes = $this->configProvider->getChannelTypes();
+        foreach ($channelTypes as $channelType => $setting) {
+            if (!empty($setting[self::LIFETIME_VALUE])) {
                 $result[$channelType] = [
-                    'entity' => $setting['customer_identity'],
-                    'field'  => $setting['lifetime_value']
+                    'entity' => $setting[self::CUSTOMER_IDENTITY],
+                    'field'  => $setting[self::LIFETIME_VALUE]
                 ];
             }
         }

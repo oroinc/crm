@@ -12,10 +12,10 @@ use Oro\Bundle\EntityBundle\Provider\ExclusionProviderInterface;
 class EntityExclusionProvider implements ExclusionProviderInterface
 {
     /** @var SettingsProvider */
-    protected $settingsProvider;
+    private $settingsProvider;
 
     /** @var StateProvider */
-    protected $stateProvider;
+    private $stateProvider;
 
     /**
      * @param SettingsProvider $settingsProvider
@@ -24,7 +24,7 @@ class EntityExclusionProvider implements ExclusionProviderInterface
     public function __construct(SettingsProvider $settingsProvider, StateProvider $stateProvider)
     {
         $this->settingsProvider = $settingsProvider;
-        $this->stateProvider    = $stateProvider;
+        $this->stateProvider = $stateProvider;
     }
 
     /**
@@ -48,24 +48,24 @@ class EntityExclusionProvider implements ExclusionProviderInterface
      */
     public function isIgnoredRelation(ClassMetadata $metadata, $associationName)
     {
-        $isMainEntityIncluded = $this->isIncludedByChannels($metadata->getName());
-        $isRelationIncluded   = $this->isIncludedByChannels($metadata->getAssociationTargetClass($associationName));
-
-        return !($isMainEntityIncluded && $isRelationIncluded);
+        return
+            !$this->isIncludedByChannels($metadata->getName())
+            || !$this->isIncludedByChannels($metadata->getAssociationTargetClass($associationName));
     }
 
     /**
-     * @param string $entityFQCN entity full class name
+     * @param string $entityClass
      *
      * @return bool
      */
-    protected function isIncludedByChannels($entityFQCN)
+    private function isIncludedByChannels($entityClass)
     {
-        if ($this->settingsProvider->isChannelEntity($entityFQCN)) {
-            return $this->stateProvider->isEntityEnabled($entityFQCN);
-        } elseif ($this->settingsProvider->isDependentOnChannelEntity($entityFQCN)) {
-            $enabled      = false;
-            $dependencies = $this->settingsProvider->getDependentEntityData($entityFQCN);
+        if ($this->settingsProvider->isChannelEntity($entityClass)) {
+            return $this->stateProvider->isEntityEnabled($entityClass);
+        }
+        if ($this->settingsProvider->isDependentOnChannelEntity($entityClass)) {
+            $enabled = false;
+            $dependencies = $this->settingsProvider->getDependentEntities($entityClass);
             foreach ($dependencies as $entityName) {
                 $enabled |= $this->stateProvider->isEntityEnabled($entityName);
             }

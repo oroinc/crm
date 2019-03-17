@@ -8,55 +8,52 @@ use Oro\Bundle\ChannelBundle\EventListener\NavigationListener;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
-use Oro\Component\Config\Resolver\ResolverInterface;
 
 class NavigationListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
-    protected $resolver;
+    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
+    private $settings;
 
     /** @var StateProvider|\PHPUnit\Framework\MockObject\MockObject */
-    protected $state;
+    private $state;
+
+    /** @var NavigationListener */
+    private $listener;
 
     protected function setUp()
     {
-        $this->resolver = $this->getMockBuilder('Oro\Component\Config\Resolver\ResolverInterface')
-            ->disableOriginalConstructor()->getMock();
-        $this->state    = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\StateProvider')
-            ->disableOriginalConstructor()->getMock();
+        $this->settings = $this->createMock(SettingsProvider::class);
+        $this->state = $this->createMock(StateProvider::class);
+
+        $this->listener = new NavigationListener($this->settings, $this->state);
     }
 
     /**
      * @dataProvider navigationConfigureDataProvider
-     *
-     * @param array $settings
-     * @param bool  $isEnabled
-     * @param bool  $expectedResult
      */
-    public function testOnNavigationConfigure($settings, $isEnabled, $expectedResult)
+    public function testOnNavigationConfigure(array $entities, bool $isEnabled, bool $expectedResult)
     {
         $factory = new MenuFactory();
 
-        $this->resolver->expects($this->any())->method('resolve')
-            ->will($this->returnArgument(0));
+        $this->settings->expects(self::once())
+            ->method('getEntities')
+            ->willReturn($entities);
+        $this->state->expects(self::once())
+            ->method('isEntityEnabled')
+            ->will(self::returnValue($isEnabled));
 
-        $this->state->expects($this->once())->method('isEntityEnabled')
-            ->will($this->returnValue($isEnabled));
-
-        $settingsProvider = new SettingsProvider($settings, $this->resolver);
-        $listener         = new NavigationListener($settingsProvider, $this->state);
-        $menu             = new MenuItem('test_menu', $factory);
-        $salesTab         = new MenuItem('sales_tab', $factory);
+        $menu = new MenuItem('test_menu', $factory);
+        $salesTab = new MenuItem('sales_tab', $factory);
 
         $salesTab->addChild('test_item')->setDisplay(false);
         $menu->addChild($salesTab);
 
-        $this->assertFalse($salesTab->getChild('test_item')->isDisplayed());
+        self::assertFalse($salesTab->getChild('test_item')->isDisplayed());
 
         $eventData = new ConfigureMenuEvent($factory, $menu);
-        $listener->onNavigationConfigure($eventData);
+        $this->listener->onNavigationConfigure($eventData);
 
-        $this->assertEquals(
+        self::assertEquals(
             $expectedResult,
             $salesTab->getChild('test_item')->isDisplayed()
         );
@@ -69,62 +66,56 @@ class NavigationListenerTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'child is shown'                               => [
-                'settings' => [
-                    'entity_data' => [
-                        [
-                            'name'                   => 'Oro\Bundle\AcmeBundle\Entity\Test',
-                            'dependent'              => [
-                                'Oro\Bundle\AcmeBundle\EntityTestAddress',
-                                'Oro\Bundle\AcmeBundle\Entity\TestItem'
-                            ],
-                            'navigation_items'       => [
-                                'test_menu.sales_tab.test_item'
-                            ],
-                            'dependencies'           => [],
-                            'dependencies_condition' => 'AND'
+                [
+                    [
+                        'name'                   => 'Oro\Bundle\AcmeBundle\Entity\Test',
+                        'dependent'              => [
+                            'Oro\Bundle\AcmeBundle\EntityTestAddress',
+                            'Oro\Bundle\AcmeBundle\Entity\TestItem'
                         ],
+                        'navigation_items'       => [
+                            'test_menu.sales_tab.test_item'
+                        ],
+                        'dependencies'           => [],
+                        'dependencies_condition' => 'AND'
                     ]
                 ],
                 true,
                 true
             ],
             'child is hidden'                              => [
-                'settings' => [
-                    'entity_data' => [
-                        [
-                            'name'                   => 'Oro\Bundle\AcmeBundle\Entity\Test',
-                            'dependent'              => [
-                                'Oro\Bundle\AcmeBundle\EntityTestAddress',
-                                'Oro\Bundle\AcmeBundle\Entity\TestItem'
-                            ],
-                            'navigation_items'       => [
-                                'test_menu.sales_tab.test_item'
-                            ],
-                            'dependencies'           => [],
-                            'dependencies_condition' => 'AND'
+                [
+                    [
+                        'name'                   => 'Oro\Bundle\AcmeBundle\Entity\Test',
+                        'dependent'              => [
+                            'Oro\Bundle\AcmeBundle\EntityTestAddress',
+                            'Oro\Bundle\AcmeBundle\Entity\TestItem'
                         ],
+                        'navigation_items'       => [
+                            'test_menu.sales_tab.test_item'
+                        ],
+                        'dependencies'           => [],
+                        'dependencies_condition' => 'AND'
                     ]
                 ],
                 false,
                 false
             ],
             'another menu is configured, should skip item' => [
-                'settings' => [
-                    'entity_data' => [
-                        [
-                            'name'                   => 'Oro\Bundle\AcmeBundle\Entity\Test',
-                            'dependent'              => [],
-                            'navigation_items'       => [
-                                'test_menu_another.sales_tab.test_item'
-                            ],
-                            'dependencies'           => [],
-                            'dependencies_condition' => 'AND'
+                [
+                    [
+                        'name'                   => 'Oro\Bundle\AcmeBundle\Entity\Test',
+                        'dependent'              => [],
+                        'navigation_items'       => [
+                            'test_menu_another.sales_tab.test_item'
                         ],
+                        'dependencies'           => [],
+                        'dependencies_condition' => 'AND'
                     ]
                 ],
                 true,
                 false
-            ],
+            ]
         ];
     }
 }
