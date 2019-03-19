@@ -1,0 +1,35 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {% set icon %}
+        {{ include('@OroPlatform/Icon/white_logo.svg') }}
+        <style>#oro-platform-icon {top: 8px;}</style>
+    {% endset %}
+    {% set text %}
+        {% block text %}
+            <div class="sf-toolbar-info-group">
+                <div class="sf-toolbar-info-piece">
+                    <b>API Sandbox</b>
+                    <span>
+                    <a href="{{ path('nelmio_api_doc_index') }}">API</a>
+                </span>
+                </div>
+            </div>
+            <div class="sf-toolbar-info-group">
+                <div class="sf-toolbar-info-piece">
+                    <b>Resources</b>
+                    <span>
+                    <a href="https://oroinc.com/orocrm/doc/current" rel="help">OroCRM Documentation</a>
+                </span>
+                </div>
+                <div class="sf-toolbar-info-piece">
+                    <b>Help</b>
+                    <span>
+                    <a href="https://oroinc.com/orocrm/doc/current/community/contact-community" rel="help">Oro Support Channels</a>
+                </span>
+                </div>
+            </div>
+        {% endblock text %}
+    {% endset %}
+    {% include '@WebProfiler/Profiler/toolbar_item.html.twig' with {'link': false, additional_classes: 'sf-toolbar-block-right'} %}
+{% endblock %}
