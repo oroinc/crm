@@ -182,6 +182,7 @@ datagrids:
                 link:         update_link
             subscribe:
                 type: ajaxdelete
+                requestType: POST
                 label: oro.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
@@ -195,6 +196,7 @@ datagrids:
                     error:           oro.magento.newslettersubscriber.action.error.subscribe
             unsubscribe:
                 type: ajaxdelete
+                requestType: POST
                 label: oro.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus
@@ -1517,6 +1519,7 @@ datagrids:
                 rowAction: true
             subscribe:
                 type: ajaxdelete
+                requestType: POST
                 label: oro.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
@@ -1530,6 +1533,7 @@ datagrids:
                     error:           oro.magento.newslettersubscriber.action.error.subscribe
             unsubscribe:
                 type: ajaxdelete
+                requestType: POST
                 label: oro.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus

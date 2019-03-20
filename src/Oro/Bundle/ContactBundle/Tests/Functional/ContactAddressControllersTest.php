@@ -12,7 +12,7 @@ class ContactAddressControllersTest extends WebTestCase
     {
         $this->initClient(
             array(),
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            $this->generateBasicAuthHeader()
         );
         $this->client->useHashNavigation(true);
     }
@@ -101,7 +101,7 @@ class ContactAddressControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
-        $this->client->request(
+        $this->ajaxRequest(
             'GET',
             $this->getUrl('oro_api_get_contact_address_primary', array('contactId' => $id))
         );
@@ -118,7 +118,7 @@ class ContactAddressControllersTest extends WebTestCase
      */
     public function testUpdateAddress($id)
     {
-        $this->client->request(
+        $this->ajaxRequest(
             'GET',
             $this->getUrl('oro_api_get_contact_address_primary', array('contactId' => $id))
         );
@@ -168,7 +168,7 @@ class ContactAddressControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
-        $this->client->request(
+        $this->ajaxRequest(
             'GET',
             $this->getUrl('oro_api_get_contact_address_primary', array('contactId' => $id))
         );

@@ -11,7 +11,7 @@ class ControllersTest extends WebTestCase
     {
         $this->initClient(
             array(),
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            $this->generateBasicAuthHeader()
         );
         $this->client->useHashNavigation(true);
     }
@@ -124,7 +124,7 @@ class ControllersTest extends WebTestCase
      */
     public function testDelete($id)
     {
-        $this->client->request(
+        $this->ajaxRequest(
             'DELETE',
             $this->getUrl('oro_api_delete_account', array('id' => $id))
         );

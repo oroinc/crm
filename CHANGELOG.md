@@ -9,6 +9,40 @@ The current file describes significant changes in the code that may affect the u
 #### CRMBundle
 * Service `oro_crm.namespace_migration_provider` and the logic that used it were removed.
 
+### Changed
+#### ContactUsBundle
+* In `Oro\Bundle\ContactUsBundle\Controller\ContactReasonController::deleteAction` 
+ (`oro_contactus_reason_delete` route)
+ action the request method was changed to DELETE. 
+* In `Oro\Bundle\ContactUsBundle\Controller\ContactRequestController::deleteAction` 
+ (`oro_contactus_request_create` route)
+ action the request method was changed to DELETE. 
+#### MagentoBundle
+* In `Oro\Bundle\MagentoBundle\Controller\CustomerController::registerAction` 
+ (`oro_magento_customer_register` route)
+ action the request method was changed to POST.
+* In `Oro\Bundle\MagentoBundle\Controller\IntegrationConfigController::checkAction` 
+ (`oro_magento_integration_check` route)
+ action the request method was changed to POST. 
+* In `Oro\Bundle\MagentoBundle\Controller\NewsletterSubscriberController::subscribeAction` 
+ (`oro_magento_newsletter_subscriber_subscribe` route)
+ action the request method was changed to POST. 
+* In `Oro\Bundle\MagentoBundle\Controller\NewsletterSubscriberController::unsubscribeAction` 
+ (`oro_magento_newsletter_subscriber_unsubscribe` route)
+ action the request method was changed to POST.
+* In `Oro\Bundle\MagentoBundle\Controller\NewsletterSubscriberController::subscribeByCustomerAction` 
+ (`oro_magento_newsletter_subscriber_subscribe_customer` route)
+ action the request method was changed to POST. 
+* In `Oro\Bundle\MagentoBundle\Controller\NewsletterSubscriberController::unsubscribeByCustomerAction` 
+ (`oro_magento_newsletter_subscriber_unsubscribe_customer` route)
+ action the request method was changed to POST. 
+* In `Oro\Bundle\MagentoBundle\Controller\OrderPlaceController::syncAction` 
+ (`oro_magento_orderplace_new_cart_order_sync` route)
+ action the request method was changed to POST. 
+* In `Oro\Bundle\MagentoBundle\Controller\OrderPlaceController::customerSyncAction` 
+ (`oro_magento_orderplace_new_customer_order_sync` route)
+ action the request method was changed to POST. 
+
 ## 3.1.0 (2019-01-30)
 [Show detailed list of changes](incompatibilities-3-1.md)
 

@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional;
 
+use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 use Symfony\Component\DomCrawler\Form;
@@ -12,7 +13,7 @@ class LeadAddressControllersTest extends WebTestCase
     {
         $this->initClient(
             array(),
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            $this->generateBasicAuthHeader()
         );
         $this->client->useHashNavigation(true);
         $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
@@ -68,7 +69,7 @@ class LeadAddressControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
-        $this->client->request(
+        $this->ajaxRequest(
             'GET',
             $this->getUrl('oro_api_get_lead_address_primary', ['leadId' => $id])
         );
@@ -85,7 +86,7 @@ class LeadAddressControllersTest extends WebTestCase
      */
     public function testUpdateAddress($id)
     {
-        $this->client->request(
+        $this->ajaxRequest(
             'GET',
             $this->getUrl('oro_api_get_lead_address_primary', ['leadId' => $id])
         );
@@ -135,7 +136,7 @@ class LeadAddressControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
-        $this->client->request(
+        $this->ajaxRequest(
             'GET',
             $this->getUrl('oro_api_get_lead_address_primary', ['leadId' => $id])
         );
@@ -152,14 +153,14 @@ class LeadAddressControllersTest extends WebTestCase
      */
     public function testDeleteAddress($id)
     {
-        $this->client->request(
+        $this->ajaxRequest(
             'GET',
             $this->getUrl('oro_api_get_lead_address_primary', ['leadId' => $id])
         );
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
         $addressId = $result['id'];
 
-        $this->client->request(
+        $this->ajaxRequest(
             'DELETE',
             $this->getUrl('oro_api_delete_lead_address', ['leadId' => $id, 'addressId' => $addressId])
         );
@@ -167,12 +168,10 @@ class LeadAddressControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
-        $this->client->request(
-            'GET',
-            $this->getUrl('oro_api_get_lead_address_primary', ['leadId' => $id])
-        );
-
-        $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 404);
+        $registry = $this->getContainer()->get('doctrine');
+        $em = $registry->getManagerForClass(Lead::class);
+        $lead = $em->find(Lead::class, $id);
+        $this->assertNotNull($lead);
+        $this->assertNull($lead->getPrimaryAddress());
     }
 }
