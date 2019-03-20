@@ -15,7 +15,7 @@ class ControllersTest extends WebTestCase
     {
         $this->initClient(
             array(),
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            $this->generateBasicAuthHeader()
         );
         $this->client->useHashNavigation(true);
     }
@@ -102,7 +102,7 @@ class ControllersTest extends WebTestCase
      */
     public function testDelete($id)
     {
-        $this->client->request(
+        $this->ajaxRequest(
             'DELETE',
             $this->getUrl('oro_api_delete_contact', array('id' => $id))
         );
@@ -148,7 +148,7 @@ class ControllersTest extends WebTestCase
             $id[] = $value['id'];
         }
         $id = implode(',', $id);
-        $this->client->request(
+        $this->ajaxRequest(
             'DELETE',
             $this->getUrl(
                 'oro_datagrid_mass_action',
@@ -156,8 +156,7 @@ class ControllersTest extends WebTestCase
                     'gridName' => 'contacts-grid',
                     'actionName' => 'delete',
                     'values' => $id,
-                    'inset' => 1,
-                    'token' => $this->getCsrfToken('delete')->getValue(),
+                    'inset' => 1
                 ]
             )
         );

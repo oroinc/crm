@@ -138,8 +138,8 @@ class NewsletterSubscriberControllerTest extends AbstractController
      */
     public function testUnsubscribe()
     {
-        $this->client->request(
-            'GET',
+        $this->ajaxRequest(
+            'POST',
             $this->getUrl('oro_magento_newsletter_subscriber_unsubscribe', ['id' => $this->getMainEntityId()])
         );
 
@@ -152,8 +152,8 @@ class NewsletterSubscriberControllerTest extends AbstractController
      */
     public function testSubscribe()
     {
-        $this->client->request(
-            'GET',
+        $this->ajaxRequest(
+            'POST',
             $this->getUrl('oro_magento_newsletter_subscriber_subscribe', ['id' => $this->getMainEntityId()])
         );
 
@@ -163,8 +163,8 @@ class NewsletterSubscriberControllerTest extends AbstractController
 
     public function testUnsubscribeByCustomer()
     {
-        $this->client->request(
-            'GET',
+        $this->ajaxRequest(
+            'POST',
             $this->getUrl(
                 'oro_magento_newsletter_subscriber_unsubscribe_customer',
                 ['id' => $this->subscriber->getCustomer()->getId()]
@@ -178,8 +178,8 @@ class NewsletterSubscriberControllerTest extends AbstractController
     public function testSubscribeByCustomer()
     {
         $subscriber = $this->getReference('newsletter_subscriber3');
-        $this->client->request(
-            'GET',
+        $this->ajaxRequest(
+            'POST',
             $this->getUrl(
                 'oro_magento_newsletter_subscriber_subscribe_customer',
                 ['id' => $subscriber->getCustomer()->getId()]

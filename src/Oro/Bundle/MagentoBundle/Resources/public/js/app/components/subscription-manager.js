@@ -16,6 +16,7 @@ define(function(require) {
             mediator.execute('showLoading');
 
             $.ajax(url, {
+                method: 'POST',
                 success: function(response) {
                     if (response.successful) {
                         mediator.once('page:afterChange', function() {

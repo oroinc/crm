@@ -17,7 +17,7 @@ class MagentoDeleteManagerTest extends WebTestCase
 
     protected function setUp()
     {
-        $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]));
+        $this->initClient([], $this->generateBasicAuthHeader());
         $this->em = $this->client->getKernel()->getContainer()->get('doctrine.orm.entity_manager');
 
         $fixtures = ['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'];
