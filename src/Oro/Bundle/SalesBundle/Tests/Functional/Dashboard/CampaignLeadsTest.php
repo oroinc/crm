@@ -17,7 +17,7 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
     {
         $this->initClient(
             ['debug' => false],
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            $this->generateBasicAuthHeader()
         );
         $this->loadFixtures([
             'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadCampaignLeadsWidgetFixture'

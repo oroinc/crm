@@ -119,8 +119,8 @@ class OrderPlaceControllerTest extends WebTestCase
         $this->soapTransport->expects($this->any())->method('getCustomers')
             ->will($this->returnValue($customerIterator));
 
-        $this->client->request(
-            'GET',
+        $this->ajaxRequest(
+            'POST',
             $this->getUrl('oro_magento_orderplace_new_cart_order_sync', ['id' => $this->cart->getId()]),
             [],
             [],
@@ -222,8 +222,8 @@ class OrderPlaceControllerTest extends WebTestCase
         $this->soapTransport->expects($this->any())->method('getCustomers')
             ->will($this->returnValue($customerIterator));
 
-        $this->client->request(
-            'GET',
+        $this->ajaxRequest(
+            'POST',
             $this->getUrl('oro_magento_orderplace_new_customer_order_sync', ['id' => $this->customer->getId()]),
             [],
             [],
@@ -340,8 +340,8 @@ class OrderPlaceControllerTest extends WebTestCase
         $this->soapTransport->expects($this->any())->method('getCustomers')
             ->will($this->returnValue($customerIterator));
 
-        $this->client->request(
-            'GET',
+        $this->ajaxRequest(
+            'POST',
             $this->getUrl('oro_magento_orderplace_new_cart_order_sync', ['id' => $this->guestCart->getId()]),
             [],
             [],

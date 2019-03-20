@@ -6,6 +6,8 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ * Magento Newsletter Subscriber Controller
  * @Route("/newsletter-subscriber")
  */
 class NewsletterSubscriberController extends Controller
@@ -75,6 +78,8 @@ class NewsletterSubscriberController extends Controller
      *      name="oro_magento_newsletter_subscriber_subscribe",
      *      requirements={"id"="\d+"})
      * )
+     * @Method({"POST"})
+     * @CsrfProtection()
      * @Acl(
      *      id="oro_magento_newsletter_subscriber_subscribe",
      *      type="entity",
@@ -96,6 +101,8 @@ class NewsletterSubscriberController extends Controller
      *      name="oro_magento_newsletter_subscriber_unsubscribe",
      *      requirements={"id"="\d+"})
      * )
+     * @Method({"POST"})
+     * @CsrfProtection()
      * @Acl(
      *      id="oro_magento_newsletter_subscriber_unsubscribe",
      *      type="entity",
@@ -117,6 +124,8 @@ class NewsletterSubscriberController extends Controller
      *      name="oro_magento_newsletter_subscriber_subscribe_customer",
      *      requirements={"id"="\d+"})
      * )
+     * @Method({"POST"})
+     * @CsrfProtection()
      * @Acl(
      *      id="oro_magento_newsletter_subscriber_subscribe_customer",
      *      type="entity",
@@ -138,6 +147,8 @@ class NewsletterSubscriberController extends Controller
      *      name="oro_magento_newsletter_subscriber_unsubscribe_customer",
      *      requirements={"id"="\d+"})
      * )
+     * @Method({"POST"})
+     * @CsrfProtection()
      * @Acl(
      *      id="oro_magento_newsletter_subscriber_unsubscribe_customer",
      *      type="entity",
@@ -179,6 +190,7 @@ class NewsletterSubscriberController extends Controller
     /**
      * @param Customer $customer
      * @param int $status
+     *
      * @return JsonResponse
      */
     protected function processCustomerSubscription(Customer $customer, $status)

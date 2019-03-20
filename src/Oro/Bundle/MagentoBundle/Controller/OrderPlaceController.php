@@ -8,12 +8,15 @@ use Oro\Bundle\ImportExportBundle\Writer\EntityWriter;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
+ * Magento Order Place Controller
  * @Route("/order/place")
  */
 class OrderPlaceController extends Controller
@@ -51,6 +54,9 @@ class OrderPlaceController extends Controller
 
     /**
      * @Route("/sync/{id}", name="oro_magento_orderplace_new_cart_order_sync", requirements={"id"="\d+"}))
+     * @Method("POST")
+     * @CsrfProtection()
+     *
      * @param Cart $cart
      * @return JsonResponse
      */
@@ -138,6 +144,9 @@ class OrderPlaceController extends Controller
      *   "/customer_sync/{id}",
      *   name="oro_magento_orderplace_new_customer_order_sync", requirements={"id"="\d+"})
      * )
+     * @Method("POST")
+     * @CsrfProtection()
+     *
      * @param Customer $customer
      * @return JsonResponse
      */
