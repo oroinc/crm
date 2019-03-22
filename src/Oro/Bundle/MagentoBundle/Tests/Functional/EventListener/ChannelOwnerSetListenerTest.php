@@ -20,7 +20,7 @@ class ChannelOwnerSetListenerTest extends WebTestCase
 
     public function setUp()
     {
-        $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]));
+        $this->initClient([], $this->generateBasicAuthHeader());
         $fixtures = [
             self::FIXTURE_NS . 'LoadMagentoChannel',
             self::FIXTURE_NS . 'LoadCustomerContact',

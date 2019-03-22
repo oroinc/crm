@@ -8,10 +8,15 @@ use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * Magento Integration Config Controller
+ */
 class IntegrationConfigController extends Controller
 {
     /**
@@ -19,6 +24,8 @@ class IntegrationConfigController extends Controller
      *
      * @Route("/check", name="oro_magento_integration_check")
      * @AclAncestor("oro_integration_update")
+     * @Method("POST")
+     * @CsrfProtection()
      */
     public function checkAction()
     {

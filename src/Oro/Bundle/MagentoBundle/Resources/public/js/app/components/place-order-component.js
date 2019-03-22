@@ -119,6 +119,7 @@ define(function(require) {
 
         _doCustomerSync: function(widget, performMessage) {
             $.ajax({
+                method: 'post',
                 dataType: 'json',
                 url: this.customerSyncURL,
                 beforeSend: function() {
@@ -134,6 +135,7 @@ define(function(require) {
 
         _doCartSync: function(widget, performMessage) {
             $.ajax({
+                method: 'post',
                 dataType: 'json',
                 url: this.cartSyncURL,
                 beforeSend: function() {

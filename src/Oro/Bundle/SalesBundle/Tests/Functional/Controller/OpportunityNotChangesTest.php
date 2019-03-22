@@ -13,7 +13,7 @@ class OpportunityNotChangesTest extends WebTestCase
     {
         $this->initClient(
             ['debug' => false],
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            $this->generateBasicAuthHeader()
         );
         $this->client->useHashNavigation(true);
         $this->loadFixtures([
