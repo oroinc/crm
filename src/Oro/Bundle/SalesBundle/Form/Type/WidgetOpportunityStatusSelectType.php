@@ -7,6 +7,9 @@ use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Form type provides functionality to select an existing entity from the tree
+ */
 class WidgetOpportunityStatusSelectType extends AbstractType
 {
     const NAME = 'oro_type_widget_opportunity_status_select';
