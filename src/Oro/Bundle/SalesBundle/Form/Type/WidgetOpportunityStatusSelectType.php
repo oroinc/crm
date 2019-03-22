@@ -32,7 +32,6 @@ class WidgetOpportunityStatusSelectType extends AbstractType
                 'choices'  => $this->enumValueProvider->getEnumChoicesByCode('opportunity_status'),
                 'multiple' => true,
                 'configs'  => [
-                    'width'      => '400px',
                     'allowClear' => true,
                 ]
             ]

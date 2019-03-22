@@ -32,7 +32,6 @@ class LeadStatusSelectType extends AbstractType
                 'choices' => $this->enumValueProvider->getEnumChoicesByCode(Lead::INTERNAL_STATUS_CODE),
                 'multiple' => true,
                 'configs' => [
-                    'width' => '400px',
                     'allowClear' => true,
                 ]
             ]

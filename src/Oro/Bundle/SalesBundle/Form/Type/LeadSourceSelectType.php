@@ -39,7 +39,6 @@ class LeadSourceSelectType extends AbstractType
                 'choices' => $choices,
                 'multiple' => true,
                 'configs'  => [
-                    'width'      => '400px',
                     'allowClear' => true,
                 ]
             ]
