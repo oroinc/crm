@@ -22,7 +22,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
     {
         $this->initClient(
             ['debug' => false],
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            $this->generateBasicAuthHeader()
         );
         $this->client->useHashNavigation(true);
         $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
@@ -181,7 +181,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
      */
     public function testDelete(array $returnValue)
     {
-        $this->client->request(
+        $this->ajaxRequest(
             'DELETE',
             $this->getUrl('oro_api_delete_opportunity', ['id' => $returnValue['id']])
         );

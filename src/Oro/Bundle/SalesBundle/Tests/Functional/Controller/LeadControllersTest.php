@@ -16,7 +16,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
     {
         $this->initClient(
             [],
-            array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
+            $this->generateBasicAuthHeader()
         );
         $this->client->useHashNavigation(true);
         $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
@@ -172,7 +172,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
      */
     public function testDelete($returnValue)
     {
-        $this->client->request(
+        $this->ajaxRequest(
             'DELETE',
             $this->getUrl('oro_api_delete_lead', ['id' => $returnValue['id']])
         );

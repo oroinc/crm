@@ -2,8 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
@@ -12,8 +11,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @RouteResource("email")
- * @NamePrefix("oro_api_")
+ * REST API Contact Email Controller
+ * @Rest\RouteResource("email")
+ * @Rest\NamePrefix("oro_api_")
  */
 class ContactEmailController extends RestController implements ClassResourceInterface
 {

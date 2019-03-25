@@ -18,7 +18,7 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
     {
         $this->initClient(
             ['debug' => false],
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            $this->generateBasicAuthHeader()
         );
         $this->loadFixtures([
             LoadCampaignByCloseRevenueWidgetFixture::class

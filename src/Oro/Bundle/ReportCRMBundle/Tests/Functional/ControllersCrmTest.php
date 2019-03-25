@@ -10,7 +10,7 @@ class ControllersCrmTest extends BaseControllersTest
     {
         $this->initClient(
             array(),
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            $this->generateBasicAuthHeader()
         );
         $this->client->useHashNavigation(true);
         $this->loadFixtures(
