@@ -9,9 +9,12 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * Fixtures for opportunity status board test
+ */
 class LoadOpportunityStatusBoardFixtures extends AbstractFixture
 {
-    const OPPORTUNITY_COUNT = 20;
+    const OPPORTUNITY_COUNT = 25;
     const STATUSES_COUNT = 4;
 
     /** @var ObjectManager */
@@ -30,6 +33,9 @@ class LoadOpportunityStatusBoardFixtures extends AbstractFixture
         $this->createOpportunities();
     }
 
+    /**
+     * @return $this
+     */
     protected function createOpportunities()
     {
         $opportunityStatuses = ['in_progress', 'lost', 'needs_analysis', 'won'];
