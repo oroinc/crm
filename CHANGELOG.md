@@ -2,6 +2,9 @@ Please refer first to [UPGRADE.md](UPGRADE.md) for the most important items that
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
+## 4.0.0-beta (2019-03-28)
+[Show detailed list of changes](incompatibilities-4-0-beta.md)
+
 ## 3.1.4 
 [Show detailed list of changes](incompatibilities-3-1-4.md) 
 
