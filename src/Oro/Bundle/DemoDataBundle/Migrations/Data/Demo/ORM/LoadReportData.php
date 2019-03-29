@@ -10,6 +10,9 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\ReportBundle\Entity\Report;
 use Oro\Bundle\ReportBundle\Entity\ReportType;
 
+/**
+ * Loads "Leads by Geography" report
+ */
 class LoadReportData extends AbstractFixture implements DependentFixtureInterface
 {
     /** @var  EntityManager */
@@ -23,7 +26,7 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
             'type' => ReportType::TYPE_TABLE,
             'owner' => 'Acme, General',
             'entity' => 'Oro\Bundle\SalesBundle\Entity\Lead',
-            'definition' => '{"filters":[],"grouping_columns":[{"name":"addresses+Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name"}],"columns":[{"name":"addresses+Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name","label":"State","func":"","sorting":"ASC"},{"name":"id","label":"NUMBER OF LEADS","func":{"name":"Count","group_type":"aggregates","group_name":"number"},"sorting":""}]}'
+            'definition' => '{"filters":[],"grouping_columns":[{"name":"addresses+Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name"}],"columns":[{"name":"addresses+Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name","label":"State","func":"","sorting":"ASC"},{"name":"id","label":"Number of Leads","func":{"name":"Count","group_type":"aggregates","group_name":"number"},"sorting":""}]}'
         ],
     ];
     // @codingStandardsIgnoreEnd
