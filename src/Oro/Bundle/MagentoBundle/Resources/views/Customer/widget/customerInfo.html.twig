@@ -114,7 +114,7 @@
 {% endif %}
 
 <div class="widget-content row-fluid">
-    <div class="account-customer-title">{{ customer|oro_format_name|escape }}
+    <div class="account-customer-title">{{ customer|oro_format_name }}
         <div class="pull-right label label-large label-success orocrm-channel-lifetime-value-label">
             {{ 'oro.magento.customer.lifetime.label'|trans}}:
             <b> {{ oro_channel_account_lifetime(customer.account, channel)|oro_format_currency }}</b>
