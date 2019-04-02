@@ -7,6 +7,9 @@ use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Form type provides functionality to select an existing entity from the tree
+ */
 class LeadSourceSelectType extends AbstractType
 {
     const NAME = 'oro_type_widget_lead_source_select';
@@ -39,7 +42,6 @@ class LeadSourceSelectType extends AbstractType
                 'choices' => $choices,
                 'multiple' => true,
                 'configs'  => [
-                    'width'      => '400px',
                     'allowClear' => true,
                 ]
             ]
