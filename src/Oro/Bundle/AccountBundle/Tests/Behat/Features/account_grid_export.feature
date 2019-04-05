@@ -49,7 +49,7 @@ Feature: Account grid export
     And I reload the page
     Then I should not see "Export Grid"
 
-  Scenario: "Export Entity" button should be inaccessible if user have not enough privileges
+  Scenario: "Export Entity" button should be inaccessible if user has not enough privileges
     Given I proceed as the Admin
     And I check "Export Entity Records" entity permission
     And I save form
