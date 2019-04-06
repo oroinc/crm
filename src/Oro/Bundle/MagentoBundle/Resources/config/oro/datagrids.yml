@@ -165,7 +165,6 @@ datagrids:
                             choices: '@oro_magento.datagrid_helper->getMagentoGroupsChoices'
                             multiple: true
                             translatable_options: false
-                    enabled: false
         actions:
             view:
                 type:         navigate
@@ -182,6 +181,7 @@ datagrids:
                 link:         update_link
             subscribe:
                 type: ajaxdelete
+                requestType: POST
                 label: oro.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
@@ -195,6 +195,7 @@ datagrids:
                     error:           oro.magento.newslettersubscriber.action.error.subscribe
             unsubscribe:
                 type: ajaxdelete
+                requestType: POST
                 label: oro.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus
@@ -209,7 +210,7 @@ datagrids:
 
         action_configuration: [ "@oro_magento.datagrid.customer_actions_provider", "getCustomerActionsPermissions"]
         options:
-            entityHint: customers
+            entityHint: oro.magento.customer.entity_plural_label
             export: true
             entity_pagination: true
 
@@ -380,7 +381,7 @@ datagrids:
                 acl_resource: oro_magento_cart_view
                 rowAction:    true
         options:
-            entityHint: carts
+            entityHint: oro.magento.cart.entity_plural_label
             export: true
             entity_pagination: true
         views_list : '@oro_magento.datagrid.cart_view_list'
@@ -435,7 +436,7 @@ datagrids:
             default:
                 createdAt:  DESC
         options:
-            entityHint: cart items
+            entityHint: oro.magento.cartitem.entity_plural_label
             toolbarOptions:
                 hide: true
                 pagination:
@@ -654,7 +655,7 @@ datagrids:
                 acl_resource: oro_magento_product_view
                 rowAction:    true
         options:
-            entityHint: magento products
+            entityHint: oro.magento.product.entity_plural_label
 
     magento-order-grid:
         extended_entity_name: Oro\Bundle\MagentoBundle\Entity\Order
@@ -853,7 +854,7 @@ datagrids:
                 acl_resource: oro_magento_order_view
                 rowAction:    true
         options:
-            entityHint: orders
+            entityHint: oro.magento.order.entity_plural_label
             export: true
             entity_pagination: true
 
@@ -952,7 +953,7 @@ datagrids:
                 taxAmount:           { data_name: oi.taxAmount }
                 rowTotal:            { data_name: oi.rowTotal }
         options:
-            entityHint: order items
+            entityHint: oro.magento.orderitem.entity_plural_label
             toolbarOptions:
                 hide: true
                 pagination:
@@ -1517,6 +1518,7 @@ datagrids:
                 rowAction: true
             subscribe:
                 type: ajaxdelete
+                requestType: POST
                 label: oro.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
@@ -1530,6 +1532,7 @@ datagrids:
                     error:           oro.magento.newslettersubscriber.action.error.subscribe
             unsubscribe:
                 type: ajaxdelete
+                requestType: POST
                 label: oro.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus
@@ -1543,7 +1546,7 @@ datagrids:
                     error:           oro.magento.newslettersubscriber.action.error.unsubscribe
         action_configuration: [ "@oro_magento.datagrid.newsletter_subscriber_provider", "getActionsPermissions"]
         options:
-            entityHint: newsletter subscribers
+            entityHint: oro.magento.newslettersubscriber.entity_plural_label
             export: true
             entity_pagination: true
 
@@ -1626,7 +1629,7 @@ datagrids:
                     type: string
                     data_name: c.email
         options:
-            entityHint: customers
+            entityHint: oro.magento.customer.entity_plural_label
             entity_pagination: true
             toolbarOptions:
                 pageSize:
@@ -1778,7 +1781,7 @@ datagrids:
                     data_name:        o.updatedAt
                     enabled:          false
         options:
-            entityHint: orders
+            entityHint: oro.magento.order.entity_plural_label
             entity_pagination: true
             toolbarOptions:
                 pageSize:
@@ -1908,7 +1911,7 @@ datagrids:
                     data_name: c.updatedAt
                     enabled: false
         options:
-            entityHint: carts
+            entityHint: oro.magento.cart.entity_plural_label
             entity_pagination: true
             toolbarOptions:
                 pageSize:
@@ -1984,7 +1987,7 @@ datagrids:
                 acl_resource: oro_magento_credit_memo_view
                 rowAction:    true
         options:
-            entityHint: credit memo
+            entityHint: oro.magento.creditmemo.entity_plural_label
 
     magento-credit-memo-order-info-mixin:
         columns:
@@ -2162,7 +2165,7 @@ datagrids:
                 price:               { data_name: cmi.price }
                 rowTotal:            { data_name: cmi.rowTotal }
         options:
-            entityHint: credit memo item
+            entityHint: oro.magento.creditmemoitem.entity_plural_label
             toolbarOptions:
                 hide: true
                 pagination:
@@ -2279,7 +2282,7 @@ datagrids:
                 acl_resource: oro_magento_order_view
                 rowAction:    true
         options:
-            entityHint: order items
+            entityHint: oro.magento.orderitem.entity_plural_label
 
     magento-customer-recent-purchases-widget-grid:
         extends: magento-customer-recent-purchases-grid
@@ -2345,7 +2348,7 @@ datagrids:
             default:
                 noteDate:  DESC
         options:
-            entityHint: order notes
+            entityHint: oro.magento.ordernote.entity_plural_label
 
     magento-order-notes-widget-grid:
         extends: magento-order-notes-base-grid

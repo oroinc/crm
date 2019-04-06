@@ -21,7 +21,7 @@ class ChannelControllerTest extends WebTestCase
 
     public function setUp()
     {
-        $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]));
+        $this->initClient([], $this->generateBasicAuthHeader());
         $this->client->enableReboot();
         $this->client->useHashNavigation(true);
     }
@@ -127,7 +127,7 @@ class ChannelControllerTest extends WebTestCase
      */
     public function testDeleteChannel($channel)
     {
-        $this->client->request(
+        $this->ajaxRequest(
             'DELETE',
             $this->getUrl('oro_api_delete_channel', ['id' => $channel['id']])
         );

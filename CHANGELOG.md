@@ -3,21 +3,57 @@ Please refer first to [UPGRADE.md](UPGRADE.md) for the most important items that
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
 ## 4.0.0-beta
-
 ### Changed
-
-#### SettingsProvider
-* Method `getSettings` has been removed from `Oro\Bundle\ChannelBundle\Provider\SettingsProvider`. Use `getChannelTypes` and `getEntities` methods instead.
-* Method `Oro\Bundle\ChannelBundle\Provider\SettingsProvider::getDependentEntityData` has been renamed to `getDependentEntities`.
+#### ChannelBundle
+* Method `getSettings` has been removed from `Oro\Bundle\ChannelBundle\Provider\SettingsProvider`.
+  Use `getChannelTypes` and `getEntities` methods instead.
+* Method `Oro\Bundle\ChannelBundle\Provider\SettingsProvider::getDependentEntityData` has been renamed
+  to `getDependentEntities`.
 * Method `Oro\Bundle\ChannelBundle\Provider\SettingsProvider::isChannelSystem` has been renamed to `isSystemChannel`.
+#### ContactUsBundle
+* In `Oro\Bundle\ContactUsBundle\Controller\ContactReasonController::deleteAction` 
+ (`oro_contactus_reason_delete` route)
+ action the request method was changed to DELETE. 
+* In `Oro\Bundle\ContactUsBundle\Controller\ContactRequestController::deleteAction` 
+ (`oro_contactus_request_create` route)
+ action the request method was changed to DELETE. 
+#### MagentoBundle
+* In `Oro\Bundle\MagentoBundle\Controller\CustomerController::registerAction` 
+ (`oro_magento_customer_register` route)
+ action the request method was changed to POST.
+* In `Oro\Bundle\MagentoBundle\Controller\IntegrationConfigController::checkAction` 
+ (`oro_magento_integration_check` route)
+ action the request method was changed to POST. 
+* In `Oro\Bundle\MagentoBundle\Controller\NewsletterSubscriberController::subscribeAction` 
+ (`oro_magento_newsletter_subscriber_subscribe` route)
+ action the request method was changed to POST. 
+* In `Oro\Bundle\MagentoBundle\Controller\NewsletterSubscriberController::unsubscribeAction` 
+ (`oro_magento_newsletter_subscriber_unsubscribe` route)
+ action the request method was changed to POST.
+* In `Oro\Bundle\MagentoBundle\Controller\NewsletterSubscriberController::subscribeByCustomerAction` 
+ (`oro_magento_newsletter_subscriber_subscribe_customer` route)
+ action the request method was changed to POST. 
+* In `Oro\Bundle\MagentoBundle\Controller\NewsletterSubscriberController::unsubscribeByCustomerAction` 
+ (`oro_magento_newsletter_subscriber_unsubscribe_customer` route)
+ action the request method was changed to POST. 
+* In `Oro\Bundle\MagentoBundle\Controller\OrderPlaceController::syncAction` 
+ (`oro_magento_orderplace_new_cart_order_sync` route)
+ action the request method was changed to POST. 
+* In `Oro\Bundle\MagentoBundle\Controller\OrderPlaceController::customerSyncAction` 
+ (`oro_magento_orderplace_new_customer_order_sync` route)
+ action the request method was changed to POST. 
 
-## 3.1.4
+## 3.1.4 
+[Show detailed list of changes](incompatibilities-3-1-4.md) 
 
 ### Removed
 #### CRMBundle
 * Service `oro_crm.namespace_migration_provider` and the logic that used it were removed.
 
-## 3.1.0-rc
+## 3.1.0 (2019-01-30)
+[Show detailed list of changes](incompatibilities-3-1.md)
+
+## 3.1.0-rc (2018-11-30)
 
 * Package `oro/crm-mail-chimp` removed from composer.json, run `composer require 'oro/mailchimp:3.1.*'` before upgrade to keep functionality working
 * Package `oro/crm-abandoned-cart` removed from composer.json, run `composer require 'oro/magento-abandoned-cart:3.1.*'` before upgrade to keep functionality working

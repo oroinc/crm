@@ -14,10 +14,10 @@ class OpportunityStatusBoardTest extends AbstractDatagridTestCase
     {
         $this->initClient(
             ['debug' => false],
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            $this->generateBasicAuthHeader()
         );
         $this->client->useHashNavigation(true);
-        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatusBoardFixtures']);
+        $this->loadFixtures([LoadOpportunityStatusBoardFixtures::class]);
     }
 
     public function testIndex()
@@ -34,17 +34,16 @@ class OpportunityStatusBoardTest extends AbstractDatagridTestCase
      */
     public function gridProvider()
     {
-        $perPage = 4;
         return [
             'Opportunity grid'                => [
                 [
                     'gridParameters'      => [
                         'gridName' => 'sales-opportunity-grid',
-                        'sales-opportunity-grid[_pager][_per_page]' => $perPage,
+                        'sales-opportunity-grid[_pager][_per_page]' => 10,
                     ],
                     'gridFilters'         => [],
                     'assert'              => [],
-                    'expectedResultCount' => $perPage
+                    'expectedResultCount' => 10
                 ],
             ],
             'Opportunity status board' => [
@@ -53,11 +52,11 @@ class OpportunityStatusBoardTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-opportunity-grid',
                         'sales-opportunity-grid[_appearance][_type]' => 'board',
                         'sales-opportunity-grid[_appearance][_data][id]' => 'opportunity-by-status',
-                        'sales-opportunity-grid[_pager][_per_page]' => $perPage,
+                        'sales-opportunity-grid[_pager][_per_page]' => 25,
                     ],
                     'gridFilters'         => [],
                     'assert'              => [],
-                    'expectedResultCount' => LoadOpportunityStatusBoardFixtures::STATUSES_COUNT * $perPage
+                    'expectedResultCount' => 25
                 ],
             ],
         ];

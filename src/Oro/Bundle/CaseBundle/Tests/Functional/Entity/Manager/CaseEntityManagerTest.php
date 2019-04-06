@@ -20,7 +20,7 @@ class CaseEntityManagerTest extends WebTestCase
     {
         $this->initClient(
             array(),
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            $this->generateBasicAuthHeader()
         );
 
         $this->loadFixtures(
