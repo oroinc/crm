@@ -18,6 +18,7 @@ oro:
             total_forecast.label: Total Forecast
             total_forecast.description: Total Forecast report
         datagrid:
+            default_entity_hint: report data
             columns:
                 account_name:      Account name
                 total_value:       Close revenue

@@ -20,8 +20,8 @@
     {% import 'OroEmailBundle::macros.html.twig' as Email %}
     <div class="contact-box">
         <div class="contact-box-title">
-            <a href="{{ path('oro_contact_view',{'id': contact.id }) }}" title="{{ contact|oro_format_name|escape }}" class="contact-box-name-link contact-box-link" >
-                {{- contact|oro_format_name|escape -}}
+            <a href="{{ path('oro_contact_view',{'id': contact.id }) }}" title="{{ contact|oro_format_name }}" class="contact-box-name-link contact-box-link" >
+                {{- contact|oro_format_name -}}
                 {% if isDefault %}
                     <span class="label label-info">{{ "oro.account.default_contact.label"|trans }}</span>
                 {% endif %}

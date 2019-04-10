@@ -105,7 +105,7 @@ datagrids:
                 icon:         trash
                 link:         delete_link
         options:
-            entityHint: contact requests
+            entityHint: oro.contactus.contactrequest.entity_plural_label
             entity_pagination: true
     orcrm-contact-reasons-grid:
         acl_resource: oro_contactus_reason_view
