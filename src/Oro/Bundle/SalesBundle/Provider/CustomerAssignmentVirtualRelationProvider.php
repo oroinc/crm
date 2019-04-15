@@ -11,8 +11,7 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
- * This class provides logic for virtual fields of entity
- * that associated with Oro\Bundle\SalesBundle\Entity\Customer entity.
+ * Provides virtual fields for an entity that is associated with Oro\Bundle\SalesBundle\Entity\Customer entity.
  */
 class CustomerAssignmentVirtualRelationProvider implements VirtualRelationProviderInterface
 {
@@ -41,8 +40,12 @@ class CustomerAssignmentVirtualRelationProvider implements VirtualRelationProvid
      */
     public function isVirtualRelation($className, $fieldName)
     {
-        return is_a($className, $this->sourceClass, true) &&
-            in_array($fieldName, [self::OPPORTUNITY_RELATION_NAME, self::LEAD_RELATION_NAME], true);
+        return
+            is_a($className, $this->sourceClass, true)
+            && (
+                self::OPPORTUNITY_RELATION_NAME === $fieldName
+                || self::LEAD_RELATION_NAME === $fieldName
+            );
     }
 
     /**
