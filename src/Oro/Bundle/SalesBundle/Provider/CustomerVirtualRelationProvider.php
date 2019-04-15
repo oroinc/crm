@@ -54,7 +54,8 @@ class CustomerVirtualRelationProvider implements VirtualRelationProviderInterfac
      */
     public function isVirtualRelation($className, $fieldName)
     {
-        return is_a($className, $this->sourceClass, true)
+        return
+            is_a($className, $this->sourceClass, true)
             && in_array($fieldName, array_values($this->getTargets()), true);
     }
 
