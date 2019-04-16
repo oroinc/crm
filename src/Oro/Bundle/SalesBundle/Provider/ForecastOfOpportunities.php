@@ -5,14 +5,14 @@ namespace Oro\Bundle\SalesBundle\Provider;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
-use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
+use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Class ForecastOfOpportunities
- * @package Oro\Bundle\SalesBundle\Provider
+ * Provide functionality to get opportunities data
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ForecastOfOpportunities
@@ -20,7 +20,7 @@ class ForecastOfOpportunities
     /** @var NumberFormatter */
     protected $numberFormatter;
 
-    /** @var DateTimeFormatter */
+    /** @var DateTimeFormatterInterface */
     protected $dateTimeFormatter;
 
     /** @var TranslatorInterface */
@@ -39,16 +39,16 @@ class ForecastOfOpportunities
     protected $moments = [];
 
     /**
-     * @param NumberFormatter          $numberFormatter
-     * @param DateTimeFormatter        $dateTimeFormatter
-     * @param TranslatorInterface      $translator
-     * @param DateHelper               $dateHelper
-     * @param ForecastProvider         $provider
+     * @param NumberFormatter $numberFormatter
+     * @param DateTimeFormatterInterface $dateTimeFormatter
+     * @param TranslatorInterface $translator
+     * @param DateHelper $dateHelper
+     * @param ForecastProvider $provider
      * @param FilterDateRangeConverter $filterDateRangeConverter
      */
     public function __construct(
         NumberFormatter $numberFormatter,
-        DateTimeFormatter $dateTimeFormatter,
+        DateTimeFormatterInterface $dateTimeFormatter,
         TranslatorInterface $translator,
         DateHelper $dateHelper,
         ForecastProvider $provider,

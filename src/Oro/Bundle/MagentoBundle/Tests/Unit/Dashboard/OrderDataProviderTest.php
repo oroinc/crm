@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Converter;
 
 use DateTime;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
-use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
+use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface;
 use Oro\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 
 class OrderDataProviderTest extends \PHPUnit\Framework\TestCase
@@ -24,7 +24,7 @@ class OrderDataProviderTest extends \PHPUnit\Framework\TestCase
     /** @var DateHelper */
     protected $dateHelper;
 
-    /** @var DateTimeFormatter */
+    /** @var DateTimeFormatterInterface */
     protected $dateTimeFormatter;
 
     /**
@@ -32,8 +32,8 @@ class OrderDataProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->registry       = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
-        $this->aclHelper      = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
+        $this->registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
             ->disableOriginalConstructor()
             ->getMock();
         $this->configProvider = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ConfigProvider')
@@ -43,7 +43,8 @@ class OrderDataProviderTest extends \PHPUnit\Framework\TestCase
         $this->dateHelper = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Helper\DateHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dateTimeFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter')
+        $this->dateTimeFormatter = $this
+            ->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
