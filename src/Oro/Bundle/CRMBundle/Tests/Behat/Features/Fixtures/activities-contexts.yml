@@ -1,0 +1,24 @@
+Oro\Bundle\AccountBundle\Entity\Account:
+    context_account:
+        name: 'Test Account'
+        owner: '@admin'
+        organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+    context_customer:
+        account: '@context_account'
+
+Oro\Bundle\SalesBundle\Entity\Opportunity:
+    context_opportunity:
+        name: 'Test Opportunity'
+        owner: '@admin'
+        organization: '@organization'
+        status: 'in_progress'
+        customerAssociation: '@context_customer'
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+    context_lead:
+        name: 'Test Lead'
+        owner: '@admin'
+        organization: '@organization'
+        status: 'new'
