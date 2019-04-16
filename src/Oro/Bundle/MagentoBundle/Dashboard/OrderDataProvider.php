@@ -8,10 +8,13 @@ use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
-use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
+use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface;
 use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+/**
+ * Provide functionality to get order data
+ */
 class OrderDataProvider
 {
     /**
@@ -30,7 +33,7 @@ class OrderDataProvider
     protected $configProvider;
 
     /**
-     * @var DateTimeFormatter
+     * @var DateTimeFormatterInterface
      */
     protected $dateTimeFormatter;
 
@@ -40,17 +43,17 @@ class OrderDataProvider
     protected $dateHelper;
 
     /**
-     * @param ManagerRegistry   $registry
-     * @param AclHelper         $aclHelper
-     * @param ConfigProvider    $configProvider
-     * @param DateTimeFormatter $dateTimeFormatter
-     * @param DateHelper        $dateHelper
+     * @param ManagerRegistry $registry
+     * @param AclHelper $aclHelper
+     * @param ConfigProvider $configProvider
+     * @param DateTimeFormatterInterface $dateTimeFormatter
+     * @param DateHelper $dateHelper
      */
     public function __construct(
         ManagerRegistry $registry,
         AclHelper $aclHelper,
         ConfigProvider $configProvider,
-        DateTimeFormatter $dateTimeFormatter,
+        DateTimeFormatterInterface $dateTimeFormatter,
         DateHelper $dateHelper
     ) {
         $this->registry          = $registry;
