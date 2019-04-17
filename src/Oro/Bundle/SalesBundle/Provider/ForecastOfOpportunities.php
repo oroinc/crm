@@ -11,8 +11,8 @@ use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Class ForecastOfOpportunities
- * @package Oro\Bundle\SalesBundle\Provider
+ * Provide functionality to get opportunities data
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ForecastOfOpportunities

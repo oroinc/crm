@@ -64,7 +64,7 @@ datagrids:
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
         options:
-            entityHint: report data
+            entityHint: oro.reportcrm.datagrid.default_entity_hint
             export: true
             entity_pagination: true
 
@@ -132,7 +132,7 @@ datagrids:
                     label:       oro.reportcrm.datagrid.columns.created_date
                     data_name:   o.createdAt
         options:
-            entityHint: report data
+            entityHint: oro.reportcrm.datagrid.default_entity_hint
             export: true
             entity_pagination: true
 
@@ -176,7 +176,7 @@ datagrids:
                 createdDate:   { type: date, data_name: createdDate, filter_by_having: true }
                 leadsCount:    { type: number-range, data_name: leadsCount, filter_by_having: true }
         options:
-            entityHint: report data
+            entityHint: oro.reportcrm.datagrid.default_entity_hint
             export: true
             entity_pagination: true
 
@@ -282,7 +282,7 @@ datagrids:
                     data_name: opportunity.updatedAt
 
         options:
-            entityHint: report data
+            entityHint: oro.reportcrm.datagrid.default_entity_hint
             export: true
             entity_pagination: true
 
@@ -381,7 +381,7 @@ datagrids:
             default:
                 period: { value: monthPeriod }
         options:
-            entityHint: report data
+            entityHint: oro.reportcrm.datagrid.default_entity_hint
             export: true
             entity_pagination: true
 
@@ -472,6 +472,6 @@ datagrids:
                     options:
                         data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
         options:
-            entityHint: report data
+            entityHint: oro.reportcrm.datagrid.default_entity_hint
             export: true
         entity_pagination: true

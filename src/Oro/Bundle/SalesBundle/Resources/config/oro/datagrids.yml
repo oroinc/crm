@@ -5,7 +5,7 @@ datagrids:
             - activity-contact-data-hidden-mixin
             - activity-contact-days-since-last-contact-hidden-mixin
         options:
-            entityHint: opportunities
+            entityHint: oro.sales.opportunity.entity_plural_label
             export: true
             entity_pagination: true
         acl_resource: oro_sales_opportunity_view
@@ -311,7 +311,7 @@ datagrids:
             - activity-contact-data-hidden-mixin
             - activity-contact-days-since-last-contact-hidden-mixin
         options:
-            entityHint: leads
+            entityHint: oro.sales.lead.entity_plural_label
             export: true
             entity_pagination: true
         acl_resource: oro_sales_lead_view
@@ -683,7 +683,7 @@ datagrids:
     sales-funnel-grid:
         extended_entity_name: '%oro_sales.salesfunnel.entity.class%'
         options:
-            entityHint: sales process
+            entityHint: oro.sales.salesfunnel.entity_plural_label
             entity_pagination: true
         acl_resource: oro_sales_salesfunnel_view
         source:
@@ -857,7 +857,7 @@ datagrids:
     sales-funnel-lead-grid:
         extended_entity_name: '%oro_sales.lead.entity.class%'
         options:
-            entityHint: leads
+            entityHint: oro.sales.lead.entity_plural_label
         acl_resource: oro_sales_lead_view
         source:
             type: orm
@@ -977,7 +977,7 @@ datagrids:
     sales-funnel-opportunity-grid:
         extended_entity_name: '%oro_sales.opportunity.class%'
         options:
-            entityHint: opportunities
+            entityHint: oro.sales.opportunity.entity_plural_label
         acl_resource: oro_sales_opportunity_view
         source:
             type: orm
@@ -1743,7 +1743,7 @@ datagrids:
     sales-lead-for-context-grid:
         extended_entity_name: '%oro_sales.lead.entity.class%'
         options:
-            entityHint: leads
+            entityHint: oro.sales.lead.entity_plural_label
             entity_pagination: true
             toolbarOptions:
                 pageSize:
@@ -1825,7 +1825,7 @@ datagrids:
     sales-opportunity-for-context-grid:
         extended_entity_name: '%oro_sales.opportunity.class%'
         options:
-            entityHint: opportunities
+            entityHint: oro.sales.opportunity.entity_plural_label
             entity_pagination: true
             toolbarOptions:
                 pageSize:
@@ -2029,7 +2029,7 @@ datagrids:
                 closeDate:
                     data_name: o.closeDate
         options:
-            entityHint: opportunities
+            entityHint: oro.sales.opportunity.entity_plural_label
             toolbarOptions:
                 hide: true
                 pageSize:
@@ -2065,7 +2065,7 @@ datagrids:
                 label:         oro.sales.lead.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
         options:
-            entityHint: opportunities
+            entityHint: oro.sales.opportunity.entity_plural_label
             toolbarOptions:
                 hide: true
                 pageSize:
@@ -2075,7 +2075,7 @@ datagrids:
         extended_entity_name: '%oro_sales.opportunity.class%'
         acl_resource: oro_sales_opportunity_view
         options:
-            entityHint: opportunities
+            entityHint: oro.sales.opportunity.entity_plural_label
             entity_pagination: true
             toolbarOptions:
                 pageSize:

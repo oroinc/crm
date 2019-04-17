@@ -8,6 +8,9 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Form type provides functionality to select an existing entity from the tree
+ */
 class LeadStatusSelectType extends AbstractType
 {
     const NAME = 'oro_type_widget_lead_status_select';
@@ -32,7 +35,6 @@ class LeadStatusSelectType extends AbstractType
                 'choices' => $this->enumValueProvider->getEnumChoicesByCode(Lead::INTERNAL_STATUS_CODE),
                 'multiple' => true,
                 'configs' => [
-                    'width' => '400px',
                     'allowClear' => true,
                 ]
             ]

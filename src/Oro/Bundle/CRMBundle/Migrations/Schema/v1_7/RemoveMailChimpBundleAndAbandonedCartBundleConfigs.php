@@ -3,7 +3,6 @@
 namespace Oro\Bundle\CRMBundle\Migrations\Schema\v1_7;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use Oro\Bundle\EntityConfigBundle\Migration\RemoveTableQuery;
@@ -17,6 +16,9 @@ class RemoveMailChimpBundleAndAbandonedCartBundleConfigs implements Migration, D
     /** @var AbstractPlatform */
     protected $platform;
 
+    /**
+     * @param AbstractPlatform $platform
+     */
     public function setDatabasePlatform(AbstractPlatform $platform)
     {
         $this->platform = $platform;
@@ -75,22 +77,87 @@ class RemoveMailChimpBundleAndAbandonedCartBundleConfigs implements Migration, D
                     ['transport' => Type::STRING]
                 )
             );
-            $queries->addQuery('ALTER TABLE oro_integration_transport DROP orocrm_mailchimp_apikey;');
-            $queries->addQuery('ALTER TABLE oro_integration_transport DROP orocrm_mailchimp_act_up_int;');
-            if ($this->platform instanceof PostgreSqlPlatform) {
-                $queries->addQuery('ALTER TABLE orocrm_cmpgn_transport_stngs DROP CONSTRAINT FK_16E86BF27BC28329;');
-                $queries->addQuery('ALTER TABLE orocrm_cmpgn_transport_stngs DROP CONSTRAINT FK_16E86BF27162EA00;');
-                $queries->addQuery('DROP INDEX IDX_16E86BF27162EA00;');
-                $queries->addQuery('DROP INDEX IDX_16E86BF27BC28329;');
-            } else {
-                $queries->addQuery('ALTER TABLE orocrm_cmpgn_transport_stngs DROP FOREIGN KEY FK_16E86BF27BC28329;');
-                $queries->addQuery('ALTER TABLE orocrm_cmpgn_transport_stngs DROP FOREIGN KEY FK_16E86BF27162EA00;');
-                $queries->addQuery('ALTER TABLE orocrm_cmpgn_transport_stngs DROP INDEX IDX_16E86BF27BC28329;');
-                $queries->addQuery('ALTER TABLE orocrm_cmpgn_transport_stngs DROP INDEX IDX_16E86BF27162EA00;');
+
+            $this->dropColumns(
+                $schema,
+                'oro_integration_transport',
+                ['orocrm_mailchimp_apikey', 'orocrm_mailchimp_act_up_int']
+            );
+
+            $this->dropForeignKeys(
+                $schema,
+                'orocrm_cmpgn_transport_stngs',
+                ['FK_16E86BF27BC28329', 'FK_16E86BF27162EA00']
+            );
+
+            $this->dropIndexes(
+                $schema,
+                'orocrm_cmpgn_transport_stngs',
+                ['IDX_16E86BF27BC28329', 'IDX_16E86BF27162EA00']
+            );
+
+            $this->dropColumns(
+                $schema,
+                'orocrm_cmpgn_transport_stngs',
+                ['mailchimp_template_id', 'mailchimp_channel_id', 'mailchimp_receive_activities']
+            );
+        }
+    }
+
+    /**
+     * @param Schema $schema
+     * @param string $tableName
+     * @param array $columns
+     */
+    private function dropColumns(Schema $schema, string $tableName, array $columns): void
+    {
+        if (!$schema->hasTable($tableName)) {
+            return;
+        }
+
+        $table = $schema->getTable($tableName);
+        foreach ($columns as $column) {
+            if ($table->hasColumn($column)) {
+                $table->dropColumn($column);
             }
-            $queries->addQuery('ALTER TABLE orocrm_cmpgn_transport_stngs DROP mailchimp_template_id;');
-            $queries->addQuery('ALTER TABLE orocrm_cmpgn_transport_stngs DROP mailchimp_channel_id;');
-            $queries->addQuery('ALTER TABLE orocrm_cmpgn_transport_stngs DROP mailchimp_receive_activities;');
+        }
+    }
+
+    /**
+     * @param Schema $schema
+     * @param string $tableName
+     * @param array $foreignKeys
+     */
+    private function dropForeignKeys(Schema $schema, string $tableName, array $foreignKeys): void
+    {
+        if (!$schema->hasTable($tableName)) {
+            return;
+        }
+
+        $table = $schema->getTable($tableName);
+        foreach ($foreignKeys as $foreignKey) {
+            if ($table->hasForeignKey($foreignKey)) {
+                $table->removeForeignKey($foreignKey);
+            }
+        }
+    }
+
+    /**
+     * @param Schema $schema
+     * @param string $tableName
+     * @param array $indexes
+     */
+    private function dropIndexes(Schema $schema, string $tableName, array $indexes): void
+    {
+        if (!$schema->hasTable($tableName)) {
+            return;
+        }
+
+        $table = $schema->getTable($tableName);
+        foreach ($indexes as $index) {
+            if ($table->hasIndex($index)) {
+                $table->dropIndex($index);
+            }
         }
     }
 }
