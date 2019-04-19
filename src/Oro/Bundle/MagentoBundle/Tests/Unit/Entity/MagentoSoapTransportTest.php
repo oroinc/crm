@@ -23,11 +23,10 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
      */
     public function getSetDataProvider()
     {
-        $this->markTestSkipped('Due to BAP-18721');
         $wsdlUrl = 'http://localhost/?wsdl';
         $apiUser = $apiKey = uniqid();
         $syncStartDate = new \DateTime('now', new \DateTimeZone('UTC'));
-        $syncRange = \DateInterval::createFromDateString('p1d');
+        $syncRange = \DateInterval::createFromDateString('1 day');
         $websiteId = 123;
         $guestCustomerSync = true;
         $websites = [];
