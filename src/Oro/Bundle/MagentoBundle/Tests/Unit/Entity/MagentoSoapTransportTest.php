@@ -26,7 +26,7 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
         $wsdlUrl = 'http://localhost/?wsdl';
         $apiUser = $apiKey = uniqid();
         $syncStartDate = new \DateTime('now', new \DateTimeZone('UTC'));
-        $syncRange = \DateInterval::createFromDateString('p1d');
+        $syncRange = \DateInterval::createFromDateString('1 day');
         $websiteId = 123;
         $guestCustomerSync = true;
         $websites = [];

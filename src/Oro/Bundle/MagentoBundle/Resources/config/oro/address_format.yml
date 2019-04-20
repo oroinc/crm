@@ -39,7 +39,7 @@ GU:
     zip_name_type: zip
     region_name_type: region
 HK:
-    format: '%REGION%\n%street%\n%organization%\n%name%'
+    format: '%COUNTRY%\n%REGION%\n%street%\n%organization%\n%name%'
     latin_format: '%name%\n%organization%\n%street%\n%REGION%\n%COUNTRY%'
     require: [street, region]
     region_name_type: area
@@ -68,7 +68,7 @@ NC:
     format: '%organization%\n%name%\n%STREET%\n%postal_code% %CITY%\n%COUNTRY%'
     require: [street, city, postal_code]
 NF:
-    format: '%organization%\n%name%\n%street%\n%CITY% %REGION% %postal_code%'
+    format: '%organization%\n%name%\n%street%\n%CITY% %REGION% %postal_code%\n%COUNTRY%'
 PF:
     format: '%name%\n%organization%\n%street%\n%postal_code% %CITY% %REGION%\n%COUNTRY%'
     require: [street, city, region, postal_code]

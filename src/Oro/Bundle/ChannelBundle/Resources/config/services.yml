@@ -156,15 +156,6 @@ services:
             - '%kernel.debug%'
             - '@oro_channel.config_resolver'
 
-    oro_channel.provider.exclusion_provider:
-        class: Oro\Bundle\ChannelBundle\Provider\EntityExclusionProvider
-        public: false
-        arguments:
-            - "@oro_channel.provider.settings_provider"
-            - "@oro_channel.provider.state_provider"
-        tags:
-            - { name: oro_entity.exclusion_provider.default }
-
     oro_channel.provider.metadata_provider:
         class: '%oro_channel.provider.entity_metadata.class%'
         arguments:

@@ -7,11 +7,14 @@ use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
-use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
+use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+/**
+ * Provide functionality to create view for custom entities
+ */
 class ViewFactory
 {
     /** @var AuthorizationCheckerInterface */
@@ -23,7 +26,7 @@ class ViewFactory
     /** @var EntityNameResolver */
     protected $entityNameResolver;
 
-    /** @var DateTimeFormatter */
+    /** @var DateTimeFormatterInterface */
     protected $dateTimeFormatter;
 
     /** @var CacheManager */
@@ -36,14 +39,14 @@ class ViewFactory
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param RouterInterface               $router
      * @param EntityNameResolver            $entityNameResolver
-     * @param DateTimeFormatter             $dateTimeFormatter
+     * @param DateTimeFormatterInterface    $dateTimeFormatter
      * @param AttachmentManager             $attachmentManager
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         RouterInterface $router,
         EntityNameResolver $entityNameResolver,
-        DateTimeFormatter $dateTimeFormatter,
+        DateTimeFormatterInterface $dateTimeFormatter,
         AttachmentManager $attachmentManager
     ) {
         $this->authorizationChecker = $authorizationChecker;

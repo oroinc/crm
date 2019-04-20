@@ -6,7 +6,7 @@ use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
-use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
+use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
@@ -23,7 +23,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
     /** @var NumberFormatter|\PHPUnit\Framework\MockObject\MockObject */
     protected $numberFormatter;
 
-    /** @var DateTimeFormatter|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var DateTimeFormatterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $dateTimeFormatter;
 
     /** @var ForecastProvider|\PHPUnit\Framework\MockObject\MockObject */
@@ -51,7 +51,8 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
             ->withAnyParameters()
             ->will($this->returnArgument(0));
 
-        $this->dateTimeFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter')
+        $this->dateTimeFormatter = $this
+            ->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
