@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ChannelBundle\DependencyInjection;
+namespace Oro\Bundle\ChannelBundle\Configuration;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

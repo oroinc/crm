@@ -1,19 +1,19 @@
 <?php
 
-namespace Oro\Bundle\ChannelBundle\Tests\Unit\DependencyInjection;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Configuration;
 
-use Oro\Bundle\ChannelBundle\Provider\ConfigurationProvider;
+use Oro\Bundle\ChannelBundle\Configuration\ChannelConfigurationProvider;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle1\TestBundle1;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle2\TestBundle2;
 use Oro\Component\Config\CumulativeResourceManager;
 use Oro\Component\Config\Resolver\ResolverInterface;
 use Oro\Component\Testing\TempDirExtension;
 
-class ConfigurationProviderTest extends \PHPUnit\Framework\TestCase
+class ChannelConfigurationProviderTest extends \PHPUnit\Framework\TestCase
 {
     use TempDirExtension;
 
-    /** @var ConfigurationProvider */
+    /** @var ChannelConfigurationProvider */
     private $configurationProvider;
 
     /** @var string */
@@ -31,7 +31,7 @@ class ConfigurationProviderTest extends \PHPUnit\Framework\TestCase
             ->method('resolve')
             ->willReturnArgument(0);
 
-        $this->configurationProvider = new ConfigurationProvider(
+        $this->configurationProvider = new ChannelConfigurationProvider(
             $this->cacheFile,
             false,
             $resolver

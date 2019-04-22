@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Provider;
 
+use Oro\Bundle\ChannelBundle\Configuration\ChannelConfigurationProvider;
+
 /**
  * The provider for different kind of channel settings.
  */
@@ -12,13 +14,13 @@ class SettingsProvider
     private const LIFETIME_VALUE    = 'lifetime_value';
     private const PRIORITY          = 'priority';
 
-    /** @var ConfigurationProvider */
+    /** @var ChannelConfigurationProvider */
     private $configProvider;
 
     /**
-     * @param ConfigurationProvider $configProvider
+     * @param ChannelConfigurationProvider $configProvider
      */
-    public function __construct(ConfigurationProvider $configProvider)
+    public function __construct(ChannelConfigurationProvider $configProvider)
     {
         $this->configProvider = $configProvider;
     }

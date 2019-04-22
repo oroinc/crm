@@ -148,7 +148,7 @@ services:
             - '@oro_channel.provider.configuration_provider'
 
     oro_channel.provider.configuration_provider:
-        class: Oro\Bundle\ChannelBundle\Provider\ConfigurationProvider
+        class: Oro\Bundle\ChannelBundle\Configuration\ChannelConfigurationProvider
         public: false
         parent: oro.static_config_provider.abstract
         arguments:

@@ -1,8 +1,7 @@
 <?php
 
-namespace Oro\Bundle\ChannelBundle\Provider;
+namespace Oro\Bundle\ChannelBundle\Configuration;
 
-use Oro\Bundle\ChannelBundle\DependencyInjection\ChannelConfiguration;
 use Oro\Component\Config\Cache\PhpArrayConfigProvider;
 use Oro\Component\Config\Loader\CumulativeConfigLoader;
 use Oro\Component\Config\Loader\CumulativeConfigProcessorUtil;
@@ -13,7 +12,7 @@ use Oro\Component\Config\ResourcesContainerInterface;
 /**
  * The provider for configuration that is loaded from "Resources/config/oro/channels.yml" files.
  */
-class ConfigurationProvider extends PhpArrayConfigProvider
+class ChannelConfigurationProvider extends PhpArrayConfigProvider
 {
     private const CONFIG_FILE = 'Resources/config/oro/channels.yml';
 

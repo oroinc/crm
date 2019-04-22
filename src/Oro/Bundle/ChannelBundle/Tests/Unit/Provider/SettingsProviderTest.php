@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 
-use Oro\Bundle\ChannelBundle\Provider\ConfigurationProvider;
+use Oro\Bundle\ChannelBundle\Configuration\ChannelConfigurationProvider;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class SettingsProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ConfigurationProvider|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ChannelConfigurationProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $configProvider;
 
     /** @var SettingsProvider */
@@ -15,7 +15,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->configProvider = $this->createMock(ConfigurationProvider::class);
+        $this->configProvider = $this->createMock(ChannelConfigurationProvider::class);
 
         $this->settingsProvider = new SettingsProvider($this->configProvider);
     }
