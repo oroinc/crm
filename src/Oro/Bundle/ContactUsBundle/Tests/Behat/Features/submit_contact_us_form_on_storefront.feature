@@ -1,10 +1,13 @@
 @ticket-BB-16463
 Feature: Submit contact us form on storefront
+  In order to control Contact us form content
+  As an administrator
+  I need to be able to see correct Contact us form content on view page
 
   Scenario: Create contact us request
     Given I am on homepage
     When I click "Contact Us"
-    And I fill "Contact Request Form" with:
+    And I fill form with:
       | First Name        | First Name       |
       | Last Name         | Last Name        |
       | Organization Name | New Organization |
