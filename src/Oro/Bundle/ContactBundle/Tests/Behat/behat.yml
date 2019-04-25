@@ -88,5 +88,6 @@ oro_behat_extension:
         - OroConfigBundle::FeatureContext
         - OroNavigationBundle::FeatureContext
         - OroLocaleBundle::LocalizationContext
+        - OroNavigationBundle::TabContext
       paths:
         - '@OroContactBundle/Tests/Behat/Features'
