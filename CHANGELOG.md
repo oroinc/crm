@@ -2,12 +2,14 @@ Please refer first to [UPGRADE.md](UPGRADE.md) for the most important items that
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
-## 4.0
+## 4.0.0-rc
 ### Removed
 * Service `oro_channel.provider.exclusion_provider` and related logic were removed. There is
 no exclusion for "channel type" entities on UI.
 
-## 4.0.0-beta
+## 4.0.0-beta (2019-03-28)
+[Show detailed list of changes](incompatibilities-4-0-beta.md)
+
 ### Changed
 #### ChannelBundle
 * Method `getSettings` has been removed from `Oro\Bundle\ChannelBundle\Provider\SettingsProvider`.
