@@ -10,70 +10,55 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class ChannelVoterTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ChannelVoter
-     */
-    protected $voter;
+    /** @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper */
+    private $doctrineHelper;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
-     */
-    protected $doctrineHelper;
+    /** @var \PHPUnit\Framework\MockObject\MockObject|SettingsProvider */
+    private $settingsProvider;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|SettingsProvider
-     */
-    protected $settingsProvider;
+    /** @var ChannelVoter */
+    private $voter;
 
     protected function setUp()
     {
-        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $this->settingsProvider = $this->createMock(SettingsProvider::class);
 
         $this->voter = new ChannelVoter($this->doctrineHelper);
         $this->voter->setSettingsProvider($this->settingsProvider);
     }
 
-    protected function tearDown()
-    {
-        unset($this->voter, $this->doctrineHelper);
-    }
-
     /**
      * @param object $object
      * @param string $className
-     * @param array $attributes
-     * @param bool $isChannelSystem
-     * @param bool $expected
+     * @param array  $attributes
+     * @param bool   $isSystemChannel
+     * @param bool   $expected
      *
      * @dataProvider attributesDataProvider
      */
-    public function testVote($object, $className, $attributes, $isChannelSystem, $expected)
+    public function testVote($object, $className, $attributes, $isSystemChannel, $expected)
     {
-        $this->doctrineHelper->expects($this->any())
+        $this->doctrineHelper->expects(self::any())
             ->method('getEntityClass')
             ->with($object)
-            ->will($this->returnValue($className));
+            ->willReturn($className);
 
-        $this->voter->setClassName('Oro\Bundle\ChannelBundle\Entity\Channel');
-
-        $this->doctrineHelper->expects($this->any())
+        $this->doctrineHelper->expects(self::any())
             ->method('getSingleEntityIdentifier')
             ->with($object, false)
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
-        $this->settingsProvider->expects($this->any())
-            ->method('isChannelSystem')
-            ->will($this->returnValue($isChannelSystem));
+        $this->settingsProvider->expects(self::any())
+            ->method('isSystemChannel')
+            ->willReturn($isSystemChannel);
 
         /** @var TokenInterface $token */
-        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
-        $this->assertEquals(
+        $token = $this->createMock(TokenInterface::class);
+
+        $this->voter->setClassName(Channel::class);
+
+        self::assertEquals(
             $expected,
             $this->voter->vote($token, $object, $attributes)
         );
@@ -84,7 +69,7 @@ class ChannelVoterTest extends \PHPUnit\Framework\TestCase
      */
     public function attributesDataProvider()
     {
-        $className = 'Oro\Bundle\ChannelBundle\Entity\Channel';
+        $className = Channel::class;
 
         return [
             // channel system
@@ -105,8 +90,13 @@ class ChannelVoterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return \PHPUnit\Framework\MockObject\MockObject|Channel
      */
-    protected function getChannel()
+    private function getChannel()
     {
-        return $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock(Channel::class);
+        $channel->expects(self::any())
+            ->method('getChannelType')
+            ->willReturn('test_channel');
+
+        return $channel;
     }
 }

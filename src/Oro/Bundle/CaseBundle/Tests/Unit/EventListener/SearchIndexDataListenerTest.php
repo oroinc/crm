@@ -6,8 +6,10 @@ use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\EventListener\SearchIndexDataListener;
 use Oro\Bundle\SearchBundle\Engine\ObjectMapper;
 use Oro\Bundle\SearchBundle\Event\PrepareEntityMapEvent;
+use Oro\Bundle\SearchBundle\Provider\SearchMappingProvider;
 use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,8 +47,12 @@ class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        $this->mapper = new ObjectMapper($this->createMock(EventDispatcherInterface::class), []);
-        $this->mapper->setHtmlTagHelper($htmlTagHelper);
+        $this->mapper = new ObjectMapper(
+            $this->createMock(SearchMappingProvider::class),
+            PropertyAccess::createPropertyAccessor(),
+            $this->createMock(EventDispatcherInterface::class),
+            $htmlTagHelper
+        );
 
         $this->listener = new SearchIndexDataListener($this->mapper);
     }

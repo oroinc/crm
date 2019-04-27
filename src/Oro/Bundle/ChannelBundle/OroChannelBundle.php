@@ -3,11 +3,13 @@
 namespace Oro\Bundle\ChannelBundle;
 
 use Oro\Bundle\ChannelBundle\Async\Topics;
-use Oro\Bundle\ChannelBundle\DependencyInjection\CompilerPass\SettingsPass;
 use Oro\Bundle\MessageQueueBundle\DependencyInjection\Compiler\AddTopicMetaPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * The ChannelBundle bundle class.
+ */
 class OroChannelBundle extends Bundle
 {
     /**
@@ -16,7 +18,6 @@ class OroChannelBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        $container->addCompilerPass(new SettingsPass());
 
         $addTopicMetaPass = AddTopicMetaPass::create();
         $addTopicMetaPass

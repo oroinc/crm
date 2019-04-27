@@ -7,13 +7,16 @@ use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 
+/**
+ * The factory to create ChannelObjectBuilder.
+ */
 class BuilderFactory
 {
     /** @var ManagerRegistry */
-    protected $registry;
+    private $registry;
 
     /** @var SettingsProvider */
-    protected $settingsProvider;
+    private $settingsProvider;
 
     /**
      * @param ManagerRegistry  $registry
@@ -21,7 +24,7 @@ class BuilderFactory
      */
     public function __construct(ManagerRegistry $registry, SettingsProvider $settingsProvider)
     {
-        $this->registry         = $registry;
+        $this->registry = $registry;
         $this->settingsProvider = $settingsProvider;
     }
 
@@ -43,33 +46,32 @@ class BuilderFactory
     public function createBuilderForIntegration(Integration $integration)
     {
         $channel = new Channel();
+        $channelType = $this->getChannelTypeForIntegration($integration->getType());
 
-        $settingsProvider = $this->settingsProvider;
-        $type             = $this->getChannelTypeForIntegration($this->settingsProvider, $integration->getType());
-        $connectors       = $integration->getConnectors();
-        $entities         = array_filter(
-            $settingsProvider->getEntitiesByChannelType($type),
-            function ($entityName) use ($settingsProvider, &$connectors) {
-                $connector = $settingsProvider->getIntegrationConnectorName($entityName);
-                $key       = array_search($connector, $connectors);
-                $enabled   = $key !== false;
-
-                if ($enabled) {
+        $connectors = $integration->getConnectors();
+        $entities = [];
+        if ($channelType) {
+            foreach ($this->settingsProvider->getEntitiesByChannelType($channelType) as $entityName) {
+                $connector = $this->settingsProvider->getIntegrationConnectorName($entityName);
+                $key = array_search($connector, $connectors);
+                if (false !== $key) {
                     unset($connectors[$key]);
+                    $entities[] = $entityName;
                 }
-
-                return $enabled;
             }
-        );
+        }
+
+        $connectors = array_diff($integration->getConnectors(), $connectors);
 
         // disable connectors without correspondent entity
-        $connectors = array_diff($integration->getConnectors(), $connectors);
-        $identity   = $settingsProvider->getCustomerIdentityFromConfig($type);
-        if (!in_array($identity, $entities, true)) {
-            array_unshift($entities, $identity);
-            $connector = $settingsProvider->getIntegrationConnectorName($identity);
-            if (false !== $connector) {
-                array_unshift($connectors, $connector);
+        if ($channelType) {
+            $identity = $this->settingsProvider->getCustomerIdentityFromConfig($channelType);
+            if (!in_array($identity, $entities, true)) {
+                array_unshift($entities, $identity);
+                $connector = $this->settingsProvider->getIntegrationConnectorName($identity);
+                if ($connector) {
+                    array_unshift($connectors, $connector);
+                }
             }
         }
 
@@ -78,7 +80,7 @@ class BuilderFactory
 
         $builder = new ChannelObjectBuilder($this->registry->getManager(), $this->settingsProvider, $channel);
         $builder
-            ->setChannelType($type)
+            ->setChannelType($channelType)
             ->setEntities($entities);
 
         return $builder;
@@ -93,21 +95,19 @@ class BuilderFactory
     }
 
     /**
-     * @param SettingsProvider $settingsProvider
-     * @param string           $integrationType
+     * @param string $integrationType
      *
-     * @return bool|string
+     * @return string|null
      */
-    protected function getChannelTypeForIntegration(SettingsProvider $settingsProvider, $integrationType)
+    private function getChannelTypeForIntegration($integrationType)
     {
-        $channelTypeConfigs = $settingsProvider->getSettings(SettingsProvider::CHANNEL_TYPE_PATH);
-
-        foreach ($channelTypeConfigs as $channelTypeName => $config) {
-            if ($settingsProvider->getIntegrationType($channelTypeName) == $integrationType) {
-                return $channelTypeName;
+        $channelTypes = $this->settingsProvider->getChannelTypes();
+        foreach ($channelTypes as $channelType => $config) {
+            if ($this->settingsProvider->getIntegrationType($channelType) === $integrationType) {
+                return $channelType;
             }
         }
 
-        return false;
+        return null;
     }
 }

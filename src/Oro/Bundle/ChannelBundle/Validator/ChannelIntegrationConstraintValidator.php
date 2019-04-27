@@ -8,6 +8,9 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
+/**
+ * Validates that a channel datasource is set if the channel integration type is not empty.
+ */
 class ChannelIntegrationConstraintValidator extends ConstraintValidator
 {
     /** @var SettingsProvider */
@@ -26,7 +29,7 @@ class ChannelIntegrationConstraintValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!($value instanceof Channel)) {
+        if (!$value instanceof Channel) {
             throw new UnexpectedTypeException($value, 'Channel');
         }
 
@@ -36,20 +39,25 @@ class ChannelIntegrationConstraintValidator extends ConstraintValidator
     /**
      * @param Channel $channel
      */
-    protected function validateIntegration(Channel $channel)
+    private function validateIntegration(Channel $channel)
     {
-        $errorLabel      = 'oro.channel.form.integration_invalid.label';
-        $field           = 'dataSource';
-        $integrationType = $this->provider->getIntegrationType($channel->getChannelType());
-
-        if (!empty($integrationType)) {
-            $integration = $channel->getDataSource();
-
-            if (empty($integration)) {
-                $this->context->buildViolation($errorLabel)
-                    ->atPath($field)
-                    ->addViolation();
-            }
+        $channelType = $channel->getChannelType();
+        if (!$channelType) {
+            return;
         }
+
+        $integrationType = $this->provider->getIntegrationType($channelType);
+        if (!$integrationType) {
+            return;
+        }
+
+        $integration = $channel->getDataSource();
+        if ($integration) {
+            return;
+        }
+
+        $this->context->buildViolation('oro.channel.form.integration_invalid.label')
+            ->atPath('dataSource')
+            ->addViolation();
     }
 }

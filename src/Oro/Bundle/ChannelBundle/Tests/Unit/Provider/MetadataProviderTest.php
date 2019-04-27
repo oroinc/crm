@@ -84,7 +84,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
         $this->settingsProvider   = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
         $this->settingsProvider->expects($this->once())
-            ->method('getSettings')
+            ->method('getEntities')
             ->will($this->returnValue($this->testConfig));
 
         $this->entityProvider     = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')

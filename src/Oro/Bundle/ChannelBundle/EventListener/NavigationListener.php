@@ -12,10 +12,10 @@ use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 class NavigationListener
 {
     /** @var SettingsProvider */
-    protected $settings;
+    private $settings;
 
     /** @var StateProvider */
-    protected $state;
+    private $state;
 
     /**
      * @param SettingsProvider $settings
@@ -24,7 +24,7 @@ class NavigationListener
     public function __construct(SettingsProvider $settings, StateProvider $state)
     {
         $this->settings = $settings;
-        $this->state    = $state;
+        $this->state = $state;
     }
 
     /**
@@ -32,7 +32,7 @@ class NavigationListener
      */
     public function onNavigationConfigure(ConfigureMenuEvent $event)
     {
-        foreach ((array) $this->settings->getSettings(SettingsProvider::DATA_PATH) as $setting) {
+        foreach ($this->settings->getEntities() as $setting) {
             if (!$this->state->isEntityEnabled($setting['name'])) {
                 continue;
             }

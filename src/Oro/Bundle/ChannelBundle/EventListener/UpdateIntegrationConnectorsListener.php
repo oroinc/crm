@@ -10,6 +10,9 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Utils\EditModeUtils;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
+/**
+ * Handles channel's integration connections.
+ */
 class UpdateIntegrationConnectorsListener
 {
     /** @var SettingsProvider */
@@ -64,12 +67,8 @@ class UpdateIntegrationConnectorsListener
 
         foreach ($entities as $entity) {
             $connectorName = $this->settingsProvider->getIntegrationConnectorName($entity);
-
-            if (!empty($connectorName)) {
-                array_push(
-                    $result,
-                    $connectorName
-                );
+            if ($connectorName) {
+                $result[] = $connectorName;
             }
         }
 

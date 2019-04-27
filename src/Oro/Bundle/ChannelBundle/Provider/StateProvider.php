@@ -153,7 +153,7 @@ class StateProvider
 
         $enabledEntities = [];
 
-        $settings = $this->settingsProvider->getSettings(SettingsProvider::DATA_PATH);
+        $settings = $this->settingsProvider->getEntities();
         foreach (array_keys($settings) as $entityName) {
             if (in_array($entityName, $assignedEntityNames, true)) {
                 $enabledEntities[$entityName] = true;

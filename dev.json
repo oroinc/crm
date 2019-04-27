@@ -14,11 +14,11 @@
         "exclude-from-classmap": ["/Tests/"]
     },
     "require": {
-        "oro/platform": "3.1-dev",
-        "oro/crm-task-bundle": "3.1-dev",
-        "oro/crm-call-bundle": "3.1-dev",
-        "oro/calendar-bundle": "3.1-dev",
-        "oro/marketing": "3.1-dev"
+        "oro/platform": "4.0.x-dev",
+        "oro/crm-task-bundle": "4.0.x-dev",
+        "oro/crm-call-bundle": "4.0.x-dev",
+        "oro/calendar-bundle": "4.0.x-dev",
+        "oro/marketing": "4.0.x-dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "3.1.*",
@@ -36,7 +36,7 @@
         "phpunit/phpcov": "4.0.*",
         "symfony/phpunit-bridge": "3.4.*",
         "friendsofphp/php-cs-fixer": "2.12.*",
-        "oro/twig-inspector": "3.1-dev"
+        "oro/twig-inspector": "1.0.*"
     },
     "repositories": {
         "monorepo": {
@@ -56,7 +56,7 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "3.1-dev"
+            "dev-master": "4.0-dev"
         }
     }
 }

@@ -8,6 +8,9 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * Provides channel's metadata.
+ */
 class MetadataProvider implements MetadataProviderInterface
 {
     const ENTITY_EDIT_ROUTE = 'oro_entityconfig_update';
@@ -91,7 +94,7 @@ class MetadataProvider implements MetadataProviderInterface
             function ($setting) {
                 return $setting['name'];
             },
-            $this->settings->getSettings(SettingsProvider::DATA_PATH)
+            $this->settings->getEntities()
         );
 
         return array_unique(array_merge($customEntities, $entities));

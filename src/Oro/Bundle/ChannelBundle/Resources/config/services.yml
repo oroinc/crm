@@ -24,7 +24,6 @@ parameters:
     oro_channel.manager.customer_search.api.class:                     Oro\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager
 
     # providers
-    oro_channel.provider.settings_provider.class:                   Oro\Bundle\ChannelBundle\Provider\SettingsProvider
     oro_channel.provider.channel_entity_exclusion_provider.class:   Oro\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider
     oro_channel.provider.state_provider.class:                      Oro\Bundle\ChannelBundle\Provider\StateProvider
     oro_channel.provider.entity_metadata.class:                     Oro\Bundle\ChannelBundle\Provider\MetadataProvider
@@ -44,7 +43,6 @@ parameters:
 
     # event listener
     oro_channel.event_listener.navigation.class:                    Oro\Bundle\ChannelBundle\EventListener\NavigationListener
-    oro_channel.form.subscriber.channel_subscriber.class:           Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
     oro_channel.event_listener.update_integration_connectors.class: Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener
     oro_channel.event_listener.channel_before_deleted.class:        Oro\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
     oro_channel.event_listener.embedded_form.class:                 Oro\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
@@ -145,10 +143,18 @@ services:
 
     # Providers
     oro_channel.provider.settings_provider:
-        class: '%oro_channel.provider.settings_provider.class%'
+        class: Oro\Bundle\ChannelBundle\Provider\SettingsProvider
         arguments:
-            - []
-            - "@oro_channel.config_resolver"
+            - '@oro_channel.provider.configuration_provider'
+
+    oro_channel.provider.configuration_provider:
+        class: Oro\Bundle\ChannelBundle\Configuration\ChannelConfigurationProvider
+        public: false
+        parent: oro.static_config_provider.abstract
+        arguments:
+            - '%kernel.cache_dir%/oro/channels.php'
+            - '%kernel.debug%'
+            - '@oro_channel.config_resolver'
 
     oro_channel.provider.metadata_provider:
         class: '%oro_channel.provider.entity_metadata.class%'
@@ -175,7 +181,7 @@ services:
         class: '%oro_channel.autocomplete.channel_limitation_handler.class%'
         calls:
             - [initDoctrinePropertiesByManagerRegistry, ["@doctrine"]]
-            - [initSearchIndexer, ["@oro_search.index", '%oro_search.entities_config%']]
+            - [initSearchIndexer, ["@oro_search.index", '@oro_search.provider.search_mapping']]
             - [setAclHelper,["@oro_security.acl_helper"]]
 
     # config resolver
@@ -244,7 +250,8 @@ services:
               - [setNamespace, [ 'oro_channel_state' ] ]
 
     oro_channel.form.subscriber.channel_subscriber:
-        class: '%oro_channel.form.subscriber.channel_subscriber.class%'
+        class: Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
+        public: false
         arguments:
             - "@oro_channel.provider.settings_provider"
 

@@ -1,16 +1,19 @@
 <?php
 
-namespace Oro\Bundle\ChannelBundle\DependencyInjection;
+namespace Oro\Bundle\ChannelBundle\Configuration;
 
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * Provides schema for configuration that is loaded from "Resources/config/oro/channels.yml" files.
+ */
 class ChannelConfiguration implements ConfigurationInterface
 {
-    const ROOT_NODE_NAME            = 'channels';
-    const DEFAULT_CUSTOMER_IDENTITY = 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity';
-    const DEFAULT_PRIORITY          = 0;
+    public const ROOT_NODE = 'channels';
+
+    private const DEFAULT_CUSTOMER_IDENTITY = 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity';
+    private const DEFAULT_PRIORITY          = 0;
 
     /**
      * {@inheritDoc}
@@ -18,10 +21,10 @@ class ChannelConfiguration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $root        = $treeBuilder->root(self::ROOT_NODE_NAME);
-        $root
+        $rootNode = $treeBuilder->root(self::ROOT_NODE);
+        $rootNode
             ->children()
-                ->arrayNode(SettingsProvider::DATA_PATH)->isRequired()->cannotBeEmpty()
+                ->arrayNode('entity_data')->isRequired()->cannotBeEmpty()
                     ->prototype('array')
                         ->children()
                             ->scalarNode('name')
