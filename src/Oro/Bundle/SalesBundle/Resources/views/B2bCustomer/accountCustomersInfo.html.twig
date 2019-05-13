@@ -13,10 +13,12 @@
         ]) %}
     {% endfor %}
     {% if (tabs|length > 1) %}
-        {% if isMobileVersion() %}
-            {% set tabsOptions = {useDropdown: true} %}
-        {% else %}
-            {% set tabsOptions = {verticalTabs: true, subtitle: 'oro.sales.customer.entity_plural_label'|trans} %}
+        {% if not isMobileVersion() %}
+            {% set tabsOptions = {
+                verticalTabs: true,
+                useDropdown: false,
+                subtitle: 'oro.sales.customer.entity_plural_label'|trans
+            }%}
         {% endif %}
         {% import 'OroUIBundle::macros.html.twig' as UI %}
         <div class="widget-content account-customer-info multicustomer" {{ UI.renderPageComponentAttributes({
@@ -25,7 +27,7 @@
                 view: 'orosales/js/app/views/account-multicustomer-view'
             }
         }) }}>
-            {{ tabPanel(tabs, tabsOptions) }}
+            {{ tabPanel(tabs, tabsOptions|default({})) }}
         </div>
     {% else %}
         <div class="widget-content account-customer-info">

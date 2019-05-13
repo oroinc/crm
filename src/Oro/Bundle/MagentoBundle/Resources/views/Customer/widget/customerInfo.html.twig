@@ -104,9 +104,6 @@
         }
     ]) %}
 {% endif %}
-{% set tabPanelOptions = {
-    useDropdown: isMobileVersion()
-} %}
 {% if activeTab %}
     {% set tabPanelOptions = tabPanelOptions|merge({
         activeTabAlias: 'oro_magento_customer_' ~ activeTab ~ uniqueSuffix
@@ -121,6 +118,6 @@
         </div>
     </div>
     <div class="customer-without-border-tabs">
-        {{ tabPanel(tabs, tabPanelOptions) }}
+        {{ tabPanel(tabs) }}
     </div>
 </div>
