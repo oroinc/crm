@@ -17,3 +17,7 @@ oro_behat_extension:
             selector:
               locator: "//input[@type='checkbox'][@value='emailAddress']"
               type: xpath
+
+        Contact Request:
+            class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Element
+            selector: '.page-content'

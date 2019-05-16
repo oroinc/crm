@@ -84,6 +84,14 @@ oro_behat_extension:
       selector: 'div.filter-item'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilterItem
 
+    Integration Website:
+      selector: '[name="oro_integration_channel_form[transport][websiteId]"]'
+
+    Configure Integration Dialog:
+      selector:
+        type: xpath
+        locator: '//span[text()="Configure integration"]/ancestor::div[contains(@role, "dialog")]'
+
   suites:
     OroMagentoBundle:
       contexts:

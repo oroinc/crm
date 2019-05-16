@@ -57,6 +57,8 @@ oro_behat_extension:
         mapping:
           Budget Amount: 'oro_sales_opportunity_form[budgetAmount][value]'
           Budget Currency: 'oro_sales_opportunity_form[budgetAmount][currency]'
+          Close Revenue Amount: 'oro_sales_opportunity_form[closeRevenue][value]'
+          Close Revenue Currency: 'oro_sales_opportunity_form[closeRevenue][currency]'
 
     ImportLead:
       selector: 'div[class="opportunity-card-view card-view ui-sortable-handle"]'

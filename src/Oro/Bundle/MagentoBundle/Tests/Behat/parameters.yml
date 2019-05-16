@@ -1,0 +1,4 @@
+services:
+    oro_magento.handler.transport.decorator:
+        class: Oro\Bundle\MagentoBundle\Tests\Behat\Mock\Handler\TransportHandler
+        decorates: oro_magento.handler.transport
