@@ -10,6 +10,9 @@ branches:
 php:
     - 7.1.26
 
+env:
+  - COMPOSER=dev.json
+
 cache:
   directories:
     - $HOME/.composer
