@@ -1,4 +1,4 @@
-os: linux
+dist: xenial
 
 language: php
 
@@ -10,6 +10,9 @@ branches:
 php:
     - 7.1.26
 
+env:
+  - COMPOSER=travis.json
+
 cache:
   directories:
     - $HOME/.composer
@@ -18,6 +21,7 @@ before_script:
   - phpenv config-rm xdebug.ini
   - phpenv config-add travis.php.ini
   - composer self-update
+  - cp dev.json travis.json # avoid dev.lock file and composer.json with a stable version
   - travis_retry travis_wait composer install --prefer-dist --optimize-autoloader --no-interaction  --no-suggest
   - set +e; DIFF=$(git diff --name-only --diff-filter=ACMR $TRAVIS_COMMIT_RANGE | grep -e ".*\.php$"); set -e;
 
