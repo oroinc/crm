@@ -2,7 +2,7 @@
     <td class="name-cell"><i class="<%= icon %> hide-text"></i>&nbsp;<%- label %></td>
     <td class="action-cell">
         <% _.each(actions, function(action) { %>
-            <a href="<%= action.url ? action.url: 'javascript: void(0);' %>"
+            <a href="<%= action.url ? action.url: '#' %>"
                 class="action <% if (!action.url) { %>no-hash<% } %>"
                 <% if (!action.url && action.collectionAction) { %>
                     data-collection-action="<%= action.collectionAction %>""
