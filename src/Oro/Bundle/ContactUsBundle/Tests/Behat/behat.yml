@@ -19,5 +19,4 @@ oro_behat_extension:
               type: xpath
 
         Contact Request:
-            class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Element
             selector: '.page-content'
