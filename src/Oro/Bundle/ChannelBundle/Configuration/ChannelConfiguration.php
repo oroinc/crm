@@ -24,7 +24,7 @@ class ChannelConfiguration implements ConfigurationInterface
         $rootNode = $treeBuilder->root(self::ROOT_NODE);
         $rootNode
             ->children()
-                ->arrayNode('entity_data')->isRequired()->cannotBeEmpty()
+                ->arrayNode('entity_data')->isRequired()->requiresAtLeastOneElement()
                     ->prototype('array')
                         ->children()
                             ->scalarNode('name')
@@ -45,7 +45,7 @@ class ChannelConfiguration implements ConfigurationInterface
                                     ->thenInvalid('Invalid param %s')
                                 ->end()
                             ->end()
-                            ->arrayNode('belongs_to')->cannotBeEmpty()
+                            ->arrayNode('belongs_to')
                                 ->children()
                                     ->scalarNode('integration')->cannotBeEmpty()->end()
                                     ->scalarNode('connector')->cannotBeEmpty()->end()
