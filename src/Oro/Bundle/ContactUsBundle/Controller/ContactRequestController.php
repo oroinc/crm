@@ -42,7 +42,7 @@ class ContactRequestController extends Controller
 
     /**
      * @Route(name="oro_contactus_request_index")
-     * @Template
+     * @Template("@OroContactUs/ContactRequest/index.html.twig")
      * @AclAncestor("oro_contactus_request_view")
      */
     public function indexAction()
@@ -54,7 +54,7 @@ class ContactRequestController extends Controller
 
     /**
      * @Route("/info/{id}", name="oro_contactus_request_info", requirements={"id"="\d+"})
-     * @Template
+     * @Template("@OroContactUs/ContactRequest/widget/info.html.twig")
      * @AclAncestor("oro_contactus_request_view")
      */
     public function infoAction(ContactRequest $contactRequest)
@@ -66,7 +66,7 @@ class ContactRequestController extends Controller
 
     /**
      * @Route("/update/{id}", name="oro_contactus_request_update", requirements={"id"="\d+"})
-     * @Template
+     * @Template("@OroContactUs/ContactRequest/update.html.twig")
      * @Acl(
      *      id="oro_contactus_request_edit",
      *      type="entity",
@@ -81,7 +81,7 @@ class ContactRequestController extends Controller
 
     /**
      * @Route("/create", name="oro_contactus_request_create")
-     * @Template("OroContactUsBundle:ContactRequest:update.html.twig")
+     * @Template("@OroContactUs/ContactRequest/update.html.twig")
      * @Acl(
      *      id="oro_contactus_request_create",
      *      type="entity",
