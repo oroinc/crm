@@ -8,14 +8,29 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class CopyCustomerAddressesToContactCommand extends Command implements ContainerAwareInterface
+/**
+ * Make copy addresses of magento customers to the contact.
+ */
+class CopyCustomerAddressesToContactCommand extends Command
 {
-    use ContainerAwareTrait;
-
     const BATCH_SIZE = 25;
+
+    /** @var string */
+    protected static $defaultName = 'oro:magento:copy-data-to-contact:addresses';
+
+    /** @var CustomerAddressManager */
+    private $customerAddressManager;
+
+    /**
+     * @param CustomerAddressManager $customerAddressManager
+     */
+    public function __construct(CustomerAddressManager $customerAddressManager)
+    {
+        parent::__construct();
+
+        $this->customerAddressManager = $customerAddressManager;
+    }
 
     /**
      * {@inheritdoc}
@@ -23,7 +38,6 @@ class CopyCustomerAddressesToContactCommand extends Command implements Container
     public function configure()
     {
         $this
-            ->setName('oro:magento:copy-data-to-contact:addresses')
             ->addOption(
                 'id',
                 null,
@@ -74,10 +88,8 @@ class CopyCustomerAddressesToContactCommand extends Command implements Container
             $logger->info('');
         }
 
-        /** @var CustomerAddressManager $customerAddressManager */
-        $customerAddressManager = $this->container->get('oro_magento.manager.customer_address_manager');
-        $customerAddressManager->setLogger($logger);
-        $customerAddressManager->copyToContact($ids, $integrationIds, $batchSize);
+        $this->customerAddressManager->setLogger($logger);
+        $this->customerAddressManager->copyToContact($ids, $integrationIds, $batchSize);
         $logger->info('Executing command finished.');
     }
 }

@@ -8,14 +8,29 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class AddContactsToMagentoCustomersCommand extends Command implements ContainerAwareInterface
+/**
+ * Creates contacts for magento customers.
+ */
+class AddContactsToMagentoCustomersCommand extends Command
 {
-    use ContainerAwareTrait;
-
     const BATCH_SIZE = 25;
+
+    /** @var string */
+    protected static $defaultName = 'oro:magento:customer:add-contacts';
+
+    /** @var CustomerContactManager */
+    private $customerContactManager;
+
+    /**
+     * @param CustomerContactManager $customerContactManager
+     */
+    public function __construct(CustomerContactManager $customerContactManager)
+    {
+        parent::__construct();
+
+        $this->customerContactManager = $customerContactManager;
+    }
 
     /**
      * {@inheritdoc}
@@ -23,7 +38,6 @@ class AddContactsToMagentoCustomersCommand extends Command implements ContainerA
     public function configure()
     {
         $this
-            ->setName('oro:magento:customer:add-contacts')
             ->addOption(
                 'integration-id',
                 null,
@@ -63,10 +77,8 @@ class AddContactsToMagentoCustomersCommand extends Command implements ContainerA
             $logger->info('');
         }
 
-        /** @var CustomerContactManager $customerContactManager */
-        $customerContactManager = $this->container->get('oro_magento.manager.customer_contact_manager');
-        $customerContactManager->setLogger($logger);
-        $customerContactManager->fillContacts($integrationIds, $batchSize);
+        $this->customerContactManager->setLogger($logger);
+        $this->customerContactManager->fillContacts($integrationIds, $batchSize);
         $logger->info('Executing command finished.');
     }
 }

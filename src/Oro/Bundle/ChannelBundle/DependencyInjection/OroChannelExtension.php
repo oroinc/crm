@@ -18,5 +18,6 @@ class OroChannelExtension extends Extension
         $loader->load('services.yml');
         $loader->load('importexport.yml');
         $loader->load('commands.yml');
+        $loader->load('controllers.yml');
     }
 }

@@ -2,27 +2,48 @@
 
 namespace Oro\Bundle\ChannelBundle\Command;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIteratorInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
+/**
+ * Abstract class for recalculate commands.
+ */
+abstract class RecalculateLifetimeCommand extends Command
 {
     const READ_BATCH_SIZE = 1000;
     const WRITE_BATCH_SIZE = 200;
     const STATUS_UPDATE_BATCH_SIZE = 50;
 
-    /**
-     * @var ProgressBar
-     */
+    /** @var ManagerRegistry */
+    protected $registry;
+
+    /** @var SettingsProvider */
+    protected $settingsProvider;
+
+    /** @var ProgressBar */
     protected $progressBar;
+
+    /**
+     * @param ManagerRegistry $registry
+     * @param SettingsProvider $settingsProvider
+     */
+    public function __construct(ManagerRegistry $registry, SettingsProvider $settingsProvider)
+    {
+        parent::__construct();
+
+        $this->registry = $registry;
+        $this->settingsProvider = $settingsProvider;
+    }
 
     /**
      * {@inheritdoc}
@@ -82,7 +103,7 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
      */
     protected function getChannelSettings($channelType)
     {
-        $settingsProvider = $this->getContainer()->get('oro_channel.provider.settings_provider');
+        $settingsProvider = $this->settingsProvider;
         $settings         = $settingsProvider->getLifetimeValueSettings();
 
         return isset($settings[$channelType])
@@ -106,7 +127,7 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
         $lifetimeField = $this->getLifetimeField($channelSettings);
 
         /** @var EntityManager $em */
-        $em                    = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+        $em                    = $this->registry->getManagerForClass($customerClass);
         $customersQueryBuilder = $this->getCustomersQueryBuilder($em, $customerClass, $channelType);
         $customerDataIterator  = $this->getCustomersIterator($customersQueryBuilder);
         if (0 === $customerDataIterator->count()) {
