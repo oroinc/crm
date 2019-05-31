@@ -1,24 +1,26 @@
 services:
-    Oro\Bundle\MagentoBundle\Command\AddContactsToMagentoCustomersCommand:
+    _defaults:
         public: false
-        class: Oro\Bundle\MagentoBundle\Command\AddContactsToMagentoCustomersCommand
+
+    Oro\Bundle\MagentoBundle\Command\AddContactsToMagentoCustomersCommand:
+        arguments:
+            - '@oro_magento.manager.customer_contact_manager'
         tags:
             - { name: console.command }
 
     Oro\Bundle\MagentoBundle\Command\CopyCustomerAddressesToContactCommand:
-        public: false
-        class: Oro\Bundle\MagentoBundle\Command\CopyCustomerAddressesToContactCommand
+        arguments:
+            - '@oro_magento.manager.customer_address_manager'
         tags:
             - { name: console.command }
 
     Oro\Bundle\MagentoBundle\Command\RecalculateLifetimeCommand:
-        public: false
-        class: Oro\Bundle\MagentoBundle\Command\RecalculateLifetimeCommand
+        arguments:
+            - '@doctrine'
+            - '@oro_channel.provider.settings_provider'
         tags:
             - { name: console.command }
 
     Oro\Bundle\MagentoBundle\Command\SyncCartExpirationCommand:
-        public: false
-        class: Oro\Bundle\MagentoBundle\Command\SyncCartExpirationCommand
         tags:
             - { name: console.command }

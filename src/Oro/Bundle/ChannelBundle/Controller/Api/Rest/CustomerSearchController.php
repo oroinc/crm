@@ -14,11 +14,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * Provides cget API action to find the Customer entities.
+ *
  * @RouteResource("search_customer")
  * @NamePrefix("oro_api_")
  */
 class CustomerSearchController extends RestGetController
 {
+    /** @var CustomerSearchApiEntityManager */
+    private $customerSearchApiEntityManager;
+
+    /**
+     * @param CustomerSearchApiEntityManager $customerSearchApiEntityManager
+     */
+    public function __construct($customerSearchApiEntityManager)
+    {
+        $this->customerSearchApiEntityManager = $customerSearchApiEntityManager;
+    }
+
     /**
      * Search customers.
      *
@@ -100,6 +113,6 @@ class CustomerSearchController extends RestGetController
      */
     public function getManager()
     {
-        return $this->container->get('oro_channel.manager.customer_search.api');
+        return $this->customerSearchApiEntityManager;
     }
 }

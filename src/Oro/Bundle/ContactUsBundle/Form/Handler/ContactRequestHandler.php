@@ -2,12 +2,15 @@
 
 namespace Oro\Bundle\ContactUsBundle\Form\Handler;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Handles submit data of ContactRequest form type.
+ */
 class ContactRequestHandler
 {
     use RequestHandlerTrait;
@@ -18,19 +21,19 @@ class ContactRequestHandler
     /** @var RequestStack */
     protected $requestStack;
 
-    /** @var EntityManager */
-    protected $em;
+    /** @var ManagerRegistry */
+    protected $registry;
 
     /**
      * @param FormInterface $form
-     * @param RequestStack  $requestStack
-     * @param EntityManager $em
+     * @param RequestStack $requestStack
+     * @param ManagerRegistry $registry
      */
-    public function __construct(FormInterface $form, RequestStack $requestStack, EntityManager $em)
+    public function __construct(FormInterface $form, RequestStack $requestStack, ManagerRegistry $registry)
     {
         $this->form = $form;
         $this->requestStack = $requestStack;
-        $this->em = $em;
+        $this->registry = $registry;
     }
 
     /**
@@ -49,8 +52,9 @@ class ContactRequestHandler
             $this->submitPostPutRequest($this->form, $request);
 
             if ($this->getForm()->isValid()) {
-                $this->em->persist($entity);
-                $this->em->flush();
+                $manager = $this->registry->getManagerForClass(ContactRequest::class);
+                $manager->persist($entity);
+                $manager->flush();
 
                 return true;
             }

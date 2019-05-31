@@ -25,7 +25,7 @@ services:
         arguments:
             - "@oro_contact_us.contact_request.form"
             - "@request_stack"
-            - "@doctrine.orm.entity_manager"
+            - "@doctrine"
 
     oro_contact_us.provider.phone.abstract_contact_request:
         class: '%oro_contact_us.provider.phone.abstract_contact_request.class%'

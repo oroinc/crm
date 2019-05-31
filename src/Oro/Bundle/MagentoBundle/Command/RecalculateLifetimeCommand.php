@@ -8,8 +8,14 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
+/**
+ * Performs re-calculation of lifetime values for Magento channel.
+ */
 class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
 {
+    /** @var string */
+    protected static $defaultName = 'oro:magento:lifetime:recalculate';
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +24,6 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
         parent::configure();
 
         $this
-            ->setName('oro:magento:lifetime:recalculate')
             ->setDescription('Perform re-calculation of lifetime values for Magento channel.');
     }
 
@@ -27,9 +32,6 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
      */
     protected function getChannelType()
     {
-        /**
-         * @todo Remove dependency on exact magento channel type in CRM-8154
-         */
         return MagentoChannelType::TYPE;
     }
 

@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Form\Handler;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler;
@@ -37,8 +38,14 @@ class ContactRequestHandlerTest extends \PHPUnit\Framework\TestCase
         $requestStack->push($this->request);
         $this->em = $this->createMock(EntityManager::class);
 
+        $registry = $this->createMock(ManagerRegistry::class);
+        $registry->expects($this->any())
+            ->method('getManagerForClass')
+            ->with(ContactRequest::class)
+            ->willReturn($this->em);
+
         $this->entity  = new ContactRequest();
-        $this->handler = new ContactRequestHandler($this->form, $requestStack, $this->em);
+        $this->handler = new ContactRequestHandler($this->form, $requestStack, $registry);
     }
 
     protected function tearDown()

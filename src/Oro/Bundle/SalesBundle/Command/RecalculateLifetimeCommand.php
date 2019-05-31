@@ -2,13 +2,40 @@
 
 namespace Oro\Bundle\SalesBundle\Command;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand as AbstractRecalculateLifetimeCommand;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
 
+/**
+ * Perform re-calculation of lifetime values for sales channel.
+ */
 class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
 {
+    /** @var string */
+    protected static $defaultName = 'oro:b2b:lifetime:recalculate';
+
+    /** @var CurrencyQueryBuilderTransformerInterface */
+    private $currencyTransformer;
+
+    /**
+     * @param ManagerRegistry $registry
+     * @param SettingsProvider $settingsProvider
+     * @param CurrencyQueryBuilderTransformerInterface $currencyTransformer
+     */
+    public function __construct(
+        ManagerRegistry $registry,
+        SettingsProvider $settingsProvider,
+        CurrencyQueryBuilderTransformerInterface $currencyTransformer
+    ) {
+        parent::__construct($registry, $settingsProvider);
+
+        $this->currencyTransformer = $currencyTransformer;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -17,7 +44,6 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
         parent::configure();
 
         $this
-            ->setName('oro:b2b:lifetime:recalculate')
             ->setDescription('Perform re-calculation of lifetime values for sales channel.');
     }
 
@@ -39,7 +65,7 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
     {
         /** @var B2bCustomerRepository $customerRepo */
         $customerRepo  = $em->getRepository('OroSalesBundle:B2bCustomer');
-        $qbTransformer = $this->getContainer()->get('oro_currency.query.currency_transformer');
+        $qbTransformer = $this->currencyTransformer;
         $lifetimeValue = $customerRepo->calculateLifetimeValue($customer, $qbTransformer);
 
         return $lifetimeValue;
