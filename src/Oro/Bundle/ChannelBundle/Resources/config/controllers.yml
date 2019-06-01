@@ -1,7 +1,3 @@
 services:
     _defaults:
         public: true
-
-    Oro\Bundle\ChannelBundle\Controller\Api\Rest\CustomerSearchController:
-        arguments:
-            - '@oro_channel.manager.customer_search.api'

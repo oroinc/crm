@@ -21,17 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CustomerSearchController extends RestGetController
 {
-    /** @var CustomerSearchApiEntityManager */
-    private $customerSearchApiEntityManager;
-
-    /**
-     * @param CustomerSearchApiEntityManager $customerSearchApiEntityManager
-     */
-    public function __construct($customerSearchApiEntityManager)
-    {
-        $this->customerSearchApiEntityManager = $customerSearchApiEntityManager;
-    }
-
     /**
      * Search customers.
      *
@@ -113,6 +102,6 @@ class CustomerSearchController extends RestGetController
      */
     public function getManager()
     {
-        return $this->customerSearchApiEntityManager;
+        return $this->container->get('oro_channel.manager.customer_search.api');
     }
 }
