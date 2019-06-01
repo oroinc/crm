@@ -2,40 +2,33 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener;
 
 class CustomerCurrencyListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var LocaleSettings|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected $localeSettings;
+    private $localeSettings;
 
     /**
      * @var CustomerCurrencyListener
      */
-    protected $listener;
+    private $listener;
 
     protected function setUp()
     {
-        $this->localeSettings = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Model\LocaleSettings')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
-
-        $container->expects($this->any())
-            ->method('get')
-            ->with('oro_locale.settings')
-            ->will($this->returnValue($this->localeSettings));
-
-        $this->listener = new CustomerCurrencyListener($container);
+        $this->localeSettings = $this->createMock(LocaleSettings::class);
+        $this->listener = new CustomerCurrencyListener($this->localeSettings);
     }
 
     public function testPrePersistEntityWithCurrency()
     {
-        $entity = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Customer')
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var Customer|\PHPUnit\Framework\MockObject\MockObject $entity */
+        $entity = $this->createMock(Customer::class);
         $entity->expects($this->once())
             ->method('getCurrency')
             ->will($this->returnValue('USD'));
@@ -44,9 +37,8 @@ class CustomerCurrencyListenerTest extends \PHPUnit\Framework\TestCase
         $this->localeSettings->expects($this->never())
             ->method($this->anything());
 
-        $event = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var LifecycleEventArgs|\PHPUnit\Framework\MockObject\MockObject $event */
+        $event = $this->createMock(LifecycleEventArgs::class);
 
         $this->listener->prePersist($entity, $event);
     }
@@ -59,18 +51,16 @@ class CustomerCurrencyListenerTest extends \PHPUnit\Framework\TestCase
             ->method('getCurrency')
             ->will($this->returnValue($currency));
 
-        $entity = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Customer')
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var Customer|\PHPUnit\Framework\MockObject\MockObject $entity */
+        $entity = $this->createMock(Customer::class);
         $entity->expects($this->once())
             ->method('getCurrency');
         $entity->expects($this->once())
             ->method('setCurrency')
             ->with($currency);
 
-        $event = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var LifecycleEventArgs|\PHPUnit\Framework\MockObject\MockObject $event */
+        $event = $this->createMock(LifecycleEventArgs::class);
 
         $this->listener->prePersist($entity, $event);
     }

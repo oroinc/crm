@@ -5,19 +5,21 @@ namespace Oro\Bundle\MagentoBundle\EventListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Apply currency to magento customer entity
+ */
 class CustomerCurrencyListener
 {
-    /** @var ContainerInterface */
-    private $container;
+    /** @var LocaleSettings */
+    private $localeSettings;
 
     /**
-     * @param ContainerInterface $container
+     * @param LocaleSettings $localeSettings
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(LocaleSettings $localeSettings)
     {
-        $this->container = $container;
+        $this->localeSettings = $localeSettings;
     }
 
     /**
@@ -27,15 +29,7 @@ class CustomerCurrencyListener
     public function prePersist(Customer $entity, LifecycleEventArgs $event)
     {
         if (!$entity->getCurrency()) {
-            $entity->setCurrency($this->getLocaleSettings()->getCurrency());
+            $entity->setCurrency($this->localeSettings->getCurrency());
         }
-    }
-
-    /**
-     * @return LocaleSettings
-     */
-    private function getLocaleSettings()
-    {
-        return $this->container->get('oro_locale.settings');
     }
 }
