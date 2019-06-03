@@ -7,12 +7,8 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler;
-use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Psr\Container\ContainerInterface;
-use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -21,16 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
  * @RouteResource("contactrequest")
  * @NamePrefix("oro_api_")
  */
-class ContactRequestController extends RestController implements ClassResourceInterface, ServiceSubscriberInterface
+class ContactRequestController extends RestController implements ClassResourceInterface
 {
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
     /**
      * REST GET item
      *
@@ -70,17 +58,5 @@ class ContactRequestController extends RestController implements ClassResourceIn
     public function getForm()
     {
         return $this->get('oro_contact_us.embedded_form');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedServices()
-    {
-        return [
-            'oro_contact_us.contact_request.manager.api' => ApiEntityManager::class,
-            'oro_contact_us.contact_request.form.handler' => ContactRequestHandler::class,
-            'oro_contact_us.embedded_form' => ContactRequestType::class,
-        ];
     }
 }

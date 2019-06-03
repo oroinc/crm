@@ -1,11 +1,3 @@
 services:
     _defaults:
         public: true
-
-    Oro\Bundle\ContactUsBundle\Controller\Api\Rest\ContactRequestController:
-        arguments:
-            - '@Psr\Container\ContainerInterface'
-        tags:
-            - { name: container.service_subscriber, id: 'oro_contact_us.contact_request.manager.api' }
-            - { name: container.service_subscriber, id: 'oro_contact_us.contact_request.form.handler' }
-            - { name: container.service_subscriber, id: 'oro_contact_us.embedded_form' }

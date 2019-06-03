@@ -499,7 +499,7 @@ services:
     oro_magento.event_listener.customer_currency:
         class: Oro\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener
         arguments:
-            - '@service_container'
+            - '@oro_locale.settings'
         tags:
             - { name: doctrine.orm.entity_listener, entity: '%oro_magento.entity.customer.class%', event: prePersist }
 
