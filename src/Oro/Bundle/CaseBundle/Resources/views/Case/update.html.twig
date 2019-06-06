@@ -5,6 +5,8 @@
 {% set formAction = entityId ? path('oro_case_update', { 'id': entityId}) : path('oro_case_create') %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% set html = UI.saveAndCloseButton({
         'route': 'oro_case_view',
         'params': {'id': '$id'}

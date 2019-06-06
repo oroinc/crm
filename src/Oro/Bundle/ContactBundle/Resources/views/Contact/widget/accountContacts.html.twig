@@ -1,11 +1,13 @@
+{% import _self as account_contacts %}
+
 <div class="widget-content">
     <div class="contact-box-wrapper">
         {% if defaultContact or contactsWithoutDefault|length %}
             {% if defaultContact %}
-                {{ _self.render_contact_box(entity, defaultContact, true) }}
+                {{ account_contacts.render_contact_box(entity, defaultContact, true) }}
             {% endif %}
             {% for contact in contactsWithoutDefault %}
-                {{ _self.render_contact_box(entity, contact, false) }}
+                {{ account_contacts.render_contact_box(entity, contact, false) }}
             {% endfor %}
         {% else %}
             <div class="no-data">

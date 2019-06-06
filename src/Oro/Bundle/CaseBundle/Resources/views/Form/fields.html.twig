@@ -1,4 +1,6 @@
 {% block oro_case_mailbox_process_settings_widget %}
-    {% form_theme form with ['OroTagBundle:Form:fields.html.twig', _self] %}
+    {% import _self as fields %}
+
+    {% form_theme form with ['OroTagBundle:Form:fields.html.twig', fields] %}
     {{ form_widget(form) }}
 {% endblock %}

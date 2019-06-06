@@ -4,6 +4,8 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
 {% block content_data %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {{ parent() }}
     <div class="widget-actions">
         <button type="reset" class="btn">{{ 'Cancel'|trans }}</button>

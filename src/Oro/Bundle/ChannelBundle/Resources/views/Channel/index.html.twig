@@ -7,6 +7,8 @@
 
 {% block navButtons %}
     {% if is_granted('oro_channel_create') %}
+        {% import 'OroUIBundle::macros.html.twig' as UI %}
+
         {{ UI.addButton({
             'path': path('oro_channel_create'),
             'entity_label': 'oro.channel.entity_label'|trans

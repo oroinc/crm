@@ -4,6 +4,7 @@
 {% import 'OroChannelBundle::macros.html.twig' as channel %}
 {% import 'OroSalesBundle::macros.html.twig' as sales %}
 {% import 'OroTagBundle::macros.html.twig' as Tag %}
+{% import _self as salesLeadInfo %}
 
 {%- macro getSocialUrl(type, value) -%}
     {% if value|slice(0, 5) == 'http:' or value|slice(0, 6) == 'https:' %}
@@ -59,14 +60,14 @@
                 <ul class="list-inline">
                     {% if entity.twitter %}
                         <li>
-                            <a class="no-hash" href="{{ _self.getSocialUrl('twitter', entity.twitter) }}" target="_blank" title="Twitter">
+                            <a class="no-hash" href="{{ salesLeadInfo.getSocialUrl('twitter', entity.twitter) }}" target="_blank" title="Twitter">
                                 <i class="fa-twitter"></i>
                             </a>
                         </li>
                     {% endif %}
                     {% if entity.linkedIn %}
                         <li>
-                            <a class="no-hash" href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank" title="LinkedIn">
+                            <a class="no-hash" href="{{ salesLeadInfo.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank" title="LinkedIn">
                                 <i class="fa-linkedin"></i>
                             </a>
                         </li>

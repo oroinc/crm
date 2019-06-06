@@ -20,6 +20,8 @@
 {% endblock %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {{ UI.cancelButton(path('oro_sales_lead_view', { 'id': entity.lead.id })) }}
     {% set html = UI.saveAndCloseButton({
         'route': 'oro_sales_lead_view',

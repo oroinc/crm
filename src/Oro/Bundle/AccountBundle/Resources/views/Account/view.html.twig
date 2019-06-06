@@ -8,6 +8,8 @@
 %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if is_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path': path('oro_account_update', {'id': entity.id}),
@@ -29,6 +31,8 @@
 {% endblock navButtons %}
 
 {% block pageHeader %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('oro_account_index'),

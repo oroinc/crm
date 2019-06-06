@@ -4,8 +4,15 @@ namespace Oro\Bundle\ChannelBundle\Twig;
 
 use Oro\Bundle\ChannelBundle\Provider\MetadataProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class MetadataExtension extends \Twig_Extension
+/**
+ * Provides Twig functions to retrieve channel metadata associated with an entity:
+ *   - oro_channel_entities_metadata
+ *   - oro_channel_type_metadata
+ */
+class MetadataExtension extends AbstractExtension
 {
     const EXTENSION_NAME = 'oro_channel_metadata';
 
@@ -34,8 +41,8 @@ class MetadataExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('oro_channel_entities_metadata', [$this, 'getEntitiesMetadata']),
-            new \Twig_SimpleFunction('oro_channel_type_metadata', [$this, 'getChannelTypeMetadata'])
+            new TwigFunction('oro_channel_entities_metadata', [$this, 'getEntitiesMetadata']),
+            new TwigFunction('oro_channel_type_metadata', [$this, 'getChannelTypeMetadata'])
         ];
     }
 

@@ -22,6 +22,8 @@
 {% endblock breadcrumbMessage %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {{ UI.button({
         'path':  path('oro_magento_cart_actualize', {'id': entity.id}),
         'label': 'oro.magento.cart.refresh_label'|trans,

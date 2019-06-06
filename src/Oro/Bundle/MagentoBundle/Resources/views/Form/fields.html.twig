@@ -23,6 +23,8 @@
 {% endmacro %}
 
 {% block oro_magento_transport_check_button_widget %}
+    {% import _self as fields %}
+
     {% set oroBridgeExtension = form.parent.vars.oroBridgeExtension is defined ? form.parent.vars.oroBridgeExtension : null %}
     <div class="control-group">
         <div class="controls">
@@ -30,7 +32,7 @@
             <script type="text/javascript">
                 require(['oro/magento/checker'], function (Checker) {
                     "use strict";
-                    new Checker({{ _self.getCheckerOptions(form.parent, '#' ~ form.vars.id) }});
+                    new Checker({{ fields.getCheckerOptions(form.parent, '#' ~ form.vars.id) }});
                 });
             </script>
             {% if oroBridgeExtension is not null %}
@@ -57,23 +59,25 @@
 {% endblock %}
 
 {% block oro_magento_website_select_row %}
+    {% import _self as fields %}
+
     {% spaceless %}
         <div class="control-group{% if attr.class is defined %} {{ attr.class }}{% endif %}">
-            {% if label is not sameas(false) %}
+            {% if label is not same as(false) %}
                 <div class="control-label wrap">
                     {{ form_label(form, '' , { label_attr: label_attr}) }}
                 </div>
             {% endif %}
             <div class="controls{% if errors|length > 0 %} validation-error{% endif %} magento-website-selector-container">
                 {{ form_widget(form) }}
-                {% if form.vars.disabled is not sameas(true) %}
+                {% if form.vars.disabled is not same as(true) %}
                     <a href="#" class="btn btn-square-light no-hash sync-website-list-link">
                         <i class="fa-refresh"></i>{{ 'oro.magento.magentotransport.website_refresh.label'|trans }}
                     </a>
                     <script type="text/javascript">
                         require(['oro/magento/checker'], function (Checker) {
                             "use strict";
-                            new Checker({{ _self.getCheckerOptions(form.parent, '.sync-website-list-link') }});
+                            new Checker({{ fields.getCheckerOptions(form.parent, '.sync-website-list-link') }});
                         });
                     </script>
                 {% endif %}

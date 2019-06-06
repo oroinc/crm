@@ -6,6 +6,7 @@ use Oro\Bundle\ChannelBundle\EventListener\EmbeddedFormListener;
 use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Environment;
 
 class EmbeddedFormListenerTest extends \PHPUnit\Framework\TestCase
 {
@@ -19,7 +20,7 @@ class EmbeddedFormListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testAddDataChannelField()
     {
-        $env = $this->getMockBuilder('Twig_Environment')
+        $env = $this->getMockBuilder(Environment::class)
             ->disableOriginalConstructor()
             ->getMock();
         $newField = "<input>";

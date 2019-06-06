@@ -14,6 +14,8 @@
 {% endblock pageHeader %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if is_granted('oro_contactus_request_delete') %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_contactus_request_delete', {'id': entity.id}),

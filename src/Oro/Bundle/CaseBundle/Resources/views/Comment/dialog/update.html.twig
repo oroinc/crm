@@ -1,4 +1,6 @@
-{% form_theme form with ['OroFormBundle:Form:fields.html.twig', _self] %}
+{% import _self as commentDialogUpdate %}
+
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig', commentDialogUpdate] %}
 
 {% if saved %}
         {% set widgetResponse = {

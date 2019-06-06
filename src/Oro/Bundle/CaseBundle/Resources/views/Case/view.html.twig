@@ -6,6 +6,8 @@
 {% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A'|trans) }}) %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if is_granted('oro_case_comment_create') and is_granted('oro_case_comment_view') %}
         {{ UI.clientButton({
             'id': 'add-case-comment-button',
@@ -53,6 +55,8 @@
 {% endblock pageHeader %}
 
 {% block content_data %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {%- set caseInformation -%}
         <div class="row-fluid form-horizontal">
             <div class="responsive-block">

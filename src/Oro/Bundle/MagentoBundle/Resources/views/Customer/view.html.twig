@@ -6,6 +6,8 @@
 {% oro_title_set({params : {"%customer.name%": fullname} }) %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if entity.originId and entity.channel.transport.adminUrl|default(false) %}
         {{
             UI.clientButton({

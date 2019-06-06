@@ -1,7 +1,9 @@
 {% set entityClassName = oro_class_name(entity, true) %}
 
+{% import _self as metrics %}
+
 <div id="activity-count-{{ entityClassName ~ '-' ~ entity.id }}" class="activity-contact-info-title">
-    {{ _self.last_contacted_time(data, entity) }}
+    {{ metrics.last_contacted_time(data, entity) }}
 </div>
 
 <script type="text/javascript">

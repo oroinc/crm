@@ -4,6 +4,8 @@
 {% set pageTitle = 'oro.contactus.contactreason.entity_plural_label'|trans %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if is_granted('oro_contactus_reason_create') %}
         <div class="btn-group">
             {{ UI.addButton({

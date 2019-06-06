@@ -11,6 +11,7 @@ use Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
 {
@@ -78,7 +79,7 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
         $opportunitiesData  = 'Opportunities List';
         $opportunitiesTitle = 'Opportunities Title';
 
-        $env = $this->getMockBuilder('Twig_Environment')
+        $env = $this->getMockBuilder(Environment::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -142,7 +143,7 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddOpportunitiesNotCustomer($entity = null, $isCustomerClass = null)
     {
-        $env   = $this->getMockBuilder('Twig_Environment')
+        $env   = $this->getMockBuilder(Environment::class)
             ->disableOriginalConstructor()
             ->getMock();
         $data  = ['dataBlocks' => ['subblocks' => ['title' => 'some title', 'data' => 'some data']]];

@@ -9,6 +9,8 @@
 {% oro_title_set({params : {"%sales_funnel%": salesFunnelHint} }) %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if is_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('oro_sales_salesfunnel_update', { 'id': entity.id }),

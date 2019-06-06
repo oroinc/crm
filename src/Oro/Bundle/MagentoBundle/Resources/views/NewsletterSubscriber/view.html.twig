@@ -20,6 +20,9 @@
 {% endblock navButtons %}
 
 {% block content_data %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import 'OroChannelBundle::macros.html.twig' as channel %}
+
     {% set newsletterSubscriberInformationWidget %}
         {{ channel.renderChannelProperty(entity, 'oro.magento.newslettersubscriber.data_channel.label') }}
         {{ UI.renderProperty('oro.magento.newslettersubscriber.channel.label'|trans, entity.channel.name) }}

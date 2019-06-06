@@ -14,6 +14,8 @@
 {% endblock %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if form.vars.value.id and is_granted('DELETE', form.vars.value) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_lead', {'id': form.vars.value.id}),
@@ -65,6 +67,8 @@
 {% endblock stats %}
 
 {% block breadcrumbs %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {{ parent() }}
     <span class="page-title__status">
         {{ UI.badge(entity.status.name, entity.status.id != 'canceled' ? 'enabled' : 'disabled') }}
