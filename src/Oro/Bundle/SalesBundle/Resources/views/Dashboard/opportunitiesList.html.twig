@@ -2,6 +2,7 @@
 {% set gridName = 'dashboard-my-sales-opportunity-grid' %}
 
 {% block content %}
+    {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
     {{ dataGrid.renderGrid(gridName, params|default({}), {
         'routerEnabled': false,
         'enableFilters': false,

@@ -3,6 +3,8 @@
 {% set pageTitle = 'oro.case.caseentity.entity_plural_label'|trans %}
 {% set gridName = 'cases-grid' %}
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if is_granted('oro_case_create') %}
         {{ UI.addButton({
             'path' : path('oro_case_create'),

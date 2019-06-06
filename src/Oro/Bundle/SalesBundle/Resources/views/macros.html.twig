@@ -31,6 +31,7 @@
 
 {% macro render_customer_info(entity) %}
     {% import 'OroUIBundle::macros.html.twig' as ui %}
+    {% import _self as sales %}
 
     {% set customer = entity.customerAssociation and entity.customerAssociation.customerTarget
         ? entity.customerAssociation.customerTarget
@@ -39,13 +40,13 @@
         ? entity.customerAssociation.account
         : null %}
 
-    {%- set accountView = _self.entity_view(account) -%}
+    {%- set accountView = sales.entity_view(account) -%}
 
     {{ ui.renderHtmlProperty('oro.sales.opportunity.customer.label'|trans, accountView, entity, 'customer') }}
 
     {% if customer is not empty %}
         <div class="base-currency-wrapper">
-            {{ ui.renderHtmlProperty(oro_entity_config_value(oro_class_name(customer), 'label')|trans, _self.entity_view(customer), entity, 'customer') }}
+            {{ ui.renderHtmlProperty(oro_entity_config_value(oro_class_name(customer), 'label')|trans, sales.entity_view(customer), entity, 'customer') }}
         </div>
     {% endif %}
 

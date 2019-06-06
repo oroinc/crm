@@ -6,6 +6,8 @@
 {% oro_title_set({params : {'%customer.name%': fullname, '%entityName%': 'oro.magento.customer.entity_label'|trans} }) %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {{ UI.cancelButton(path('oro_magento_customer_index')) }}
     {% set html = UI.saveAndCloseButton() %}
     {% if form.vars.value.id or is_granted('oro_magento_customer_update') %}

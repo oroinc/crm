@@ -5,6 +5,8 @@
 
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if is_granted('oro_contactus_request_create') %}
         <div class="btn-group">
             {{ UI.addButton({

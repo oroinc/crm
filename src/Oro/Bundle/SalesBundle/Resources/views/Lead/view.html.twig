@@ -4,6 +4,8 @@
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if is_granted('EDIT', entity) %}
         {% if (isDisqualifyAllowed)  %}
             {{ UI.button({
@@ -56,6 +58,8 @@
 {% endblock pageHeader %}
 
 {% block breadcrumbs %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {{ parent() }}
     <span class="page-title__status">
         {{ UI.badge(entity.status.name, entity.status.id != 'canceled' ? 'enabled' : 'disabled') }}

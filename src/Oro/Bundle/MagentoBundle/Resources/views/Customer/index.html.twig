@@ -6,6 +6,8 @@
 {% set gridName = 'magento-customers-grid' %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if is_granted('oro_magento_customer_create') and is_granted('oro_integration_assign') %}
         <div class="btn-group">
             {{ UI.addButton({

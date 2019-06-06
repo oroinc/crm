@@ -5,6 +5,8 @@
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if is_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('oro_contact_update', { 'id': entity.id }),

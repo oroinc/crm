@@ -5,8 +5,14 @@ namespace Oro\Bundle\MagentoBundle\Twig;
 use Oro\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\Order;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class OrderNotesExtension extends \Twig_Extension
+/**
+ * Provides a Twig function to check if Magento order notes are supported and enabled in the integration configuration:
+ *   - oro_magento_order_notes_is_applicable
+ */
+class OrderNotesExtension extends AbstractExtension
 {
     const EXTENSION_NAME = 'oro_magento_order_notes';
 
@@ -16,7 +22,7 @@ class OrderNotesExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('oro_magento_order_notes_is_applicable', [$this, 'isOrderNotesApplicable']),
+            new TwigFunction('oro_magento_order_notes_is_applicable', [$this, 'isOrderNotesApplicable']),
         ];
     }
 

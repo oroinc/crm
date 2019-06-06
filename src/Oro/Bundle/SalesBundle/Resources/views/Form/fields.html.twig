@@ -144,9 +144,11 @@
 {%  endblock %}
 
 {% block _oro_sales_lead_form_address_collection_widget %}
+    {% import _self as fields %}
+
     {{ block('oro_address_collection_widget') }}
     {% set id = id ~ '_collection' %}
-    {{ _self.oro_adddress_collection_prefill_names(_context) }}
+    {{ fields.oro_adddress_collection_prefill_names(_context) }}
 {% endblock %}
 
 {% macro oro_adddress_collection_prefill_names(context) %}

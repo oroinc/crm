@@ -27,6 +27,8 @@
 {% endblock %}
 
 {% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if form.vars.value.id and is_granted('DELETE', form.vars.value) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_opportunity', {'id': form.vars.value.id}),
@@ -58,6 +60,8 @@
 {% endblock %}
 
 {% block pageHeader %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% if form.vars.value.id %}
         {% set name = 'N/A' %}
         {% if entity.name %}
@@ -89,6 +93,8 @@
 {% endblock stats %}
 
 {% block breadcrumbs %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {{ parent() }}
     {% if entity.status %}
         <span class="page-title__status">
