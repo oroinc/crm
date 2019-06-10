@@ -10,6 +10,9 @@ use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Produces message to recalculate contacting activities.
+ */
 class ActivityContactRecalculate extends AbstractFixture implements ContainerAwareInterface
 {
     /** @var ContainerInterface */
@@ -31,7 +34,7 @@ class ActivityContactRecalculate extends AbstractFixture implements ContainerAwa
         /** @var MessageProducerInterface $producer */
         $producer = $this->container->get('oro_message_queue.client.message_producer');
         $producer->send(Topics::RUN_COMMAND, [
-            'command' => ActivityContactRecalculateCommand::COMMAND_NAME,
+            'command' => ActivityContactRecalculateCommand::getDefaultName(),
             'arguments' => ['-v' => 1, '--disabled-listeners' => ['all']]
         ]);
     }

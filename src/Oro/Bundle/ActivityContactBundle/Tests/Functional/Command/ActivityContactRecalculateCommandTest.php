@@ -33,7 +33,7 @@ class ActivityContactRecalculateCommandTest extends WebTestCase
 
     protected function runActivityContactRecalculateCommand()
     {
-        $this->runCommand(ActivityContactRecalculateCommand::COMMAND_NAME);
+        $this->runCommand(ActivityContactRecalculateCommand::getDefaultName());
     }
 
     /**
