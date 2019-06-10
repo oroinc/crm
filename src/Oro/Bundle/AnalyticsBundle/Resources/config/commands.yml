@@ -1,6 +1,10 @@
 services:
-    Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand:
+    _defaults:
         public: false
-        class: Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand
+
+    Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand:
+        arguments:
+            - '@doctrine'
+            - '@oro_analytics.calculate_analytics_scheduler'
         tags:
             - { name: console.command }

@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Command;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
@@ -19,16 +20,21 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Component\Log\OutputLogger;
 use Oro\Component\PropertyAccess\PropertyAccessor;
 use Psr\Log\AbstractLogger;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class ActivityContactRecalculateCommand extends ContainerAwareCommand
+/**
+ * The CLI command to recalculate contacting activities.
+ */
+class ActivityContactRecalculateCommand extends Command
 {
-    const STATUS_SUCCESS = 0;
-    const COMMAND_NAME   = 'oro:activity-contact:recalculate';
-    const BATCH_SIZE     = 100;
+    private const STATUS_SUCCESS = 0;
+    private const BATCH_SIZE     = 100;
+
+    /** @var string */
+    protected static $defaultName = 'oro:activity-contact:recalculate';
 
     /** @var OroEntityManager $em */
     protected $em;
@@ -36,14 +42,56 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
     /** @var ActivityListRepository $activityListRepository */
     protected $activityListRepository;
 
+    /** @var ManagerRegistry */
+    private $registry;
+
+    /** @var ConfigProvider */
+    private $activityConfigProvider;
+
+    /** @var ConfigProvider */
+    private $extendConfigProvider;
+
+    /** @var ActivityListener */
+    private $activityListener;
+
+    /** @var ActivityListFilterHelper */
+    private $activityListFilterHelper;
+
+    /** @var ActivityContactProvider */
+    private $activityContactProvider;
+
+    /**
+     * @param ManagerRegistry $registry
+     * @param ConfigProvider $activityConfigProvider
+     * @param ConfigProvider $extendConfigProvider
+     * @param ActivityListener $activityListener
+     * @param ActivityListFilterHelper $activityListFilterHelper
+     * @param ActivityContactProvider $activityContactProvider
+     */
+    public function __construct(
+        ManagerRegistry $registry,
+        ConfigProvider $activityConfigProvider,
+        ConfigProvider $extendConfigProvider,
+        ActivityListener $activityListener,
+        ActivityListFilterHelper $activityListFilterHelper,
+        ActivityContactProvider $activityContactProvider
+    ) {
+        parent::__construct();
+
+        $this->registry = $registry;
+        $this->activityConfigProvider = $activityConfigProvider;
+        $this->extendConfigProvider = $extendConfigProvider;
+        $this->activityListener = $activityListener;
+        $this->activityListFilterHelper = $activityListFilterHelper;
+        $this->activityContactProvider = $activityContactProvider;
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this
-            ->setName(self::COMMAND_NAME)
-            ->setDescription('Recalculate contacting activities');
+        $this->setDescription('Recalculate contacting activities');
     }
 
     /**
@@ -66,21 +114,14 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
         $logger->info('Recalculating contacting activities...');
         $logger->info(sprintf('<info>Processing started at %s</info>', date('Y-m-d H:i:s')));
 
-        /** @var ConfigProvider $activityConfigProvider */
-        $activityConfigProvider = $this->getContainer()->get('oro_entity_config.provider.activity');
-        /** @var ConfigProvider $extendConfigProvider */
-        $extendConfigProvider = $this->getContainer()->get('oro_entity_config.provider.extend');
+        $contactingActivityClasses = $this->activityContactProvider->getSupportedActivityClasses();
 
-        /** @var ActivityContactProvider $activityContactProvider */
-        $activityContactProvider   = $this->getContainer()->get('oro_activity_contact.provider');
-        $contactingActivityClasses = $activityContactProvider->getSupportedActivityClasses();
-
-        $entityConfigsWithApplicableActivities = $activityConfigProvider->filter(
-            function (ConfigInterface $entity) use ($contactingActivityClasses, $extendConfigProvider) {
+        $entityConfigsWithApplicableActivities = $this->activityConfigProvider->filter(
+            function (ConfigInterface $entity) use ($contactingActivityClasses) {
                 return
                     $entity->get('activities')
                     && array_intersect($contactingActivityClasses, $entity->get('activities')) &&
-                    $extendConfigProvider->getConfig($entity->getId()->getClassName())->is('is_extend');
+                    $this->extendConfigProvider->getConfig($entity->getId()->getClassName())->is('is_extend');
             }
         );
 
@@ -91,13 +132,8 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
                     count($entityConfigsWithApplicableActivities)
                 )
             );
-            $this->em                     = $this->getContainer()->get('doctrine')->getManager();
+            $this->em                     = $this->registry->getManager();
             $this->activityListRepository = $this->em->getRepository(ActivityList::ENTITY_NAME);
-
-            /** @var ActivityListener $activityListener */
-            $activityListener = $this->getContainer()->get('oro_activity_contact.listener.activity_listener');
-            /** @var ActivityListFilterHelper $activityListHelper */
-            $activityListHelper = $this->getContainer()->get('oro_activity_list.filter.helper');
 
             foreach ($entityConfigsWithApplicableActivities as $activityScopeConfig) {
                 $entityClassName = $activityScopeConfig->getId()->getClassName();
@@ -117,7 +153,7 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
                             $entityClassName,
                             $record->getId()
                         );
-                        $activityListHelper->addFiltersToQuery(
+                        $this->activityListFilterHelper->addFiltersToQuery(
                             $qb,
                             ['activityType' => ['value' => $contactingActivityClasses]]
                         );
@@ -130,7 +166,7 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
                                 $activity = $this->em->getRepository($activityListItem->getRelatedActivityClass())
                                     ->find($activityListItem->getRelatedActivityId());
 
-                                $activityListener->onAddActivity(new ActivityEvent($activity, $record));
+                                $this->activityListener->onAddActivity(new ActivityEvent($activity, $record));
                             }
                             $this->em->persist($record);
                             $needsFlush = true;
@@ -236,9 +272,7 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
      */
     protected function getTargetIds($className)
     {
-        /** @var ActivityContactProvider $activityContactProvider */
-        $activityContactProvider   = $this->getContainer()->get('oro_activity_contact.provider');
-        $contactingActivityClasses = $activityContactProvider->getSupportedActivityClasses();
+        $contactingActivityClasses = $this->activityContactProvider->getSupportedActivityClasses();
 
         // we need try/catch here to avoid crash on non existing entity relation
         try {

@@ -1,16 +1,28 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Command;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class CalculateAnalyticsCommandTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;
+
+    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
+    private $registry;
+
+    /** @var CalculateAnalyticsScheduler|\PHPUnit\Framework\MockObject\MockObject */
+    private $calculateAnalyticsScheduler;
+
+    protected function setUp()
+    {
+        $this->registry = $this->createMock(ManagerRegistry::class);
+        $this->calculateAnalyticsScheduler = $this->createMock(CalculateAnalyticsScheduler::class);
+    }
 
     public function testShouldBeSubClassOfCommand()
     {
@@ -22,31 +34,15 @@ class CalculateAnalyticsCommandTest extends \PHPUnit\Framework\TestCase
         $this->assertClassImplements(CronCommandInterface::class, CalculateAnalyticsCommand::class);
     }
 
-    public function testShouldImplementContainerAwareInterface()
-    {
-        $this->assertClassImplements(ContainerAwareInterface::class, CalculateAnalyticsCommand::class);
-    }
-
     public function testCouldBeConstructedWithoutAnyArguments()
     {
-        new CalculateAnalyticsCommand();
+        new CalculateAnalyticsCommand($this->registry, $this->calculateAnalyticsScheduler);
     }
 
     public function testShouldBeExecutedEveryMidNightByCron()
     {
-        $command = new CalculateAnalyticsCommand();
+        $command = new CalculateAnalyticsCommand($this->registry, $this->calculateAnalyticsScheduler);
 
         $this->assertEquals('0 0 * * *', $command->getDefaultDefinition());
-    }
-
-    public function testShouldAllowSetContainer()
-    {
-        $container = new Container();
-
-        $command = new CalculateAnalyticsCommand();
-
-        $command->setContainer($container);
-
-        $this->assertAttributeSame($container, 'container', $command);
     }
 }

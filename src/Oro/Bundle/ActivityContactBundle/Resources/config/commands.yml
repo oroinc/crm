@@ -1,6 +1,14 @@
 services:
-    Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand:
+    _defaults:
         public: false
-        class: Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand
+
+    Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand:
+        arguments:
+            - '@doctrine'
+            - '@oro_entity_config.provider.activity'
+            - '@oro_entity_config.provider.extend'
+            - '@oro_activity_contact.listener.activity_listener'
+            - '@oro_activity_list.filter.helper'
+            - '@oro_activity_contact.provider'
         tags:
             - { name: console.command }
