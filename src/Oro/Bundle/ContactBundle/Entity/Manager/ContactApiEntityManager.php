@@ -105,11 +105,7 @@ class ContactApiEntityManager extends ApiEntityManager
         $result['email'] = $email;
 
         if (!empty($result['picture'])) {
-            $result['picture'] = $this->attachmentManager->getFileRestApiUrl(
-                $result['picture']['id'],
-                $this->class,
-                $result['id']
-            );
+            $result['picture'] = $this->attachmentManager->getFileRestApiUrl($result['picture']['id']);
         }
 
         return $result;
