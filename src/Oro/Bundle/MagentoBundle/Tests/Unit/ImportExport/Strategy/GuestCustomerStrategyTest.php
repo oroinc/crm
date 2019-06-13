@@ -35,6 +35,9 @@ class GuestCustomerStrategyTest extends AbstractStrategyTest
             $this->doctrineHelper,
             $this->ownerChecker
         );
+        $strategy->setRelatedEntityStateHelper(
+            $this->relatedEntityStateHelper
+        );
 
         $strategy->setOwnerHelper($this->defaultOwnerHelper);
         $strategy->setChannelHelper($this->channelHelper);

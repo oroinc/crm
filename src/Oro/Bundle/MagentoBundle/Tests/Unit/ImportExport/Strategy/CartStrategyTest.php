@@ -82,6 +82,9 @@ class CartStrategyTest extends AbstractStrategyTest
             $this->doctrineHelper,
             $this->ownerChecker
         );
+        $strategy->setRelatedEntityStateHelper(
+            $this->relatedEntityStateHelper
+        );
 
         $strategy->setOwnerHelper($this->defaultOwnerHelper);
         $strategy->setLogger($this->logger);
