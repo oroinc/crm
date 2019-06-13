@@ -9,18 +9,21 @@ use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider;
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
+use Oro\Bundle\ImportExportBundle\Field\RelatedEntityStateHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\NewEntitiesHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
-use Oro\Bundle\SecurityBundle\Owner\OwnerChecker;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 abstract class AbstractStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -93,10 +96,8 @@ abstract class AbstractStrategyTest extends \PHPUnit\Framework\TestCase
      */
     protected $newEntitiesHelper;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|OwnerChecker $channel
-     */
-    protected $ownerChecker;
+    /** @var \PHPUnit\Framework\MockObject\MockObject|RelatedEntityStateHelper */
+    protected $relatedEntityStateHelper;
 
     protected function setUp()
     {
@@ -124,7 +125,7 @@ abstract class AbstractStrategyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->strategyHelper->expects($this->any())
-            ->method('isGranted')
+            ->method('checkPermissionGrantedForEntity')
             ->will($this->returnValue(true));
 
         $this->defaultOwnerHelper = $this
@@ -166,7 +167,7 @@ abstract class AbstractStrategyTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->ownerChecker = $this->createMock(OwnerChecker::class);
+        $this->relatedEntityStateHelper = $this->createMock(RelatedEntityStateHelper::class);
 
         $this->newEntitiesHelper = new NewEntitiesHelper();
         $this->logger = new NullLogger();
