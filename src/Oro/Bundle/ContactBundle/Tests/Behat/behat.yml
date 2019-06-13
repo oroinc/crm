@@ -72,6 +72,7 @@ oro_behat_extension:
       contexts:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
+        - Oro\Bundle\AccountBundle\Tests\Behat\Context\FeatureContext
         - OroQueryDesignerBundle::QueryDesignerContext
         - OroFormBundle::FormContext
         - OroDataGridBundle::GridContext
