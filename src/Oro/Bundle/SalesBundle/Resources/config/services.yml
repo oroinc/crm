@@ -316,6 +316,9 @@ services:
             - '@oro_dashboard.filter.date_filter_processor'
             - '@oro_currency.query.currency_transformer'
 
+    Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider:
+        alias: oro_sales.provider.opportunity_by_status
+
     oro_sales.handler.opportunity_api:
         class: Oro\Bundle\SalesBundle\Handler\OpportunityApiHandler
         tags:
@@ -398,6 +401,9 @@ services:
             - '@translator'
             - '@oro_entity_extend.twig.extension.enum'
             - '@oro_currency.query.currency_transformer'
+
+    Oro\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider:
+        alias: oro_sales.provider.opportunity_by_lead_source
 
     oro_sales.provider.opportunity.forecast:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider

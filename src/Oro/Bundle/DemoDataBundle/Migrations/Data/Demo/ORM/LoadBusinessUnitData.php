@@ -55,7 +55,7 @@ class LoadBusinessUnitData extends AbstractFixture
 
         $oroUnit
             ->setName('Acme, West')
-            ->setWebsite('http://www.oro.com')
+            ->setWebsite('http://www.example.com')
             ->setOrganization($organization)
             ->setEmail('west@acme.inc')
             ->setPhone('798-682-5918')
