@@ -12,6 +12,9 @@ use Oro\Bundle\SalesBundle\Entity\LeadAddress;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 
+/**
+ * Lead demo data
+ */
 class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
     /**
@@ -77,7 +80,7 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setJobTitle('Manager');
                 $entity->addPhone(new LeadPhone('585-255-1127'));
                 $entity->addPhone(new LeadPhone('978-242-1314'));
-                $entity->setWebsite('http://oro.com');
+                $entity->setWebsite('http://example.com');
                 $entity->setNumberOfEmployees(100);
                 $entity->setIndustry('Internet');
 
