@@ -116,8 +116,6 @@ parameters:
     oro_magento.datagrid.customer_actions_provider.class:                Oro\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider
     oro_magento.datagrid.newsletter_subscriber_provider.class:           Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider
 
-    oro_magento.model.newsletter_subscriber_manager.class:               Oro\Bundle\MagentoBundle\Model\NewsletterSubscriberManager
-
     oro_magento.service.automatic_discovery.class:                       Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery
     oro_magento.strategy.automatic_discovery.default.class:              Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy
     oro_magento.strategy.automatic_discovery.addresses.class:            Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\AddressDiscoveryStrategy
@@ -870,9 +868,12 @@ services:
             - [setAuthorizationChecker,  ["@security.authorization_checker"]]
 
     oro_magento.model.newsletter_subscriber_manager:
-        class: '%oro_magento.model.newsletter_subscriber_manager.class%'
+        class: Oro\Bundle\MagentoBundle\Model\NewsletterSubscriberManager
         arguments:
             - "@oro_entity.doctrine_helper"
+
+    Oro\Bundle\MagentoBundle\Model\NewsletterSubscriberManager:
+        alias: oro_magento.model.newsletter_subscriber_manager
 
     oro_magento.strategy.automatic_discovery.default:
         class: '%oro_magento.strategy.automatic_discovery.default.class%'

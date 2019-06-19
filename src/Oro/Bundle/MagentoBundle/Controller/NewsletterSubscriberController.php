@@ -2,15 +2,17 @@
 
 namespace Oro\Bundle\MagentoBundle\Controller;
 
+use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Model\NewsletterSubscriberManager;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Magento Newsletter Subscriber Controller
  * @Route("/newsletter-subscriber")
  */
-class NewsletterSubscriberController extends Controller
+class NewsletterSubscriberController extends AbstractController
 {
     /**
      * @Route("/", name="oro_magento_newsletter_subscriber_index")
@@ -28,7 +30,7 @@ class NewsletterSubscriberController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_magento.entity.newsletter_subscriber.class')
+            'entity_class' => NewsletterSubscriber::class
         ];
     }
 
@@ -169,7 +171,7 @@ class NewsletterSubscriberController extends Controller
      */
     protected function doJob(NewsletterSubscriber $newsletterSubscriber, $statusIdentifier)
     {
-        $jobResult = $this->get('oro_importexport.job_executor')->executeJob(
+        $jobResult = $this->get(JobExecutor::class)->executeJob(
             'export',
             'magento_newsletter_subscriber_export',
             [
@@ -195,7 +197,7 @@ class NewsletterSubscriberController extends Controller
      */
     protected function processCustomerSubscription(Customer $customer, $status)
     {
-        $newsletterSubscribers = $this->get('oro_magento.model.newsletter_subscriber_manager')
+        $newsletterSubscribers = $this->get(NewsletterSubscriberManager::class)
             ->getOrCreateFromCustomer($customer);
 
         $jobResult = ['successful' => false];
@@ -209,5 +211,16 @@ class NewsletterSubscriberController extends Controller
         }
 
         return new JsonResponse($jobResult);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return [
+            JobExecutor::class,
+            NewsletterSubscriberManager::class,
+        ];
     }
 }
