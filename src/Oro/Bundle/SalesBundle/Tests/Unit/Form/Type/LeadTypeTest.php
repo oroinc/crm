@@ -13,7 +13,6 @@ use Oro\Bundle\SalesBundle\Form\Type\CustomerType;
 use Oro\Bundle\SalesBundle\Form\Type\LeadType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class LeadTypeTest extends \PHPUnit\Framework\TestCase
 {
@@ -43,7 +42,7 @@ class LeadTypeTest extends \PHPUnit\Framework\TestCase
             'emails' => EmailCollectionType::class,
             'customerAssociation' => CustomerType::class,
             'companyName' => TextType::class,
-            'website' => UrlType::class,
+            'website' => TextType::class,
             'numberOfEmployees' => IntegerType::class,
             'industry' => TextType::class,
             'addresses' => AddressCollectionType::class,

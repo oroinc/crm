@@ -1,0 +1,6 @@
+oro:
+    sales:
+        validation:
+            lead:
+                website_url:
+                    message: 'This value is not a valid URL. Allowed URL protocols are: http, https.'
