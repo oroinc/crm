@@ -43,6 +43,10 @@ Oro\Bundle\SalesBundle\Entity\Lead:
             - Regex: # For frontend validation
                 pattern: '/^[\d+]*$/'
                 message: "This value should contain only numbers."
+        website:
+            - Url:
+                protocols: ['http', 'https']
+                message: oro.sales.validation.lead.website_url.message
 
 Oro\Bundle\SalesBundle\Entity\LeadAddress:
     constraints:
