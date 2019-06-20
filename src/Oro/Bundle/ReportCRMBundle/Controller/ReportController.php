@@ -2,13 +2,18 @@
 
 namespace Oro\Bundle\ReportCRMBundle\Controller;
 
+use Oro\Bundle\DataGridBundle\Datagrid\Manager;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Translation\TranslatorInterface;
 
-class ReportController extends Controller
+/**
+ * Provides action to display all reports.
+ */
+class ReportController extends AbstractController
 {
     /**
      * @Route(
@@ -19,11 +24,15 @@ class ReportController extends Controller
      * )
      * @Template
      * @AclAncestor("oro_report_view")
+     *
+     * @param string $reportGroupName
+     * @param string $reportName
+     * @return array
      */
     public function indexAction($reportGroupName, $reportName)
     {
         $gridName  = implode('-', ['oro_reportcrm', $reportGroupName, $reportName]);
-        $gridConfig = $this->get('oro_datagrid.datagrid.manager')->getConfigurationForGrid($gridName);
+        $gridConfig = $this->get(Manager::class)->getConfigurationForGrid($gridName);
         $pageTitle = $gridConfig['pageTitle'];
 
         $requiredFeatures = isset($gridConfig['requiredFeatures']) ? $gridConfig['requiredFeatures'] : [];
@@ -35,7 +44,7 @@ class ReportController extends Controller
         }
 
         return [
-            'pageTitle' => $this->get('translator')->trans($pageTitle),
+            'pageTitle' => $this->get(TranslatorInterface::class)->trans($pageTitle),
             'gridName'  => $gridName,
             'params'    => [
                 'reportGroupName' => $reportGroupName,
@@ -49,6 +58,21 @@ class ReportController extends Controller
      */
     protected function getFeatureChecker()
     {
-        return $this->get('oro_featuretoggle.checker.feature_checker');
+        return $this->get(FeatureChecker::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                TranslatorInterface::class,
+                FeatureChecker::class,
+                Manager::class,
+            ]
+        );
     }
 }
