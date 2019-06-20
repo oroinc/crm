@@ -7,7 +7,6 @@ use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\ChartBundle\Utils\ColorUtils;
 use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TCI;
-use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -40,8 +39,8 @@ abstract class WebsiteChartProvider
     /** @var ConfigProvider */
     protected $configProvider;
 
-    /** @var Container */
-    protected $container;
+    /** @var ChartViewBuilder */
+    protected $chartViewBuilder;
 
     /** @var TranslatorInterface */
     protected $translator;
@@ -49,18 +48,18 @@ abstract class WebsiteChartProvider
     /**
      * @param TrackingVisitEventProviderInterface $visitEventProvider
      * @param ConfigProvider $configProvider
-     * @param Container $container
+     * @param ChartViewBuilder $chartViewBuilder
      * @param TranslatorInterface $translator
      */
     public function __construct(
         TrackingVisitEventProviderInterface $visitEventProvider,
         ConfigProvider $configProvider,
-        Container $container,
+        ChartViewBuilder $chartViewBuilder,
         TranslatorInterface $translator
     ) {
         $this->visitEventProvider = $visitEventProvider;
         $this->configProvider = $configProvider;
-        $this->container = $container;
+        $this->chartViewBuilder = $chartViewBuilder;
         $this->translator = $translator;
     }
 
@@ -85,11 +84,10 @@ abstract class WebsiteChartProvider
      */
     public function getChartView(array $customers)
     {
-        $viewBuilder = $this->getChartViewBuilder();
         $data = $this->getData($customers);
         $numberOfShadedColors = $this->getNumberOfShadeColors($data);
 
-        return $viewBuilder
+        return $this->chartViewBuilder
             ->setArrayData($this->transformData($data))
             ->setOptions($this->getConfig($numberOfShadedColors))
             ->getView();
@@ -206,13 +204,5 @@ abstract class WebsiteChartProvider
         );
 
         return $config;
-    }
-
-    /**
-     * @return ChartViewBuilder
-     */
-    protected function getChartViewBuilder()
-    {
-        return $this->container->get('oro_chart.view_builder');
     }
 }

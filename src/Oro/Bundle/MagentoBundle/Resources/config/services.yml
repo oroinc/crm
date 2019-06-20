@@ -214,7 +214,7 @@ services:
         arguments:
             - '@oro_magento.provider.tracking_visit_event'
             - '@oro_chart.config_provider'
-            - '@service_container'
+            - '@oro_chart.view_builder'
             - '@translator'
 
     oro_magento.provider.website_events_chart:
@@ -695,6 +695,9 @@ services:
             - "@oro_locale.formatter.date_time"
             - "@oro_dashboard.datetime.helper"
 
+    Oro\Bundle\MagentoBundle\Dashboard\OrderDataProvider:
+        alias: oro_magento.dashboard.data_provider.order
+
     oro_magento.dashboard.data_provider.customer:
         class: '%oro_magento.dashboard.data_provider.customer.class%'
         arguments:
@@ -702,6 +705,9 @@ services:
             - '@oro_security.acl_helper'
             - '@oro_chart.config_provider'
             - '@oro_dashboard.datetime.helper'
+
+    Oro\Bundle\MagentoBundle\Dashboard\CustomerDataProvider:
+        alias: oro_magento.dashboard.data_provider.customer
 
     oro_magento.dashboard.data_provider.purchase:
         class: '%oro_magento.dashboard.data_provider.purchase.class%'
@@ -712,6 +718,9 @@ services:
             - '@translator'
             - '@oro_security.acl_helper'
             - '@oro_dashboard.filter.date_filter_processor'
+
+    Oro\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider:
+        alias: oro_magento.dashboard.data_provider.purchase
 
     oro_magento.placeholder.filter:
         class: '%oro_magento.placeholder.filter.class%'
@@ -1092,6 +1101,9 @@ services:
         parent: oro_workflow.abstract.workflow_aware_manager
         calls:
             - ['setWorkflowName', ['b2c_flow_abandoned_shopping_cart']]
+
+    Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager:
+        alias: oro_magento.manager.abandoned_shopping_cart_flow
 
     oro_magento.async.sync_cart_expiration_integration_processor:
         class: 'Oro\Bundle\MagentoBundle\Async\SyncCartExpirationIntegrationProcessor'

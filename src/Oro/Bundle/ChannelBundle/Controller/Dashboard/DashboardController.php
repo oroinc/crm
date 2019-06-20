@@ -2,16 +2,34 @@
 
 namespace Oro\Bundle\ChannelBundle\Controller\Dashboard;
 
+use Oro\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider;
+use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
+use Oro\Bundle\ChartBundle\Model\ConfigProvider;
+use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ * Adds action to work with average lifetime sales chart
  * @Route("/dashboard")
  */
-class DashboardController extends Controller
+class DashboardController extends AbstractController
 {
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(parent::getSubscribedServices(), [
+            WidgetConfigs::class,
+            AverageLifetimeWidgetProvider::class,
+            ChartViewBuilder::class,
+            ConfigProvider::class,
+        ]);
+    }
+
     /**
      * @Route(
      *      "/chart/{widget}",
@@ -25,17 +43,19 @@ class DashboardController extends Controller
      */
     public function averageLifetimeSalesAction(Request $request, $widget)
     {
-        $dateRange = $this->get('oro_dashboard.widget_configs')
+        $widgetConfigs = $this->get(WidgetConfigs::class);
+        $dateRange = $widgetConfigs
             ->getWidgetOptions($request->query->get('_widgetId', null))
             ->get('dateRange');
-        $data = $this->get('oro_channel.provider.lifetime.average_widget_provider')->getChartData($dateRange);
-        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+
+        $data = $this->get(AverageLifetimeWidgetProvider::class)->getChartData($dateRange);
+        $widgetAttr = $widgetConfigs->getWidgetAttributesForTwig($widget);
         $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],
-            $this->get('oro_chart.config_provider')->getChartConfig('average_lifetime_sales')
+            $this->get(ConfigProvider::class)->getChartConfig('average_lifetime_sales')
         );
 
-        $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
+        $widgetAttr['chartView'] = $this->get(ChartViewBuilder::class)
             ->setArrayData($data)
             ->setOptions($chartOptions)
             ->getView();

@@ -54,10 +54,9 @@ class WebsiteEventsChartProviderTest extends WebsiteChartProviderTest
         $eventProvider = $this->getTrackingVisitEventProviderMock($method, $data);
         $configProvider = $this->getConfigProvider();
         $chartViewBuilder = $this->getChartViewBuilderMock($expectedData, $expectedOptions);
-        $container = $this->getContainer($chartViewBuilder);
         $translator = $this->getTranslator();
 
-        return new WebsiteEventsChartProvider($eventProvider, $configProvider, $container, $translator);
+        return new WebsiteEventsChartProvider($eventProvider, $configProvider, $chartViewBuilder, $translator);
     }
 
     /**

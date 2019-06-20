@@ -1,3 +1,9 @@
 services:
     _defaults:
         public: true
+
+    Oro\Bundle\ChannelBundle\Controller\Dashboard\DashboardController:
+        calls:
+            - ['setContainer', ['@Psr\Container\ContainerInterface']]
+        tags:
+            - { name: container.service_subscriber }
