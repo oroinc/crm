@@ -229,6 +229,9 @@ services:
             - '@oro_security.acl_helper'
             - '@oro_dashboard.filter.date_filter_processor'
 
+    Oro\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider:
+        alias: oro_channel.provider.lifetime.average_widget_provider
+
     oro_channel.config_resolver:
         class: '%oro_channel.config_resolver.class%'
         arguments:

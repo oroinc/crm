@@ -4,7 +4,6 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\MagentoBundle\Provider\TrackingVisitEventProvider;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Translation\Translator;
 
 abstract class WebsiteChartProviderTest extends \PHPUnit\Framework\TestCase
@@ -51,19 +50,6 @@ abstract class WebsiteChartProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($chartViewBuilder);
 
         return $chartViewBuilder;
-    }
-
-    /**
-     * @param ChartViewBuilder $chartViewBuilder
-     *
-     * @return ContainerInterface
-     */
-    protected function getContainer(ChartViewBuilder $chartViewBuilder)
-    {
-        $container = new Container();
-        $container->set('oro_chart.view_builder', $chartViewBuilder);
-
-        return $container;
     }
 
     protected function getTranslator()

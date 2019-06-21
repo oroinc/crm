@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        public: true
+
+    Oro\Bundle\MagentoBundle\Controller\Dashboard\DashboardController:
+        calls:
+            - ['setContainer', ['@Psr\Container\ContainerInterface']]
+        tags:
+            - { name: container.service_subscriber }
+
+    Oro\Bundle\MagentoBundle\Controller\NewsletterSubscriberController:
+        calls:
+            - ['setContainer', ['@Psr\Container\ContainerInterface']]
+        tags:
+            - { name: container.service_subscriber }

@@ -94,10 +94,9 @@ class WebsiteChannelChartProviderTest extends WebsiteChartProviderTest
         $eventProvider = $this->getTrackingVisitEventProviderMock($method, $data);
         $configProvider = $this->getConfigProvider();
         $chartViewBuilder = $this->getChartViewBuilderMock($expectedData, $expectedOptions);
-        $container = $this->getContainer($chartViewBuilder);
         $translator = $this->getTranslator();
 
-        return new WebsiteChannelChartProvider($eventProvider, $configProvider, $container, $translator);
+        return new WebsiteChannelChartProvider($eventProvider, $configProvider, $chartViewBuilder, $translator);
     }
 
     /**
