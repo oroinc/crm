@@ -85,11 +85,6 @@ parameters:
     oro_magento.state_manager.class:                                     Oro\Bundle\MagentoBundle\Service\StateManager
     oro_magento.customer_state_handler.class:                            Oro\Bundle\MagentoBundle\Service\CustomerStateHandler
 
-    # dashboard
-    oro_magento.dashboard.data_provider.order.class:                     Oro\Bundle\MagentoBundle\Dashboard\OrderDataProvider
-    oro_magento.dashboard.data_provider.customer.class:                  Oro\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
-    oro_magento.dashboard.data_provider.purchase.class:                  Oro\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider
-
     oro_magento.placeholder.filter.class:                                Oro\Bundle\MagentoBundle\Placeholder\PlaceholderFilter
 
     oro_magento.provider.phone.address.class:                            Oro\Bundle\MagentoBundle\Provider\AddressPhoneProvider
@@ -687,7 +682,7 @@ services:
             - "@oro_importexport.strategy.import.helper"
 
     oro_magento.dashboard.data_provider.order:
-        class: '%oro_magento.dashboard.data_provider.order.class%'
+        class: Oro\Bundle\MagentoBundle\Dashboard\OrderDataProvider
         arguments:
             - "@doctrine"
             - "@oro_security.acl_helper"
@@ -699,7 +694,7 @@ services:
         alias: oro_magento.dashboard.data_provider.order
 
     oro_magento.dashboard.data_provider.customer:
-        class: '%oro_magento.dashboard.data_provider.customer.class%'
+        class: Oro\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
@@ -710,7 +705,7 @@ services:
         alias: oro_magento.dashboard.data_provider.customer
 
     oro_magento.dashboard.data_provider.purchase:
-        class: '%oro_magento.dashboard.data_provider.purchase.class%'
+        class: Oro\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider
         arguments:
             - '@doctrine'
             - '@oro_chart.config_provider'
