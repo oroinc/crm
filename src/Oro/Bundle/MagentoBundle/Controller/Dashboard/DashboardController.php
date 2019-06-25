@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Adds magento dashboard widgets
+ * Adds action which are responsible for rendering magento dashboard chart widgets
  */
 class DashboardController extends AbstractController
 {

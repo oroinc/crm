@@ -3,17 +3,32 @@
 namespace Oro\Bundle\SalesBundle\Controller;
 
 use Oro\Bundle\DataGridBundle\Provider\MultiGridProvider;
+use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
+ * Provides grid dialog action
  * @Route("/customer")
  */
-class CustomerController extends Controller
+class CustomerController extends AbstractController
 {
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(parent::getSubscribedServices(), [
+            EntityRoutingHelper::class,
+            'oro_sales.customer.account_config_provider' => AccountConfigProvider::class,
+            MultiGridProvider::class,
+            EntityAliasResolver::class
+        ]);
+    }
+
     /**
      * @Route("/customer/grid-dialog/{entityClass}", name="oro_sales_customer_grid_dialog")
      * @Template("OroDataGridBundle:Grid/dialog:multi.html.twig")
@@ -24,14 +39,14 @@ class CustomerController extends Controller
      */
     public function gridDialogAction($entityClass)
     {
-        $resolvedClass = $this->getRoutingHelper()->resolveEntityClass($entityClass);
-        $entityClassAlias = $this->get('oro_entity.entity_alias_resolver')
+        $resolvedClass = $this->get(EntityRoutingHelper::class)->resolveEntityClass($entityClass);
+        $entityClassAlias = $this->get(EntityAliasResolver::class)
             ->getPluralAlias($resolvedClass);
-        $entityTargets = $this->getMultiGridProvider()->getEntitiesData(
-            $this->getCustomerConfigProvider()->getCustomerClasses()
+        $entityTargets = $this->get(MultiGridProvider::class)->getEntitiesData(
+            $this->get('oro_sales.customer.account_config_provider')->getCustomerClasses()
         );
 
-        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $request = $this->get('request_stack')->getCurrentRequest();
         $params = [
             'params' => $request->get('params', [])
         ];
@@ -54,29 +69,5 @@ class CustomerController extends Controller
             'sourceEntityClassAlias' => $entityClassAlias,
             'entityTargets'          => $entityTargets
         ];
-    }
-
-    /**
-     * @return EntityRoutingHelper
-     */
-    protected function getRoutingHelper()
-    {
-        return $this->get('oro_entity.routing_helper');
-    }
-
-    /**
-     * @return ConfigProvider
-     */
-    protected function getCustomerConfigProvider()
-    {
-        return $this->get('oro_sales.customer.account_config_provider');
-    }
-
-    /**
-     * @return MultiGridProvider
-     */
-    protected function getMultiGridProvider()
-    {
-        return $this->get('oro_datagrid.multi_grid_provider');
     }
 }

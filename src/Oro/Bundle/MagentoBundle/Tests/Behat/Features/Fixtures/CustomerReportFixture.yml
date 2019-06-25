@@ -60,13 +60,13 @@ Oro\Bundle\ChannelBundle\Entity\EntityName:
   channel-entity-opportunity:
     __construct: ['Oro\Bundle\MagentoBundle\Entity\Order']
     channel: '@magentoChannel'
-  channel-entity-customer:
+  channel-entity-creditmemo:
     __construct: ['Oro\Bundle\MagentoBundle\Entity\CreditMemo']
     channel: '@magentoChannel'
-  channel-entity-lead:
+  channel-entity-newslettersubscriber:
     __construct: ['Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber']
     channel: '@magentoChannel'
-  channel-entity-opportunity:
+  channel-entity-ordernote:
     __construct: ['Oro\Bundle\MagentoBundle\Entity\OrderNote']
     channel: '@magentoChannel'
 
