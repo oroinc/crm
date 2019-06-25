@@ -419,6 +419,7 @@ services:
     oro_channel.account_lifetime_subscriber:
         class: Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeSubscriber
         arguments:
-            - '@service_container'
+            - '@oro_currency.query.currency_transformer'
+            - '@oro_sales.manager.account_customer'
         tags:
             - { name: doctrine.event_subscriber }

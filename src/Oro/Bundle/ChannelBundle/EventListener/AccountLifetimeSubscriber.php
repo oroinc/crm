@@ -16,12 +16,14 @@ use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Schedules accounts for deletion wich has no custmers assigned
+ */
 class AccountLifetimeSubscriber implements EventSubscriber
 {
-    /** @var ContainerInterface */
-    private $container;
+    /** @var CurrencyQueryBuilderTransformerInterface */
+    private $currencyQueryBuilderTransformer;
 
     /** @var Account[] */
     private $accounts = [];
@@ -29,12 +31,19 @@ class AccountLifetimeSubscriber implements EventSubscriber
     /** @var array|null */
     private $customerTargetFields;
 
+    /** @var AccountCustomerManager */
+    private $accountCustomerManager;
+
     /**
-     * @param ContainerInterface $container
+     * @param CurrencyQueryBuilderTransformerInterface $currencyQueryBuilderTransformer
+     * @param AccountCustomerManager $accountCustomerManager
      */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        CurrencyQueryBuilderTransformerInterface $currencyQueryBuilderTransformer,
+        AccountCustomerManager $accountCustomerManager
+    ) {
+        $this->currencyQueryBuilderTransformer = $currencyQueryBuilderTransformer;
+        $this->accountCustomerManager = $accountCustomerManager;
     }
 
     /**
@@ -222,7 +231,7 @@ class AccountLifetimeSubscriber implements EventSubscriber
             ->select(
                 sprintf(
                     'SUM(%s)',
-                    $this->getCurrencyQueryBuilderTransformer()->getTransformSelectQuery('closeRevenue', $qb, 'o')
+                    $this->currencyQueryBuilderTransformer->getTransformSelectQuery('closeRevenue', $qb, 'o')
                 )
             )
             ->join('o.customerAssociation', 'c')
@@ -244,19 +253,9 @@ class AccountLifetimeSubscriber implements EventSubscriber
     private function getCustomerTargetFields()
     {
         if (null === $this->customerTargetFields) {
-            /** @var AccountCustomerManager $customerManager */
-            $customerManager = $this->container->get('oro_sales.manager.account_customer');
-            $this->customerTargetFields = $customerManager->getCustomerTargetFields();
+            $this->customerTargetFields = $this->accountCustomerManager->getCustomerTargetFields();
         }
 
         return $this->customerTargetFields;
-    }
-
-    /**
-     * @return CurrencyQueryBuilderTransformerInterface
-     */
-    private function getCurrencyQueryBuilderTransformer()
-    {
-        return $this->container->get('oro_currency.query.currency_transformer');
     }
 }

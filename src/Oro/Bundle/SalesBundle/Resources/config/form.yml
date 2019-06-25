@@ -2,7 +2,6 @@ parameters:
     oro_sales.opportunity.form.type.class: Oro\Bundle\SalesBundle\Form\Type\OpportunityType
     oro_sales.opportunity.form.type.api.class: Oro\Bundle\SalesBundle\Form\Type\OpportunityApiType
     oro_sales.lead_to_opportunity.form.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType
-    oro_sales.opportunity.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler
     oro_sales.lead_to_opportunity.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\LeadToOpportunityHandler
 
     oro_sales.lead.form.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadType
@@ -104,13 +103,16 @@ services:
             - Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType
 
     oro_sales.opportunity.form.handler:
-        class: '%oro_sales.opportunity.form.handler.class%'
+        class: 'Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler'
         arguments:
             - "@oro_sales.opportunity.form"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
             - "@logger"
+
+    Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler:
+        alias: oro_sales.opportunity.form.handler
 
     oro_sales.lead_to_opportunity.form.handler:
         class: '%oro_sales.lead_to_opportunity.form.handler.class%'
@@ -123,7 +125,7 @@ services:
             - "@logger"
 
     oro_sales.opportunity.form.handler.api:
-        class: '%oro_sales.opportunity.form.handler.class%'
+        class: 'Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler'
         arguments:
             - "@oro_sales.opportunity.form.api"
             - "@request_stack"
