@@ -14,10 +14,14 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Lead entity form type.
+ * - used in backoffice on create, update entity pages.
+ * - used in API as parent form type for LeadApiType
+ */
 class LeadType extends AbstractType
 {
     /**
@@ -82,7 +86,7 @@ class LeadType extends AbstractType
                 ]
             )
             ->add('companyName', TextType::class, ['required' => false, 'label' => 'oro.sales.lead.company_name.label'])
-            ->add('website', UrlType::class, array('required' => false, 'label' => 'oro.sales.lead.website.label'))
+            ->add('website', TextType::class, array('required' => false, 'label' => 'oro.sales.lead.website.label'))
             ->add(
                 'numberOfEmployees',
                 IntegerType::class,

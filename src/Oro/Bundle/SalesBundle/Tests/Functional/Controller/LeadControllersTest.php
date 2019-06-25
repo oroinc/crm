@@ -45,6 +45,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
         $form['oro_sales_lead_form[companyName]']         = 'Company';
         $form['oro_sales_lead_form[emails][0][email]']    = 'test@example.test';
         $form['oro_sales_lead_form[owner]']               = 1;
+        $form['oro_sales_lead_form[website]']             = 'http://example.com';
         //Add address fields to form as they are rendered with javascript
         $doc = new \DOMDocument("1.0");
         $addressInputs = ['city', 'label', 'postalCode', 'street', 'street2'];
@@ -87,6 +88,56 @@ class LeadControllersTest extends AbstractDatagridTestCase
         $this->assertContains("Lead saved", $crawler->html());
 
         return $name;
+    }
+
+
+    /**
+     * @dataProvider updateWithInvalidWebsiteDataProvider
+     *
+     * @param string $name
+     * @param string $website
+     *
+     * @depends      testCreate
+     */
+    public function testUpdateWithInvalidWebsite(string $website, string $name)
+    {
+        $response = $this->client->requestGrid(
+            'sales-lead-grid',
+            ['sales-lead-grid[_filter][name][value]' => $name]
+        );
+
+        $result = $this->getJsonResponseContent($response, 200);
+        $result = reset($result['data']);
+        $crawler = $this->client->request(
+            'GET',
+            $this->getUrl('oro_sales_lead_update', ['id' => $result['id']])
+        );
+
+        /** @var Form $form */
+        $form = $crawler->selectButton('Save and Close')->form();
+        $form['oro_sales_lead_form[website]'] = $website;
+
+        $crawler = $this->client->submit($form);
+
+        $result = $this->client->getResponse();
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $this->assertContains(
+            'This value is not a valid URL. Allowed URL protocols are: http, https.',
+            $crawler->html()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function updateWithInvalidWebsiteDataProvider(): array
+    {
+        return [
+            ['website' => 'sample-string'],
+            ['website' => 'unsupported-protocol://sample-site'],
+            ['website' => 'javascript:alert(1)'],
+            ['website' => 'jAvAsCrIpt:alert(1)'],
+        ];
     }
 
     /**

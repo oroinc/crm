@@ -60,6 +60,10 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
             $container->get('oro_entity.doctrine_helper'),
             $container->get('oro_security.owner.checker')
         );
+        $this->strategy->setRelatedEntityStateHelper(
+            $container->get('oro_importexport.field.related_entity_state_helper')
+        );
+
 
         $this->stepExecution = new StepExecution('step', new JobExecution());
         $this->context = new StepExecutionProxyContext($this->stepExecution);
@@ -73,6 +77,7 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
     {
         $address = new Address();
         $address->setStreet('Test1');
+        $address->setPostalCode('01234');
         $address->setCity('test_city');
         $country = new Country('US');
         $address->setCountry($country);
@@ -123,7 +128,7 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
         $address->setStreet('1215 Caldwell Road');
         $address->setCity('Rochester');
         $address->setPostalCode('14608');
-        $country = new Country('US');
+        $country = new Country('CC');
         $address->setCountry($country);
         $address->setRegionText('test');
 

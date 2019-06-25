@@ -15,7 +15,7 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
      */
     protected function getStrategy()
     {
-        return new CartWithExistingCustomerStrategy(
+        $strategy = new CartWithExistingCustomerStrategy(
             $this->eventDispatcher,
             $this->strategyHelper,
             $this->fieldHelper,
@@ -26,6 +26,11 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
             $this->doctrineHelper,
             $this->ownerChecker
         );
+        $strategy->setRelatedEntityStateHelper(
+            $this->relatedEntityStateHelper
+        );
+
+        return $strategy;
     }
 
     /**

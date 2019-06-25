@@ -76,6 +76,9 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
             $this->doctrineHelper,
             $this->ownerChecker
         );
+        $strategy->setRelatedEntityStateHelper(
+            $this->relatedEntityStateHelper
+        );
 
         $strategy->setGuestCustomerStrategyHelper($this->guestCustomerStrategyHelper);
 
