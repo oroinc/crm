@@ -11,10 +11,10 @@ oro_behat_extension:
       options:
         mapping:
           Second Country:
-            locator: '//div[contains(@id,"s2id_oro_sales_lead_form_addresses_2_country-uid")]/input'
+            locator: '//div[contains(@id,"s2id_oro_sales_lead_form_addresses_1_country-uid")]/input'
             type: xpath
           Second State:
-            locator: '//div[contains(@id,"s2id_oro_sales_lead_form_addresses_2_region-uid")]/input'
+            locator: '//div[contains(@id,"s2id_oro_sales_lead_form_addresses_1_region-uid")]/input'
             type: xpath
 
     Business Customer Form:
