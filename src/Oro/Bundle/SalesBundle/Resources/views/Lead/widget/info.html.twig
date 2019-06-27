@@ -79,7 +79,10 @@
         <div class="responsive-block">
             {{ ui.renderHtmlProperty('oro.sales.lead.emails.label'|trans, sales.renderCollectionWithPrimaryElement(entity.emails, true, entity)) }}
             {{ ui.renderHtmlProperty('oro.sales.lead.phones.label'|trans, sales.renderCollectionWithPrimaryElement(entity.phones, false, entity)) }}
-            {{ ui.renderHtmlProperty('oro.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
+            {%- if entity.website -%}
+                {%- set website = entity.website|strip_dangerous_protocols -%}
+            {%- endif -%}
+            {{ ui.renderHtmlProperty('oro.sales.lead.website.label'|trans, website is defined ? ui.renderUrl(website, website, 'no-hash') : null) }}
             {{ ui.renderCollapsibleHtmlProperty('oro.sales.lead.notes.label'|trans, entity.notes|oro_html_strip_tags, entity, 'notes') }}
             {{ ui.renderHtmlProperty('oro.contact.social.label'|trans, socialData) }}
             {{ ui.renderHtmlProperty('oro.sales.opportunity.entity_label'|trans, opportunitiesData) }}

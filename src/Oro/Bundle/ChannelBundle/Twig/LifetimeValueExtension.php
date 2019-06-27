@@ -5,7 +5,8 @@ namespace Oro\Bundle\ChannelBundle\Twig;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -13,7 +14,7 @@ use Twig\TwigFunction;
  * Provides a Twig function for the per-channel account lifetime value:
  *   - oro_channel_account_lifetime
  */
-class LifetimeValueExtension extends AbstractExtension
+class LifetimeValueExtension extends AbstractExtension implements ServiceSubscriberInterface
 {
     const EXTENSION_NAME = 'oro_channel_lifetime_value';
 
@@ -63,5 +64,15 @@ class LifetimeValueExtension extends AbstractExtension
     public function getName()
     {
         return self::EXTENSION_NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return [
+            'oro_channel.provider.lifetime.amount_provider' => AmountProvider::class,
+        ];
     }
 }

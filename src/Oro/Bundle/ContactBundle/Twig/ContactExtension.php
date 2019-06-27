@@ -3,7 +3,8 @@
 namespace Oro\Bundle\ContactBundle\Twig;
 
 use Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -11,7 +12,7 @@ use Twig\TwigFunction;
  * Provides a Twig function to format URLs to social networks:
  *   - oro_social_url
  */
-class ContactExtension extends AbstractExtension
+class ContactExtension extends AbstractExtension implements ServiceSubscriberInterface
 {
     /** @var ContainerInterface */
     protected $container;
@@ -63,5 +64,15 @@ class ContactExtension extends AbstractExtension
         }
 
         return $this->getSocialUrlFormatter()->getSocialUrl($socialType, $username);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return [
+            'oro_contact.social_url_formatter' => SocialUrlFormatter::class,
+        ];
     }
 }

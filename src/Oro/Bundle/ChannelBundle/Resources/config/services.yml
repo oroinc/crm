@@ -316,7 +316,7 @@ services:
         class: Oro\Bundle\ChannelBundle\Twig\MetadataExtension
         public: false
         arguments:
-            - "@service_container"
+            - "@oro_platform.twig.service_locator"
         tags:
             - { name: twig.extension }
 
@@ -336,7 +336,7 @@ services:
         class: Oro\Bundle\ChannelBundle\Twig\LifetimeValueExtension
         public: false
         arguments:
-            - '@service_container'
+            - '@oro_platform.twig.service_locator'
         tags:
             - { name: twig.extension }
 
