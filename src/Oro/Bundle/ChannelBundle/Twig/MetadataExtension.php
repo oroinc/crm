@@ -3,7 +3,8 @@
 namespace Oro\Bundle\ChannelBundle\Twig;
 
 use Oro\Bundle\ChannelBundle\Provider\MetadataProviderInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -12,7 +13,7 @@ use Twig\TwigFunction;
  *   - oro_channel_entities_metadata
  *   - oro_channel_type_metadata
  */
-class MetadataExtension extends AbstractExtension
+class MetadataExtension extends AbstractExtension implements ServiceSubscriberInterface
 {
     const EXTENSION_NAME = 'oro_channel_metadata';
 
@@ -68,5 +69,15 @@ class MetadataExtension extends AbstractExtension
     public function getName()
     {
         return self::EXTENSION_NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return [
+            'oro_channel.provider.metadata_provider' => MetadataProviderInterface::class,
+        ];
     }
 }
