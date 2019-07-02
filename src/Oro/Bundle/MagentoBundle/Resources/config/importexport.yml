@@ -260,6 +260,8 @@ services:
 
     oro_magento.mage.cart_connector:
         class: '%oro_magento.mage.cart_connector.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_magento.connector.abstract
         tags:
             - { name: oro_integration.connector, type: cart, channel_type: magento }

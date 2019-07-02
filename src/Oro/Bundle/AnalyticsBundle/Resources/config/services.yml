@@ -95,6 +95,8 @@ services:
 
     oro_analytics.calculate_analytics_scheduler:
         class: 'Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - '@oro_message_queue.message_producer'
 

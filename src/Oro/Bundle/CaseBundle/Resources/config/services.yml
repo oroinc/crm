@@ -13,12 +13,16 @@ parameters:
 services:
     oro_case.manager:
         class: '%oro_case.manager.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@doctrine"
             - "@oro_security.acl_helper"
 
     oro_case.manager.api:
         class: '%oro_case.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_case.entity.class%'
@@ -27,6 +31,8 @@ services:
 
     oro_case.manager.comment.api:
         class: '%oro_case.manager.comment.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_case.comment.class%'
@@ -35,6 +41,8 @@ services:
 
     oro_case.view_factory:
         class: '%oro_case.view_factory.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@security.authorization_checker"
             - "@router"
