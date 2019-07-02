@@ -52,6 +52,8 @@ parameters:
 services:
     oro_sales.opportunity.manager.api:
         class: '%oro_sales.opportunity.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.opportunity.class%'
@@ -59,6 +61,8 @@ services:
 
     oro_sales.lead.manager.api:
         class: '%oro_sales.lead.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.lead.entity.class%'
@@ -66,6 +70,8 @@ services:
 
     oro_sales.lead_address.manager.api:
         class: '%oro_sales.lead_address.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.leadaddress.entity.class%'
@@ -73,6 +79,8 @@ services:
 
     oro_sales.lead_email.manager.api:
         class: '%oro_sales.lead_email.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.lead_email.entity.class%'
@@ -80,6 +88,8 @@ services:
 
     oro_sales.salesfunnel.manager.api:
         class: '%oro_sales.salesfunnel.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.salesfunnel.entity.class%'
@@ -193,6 +203,8 @@ services:
 
     oro_sales.provider.probability:
         class: Oro\Bundle\SalesBundle\Provider\ProbabilityProvider
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - '@oro_config.user'
 
@@ -367,6 +379,8 @@ services:
 
     oro_sales.lead_phone.manager.api:
         class: '%oro_sales.lead_phone.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.lead_phone.entity.class%'
@@ -382,6 +396,8 @@ services:
 
     oro_sales.model.change_lead_status:
         class: '%oro_sales.model.change_lead_status.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@validator'
@@ -436,6 +452,8 @@ services:
 
     oro_sales.provider.lead_actions_access:
         class: Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - '@oro_workflow.registry'
             - '@oro_featuretoggle.checker.feature_checker'
@@ -489,11 +507,14 @@ services:
 
     oro_sales.customer.account_config_provider:
         class: Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider
-        public: false
+        # This service marked as public (origin private) for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_sales.customer.config_provider
 
     oro_sales.autocomplete.customer_search_handler:
         class: Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_activity.form.handler.autocomplete
         calls:
             - [setCustomerIconProvider, ['@oro_sales.provider.customer.chain_customer_icon']]

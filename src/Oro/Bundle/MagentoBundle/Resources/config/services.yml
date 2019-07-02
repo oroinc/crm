@@ -331,12 +331,16 @@ services:
 
     oro_magento.form.handler.customer:
         class: '%oro_magento.form.handler.customer.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_form.model.update_handler
         calls:
             - [setStateHandler,  ["@oro_magento.customer_state_handler"]]
 
     oro_magento.form.cart.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
@@ -354,6 +358,8 @@ services:
 
     oro_magento.form.cart_item.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
@@ -366,6 +372,8 @@ services:
 
     oro_magento.form.cart_address.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
@@ -378,6 +386,8 @@ services:
 
     oro_magento.form.order.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
@@ -407,6 +417,8 @@ services:
 
     oro_magento.form.order_address.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
@@ -419,6 +431,8 @@ services:
 
     oro_magento.form.order_item.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
@@ -433,6 +447,8 @@ services:
 
     oro_magento.form.customer.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
@@ -440,6 +456,8 @@ services:
 
     oro_magento.form.customer_address.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - ~
@@ -619,6 +637,8 @@ services:
     # Customer API
     oro_magento.customer_address.manager.api:
         class: '%oro_magento.customer_address.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_magento.entity.address.class%'
@@ -626,6 +646,8 @@ services:
 
     oro_magento.customer.manager.api:
         class: '%oro_magento.customer.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_magento.entity.customer.class%'
@@ -964,6 +986,8 @@ services:
 
     oro_magento.service.order.information_loader:
         class: '%oro_magento.service.information_loader.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_importexport.job_executor"
             - "@oro_magento.mage.order_connector"
@@ -971,6 +995,8 @@ services:
 
     oro_magento.service.cart.information_loader:
         class: '%oro_magento.service.information_loader.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_importexport.job_executor"
             - "@oro_magento.mage.cart_connector"
@@ -979,6 +1005,8 @@ services:
     # manager
     oro_magento.cart.manager.api:
         class: '%oro_magento.cart.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_magento.entity.cart.class%'
@@ -986,6 +1014,8 @@ services:
 
     oro_magento.cart_address.manager.api:
         class: '%oro_magento.cart_address.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_magento.entity.cart_address.class%'
@@ -993,6 +1023,8 @@ services:
 
     oro_magento.cart_item.manager.api:
         class: '%oro_magento.cart_item.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_magento.entity.cart_item.class%'
@@ -1000,6 +1032,8 @@ services:
 
     oro_magento.order.manager.api:
         class: '%oro_magento.order.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_magento.entity.order.class%'
@@ -1007,6 +1041,8 @@ services:
 
     oro_magento.order_item.manager.api:
         class: '%oro_magento.order_item.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_magento.entity.order_item.class%'
@@ -1014,6 +1050,8 @@ services:
 
     oro_magento.order_address.manager.api:
         class: '%oro_magento.order_address.manager.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_magento.entity.order_address.class%'
@@ -1022,6 +1060,8 @@ services:
     # handler
     oro_magento.form.handler.cart.api:
         class: '%oro_magento.form.handler.cart.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_magento.form.cart.api"
             - "@request_stack"
@@ -1030,6 +1070,8 @@ services:
 
     oro_magento.form.handler.cart_address:
         class: '%oro_magento.form.handler.cart_address.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_magento.form.cart_address.api"
             - "@request_stack"
@@ -1038,6 +1080,8 @@ services:
 
     oro_magento.form.handler.cart_item:
         class: '%oro_magento.form.handler.cart_item.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_magento.form.cart_item.api"
             - "@request_stack"
@@ -1045,6 +1089,8 @@ services:
 
     oro_magento.form.handler.order.api:
         class: '%oro_magento.form.handler.order.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_magento.form.order.api"
             - "@request_stack"
@@ -1053,6 +1099,8 @@ services:
 
     oro_magento.form.handler.order_item:
         class: '%oro_magento.form.handler.order_item.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_magento.form.order_item.api"
             - "@request_stack"
@@ -1060,6 +1108,8 @@ services:
 
     oro_magento.form.handler.order_address.api:
         class: '%oro_magento.form.handler.order_address.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_magento.form.order_address.api"
             - "@request_stack"
@@ -1068,6 +1118,8 @@ services:
 
     oro_magento.form.handler.customer.api:
         class: '%oro_magento.form.api.handler.customer.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_magento.form.customer.api"
             - "@request_stack"
@@ -1077,6 +1129,8 @@ services:
 
     oro_magento.form.api.handler.customer_address:
         class: '%oro_magento.form.handler.customer_address.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_magento.form.customer_address.api"
             - "@request_stack"
@@ -1085,6 +1139,8 @@ services:
 
     oro_magento.handler.transport:
         class: Oro\Bundle\MagentoBundle\Handler\TransportHandler
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - '@oro_integration.manager.types_registry'
             - '@oro_magento.provider.transport_entity'
@@ -1172,6 +1228,8 @@ services:
 
     oro_magento.converter.cart_subtotal_to_multicurrency:
         class: Oro\Bundle\MagentoBundle\Converter\CartSubtotalToMultiCurrency
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
 
     oro_magento.provider.iso2_code:
         class: Oro\Bundle\MagentoBundle\Provider\Iso2CodeProvider

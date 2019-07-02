@@ -110,6 +110,8 @@ services:
     # handlers
     oro_channel.channel_form.handler:
         class: '%oro_channel.channel_form.handler.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@request_stack"
             - "@oro_channel.form.channel"
@@ -118,6 +120,8 @@ services:
 
     oro_channel.channel_integration_form.handler:
         class: '%oro_channel.channel_integration_form.handler.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@request_stack"
             - "@form.factory"
@@ -125,6 +129,8 @@ services:
     # Channel API
     oro_channel.manager.channel.api:
         class: '%oro_channel.manager.channel.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_channel.entity.class%'
@@ -132,6 +138,8 @@ services:
 
     oro_channel.manager.customer_search.api:
         class: '%oro_channel.manager.customer_search.api.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_channel.entity.class%'
@@ -217,6 +225,8 @@ services:
 
     oro_channel.provider.lifetime.amount_provider:
         class: '%oro_channel.provider.lifetime.amount_provider.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@doctrine"
 

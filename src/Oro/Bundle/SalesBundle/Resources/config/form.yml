@@ -83,6 +83,8 @@ services:
 
     oro_sales.opportunity.form:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_opportunity_form"
@@ -90,6 +92,8 @@ services:
 
     oro_sales.opportunity.form.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - "opportunity"
@@ -116,6 +120,8 @@ services:
 
     oro_sales.lead_to_opportunity.form.handler:
         class: '%oro_sales.lead_to_opportunity.form.handler.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_sales.lead_to_opportunity.form"
             - "@request_stack"
@@ -126,6 +132,8 @@ services:
 
     oro_sales.opportunity.form.handler.api:
         class: 'Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_sales.opportunity.form.api"
             - "@request_stack"
@@ -150,6 +158,8 @@ services:
 
     oro_sales.lead.form:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_lead_form"
@@ -157,6 +167,8 @@ services:
 
     oro_sales.lead.form.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - "lead"
@@ -164,6 +176,8 @@ services:
 
     oro_sales.lead.form.handler:
         class: '%oro_sales.lead.form.handler.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_sales.lead.form"
             - "@request_stack"
@@ -172,6 +186,8 @@ services:
 
     oro_sales.lead.form.handler.api:
         class: '%oro_sales.lead.form.handler.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_sales.lead.form.api"
             - "@request_stack"
@@ -180,6 +196,8 @@ services:
 
     oro_sales.lead_address.form:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_lead_address_form"
@@ -189,6 +207,8 @@ services:
 
     oro_sales.lead_address.form.handler:
         class: '%oro_address.form.handler.address.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_sales.lead_address.form"
             - "@request_stack"
@@ -228,6 +248,8 @@ services:
 
     oro_sales.salesfunnel.form:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_salesfunnel_form"
@@ -235,6 +257,8 @@ services:
 
     oro_sales.salesfunnel.form.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - "salesfunnel"
@@ -242,6 +266,8 @@ services:
 
     oro_sales.salesfunnel.form.handler:
         class: '%oro_sales.salesfunnel.form.handler.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_sales.salesfunnel.form"
             - "@request_stack"
@@ -249,6 +275,8 @@ services:
 
     oro_sales.salesfunnel.form.handler.api:
         class: '%oro_sales.salesfunnel.form.handler.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_sales.salesfunnel.form.api"
             - "@request_stack"
@@ -332,11 +360,15 @@ services:
 
     oro_sales.form.type.lead_phone.type:
         class: '%oro_sales.lead_phone.form.type.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         tags:
             - { name: form.type, alias: oro_sales_lead_phone }
 
     oro_sales.form.type.lead_phone.handler:
         class: '%oro_sales.lead_phone.form.handler.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@form.factory"
             - "@request_stack"
@@ -345,11 +377,15 @@ services:
 
     oro_sales.form.type.lead_email.type:
         class: '%oro_sales.lead_email.type.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         tags:
             - { name: form.type, alias: oro_sales_lead_email }
 
     oro_sales.form.type.lead_email.handler:
         class: '%oro_sales.lead_email.handler.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@form.factory"
             - "@request_stack"

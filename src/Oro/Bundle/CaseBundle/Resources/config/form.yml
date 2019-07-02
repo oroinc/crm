@@ -36,6 +36,8 @@ services:
 
     oro_case.form.entity:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - 'oro_case_entity_form'
@@ -43,6 +45,8 @@ services:
 
     oro_case.form.entity.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - 'case'
@@ -50,6 +54,8 @@ services:
 
     oro_case.form.comment:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - 'oro_case_comment_form'
@@ -57,6 +63,8 @@ services:
 
     oro_case.form.comment.api:
         class: Symfony\Component\Form\Form
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - 'comment'
@@ -64,6 +72,8 @@ services:
 
     oro_case.form.handler.entity:
         class: '%oro_case.form.handler.entity.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_case.form.entity"
             - "@request_stack"
@@ -72,6 +82,8 @@ services:
 
     oro_case.form.handler.entity.api:
         class: '%oro_case.form.handler.entity.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_case.form.entity.api"
             - "@request_stack"
@@ -80,6 +92,8 @@ services:
 
     oro_case.form.handler.comment:
         class: '%oro_case.form.handler.entity.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_case.form.comment"
             - "@request_stack"
@@ -88,6 +102,8 @@ services:
 
     oro_case.form.handler.comment.api:
         class: '%oro_case.form.handler.entity.class%'
+        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
+        public: true
         arguments:
             - "@oro_case.form.comment.api"
             - "@request_stack"
