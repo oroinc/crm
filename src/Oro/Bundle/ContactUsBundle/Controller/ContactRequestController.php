@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ContactUsBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
-use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -13,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Contact Request Controller
@@ -113,7 +113,7 @@ class ContactRequestController extends Controller
         $em->remove($contactRequest);
         $em->flush();
 
-        return new JsonResponse('', Codes::HTTP_OK);
+        return new JsonResponse('', Response::HTTP_OK);
     }
 
     /**

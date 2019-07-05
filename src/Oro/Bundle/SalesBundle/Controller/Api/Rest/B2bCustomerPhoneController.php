@@ -5,7 +5,6 @@ namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -46,7 +45,7 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
 
         return new JsonResponse(
             $result,
-            empty($customer) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
+            empty($customer) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK
         );
     }
 
@@ -75,7 +74,7 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
 
         $responseData = $phone ? json_encode($this->getPreparedItem($phone)) : '';
 
-        return new Response($responseData, $phone ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
+        return new Response($responseData, $phone ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
 
     /**

@@ -5,7 +5,6 @@ namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\MagentoBundle\Entity\Manager\OrderApiEntityManager;
 use Oro\Bundle\MagentoBundle\Entity\Order;
@@ -74,13 +73,13 @@ class OrderItemController extends RestController implements ClassResourceInterfa
             $entity = $this->processForm($entity);
 
             if ($entity) {
-                $view = $this->view($this->createResponseData($entity), Codes::HTTP_CREATED);
+                $view = $this->view($this->createResponseData($entity), Response::HTTP_CREATED);
                 $isProcessed = true;
             } else {
-                $view = $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
+                $view = $this->view($this->getForm(), Response::HTTP_BAD_REQUEST);
             }
         } else {
-            $view = $this->view($this->getForm(), Codes::HTTP_NOT_FOUND);
+            $view = $this->view($this->getForm(), Response::HTTP_NOT_FOUND);
         }
 
         return $this->buildResponse($view, self::ACTION_CREATE, ['success' => $isProcessed, 'entity' => $entity]);
@@ -106,7 +105,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
 
         return new JsonResponse(
             $orderItem,
-            empty($orderItem) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
+            empty($orderItem) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK
         );
     }
 
@@ -129,7 +128,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
 
         return new JsonResponse(
             $orderItems,
-            empty($orderItems) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
+            empty($orderItems) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK
         );
     }
 
@@ -157,12 +156,12 @@ class OrderItemController extends RestController implements ClassResourceInterfa
 
         if ($orderItem) {
             if ($this->processForm($orderItem)) {
-                $view = $this->view(null, Codes::HTTP_NO_CONTENT);
+                $view = $this->view(null, Response::HTTP_NO_CONTENT);
             } else {
-                $view = $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
+                $view = $this->view($this->getForm(), Response::HTTP_BAD_REQUEST);
             }
         } else {
-            $view = $this->view(null, Codes::HTTP_NOT_FOUND);
+            $view = $this->view(null, Response::HTTP_NOT_FOUND);
         }
 
         return $this->buildResponse($view, self::ACTION_UPDATE, ['id' => $itemId, 'entity' => $orderItem]);
@@ -193,17 +192,17 @@ class OrderItemController extends RestController implements ClassResourceInterfa
         $orderItem = $this->getManager()->findOneBy(['order' => $orderId, 'id' => $itemId]);
 
         if (!$orderItem) {
-            $view = $this->view(null, Codes::HTTP_NOT_FOUND);
+            $view = $this->view(null, Response::HTTP_NOT_FOUND);
         } else {
             try {
                 $this->getDeleteHandler()->handleDelete($itemId, $this->getManager());
 
                 $isProcessed = true;
-                $view        = $this->view(null, Codes::HTTP_NO_CONTENT);
+                $view        = $this->view(null, Response::HTTP_NO_CONTENT);
             } catch (EntityNotFoundException $notFoundEx) {
-                $view = $this->view(null, Codes::HTTP_NOT_FOUND);
+                $view = $this->view(null, Response::HTTP_NOT_FOUND);
             } catch (ForbiddenException $forbiddenEx) {
-                $view = $this->view(['reason' => $forbiddenEx->getReason()], Codes::HTTP_FORBIDDEN);
+                $view = $this->view(['reason' => $forbiddenEx->getReason()], Response::HTTP_FORBIDDEN);
             }
         }
 

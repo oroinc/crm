@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
-use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\FactoryInterface as RestClientFactoryInterface;
@@ -24,6 +23,7 @@ use Oro\Bundle\MagentoBundle\Provider\Transport\Provider\OroBridgeExtensionConfi
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -154,7 +154,7 @@ class RestTransport implements
      */
     protected function isUnauthorizedException(RestException $exception)
     {
-        return $exception->getResponse()->getStatusCode() === Codes::HTTP_UNAUTHORIZED;
+        return $exception->getResponse()->getStatusCode() === Response::HTTP_UNAUTHORIZED;
     }
 
     /**
@@ -164,7 +164,7 @@ class RestTransport implements
     {
         $lastResponse = $this->client->getLastResponse();
 
-        return null === $lastResponse || $lastResponse->getStatusCode() !== Codes::HTTP_UNAUTHORIZED;
+        return null === $lastResponse || $lastResponse->getStatusCode() !== Response::HTTP_UNAUTHORIZED;
     }
 
     /**

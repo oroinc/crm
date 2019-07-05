@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
-use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
 use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerPhoneData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class RestB2bCustomerPhoneApiTest extends WebTestCase
 {
@@ -26,7 +26,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
             'primary' => true
         ]);
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_phone'), [], [], [], $content);
-        $customer = $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_CREATED);
+        $customer = $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_CREATED);
 
         $this->assertArrayHasKey('id', $customer);
         $this->assertNotEmpty($customer['id']);
@@ -43,7 +43,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_phone'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testEmptyCustomerId()
@@ -54,7 +54,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_phone'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testEmptyPhone()
@@ -66,7 +66,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_phone'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testDeletePhoneForbidden()
@@ -78,7 +78,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_b2bcustomer_phone', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_INTERNAL_SERVER_ERROR);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_INTERNAL_SERVER_ERROR);
         $this->assertEquals(
             '{"code":500,"message":"oro.sales.phone.error.delete.more_one"}',
             $this->client->getResponse()->getContent()
@@ -93,7 +93,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_b2bcustomer_phone', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_OK);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_OK);
         $this->assertEquals('{"id":""}', $this->client->getResponse()->getContent());
     }
 }

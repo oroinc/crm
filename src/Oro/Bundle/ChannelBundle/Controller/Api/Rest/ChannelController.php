@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
 use Oro\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
@@ -124,14 +123,14 @@ class ChannelController extends RestController
             $this->getDeleteHandler()->handleDelete($id, $this->getManager());
             $this->get('event_dispatcher')->dispatch(ChannelDeleteEvent::EVENT_NAME, new ChannelDeleteEvent($channel));
         } catch (EntityNotFoundException $notFoundEx) {
-            return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
+            return $this->handleView($this->view(null, Response::HTTP_NOT_FOUND));
         } catch (ForbiddenException $forbiddenEx) {
             return $this->handleView(
-                $this->view(['reason' => $forbiddenEx->getReason()], Codes::HTTP_FORBIDDEN)
+                $this->view(['reason' => $forbiddenEx->getReason()], Response::HTTP_FORBIDDEN)
             );
         }
 
-        return $this->handleView($this->view(null, Codes::HTTP_NO_CONTENT));
+        return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
     }
 
     /**

@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
-use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEmailData;
 use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class RestB2bCustomerEmailApiTest extends WebTestCase
 {
@@ -27,7 +27,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_email'), [], [], [], $content);
-        $customer = $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_CREATED);
+        $customer = $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_CREATED);
 
         $this->assertArrayHasKey('id', $customer);
         $this->assertNotEmpty($customer['id']);
@@ -43,7 +43,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_email'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testEmptyB2bCustomerId()
@@ -54,7 +54,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_email'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testEmptyEmail()
@@ -66,7 +66,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_email'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testDeleteEmailForbidden()
@@ -77,7 +77,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_b2bcustomer_email', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_INTERNAL_SERVER_ERROR);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_INTERNAL_SERVER_ERROR);
         $this->assertEquals(
             '{"code":500,"message":"oro.sales.email.error.delete.more_one"}',
             $this->client->getResponse()->getContent()
@@ -92,7 +92,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_b2bcustomer_email', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_OK);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_OK);
         $this->assertEquals('{"id":""}', $this->client->getResponse()->getContent());
     }
 }
