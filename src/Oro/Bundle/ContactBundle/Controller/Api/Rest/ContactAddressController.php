@@ -5,7 +5,6 @@ namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
@@ -46,7 +45,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
             $addressData = $this->getPreparedItem($address);
         }
         $responseData = $addressData ? json_encode($addressData) : '';
-        return new Response($responseData, $address ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
+        return new Response($responseData, $address ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -77,7 +76,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
 
         return new JsonResponse(
             $result,
-            empty($contact) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
+            empty($contact) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK
         );
     }
 
@@ -106,7 +105,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
             $contact->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
             return $this->handleDeleteRequest($addressId);
         } else {
-            return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
+            return $this->handleView($this->view(null, Response::HTTP_NOT_FOUND));
         }
     }
 
@@ -136,7 +135,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
 
         $responseData = $address ? json_encode($this->getPreparedItem($address)) : '';
 
-        return new Response($responseData, $address ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
+        return new Response($responseData, $address ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -164,7 +163,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
 
         $responseData = $address ? json_encode($this->getPreparedItem($address)) : '';
 
-        return new Response($responseData, $address ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
+        return new Response($responseData, $address ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
 
     protected function getContactManager()

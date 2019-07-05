@@ -5,7 +5,6 @@ namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
@@ -46,7 +45,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
 
         return new JsonResponse(
             $result,
-            empty($contact) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
+            empty($contact) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK
         );
     }
 
@@ -75,7 +74,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
 
         $responseData = $phone ? json_encode($this->getPreparedItem($phone)) : '';
 
-        return new Response($responseData, $phone ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
+        return new Response($responseData, $phone ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
 
     /**

@@ -5,7 +5,6 @@ namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\MagentoBundle\Entity\Address;
@@ -51,7 +50,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
 
         return new JsonResponse(
             $result,
-            empty($customer) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
+            empty($customer) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK
         );
     }
 
@@ -77,13 +76,13 @@ class CustomerAddressController extends RestController implements ClassResourceI
         if ($customer instanceof Customer) {
             $entity = $this->processForm($entity, $customer);
             if ($entity) {
-                $view = $this->view($this->createResponseData($entity), Codes::HTTP_CREATED);
+                $view = $this->view($this->createResponseData($entity), Response::HTTP_CREATED);
                 $isProcessed = true;
             } else {
-                $view = $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
+                $view = $this->view($this->getForm(), Response::HTTP_BAD_REQUEST);
             }
         } else {
-            $view = $this->view($this->getForm(), Codes::HTTP_NOT_FOUND);
+            $view = $this->view($this->getForm(), Response::HTTP_NOT_FOUND);
         }
 
         return $this->buildResponse($view, self::ACTION_CREATE, ['success' => $isProcessed, 'entity' => $entity]);
@@ -109,7 +108,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
 
         return new JsonResponse(
             $address,
-            empty($address) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
+            empty($address) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK
         );
     }
 
@@ -132,12 +131,12 @@ class CustomerAddressController extends RestController implements ClassResourceI
 
         if ($address) {
             if ($this->processForm($address)) {
-                $view = $this->view(null, Codes::HTTP_NO_CONTENT);
+                $view = $this->view(null, Response::HTTP_NO_CONTENT);
             } else {
-                $view = $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
+                $view = $this->view($this->getForm(), Response::HTTP_BAD_REQUEST);
             }
         } else {
-            $view = $this->view(null, Codes::HTTP_NOT_FOUND);
+            $view = $this->view(null, Response::HTTP_NOT_FOUND);
         }
 
         return $this->buildResponse($view, self::ACTION_UPDATE, ['id' => $addressId, 'entity' => $address]);
@@ -167,17 +166,17 @@ class CustomerAddressController extends RestController implements ClassResourceI
         $address     = $this->getManager()->findOneBy(['owner' => $customerId, 'id' => $addressId]);
 
         if (!$address) {
-            $view = $this->view(null, Codes::HTTP_NOT_FOUND);
+            $view = $this->view(null, Response::HTTP_NOT_FOUND);
         } else {
             try {
                 $this->getDeleteHandler()->handleDelete($addressId, $this->getManager());
 
                 $isProcessed = true;
-                $view        = $this->view(null, Codes::HTTP_NO_CONTENT);
+                $view        = $this->view(null, Response::HTTP_NO_CONTENT);
             } catch (EntityNotFoundException $notFoundEx) {
-                $view = $this->view(null, Codes::HTTP_NOT_FOUND);
+                $view = $this->view(null, Response::HTTP_NOT_FOUND);
             } catch (ForbiddenException $forbiddenEx) {
-                $view = $this->view(['reason' => $forbiddenEx->getReason()], Codes::HTTP_FORBIDDEN);
+                $view = $this->view(['reason' => $forbiddenEx->getReason()], Response::HTTP_FORBIDDEN);
             }
         }
 

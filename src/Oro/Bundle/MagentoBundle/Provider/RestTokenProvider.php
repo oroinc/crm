@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
-use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
@@ -15,6 +14,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This class provides ability to get REST API tokens for magento integration
@@ -126,7 +126,7 @@ class RestTokenProvider implements LoggerAwareInterface
         }
 
         $statusCode = $response->getStatusCode();
-        if (Codes::HTTP_UNAUTHORIZED === $statusCode) {
+        if (Response::HTTP_UNAUTHORIZED === $statusCode) {
             throw new InvalidConfigurationException(
                 "Can't get token by defined 'api_key' and 'api_user'. Please check credentials !"
             );

@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional\Api\Rest;
 
-use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEmailData;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class RestContactEmailApiTest extends WebTestCase
 {
@@ -27,7 +27,7 @@ class RestContactEmailApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_email'), [], [], [], $content);
-        $contact = $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_CREATED);
+        $contact = $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_CREATED);
 
         $this->assertArrayHasKey('id', $contact);
         $this->assertNotEmpty($contact['id']);
@@ -43,7 +43,7 @@ class RestContactEmailApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_email'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testEmptyContactId()
@@ -54,7 +54,7 @@ class RestContactEmailApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_email'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testEmptyEmail()
@@ -66,7 +66,7 @@ class RestContactEmailApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_email'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testDeleteEmailForbidden()
@@ -77,7 +77,7 @@ class RestContactEmailApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_email', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
 
         $expectedMessage = "Email address was not deleted, the contact ".
             "has more than one email addresses, can't set the new primary.";
@@ -98,7 +98,7 @@ class RestContactEmailApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_email', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_OK);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_OK);
         $this->assertEquals('{"id":""}', $this->client->getResponse()->getContent());
     }
 
@@ -122,7 +122,7 @@ class RestContactEmailApiTest extends WebTestCase
             'id' => $contactEmail->getId()
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_email', $routeParams));
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
         $realResponse = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(400, $realResponse->code);
         $this->assertEquals(
@@ -140,7 +140,7 @@ class RestContactEmailApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_email', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_OK);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_OK);
         $this->assertEquals('{"id":""}', $this->client->getResponse()->getContent());
     }
 }

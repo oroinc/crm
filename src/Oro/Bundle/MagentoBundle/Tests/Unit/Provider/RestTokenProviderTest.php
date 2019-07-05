@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\ORM\EntityManager;
-use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Test\FakeRestClient;
 use Oro\Bundle\IntegrationBundle\Test\FakeRestResponse;
@@ -15,6 +14,7 @@ use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 use Psr\Log\NullLogger;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Response;
 
 class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -134,11 +134,11 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Unauthorized exception' => [
-                'httpCode' => CODES::HTTP_UNAUTHORIZED,
+                'httpCode' => Response::HTTP_UNAUTHORIZED,
                 'expectedException' => InvalidConfigurationException::class,
             ],
             'Non-unauthorized exception' => [
-                'code' => CODES::HTTP_BAD_REQUEST,
+                'code' => Response::HTTP_BAD_REQUEST,
                 'expectedException' => RuntimeException::class,
                 'expectedExceptionMessage' => 'Server returned unexpected response. Response code 400'
             ]
@@ -148,7 +148,7 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
     public function testValidResultAndTransportEntityAlreadySavedToDB()
     {
         $this->client->setDefaultResponse(
-            new FakeRestResponse(CODES::HTTP_OK, [], sprintf('"%s"', self::TOKEN))
+            new FakeRestResponse(Response::HTTP_OK, [], sprintf('"%s"', self::TOKEN))
         );
         $this->parameterBag->add([
             RestTokenProvider::USER_KEY => 'api_user',
@@ -180,7 +180,7 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
     public function testValidResultAndTransportEntityNotSavedToDB()
     {
         $this->client->setDefaultResponse(
-            new FakeRestResponse(CODES::HTTP_OK, [], sprintf('"%s"', self::TOKEN))
+            new FakeRestResponse(Response::HTTP_OK, [], sprintf('"%s"', self::TOKEN))
         );
         $this->parameterBag->add([
             RestTokenProvider::USER_KEY => 'api_user',
@@ -215,7 +215,7 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
     public function testResponseContainsBrokenJson()
     {
         $this->client->setDefaultResponse(
-            new FakeRestResponse(CODES::HTTP_OK, [], '\token')
+            new FakeRestResponse(Response::HTTP_OK, [], '\token')
         );
         $this->parameterBag->add([
             RestTokenProvider::USER_KEY => 'api_user',

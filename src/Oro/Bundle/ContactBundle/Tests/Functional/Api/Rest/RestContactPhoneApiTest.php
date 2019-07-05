@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional\Api\Rest;
 
-use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactPhoneData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class RestContactPhoneApiTest extends WebTestCase
 {
@@ -26,7 +26,7 @@ class RestContactPhoneApiTest extends WebTestCase
             'primary' => true
         ]);
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_phone'), [], [], [], $content);
-        $contact = $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_CREATED);
+        $contact = $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_CREATED);
 
         $this->assertArrayHasKey('id', $contact);
         $this->assertNotEmpty($contact['id']);
@@ -43,7 +43,7 @@ class RestContactPhoneApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_phone'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testEmptyContactId()
@@ -54,7 +54,7 @@ class RestContactPhoneApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_phone'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testEmptyPhone()
@@ -66,7 +66,7 @@ class RestContactPhoneApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_phone'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testDeletePhoneForbidden()
@@ -77,7 +77,7 @@ class RestContactPhoneApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
         $realResponse = json_decode($this->client->getResponse()->getContent());
         $expectedMessage = "Phone number was not deleted, the contact has ".
             "more than one phone number, can't set the new primary.";
@@ -97,7 +97,7 @@ class RestContactPhoneApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_OK);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_OK);
         $this->assertEquals('{"id":""}', $this->client->getResponse()->getContent());
     }
 
@@ -121,7 +121,7 @@ class RestContactPhoneApiTest extends WebTestCase
             'id' => $contactEmail->getId()
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
         $realResponse = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(400, $realResponse->code);
         $this->assertEquals(
@@ -139,7 +139,7 @@ class RestContactPhoneApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_OK);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_OK);
         $this->assertEquals('{"id":""}', $this->client->getResponse()->getContent());
     }
 }
