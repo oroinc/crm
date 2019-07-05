@@ -4,7 +4,6 @@ namespace Oro\Bundle\CaseBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -49,7 +48,7 @@ class CommentController extends RestController implements ClassResourceInterface
             );
 
         return $this->handleView(
-            $this->view($this->getPreparedItems($comments), Codes::HTTP_OK)
+            $this->view($this->getPreparedItems($comments), Response::HTTP_OK)
         );
     }
 

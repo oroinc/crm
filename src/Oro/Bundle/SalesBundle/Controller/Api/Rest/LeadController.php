@@ -6,7 +6,6 @@ use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
@@ -55,7 +54,7 @@ class LeadController extends RestController implements ClassResourceInterface
         }
         $responseData = $address ? json_encode($address) : '';
 
-        return new Response($responseData, Codes::HTTP_OK);
+        return new Response($responseData, Response::HTTP_OK);
     }
 
     /**

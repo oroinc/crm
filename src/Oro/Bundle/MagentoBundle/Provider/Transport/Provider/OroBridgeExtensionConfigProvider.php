@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Transport\Provider;
 
-use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
 use Oro\Bundle\MagentoBundle\Model\OroBridgeExtension\Config;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
@@ -51,7 +51,7 @@ class OroBridgeExtensionConfigProvider
                 $data = $client->get(static::REST_CONFIG_URI, [], $headers)->json();
                 $this->processData($data);
             } catch (RestException $e) {
-                if (Codes::HTTP_NOT_FOUND === $e->getCode()) {
+                if (Response::HTTP_NOT_FOUND === $e->getCode()) {
                     $this->initDefaultConfig();
                 } else {
                     throw $e;
