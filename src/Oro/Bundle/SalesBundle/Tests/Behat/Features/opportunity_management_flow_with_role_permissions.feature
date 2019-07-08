@@ -20,7 +20,7 @@ Feature: Opportunity Management Flow with role permissions
     Given I go to System/ Workflows
     And I click on Opportunity Management Flow in grid
     And I click "Activate"
-    And I click "Activate"
+    And I click "Activate" in modal window
     When I go to Sales/ Opportunities
     And I click "view" on row "Summer sales" in grid
     And I click "Start Opportunity Management Flow"
