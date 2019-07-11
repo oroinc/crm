@@ -24,7 +24,7 @@ Feature: Opportunity workflow
     When I go to System/ Workflows
     And click on Opportunity Management Flow in grid
     And click "Activate"
-    And click "Activate"
+    And I click "Activate" in modal window
     And I go to Sales/ Opportunities
     And I click "view" on row "Summer sales" in grid
     Then I should see "Start Opportunity Management Flow"
