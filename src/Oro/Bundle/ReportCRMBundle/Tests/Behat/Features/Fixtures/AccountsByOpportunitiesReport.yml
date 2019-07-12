@@ -1,108 +1,149 @@
 Oro\Bundle\UserBundle\Entity\User:
-  second_user:
-    username: user2
-    email: user2@example.com
-    firstName: New
-    lastName: Owner
-    password: password
-    salt: salt
-    organization: '@organization'
-    owner: '@business_unit'
+    second_user:
+        username: user2
+        email: user2@example.com
+        firstName: New
+        lastName: Owner
+        password: password
+        salt: salt
+        organization: '@organization'
+        owner: '@business_unit'
 
 Oro\Bundle\ContactBundle\Entity\ContactEmail:
-  contactEmail{1..20}:
-    email: '<email()>'
+    contactEmail{1..20}:
+        email: '<email()>'
 
 Oro\Bundle\ContactBundle\Entity\Contact:
-  contact{1..20}:
-    firstName: 'firstName<current()>'
-    lastName: 'lastName<current()>'
-    addEmail: ['@contactEmail<current()>']
-    owner: '@admin'
-    organization: '@organization'
+    contact{1..20}:
+        firstName: 'firstName<current()>'
+        lastName: 'lastName<current()>'
+        __calls:
+            -   addEmail: ['@contactEmail<current()>']
+        owner: '@admin'
+        organization: '@organization'
 
 Oro\Bundle\AccountBundle\Entity\Account:
-  account{1..20}:
-    name: 'Customer <current()>'
-    organization: '@organization'
+    account{1..20}:
+        name: 'Customer <current()>'
+        organization: '@organization'
 
 Oro\Bundle\SalesBundle\Entity\B2bCustomer:
-  b2bcustomer{1..20}:
-    name: 'B2bCustomer <current()>'
-    account: '@account<current()>'
-    contact: '@contact<current()>'
-    owner: '@admin'
-    organization: '@organization'
+    b2bcustomer{1..20}:
+        name: 'B2bCustomer <current()>'
+        account: '@account<current()>'
+        contact: '@contact<current()>'
+        owner: '@admin'
+        organization: '@organization'
 
 Oro\Bundle\SalesBundle\Entity\Customer:
-  customer{1..20}:
-    account: '@account<current()>'
-    customerTarget: '@b2bcustomer<current()>'
+    customer{1..20}:
+        account: '@account<current()>'
+        customerTarget: '@b2bcustomer<current()>'
 
 Oro\Bundle\SalesBundle\Entity\Opportunity:
-  opportunity{1..20}:
-    name: 'Opportunity <current()>'
-    customerAssociation: '@customer<current()>'
-    organization: '@organization'
-    status: solution_development
-    owner: '@second_user'
-    budgetAmountCurrency: USD
-    budgetAmountValue: <current()>
-  opportunity1:
-    status: won
-    owner: '@admin'
-    closeRevenueCurrency: USD
-    closeRevenueValue: 70.00
-    closeDate: '<dateTimeBetween("-3 day", "-2 day")>'
-    closeReason: won
-  opportunity2:
-    status: won
-    owner: '@admin'
-    closeRevenueCurrency: USD
-    closeRevenueValue: 10.00
-    closeDate: '<dateTimeBetween("-3 day", "-2 day")>'
-    closeReason: won
-  opportunity3:
-    status: won
-    owner: '@admin'
-    closeRevenueCurrency: USD
-    closeRevenueValue: 1000.00
-    closeDate: '<dateTimeBetween("-10 day", "-9 day")>'
-    closeReason: won
-  opportunity4:
-    status: identification_alignment
-    owner: '@admin'
-    closeRevenueCurrency: USD
-    closeRevenueValue: 250.00
-  opportunity5:
-    status: in_progress
-    owner: '@admin'
-    closeRevenueCurrency: USD
-    closeRevenueValue: 320.00
-  opportunity6:
-    status: lost
-    owner: '@admin'
-    closeRevenueCurrency: USD
-    closeRevenueValue: 256.00
-  opportunity7:
-    status: needs_analysis
-    owner: '@admin'
-    closeRevenueCurrency: USD
-    closeRevenueValue: 222.00
-  opportunity8:
-    status: negotiation
-    owner: '@admin'
-    closeRevenueCurrency: USD
-    closeRevenueValue: 123.00
-  opportunity21:
-    name: 'Opportunity 21'
-    customerAssociation: '@customer1'
-    organization: '@organization'
-    budgetAmountCurrency: USD
-    budgetAmountValue: 21
-    status: won
-    owner: '@admin'
-    closeRevenueCurrency: USD
-    closeRevenueValue: 70.00
-    closeDate: '<dateTimeBetween("-3 day", "-2 day")>'
-    closeReason: won
+    opportunity1:
+        status: '@opportunity_status_won'
+        owner: '@admin'
+        closeRevenueCurrency: USD
+        closeRevenueValue: 70.00
+        closeDate: '<dateTimeBetween("-3 day", "-2 day")>'
+        closeReason: '@opportunity_close_reason_won'
+        name: 'Opportunity 1'
+        customerAssociation: '@customer1'
+        organization: '@organization'
+        budgetAmountCurrency: USD
+        budgetAmountValue: 1
+    opportunity2:
+        status: '@opportunity_status_won'
+        owner: '@admin'
+        closeRevenueCurrency: USD
+        closeRevenueValue: 10.00
+        closeDate: '<dateTimeBetween("-3 day", "-2 day")>'
+        closeReason: '@opportunity_close_reason_won'
+        name: 'Opportunity 2'
+        customerAssociation: '@customer2'
+        organization: '@organization'
+        budgetAmountCurrency: USD
+        budgetAmountValue: 2
+    opportunity3:
+        status: '@opportunity_status_won'
+        owner: '@admin'
+        closeRevenueCurrency: USD
+        closeRevenueValue: 1000.00
+        closeDate: '<dateTimeBetween("-10 day", "-9 day")>'
+        closeReason: '@opportunity_close_reason_won'
+        name: 'Opportunity 3'
+        customerAssociation: '@customer3'
+        organization: '@organization'
+        budgetAmountCurrency: USD
+        budgetAmountValue: 3
+    opportunity4:
+        status: '@opportunity_status_identification_alignment'
+        owner: '@admin'
+        closeRevenueCurrency: USD
+        closeRevenueValue: 250.00
+        name: 'Opportunity 4'
+        customerAssociation: '@customer4'
+        organization: '@organization'
+        budgetAmountCurrency: USD
+        budgetAmountValue: 4
+    opportunity5:
+        status: '@opportunity_status_in_progress'
+        owner: '@admin'
+        closeRevenueCurrency: USD
+        closeRevenueValue: 320.00
+        name: 'Opportunity 5'
+        customerAssociation: '@customer5'
+        organization: '@organization'
+        budgetAmountCurrency: USD
+        budgetAmountValue: 5
+    opportunity6:
+        status: '@opportunity_status_lost'
+        owner: '@admin'
+        closeRevenueCurrency: USD
+        closeRevenueValue: 256.00
+        name: 'Opportunity 6'
+        customerAssociation: '@customer6'
+        organization: '@organization'
+        budgetAmountCurrency: USD
+        budgetAmountValue: 6
+    opportunity7:
+        status: '@opportunity_status_needs_analysis'
+        owner: '@admin'
+        closeRevenueCurrency: USD
+        closeRevenueValue: 222.00
+        name: 'Opportunity 7'
+        customerAssociation: '@customer7'
+        organization: '@organization'
+        budgetAmountCurrency: USD
+        budgetAmountValue: 7
+    opportunity8:
+        status: '@opportunity_status_negotiation'
+        owner: '@admin'
+        closeRevenueCurrency: USD
+        closeRevenueValue: 123.00
+        name: 'Opportunity 8'
+        customerAssociation: '@customer8'
+        organization: '@organization'
+        budgetAmountCurrency: USD
+        budgetAmountValue: 8
+    opportunity{9..20}:
+        name: 'Opportunity <current()>'
+        customerAssociation: '@customer<current()>'
+        organization: '@organization'
+        status: '@opportunity_status_solution_development'
+        owner: '@second_user'
+        budgetAmountCurrency: USD
+        budgetAmountValue: <current()>
+    opportunity21:
+        name: 'Opportunity 21'
+        customerAssociation: '@customer1'
+        organization: '@organization'
+        budgetAmountCurrency: USD
+        budgetAmountValue: 21
+        status: '@opportunity_status_won'
+        owner: '@admin'
+        closeRevenueCurrency: USD
+        closeRevenueValue: 70.00
+        closeDate: '<dateTimeBetween("-3 day", "-2 day")>'
+        closeReason: '@opportunity_close_reason_won'

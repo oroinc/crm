@@ -2,15 +2,14 @@ Oro\Bundle\ContactBundle\Entity\Contact:
   contactCharlie:
     firstName: Charlie
     lastName: Sheen
-    email: charlie@sheen.com
+    email: 'charlie@sheen.com'
     owner: '@admin'
     organization: '@organization'
 
 OroEntityProxy\OroEmailBundle\EmailAddressProxy:
   charlieAddress:
     owner: '@contactCharlie'
-    email: charlie@sheen.com
-    hasOwner: true
+    email: 'charlie@sheen.com'
 
 Oro\Bundle\EmailBundle\Entity\EmailBody:
   emailBody:
@@ -38,7 +37,8 @@ Oro\Bundle\EmailBundle\Entity\EmailUser:
 Oro\Bundle\NoteBundle\Entity\Note:
   note:
     message: 'Charlie works hard'
-    addActivityTarget: ['@contactCharlie']
+    __calls:
+      - addActivityTarget: ['@contactCharlie']
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     owner: '@admin'
@@ -47,7 +47,8 @@ Oro\Bundle\NoteBundle\Entity\Note:
 Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
   calendarEvent:
     title: 'Contract sign in'
-    addActivityTarget: ['@contactCharlie']
+    __calls:
+      - addActivityTarget: ['@contactCharlie']
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     start: '<dateTimeBetween($createdAt, $createdAt)>'
@@ -57,7 +58,8 @@ Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
 Oro\Bundle\CallBundle\Entity\Call:
   call:
     subject: 'Proposed Charlie to star in new film'
-    addActivityTarget: ['@contactCharlie']
+    __calls:
+      - addActivityTarget: ['@contactCharlie']
     phoneNumber: <e164PhoneNumber()>
     notes: '<sentence(6, true)>'
     createdAt: '<dateTimeBetween("-200 days", "now")>'
@@ -68,7 +70,8 @@ Oro\Bundle\CallBundle\Entity\Call:
 Oro\Bundle\TaskBundle\Entity\Task:
   task:
     subject: 'Contact with Charlie'
-    addActivityTarget: ['@contactCharlie']
+    __calls:
+      - addActivityTarget: ['@contactCharlie']
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     dueDate: '<dateTimeBetween($updatedAt, "now")>'

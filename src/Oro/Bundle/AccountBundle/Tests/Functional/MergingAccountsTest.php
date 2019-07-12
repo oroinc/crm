@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ActivityListBundle\Tests\Functional\Entity\Manager;
+namespace Oro\Bundle\AccountBundle\Tests\Functional;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;

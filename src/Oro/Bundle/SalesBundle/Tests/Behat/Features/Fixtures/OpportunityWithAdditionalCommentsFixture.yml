@@ -19,20 +19,20 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
     name: '<{opportunity1_name}>'
     customerAssociation: '@mrcustomer'
     organization: '@organization'
-    status: in_progress
+    status: '@opportunity_status_in_progress'
     owner: '@admin'
     notes: '<{opportunity1_and_2_notes}>'
   opportunity2:
     name: '<{opportunity2_name}>'
     customerAssociation: '@mrcustomer'
     organization: '@organization'
-    status: in_progress
+    status: '@opportunity_status_in_progress'
     owner: '@admin'
     notes: '<{opportunity1_and_2_notes}>'
   opportunity3:
     name: '<{opportunity3_name}>'
     customerAssociation: '@mrcustomer'
     organization: '@organization'
-    status: in_progress
+    status: '@opportunity_status_in_progress'
     owner: '@admin'
     notes: '<{opportunity3_notes}>'

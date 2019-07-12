@@ -5,7 +5,7 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         lastName: 'ContactLN1'
         owner: '@admin'
         organization: '@organization'
-        status: new
+        status: '@lead_status_new'
         phones: ['@lead_phone_1']
         emails: ['@lead_email_1']
         addresses: ['@lead_address_1']
@@ -15,7 +15,7 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         lastName: 'ContactLN2'
         owner: '@admin'
         organization: '@organization'
-        status: new
+        status: '@lead_status_new'
         phones: ['@lead_phone_2']
         emails: ['@lead_email_2']
         addresses: ['@lead_address_2']
