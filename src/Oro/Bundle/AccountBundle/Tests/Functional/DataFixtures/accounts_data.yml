@@ -18,8 +18,9 @@ Oro\Bundle\AccountBundle\Entity\Account:
 
 Oro\Bundle\NoteBundle\Entity\Note:
   note:
-    message: '<p><strong>New note</strong></p>'
-    addActivityTarget: ['@account2']
+    message: '\<p\>\<strong\>New note\</strong\>\</p\>'
+    __calls:
+      - addActivityTarget: ['@account2']
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     owner: '@user'

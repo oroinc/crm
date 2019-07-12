@@ -6,7 +6,7 @@ Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
         apiUrl: 'http://test.magento.host/index.php/api/v2_soap/index/?wsdl=1'
         apiUser: 'api_user'
         apiKey: '69EeYPV8Xyp5SukvUyafDKmndNIyUDwBiAdCWPnuN+E='
-        syncStartDate: '2017-01-01'
+        syncStartDate: '<(new DateTime("2017-01-01 01:00:00"))>'
         initialSyncStartDate: '<(new DateTime("2017-01-01 01:00:00"))>'
         website_id: -1
         websites:
@@ -22,7 +22,7 @@ Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
         extensionVersion: '1.2.19'
         magentoVersion: '1.8.0.0'
 
-Oro\Component\Config\Common\ConfigObject(local):
+Oro\Component\Config\Common\ConfigObject:
     magento_synchronization_settings:
         __construct: { create: [isTwoWaySyncEnabled: false, syncPriority: remote] }
 
@@ -59,27 +59,27 @@ Oro\Bundle\ChannelBundle\Entity\Channel:
         data:
           rfm_enabled: false
         channelType: magento
-        customerIdentity: 'Oro\Bundle\MagentoBundle\Entity\Customer'
+        customerIdentity: 'Oro\\Bundle\\MagentoBundle\\Entity\\Customer'
         owner: '@organization'
 
 Oro\Bundle\ChannelBundle\Entity\EntityName:
     channel-entity-customer:
-        __construct: ['Oro\Bundle\MagentoBundle\Entity\Customer']
+        __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\Customer']
         channel: '@magento_channel'
     channel-entity-lead:
-        __construct: ['Oro\Bundle\MagentoBundle\Entity\Cart']
+        __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\Cart']
         channel: '@magento_channel'
     channel-entity-opportunity:
-        __construct: ['Oro\Bundle\MagentoBundle\Entity\Order']
+        __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\Order']
         channel: '@magento_channel'
     channel-entity-creditmemo:
-        __construct: ['Oro\Bundle\MagentoBundle\Entity\CreditMemo']
+        __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\CreditMemo']
         channel: '@magento_channel'
     channel-entity-newslettersubscriber:
-        __construct: ['Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber']
+        __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\NewsletterSubscriber']
         channel: '@magento_channel'
     channel-entity-ordernote:
-        __construct: ['Oro\Bundle\MagentoBundle\Entity\OrderNote']
+        __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\OrderNote']
         channel: '@magento_channel'
 
 Oro\Bundle\MagentoBundle\Entity\CartAddress:
@@ -122,7 +122,7 @@ Oro\Bundle\MagentoBundle\Entity\Address:
         originId: 1
         country: '@united_states'
         owner: '@magento_customer1'
-        types: ['billing', 'shipping']
+        types: ['@billingType', '@shippingType']
         channel: '@magento_integration'
     magento_customer_addr_2:
         street: 'magentoStreet2'
@@ -137,7 +137,7 @@ Oro\Bundle\MagentoBundle\Entity\Address:
         originId: 2
         country: '@germany'
         owner: '@magento_customer2'
-        types: ['billing', 'shipping']
+        types: ['@billingType', '@shippingType']
         channel: '@magento_integration'
 
 Oro\Bundle\MagentoBundle\Entity\CartStatus:
@@ -225,7 +225,7 @@ Oro\Bundle\SalesBundle\Entity\Customer:
 
 Oro\Bundle\MagentoBundle\Entity\Cart:
     magento_cart_1:
-        itemsQty: '<randomFloat(null,10,100)>'
+        itemsQty: '<randomFloat(4,10,100)>'
         itemsCount: '<randomNumber()>'
         baseCurrencyCode: 'USD'
         storeCurrencyCode: 'USD'
@@ -258,7 +258,7 @@ Oro\Bundle\MagentoBundle\Entity\Cart:
         channel: '@magento_integration'
         dataChannel: '@magento_channel'
     magento_cart_2:
-        itemsQty: '<randomFloat(null,10,100)>'
+        itemsQty: '<randomFloat(4,10,100)>'
         itemsCount: '<randomNumber()>'
         baseCurrencyCode: 'USD'
         storeCurrencyCode: 'USD'
@@ -452,7 +452,7 @@ Oro\Bundle\MagentoBundle\Entity\OrderAddress:
         lastName: 'lastName1'
         originId: 1
         countryText: 'countryText'
-        types: ['billing', 'shipping']
+        types: ['@billingType', '@shippingType']
         owner: '@magento_order1'
         country: '@germany'
         region: '@berlin'
@@ -467,7 +467,7 @@ Oro\Bundle\MagentoBundle\Entity\OrderAddress:
         lastName: 'lastName2'
         originId: 2
         countryText: 'countryText'
-        types: ['billing', 'shipping']
+        types: ['@billingType', '@shippingType']
         owner: '@magento_order2'
         country: '@united_states'
         region: '@florida'

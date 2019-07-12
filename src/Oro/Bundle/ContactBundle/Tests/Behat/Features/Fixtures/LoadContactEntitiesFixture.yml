@@ -25,7 +25,7 @@ Oro\Bundle\ContactBundle\Entity\ContactAddress:
         region: '@berlin'
         firstName: 'TestContact1'
         lastName: 'TestContact1'
-        types: ['billing', 'shipping']
+        types: ['@billingType', '@shippingType']
     contact_address_2:
         country: '@united_states'
         primary: true
@@ -36,7 +36,7 @@ Oro\Bundle\ContactBundle\Entity\ContactAddress:
         region: '@florida'
         firstName: 'TestContact2'
         lastName: 'TestContact2'
-        types: ['billing', 'shipping']
+        types: ['@billingType', '@shippingType']
 
 Oro\Bundle\ContactBundle\Entity\Contact:
     contact_1:
@@ -44,14 +44,16 @@ Oro\Bundle\ContactBundle\Entity\Contact:
         organization: '@organization'
         firstName: 'TestContact1'
         lastName: 'TestContact1'
-        addEmail: ['@contact_email_1']
-        addPhone: ['@contact_phone_1']
-        addAddress: ['@contact_address_1']
+        __calls:
+            - addEmail: ['@contact_email_1']
+            - addPhone: ['@contact_phone_1']
+            - addAddress: ['@contact_address_1']
     contact_2:
         owner: '@admin'
         organization: '@organization'
         firstName: 'TestContact2'
         lastName: 'TestContact2'
-        addEmail: ['@contact_email_2']
-        addPhone: ['@contact_phone_2']
-        addAddress: ['@contact_address_2']
+        __calls:
+            - addEmail: ['@contact_email_2']
+            - addPhone: ['@contact_phone_2']
+            - addAddress: ['@contact_address_2']

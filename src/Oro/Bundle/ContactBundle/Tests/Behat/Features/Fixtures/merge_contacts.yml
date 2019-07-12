@@ -1,6 +1,6 @@
 Oro\Bundle\ContactBundle\Entity\ContactEmail:
   contact_email{1..6}:
-    email: 'test<current()>@test.com'
+    email: 'test<current()>\@test.com'
     primary: true
 
 Oro\Bundle\ContactBundle\Entity\ContactPhone:
@@ -24,9 +24,10 @@ Oro\Bundle\ContactBundle\Entity\Contact:
   contact{1..6}:
     firstName: 'First_<current()>'
     lastName: 'Last_<current()>'
-    email: 'email<current()>@example.com'
+    email: 'email<current()>\@example.com'
     owner: '@admin'
     organization: '@organization'
-    addEmail: ['@contact_email<current()>']
-    addPhone: ['@contact_phone<current()>']
-    addAddress: ['@contact_address<current()>']
+    __calls:
+      - addEmail: ['@contact_email<current()>']
+      - addPhone: ['@contact_phone<current()>']
+      - addAddress: ['@contact_address<current()>']

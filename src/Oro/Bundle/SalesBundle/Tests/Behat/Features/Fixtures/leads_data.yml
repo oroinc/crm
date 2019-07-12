@@ -4,7 +4,7 @@ Oro\Bundle\SalesBundle\Entity\Lead:
     name: Bruce
     firstName: Bruce
     lastName: Willis
-    status: 'new'
+    status: '@lead_status_new'
     organization: '@organization'
 
   Alan:
@@ -12,7 +12,7 @@ Oro\Bundle\SalesBundle\Entity\Lead:
     name: Alan
     firstName: Alan
     lastName: Willis
-    status: 'qualified'
+    status: '@lead_status_qualified'
     organization: '@organization'
 
   John:
@@ -20,5 +20,5 @@ Oro\Bundle\SalesBundle\Entity\Lead:
     name: John
     firstName: John
     lastName: Willis
-    status: 'canceled'
+    status: '@lead_status_canceled'
     organization: '@organization'

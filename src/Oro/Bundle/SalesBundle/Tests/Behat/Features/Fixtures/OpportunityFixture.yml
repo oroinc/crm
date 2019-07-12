@@ -15,7 +15,8 @@ Oro\Bundle\ContactBundle\Entity\Contact:
     namePrefix: 'Mrs.'
     firstName: 'Catherine'
     lastName: 'Hinojosa'
-    addEmail: ['@contactEmail1']
+    __calls:
+      - addEmail: ['@contactEmail1']
 
 Oro\Bundle\SalesBundle\Entity\Customer:
   mrcustomer:
@@ -26,5 +27,5 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
     name: '<{opportunity1_name}>'
     customerAssociation: '@mrcustomer'
     organization: '@organization'
-    status: in_progress
+    status: '@opportunity_status_in_progress'
     owner: '@admin'

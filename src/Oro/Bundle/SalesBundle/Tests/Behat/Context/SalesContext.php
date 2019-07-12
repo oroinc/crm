@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Behat\Context;
 
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridRow;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
@@ -88,6 +89,10 @@ class SalesContext extends OroFeatureContext implements
         }
 
         $form->saveAndClose();
+
+        $repository = $this->getContainer()->get('doctrine')->getRepository(Channel::class);
+
+        $this->fixtureLoader->addReference('first_channel', $repository->findOneBy([]));
     }
 
     /**

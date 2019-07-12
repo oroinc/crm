@@ -1,4 +1,4 @@
-Oro\Bundle\CurrencyBundle\Entity\Price(local):
+Oro\Bundle\CurrencyBundle\Entity\Price:
   price:
    value: '1'
    currency: 'USD'
