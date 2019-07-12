@@ -8,7 +8,7 @@ use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Provides chart data for 'Opportunity By Lead Source' dashboard widget

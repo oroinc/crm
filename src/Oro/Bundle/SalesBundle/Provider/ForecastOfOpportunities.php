@@ -8,7 +8,7 @@ use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Provide functionality to get opportunities data

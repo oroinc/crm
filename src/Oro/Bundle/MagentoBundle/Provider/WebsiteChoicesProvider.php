@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class WebsiteChoicesProvider
 {

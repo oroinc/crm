@@ -9,7 +9,7 @@ use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
 use Oro\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestCase
 {

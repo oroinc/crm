@@ -10,7 +10,7 @@ use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
 {

@@ -6,7 +6,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationInterface;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationProviderInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContactImportExportConfigurationProvider implements ImportExportConfigurationProviderInterface
 {

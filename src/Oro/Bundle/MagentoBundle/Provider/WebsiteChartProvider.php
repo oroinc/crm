@@ -7,7 +7,7 @@ use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\ChartBundle\Utils\ColorUtils;
 use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TCI;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Provide chart view instance with tracking events data sorted by date.

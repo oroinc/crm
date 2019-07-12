@@ -30,7 +30,7 @@ class OpportunityListenerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCurrencyList', 'getDefaultCurrency'])
             ->getMock();
 
-        $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->createMock('Symfony\Contracts\Translation\TranslatorInterface');
         $importStrategyHelper = $this->createMock('Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper');
 
         $organization = new Organization();
