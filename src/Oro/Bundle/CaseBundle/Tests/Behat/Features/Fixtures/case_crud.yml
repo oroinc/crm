@@ -2,7 +2,7 @@ Oro\Bundle\ContactBundle\Entity\Contact:
   contactCharlie:
     firstName: Charlie
     lastName: Sheen
-    email: charlie@sheen.com
+    email: 'charlie@sheen.com'
     owner: '@admin'
     organization: '@organization'
 

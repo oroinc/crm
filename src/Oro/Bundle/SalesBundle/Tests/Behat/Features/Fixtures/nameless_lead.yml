@@ -8,5 +8,5 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         owner: '@admin'
         name: 'lead'
         phones: ['@lead-phone']
-        status: new
+        status: '@lead_status_new'
         organization: '@organization'

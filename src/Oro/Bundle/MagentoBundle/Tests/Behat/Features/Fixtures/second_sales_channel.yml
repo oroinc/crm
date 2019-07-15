@@ -3,18 +3,18 @@ Oro\Bundle\ChannelBundle\Entity\Channel:
     name: Second Sales Channel
     status: 1
     channelType: b2b
-    customerIdentity: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+    customerIdentity: 'Oro\\Bundle\\SalesBundle\\Entity\\B2bCustomer'
     owner: '@organization'
 
 Oro\Bundle\ChannelBundle\Entity\EntityName:
   b2b2:
-    __construct: [Oro\Bundle\SalesBundle\Entity\B2bCustomer]
+    __construct: ['Oro\\Bundle\\SalesBundle\\Entity\\B2bCustomer']
     channel: '@salesChannel'
   lead2:
-    __construct: [Oro\Bundle\SalesBundle\Entity\Lead]
+    __construct: ['Oro\\Bundle\\SalesBundle\\Entity\\Lead']
     channel: '@salesChannel'
   opportunity2:
-    __construct: [Oro\Bundle\SalesBundle\Entity\Opportunity]
+    __construct: ['Oro\\Bundle\\SalesBundle\\Entity\\Opportunity']
     channel: '@salesChannel'
 
 Oro\Bundle\AccountBundle\Entity\Account:

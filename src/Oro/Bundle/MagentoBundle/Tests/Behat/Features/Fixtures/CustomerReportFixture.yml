@@ -3,7 +3,7 @@ Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
     api_url: 'http://test.magento.host/index.php/api/v2_soap/index/?wsdl=1'
     api_user: 'api_user'
     api_key: '69EeYPV8Xyp5SukvUyafDKmndNIyUDwBiAdCWPnuN+E='
-    sync_start_date: '2015-08-01'
+    sync_start_date: '<(new DateTime("2015-08-01 UTC"))>'
     website_id: -1
     websites:
       -
@@ -13,7 +13,7 @@ Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
         id: 1
         label: 'Website ID: 1, Stores: Store view 1 - website_id_1 - group_id_1'
 
-Oro\Component\Config\Common\ConfigObject(local):
+Oro\Component\Config\Common\ConfigObject:
   magentoSynchronizationSettings:
     __construct: { create: [isTwoWaySyncEnabled: false, syncPriority: remote] }
 
@@ -47,27 +47,27 @@ Oro\Bundle\ChannelBundle\Entity\Channel:
     data:
       rfm_enabled: false
     channelType: magento
-    customerIdentity: 'Oro\Bundle\MagentoBundle\Entity\Customer'
+    customerIdentity: 'Oro\\Bundle\\MagentoBundle\\Entity\\Customer'
     owner: '@organization'
 
 Oro\Bundle\ChannelBundle\Entity\EntityName:
   channel-entity-customer:
-    __construct: ['Oro\Bundle\MagentoBundle\Entity\Customer']
+    __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\Customer']
     channel: '@magentoChannel'
   channel-entity-lead:
-    __construct: ['Oro\Bundle\MagentoBundle\Entity\Cart']
+    __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\Cart']
     channel: '@magentoChannel'
   channel-entity-opportunity:
-    __construct: ['Oro\Bundle\MagentoBundle\Entity\Order']
+    __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\Order']
     channel: '@magentoChannel'
   channel-entity-creditmemo:
-    __construct: ['Oro\Bundle\MagentoBundle\Entity\CreditMemo']
+    __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\CreditMemo']
     channel: '@magentoChannel'
   channel-entity-newslettersubscriber:
-    __construct: ['Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber']
+    __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\NewsletterSubscriber']
     channel: '@magentoChannel'
   channel-entity-ordernote:
-    __construct: ['Oro\Bundle\MagentoBundle\Entity\OrderNote']
+    __construct: ['Oro\\Bundle\\MagentoBundle\\Entity\\OrderNote']
     channel: '@magentoChannel'
 
 Oro\Bundle\AccountBundle\Entity\Account:
@@ -82,7 +82,7 @@ Oro\Bundle\MagentoBundle\Entity\Customer:
     owner: '@admin'
     organization: '@organization'
     account: '@account<current()>'
-    dataChannel: 1
+    dataChannel: '@magentoChannel'
     createdAt: <dateTimeThisMonth('now')>
     updatedAt: <dateTimeThisMonth('now')>
 
@@ -95,7 +95,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
   opportunity{1..5}:
     customerAssociation: '@customer<current()>'
     name: 'Opportunity <current()>'
-    status: in_progress
+    status: '@opportunity_status_in_progress'
     owner: '@admin'
     organization: '@organization'
 
@@ -103,6 +103,6 @@ Oro\Bundle\SalesBundle\Entity\Lead:
   lead{6..10}:
     customerAssociation: '@customer<current()>'
     name: 'Lead <current()>'
-    status: new
+    status: '@lead_status_new'
     owner: '@admin'
     organization: '@organization'

@@ -6,5 +6,5 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
     name: 'opportunity'
     organization: '@organization'
     contact: '@contact'
-    status: in_progress
+    status: '@opportunity_status_in_progress'
     owner: '@admin'

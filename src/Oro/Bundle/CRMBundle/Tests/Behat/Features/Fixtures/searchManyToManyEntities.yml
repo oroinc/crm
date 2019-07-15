@@ -13,6 +13,7 @@ Oro\Bundle\ContactBundle\Entity\Contact:
     namePrefix: 'Mrs.'
     firstName: 'July'
     lastName: 'Robertson'
-    addEmail: ['@contactEmail1']
+    __calls:
+      - addEmail: ['@contactEmail1']
     accounts: ['@account1']
     owner: '@admin'

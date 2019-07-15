@@ -6,7 +6,8 @@ Oro\Bundle\ContactBundle\Entity\Contact:
   contact{1..10}:
     firstName: 'firstName<current()>'
     lastName: 'lastName<current()>'
-    addEmail: ['@contactEmail<current()>']
+    __calls:
+      - addEmail: ['@contactEmail<current()>']
     owner: '@admin'
     organization: '@organization'
 
@@ -32,7 +33,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
   opportunity{1..5}:
     customerAssociation: '@customer<current()>'
     name: 'Opportunity <current()>'
-    status: in_progress
+    status: '@opportunity_status_in_progress'
     owner: '@admin'
     organization: '@organization'
 
@@ -40,6 +41,6 @@ Oro\Bundle\SalesBundle\Entity\Lead:
   lead{6..10}:
     customerAssociation: '@customer<current()>'
     name: 'Lead <current()>'
-    status: new
+    status: '@lead_status_new'
     owner: '@admin'
     organization: '@organization'

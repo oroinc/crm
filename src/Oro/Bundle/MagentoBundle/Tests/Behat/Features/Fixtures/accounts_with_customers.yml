@@ -23,7 +23,7 @@ Oro\Bundle\MagentoBundle\Entity\Customer:
     owner: '@charlie'
     organization: '@organization'
     account: '@charlieAccount1'
-    dataChannel: 1
+    dataChannel: '@first_channel'
     createdAt: <dateTimeThisMonth('now')>
     updatedAt: <dateTimeThisMonth('now')>
   customer{3..4}:
@@ -32,7 +32,7 @@ Oro\Bundle\MagentoBundle\Entity\Customer:
     owner: '@samantha'
     organization: '@organization'
     account: '@samanthaAccount1'
-    dataChannel: 1
+    dataChannel: '@first_channel'
     createdAt: <dateTimeThisMonth('now')>
     updatedAt: <dateTimeThisMonth('now')>
   customer{5..6}:
@@ -41,7 +41,7 @@ Oro\Bundle\MagentoBundle\Entity\Customer:
     owner: '@charlie'
     organization: '@organization'
     account: '@charlieAccount2'
-    dataChannel: 1
+    dataChannel: '@first_channel'
     createdAt: <dateTimeThisMonth('now')>
     updatedAt: <dateTimeThisMonth('now')>
   customer7:
@@ -50,7 +50,7 @@ Oro\Bundle\MagentoBundle\Entity\Customer:
     owner: '@samantha'
     organization: '@organization'
     account: '@samanthaAccount2'
-    dataChannel: 1
+    dataChannel: '@first_channel'
     createdAt: <dateTimeThisMonth('now')>
     updatedAt: <dateTimeThisMonth('now')>
   customer8:
@@ -59,6 +59,6 @@ Oro\Bundle\MagentoBundle\Entity\Customer:
     owner: '@samantha'
     organization: '@organization'
     account: '@samanthaAccount2'
-    dataChannel: 1
+    dataChannel: '@first_channel'
     createdAt: <dateTimeThisMonth('now')>
     updatedAt: <dateTimeThisMonth('now')>
