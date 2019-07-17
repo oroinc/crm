@@ -744,6 +744,7 @@ services:
 
     oro_magento.provider.enitity_state:
         parent: oro_channel.provider.utils.entity_state_provider
+        public: true
         arguments:
             - 'Oro\Bundle\MagentoBundle\Entity'
 

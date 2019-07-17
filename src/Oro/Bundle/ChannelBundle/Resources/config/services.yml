@@ -59,6 +59,7 @@ parameters:
 services:
     oro_channel.builder.factory:
         class: '%oro_channel.builder.factory.class%'
+        public: true
         arguments:
           - "@doctrine"
           - "@oro_channel.provider.settings_provider"

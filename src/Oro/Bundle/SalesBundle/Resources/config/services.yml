@@ -137,6 +137,7 @@ services:
 
     oro_sales.provider.enitity_state:
         parent: oro_channel.provider.utils.entity_state_provider
+        public: true
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity'
 
