@@ -255,6 +255,7 @@ services:
 
     oro_contact.contact.datagrid_helper:
         class: '%oro_contact.contact.datagrid_helper.class%'
+        public: true
 
     oro_contact.activity_widget_provider:
         class: '%oro_contact.activity_widget_provider.class%'

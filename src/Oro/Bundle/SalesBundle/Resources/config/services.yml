@@ -97,6 +97,7 @@ services:
 
     oro_sales.lead.datagrid_helper:
         class: '%oro_sales.lead.datagrid_helper.class%'
+        public: true
 
     oro_sales.form.autocomplete.opportunity.search_handler:
         parent: oro_channel.autocomplete.channel_limitation_handler
@@ -194,6 +195,7 @@ services:
 
     oro_sales.provider.forecast_of_opportunities:
         class: '%oro_sales.provider.forecast_of_opportunity.class%'
+        public: true
         arguments:
             - '@oro_locale.formatter.number'
             - '@oro_locale.formatter.date_time'
@@ -443,6 +445,7 @@ services:
 
     oro_sales.provider.opportunity.indeterminate_forecast:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\IndeterminateForecastProvider
+        public: true
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'

@@ -152,6 +152,7 @@ services:
     # Providers
     oro_channel.provider.settings_provider:
         class: Oro\Bundle\ChannelBundle\Provider\SettingsProvider
+        public: true
         arguments:
             - '@oro_channel.provider.configuration_provider'
 

@@ -200,6 +200,7 @@ services:
 
     oro_magento.provider.website_metrics:
         class: '%oro_magento.provider.website_metrics.class%'
+        public: true
         arguments:
             - '@oro_magento.provider.tracking_visit'
             - '@oro_magento.provider.tracking_visit_event'
@@ -214,10 +215,12 @@ services:
 
     oro_magento.provider.website_events_chart:
         class: '%oro_magento.provider.website_events_chart.class%'
+        public: true
         parent: oro_magento.provider.website_chart
 
     oro_magento.provider.website_channel_chart:
         class: '%oro_magento.provider.website_channel_chart.class%'
+        public: true
         parent: oro_magento.provider.website_chart
 
     oro_magento.provider.rest_token_provider:
@@ -658,12 +661,14 @@ services:
 
     oro_magento.datagrid_helper:
         class: '%oro_magento.datagrid_helper.class%'
+        public: true
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@oro_security.acl_helper'
 
     oro_magento.country.datagrid_helper:
         class: '%oro_magento.country.datagrid_helper.class%'
+        public: true
 
     oro_magento.manager.magento_delete_provider:
         class: '%oro_magento.manager.magento_delete_provider.class%'
@@ -741,6 +746,7 @@ services:
 
     oro_magento.placeholder.filter:
         class: '%oro_magento.placeholder.filter.class%'
+        public: true
 
     oro_magento.provider.enitity_state:
         parent: oro_channel.provider.utils.entity_state_provider
