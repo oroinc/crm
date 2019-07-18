@@ -73,7 +73,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
             ->getMock();
 
         $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->setMethods(['getQuery', 'getResult', 'where', 'expr'])
+            ->setMethods(['getQuery', 'getResult', 'where', 'expr', 'setParameter'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -89,6 +89,10 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
         $queryBuilder->expects($this->any())
             ->method('getResult')
             ->will($this->returnValue([]));
+        $queryBuilder->expects($this->any())
+            ->method('setParameter')
+            ->with('entityIds', $expectedIds)
+            ->willReturnSelf();
 
         $entityRepository = $this
             ->getMockBuilder('Doctrine\ORM\EntityRepository')
@@ -135,7 +139,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
         $expr
             ->expects($this->once())
             ->method('in')
-            ->with('e.'.self::TEST_ID_FIELD, $expectedIds);
+            ->with('e.'.self::TEST_ID_FIELD, ':entityIds');
 
         $this->handler->search('query', 0, 10);
     }
