@@ -10,6 +10,9 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
+/**
+ * Limit datagrid by given channels
+ */
 class ChannelLimitationExtension extends AbstractExtension
 {
     const CHANNEL_OPTIONS_PATH         = '[channel_limitation]';
@@ -47,6 +50,7 @@ class ChannelLimitationExtension extends AbstractExtension
     {
         /** @var OrmDatasource $datasource */
         $path = $config->offsetGetByPath(self::CHANNEL_RELATION_OPTION_PATH);
+        /** @var QueryBuilder $queryBuilder */
         $queryBuilder = $datasource->getQueryBuilder();
         if (strpos($path, '.') !== false) {
             list($mainEntity, $relationName) = explode('.', $path);
@@ -58,7 +62,9 @@ class ChannelLimitationExtension extends AbstractExtension
 
         $channelIds   = explode(',', $this->getParameters()->get('channelIds'));
 
-        $queryBuilder->andWhere($relationName . '.id in (:channelIds)');
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->in(QueryBuilderUtil::getField($relationName, 'id'), ':channelIds')
+        );
         $queryBuilder->setParameter('channelIds', $channelIds);
     }
 

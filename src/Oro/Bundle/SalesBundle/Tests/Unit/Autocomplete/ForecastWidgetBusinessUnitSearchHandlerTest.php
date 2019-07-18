@@ -2,7 +2,16 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Autocomplete;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
+use Oro\Bundle\OrganizationBundle\Provider\BusinessUnitAclProvider;
 use Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler;
+use Oro\Bundle\SearchBundle\Engine\Indexer;
+use Oro\Bundle\SearchBundle\Query\Query;
 
 class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -18,10 +27,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
 
     public function setUp()
     {
-        $this->businessAclProvider = $this
-            ->getMockBuilder('Oro\Bundle\OrganizationBundle\Provider\BusinessUnitAclProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->businessAclProvider = $this->createMock(BusinessUnitAclProvider::class);
 
         $this->handler = new ForecastWidgetBusinessUnitSearchHandler(
             self::TEST_ENTITY_NAME,
@@ -41,7 +47,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
         $expectedIds = [1, 2];
 
         $query = $this
-            ->getMockBuilder('Oro\Bundle\SearchBundle\Query\Query')
+            ->getMockBuilder(Query::class)
             ->setMethods(['getElements'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -55,7 +61,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
             ->method('getBusinessUnitIds')
             ->will($this->returnValue($expectedIds));
 
-        $indexer = $this->getMockBuilder('Oro\Bundle\SearchBundle\Engine\Indexer')
+        $indexer = $this->getMockBuilder(Indexer::class)
             ->setMethods(['query', 'select', 'simpleSearch'])
             ->disableOriginalConstructor()->getMock();
 
@@ -63,13 +69,13 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
             ->method('simpleSearch')
             ->will($this->returnValue($query));
 
-        $expr = $this->getMockBuilder('Doctrine\ORM\Query\Expr')
+        $expr = $this->getMockBuilder(Expr::class)
             ->setMethods(['in'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->setMethods(['getQuery', 'getResult', 'where', 'expr'])
+        $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
+            ->setMethods(['getQuery', 'getResult', 'where', 'expr', 'setParameter'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -85,9 +91,12 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
         $queryBuilder->expects($this->any())
             ->method('getResult')
             ->will($this->returnValue([]));
+        $queryBuilder->expects($this->any())
+            ->method('setParameter')
+            ->with('entityIds', $expectedIds)
+            ->willReturnSelf();
 
-        $entityRepository = $this
-            ->getMockBuilder('Doctrine\ORM\EntityRepository')
+        $entityRepository = $this->getMockBuilder(EntityRepository::class)
             ->setMethods(['createQueryBuilder'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -96,25 +105,22 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
             ->method('createQueryBuilder')
             ->will($this->returnValue($queryBuilder));
 
-        $metadata = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()->getMock();
+        $metadata = $this->createMock(ClassMetadata::class);
         $metadata->expects($this->once())->method('getSingleIdentifierFieldName')
             ->will($this->returnValue(self::TEST_ID_FIELD));
 
-        $metadataFactory = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataFactory')
-            ->disableOriginalConstructor()->getMock();
+        $metadataFactory = $this->createMock(ClassMetadataFactory::class);
         $metadataFactory->expects($this->once())
             ->method('getMetadataFor')->with(self::TEST_ENTITY_NAME)
             ->will($this->returnValue($metadata));
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()->getMock();
+        $em = $this->createMock('Doctrine\ORM\EntityManager');
         $em->expects($this->once())->method('getRepository')
             ->will($this->returnValue($entityRepository));
         $em->expects($this->once())->method('getMetadataFactory')
             ->will($this->returnValue($metadataFactory));
 
-        $managerRegistry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $managerRegistry = $this->createMock(ManagerRegistry::class);
         $managerRegistry->expects($this->once())->method('getManagerForClass')->with(self::TEST_ENTITY_NAME)
             ->will($this->returnValue($em));
 
@@ -125,7 +131,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
         $expr
             ->expects($this->once())
             ->method('in')
-            ->with('e.'.self::TEST_ID_FIELD, $expectedIds);
+            ->with('e.'.self::TEST_ID_FIELD, ':entityIds');
 
         $this->handler->search('query', 0, 10);
     }

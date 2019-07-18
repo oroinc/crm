@@ -6,6 +6,9 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 
+/**
+ * Restrict related entities grid by account.
+ */
 class AccountRelatedEntitiesExtension extends RelatedEntitiesExtension
 {
     /**

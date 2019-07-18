@@ -25,6 +25,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
+/**
+ * Recalculate contacting activities
+ */
 class ActivityContactRecalculateCommand extends ContainerAwareCommand
 {
     const STATUS_SUCCESS = 0;
@@ -219,7 +222,8 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
         $qb = $this->em->getRepository($entityClassName)->createQueryBuilder('e');
 
         if ($excludedIds) {
-            $qb->andWhere($qb->expr()->notIn('e.id', $excludedIds));
+            $qb->andWhere($qb->expr()->notIn('e.id', ':excludedIds'));
+            $qb->setParameter('excludedIds', $excludedIds);
         }
 
         return $qb->setMaxResults(static::BATCH_SIZE)

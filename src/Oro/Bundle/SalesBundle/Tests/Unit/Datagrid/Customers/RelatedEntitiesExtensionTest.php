@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Datagrid\Extension\Customers;
 
+use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
@@ -25,7 +26,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->configProvider = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider')
+            ->getMockBuilder(ConfigProvider::class)
             ->disableOriginalConstructor()
             ->setMethods(['isCustomerClass'])
             ->getMock();
@@ -175,28 +176,30 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
         $customerIdParam = null,
         $alias = null
     ) {
-        $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $qb = $this->createMock(QueryBuilder::class);
         $qb->expects($this->never())
             ->method('getDQLPart');
-        $from = $this->getMockBuilder('Doctrine\ORM\Query\Expr\From')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $from = $this->createMock(Expr\From::class);
         $from->expects($this->once())
             ->method('getFrom')
-            ->will($this->returnValue($opportunityClass));
-        $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->willReturn($opportunityClass);
+        $qb = $this->createMock(QueryBuilder::class);
         $qb->expects($this->once())
             ->method('getDQLPart')
             ->with('from')
-            ->will($this->returnValue([$from]));
+            ->willReturn([$from]);
         if (null !== $alias) {
+            $expr = $this->createMock(Expr::class);
+            $expr->expects($this->any())
+                ->method('eq')
+                ->with(sprintf('%s.%s', $alias, $customerField), $customerIdParam)
+                ->willReturn(sprintf('%s.%s = %s', $alias, $customerField, $customerIdParam));
+            $qb->expects($this->any())
+                ->method('expr')
+                ->willReturn($expr);
             $from->expects($this->once())
                 ->method('getAlias')
-                ->will($this->returnValue($alias));
+                ->willReturn($alias);
             $qb->expects($this->once())
                 ->method('andWhere')
                 ->with(sprintf('%s.%s = %s', $alias, $customerField, $customerIdParam))
@@ -216,9 +219,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
      */
     public function getDatasource($qb)
     {
-        $datasource = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $datasource = $this->createMock(OrmDatasource::class);
         $datasource->expects($this->once())
             ->method('getQueryBuilder')
             ->willReturn($qb);
