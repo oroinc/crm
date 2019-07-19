@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Autocomplete;
 
 use Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler;
 use Oro\Bundle\SearchBundle\Provider\SearchMappingProvider;
+use Oro\Bundle\SearchBundle\Query\Result;
 
 class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -44,13 +45,9 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
         ];
         $expectedIds = [1, 2];
 
-        $query = $this
-            ->getMockBuilder('Oro\Bundle\SearchBundle\Query\Query')
-            ->setMethods(['getElements'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchResult = $this->createMock(Result::class);
 
-        $query->expects($this->once())
+        $searchResult->expects($this->once())
             ->method('getElements')
             ->will($this->returnValue($actualElements));
 
@@ -65,7 +62,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
 
         $indexer->expects($this->once())
             ->method('simpleSearch')
-            ->will($this->returnValue($query));
+            ->will($this->returnValue($searchResult));
 
         $expr = $this->getMockBuilder('Doctrine\ORM\Query\Expr')
             ->setMethods(['in'])
