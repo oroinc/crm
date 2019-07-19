@@ -881,6 +881,7 @@ services:
 
     oro_magento.datagrid.customer_actions_provider:
         class: '%oro_magento.datagrid.customer_actions_provider.class%'
+        public: true
         parent: oro_magento.datagrid.newsletter_subscriber_provider
         arguments:
             - "@oro_magento.model.channel_settings_provider"
@@ -895,6 +896,7 @@ services:
 
     oro_magento.datagrid.newsletter_subscriber_provider:
         class: '%oro_magento.datagrid.newsletter_subscriber_provider.class%'
+        public: true
         arguments:
             - "@oro_magento.model.channel_settings_provider"
         calls:
