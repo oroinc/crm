@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Datagrid\Extension\Customers;
 
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
@@ -12,7 +13,11 @@ use Oro\Bundle\EntityBundle\ORM\EntityClassResolver;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
+/**
+ * Add associated account information to supported datagrid.
+ */
 class AccountExtension extends AbstractExtension
 {
     use UnsupportedGridPrefixesTrait;
@@ -128,13 +133,17 @@ class AccountExtension extends AbstractExtension
         /** @var OrmDatasource $datasource */
         $customerClass = $this->getEntity($config);
         $customerField = $this->getCustomerField($customerClass);
+        /** @var QueryBuilder $queryBuilder */
         $queryBuilder = $datasource->getQueryBuilder();
 
         $queryBuilder->leftJoin(
             Customer::class,
             'customerAssociation',
             'WITH',
-            sprintf('customerAssociation.%s = %s', $customerField, $config->getOrmQuery()->getRootAlias())
+            $queryBuilder->expr()->eq(
+                QueryBuilderUtil::getField('customerAssociation', $customerField),
+                $config->getOrmQuery()->getRootAlias()
+            )
         );
         $queryBuilder->leftJoin('customerAssociation.account', 'associatedAccount');
         $queryBuilder->addSelect(sprintf('%s as %s', static::FULL_COLUMN_NAME, static::COLUMN_NAME));
