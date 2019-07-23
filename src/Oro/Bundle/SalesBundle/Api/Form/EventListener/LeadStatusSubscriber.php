@@ -40,12 +40,14 @@ class LeadStatusSubscriber implements EventSubscriberInterface
      */
     public function onPostSubmit(FormEvent $event)
     {
+        $statusForm = FormUtil::findFormFieldByPropertyPath($event->getForm(), 'status');
+        if (null !== $statusForm && $statusForm->isSubmitted()) {
+            return;
+        }
+
+        /** @var Lead $lead */
         $lead = $event->getData();
-        $statusField = FormUtil::findFormFieldByPropertyPath($event->getForm(), 'status');
-        if (null === $lead->getId()
-            && null === $lead->getStatus()
-            && !$event->getForm()->get($statusField->getName())->isSubmitted()
-        ) {
+        if (null === $lead->getId() && null === $lead->getStatus()) {
             $defaultStatus = $this->getDefaultStatus();
             if (null !== $defaultStatus) {
                 $lead->setStatus($defaultStatus);
