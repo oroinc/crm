@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ContactBundle\Handler;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
 use Oro\Bundle\ContactBundle\Entity\Contact;
@@ -182,7 +181,7 @@ class ContactEmailAddressHandler
     }
 
     /**
-     * @return EntityManager|ObjectManager
+     * @return EntityManager
      */
     private function getEntityManager()
     {

@@ -11,7 +11,11 @@ use Oro\Bundle\DataGridBundle\Exception\DatasourceException;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
+/**
+ * Restrict related entities grid for customer.
+ */
 class RelatedEntitiesExtension extends AbstractExtension
 {
     /** @var ConfigProvider */
@@ -52,16 +56,15 @@ class RelatedEntitiesExtension extends AbstractExtension
         /** @var OrmDatasource $datasource */
         $customerClass    = $this->parameters->get('customer_class');
         $customerField    = $this->getCustomerField($customerClass);
+        /** @var QueryBuilder $queryBuilder */
         $queryBuilder     = $datasource->getQueryBuilder();
-        $customerIdParam  = sprintf(':customerIdParam_%s', $customerField);
+        $customerIdParam  = QueryBuilderUtil::sprintf(':customerIdParam_%s', $customerField);
         $alias            = $this->getEntityAlias($queryBuilder);
         $customerAlias    = 'customer';
-        $queryBuilder->join(sprintf('%s.customerAssociation', $alias), $customerAlias);
+        $queryBuilder->join(QueryBuilderUtil::getField($alias, 'customerAssociation'), $customerAlias);
         $queryBuilder->andWhere(
-            sprintf(
-                '%s.%s = %s',
-                $customerAlias,
-                $customerField,
+            $queryBuilder->expr()->eq(
+                QueryBuilderUtil::getField($customerAlias, $customerField),
                 $customerIdParam
             )
         );

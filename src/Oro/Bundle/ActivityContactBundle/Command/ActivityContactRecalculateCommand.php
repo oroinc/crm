@@ -254,7 +254,8 @@ class ActivityContactRecalculateCommand extends Command
         $qb = $this->em->getRepository($entityClassName)->createQueryBuilder('e');
 
         if ($excludedIds) {
-            $qb->andWhere($qb->expr()->notIn('e.id', $excludedIds));
+            $qb->andWhere($qb->expr()->notIn('e.id', ':excludedIds'));
+            $qb->setParameter('excludedIds', $excludedIds);
         }
 
         return $qb->setMaxResults(static::BATCH_SIZE)

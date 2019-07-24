@@ -6,6 +6,9 @@ use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
+/**
+ * Autocomplete handler for BusinessCustomer
+ */
 class BusinessCustomerSearchHandler extends ChannelLimitationHandler
 {
     /**
@@ -59,7 +62,8 @@ class BusinessCustomerSearchHandler extends ChannelLimitationHandler
         $queryBuilder = $this->entityRepository->createQueryBuilder('c');
         $queryBuilder->select('c', 'account');
         $queryBuilder->innerJoin('c.account', 'account');
-        $queryBuilder->where($queryBuilder->expr()->in('c.' . $this->idFieldName, $entityIds));
+        $queryBuilder->where($queryBuilder->expr()->in('c.' . $this->idFieldName, ':entityIds'));
+        $queryBuilder->setParameter('entityIds', $entityIds);
 
         return $queryBuilder->getQuery()->getResult();
     }

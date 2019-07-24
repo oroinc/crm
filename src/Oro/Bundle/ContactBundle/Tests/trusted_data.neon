@@ -6,3 +6,6 @@ trusted_data:
                 fullNameQueryPart: true
             getSecondaryEmailsQb:
                 fullNameQueryPart: true
+    safe_methods:
+        Oro\Bundle\ContactBundle\Handler\ContactEmailAddressHandler:
+            getEmailAddressClass: true
