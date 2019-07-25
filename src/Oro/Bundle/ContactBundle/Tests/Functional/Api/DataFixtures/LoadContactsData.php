@@ -40,9 +40,14 @@ class LoadContactsData extends AbstractFixture implements ContainerAwareInterfac
     {
         $this->em = $manager;
         try {
-            $this->createAccount(1);
-            $this->createContact(1);
-            $this->createContact(2, true);
+            $account = $this->createAccount(1);
+            $contact1 = $this->createContact(1);
+            $contact2 = $this->createContact(2, true);
+
+            $account->setDefaultContact($contact1);
+            $account->addContact($contact1);
+            $account->addContact($contact2);
+            $manager->flush();
         } finally {
             $this->em = null;
         }
@@ -50,6 +55,8 @@ class LoadContactsData extends AbstractFixture implements ContainerAwareInterfac
 
     /**
      * @param int $number
+     *
+     * @return Account
      */
     protected function createAccount($number)
     {
@@ -60,11 +67,15 @@ class LoadContactsData extends AbstractFixture implements ContainerAwareInterfac
         $this->em->persist($account);
         $this->em->flush();
         $this->setReference(sprintf('account%d', $number), $account);
+
+        return $account;
     }
 
     /**
      * @param int  $number
      * @param bool $withoutEmailsAndPhones
+     *
+     * @return Contact
      */
     protected function createContact($number, $withoutEmailsAndPhones = false)
     {
@@ -92,5 +103,7 @@ class LoadContactsData extends AbstractFixture implements ContainerAwareInterfac
         $this->em->persist($contact);
         $this->em->flush();
         $this->setReference(sprintf('contact%d', $number), $contact);
+
+        return $contact;
     }
 }
