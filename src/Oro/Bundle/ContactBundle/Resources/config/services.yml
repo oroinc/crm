@@ -376,6 +376,7 @@ services:
 
     oro_contact.contacts_view_list:
         class: Oro\Bundle\ContactBundle\Datagrid\ContactsViewList
+        public: true
         arguments:
             - '@translator'
 

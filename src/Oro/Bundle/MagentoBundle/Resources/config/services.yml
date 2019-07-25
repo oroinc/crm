@@ -1200,6 +1200,7 @@ services:
 
     oro_magento.datagrid.cart_view_list:
         class: Oro\Bundle\MagentoBundle\Datagrid\CartViewList
+        public: true
         arguments:
             - '@translator'
 

@@ -309,6 +309,7 @@ services:
 
     oro_sales.b2bcustomer.form:
         class: Symfony\Component\Form\Form
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - "oro_sales_b2bcustomer_form"
@@ -323,6 +324,7 @@ services:
 
     oro_sales.b2bcustomer.form.handler:
         class: '%oro_sales.b2bcustomer.form.handler.class%'
+        public: true
         arguments:
             - "@oro_sales.b2bcustomer.form"
             - "@request_stack"

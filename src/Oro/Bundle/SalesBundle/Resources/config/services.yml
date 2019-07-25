@@ -144,6 +144,7 @@ services:
 
     oro_sales.b2bcustomer.manager.api:
         class: '%oro_sales.b2bcustomer.manager.api.class%'
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.b2bcustomer.entity.class%'
@@ -265,11 +266,13 @@ services:
 
     oro_sales.opportunity.datagrid_view_list:
         class: '%oro_sales.opportunity.datagrid_view_list.class%'
+        public: true
         arguments:
             - '@translator'
 
     oro_sales.lead.datagrid_view_list:
         class: '%oro_sales.lead.datagrid_view_list.class%'
+        public: true
         arguments:
             - '@translator'
 
