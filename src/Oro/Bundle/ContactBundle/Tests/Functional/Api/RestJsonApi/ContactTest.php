@@ -122,4 +122,58 @@ class ContactTest extends RestJsonApiTestCase
         $contact = $this->getEntityManager()->find(Contact::class, $contactId);
         self::assertEquals(new \DateTime('1995-05-25', new \DateTimeZone('UTC')), $contact->getBirthday());
     }
+
+    public function testGetListWithDifferentPartialQueriesForSameEntityType()
+    {
+        $response = $this->cget(
+            ['entity' => 'accounts'],
+            [
+                'filter[id]' => '<toString(@account1->id)>',
+                'fields'     => [
+                    'accounts' => 'defaultContact,contacts',
+                    'contacts' => 'firstName'
+                ],
+                'include'    => 'contacts'
+            ]
+        );
+
+        $this->assertResponseContains(
+            [
+                'data'     => [
+                    [
+                        'type'          => 'accounts',
+                        'id'            => '<toString(@account1->id)>',
+                        'relationships' => [
+                            'contacts'       => [
+                                'data' => [
+                                    ['type' => 'contacts', 'id' => '<toString(@contact1->id)>'],
+                                    ['type' => 'contacts', 'id' => '<toString(@contact2->id)>']
+                                ]
+                            ],
+                            'defaultContact' => [
+                                'data' => ['type' => 'contacts', 'id' => '<toString(@contact1->id)>']
+                            ]
+                        ]
+                    ]
+                ],
+                'included' => [
+                    [
+                        'type'       => 'contacts',
+                        'id'         => '<toString(@contact1->id)>',
+                        'attributes' => [
+                            'firstName' => 'Contact 1'
+                        ]
+                    ],
+                    [
+                        'type'       => 'contacts',
+                        'id'         => '<toString(@contact2->id)>',
+                        'attributes' => [
+                            'firstName' => 'Contact 2'
+                        ]
+                    ]
+                ]
+            ],
+            $response
+        );
+    }
 }
