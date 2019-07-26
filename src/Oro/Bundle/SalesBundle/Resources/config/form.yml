@@ -317,6 +317,7 @@ services:
 
     oro_sales.b2bcustomer.form.api:
         class: Symfony\Component\Form\Form
+        public: true
         factory: ['@form.factory', createNamed]
         arguments:
             - "b2bcustomer"
@@ -333,6 +334,7 @@ services:
 
     oro_sales.b2bcustomer.form.handler.api:
         class: '%oro_sales.b2bcustomer.form.handler.class%'
+        public: true
         arguments:
             - "@oro_sales.b2bcustomer.form.api"
             - "@request_stack"
@@ -401,11 +403,13 @@ services:
 
     oro_sales.form.type.b2bcustomer_phone.type:
         class: '%oro_sales.form.type.b2bcustomer_phone.class%'
+        public: true
         tags:
             - { name: form.type, alias: oro_b2bcustomer_phone }
 
     oro_sales.form.type.b2bcustomer_phone.handler:
         class: '%oro_sales.form.handler.b2bcustomer_phone.class%'
+        public: true
         arguments:
             - "@oro_sales.form.type.b2bcustomer_phone"
             - "@request_stack"
@@ -420,11 +424,13 @@ services:
 
     oro_sales.form.type.b2bcustomer_email.type:
         class: '%oro_sales.form.type.b2bcustomer_email.class%'
+        public: true
         tags:
             - { name: form.type, alias: oro_b2bcustomer_email }
 
     oro_sales.form.type.b2bcustomer_email.handler:
         class: '%oro_sales.form.handler.b2bcustomer_email.class%'
+        public: true
         arguments:
             - "@oro_sales.form.type.b2bcustomer_email"
             - "@request_stack"

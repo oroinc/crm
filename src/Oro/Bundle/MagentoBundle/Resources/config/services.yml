@@ -162,6 +162,7 @@ services:
 
     oro_magento.transport.rest_transport:
         class: Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport
+        public: true
         arguments:
             - '@oro_integration.transport.rest.event_dispatchable_client_factory'
             - '@oro_magento.provider.rest_token_provider'
@@ -658,6 +659,7 @@ services:
 
     oro_magento.customer_birthday_type_transformer:
         class: Oro\Bundle\MagentoBundle\Form\DataTransformer\BirthdayTypeApiTransformer
+        public: true
 
     oro_magento.datagrid_helper:
         class: '%oro_magento.datagrid_helper.class%'

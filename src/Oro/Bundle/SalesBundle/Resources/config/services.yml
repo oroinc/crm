@@ -344,6 +344,7 @@ services:
 
     oro_sales.b2bcustomer_phone.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.b2bcustomer_phone.entity.class%'
@@ -359,6 +360,7 @@ services:
 
     oro_sales.b2bcustomer_email.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.b2bcustomer_email.entity.class%'

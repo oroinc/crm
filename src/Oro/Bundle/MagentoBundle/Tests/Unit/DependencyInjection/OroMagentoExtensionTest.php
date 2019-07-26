@@ -20,6 +20,7 @@ class OroMagentoExtensionTest extends \PHPUnit\Framework\TestCase
         ];
 
         $container = new ContainerBuilder();
+        $container->getParameterBag()->set('kernel.environment', 'prod');
         $extension = new OroMagentoExtension();
 
         $extension->load(['oro_magento' => $config], $container);
@@ -70,6 +71,7 @@ class OroMagentoExtensionTest extends \PHPUnit\Framework\TestCase
             null
         ];
         $container = new ContainerBuilder();
+        $container->getParameterBag()->set('kernel.environment', 'prod');
         $extension = new OroMagentoExtension();
         $extension->load($config, $container);
     }
@@ -83,6 +85,7 @@ class OroMagentoExtensionTest extends \PHPUnit\Framework\TestCase
     public function testInheritanceConfiguration(array $config, array $resultConfig)
     {
         $container = new ContainerBuilder();
+        $container->getParameterBag()->set('kernel.environment', 'prod');
         $extension = new OroMagentoExtension();
         $extension->load($config, $container);
         $services = $container->findTaggedServiceIds('oro_magento.bundle_config.aware');
