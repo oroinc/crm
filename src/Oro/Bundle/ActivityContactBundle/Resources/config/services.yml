@@ -58,4 +58,5 @@ services:
 
     oro_activity_contact.placeholder.filter:
         class: '%oro_activity_contact.placeholder.filter.class%'
+        public: true
         parent: oro_activity_list.placeholder.filter

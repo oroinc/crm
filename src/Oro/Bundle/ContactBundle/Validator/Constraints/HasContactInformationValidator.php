@@ -3,9 +3,9 @@
 namespace Oro\Bundle\ContactBundle\Validator\Constraints;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class HasContactInformationValidator extends ConstraintValidator
 {

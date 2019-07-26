@@ -97,6 +97,7 @@ services:
 
     oro_sales.lead.datagrid_helper:
         class: '%oro_sales.lead.datagrid_helper.class%'
+        public: true
 
     oro_sales.form.autocomplete.opportunity.search_handler:
         parent: oro_channel.autocomplete.channel_limitation_handler
@@ -137,11 +138,13 @@ services:
 
     oro_sales.provider.enitity_state:
         parent: oro_channel.provider.utils.entity_state_provider
+        public: true
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity'
 
     oro_sales.b2bcustomer.manager.api:
         class: '%oro_sales.b2bcustomer.manager.api.class%'
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.b2bcustomer.entity.class%'
@@ -193,6 +196,7 @@ services:
 
     oro_sales.provider.forecast_of_opportunities:
         class: '%oro_sales.provider.forecast_of_opportunity.class%'
+        public: true
         arguments:
             - '@oro_locale.formatter.number'
             - '@oro_locale.formatter.date_time'
@@ -262,11 +266,13 @@ services:
 
     oro_sales.opportunity.datagrid_view_list:
         class: '%oro_sales.opportunity.datagrid_view_list.class%'
+        public: true
         arguments:
             - '@translator'
 
     oro_sales.lead.datagrid_view_list:
         class: '%oro_sales.lead.datagrid_view_list.class%'
+        public: true
         arguments:
             - '@translator'
 
@@ -338,6 +344,7 @@ services:
 
     oro_sales.b2bcustomer_phone.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.b2bcustomer_phone.entity.class%'
@@ -353,6 +360,7 @@ services:
 
     oro_sales.b2bcustomer_email.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+        public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_sales.b2bcustomer_email.entity.class%'
@@ -442,6 +450,7 @@ services:
 
     oro_sales.provider.opportunity.indeterminate_forecast:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\IndeterminateForecastProvider
+        public: true
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'

@@ -206,7 +206,7 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit\Framework\TestCase
      */
     protected function getEnumFieldConfigSubscriber()
     {
-        $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->createMock('Symfony\Contracts\Translation\TranslatorInterface');
         $enumSynchronizer = $this->getMockBuilder('Oro\Bundle\EntityExtendBundle\Tools\EnumSynchronizer')
             ->disableOriginalConstructor()
             ->getMock();

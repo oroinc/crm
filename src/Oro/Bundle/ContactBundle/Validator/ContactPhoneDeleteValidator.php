@@ -4,7 +4,7 @@ namespace Oro\Bundle\ContactBundle\Validator;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContactPhoneDeleteValidator
 {

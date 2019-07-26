@@ -6,7 +6,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\ImportExport\Configuration\ContactImportExportConfigurationProvider;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContactImportExportConfigurationProviderTest extends TestCase
 {

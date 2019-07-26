@@ -1,0 +1,10 @@
+services:
+    oro_magento.transport.rest_transport.stub:
+        public: true
+        decorates: oro_magento.transport.rest_transport
+        parent: oro_magento.transport.rest_transport
+
+    oro_magento.transport.soap_transport.test:
+        decorates: 'oro_magento.transport.soap_transport'
+        parent: 'oro_magento.transport.soap_transport'
+        public: true

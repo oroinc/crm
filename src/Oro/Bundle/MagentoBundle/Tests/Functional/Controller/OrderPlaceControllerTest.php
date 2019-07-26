@@ -37,11 +37,8 @@ class OrderPlaceControllerTest extends WebTestCase
     /** @var Customer */
     protected $customer;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var SoapTransport|\PHPUnit\Framework\MockObject\MockObject */
     protected $soapTransport;
-
-    /** @var SoapTransport */
-    protected $originalSoapTransport;
 
     protected function setUp()
     {
@@ -54,16 +51,7 @@ class OrderPlaceControllerTest extends WebTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        // replace the SOAP transport with a mock object
-        $this->originalSoapTransport = $this->getContainer()->get('oro_magento.transport.soap_transport');
-        $this->getContainer()->set('oro_magento.transport.soap_transport', $this->soapTransport);
-    }
-
-    protected function tearDown()
-    {
-        // restore the original SOAP transport
-        $this->getContainer()->set('oro_magento.transport.soap_transport', $this->originalSoapTransport);
-        $this->originalSoapTransport = null;
+        $this->getContainer()->set('oro_magento.transport.soap_transport.test', $this->soapTransport);
     }
 
     protected function postFixtureLoad()

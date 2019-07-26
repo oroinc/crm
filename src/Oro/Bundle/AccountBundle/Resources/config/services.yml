@@ -112,6 +112,7 @@ services:
 
     oro_account.accounts_view_list:
         class: Oro\Bundle\AccountBundle\Datagrid\AccountsViewList
+        public: true
         arguments:
             - '@translator'
 

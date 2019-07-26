@@ -22,10 +22,7 @@ abstract class BaseIntegrationTest extends WebTestCase
     {
         parent::setUp();
         $this->initClient();
-        self::getContainer()->set(
-            'oro_integration.transport.rest.client_factory',
-            self::$fakeRestClientFactory
-        );
+
         /**
          * Force transport re-initialization on every test
          */
