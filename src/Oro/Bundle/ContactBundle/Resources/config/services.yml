@@ -255,6 +255,7 @@ services:
 
     oro_contact.contact.datagrid_helper:
         class: '%oro_contact.contact.datagrid_helper.class%'
+        public: true
 
     oro_contact.activity_widget_provider:
         class: '%oro_contact.activity_widget_provider.class%'
@@ -375,6 +376,7 @@ services:
 
     oro_contact.contacts_view_list:
         class: Oro\Bundle\ContactBundle\Datagrid\ContactsViewList
+        public: true
         arguments:
             - '@translator'
 

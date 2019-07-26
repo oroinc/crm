@@ -38,12 +38,6 @@ class NewsletterSubscriberControllerTest extends AbstractController
     {
         $this->initClient([], $this->generateBasicAuthHeader());
 
-        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
-
-        $this->subscriber = $this->getReference('newsletter_subscriber');
-
-        $this->baseJobExecutor = $this->getContainer()->get('oro_importexport.job_executor');
-
         $jobExecutor = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Job\JobExecutor')
             ->disableOriginalConstructor()
             ->getMock();
@@ -55,15 +49,11 @@ class NewsletterSubscriberControllerTest extends AbstractController
             ->method('executeJob')
             ->willReturn($jobResult);
 
-        $this->getContainer()->set('oro_importexport.job_executor', $jobExecutor);
-    }
+        $this->getContainer()->set('oro_importexport.job_executor.test', $jobExecutor);
 
-    protected function tearDown()
-    {
-        $this->getContainer()->set('oro_importexport.job_executor', $this->baseJobExecutor);
-        unset($this->transport, $this->baseJobExecutor);
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
 
-        parent::tearDown();
+        $this->subscriber = $this->getReference('newsletter_subscriber');
     }
 
     public function testView()

@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Provider\Transport;
 
-use Oro\Bundle\IntegrationBundle\Test\FakeRestClientFactory;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
@@ -15,9 +14,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class RestTransportTest extends WebTestCase
 {
-    /** @var FakeRestClientFactory */
-    private $fakeRestClientFactory;
-
     /**
      * @var SymmetricCrypterInterface
      */
@@ -27,24 +23,7 @@ class RestTransportTest extends WebTestCase
     {
         $this->initClient();
 
-        $this->fakeRestClientFactory = new FakeRestClientFactory();
-
-        $this->client->getContainer()->set(
-            'oro_integration.transport.rest.client_factory',
-            $this->fakeRestClientFactory
-        );
-
         $this->crypter = $this->client->getContainer()->get('oro_security.encoder.default');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function tearDown()
-    {
-        unset(
-            $this->fakeRestClientFactory
-        );
     }
 
     public function testTransportInitSuccess()
@@ -188,6 +167,6 @@ class RestTransportTest extends WebTestCase
         );
 
         $fixtureFile = str_replace('/', DIRECTORY_SEPARATOR, $fixtureFile);
-        $this->fakeRestClientFactory->setFixtureFile($fixtureFile);
+        $this->getContainer()->get('oro_integration.transport.rest.client_factory.stub')->setFixtureFile($fixtureFile);
     }
 }

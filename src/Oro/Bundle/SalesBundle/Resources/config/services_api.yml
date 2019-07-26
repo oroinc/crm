@@ -1,18 +1,20 @@
 services:
-
     oro_sales.api.form_listener.customer_association:
         class: Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener
+        public: true
         arguments:
             - '@oro_sales.manager.account_customer'
             - '@oro_security.form.field_acl_helper'
 
     oro_sales.api.form_listener.optional_customer_association:
         parent: oro_sales.api.form_listener.customer_association
+        public: true
         calls:
             - [setIsRelationOptional, [true]]
 
     oro_sales.api.form_listener.lead_status:
         class: Oro\Bundle\SalesBundle\Api\Form\EventListener\LeadStatusSubscriber
+        public: true
         arguments:
             - '@oro_entity_extend.enum_value_provider'
 

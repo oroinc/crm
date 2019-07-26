@@ -4,6 +4,9 @@ namespace Oro\Bundle\MagentoBundle\ImportExport\Processor;
 
 use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareImportProcessor;
 
+/**
+ * Processes deserialized item by certain strategy
+ */
 class ContextProcessor extends StepExecutionAwareImportProcessor
 {
     /**
@@ -18,7 +21,7 @@ class ContextProcessor extends StepExecutionAwareImportProcessor
         $object = $this->serializer->deserialize(
             $item,
             $this->getEntityName(),
-            null,
+            '',
             $this->context->getConfiguration()
         );
 

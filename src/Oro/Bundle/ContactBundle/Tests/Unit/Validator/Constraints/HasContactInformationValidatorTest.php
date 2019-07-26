@@ -19,7 +19,7 @@ class HasContactInformationValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $translator = $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $translator = $this->createMock('Symfony\Contracts\Translation\TranslatorInterface');
         $translator
             ->expects($this->any())
             ->method('trans')

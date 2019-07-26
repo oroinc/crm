@@ -10,7 +10,7 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
