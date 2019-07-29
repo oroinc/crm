@@ -11,12 +11,27 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class LifetimeAverageAggregateCommand extends Command implements CronCommandInterface, ContainerAwareInterface
+/**
+ * Aggregates average lifetime value per channel.
+ */
+class LifetimeAverageAggregateCommand extends Command implements CronCommandInterface
 {
-    use ContainerAwareTrait;
+    /** @var string */
+    protected static $defaultName = 'oro:cron:lifetime-average:aggregate';
+
+    /** @var MessageProducerInterface */
+    private $messageProducer;
+
+    /**
+     * @param MessageProducerInterface $messageProducer
+     */
+    public function __construct(MessageProducerInterface $messageProducer)
+    {
+        parent::__construct();
+
+        $this->messageProducer = $messageProducer;
+    }
 
     /**
      * {@inheritdoc}
@@ -41,7 +56,6 @@ class LifetimeAverageAggregateCommand extends Command implements CronCommandInte
      */
     public function configure()
     {
-        $this->setName('oro:cron:lifetime-average:aggregate');
         $this->setDescription('Run daily aggregation of average lifetime value per channel');
         $this->addOption(
             'force',
@@ -62,7 +76,7 @@ class LifetimeAverageAggregateCommand extends Command implements CronCommandInte
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getMessageProducer()->send(
+        $this->messageProducer->send(
             Topics::AGGREGATE_LIFETIME_AVERAGE,
             new Message(
                 [
@@ -74,13 +88,5 @@ class LifetimeAverageAggregateCommand extends Command implements CronCommandInte
         );
 
         $output->writeln('<info>Completed!</info>');
-    }
-
-    /**
-     * @return MessageProducerInterface
-     */
-    private function getMessageProducer()
-    {
-        return $this->container->get('oro_message_queue.message_producer');
     }
 }
