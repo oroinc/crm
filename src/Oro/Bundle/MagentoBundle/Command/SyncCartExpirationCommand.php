@@ -16,12 +16,32 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class SyncCartExpirationCommand extends Command implements CronCommandInterface, ContainerAwareInterface
+/**
+ * Runs synchronization for magento channels to process expiration of merged carts
+ */
+class SyncCartExpirationCommand extends Command implements CronCommandInterface
 {
-    use ContainerAwareTrait;
+    /** @var string */
+    protected static $defaultName = 'oro:cron:magento:cart:expiration';
+
+    /** @var RegistryInterface */
+    private $registry;
+
+    /** @var MessageProducerInterface */
+    private $messageProducer;
+
+    /**
+     * @param RegistryInterface $doctrine
+     * @param MessageProducerInterface $messageProducer
+     */
+    public function __construct(RegistryInterface $doctrine, MessageProducerInterface $messageProducer)
+    {
+        parent::__construct();
+
+        $this->registry = $doctrine;
+        $this->messageProducer = $messageProducer;
+    }
 
     /**
      * {@inheritdoc}
@@ -36,9 +56,6 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
      */
     public function isActive()
     {
-        /**
-         * @todo Remove dependency on exact magento channel type in CRM-8155
-         */
         return ($this->getIntegrationRepository()->countActiveIntegrations(MagentoChannelType::TYPE) > 0);
     }
 
@@ -48,7 +65,6 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
     public function configure()
     {
         $this
-            ->setName('oro:cron:magento:cart:expiration')
             ->addOption(
                 'channel-id',
                 'c',
@@ -76,9 +92,6 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
 
             $channels = [$channel];
         } else {
-            /**
-             * @todo Remove dependency on exact magento channel type in CRM-8155
-             */
             $channels = $repository->getConfiguredChannelsForSync(MagentoChannelType::TYPE);
         }
 
@@ -86,7 +99,7 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
         foreach ($channels as $channel) {
             $logger->info(sprintf('Run sync for "%s" channel.', $channel->getName()));
 
-            $this->getMessageProducer()->send(
+            $this->messageProducer->send(
                 Topics::SYNC_CART_EXPIRATION_INTEGRATION,
                 new Message(
                     ['integrationId' => $channel->getId()],
@@ -99,26 +112,10 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
     }
 
     /**
-     * @return RegistryInterface
-     */
-    private function getDoctrine()
-    {
-        return $this->container->get('doctrine');
-    }
-
-    /**
-     * @return MessageProducerInterface
-     */
-    private function getMessageProducer()
-    {
-        return $this->container->get('oro_message_queue.message_producer');
-    }
-
-    /**
      * @return IntegrationRepository
      */
     private function getIntegrationRepository()
     {
-        return $this->getDoctrine()->getRepository(Integration::class);
+        return $this->registry->getRepository(Integration::class);
     }
 }

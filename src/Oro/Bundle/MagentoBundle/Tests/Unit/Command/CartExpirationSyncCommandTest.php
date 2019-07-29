@@ -4,10 +4,10 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Command;
 
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Bundle\MagentoBundle\Command\SyncCartExpirationCommand;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Component\Testing\ClassExtensionTrait;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class CartExpirationSyncCommandTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,31 +23,16 @@ class CartExpirationSyncCommandTest extends \PHPUnit\Framework\TestCase
         $this->assertClassImplements(CronCommandInterface::class, SyncCartExpirationCommand::class);
     }
 
-    public function testShouldImplementContainerAwareInterface()
-    {
-        $this->assertClassImplements(ContainerAwareInterface::class, SyncCartExpirationCommand::class);
-    }
-
-    public function testCouldBeConstructedWithoutAnyArguments()
-    {
-        new SyncCartExpirationCommand();
-    }
-
     public function testShouldBeExecutedAtThreeOClockInTheMorningByCron()
     {
-        $command = new SyncCartExpirationCommand();
+        /** @var RegistryInterface|\PHPUnit\Framework\MockObject\MockObject $doctrine */
+        $doctrine = $this->createMock(RegistryInterface::class);
+
+        /** @var MessageProducerInterface|\PHPUnit\Framework\MockObject\MockObject $messageProducer */
+        $messageProducer = $this->createMock(MessageProducerInterface::class);
+
+        $command = new SyncCartExpirationCommand($doctrine, $messageProducer);
 
         $this->assertEquals('0 3 * * *', $command->getDefaultDefinition());
-    }
-
-    public function testShouldAllowSetContainer()
-    {
-        $container = new Container();
-
-        $command = new SyncCartExpirationCommand();
-
-        $command->setContainer($container);
-
-        $this->assertAttributeSame($container, 'container', $command);
     }
 }

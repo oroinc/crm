@@ -1,6 +1,9 @@
 services:
-    Oro\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand:
+    _defaults:
         public: false
-        class: Oro\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand
+
+    Oro\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand:
+        arguments:
+            - '@oro_message_queue.message_producer'
         tags:
             - { name: console.command }

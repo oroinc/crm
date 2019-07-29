@@ -22,5 +22,8 @@ services:
             - { name: console.command }
 
     Oro\Bundle\MagentoBundle\Command\SyncCartExpirationCommand:
+        arguments:
+            - '@doctrine'
+            - '@oro_message_queue.message_producer'
         tags:
             - { name: console.command }
