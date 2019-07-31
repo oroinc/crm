@@ -17,6 +17,9 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Loads new Email entities.
+ */
 class LoadEmailData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
     /**

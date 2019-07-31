@@ -15,6 +15,9 @@ use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationT
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Loads new Opportunity entities.
+ */
 class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixtureInterface
 {
     /** @var Contact[] */
