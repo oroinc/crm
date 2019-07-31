@@ -78,6 +78,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->initSupportingEntities($manager);
         $this->loadLeads($manager);
         $this->loadSources($manager);
+
+        $tokenStorage = $this->container->get('security.token_storage');
+        $tokenStorage->setToken(null);
     }
 
     /**

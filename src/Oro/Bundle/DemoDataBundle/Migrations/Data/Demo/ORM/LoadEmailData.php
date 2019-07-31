@@ -69,6 +69,9 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
         $this->loadEmailTemplates();
         $this->loadEmailsDemo($om);
         $om->flush();
+
+        $tokenStorage = $this->container->get('security.token_storage');
+        $tokenStorage->setToken(null);
     }
 
     protected function loadEmailTemplates()

@@ -102,6 +102,9 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
         $this->persistDemoTasks($om);
 
         $om->flush();
+
+        $tokenStorage = $this->container->get('security.token_storage');
+        $tokenStorage->setToken(null);
     }
 
     /**

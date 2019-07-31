@@ -74,6 +74,9 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
         $this->loadUsersTags();
         $this->loadAccountsTags();
         $this->loadContactsTags();
+
+        $tokenStorage = $this->container->get('security.token_storage');
+        $tokenStorage->setToken(null);
     }
 
     /**
