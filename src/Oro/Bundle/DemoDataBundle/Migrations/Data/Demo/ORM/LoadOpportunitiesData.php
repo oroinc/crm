@@ -15,9 +15,6 @@ use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationT
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Loads new Opportunity entities.
- */
 class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixtureInterface
 {
     /** @var Contact[] */
@@ -61,9 +58,6 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
     {
         $this->initSupportingEntities();
         $this->loadOpportunities();
-
-        $tokenStorage = $this->container->get('security.token_storage');
-        $tokenStorage->setToken(null);
     }
 
     protected function initSupportingEntities()

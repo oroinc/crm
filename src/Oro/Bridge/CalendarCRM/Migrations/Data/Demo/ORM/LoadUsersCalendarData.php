@@ -85,8 +85,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
 
         $this->loadCalendars();
         $this->connectCalendars();
-
-        $this->tokenStorage->setToken(null);
     }
 
     /**

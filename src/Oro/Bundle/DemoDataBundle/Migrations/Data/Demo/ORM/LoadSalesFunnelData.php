@@ -73,9 +73,6 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     {
         $this->initSupportingEntities($manager);
         $this->loadFlows();
-
-        $tokenStorage = $this->container->get('security.token_storage');
-        $tokenStorage->setToken(null);
     }
 
     /**

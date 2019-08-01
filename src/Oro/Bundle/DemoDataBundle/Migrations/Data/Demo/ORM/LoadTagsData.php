@@ -16,9 +16,6 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Loads new Tag entities.
- */
 class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /** @var ContainerInterface */
@@ -77,9 +74,6 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
         $this->loadUsersTags();
         $this->loadAccountsTags();
         $this->loadContactsTags();
-
-        $tokenStorage = $this->container->get('security.token_storage');
-        $tokenStorage->setToken(null);
     }
 
     /**

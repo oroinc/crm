@@ -24,9 +24,6 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Loads new Lead entities.
- */
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     const FLUSH_MAX = 50;
@@ -81,9 +78,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->initSupportingEntities($manager);
         $this->loadLeads($manager);
         $this->loadSources($manager);
-
-        $tokenStorage = $this->container->get('security.token_storage');
-        $tokenStorage->setToken(null);
     }
 
     /**

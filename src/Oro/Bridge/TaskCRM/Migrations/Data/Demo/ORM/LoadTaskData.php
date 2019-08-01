@@ -13,9 +13,6 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Loads new Task entities.
- */
 class LoadTaskData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
     const FIXTURES_COUNT = 20;
@@ -105,9 +102,6 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
         $this->persistDemoTasks($om);
 
         $om->flush();
-
-        $tokenStorage = $this->container->get('security.token_storage');
-        $tokenStorage->setToken(null);
     }
 
     /**
