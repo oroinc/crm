@@ -17,6 +17,9 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Loads new Email entities.
+ */
 class LoadEmailData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
     /**
@@ -69,6 +72,9 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
         $this->loadEmailTemplates();
         $this->loadEmailsDemo($om);
         $om->flush();
+
+        $tokenStorage = $this->container->get('security.token_storage');
+        $tokenStorage->setToken(null);
     }
 
     protected function loadEmailTemplates()

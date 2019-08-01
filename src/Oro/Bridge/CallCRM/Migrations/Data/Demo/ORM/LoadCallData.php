@@ -14,6 +14,9 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Loads new Call entities.
+ */
 class LoadCallData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
     protected $subjects = [
@@ -56,6 +59,9 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
         $this->organization = $this->getReference('default_organization');
         $this->persistDemoCalls($om);
         $om->flush();
+
+        $tokenStorage = $this->container->get('security.token_storage');
+        $tokenStorage->setToken(null);
     }
 
     /**
