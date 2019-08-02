@@ -113,7 +113,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $birthday,
         $organization
     ) {
-        /** @var $user User */
+        /** @var User $user */
         $user = $this->userManager->createUser();
 
         $user->setEmail($email);
