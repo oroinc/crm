@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadBusinessUnit;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\UserManager;
@@ -45,7 +46,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
      */
     public function getDependencies()
     {
-        return [LoadOrganization::class];
+        return [LoadOrganization::class, LoadBusinessUnit::class];
     }
 
     /**
@@ -83,6 +84,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
         $user = $userManager->createUser();
         $organization = $this->getReference('organization');
         $user->setUsername(self::USER_NAME)
+            ->setOwner($this->getReference('business_unit'))
             ->setPlainPassword(self::USER_PASSWORD)
             ->setFirstName('User')
             ->setLastName('Test')

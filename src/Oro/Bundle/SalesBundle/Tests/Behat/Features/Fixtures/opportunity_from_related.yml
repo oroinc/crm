@@ -34,8 +34,8 @@ Oro\Bundle\UserBundle\Entity\User:
     username: Johnconnor8
     organization: '@organization'
     organizations: ['@organization']
-#    owner: '@business_unit'
-#    businessUnits: ['@business_unit']
+    owner: '@business_unit'
+    businessUnits: ['@business_unit']
     email: john@example.com
     password: ocINyrtG+M0qn76WdvdD945WYGYD6VS8+Wrlgfarc9QkERva9zW0yU1+nnJPOb76ophDg60Wgzpj0VzZVW4tXg==
     salt: budomlxfmrs4k4c44o0co4skgwk88s
