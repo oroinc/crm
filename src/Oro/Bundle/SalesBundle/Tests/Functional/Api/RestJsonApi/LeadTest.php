@@ -55,28 +55,39 @@ class LeadTest extends RestJsonApiTestCase
     public function cgetDataProvider()
     {
         return [
-            'without parameters'                                  => [
+            'without parameters'                                                        => [
                 'parameters'      => [],
                 'expectedContent' => 'lead_cget.yml'
             ],
-            'filter by status'                                    => [
+            'filter by status'                                                          => [
                 'parameters'      => [
                     'filter' => ['status' => 'new']
                 ],
                 'expectedContent' => 'lead_cget_filter_by_status.yml'
             ],
-            'fields and include filters for customer association' => [
+            'fields and include filters for customer association'                       => [
                 'parameters'      => [
-                    'fields[opportunities]' => 'account,customer',
-                    'include'               => 'account,customer'
+                    'fields[leads]'    => 'name,account,customer',
+                    'fields[accounts]' => 'name,organization',
+                    'include'          => 'account,customer'
                 ],
                 'expectedContent' => 'lead_cget_customer_association.yml'
             ],
-            'title for customer association'                      => [
+            'fields and include filters for nested association of customer association' => [
                 'parameters'      => [
-                    'meta'                  => 'title',
-                    'fields[opportunities]' => 'account,customer',
-                    'include'               => 'account,customer'
+                    'fields[leads]'         => 'account',
+                    'fields[accounts]'      => 'name,organization',
+                    'fields[organizations]' => 'name',
+                    'include'               => 'account,account.organization'
+                ],
+                'expectedContent' => 'lead_cget_customer_association_nested.yml'
+            ],
+            'title for customer association'                                            => [
+                'parameters'      => [
+                    'meta'             => 'title',
+                    'fields[leads]'    => 'name,account,customer',
+                    'fields[accounts]' => 'name,organization',
+                    'include'          => 'account,customer'
                 ],
                 'expectedContent' => 'lead_cget_customer_association_title.yml'
             ]

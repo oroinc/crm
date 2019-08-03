@@ -1,0 +1,49 @@
+data:
+    -
+        type: opportunities
+        id: '<toString(@opportunity1->id)>'
+        relationships:
+            lead:
+                data:
+                    type: leads
+                    id: '<toString(@lead1->id)>'
+    -
+        type: opportunities
+        id: '<toString(@opportunity2->id)>'
+        relationships:
+            lead:
+                data:
+                    type: leads
+                    id: '<toString(@lead2->id)>'
+included:
+    -
+        type: organizations
+        id: '<toString(@organization->id)>'
+        attributes:
+            name: '@organization->getName()'
+    -
+        type: accounts
+        id: '<toString(@account1->id)>'
+        attributes:
+            name: 'Account 1'
+        relationships:
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
+    -
+        type: leads
+        id: '<toString(@lead1->id)>'
+        relationships:
+            account:
+                data:
+                    type: accounts
+                    id: '<toString(@account1->id)>'
+    -
+        type: leads
+        id: '<toString(@lead2->id)>'
+        relationships:
+            account:
+                data:
+                    type: accounts
+                    id: '<toString(@account1->id)>'
