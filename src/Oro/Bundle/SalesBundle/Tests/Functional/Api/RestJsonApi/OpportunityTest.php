@@ -36,24 +36,24 @@ class OpportunityTest extends RestJsonApiTestCase
     public function cgetDataProvider()
     {
         return [
-            'without parameters'                                         => [
+            'without parameters'                                                               => [
                 'parameters'      => [],
                 'expectedContent' => 'opportunity_cget.yml'
             ],
-            'filter by status'                                           => [
+            'filter by status'                                                                 => [
                 'parameters'      => [
                     'filter' => ['status' => 'won']
                 ],
                 'expectedContent' => 'opportunity_cget_filter_by_status.yml'
             ],
-            'fields and include filters for customer association'        => [
+            'fields and include filters for customer association'                              => [
                 'parameters'      => [
                     'fields[opportunities]' => 'account,customer',
                     'include'               => 'account,customer'
                 ],
                 'expectedContent' => 'opportunity_cget_customer_association.yml'
             ],
-            'title for customer association'                             => [
+            'title for customer association'                                                   => [
                 'parameters'      => [
                     'meta'                  => 'title',
                     'fields[opportunities]' => 'account,customer',
@@ -61,7 +61,7 @@ class OpportunityTest extends RestJsonApiTestCase
                 ],
                 'expectedContent' => 'opportunity_cget_customer_association_title.yml'
             ],
-            'fields and include filters for nested customer association' => [
+            'fields and include filters for nested customer association'                       => [
                 'parameters'      => [
                     'fields[opportunities]' => 'lead',
                     'fields[leads]'         => 'account,customer',
@@ -69,7 +69,17 @@ class OpportunityTest extends RestJsonApiTestCase
                 ],
                 'expectedContent' => 'opportunity_cget_customer_association_nested.yml'
             ],
-            'title for nested customer association'                      => [
+            'fields and include filters for nested association of nested customer association' => [
+                'parameters'      => [
+                    'fields[opportunities]' => 'lead',
+                    'fields[leads]'         => 'account',
+                    'fields[accounts]'      => 'name,organization',
+                    'fields[organizations]' => 'name',
+                    'include'               => 'lead.account,lead.account.organization'
+                ],
+                'expectedContent' => 'opportunity_cget_customer_association_nested1.yml'
+            ],
+            'title for nested customer association'                                            => [
                 'parameters'      => [
                     'meta'                  => 'title',
                     'fields[opportunities]' => 'lead',
@@ -78,7 +88,7 @@ class OpportunityTest extends RestJsonApiTestCase
                 ],
                 'expectedContent' => 'opportunity_cget_customer_association_nested_title.yml'
             ],
-            'title for close reason and status'                          => [
+            'title for close reason and status'                                                => [
                 'parameters'      => [
                     'meta'                  => 'title',
                     'fields[opportunities]' => 'closeReason,status',

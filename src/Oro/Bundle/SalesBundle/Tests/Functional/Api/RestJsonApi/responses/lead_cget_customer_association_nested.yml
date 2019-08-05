@@ -2,41 +2,28 @@ data:
     -
         type: leads
         id: '<toString(@lead1->id)>'
-        meta:
-            title: 'Lead 1'
-        attributes:
-            name: 'Lead 1'
         relationships:
             account:
                 data:
                     type: accounts
                     id: '<toString(@account1->id)>'
-            customer:
-                data:
-                    type: b2bcustomers
-                    id: '<toString(@b2b_customer1->id)>'
     -
         type: leads
         id: '<toString(@lead2->id)>'
-        meta:
-            title: 'Lead 2'
-        attributes:
-            name: 'Lead 2'
         relationships:
             account:
                 data:
                     type: accounts
                     id: '<toString(@account1->id)>'
-            customer:
-                data:
-                    type: b2bcustomers
-                    id: '<toString(@b2b_customer1->id)>'
 included:
+    -
+        type: organizations
+        id: '<toString(@organization->id)>'
+        attributes:
+            name: '@organization->getName()'
     -
         type: accounts
         id: '<toString(@account1->id)>'
-        meta:
-            title: 'Account 1'
         attributes:
             name: 'Account 1'
         relationships:
