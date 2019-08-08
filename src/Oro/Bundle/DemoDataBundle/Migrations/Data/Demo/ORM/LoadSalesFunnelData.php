@@ -8,7 +8,6 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
-use Oro\Bundle\OrganizationBundle\Migrations\Data\Demo\ORM\LoadAcmeOrganizationAndBusinessUnitData;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
@@ -53,7 +52,6 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         return [
             LoadLeadsData::class,
             LoadOpportunitiesData::class,
-            LoadAcmeOrganizationAndBusinessUnitData::class
         ];
     }
 
@@ -73,6 +71,9 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     {
         $this->initSupportingEntities($manager);
         $this->loadFlows();
+
+        $tokenStorage = $this->container->get('security.token_storage');
+        $tokenStorage->setToken(null);
     }
 
     /**
