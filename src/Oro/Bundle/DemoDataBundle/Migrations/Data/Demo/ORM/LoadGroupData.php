@@ -6,13 +6,12 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
-use Oro\Bundle\OrganizationBundle\Migrations\Data\Demo\ORM\LoadAcmeOrganizationAndBusinessUnitData;
 use Oro\Bundle\UserBundle\Entity\Group;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Load User groups for two organizations (default one and demo)
+ * Load User groups for default organization
  */
 class LoadGroupData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -25,8 +24,7 @@ class LoadGroupData extends AbstractFixture implements ContainerAwareInterface, 
     public function getDependencies()
     {
         return [
-            LoadBusinessUnitData::class,
-            LoadAcmeOrganizationAndBusinessUnitData::class
+            LoadBusinessUnitData::class
         ];
     }
 
@@ -64,21 +62,6 @@ class LoadGroupData extends AbstractFixture implements ContainerAwareInterface, 
             $newGroup = new Group($group);
             $newGroup->setOwner($user);
             $newGroup->setOrganization($organization);
-            $entityManager->persist($newGroup);
-        }
-
-        //Save same groups for second organization as well
-        $secondOrganization = $this->getReference(LoadAcmeOrganizationAndBusinessUnitData::REFERENCE_DEMO_ORGANIZATION);
-        $secondOrganizationBU = $this->getReference(LoadAcmeOrganizationAndBusinessUnitData::REFERENCE_DEMO_BU);
-
-        $groups['Administrators'] = $secondOrganizationBU;
-        $groups['Marketing'] = $secondOrganizationBU;
-        $groups['Sales'] = $secondOrganizationBU;
-
-        foreach ($groups as $group => $user) {
-            $newGroup = new Group($group);
-            $newGroup->setOwner($secondOrganizationBU);
-            $newGroup->setOrganization($secondOrganization);
             $entityManager->persist($newGroup);
         }
         $entityManager->flush();

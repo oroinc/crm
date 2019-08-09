@@ -13,6 +13,9 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Load campaign demo data
+ */
 class LoadCampaignData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /**
@@ -95,6 +98,9 @@ class LoadCampaignData extends AbstractFixture implements ContainerAwareInterfac
             $manager->flush();
 
             fclose($handle);
+
+            $tokenStorage = $this->container->get('security.token_storage');
+            $tokenStorage->setToken(null);
         }
     }
 

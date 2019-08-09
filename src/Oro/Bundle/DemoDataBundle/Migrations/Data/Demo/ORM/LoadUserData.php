@@ -10,17 +10,14 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\DataAuditBundle\Tests\Unit\Fixture\Repository\UserRepository;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
-use Oro\Bundle\OrganizationBundle\Migrations\Data\Demo\ORM\LoadAcmeOrganizationAndBusinessUnitData;
 use Oro\Bundle\TagBundle\Entity\TagManager;
-use Oro\Bundle\UserBundle\Entity\Group;
-use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadRolesData;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Loads Sale and Marketing users for two organization
+ * Loads Sale and Marketing users for default organization
  */
 class LoadUserData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -50,7 +47,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
         return [
             LoadGroupData::class,
             LoadBusinessUnitData::class,
-            LoadAcmeOrganizationAndBusinessUnitData::class
         ];
     }
 
@@ -141,67 +137,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
         }
         $this->addReference('default_marketing', $marketing);
         $this->userManager->updateUser($marketing);
-
-        $this->createUsersForSecondOrganization($saleRole, $marketingRole);
-    }
-
-    /**
-     * @param Role $salesRole
-     * @param Role $marketingRole
-     */
-    private function createUsersForSecondOrganization(Role $salesRole, Role $marketingRole)
-    {
-        //Load users for second organization
-        $secondOrganization =
-            $this->getReference(LoadAcmeOrganizationAndBusinessUnitData::REFERENCE_DEMO_ORGANIZATION);
-
-        $secondOrganizationBU = $this->getReference(LoadAcmeOrganizationAndBusinessUnitData::REFERENCE_DEMO_BU);
-
-        $secondOrganizationSale = $this->userManager->createUser();
-
-        /** @var Group $salesGroup */
-        $salesGroup = $this->group->findOneBy(['name' => 'Executive Sales', 'owner' => $secondOrganizationBU]);
-        /** Group $marketingGroup */
-        $marketingGroup = $this->group->findOneBy(['name' => 'Executive Marketing', 'owner' => $secondOrganizationBU]);
-
-        $secondOrganizationSale
-            ->setUsername('acmesale')
-            ->setPlainPassword('sale')
-            ->setFirstName('Ellen')
-            ->setLastName('Second')
-            ->addRole($salesRole)
-            ->addGroup($salesGroup)
-            ->setEmail('acmesales@example.com')
-            ->setOrganization($secondOrganization)
-            ->addOrganization($secondOrganization)
-            ->setOwner($secondOrganizationBU)
-            ->setBusinessUnits(
-                new ArrayCollection(
-                    [$secondOrganizationBU]
-                )
-            );
-
-        $this->userManager->updateUser($secondOrganizationSale);
-
-        $secondOrganizationMarketing = $this->userManager->createUser();
-
-        $secondOrganizationMarketing
-            ->setUsername('acmemarketing')
-            ->setPlainPassword('marketing')
-            ->setFirstName('Michael')
-            ->setLastName('Second')
-            ->addRole($marketingRole)
-            ->addGroup($marketingGroup)
-            ->setEmail('acmemarketing@example.com')
-            ->setOrganization($secondOrganization)
-            ->addOrganization($secondOrganization)
-            ->setOwner($secondOrganizationBU)
-            ->setBusinessUnits(
-                new ArrayCollection(
-                    [$secondOrganizationBU]
-                )
-            );
-        $this->userManager->updateUser($secondOrganizationMarketing);
     }
 
     /**
