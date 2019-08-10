@@ -26,5 +26,5 @@ api:
                 data:
                     exclude: true
         Oro\Bundle\ChannelBundle\Entity\EntityName:
-            # this entity does not have own Data API resource
+            # this entity does not have own API resource
             actions: false

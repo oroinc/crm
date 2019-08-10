@@ -54,11 +54,11 @@ api:
                         property_path: emails.email
 
         Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone:
-            # this entity does not have own Data API resource
+            # this entity does not have own API resource
             actions: false
 
         Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail:
-            # this entity does not have own Data API resource
+            # this entity does not have own API resource
             actions: false
 
         Oro\Bundle\SalesBundle\Entity\Lead:
@@ -134,11 +134,11 @@ api:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/lead.md'
 
         Oro\Bundle\SalesBundle\Entity\LeadPhone:
-            # this entity does not have own Data API resource
+            # this entity does not have own API resource
             actions: false
 
         Oro\Bundle\SalesBundle\Entity\LeadEmail:
-            # this entity does not have own Data API resource
+            # this entity does not have own API resource
             actions: false
 
         Oro\Bundle\SalesBundle\Entity\Opportunity:
@@ -162,7 +162,7 @@ api:
             fields:
                 target:
                     data_type: association:manyToOne:customer
-            # this entity does not have own Data API resource
+            # this entity does not have own API resource
             actions: false
 
         Oro\Bundle\SalesBundle\Entity\SalesFunnel:

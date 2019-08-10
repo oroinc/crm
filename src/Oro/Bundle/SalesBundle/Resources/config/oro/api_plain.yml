@@ -1,0 +1,22 @@
+api:
+    entities:
+        Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+            fields:
+                shippingAddress:
+                    collapse: false
+                    fields:
+                        owner:
+                            exclude: true
+                billingAddress:
+                    collapse: false
+                    fields:
+                        owner:
+                            exclude: true
+
+        Oro\Bundle\SalesBundle\Entity\Lead:
+            fields:
+                addresses:
+                    collapse: false
+                    fields:
+                        owner:
+                            exclude: true
