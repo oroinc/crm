@@ -2,13 +2,6 @@ data:
     type: accounts
     id: '<toString(@account1->id)>'
     attributes:
-        extend_description: null
-        lastContactedDate: null
-        lastContactedDateIn: null
-        lastContactedDateOut: null
-        timesContacted: null
-        timesContactedIn: null
-        timesContactedOut: null
         name: 'Account 1'
         createdAt: '@account1->createdAt->format("Y-m-d\TH:i:s\Z")'
         updatedAt: '@account1->updatedAt->format("Y-m-d\TH:i:s\Z")'

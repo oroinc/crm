@@ -501,7 +501,8 @@ class B2bCustomer extends ExtendB2bCustomer implements
      */
     public function prePersist()
     {
-        $this->createdAt = $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = clone $this->createdAt;
     }
 
     /**

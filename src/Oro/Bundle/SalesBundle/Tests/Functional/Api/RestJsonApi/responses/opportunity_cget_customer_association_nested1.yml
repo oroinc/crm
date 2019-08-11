@@ -7,6 +7,14 @@ data:
                 data:
                     type: leads
                     id: '<toString(@lead1->id)>'
+            account:
+                data:
+                    type: accounts
+                    id: '<toString(@account1->id)>'
+            customer:
+                data:
+                    type: b2bcustomers
+                    id: '<toString(@b2b_customer1->id)>'
     -
         type: opportunities
         id: '<toString(@opportunity2->id)>'
@@ -15,12 +23,26 @@ data:
                 data:
                     type: leads
                     id: '<toString(@lead2->id)>'
+            account:
+                data:
+                    type: accounts
+                    id: '<toString(@account1->id)>'
+            customer:
+                data:
+                    type: b2bcustomers
+                    id: '<toString(@b2b_customer1->id)>'
 included:
     -
         type: organizations
         id: '<toString(@organization->id)>'
         attributes:
             name: '@organization->getName()'
+        relationships:
+            users:
+                data:
+                    -
+                        type: users
+                        id: '<toString(@user->id)>'
     -
         type: accounts
         id: '<toString(@account1->id)>'

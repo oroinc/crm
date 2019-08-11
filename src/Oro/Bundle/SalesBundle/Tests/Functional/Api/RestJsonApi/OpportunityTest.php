@@ -32,28 +32,35 @@ class OpportunityTest extends RestJsonApiTestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function cgetDataProvider()
     {
         return [
-            'without parameters'                                                               => [
+            'without parameters'                                                 => [
                 'parameters'      => [],
                 'expectedContent' => 'opportunity_cget.yml'
             ],
-            'filter by status'                                                                 => [
+            'filter by status'                                                   => [
                 'parameters'      => [
                     'filter' => ['status' => 'won']
                 ],
                 'expectedContent' => 'opportunity_cget_filter_by_status.yml'
             ],
-            'fields and include filters for customer association'                              => [
+            'title without fields and include filters'                           => [
+                'parameters'      => [
+                    'meta' => 'title'
+                ],
+                'expectedContent' => 'opportunity_cget_title.yml'
+            ],
+            'fields and include filters for customer association'                => [
                 'parameters'      => [
                     'fields[opportunities]' => 'account,customer',
                     'include'               => 'account,customer'
                 ],
                 'expectedContent' => 'opportunity_cget_customer_association.yml'
             ],
-            'title for customer association'                                                   => [
+            'title for customer association'                                     => [
                 'parameters'      => [
                     'meta'                  => 'title',
                     'fields[opportunities]' => 'account,customer',
@@ -61,25 +68,15 @@ class OpportunityTest extends RestJsonApiTestCase
                 ],
                 'expectedContent' => 'opportunity_cget_customer_association_title.yml'
             ],
-            'fields and include filters for nested customer association'                       => [
+            'fields and include filters for nested customer association'         => [
                 'parameters'      => [
-                    'fields[opportunities]' => 'lead',
+                    'fields[opportunities]' => 'lead,account,customer',
                     'fields[leads]'         => 'account,customer',
                     'include'               => 'lead.account,lead.customer'
                 ],
                 'expectedContent' => 'opportunity_cget_customer_association_nested.yml'
             ],
-            'fields and include filters for nested association of nested customer association' => [
-                'parameters'      => [
-                    'fields[opportunities]' => 'lead',
-                    'fields[leads]'         => 'account',
-                    'fields[accounts]'      => 'name,organization',
-                    'fields[organizations]' => 'name',
-                    'include'               => 'lead.account,lead.account.organization'
-                ],
-                'expectedContent' => 'opportunity_cget_customer_association_nested1.yml'
-            ],
-            'title for nested customer association'                                            => [
+            'title for nested customer association'                              => [
                 'parameters'      => [
                     'meta'                  => 'title',
                     'fields[opportunities]' => 'lead',
@@ -88,7 +85,49 @@ class OpportunityTest extends RestJsonApiTestCase
                 ],
                 'expectedContent' => 'opportunity_cget_customer_association_nested_title.yml'
             ],
-            'title for close reason and status'                                                => [
+            'fields and include filters for nested association of lead.account'  => [
+                'parameters'      => [
+                    'fields[opportunities]' => 'lead,account,customer',
+                    'fields[leads]'         => 'account',
+                    'fields[accounts]'      => 'name,organization',
+                    'fields[organizations]' => 'name,users',
+                    'include'               => 'lead.account.organization'
+                ],
+                'expectedContent' => 'opportunity_cget_customer_association_nested1.yml'
+            ],
+            'title for nested association of lead.account'                       => [
+                'parameters'      => [
+                    'meta'                  => 'title',
+                    'fields[opportunities]' => 'lead,account,customer',
+                    'fields[leads]'         => 'account',
+                    'fields[accounts]'      => 'name,organization',
+                    'fields[organizations]' => 'name,users',
+                    'include'               => 'lead.account.organization'
+                ],
+                'expectedContent' => 'opportunity_cget_customer_association_nested1_title.yml'
+            ],
+            'fields and include filters for nested association of lead.customer' => [
+                'parameters'      => [
+                    'fields[opportunities]' => 'lead,account,customer',
+                    'fields[leads]'         => 'customer',
+                    'fields[b2bcustomers]'  => 'name,organization',
+                    'fields[organizations]' => 'name,users',
+                    'include'               => 'lead.customer.organization'
+                ],
+                'expectedContent' => 'opportunity_cget_customer_association_nested2.yml'
+            ],
+            'title for nested association of lead.customer'                      => [
+                'parameters'      => [
+                    'meta'                  => 'title',
+                    'fields[opportunities]' => 'lead,account,customer',
+                    'fields[leads]'         => 'customer',
+                    'fields[b2bcustomers]'  => 'name,organization',
+                    'fields[organizations]' => 'name,users',
+                    'include'               => 'lead.customer.organization'
+                ],
+                'expectedContent' => 'opportunity_cget_customer_association_nested2_title.yml'
+            ],
+            'title for close reason and status'                                  => [
                 'parameters'      => [
                     'meta'                  => 'title',
                     'fields[opportunities]' => 'closeReason,status',
@@ -102,7 +141,7 @@ class OpportunityTest extends RestJsonApiTestCase
     public function testGet()
     {
         $response = $this->get(
-            ['entity' => 'opportunities', 'id' => $this->getReference('opportunity1')->getId()]
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>']
         );
 
         $this->assertResponseContains('opportunity_get.yml', $response);
@@ -172,147 +211,108 @@ class OpportunityTest extends RestJsonApiTestCase
     public function testGetLeadRelationship()
     {
         $response = $this->getRelationship(
-            [
-                'entity'      => 'opportunities',
-                'id'          => $this->getReference('opportunity1')->getId(),
-                'association' => 'lead'
-            ]
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'lead']
         );
 
-        $this->assertResponseContains('opportunity_get_relationship_lead', $response);
+        $this->assertResponseContains('opportunity_get_relationship_lead.yml', $response);
     }
 
     public function testGetLeadSubresource()
     {
         $response = $this->getSubresource(
-            [
-                'entity'      => 'opportunities',
-                'id'          => $this->getReference('opportunity1')->getId(),
-                'association' => 'lead'
-            ]
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'lead']
         );
 
-        $this->assertResponseContains('opportunity_get_subresource_lead', $response);
+        $this->assertResponseContains('opportunity_get_subresource_lead.yml', $response);
     }
 
     public function testGetAccountRelationship()
     {
         $response = $this->getRelationship(
-            [
-                'entity'      => 'opportunities',
-                'id'          => $this->getReference('opportunity1')->getId(),
-                'association' => 'account'
-            ]
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'account']
         );
 
         $this->assertResponseContains('opportunity_get_relationship_account.yml', $response);
     }
 
-    /**
-     * @param array  $parameters
-     * @param string $expectedDataFileName
-     *
-     * @dataProvider getAccountSubresourceDataProvider
-     */
-    public function testGetAccountSubresource(array $parameters, $expectedDataFileName)
+    public function testGetAccountSubresource()
     {
-        $this->assertNotEmpty($this->getReference('organization')->getName());
-
         $response = $this->getSubresource(
-            [
-                'entity'      => 'opportunities',
-                'id'          => $this->getReference('opportunity1')->getId(),
-                'association' => 'account'
-            ],
-            $parameters
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'account']
         );
-
-        $this->assertResponseContains($expectedDataFileName, $response);
+        $this->assertResponseContains('opportunity_get_subresource_account.yml', $response);
     }
 
-    /**
-     * @return array
-     */
-    public function getAccountSubresourceDataProvider()
+    public function testGetAccountSubresourceWithIncludeFilter()
     {
-        return [
-            'without parameters'         => [
-                'parameters'      => [],
-                'expectedContent' => 'opportunity_get_subresource_account.yml'
-            ],
-            'fields and include filters' => [
-                'parameters'      => [
-                    'fields[accounts]' => 'organization',
-                    'include'          => 'organization'
-                ],
-                'expectedContent' => 'opportunity_get_subresource_account_include.yml'
-            ],
-            'title meta'                 => [
-                'parameters'      => [
-                    'meta' => 'title'
-                ],
-                'expectedContent' => 'opportunity_get_subresource_account_title.yml'
+        $response = $this->getSubresource(
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'account'],
+            [
+                'fields[accounts]' => 'name,organization',
+                'include'          => 'organization'
             ]
-        ];
+        );
+        $this->assertResponseContains('opportunity_get_subresource_account_include.yml', $response);
+    }
+
+    public function testGetAccountSubresourceWithTitle()
+    {
+        $response = $this->getSubresource(
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'account'],
+            ['meta' => 'title']
+        );
+        $this->assertResponseContains('opportunity_get_subresource_account_title.yml', $response);
     }
 
     public function testGetCustomerRelationship()
     {
         $response = $this->getRelationship(
-            [
-                'entity'      => 'opportunities',
-                'id'          => $this->getReference('opportunity1')->getId(),
-                'association' => 'customer'
-            ]
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer']
         );
 
         $this->assertResponseContains('opportunity_get_relationship_customer.yml', $response);
     }
 
-    /**
-     * @param array  $parameters
-     * @param string $expectedDataFileName
-     *
-     * @dataProvider getCustomerSubresourceDataProvider
-     */
-    public function testGetCustomerSubresource(array $parameters, $expectedDataFileName)
+    public function testGetCustomerSubresource()
     {
         $response = $this->getSubresource(
-            [
-                'entity'      => 'opportunities',
-                'id'          => $this->getReference('opportunity1')->getId(),
-                'association' => 'customer'
-            ],
-            $parameters
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer']
         );
-
-        $this->assertResponseContains($expectedDataFileName, $response);
+        $this->assertResponseContains('opportunity_get_subresource_customer.yml', $response);
     }
 
-    /**
-     * @return array
-     */
-    public function getCustomerSubresourceDataProvider()
+    public function testGetCustomerSubresourceWithIncludeFilter()
     {
-        return [
-            'without parameters'         => [
-                'parameters'      => [],
-                'expectedContent' => 'opportunity_get_subresource_customer.yml'
-            ],
-            'fields and include filters' => [
-                'parameters'      => [
-                    'fields[b2bcustomers]' => 'organization',
-                    'include'              => 'organization'
-                ],
-                'expectedContent' => 'opportunity_get_subresource_customer_include.yml'
-            ],
-            'title meta'                 => [
-                'parameters'      => [
-                    'meta' => 'title'
-                ],
-                'expectedContent' => 'opportunity_get_subresource_customer_title.yml'
+        $response = $this->getSubresource(
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer'],
+            [
+                'fields[b2bcustomers]' => 'name,organization',
+                'include'              => 'organization'
             ]
-        ];
+        );
+        $this->assertResponseContains('opportunity_get_subresource_customer_include.yml', $response);
+    }
+
+    public function testGetCustomerSubresourceWithTitle()
+    {
+        $response = $this->getSubresource(
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer'],
+            ['meta' => 'title']
+        );
+        $this->assertResponseContains('opportunity_get_subresource_customer_title.yml', $response);
+    }
+
+    public function testGetCustomerSubresourceWithIncludeFilterAndTitle()
+    {
+        $response = $this->getSubresource(
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer'],
+            [
+                'fields[b2bcustomers]' => 'name,organization',
+                'include'              => 'organization',
+                'meta'                 => 'title'
+            ]
+        );
+        $this->assertResponseContains('opportunity_get_subresource_customer_include_title.yml', $response);
     }
 
     public function testPatchLead()
@@ -414,9 +414,8 @@ class OpportunityTest extends RestJsonApiTestCase
 
     public function testPatchWithInconsistentCustomer()
     {
-        $opportunityId = $this->getReference('opportunity1')->getId();
         $response = $this->patch(
-            ['entity' => 'opportunities', 'id' => $opportunityId],
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>'],
             $this->getRequestData('opportunity_patch_inconsistent_customer.yml'),
             [],
             false
@@ -501,9 +500,8 @@ class OpportunityTest extends RestJsonApiTestCase
 
     public function testPatchAccountAsRelationshipWithNullValue()
     {
-        $opportunityId = $this->getReference('opportunity1')->getId();
         $response = $this->patchRelationship(
-            ['entity' => 'opportunities', 'id' => $opportunityId, 'association' => 'account'],
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'account'],
             ['data' => null],
             [],
             false
@@ -520,9 +518,8 @@ class OpportunityTest extends RestJsonApiTestCase
 
     public function testPatchCustomerAsRelationshipWithNullValue()
     {
-        $opportunityId = $this->getReference('opportunity1')->getId();
         $response = $this->patchRelationship(
-            ['entity' => 'opportunities', 'id' => $opportunityId, 'association' => 'customer'],
+            ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer'],
             ['data' => null],
             [],
             false

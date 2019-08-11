@@ -2,6 +2,8 @@ data:
     -
         type: opportunities
         id: '<toString(@opportunity1->id)>'
+        meta:
+            title: 'Opportunity 1'
         relationships:
             lead:
                 data:
@@ -18,6 +20,8 @@ data:
     -
         type: opportunities
         id: '<toString(@opportunity2->id)>'
+        meta:
+            title: 'Opportunity 2'
         relationships:
             lead:
                 data:
@@ -33,25 +37,26 @@ data:
                     id: '<toString(@b2b_customer1->id)>'
 included:
     -
-        type: accounts
-        id: '<toString(@account1->id)>'
+        type: organizations
+        id: '<toString(@organization->id)>'
+        meta:
+            title: '@organization->getName()'
         attributes:
-            name: 'Account 1'
+            name: '@organization->getName()'
         relationships:
-            organization:
+            users:
                 data:
-                    type: organizations
-                    id: '<toString(@organization->id)>'
+                    -
+                        type: users
+                        id: '<toString(@user->id)>'
     -
         type: b2bcustomers
         id: '<toString(@b2b_customer1->id)>'
+        meta:
+            title: 'B2B Customer 1'
         attributes:
             name: 'B2B Customer 1'
         relationships:
-            account:
-                data:
-                    type: accounts
-                    id: '<toString(@account1->id)>'
             organization:
                 data:
                     type: organizations
@@ -59,11 +64,9 @@ included:
     -
         type: leads
         id: '<toString(@lead1->id)>'
+        meta:
+            title: 'Lead 1'
         relationships:
-            account:
-                data:
-                    type: accounts
-                    id: '<toString(@account1->id)>'
             customer:
                 data:
                     type: b2bcustomers
@@ -71,11 +74,9 @@ included:
     -
         type: leads
         id: '<toString(@lead2->id)>'
+        meta:
+            title: 'Lead 2'
         relationships:
-            account:
-                data:
-                    type: accounts
-                    id: '<toString(@account1->id)>'
             customer:
                 data:
                     type: b2bcustomers

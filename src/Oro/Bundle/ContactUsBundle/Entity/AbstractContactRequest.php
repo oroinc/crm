@@ -9,6 +9,8 @@ use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 
 /**
+ * The base class for entities that are used to store different kind of contact requests.
+ *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  */
@@ -229,7 +231,8 @@ abstract class AbstractContactRequest implements
      */
     public function prePersist()
     {
-        $this->createdAt = $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = clone $this->createdAt;
     }
 
     /**
