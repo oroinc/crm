@@ -103,5 +103,5 @@ api:
         Oro\Bundle\MagentoBundle\Entity\Website:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/website.md'
 
-        # remove this exclusion when NewsletterSubscriber entity will be enabled for Data API
+        # remove this exclusion when NewsletterSubscriber entity will be enabled for API
         Extend\Entity\EV_Mage_Subscr_Status: { exclude: true}

@@ -1,3 +1,27 @@
 data:
     type: b2bcustomers
     id: '<toString(@b2b_customer1->id)>'
+    attributes:
+        name: 'B2B Customer 1'
+        lifetime: '100.0000'
+        primaryPhone: null
+        primaryEmail: null
+        phones: {  }
+        emails: {  }
+    relationships:
+        shippingAddress:
+            data: null
+        billingAddress:
+            data: null
+        account:
+            data:
+                type: accounts
+                id: '<toString(@account1->id)>'
+        contact:
+            data: null
+        owner:
+            data: null
+        organization:
+            data:
+                type: organizations
+                id: '<toString(@organization->id)>'

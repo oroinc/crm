@@ -1,0 +1,25 @@
+data:
+    -
+        type: opportunities
+        id: '<toString(@opportunity1->id)>'
+        meta:
+            title: 'Opportunity 1'
+        attributes:
+            name: 'Opportunity 1'
+        relationships:
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
+    -
+        type: opportunities
+        id: '<toString(@opportunity2->id)>'
+        meta:
+            title: 'Opportunity 2'
+        attributes:
+            name: 'Opportunity 2'
+        relationships:
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'

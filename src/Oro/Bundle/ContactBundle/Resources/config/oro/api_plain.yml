@@ -1,0 +1,12 @@
+api:
+    entities:
+        Oro\Bundle\ContactBundle\Entity\Contact:
+            fields:
+                addresses:
+                    collapse: false
+                    fields:
+                        owner:
+                            exclude: true
+                        types:
+                            order_by:
+                                name: ASC

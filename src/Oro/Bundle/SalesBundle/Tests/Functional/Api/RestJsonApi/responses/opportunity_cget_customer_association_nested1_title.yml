@@ -2,7 +2,13 @@ data:
     -
         type: opportunities
         id: '<toString(@opportunity1->id)>'
+        meta:
+            title: 'Opportunity 1'
         relationships:
+            lead:
+                data:
+                    type: leads
+                    id: '<toString(@lead1->id)>'
             account:
                 data:
                     type: accounts
@@ -14,7 +20,13 @@ data:
     -
         type: opportunities
         id: '<toString(@opportunity2->id)>'
+        meta:
+            title: 'Opportunity 2'
         relationships:
+            lead:
+                data:
+                    type: leads
+                    id: '<toString(@lead2->id)>'
             account:
                 data:
                     type: accounts
@@ -25,8 +37,23 @@ data:
                     id: '<toString(@b2b_customer1->id)>'
 included:
     -
+        type: organizations
+        id: '<toString(@organization->id)>'
+        meta:
+            title: '@organization->getName()'
+        attributes:
+            name: '@organization->getName()'
+        relationships:
+            users:
+                data:
+                    -
+                        type: users
+                        id: '<toString(@user->id)>'
+    -
         type: accounts
         id: '<toString(@account1->id)>'
+        meta:
+            title: 'Account 1'
         attributes:
             name: 'Account 1'
         relationships:
@@ -35,16 +62,22 @@ included:
                     type: organizations
                     id: '<toString(@organization->id)>'
     -
-        type: b2bcustomers
-        id: '<toString(@b2b_customer1->id)>'
-        attributes:
-            name: 'B2B Customer 1'
+        type: leads
+        id: '<toString(@lead1->id)>'
+        meta:
+            title: 'Lead 1'
         relationships:
             account:
                 data:
                     type: accounts
                     id: '<toString(@account1->id)>'
-            organization:
+    -
+        type: leads
+        id: '<toString(@lead2->id)>'
+        meta:
+            title: 'Lead 2'
+        relationships:
+            account:
                 data:
-                    type: organizations
-                    id: '<toString(@organization->id)>'
+                    type: accounts
+                    id: '<toString(@account1->id)>'

@@ -15,6 +15,10 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
+ * Represents a person, a company or a group of people.
+ * The account aggregates details of all the customer identities assigned to it,
+ * providing for a 360-degree view of the customer activity.
+ *
  * @ORM\Entity()
  * @ORM\Table(name="orocrm_account", indexes={@ORM\Index(name="account_name_idx", columns={"name", "id"})})
  * @ORM\HasLifecycleCallbacks()
@@ -374,7 +378,7 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
     public function beforeSave()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = clone $this->createdAt;
     }
 
     /**

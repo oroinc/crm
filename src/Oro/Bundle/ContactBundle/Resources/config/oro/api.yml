@@ -82,11 +82,11 @@ api:
                         update_relationship: false
 
         Oro\Bundle\ContactBundle\Entity\ContactEmail:
-            # this entity does not have own Data API resource
+            # this entity does not have own API resource
             actions: false
 
         Oro\Bundle\ContactBundle\Entity\ContactPhone:
-            # this entity does not have own Data API resource
+            # this entity does not have own API resource
             actions: false
 
         Oro\Bundle\ContactBundle\Entity\Group:

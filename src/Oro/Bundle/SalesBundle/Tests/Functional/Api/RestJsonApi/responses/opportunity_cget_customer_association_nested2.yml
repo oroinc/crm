@@ -3,6 +3,10 @@ data:
         type: opportunities
         id: '<toString(@opportunity1->id)>'
         relationships:
+            lead:
+                data:
+                    type: leads
+                    id: '<toString(@lead1->id)>'
             account:
                 data:
                     type: accounts
@@ -15,6 +19,10 @@ data:
         type: opportunities
         id: '<toString(@opportunity2->id)>'
         relationships:
+            lead:
+                data:
+                    type: leads
+                    id: '<toString(@lead2->id)>'
             account:
                 data:
                     type: accounts
@@ -25,26 +33,39 @@ data:
                     id: '<toString(@b2b_customer1->id)>'
 included:
     -
-        type: accounts
-        id: '<toString(@account1->id)>'
+        type: organizations
+        id: '<toString(@organization->id)>'
         attributes:
-            name: 'Account 1'
+            name: '@organization->getName()'
         relationships:
-            organization:
+            users:
                 data:
-                    type: organizations
-                    id: '<toString(@organization->id)>'
+                    -
+                        type: users
+                        id: '<toString(@user->id)>'
     -
         type: b2bcustomers
         id: '<toString(@b2b_customer1->id)>'
         attributes:
             name: 'B2B Customer 1'
         relationships:
-            account:
-                data:
-                    type: accounts
-                    id: '<toString(@account1->id)>'
             organization:
                 data:
                     type: organizations
                     id: '<toString(@organization->id)>'
+    -
+        type: leads
+        id: '<toString(@lead1->id)>'
+        relationships:
+            customer:
+                data:
+                    type: b2bcustomers
+                    id: '<toString(@b2b_customer1->id)>'
+    -
+        type: leads
+        id: '<toString(@lead2->id)>'
+        relationships:
+            customer:
+                data:
+                    type: b2bcustomers
+                    id: '<toString(@b2b_customer1->id)>'

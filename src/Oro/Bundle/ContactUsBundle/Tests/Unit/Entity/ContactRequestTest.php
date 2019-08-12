@@ -86,7 +86,8 @@ class ContactRequestTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('DateTime', $request->getCreatedAt());
         $this->assertNotNull($request->getUpdatedAt());
         $this->assertInstanceOf('DateTime', $request->getUpdatedAt());
-        $this->assertSame($request->getCreatedAt(), $request->getUpdatedAt());
+        $this->assertEquals($request->getCreatedAt(), $request->getUpdatedAt());
+        $this->assertNotSame($request->getCreatedAt(), $request->getUpdatedAt());
     }
 
     public function testDoPreUpdate()

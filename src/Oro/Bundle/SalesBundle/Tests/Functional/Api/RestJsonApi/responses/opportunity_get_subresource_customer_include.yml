@@ -1,3 +1,22 @@
 data:
     type: b2bcustomers
     id: '<toString(@b2b_customer1->id)>'
+    attributes:
+        name: 'B2B Customer 1'
+    relationships:
+        organization:
+            data:
+                type: organizations
+                id: '<toString(@organization->id)>'
+included:
+    -
+        type: organizations
+        id: '<toString(@organization->id)>'
+        attributes:
+            name: '@organization->getName()'
+        relationships:
+            users:
+                data:
+                    -
+                        type: users
+                        id: '<toString(@user->id)>'

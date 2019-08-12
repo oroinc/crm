@@ -2,5 +2,5 @@ api:
     entities:
 #        Oro\Bundle\ContactUsBundle\Entity\ContactRequest: ~
 
-        # remove this exclusion when ContactRequest entity will be enabled for Data API
+        # remove this exclusion when ContactRequest entity will be enabled for API
         Oro\Bundle\ContactUsBundle\Entity\ContactReason: { exclude: true}
