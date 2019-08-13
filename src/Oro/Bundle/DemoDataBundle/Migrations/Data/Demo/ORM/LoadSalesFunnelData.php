@@ -8,7 +8,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Migrations\Data\Demo\ORM\LoadAcmeOrganizationAndBusinessUnitData;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
@@ -19,6 +19,9 @@ use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Loads sales funnel data
+ */
 class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /** @var array */
@@ -42,17 +45,15 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     /** @var  EntityManager */
     protected $em;
 
-    /** @var Organization */
-    protected $organization;
-
     /**
      * {@inheritdoc}
      */
     public function getDependencies()
     {
         return [
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadOpportunitiesData'
+            LoadLeadsData::class,
+            LoadOpportunitiesData::class,
+            LoadAcmeOrganizationAndBusinessUnitData::class
         ];
     }
 
@@ -70,9 +71,6 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
      */
     public function load(ObjectManager $manager)
     {
-        $this->organization = $this->container->get('doctrine')->getManager()
-            ->getRepository('OroOrganizationBundle:Organization')->getFirst();
-
         $this->initSupportingEntities($manager);
         $this->loadFlows();
     }
@@ -242,7 +240,12 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     protected function setSecurityContext($user)
     {
         $tokenStorage = $this->container->get('security.token_storage');
-        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
+        $token = new UsernamePasswordOrganizationToken(
+            $user,
+            $user->getUsername(),
+            'main',
+            $user->getOrganization()
+        );
         $tokenStorage->setToken($token);
     }
 
