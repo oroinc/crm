@@ -5,23 +5,26 @@ namespace Oro\Bundle\ChannelBundle\EventListener;
 use Akeneo\Bundle\BatchBundle\Event\EventInterface;
 use Akeneo\Bundle\BatchBundle\Event\JobExecutionEvent;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Authentication\Token\ConsoleToken;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * Sets the organization from the job configuration channel to the security context.
+ */
 class JobExecutionSubscriber implements EventSubscriberInterface
 {
-    const CHANNEL_CONFIG = 'channel';
+    private const CHANNEL_CONFIG = 'channel';
 
     /** @var DoctrineHelper */
-    protected $doctrineHelper;
+    private $doctrineHelper;
 
     /** @var TokenStorageInterface */
-    protected $tokenStorage;
+    private $tokenStorage;
 
     /**
-     * @param DoctrineHelper $doctrineHelper
+     * @param DoctrineHelper        $doctrineHelper
      * @param TokenStorageInterface $tokenStorage
      */
     public function __construct(DoctrineHelper $doctrineHelper, TokenStorageInterface $tokenStorage)
@@ -36,7 +39,7 @@ class JobExecutionSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            EventInterface::BEFORE_JOB_EXECUTION => 'beforeJobExecution',
+            EventInterface::BEFORE_JOB_EXECUTION => 'beforeJobExecution'
         ];
     }
 
@@ -46,44 +49,33 @@ class JobExecutionSubscriber implements EventSubscriberInterface
     public function beforeJobExecution(JobExecutionEvent $event)
     {
         $config = $event->getJobExecution()->getJobInstance()->getRawConfiguration();
-        if (!isset($config[static::CHANNEL_CONFIG])) {
+        if (!isset($config[self::CHANNEL_CONFIG])) {
             return;
         }
-        $channelId = $config[static::CHANNEL_CONFIG];
 
-        $integration = $this->getIntegration($channelId);
-        if ($integration) {
-            $this->updateToken($integration);
-        }
-    }
-
-
-    /**
-     * @param int|null $channelId
-     *
-     * @return Integration
-     */
-    protected function getIntegration($channelId = null)
-    {
+        $channelId = $config[self::CHANNEL_CONFIG];
         if (!$channelId) {
             return;
         }
 
-        return $this->doctrineHelper->getEntityRepositoryForClass('OroIntegrationBundle:Channel')
-            ->find($channelId);
+        $channel = $this->doctrineHelper->getEntityRepositoryForClass(Channel::class)->find($channelId);
+        if ($channel) {
+            $this->updateToken($channel);
+        }
     }
 
+
     /**
-     * @param Integration $integration
+     * @param Channel $channel
      */
-    protected function updateToken(Integration $integration)
+    private function updateToken(Channel $channel)
     {
         $token = $this->tokenStorage->getToken();
-        if (!$token) {
+        if (null === $token) {
             $token = new ConsoleToken();
             $this->tokenStorage->setToken($token);
         }
 
-        $token->setOrganizationContext($integration->getOrganization());
+        $token->setOrganization($channel->getOrganization());
     }
 }
