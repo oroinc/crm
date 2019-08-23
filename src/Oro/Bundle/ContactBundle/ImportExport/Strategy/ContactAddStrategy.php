@@ -5,10 +5,13 @@ namespace Oro\Bundle\ContactBundle\ImportExport\Strategy;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\AbstractImportStrategy;
-use Oro\Bundle\SecurityBundle\Authentication\Token\OrganizationContextTokenInterface;
+use Oro\Bundle\SecurityBundle\Authentication\Token\OrganizationAwareTokenInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * The import strategy for adding new Contact entities.
+ */
 class ContactAddStrategy extends AbstractImportStrategy
 {
     /**
@@ -178,8 +181,8 @@ class ContactAddStrategy extends AbstractImportStrategy
         }
         if (!$organization) {
             $token = $this->tokenStorage->getToken();
-            if ($token && $token instanceof OrganizationContextTokenInterface) {
-                $organization = $token->getOrganizationContext();
+            if ($token && $token instanceof OrganizationAwareTokenInterface) {
+                $organization = $token->getOrganization();
             }
         }
         $entity->setOrganization($organization);
