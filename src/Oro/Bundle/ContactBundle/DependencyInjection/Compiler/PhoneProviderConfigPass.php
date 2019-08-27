@@ -2,12 +2,16 @@
 
 namespace Oro\Bundle\ContactBundle\DependencyInjection\Compiler;
 
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * Adds Contact entity to the phone provider service.
+ */
 class PhoneProviderConfigPass implements CompilerPassInterface
 {
-    const SERVICE_KEY = 'oro_address.provider.phone';
+    private const SERVICE_KEY = 'oro_address.provider.phone';
 
     /**
      * {@inheritdoc}
@@ -18,10 +22,7 @@ class PhoneProviderConfigPass implements CompilerPassInterface
             return;
         }
 
-        $serviceDef = $container->getDefinition(self::SERVICE_KEY);
-        $serviceDef->addMethodCall(
-            'addTargetEntity',
-            [$container->getParameter('oro_contact.entity.class')]
-        );
+        $container->getDefinition(self::SERVICE_KEY)
+            ->addMethodCall('addTargetEntity', [Contact::class]);
     }
 }

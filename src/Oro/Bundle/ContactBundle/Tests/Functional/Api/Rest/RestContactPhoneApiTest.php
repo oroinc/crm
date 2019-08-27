@@ -12,9 +12,7 @@ class RestContactPhoneApiTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient([], $this->generateWsseAuthHeader());
-        $this->loadFixtures([
-            'Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactPhoneData'
-        ]);
+        $this->loadFixtures([LoadContactPhoneData::class]);
     }
 
     public function testCreateContactPhone()
@@ -77,13 +75,13 @@ class RestContactPhoneApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_FORBIDDEN);
         $realResponse = json_decode($this->client->getResponse()->getContent());
-        $expectedMessage = "Phone number was not deleted, the contact has ".
-            "more than one phone number, can't set the new primary.";
-        $this->assertEquals(400, $realResponse->code);
+        $this->assertEquals(403, $realResponse->code);
         $this->assertEquals(
-            $expectedMessage,
+            'The delete operation is forbidden. Reason: '
+            . 'Phone number was not deleted, the contact has '
+            . 'more than one phone number, can\'t set the new primary.',
             $realResponse->message
         );
         $this->assertNotEmpty($realResponse->errors->errors);
@@ -121,11 +119,12 @@ class RestContactPhoneApiTest extends WebTestCase
             'id' => $contactEmail->getId()
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
-        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_FORBIDDEN);
         $realResponse = json_decode($this->client->getResponse()->getContent());
-        $this->assertEquals(400, $realResponse->code);
+        $this->assertEquals(403, $realResponse->code);
         $this->assertEquals(
-            "At least one of the fields First name, Last name, Emails or Phones must be defined.",
+            'The delete operation is forbidden. Reason: '
+            . 'At least one of the fields First name, Last name, Emails or Phones must be defined.',
             $realResponse->message
         );
         $this->assertNotEmpty($realResponse->errors->errors);

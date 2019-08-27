@@ -6,12 +6,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 use Oro\Bundle\SalesBundle\Form\Type\LeadPhoneType;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * The form handler for LeadPhone entity.
+ */
 class LeadPhoneHandler
 {
     /** @var FormFactory */
@@ -87,29 +89,6 @@ class LeadPhoneHandler
         }
 
         return false;
-    }
-
-    /**
-     * @param $id
-     * @param ApiEntityManager $manager
-     *
-     * @throws \Exception
-     */
-    public function handleDelete($id, ApiEntityManager $manager)
-    {
-        /** @var LeadPhone $leadPhone */
-        $leadPhone = $manager->find($id);
-        if (!$this->authorizationChecker->isGranted('EDIT', $leadPhone->getOwner())) {
-            throw new AccessDeniedException();
-        }
-
-        if ($leadPhone->isPrimary() && $leadPhone->getOwner()->getPhones()->count() === 1) {
-            $em = $manager->getObjectManager();
-            $em->remove($leadPhone);
-            $em->flush();
-        } else {
-            throw new \Exception("oro.sales.phone.error.delete.more_one", 500);
-        }
     }
 
     /**

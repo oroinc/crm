@@ -6,12 +6,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Form\Type\LeadEmailType;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * The form handler for LeadEmail entity.
+ */
 class LeadEmailHandler
 {
     /** @var FormFactory */
@@ -87,28 +89,6 @@ class LeadEmailHandler
         }
 
         return false;
-    }
-
-    /**
-     * @param $id
-     * @param ApiEntityManager $manager
-     * @throws \Exception
-     */
-    public function handleDelete($id, ApiEntityManager $manager)
-    {
-        /** @var LeadEmail $leadEmail */
-        $leadEmail = $manager->find($id);
-        if (!$this->authorizationChecker->isGranted('EDIT', $leadEmail->getOwner())) {
-            throw new AccessDeniedException();
-        }
-
-        if ($leadEmail->isPrimary() && $leadEmail->getOwner()->getEmails()->count() === 1) {
-            $em = $manager->getObjectManager();
-            $em->remove($leadEmail);
-            $em->flush();
-        } else {
-            throw new \Exception("oro.sales.email.error.delete.more_one", 500);
-        }
     }
 
     /**

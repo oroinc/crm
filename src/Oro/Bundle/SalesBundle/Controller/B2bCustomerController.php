@@ -5,6 +5,8 @@ namespace Oro\Bundle\SalesBundle\Controller;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -13,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
+ * The controller for B2bCustomer entity.
  * @Route("/b2bcustomer")
  */
 class B2bCustomerController extends Controller
@@ -30,7 +33,7 @@ class B2bCustomerController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_sales.b2bcustomer.entity.class')
+            'entity_class' => B2bCustomer::class
         ];
     }
 
@@ -175,8 +178,8 @@ class B2bCustomerController extends Controller
         return [
             'customer'             => $customer,
             'channel'              => $channel,
-            'leadClassName'        => $this->container->getParameter('oro_sales.lead.entity.class'),
-            'opportunityClassName' => $this->container->getParameter('oro_sales.opportunity.class'),
+            'leadClassName'        => Lead::class,
+            'opportunityClassName' => Opportunity::class
         ];
     }
 }

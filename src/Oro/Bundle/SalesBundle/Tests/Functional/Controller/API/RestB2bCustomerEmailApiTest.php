@@ -12,9 +12,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient([], $this->generateWsseAuthHeader());
-        $this->loadFixtures([
-            'Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEmailData'
-        ]);
+        $this->loadFixtures([LoadB2bCustomerEmailData::class]);
     }
 
     public function testCreateB2bCustomerEmail()
@@ -77,10 +75,14 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_b2bcustomer_email', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_FORBIDDEN);
+        $realResponse = json_decode($this->client->getResponse()->getContent());
+        $this->assertEquals(403, $realResponse->code);
         $this->assertEquals(
-            '{"code":500,"message":"oro.sales.email.error.delete.more_one"}',
-            $this->client->getResponse()->getContent()
+            'The delete operation is forbidden. Reason: '
+            . 'Email address was not deleted, the B2B customer has '
+            . 'more than one email addresses, can\'t set the new primary.',
+            $realResponse->message
         );
     }
 

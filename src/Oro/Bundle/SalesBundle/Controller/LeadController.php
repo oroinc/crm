@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
+ * The controller for Lead entity.
  * @Route("/lead")
  */
 class LeadController extends Controller
@@ -97,7 +98,7 @@ class LeadController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_sales.lead.entity.class')
+            'entity_class' => Lead::class
         ];
     }
 

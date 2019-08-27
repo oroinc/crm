@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for LeadPhone entity.
+ *
  * @RouteResource("phone")
  * @NamePrefix("oro_api_")
  */
@@ -81,13 +83,5 @@ class LeadPhoneController extends RestController implements ClassResourceInterfa
     public function getForm()
     {
         return $this->get('oro_sales.form.type.lead_phone.type');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDeleteHandler()
-    {
-        return $this->get('oro_sales.form.type.lead_phone.handler');
     }
 }

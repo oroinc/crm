@@ -2,12 +2,16 @@
 
 namespace Oro\Bundle\ContactBundle\DependencyInjection\Compiler;
 
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * Adds Contact entity to the email provider service.
+ */
 class EmailHolderHelperConfigPass implements CompilerPassInterface
 {
-    const SERVICE_KEY = 'oro_email.email_holder_helper';
+    private const SERVICE_KEY = 'oro_email.email_holder_helper';
 
     /**
      * {@inheritdoc}
@@ -18,10 +22,7 @@ class EmailHolderHelperConfigPass implements CompilerPassInterface
             return;
         }
 
-        $serviceDef = $container->getDefinition(self::SERVICE_KEY);
-        $serviceDef->addMethodCall(
-            'addTargetEntity',
-            [$container->getParameter('oro_contact.entity.class')]
-        );
+        $container->getDefinition(self::SERVICE_KEY)
+            ->addMethodCall('addTargetEntity', [Contact::class]);
     }
 }

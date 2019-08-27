@@ -5,13 +5,14 @@ namespace Oro\Bundle\ContactBundle\Form\Handler;
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
-use Oro\Bundle\ContactBundle\Validator\ContactEmailDeleteValidator;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * The form handler for ContactEmail entity.
+ */
 class ContactEmailHandler
 {
     /** @var FormInterface */
@@ -23,9 +24,6 @@ class ContactEmailHandler
     /** @var EntityManagerInterface */
     protected $manager;
 
-    /** @var  ContactEmailDeleteValidator */
-    protected $contactEmailDeleteValidator;
-
     /** @var AuthorizationCheckerInterface */
     protected $authorizationChecker;
 
@@ -33,20 +31,17 @@ class ContactEmailHandler
      * @param FormInterface $form
      * @param RequestStack $requestStack
      * @param EntityManagerInterface $manager
-     * @param ContactEmailDeleteValidator $contactEmailDeleteValidator
      * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         FormInterface $form,
         RequestStack $requestStack,
         EntityManagerInterface $manager,
-        ContactEmailDeleteValidator $contactEmailDeleteValidator,
         AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->form = $form;
         $this->requestStack = $requestStack;
         $this->manager = $manager;
-        $this->contactEmailDeleteValidator = $contactEmailDeleteValidator;
         $this->authorizationChecker = $authorizationChecker;
     }
 
@@ -92,26 +87,6 @@ class ContactEmailHandler
         }
 
         return false;
-    }
-
-    /**
-     * @param $id
-     * @param ApiEntityManager $manager
-     * @throws \Exception
-     */
-    public function handleDelete($id, ApiEntityManager $manager)
-    {
-        /** @var ContactEmail $contactEmail */
-        $contactEmail = $manager->find($id);
-        if (!$this->authorizationChecker->isGranted('EDIT', $contactEmail->getOwner())) {
-            throw new AccessDeniedException();
-        }
-
-        if ($this->contactEmailDeleteValidator->validate($contactEmail)) {
-            $em = $manager->getObjectManager();
-            $em->remove($contactEmail);
-            $em->flush();
-        }
     }
 
     /**

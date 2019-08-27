@@ -1,43 +1,6 @@
-parameters:
-    oro_sales.opportunity.form.type.class: Oro\Bundle\SalesBundle\Form\Type\OpportunityType
-    oro_sales.opportunity.form.type.api.class: Oro\Bundle\SalesBundle\Form\Type\OpportunityApiType
-    oro_sales.lead_to_opportunity.form.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType
-    oro_sales.lead_to_opportunity.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\LeadToOpportunityHandler
-
-    oro_sales.lead.form.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadType
-    oro_sales.lead.address.form.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadAddressType
-    oro_sales.lead.form.type.api.class: Oro\Bundle\SalesBundle\Form\Type\LeadApiType
-    oro_sales.lead.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\LeadHandler
-    oro_sales.lead_phone.form.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadPhoneType
-    oro_sales.lead_phone.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\LeadPhoneHandler
-
-    oro_sales.form.type.lead_select.class:        Oro\Bundle\SalesBundle\Form\Type\LeadSelectType
-    oro_sales.form.type.opportunity_select.class: Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType
-    oro_sales.form.type.b2bcustomer_select.class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType
-
-    oro_sales.salesfunnel.form.type.class: Oro\Bundle\SalesBundle\Form\Type\SalesFunnelType
-    oro_sales.salesfunnel.form.type.api.class: Oro\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
-    oro_sales.salesfunnel.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
-
-    oro_sales.b2bcustomer.form.type.class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType
-    oro_sales.b2bcustomer.form.type.api.class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerApiType
-    oro_sales.b2bcustomer.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler
-
-    oro_sales.form.type.b2bcustomer_phone.class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerPhoneType
-    oro_sales.form.type.b2bcustomer_email.class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerEmailType
-
-    oro_sales.form.handler.b2bcustomer_phone.class: Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerPhoneHandler
-    oro_sales.form.handler.b2bcustomer_email.class: Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerEmailHandler
-
-    oro_sales.mailbox_process.lead.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSettingsType
-    oro_sales.lead_mailbox_process_source.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSourceType
-
-    oro_sales.lead_email.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadEmailType
-    oro_sales.lead_email.handler.class: Oro\Bundle\SalesBundle\Form\Handler\LeadEmailHandler
-
 services:
     oro_sales.opportunity.form.type:
-        class: '%oro_sales.opportunity.form.type.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\OpportunityType
         arguments:
             - '@oro_sales.provider.probability'
             - '@oro_entity_extend.enum_value_provider'
@@ -71,13 +34,13 @@ services:
             - { name: form.type, alias: oro_sales_opportunity_status_enum_value }
 
     oro_sales.opportunity.form.type.api:
-        class: '%oro_sales.opportunity.form.type.api.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\OpportunityApiType
         parent: oro_sales.opportunity.form.type
         tags:
             - { name: form.type, alias: oro_sales_opportunity_api }
 
     oro_sales.lead_to_opportunity.form.type:
-        class: '%oro_sales.lead_to_opportunity.form.type.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType
         tags:
             - { name: form.type, alias: oro_sales_lead_to_opportunity }
 
@@ -119,7 +82,7 @@ services:
         alias: oro_sales.opportunity.form.handler
 
     oro_sales.lead_to_opportunity.form.handler:
-        class: '%oro_sales.lead_to_opportunity.form.handler.class%'
+        class: Oro\Bundle\SalesBundle\Form\Handler\LeadToOpportunityHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -142,17 +105,17 @@ services:
             - "@logger"
 
     oro_sales.lead.form.type:
-        class: '%oro_sales.lead.form.type.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\LeadType
         tags:
             - { name: form.type, alias: oro_sales_lead }
 
     oro_sales.lead.address.form.type:
-        class: '%oro_sales.lead.address.form.type.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\LeadAddressType
         tags:
             - { name: form.type, alias: oro_sales_lead_address }
 
     oro_sales.lead.form.type.api:
-        class: '%oro_sales.lead.form.type.api.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\LeadApiType
         tags:
             - { name: form.type, alias: oro_sales_lead_api }
 
@@ -175,7 +138,7 @@ services:
             - Oro\Bundle\SalesBundle\Form\Type\LeadApiType
 
     oro_sales.lead.form.handler:
-        class: '%oro_sales.lead.form.handler.class%'
+        class: Oro\Bundle\SalesBundle\Form\Handler\LeadHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -185,7 +148,7 @@ services:
             - "@oro_channel.provider.request_channel"
 
     oro_sales.lead.form.handler.api:
-        class: '%oro_sales.lead.form.handler.class%'
+        class: Oro\Bundle\SalesBundle\Form\Handler\LeadHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -203,7 +166,7 @@ services:
             - "oro_sales_lead_address_form"
             - Oro\Bundle\SalesBundle\Form\Type\LeadAddressType
             - ~
-            - { data_class: '%oro_sales.leadaddress.entity.class%' }
+            - { data_class: 'Oro\Bundle\SalesBundle\Entity\LeadAddress' }
 
     oro_sales.lead_address.form.handler:
         class: '%oro_address.form.handler.address.class%'
@@ -215,17 +178,17 @@ services:
             - "@doctrine.orm.entity_manager"
 
     oro_sales.form.type.opportunity_select:
-        class: '%oro_sales.form.type.opportunity_select.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType
         tags:
             - { name: form.type, alias: oro_sales_opportunity_select }
 
     oro_sales.form.type.lead_select:
-        class: '%oro_sales.form.type.lead_select.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\LeadSelectType
         tags:
             - { name: form.type, alias: "oro_sales_lead_select" }
 
     oro_sales.form.type.b2bcustomer_select:
-        class: '%oro_sales.form.type.b2bcustomer_select.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType
         tags:
             - { name: form.type, alias: oro_sales_b2bcustomer_select }
 
@@ -237,12 +200,12 @@ services:
             - { name: form.type, alias: oro_sales_opportunity_status_select }
 
     oro_sales.salesfunnel.form.type:
-        class: '%oro_sales.salesfunnel.form.type.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\SalesFunnelType
         tags:
             - { name: form.type, alias: "oro_sales_funnel" }
 
     oro_sales.salesfunnel.form.type.api:
-        class: '%oro_sales.salesfunnel.form.type.api.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
         tags:
             - { name: form.type, alias: "oro_sales_salesfunnel_api" }
 
@@ -265,7 +228,7 @@ services:
             - Oro\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
 
     oro_sales.salesfunnel.form.handler:
-        class: '%oro_sales.salesfunnel.form.handler.class%'
+        class: Oro\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -274,7 +237,7 @@ services:
             - "@doctrine.orm.entity_manager"
 
     oro_sales.salesfunnel.form.handler.api:
-        class: '%oro_sales.salesfunnel.form.handler.class%'
+        class: Oro\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -283,26 +246,26 @@ services:
             - "@doctrine.orm.entity_manager"
 
     oro_sales.b2bcustomer.form.type:
-        class: '%oro_sales.b2bcustomer.form.type.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType
         arguments:
             - "@property_accessor"
         tags:
             - { name: form.type, alias: oro_sales_b2bcustomer }
 
     oro_sales.b2bcustomer.form.type.api:
-        class: '%oro_sales.b2bcustomer.form.type.api.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerApiType
         arguments:
             - '@property_accessor'
         tags:
             - { name: form.type, alias: oro_sales_b2bcustomer_api }
 
     oro_sales.mailbox_process.lead.type:
-        class: '%oro_sales.mailbox_process.lead.type.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSettingsType
         tags:
             - { name: form.type, alias: oro_sales_lead_mailbox_process_settings }
 
     oro_sales.lead_mailbox_process_source.type:
-        class: '%oro_sales.lead_mailbox_process_source.type.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSourceType
         arguments:  ["@oro_entity_extend.enum_value_provider"]
         tags:
             - { name: form.type, alias: oro_sales_lead_mailbox_process_source }
@@ -324,7 +287,7 @@ services:
             - Oro\Bundle\SalesBundle\Form\Type\B2bCustomerApiType
 
     oro_sales.b2bcustomer.form.handler:
-        class: '%oro_sales.b2bcustomer.form.handler.class%'
+        class: Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler
         public: true
         arguments:
             - "@oro_sales.b2bcustomer.form"
@@ -333,7 +296,7 @@ services:
             - "@oro_channel.provider.request_channel"
 
     oro_sales.b2bcustomer.form.handler.api:
-        class: '%oro_sales.b2bcustomer.form.handler.class%'
+        class: Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler
         public: true
         arguments:
             - "@oro_sales.b2bcustomer.form.api"
@@ -363,14 +326,14 @@ services:
             - { name: form.type, alias: oro_type_widget_lead_status_select }
 
     oro_sales.form.type.lead_phone.type:
-        class: '%oro_sales.lead_phone.form.type.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\LeadPhoneType
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         tags:
             - { name: form.type, alias: oro_sales_lead_phone }
 
     oro_sales.form.type.lead_phone.handler:
-        class: '%oro_sales.lead_phone.form.handler.class%'
+        class: Oro\Bundle\SalesBundle\Form\Handler\LeadPhoneHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -380,14 +343,14 @@ services:
             - "@security.authorization_checker"
 
     oro_sales.form.type.lead_email.type:
-        class: '%oro_sales.lead_email.type.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\LeadEmailType
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         tags:
             - { name: form.type, alias: oro_sales_lead_email }
 
     oro_sales.form.type.lead_email.handler:
-        class: '%oro_sales.lead_email.handler.class%'
+        class: Oro\Bundle\SalesBundle\Form\Handler\LeadEmailHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -402,19 +365,18 @@ services:
         arguments: ["oro_b2bcustomer_phone", Oro\Bundle\SalesBundle\Form\Type\B2bCustomerPhoneType, null]
 
     oro_sales.form.type.b2bcustomer_phone.type:
-        class: '%oro_sales.form.type.b2bcustomer_phone.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerPhoneType
         public: true
         tags:
             - { name: form.type, alias: oro_b2bcustomer_phone }
 
     oro_sales.form.type.b2bcustomer_phone.handler:
-        class: '%oro_sales.form.handler.b2bcustomer_phone.class%'
+        class: Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerPhoneHandler
         public: true
         arguments:
             - "@oro_sales.form.type.b2bcustomer_phone"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
-            - "@oro_sales.validator.b2bcustomer_phone_delete"
             - "@security.authorization_checker"
 
     oro_sales.form.type.b2bcustomer_email:
@@ -423,19 +385,18 @@ services:
         arguments: ["oro_b2bcustomer_email", Oro\Bundle\SalesBundle\Form\Type\B2bCustomerEmailType, null]
 
     oro_sales.form.type.b2bcustomer_email.type:
-        class: '%oro_sales.form.type.b2bcustomer_email.class%'
+        class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerEmailType
         public: true
         tags:
             - { name: form.type, alias: oro_b2bcustomer_email }
 
     oro_sales.form.type.b2bcustomer_email.handler:
-        class: '%oro_sales.form.handler.b2bcustomer_email.class%'
+        class: Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerEmailHandler
         public: true
         arguments:
             - "@oro_sales.form.type.b2bcustomer_email"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
-            - "@oro_sales.validator.b2bcustomer_email_delete"
             - "@security.authorization_checker"
 
     oro_sales.form.type.customer:

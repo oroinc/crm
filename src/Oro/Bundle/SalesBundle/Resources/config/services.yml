@@ -1,108 +1,57 @@
-parameters:
-    oro_sales.opportunity.class:                          Oro\Bundle\SalesBundle\Entity\Opportunity
-    oro_sales.opportunity.manager.api.class:              Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-
-    oro_sales.lead.entity.class:                          Oro\Bundle\SalesBundle\Entity\Lead
-    oro_sales.leadaddress.entity.class:                   Oro\Bundle\SalesBundle\Entity\LeadAddress
-    oro_sales.lead.manager.api.class:                     Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-    oro_sales.lead_address.manager.api.class:             Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-
-    oro_sales.lead_email.entity.class:                    Oro\Bundle\SalesBundle\Entity\LeadEmail
-    oro_sales.lead_email.manager.api.class:               Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-
-    oro_sales.lead_phone.entity.class:                    Oro\Bundle\SalesBundle\Entity\LeadPhone
-    oro_sales.handler.lead_phone_api.class:               Oro\Bundle\SalesBundle\Handler\LeadPhoneApiHandler
-    oro_sales.lead_phone.manager.api.class:               Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-
-    oro_sales.lead.datagrid_helper.class:                 Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
-
-    oro_sales.salesfunnel.entity.class:                   Oro\Bundle\SalesBundle\Entity\SalesFunnel
-    oro_sales.salesfunnel.manager.api.class:              Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-
-    oro_sales.b2bcustomer.entity.class:                   Oro\Bundle\SalesBundle\Entity\B2bCustomer
-    oro_sales.b2bcustomer.manager.api.class:              Oro\Bundle\SalesBundle\Entity\Manager\B2bCustomerApiEntityManager
-
-    oro_sales.b2bcustomer_phone.entity.class:             Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone
-    oro_sales.b2bcustomer_email.entity.class:             Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail
-
-    oro_sales.validator.b2bcustomer_email_delete.class:   Oro\Bundle\SalesBundle\Validator\B2bCustomerEmailDeleteValidator
-    oro_sales.validator.b2bcustomer_phone_delete.class:   Oro\Bundle\SalesBundle\Validator\B2bCustomerPhoneDeleteValidator
-
-    oro_sales.event_listener.b2bcustomer_lifetime.class:  Oro\Bundle\SalesBundle\EventListener\B2bCustomerLifetimeListener
-
-    oro_sales.provider.phone.lead.class:                  Oro\Bundle\SalesBundle\Provider\LeadPhoneProvider
-    oro_sales.provider.phone.opportunity.class:           Oro\Bundle\SalesBundle\Provider\OpportunityPhoneProvider
-    oro_sales.provider.phone.b2bcustomer.class:           Oro\Bundle\SalesBundle\Provider\B2bCustomerPhoneProvider
-
-    oro_sales.provider.mailbox_process.lead.class:        Oro\Bundle\SalesBundle\Provider\LeadMailboxProcessProvider
-
-    oro_sales.provider.forecast_of_opportunity.class:     Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities
-
-    oro_sales.opportunity.datagrid_view_list.class:       Oro\Bundle\SalesBundle\Datagrid\OpportunityViewList
-    oro_sales.lead.datagrid_view_list.class:              Oro\Bundle\SalesBundle\Datagrid\LeadViewList
-
-    oro_sales.provider.privilege_category_provider.class: Oro\Bundle\SalesBundle\Provider\PrivilegeCategoryProvider
-
-    oro_sales.provider.b2b_statistics.class:              Oro\Bundle\SalesBundle\Provider\B2bBigNumberProvider
-    oro_sales.autocomplete.forecast_widget_business_unit.search_handler.class: Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
-    oro_sales.autocomplete.business_customer.search_handler.class:  Oro\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
-
-    oro_sales.model.change_lead_status.class: Oro\Bundle\SalesBundle\Model\ChangeLeadStatus
-
 services:
     oro_sales.opportunity.manager.api:
-        class: '%oro_sales.opportunity.manager.api.class%'
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_sales.opportunity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\Opportunity'
             - '@doctrine.orm.entity_manager'
 
     oro_sales.lead.manager.api:
-        class: '%oro_sales.lead.manager.api.class%'
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_sales.lead.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\Lead'
             - '@doctrine.orm.entity_manager'
 
     oro_sales.lead_address.manager.api:
-        class: '%oro_sales.lead_address.manager.api.class%'
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_sales.leadaddress.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\LeadAddress'
             - "@doctrine.orm.entity_manager"
 
     oro_sales.lead_email.manager.api:
-        class: '%oro_sales.lead_email.manager.api.class%'
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_sales.lead_email.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\LeadEmail'
             - "@doctrine.orm.entity_manager"
 
     oro_sales.salesfunnel.manager.api:
-        class: '%oro_sales.salesfunnel.manager.api.class%'
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_sales.salesfunnel.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\SalesFunnel'
             - '@doctrine.orm.entity_manager'
 
     oro_sales.lead.datagrid_helper:
-        class: '%oro_sales.lead.datagrid_helper.class%'
+        class: Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
         public: true
 
     oro_sales.form.autocomplete.opportunity.search_handler:
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
-            - '%oro_sales.opportunity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\Opportunity'
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: opportunities, acl_resource: oro_sales_opportunity_view }
@@ -111,7 +60,7 @@ services:
     oro_sales.form.autocomplete.lead.search_handler:
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
-            - '%oro_sales.lead.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\Lead'
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: leads, acl_resource: oro_sales_lead_view }
@@ -120,17 +69,17 @@ services:
     oro_sales.form.autocomplete.b2bcustomer.search_handler:
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
-            - '%oro_sales.b2bcustomer.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\B2bCustomer'
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: b2b_customers, acl_resource: oro_sales_b2bcustomer_view }
         lazy: true
 
     oro_sales.form.autocomplete.b2b_customers_with_channel.search_handler:
-        class: '%oro_sales.autocomplete.business_customer.search_handler.class%'
+        class: Oro\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
-            - '%oro_sales.b2bcustomer.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\B2bCustomer'
             - ["name", "account.name", "dataChannel.id"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: b2b_customers_with_channel, acl_resource: oro_sales_b2bcustomer_view }
@@ -143,15 +92,15 @@ services:
             - 'Oro\Bundle\SalesBundle\Entity'
 
     oro_sales.b2bcustomer.manager.api:
-        class: '%oro_sales.b2bcustomer.manager.api.class%'
+        class: Oro\Bundle\SalesBundle\Entity\Manager\B2bCustomerApiEntityManager
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_sales.b2bcustomer.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\B2bCustomer'
             - '@doctrine.orm.entity_manager'
 
     oro_sales.event_listener.b2bcustomer_lifetime:
-        class: '%oro_sales.event_listener.b2bcustomer_lifetime.class%'
+        class: Oro\Bundle\SalesBundle\EventListener\B2bCustomerLifetimeListener
         arguments:
             - '@oro_currency.converter.rate.link'
             - '@oro_currency.query.currency_transformer'
@@ -165,7 +114,7 @@ services:
             - '@oro_config.user'
             - '@oro_workflow.restriction.manager'
         tags:
-            - { name: doctrine.orm.entity_listener, entity: '%oro_sales.opportunity.class%', event: preUpdate }
+            - { name: doctrine.orm.entity_listener, entity: Oro\Bundle\SalesBundle\Entity\Opportunity, event: preUpdate }
 
     oro_sales.event_listener.config.default_probability:
         class: Oro\Bundle\SalesBundle\EventListener\Config\DefaultProbabilityListener
@@ -173,29 +122,29 @@ services:
             - { name: kernel.event_listener, event: oro_config.get.oro_crm_sales.default_opportunity_probabilities, method: loadConfig }
 
     oro_sales.provider.phone.lead:
-        class: '%oro_sales.provider.phone.lead.class%'
+        class: Oro\Bundle\SalesBundle\Provider\LeadPhoneProvider
         tags:
-            - { name: oro_address.phone_provider, class: '%oro_sales.lead.entity.class%' }
+            - { name: oro_address.phone_provider, class: Oro\Bundle\SalesBundle\Entity\Lead }
 
     oro_sales.provider.phone.opportunity:
-        class: '%oro_sales.provider.phone.opportunity.class%'
+        class: Oro\Bundle\SalesBundle\Provider\OpportunityPhoneProvider
         tags:
-            - { name: oro_address.phone_provider, class: '%oro_sales.opportunity.class%' }
+            - { name: oro_address.phone_provider, class: Oro\Bundle\SalesBundle\Entity\Opportunity }
 
     oro_sales.provider.phone.b2bcustomer:
-        class: '%oro_sales.provider.phone.b2bcustomer.class%'
+        class: Oro\Bundle\SalesBundle\Provider\B2bCustomerPhoneProvider
         tags:
-            - { name: oro_address.phone_provider, class: '%oro_sales.b2bcustomer.entity.class%' }
+            - { name: oro_address.phone_provider, class: Oro\Bundle\SalesBundle\Entity\B2bCustomer }
 
     oro_sales.provider.mailbox_process.lead:
-        class: '%oro_sales.provider.mailbox_process.lead.class%'
+        class: Oro\Bundle\SalesBundle\Provider\LeadMailboxProcessProvider
         arguments:
             - '@doctrine'
         tags:
             - { name: oro_email.mailbox_process, type: lead }
 
     oro_sales.provider.forecast_of_opportunities:
-        class: '%oro_sales.provider.forecast_of_opportunity.class%'
+        class: Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities
         public: true
         arguments:
             - '@oro_locale.formatter.number'
@@ -213,7 +162,7 @@ services:
             - '@oro_config.user'
 
     oro_sales.provider.b2b_statistics:
-        class: '%oro_sales.provider.b2b_statistics.class%'
+        class: Oro\Bundle\SalesBundle\Provider\B2bBigNumberProvider
         abstract: true
         arguments:
             - '@doctrine'
@@ -254,24 +203,24 @@ services:
             - { name: oro_entity.name_provider, priority: 100 }
 
     oro_sales.autocomplete.forecast_widget_business_unit.search_handler:
-        class: '%oro_sales.autocomplete.forecast_widget_business_unit.search_handler.class%'
+        class: Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
         parent: oro_form.autocomplete.search_handler
         arguments:
             - '%oro_organization.business_unit.entity.class%'
             - ["name"]
             - '@oro_organization.provider.busines_unit_acl'
-            - '%oro_sales.opportunity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\Opportunity'
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: forecast_widget_business_units }
 
     oro_sales.opportunity.datagrid_view_list:
-        class: '%oro_sales.opportunity.datagrid_view_list.class%'
+        class: Oro\Bundle\SalesBundle\Datagrid\OpportunityViewList
         public: true
         arguments:
             - '@translator'
 
     oro_sales.lead.datagrid_view_list:
-        class: '%oro_sales.lead.datagrid_view_list.class%'
+        class: Oro\Bundle\SalesBundle\Datagrid\LeadViewList
         public: true
         arguments:
             - '@translator'
@@ -342,12 +291,30 @@ services:
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
+    oro_sales.delete_handler_extension.b2bcustomer_email:
+        class: Oro\Bundle\SalesBundle\Handler\B2bCustomerEmailDeleteHandlerExtension
+        parent: oro_entity.delete_handler_extension
+        arguments:
+            - '@security.authorization_checker'
+            - '@translator'
+        tags:
+            - { name: oro_entity.delete_handler_extension, entity: Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail }
+
+    oro_sales.delete_handler_extension.b2bcustomer_phone:
+        class: Oro\Bundle\SalesBundle\Handler\B2bCustomerPhoneDeleteHandlerExtension
+        parent: oro_entity.delete_handler_extension
+        arguments:
+            - '@security.authorization_checker'
+            - '@translator'
+        tags:
+            - { name: oro_entity.delete_handler_extension, entity: Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone }
+
     oro_sales.b2bcustomer_phone.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_sales.b2bcustomer_phone.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone'
             - "@doctrine.orm.entity_manager"
 
     oro_sales.b2bcustomer_phone.api.handler:
@@ -363,7 +330,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_sales.b2bcustomer_email.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail'
             - "@doctrine.orm.entity_manager"
 
     oro_sales.b2bcustomer_email.api.handler:
@@ -374,28 +341,40 @@ services:
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
-    oro_sales.validator.b2bcustomer_email_delete:
-        class: '%oro_sales.validator.b2bcustomer_email_delete.class%'
-
-    oro_sales.validator.b2bcustomer_phone_delete:
-        class: '%oro_sales.validator.b2bcustomer_phone_delete.class%'
-
     oro_sales.provider.privilege_category_provider:
-        class: '%oro_sales.provider.privilege_category_provider.class%'
+        class: Oro\Bundle\SalesBundle\Provider\PrivilegeCategoryProvider
         tags:
             - { name: oro_user.privilege_category}
 
+    oro_sales.delete_handler_extension.lead_email:
+        class: Oro\Bundle\SalesBundle\Handler\LeadEmailDeleteHandlerExtension
+        parent: oro_entity.delete_handler_extension
+        arguments:
+            - '@security.authorization_checker'
+            - '@translator'
+        tags:
+            - { name: oro_entity.delete_handler_extension, entity: Oro\Bundle\SalesBundle\Entity\LeadEmail }
+
+    oro_sales.delete_handler_extension.lead_phone:
+        class: Oro\Bundle\SalesBundle\Handler\LeadPhoneDeleteHandlerExtension
+        parent: oro_entity.delete_handler_extension
+        arguments:
+            - '@security.authorization_checker'
+            - '@translator'
+        tags:
+            - { name: oro_entity.delete_handler_extension, entity: Oro\Bundle\SalesBundle\Entity\LeadPhone }
+
     oro_sales.lead_phone.manager.api:
-        class: '%oro_sales.lead_phone.manager.api.class%'
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_sales.lead_phone.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\LeadPhone'
             - "@doctrine.orm.entity_manager"
 
     oro_sales.handler.lead_phone_api:
-        class: '%oro_sales.handler.lead_phone_api.class%'
+        class: Oro\Bundle\SalesBundle\Handler\LeadPhoneApiHandler
         arguments:
             - "@doctrine"
             - "@security.authorization_checker"
@@ -403,7 +382,7 @@ services:
             - { name: oro_entity.form.entity_field.handler }
 
     oro_sales.model.change_lead_status:
-        class: '%oro_sales.model.change_lead_status.class%'
+        class: Oro\Bundle\SalesBundle\Model\ChangeLeadStatus
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -645,7 +624,7 @@ services:
         class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\RelatedEntitiesExtension
         arguments:
             - '@oro_sales.customer.config_provider'
-            - '%oro_sales.opportunity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\Opportunity'
         tags:
             - { name: oro_datagrid.extension }
 
@@ -653,7 +632,7 @@ services:
         class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\RelatedEntitiesExtension
         arguments:
             - '@oro_sales.customer.config_provider'
-            - '%oro_sales.lead.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\Lead'
         tags:
             - { name: oro_datagrid.extension }
 
@@ -706,7 +685,7 @@ services:
         tags:
            - { name: oro_entity.virtual_relation_provider, priority: 150 }
         calls:
-           - [setSourceClass, ['%oro_sales.lead.entity.class%']]
+           - [setSourceClass, [ Oro\Bundle\SalesBundle\Entity\Lead ]]
 
     oro_sales.customer_virtual_relations.provider.opportunity:
        parent: oro_sales.customer_virtual_relations.provider
@@ -714,13 +693,13 @@ services:
        tags:
           - { name: oro_entity.virtual_relation_provider, priority: 150 }
        calls:
-          - [setSourceClass, ['%oro_sales.opportunity.class%']]
+          - [setSourceClass, [ Oro\Bundle\SalesBundle\Entity\Opportunity ]]
 
     oro_sales.b2bcustomer_virtual_relations.provider:
         class: Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider
         public: false
         arguments:
-            - '%oro_sales.b2bcustomer.entity.class%'
+            - 'Oro\Bundle\SalesBundle\Entity\B2bCustomer'
         tags:
            - { name: oro_entity.virtual_relation_provider, priority: 150 }
 

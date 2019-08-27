@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ * The controller for Group entity.
  * @Route("/group")
  */
 class GroupController extends Controller
@@ -72,7 +73,7 @@ class GroupController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_contact.group.entity.class')
+            'entity_class' => Group::class
         ];
     }
 
