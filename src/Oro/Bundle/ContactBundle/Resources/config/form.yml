@@ -1,11 +1,3 @@
-parameters:
-    oro_contact.form.type.contact_phone.class: Oro\Bundle\ContactBundle\Form\Type\ContactPhoneType
-    oro_contact.form.type.contact_email.class: Oro\Bundle\ContactBundle\Form\Type\ContactEmailType
-
-    #handler
-    oro_contact.form.handler.contact_phone.class: Oro\Bundle\ContactBundle\Form\Handler\ContactPhoneHandler
-    oro_contact.form.handler.contact_email.class: Oro\Bundle\ContactBundle\Form\Handler\ContactEmailHandler
-
 services:
     oro_contact.form.type.contact_phone:
         class: Symfony\Component\Form\Form
@@ -13,21 +5,20 @@ services:
         arguments: ["oro_contact_phone", Oro\Bundle\ContactBundle\Form\Type\ContactPhoneType, null]
 
     oro_contact.form.type.contact_phone.type:
-        class: '%oro_contact.form.type.contact_phone.class%'
+        class: Oro\Bundle\ContactBundle\Form\Type\ContactPhoneType
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         tags:
             - { name: form.type, alias: oro_contact_phone }
 
     oro_contact.form.type.contact_phone.handler:
-        class: '%oro_contact.form.handler.contact_phone.class%'
+        class: Oro\Bundle\ContactBundle\Form\Handler\ContactPhoneHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_contact.form.type.contact_phone"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
-            - "@oro_contact.validator.contact_phone_delete"
             - "@security.authorization_checker"
 
     oro_contact.form.type.contact_email:
@@ -36,19 +27,18 @@ services:
         arguments: ["oro_contact_email", Oro\Bundle\ContactBundle\Form\Type\ContactEmailType, null]
 
     oro_contact.form.type.contact_email.type:
-        class: '%oro_contact.form.type.contact_email.class%'
+        class: Oro\Bundle\ContactBundle\Form\Type\ContactEmailType
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         tags:
             - { name: form.type, alias: oro_contact_email }
 
     oro_contact.form.type.contact_email.handler:
-        class: '%oro_contact.form.handler.contact_email.class%'
+        class: Oro\Bundle\ContactBundle\Form\Handler\ContactEmailHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_contact.form.type.contact_email"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
-            - "@oro_contact.validator.contact_email_delete"
             - "@security.authorization_checker"

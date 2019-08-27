@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for ContactPhone entity.
+ *
  * @RouteResource("phone")
  * @NamePrefix("oro_api_")
  */
@@ -169,13 +171,5 @@ class ContactPhoneController extends RestController implements ClassResourceInte
     public function getForm()
     {
         return $this->get('oro_contact.form.type.contact_phone.type');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDeleteHandler()
-    {
-        return $this->get('oro_contact.form.type.contact_phone.handler');
     }
 }

@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for B2bCustomerPhone entity.
+ *
  * @RouteResource("b2bcustomer_phone")
  * @NamePrefix("oro_api_")
  */
@@ -161,13 +163,5 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
     public function getForm()
     {
         return $this->get('oro_sales.form.type.b2bcustomer_phone.type');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDeleteHandler()
-    {
-        return $this->get('oro_sales.form.type.b2bcustomer_phone.handler');
     }
 }

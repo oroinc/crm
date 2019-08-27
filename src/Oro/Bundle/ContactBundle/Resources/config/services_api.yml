@@ -1,5 +1,4 @@
 services:
-
     oro_contact.api.contact.customize_loaded_data.compute_primary_phone:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\ComputePrimaryField
         arguments: [primaryPhone, phones, phone]

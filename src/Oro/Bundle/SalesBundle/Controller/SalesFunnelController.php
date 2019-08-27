@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
+ * The controller for SalesFunnel entity.
  * @Route("/salesfunnel")
  */
 class SalesFunnelController extends Controller
@@ -27,7 +28,7 @@ class SalesFunnelController extends Controller
     public function indexAction()
     {
         return array(
-            'entity_class' => $this->container->getParameter('oro_sales.salesfunnel.entity.class')
+            'entity_class' => SalesFunnel::class
         );
     }
 

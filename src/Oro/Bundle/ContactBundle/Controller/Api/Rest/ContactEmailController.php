@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * REST API Contact Email Controller
+ * API CRUD controller for ContactEmail entity.
+ *
  * @Rest\RouteResource("email")
  * @Rest\NamePrefix("oro_api_")
  */
@@ -91,13 +92,5 @@ class ContactEmailController extends RestController implements ClassResourceInte
     public function getForm()
     {
         return $this->get('oro_contact.form.type.contact_email.type');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDeleteHandler()
-    {
-        return $this->get('oro_contact.form.type.contact_email.handler');
     }
 }

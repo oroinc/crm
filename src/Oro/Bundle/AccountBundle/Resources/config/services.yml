@@ -7,8 +7,6 @@ parameters:
     oro_account.account.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     oro_account.type.account.api.class:          Oro\Bundle\AccountBundle\Form\Type\AccountApiType
 
-    oro_account.activity_widget_provider.class:  '%oro_activity.widget_provider.activities.menu.class%'
-
     oro_account.provider.phone.account.class:    Oro\Bundle\AccountBundle\Provider\AccountPhoneProvider
 
 services:
@@ -87,7 +85,7 @@ services:
             - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: oro_account_view }
 
     oro_account.activity_widget_provider:
-        class: '%oro_account.activity_widget_provider.class%'
+        class: Oro\Bundle\UIBundle\Provider\TabMenuWidgetProvider
         arguments:
            - "@oro_entity.entity_identifier_accessor"
            - "@oro_ui.twig.tab_extension"

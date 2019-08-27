@@ -11,12 +11,14 @@ use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartAddress;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
+ * API CRUD controller for CartAddress entity.
+ *
  * @NamePrefix("oro_api_")
  */
 class CartAddressController extends RestController implements ClassResourceInterface
@@ -227,10 +229,10 @@ class CartAddressController extends RestController implements ClassResourceInter
                     $this->getDeleteHandler()->handleDelete($addressId, $this->getManager());
                     $isProcessed = true;
                     $view        = $this->view(null, Response::HTTP_NO_CONTENT);
-                } catch (EntityNotFoundException $notFoundEx) {
+                } catch (EntityNotFoundException $e) {
                     $view = $this->view(null, Response::HTTP_NOT_FOUND);
-                } catch (ForbiddenException $forbiddenEx) {
-                    $view = $this->view(['reason' => $forbiddenEx->getReason()], Response::HTTP_FORBIDDEN);
+                } catch (AccessDeniedException $e) {
+                    $view = $this->view(['reason' => $e->getMessage()], Response::HTTP_FORBIDDEN);
                 }
             }
         } else {

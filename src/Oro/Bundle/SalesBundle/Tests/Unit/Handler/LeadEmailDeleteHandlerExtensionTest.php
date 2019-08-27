@@ -1,0 +1,147 @@
+<?php
+
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
+
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Oro\Bundle\EntityBundle\Handler\EntityDeleteAccessDeniedExceptionFactory;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Handler\LeadEmailDeleteHandlerExtension;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
+{
+    /** @var AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $authorizationChecker;
+
+    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $translator;
+
+    /** @var LeadEmailDeleteHandlerExtension */
+    private $extension;
+
+    protected function setUp()
+    {
+        $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $this->translator = $this->createMock(TranslatorInterface::class);
+
+        $this->extension = new LeadEmailDeleteHandlerExtension(
+            $this->authorizationChecker,
+            $this->translator
+        );
+        $this->extension->setDoctrine($this->createMock(ManagerRegistry::class));
+        $this->extension->setAccessDeniedExceptionFactory(new EntityDeleteAccessDeniedExceptionFactory());
+    }
+
+    public function testAssertDeleteGrantedWhenNoOwner()
+    {
+        $leadEmail = new LeadEmail();
+
+        $this->authorizationChecker->expects($this->never())
+            ->method('isGranted');
+        $this->translator->expects($this->never())
+            ->method('trans');
+
+        $this->extension->assertDeleteGranted($leadEmail);
+    }
+
+    public function testAssertDeleteGrantedWhenAccessGranted()
+    {
+        $leadEmail = new LeadEmail();
+        $lead = new Lead();
+        $leadEmail->setOwner($lead);
+
+        $this->authorizationChecker->expects($this->once())
+            ->method('isGranted')
+            ->with('EDIT', $this->identicalTo($lead))
+            ->willReturn(true);
+        $this->translator->expects($this->never())
+            ->method('trans');
+
+        $this->extension->assertDeleteGranted($leadEmail);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @expectedExceptionMessage The delete operation is forbidden. Reason: access denied.
+     */
+    public function testAssertDeleteGrantedWhenAccessDenied()
+    {
+        $leadEmail = new LeadEmail();
+        $lead = new Lead();
+        $leadEmail->setOwner($lead);
+
+        $this->authorizationChecker->expects($this->once())
+            ->method('isGranted')
+            ->with('EDIT', $this->identicalTo($lead))
+            ->willReturn(false);
+        $this->translator->expects($this->never())
+            ->method('trans');
+
+        $this->extension->assertDeleteGranted($leadEmail);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @expectedExceptionMessage The delete operation is forbidden. Reason: translated exception message.
+     */
+    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails()
+    {
+        $leadEmail = new LeadEmail();
+        $lead = new Lead();
+        $leadEmail->setOwner($lead);
+
+        $leadEmail->setPrimary(true);
+        $lead->addEmail($leadEmail);
+        $lead->addEmail(new LeadEmail());
+
+        $this->authorizationChecker->expects($this->once())
+            ->method('isGranted')
+            ->with('EDIT', $this->identicalTo($lead))
+            ->willReturn(true);
+        $this->translator->expects($this->once())
+            ->method('trans')
+            ->with('oro.sales.validation.lead.emails.delete.more_one', [], 'validators')
+            ->willReturn('translated exception message');
+
+        $this->extension->assertDeleteGranted($leadEmail);
+    }
+
+    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedIfThereIsNoOtherEmails()
+    {
+        $leadEmail = new LeadEmail();
+        $lead = new Lead();
+        $leadEmail->setOwner($lead);
+
+        $leadEmail->setPrimary(true);
+        $lead->addEmail($leadEmail);
+
+        $this->authorizationChecker->expects($this->once())
+            ->method('isGranted')
+            ->with('EDIT', $this->identicalTo($lead))
+            ->willReturn(true);
+        $this->translator->expects($this->never())
+            ->method('trans');
+
+        $this->extension->assertDeleteGranted($leadEmail);
+    }
+
+    public function testAssertDeleteGrantedWhenNotPrimaryEmailIsDeleted()
+    {
+        $leadEmail = new LeadEmail();
+        $lead = new Lead();
+        $leadEmail->setOwner($lead);
+
+        $lead->addEmail($leadEmail);
+
+        $this->authorizationChecker->expects($this->once())
+            ->method('isGranted')
+            ->with('EDIT', $this->identicalTo($lead))
+            ->willReturn(true);
+        $this->translator->expects($this->never())
+            ->method('trans');
+
+        $this->extension->assertDeleteGranted($leadEmail);
+    }
+}

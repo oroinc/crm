@@ -239,7 +239,7 @@ datagrids:
         views_list: '@oro_account.accounts_view_list'
 
     base-account-contacts-grid:
-        extended_entity_name: '%oro_contact.entity.class%'
+        extended_entity_name: Oro\Bundle\ContactBundle\Entity\Contact
         acl_resource: oro_contact_view
         source:
             type: orm
@@ -255,7 +255,7 @@ datagrids:
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                 from:
-                    - { table: '%oro_contact.entity.class%', alias: c }
+                    - { table: Oro\Bundle\ContactBundle\Entity\Contact, alias: c }
                 join:
                     left:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }

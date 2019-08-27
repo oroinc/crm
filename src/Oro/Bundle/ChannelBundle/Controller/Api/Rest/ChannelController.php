@@ -11,7 +11,6 @@ use Oro\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
 use Oro\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\BooleanParameterFilter;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\ChainParameterFilter;
@@ -19,14 +18,16 @@ use Oro\Bundle\SoapBundle\Request\Parameters\Filter\EntityClassParameterFilter;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\StringToArrayParameterFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
+ * API CRUD controller for Channel entity.
+ *
  * @RouteResource("channel")
  * @NamePrefix("oro_api_")
  */
 class ChannelController extends RestController
 {
-
     /**
      * Get channels.
      *
@@ -122,12 +123,10 @@ class ChannelController extends RestController
 
             $this->getDeleteHandler()->handleDelete($id, $this->getManager());
             $this->get('event_dispatcher')->dispatch(ChannelDeleteEvent::EVENT_NAME, new ChannelDeleteEvent($channel));
-        } catch (EntityNotFoundException $notFoundEx) {
+        } catch (EntityNotFoundException $e) {
             return $this->handleView($this->view(null, Response::HTTP_NOT_FOUND));
-        } catch (ForbiddenException $forbiddenEx) {
-            return $this->handleView(
-                $this->view(['reason' => $forbiddenEx->getReason()], Response::HTTP_FORBIDDEN)
-            );
+        } catch (AccessDeniedException $e) {
+            return $this->handleView($this->view(['reason' => $e->getMessage()], Response::HTTP_FORBIDDEN));
         }
 
         return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));

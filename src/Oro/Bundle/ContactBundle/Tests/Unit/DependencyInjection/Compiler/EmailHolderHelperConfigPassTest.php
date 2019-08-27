@@ -3,18 +3,19 @@
 namespace Oro\Bundle\ContactBundle\Tests\Unit\DependencyInjection\Compiler;
 
 use Oro\Bundle\ContactBundle\DependencyInjection\Compiler\EmailHolderHelperConfigPass;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 class EmailHolderHelperConfigPassTest extends \PHPUnit\Framework\TestCase
 {
     public function testNoTargetService()
     {
-        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $container = $this->createMock(ContainerBuilder::class);
 
         $container->expects($this->once())
             ->method('hasDefinition')
-            ->with(EmailHolderHelperConfigPass::SERVICE_KEY)
+            ->with('oro_email.email_holder_helper')
             ->will($this->returnValue(false));
         $container->expects($this->never())
             ->method('getDefinition');
@@ -25,32 +26,22 @@ class EmailHolderHelperConfigPassTest extends \PHPUnit\Framework\TestCase
 
     public function testProcess()
     {
-        $entityClass = 'Test\Entity';
+        $container = $this->createMock(ContainerBuilder::class);
 
-        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $serviceDef = $this->getMockBuilder('Symfony\Component\DependencyInjection\Definition')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $serviceDef = $this->createMock(Definition::class);
 
         $container->expects($this->once())
             ->method('hasDefinition')
-            ->with(EmailHolderHelperConfigPass::SERVICE_KEY)
+            ->with('oro_email.email_holder_helper')
             ->will($this->returnValue(true));
         $container->expects($this->once())
             ->method('getDefinition')
-            ->with(EmailHolderHelperConfigPass::SERVICE_KEY)
+            ->with('oro_email.email_holder_helper')
             ->will($this->returnValue($serviceDef));
-        $container->expects($this->once())
-            ->method('getParameter')
-            ->with('oro_contact.entity.class')
-            ->will($this->returnValue($entityClass));
 
         $serviceDef->expects($this->once())
             ->method('addMethodCall')
-            ->with('addTargetEntity', [$entityClass]);
+            ->with('addTargetEntity', [Contact::class]);
 
         $compiler = new EmailHolderHelperConfigPass();
         $compiler->process($container);

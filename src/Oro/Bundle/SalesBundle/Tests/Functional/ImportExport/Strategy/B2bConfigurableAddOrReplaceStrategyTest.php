@@ -64,9 +64,7 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
         $this->stepExecution = new StepExecution('step', new JobExecution());
         $this->context = new StepExecutionProxyContext($this->stepExecution);
         $this->strategy->setImportExportContext($this->context);
-        $this->strategy->setEntityName(
-            $container->getParameter('oro_sales.b2bcustomer.entity.class')
-        );
+        $this->strategy->setEntityName(B2bCustomer::class);
     }
 
     public function testUpdateAddress()

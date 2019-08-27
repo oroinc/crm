@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * The controller for Contact entity.
+ */
 class ContactController extends Controller
 {
     /**
@@ -123,7 +126,7 @@ class ContactController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_contact.entity.class')
+            'entity_class' => Contact::class
         ];
     }
 

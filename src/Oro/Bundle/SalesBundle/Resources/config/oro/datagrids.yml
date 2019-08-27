@@ -1,6 +1,6 @@
 datagrids:
     sales-opportunity-grid:
-        extended_entity_name: '%oro_sales.opportunity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\Opportunity
         mixins:
             - activity-contact-data-hidden-mixin
             - activity-contact-days-since-last-contact-hidden-mixin
@@ -32,7 +32,7 @@ datagrids:
                     - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
                     - account.name as accountName
                 from:
-                    - { table: '%oro_sales.opportunity.class%', alias: o }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 join:
                     left:
                         - { join: o.contact, alias: contactAlias }
@@ -306,7 +306,7 @@ datagrids:
                     acl_resource: oro_sales_opportunity_update
 
     sales-lead-grid:
-        extended_entity_name: '%oro_sales.lead.entity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\Lead
         mixins:
             - activity-contact-data-hidden-mixin
             - activity-contact-days-since-last-contact-hidden-mixin
@@ -353,7 +353,7 @@ datagrids:
                     - CONCAT_WS(' ', c.firstName, c.lastName) as contactName
                     - own.id as owner
                 from:
-                    - { table: '%oro_sales.lead.entity.class%', alias: l }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Lead, alias: l }
                 join:
                     left:
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
@@ -681,7 +681,7 @@ datagrids:
         views_list: "@oro_sales.lead.datagrid_view_list"
 
     sales-funnel-grid:
-        extended_entity_name: '%oro_sales.salesfunnel.entity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\SalesFunnel
         options:
             entityHint: oro.sales.salesfunnel.entity_plural_label
             entity_pagination: true
@@ -701,7 +701,7 @@ datagrids:
                     - opportunity.probability as opportunityProbability
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
-                    - { table: '%oro_sales.salesfunnel.entity.class%', alias: salesFunnel }
+                    - { table: Oro\Bundle\SalesBundle\Entity\SalesFunnel, alias: salesFunnel }
                 join:
                     left:
                         - { join: salesFunnel.lead, alias: lead }
@@ -855,7 +855,7 @@ datagrids:
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
-        extended_entity_name: '%oro_sales.lead.entity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\Lead
         options:
             entityHint: oro.sales.lead.entity_plural_label
         acl_resource: oro_sales_lead_view
@@ -879,7 +879,7 @@ datagrids:
                             END, ''
                         ) as regionLabel
                 from:
-                    - { table: '%oro_sales.lead.entity.class%', alias: lead }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Lead, alias: lead }
                 join:
                     left:
                         - { join: lead.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
@@ -975,7 +975,7 @@ datagrids:
 
     # opportunities with "In progress" status for Sales Funnel flow
     sales-funnel-opportunity-grid:
-        extended_entity_name: '%oro_sales.opportunity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\Opportunity
         options:
             entityHint: oro.sales.opportunity.entity_plural_label
         acl_resource: oro_sales_opportunity_view
@@ -989,7 +989,7 @@ datagrids:
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - email.email as primaryEmail
                 from:
-                    - { table: '%oro_sales.opportunity.class%', alias: opportunity }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: opportunity }
                 join:
                     left:
                         - { join: opportunity.contact , alias: contact }
@@ -1052,7 +1052,7 @@ datagrids:
                     data_name: email.email
 
     base-sales-b2bcustomers-grid:
-        extended_entity_name: '%oro_sales.b2bcustomer.entity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\B2bCustomer
         acl_resource: oro_sales_b2bcustomer_view
         source:
             type: orm
@@ -1069,7 +1069,7 @@ datagrids:
                     - c.updatedAt
                     - channel.name as channelName
                 from:
-                    - { table: '%oro_sales.b2bcustomer.entity.class%', alias: c }
+                    - { table: Oro\Bundle\SalesBundle\Entity\B2bCustomer, alias: c }
                 join:
                     left:
                         - { join: c.dataChannel, alias: channel }
@@ -1401,7 +1401,7 @@ datagrids:
                     data_name: accountName
 
     base-sales-b2bcustomer-leads-grid:
-        extended_entity_name: '%oro_sales.lead.entity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\Lead
         acl_resource: oro_sales_lead_view
         source:
             type: orm
@@ -1426,7 +1426,7 @@ datagrids:
                         ) as regionLabel
 
                 from:
-                    - { table: '%oro_sales.lead.entity.class%', alias: l }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Lead, alias: l }
                 join:
                     left:
                         - { join: l.status, alias: s }
@@ -1576,7 +1576,7 @@ datagrids:
                     enabled: false
 
     base-sales-b2bcustomer-opportunities-grid:
-        extended_entity_name: '%oro_sales.opportunity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\Opportunity
         acl_resource: oro_sales_opportunity_view
         source:
             type: orm
@@ -1593,7 +1593,7 @@ datagrids:
                     - s.id as status
                     - email.email as primaryEmail
                 from:
-                    - { table: '%oro_sales.opportunity.class%', alias: o }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 join:
                     left:
                         - { join: o.contact , alias: contact }
@@ -1741,7 +1741,7 @@ datagrids:
                 createdAt: DESC
 
     sales-lead-for-context-grid:
-        extended_entity_name: '%oro_sales.lead.entity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\Lead
         options:
             entityHint: oro.sales.lead.entity_plural_label
             entity_pagination: true
@@ -1762,7 +1762,7 @@ datagrids:
                     - email.email
                     - s.id as status
                 from:
-                    - { table: '%oro_sales.lead.entity.class%', alias: l }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Lead, alias: l }
                 join:
                     left:
                         - { join: l.status, alias: s }
@@ -1823,7 +1823,7 @@ datagrids:
                     data_name: email.email
 
     sales-opportunity-for-context-grid:
-        extended_entity_name: '%oro_sales.opportunity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\Opportunity
         options:
             entityHint: oro.sales.opportunity.entity_plural_label
             entity_pagination: true
@@ -1844,7 +1844,7 @@ datagrids:
                     - email.email as primaryEmail
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
-                    - { table: '%oro_sales.opportunity.class%', alias: o }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 join:
                     left:
                         - { join: o.contact , alias: contact }
@@ -1915,7 +1915,7 @@ datagrids:
                             translatable_options: false
 
     oro-sales-b2bcustomers-for-context-grid:
-        extended_entity_name: '%oro_sales.b2bcustomer.entity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\B2bCustomer
         acl_resource: oro_sales_b2bcustomer_view
         source:
             type: orm
@@ -1926,7 +1926,7 @@ datagrids:
                     - CASE WHEN c.lifetime IS NOT NULL THEN c.lifetime ELSE 0 END as lifetime
                     - channel.name as channelName
                 from:
-                    - { table: '%oro_sales.b2bcustomer.entity.class%', alias: c }
+                    - { table: Oro\Bundle\SalesBundle\Entity\B2bCustomer, alias: c }
                 join:
                     left:
                         - { join: c.dataChannel, alias: channel }
@@ -1971,7 +1971,7 @@ datagrids:
             routerEnabled: false
 
     dashboard-my-sales-opportunity-grid:
-        extended_entity_name: '%oro_sales.opportunity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\Opportunity
         acl_resource: oro_sales_opportunity_view
         source:
             type: orm
@@ -1985,7 +1985,7 @@ datagrids:
                     - o.probability
                     - o.closeDate
                 from:
-                    - { table: '%oro_sales.opportunity.class%', alias: o }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 join:
                     left:
                         - { join: o.status, alias: s }
@@ -2037,7 +2037,7 @@ datagrids:
                     default_per_page: 10
 
     dashboard-my-sales-lead-grid:
-        extended_entity_name: '%oro_sales.lead.entity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\Lead
         mixins:
             - activity-contact-last-contacted-date-data-mixin
         acl_resource: oro_sales_opportunity_view
@@ -2049,7 +2049,7 @@ datagrids:
                     - l.name
                     - s.id as status
                 from:
-                    - { table: '%oro_sales.lead.entity.class%', alias: l }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Lead, alias: l }
                 join:
                     left:
                         - { join: l.status, alias: s }
@@ -2072,7 +2072,7 @@ datagrids:
                     items: [10]
                     default_per_page: 10
     sales-customers-opportunities-grid:
-        extended_entity_name: '%oro_sales.opportunity.class%'
+        extended_entity_name: Oro\Bundle\SalesBundle\Entity\Opportunity
         acl_resource: oro_sales_opportunity_view
         options:
             entityHint: oro.sales.opportunity.entity_plural_label
@@ -2094,7 +2094,7 @@ datagrids:
                     - o.createdAt
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
-                    - { table: '%oro_sales.opportunity.class%', alias: o }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 join:
                     left:
                         - { join: o.status, alias: s }

@@ -11,7 +11,7 @@ datagrids:
                     - phone.phone as primaryPhone
                     - max(history.visitedAt) as visitDate
                 from:
-                    - { table: '%oro_contact.entity.class%', alias: c }
+                    - { table: Oro\Bundle\ContactBundle\Entity\Contact, alias: c }
                 join:
                     left:
                         - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
@@ -58,7 +58,7 @@ datagrids:
                     - g.id
                     - g.label
                 from:
-                  - { table: '%oro_contact.group.entity.class%', alias: g }
+                  - { table: Oro\Bundle\ContactBundle\Entity\Group, alias: g }
         columns:
             label:
                 label: oro.contact.group.label.label
@@ -118,7 +118,7 @@ datagrids:
                         THEN true ELSE false END
                       END) as hasGroup
                 from:
-                    - { table: '%oro_contact.entity.class%', alias: c }
+                    - { table: Oro\Bundle\ContactBundle\Entity\Contact, alias: c }
             bind_parameters:
                 -
                     name: group
@@ -165,7 +165,7 @@ datagrids:
 
     # contacts main grid show on oro_contact_index route
     contacts-grid:
-        extended_entity_name: '%oro_contact.entity.class%'
+        extended_entity_name: Oro\Bundle\ContactBundle\Entity\Contact
         mixins:
             - activity-contact-data-hidden-mixin
             - activity-contact-days-since-last-contact-hidden-mixin
@@ -202,7 +202,7 @@ datagrids:
                     - CONCAT_WS(' ', assignedTo.firstName, assignedTo.lastName) as assignedName
                     - CONCAT_WS(' ', reportsTo.firstName, reportsTo.lastName) as reportsName
                 from:
-                    - { table: '%oro_contact.entity.class%', alias: c }
+                    - { table: Oro\Bundle\ContactBundle\Entity\Contact, alias: c }
                 join:
                     left:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -543,7 +543,7 @@ datagrids:
         mass_actions:
             merge:
                 type: merge
-                entity_name: '%oro_contact.entity.class%'
+                entity_name: Oro\Bundle\ContactBundle\Entity\Contact
                 data_identifier: c.id
         options:
             entityHint: oro.contact.entity_plural_label
@@ -675,7 +675,7 @@ datagrids:
 
     # contacts select grid used for contact selection in dialog
     contacts-select-grid:
-        extended_entity_name: '%oro_contact.entity.class%'
+        extended_entity_name: Oro\Bundle\ContactBundle\Entity\Contact
         acl_resource: oro_contact_view
         source:
             type: orm
@@ -691,7 +691,7 @@ datagrids:
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                 from:
-                    - { table: '%oro_contact.entity.class%', alias: c }
+                    - { table: Oro\Bundle\ContactBundle\Entity\Contact, alias: c }
                 join:
                     left:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -789,7 +789,7 @@ datagrids:
 
     # contacts grid for context
     contacts-for-context-grid:
-        extended_entity_name: '%oro_contact.entity.class%'
+        extended_entity_name: Oro\Bundle\ContactBundle\Entity\Contact
         acl_resource: oro_contact_view
         source:
             type: orm
@@ -805,7 +805,7 @@ datagrids:
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                 from:
-                    - { table: '%oro_contact.entity.class%', alias: c }
+                    - { table: Oro\Bundle\ContactBundle\Entity\Contact, alias: c }
                 join:
                     left:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }

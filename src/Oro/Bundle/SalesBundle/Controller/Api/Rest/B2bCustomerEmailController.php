@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for B2bCustomerEmail entity.
+ *
  * @RouteResource("b2bcustomer_email")
  * @NamePrefix("oro_api_")
  */
@@ -83,13 +85,5 @@ class B2bCustomerEmailController extends RestController implements ClassResource
     public function getForm()
     {
         return $this->get('oro_sales.form.type.b2bcustomer_email.type');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDeleteHandler()
-    {
-        return $this->get('oro_sales.form.type.b2bcustomer_email.handler');
     }
 }
