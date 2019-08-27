@@ -12,11 +12,11 @@ Feature: Activities
     When go to Activities/ Tasks
     And click "Create Task"
     And fill form with:
-      |Subject    |Test1           |
-      |Description|test description|
-      |Due date   |2019-08-24      |
-      |Status     |Open            |
-      |Priority   |Normal          |
+      | Subject     | Test1                   |
+      | Description | test description        |
+      | Due date    | <DateTime:+1 day 12:00> |
+      | Status      | Open                    |
+      | Priority    | Normal                  |
     And set Reminders with:
       | Method        | Interval unit | Interval number |
       | Flash message | minutes       | 30              |
@@ -24,27 +24,27 @@ Feature: Activities
     Then should see "Task saved" flash message
     And go to Activities/ Tasks
     And I should see following grid:
-      | Subject | Due date               | Status | Priority | Assigned To |
-      | Test1   | Aug 24, 2019, 12:00 AM | Open   | Normal   | John Doe    |
+      | Subject | Due date     | Status | Priority | Assigned To |
+      | Test1   | +1 day 12:00 | Open   | Normal   | John Doe    |
     When click My Tasks in user menu
     Then I should see following grid:
-      | Subject | Due date               | Status | Priority |
-      | Test1   | Aug 24, 2019, 12:00 AM | Open   | Normal   |
+      | Subject | Due date     | Status | Priority |
+      | Test1   | +1 day 12:00 | Open   | Normal   |
 
   Scenario: Add a Task for Another Record
     Given go to Sales/ Leads
     And click "Create Lead"
     And fill form with:
-      |Lead name|OroInc|
+      | Lead name | OroInc |
     And save and close form
     When click "More actions"
     And click "Add task"
     And fill form with:
-      |Subject    |Sprint Demo     |
-      |Description|test description|
-      |Due date   |2019-08-24      |
-      |Status     |Open            |
-      |Priority   |Normal          |
+      | Subject     | Sprint Demo             |
+      | Description | test description        |
+      | Due date    | <DateTime:+1 day 12:00> |
+      | Status      | Open                    |
+      | Priority    | Normal                  |
     And set Reminders with:
       | Method        | Interval unit | Interval number |
       | Flash message | hours         | 30              |
@@ -62,19 +62,19 @@ Feature: Activities
     When click "More actions"
     And click "Assign task"
     And fill form with:
-      |Subject    |SalesRep Task   |
-      |Description|test description|
-      |Due date   |2019-08-24      |
-      |Status     |Open            |
-      |Priority   |Normal          |
+      | Subject     | SalesRep Task           |
+      | Description | test description        |
+      | Due date    | <DateTime:+1 day 12:00> |
+      | Status      | Open                    |
+      | Priority    | Normal                  |
     And set Reminders with:
       | Method | Interval unit | Interval number |
       | Email  | hours         | 30              |
     And click "Create Task"
     Then should see "Task created successfully" flash message
     And I should see following grid:
-      | Subject       | Due date               | Status | Priority |
-      | SalesRep Task | Aug 24, 2019, 12:00 AM | Open   | Normal   |
+      | Subject       | Due date     | Status | Priority |
+      | SalesRep Task | +1 day 12:00 | Open   | Normal   |
     And go to Activities/ Tasks
     And click view "SalesRep Task" in grid
     And should see "Assigned To: Charlie Sheen (Main)"
@@ -83,14 +83,14 @@ Feature: Activities
     Given go to Sales/ Leads
     And click "Create Lead"
     And fill form with:
-      |Lead name|Magento|
+      | Lead name | Magento |
     And save and close form
     And go to Sales/ Leads
     And click view "OroInc" in grid
     When I hover on "Activity Dropdown Menu"
     And click "Update Task"
     And fill form with:
-      |Subject|Sprint Nemo|
+      | Subject | Sprint Nemo |
     And click "Update Task"
     Then should see "Task created successfully" flash message
     And should see "Sprint Nemo - test description"
@@ -113,18 +113,18 @@ Feature: Activities
     Given go to Activities/ Calls
     And click "Log call"
     When I fill form with:
-      | Subject             | Call to Someone                          |
-      | Additional comments | Offered $40 discount on her next purchase|
-      | Call date & time    | 2016-10-31 08:00:00                      |
-      | Phone number        | 0501468825                               |
-      | Direction           | Outgoing                                 |
-      | Duration            | 60s                                      |
+      | Subject             | Call to Someone                           |
+      | Additional comments | Offered $40 discount on her next purchase |
+      | Call date & time    | 2016-10-31 08:00:00                       |
+      | Phone number        | 0501468825                                |
+      | Direction           | Outgoing                                  |
+      | Duration            | 60s                                       |
     And save and close form
     Then should see "Call saved" flash message
     And go to Activities/ Calls
     And I should see following grid:
-      | Subject          | Phone number | Call date & time      | Contexts |
-      | Call to Someone  | 0501468825   | Oct 31, 2016, 8:00 AM | John Doe |
+      | Subject         | Phone number | Call date & time      | Contexts |
+      | Call to Someone | 0501468825   | Oct 31, 2016, 8:00 AM | John Doe |
 
   Scenario:Add a Task for Another Record
     Given go to Sales/ Leads
@@ -132,12 +132,12 @@ Feature: Activities
     When click "More actions"
     And click "Log call"
     And I fill form with:
-      | Subject             | Call for lead                            |
-      | Additional comments | Offered $50 discount on her next purchase|
-      | Call date & time    | 2016-11-21 08:00:00                      |
-      | Phone number        | 0503505566                               |
-      | Direction           | Incoming                                 |
-      | Duration            | 30s                                      |
+      | Subject             | Call for lead                             |
+      | Additional comments | Offered $50 discount on her next purchase |
+      | Call date & time    | 2016-11-21 08:00:00                       |
+      | Phone number        | 0503505566                                |
+      | Direction           | Incoming                                  |
+      | Duration            | 30s                                       |
     And click "Log call"
     Then should see "Call saved" flash message
     And should see "Call for lead - Offered $50 discount on her next purchase"
@@ -152,7 +152,7 @@ Feature: Activities
     When I hover on "Activity Dropdown Menu"
     And click "Update Call log"
     And I fill form with:
-      |Phone number|0503504444|
+      | Phone number | 0503504444 |
     And click "Update call"
     Then should see "Call saved" flash message
     And click on "Call log accordion"
@@ -160,20 +160,20 @@ Feature: Activities
     And should not see "Phone Number 0503505566"
     And go to Activities/ Calls
     And I should see following grid:
-      | Subject          | Phone number | Call date & time      | Contexts         |
-      | Call for lead    | 0503504444   | Nov 21, 2016, 8:00 AM | OroInc John Doe  |
-      | Call to Someone  | 0501468825   | Oct 31, 2016, 8:00 AM | John Doe         |
+      | Subject         | Phone number | Call date & time      | Contexts        |
+      | Call for lead   | 0503504444   | Nov 21, 2016, 8:00 AM | OroInc John Doe |
+      | Call to Someone | 0501468825   | Oct 31, 2016, 8:00 AM | John Doe        |
 
   Scenario:View and Manage Calls on the view page of a record
     Given go to Activities/ Cases
     And click "Create Case"
     And I fill form with:
-      | Subject         | Case subject                  |
-      | Description     | Case for behat testing        |
-      | Resolution      | Create through form and check |
-      | Source          | Web                           |
-      | Status          | Open                          |
-      | Priority        | High                          |
+      | Subject     | Case subject                  |
+      | Description | Case for behat testing        |
+      | Resolution  | Create through form and check |
+      | Source      | Web                           |
+      | Status      | Open                          |
+      | Priority    | High                          |
     And save and close form
     And should see "Case saved" flash message
     And click "Add Comment"
@@ -188,7 +188,7 @@ Feature: Activities
     And go to Activities/ Cases
     And click edit "Case subject" in grid
     When I fill form with:
-      | Owner|Charlie Sheen|
+      | Owner | Charlie Sheen |
     And save and close form
     And should see "Case saved" flash message
     And go to System/ User Management/ Users
@@ -233,14 +233,14 @@ Feature: Activities
     When click "More actions"
     And click "Add Event"
     And I fill "Event Form" with:
-      | Title         | New event          |
-      | Start         | 2018-05-24 12:00 AM|
-      | End           | 2019-05-26 12:00 AM|
-      | All-Day Event | true               |
-      | Repeat        | false              |
-      | Description   | testfull desc      |
-      | Guests        | John Doe           |
-      | Color         | Cornflower Blue    |
+      | Title         | New event           |
+      | Start         | 2018-05-24 12:00 AM |
+      | End           | 2019-05-26 12:00 AM |
+      | All-Day Event | true                |
+      | Repeat        | false               |
+      | Description   | testfull desc       |
+      | Guests        | John Doe            |
+      | Color         | Cornflower Blue     |
     And set Reminders with:
       | Method        | Interval unit | Interval number |
       | Email         | days          | 1               |
@@ -257,12 +257,12 @@ Feature: Activities
     Given click My Calendar in user menu
     And click on "Empty slot"
     And I fill "Event Form" with:
-      | Title         | Stand-Up           |
-      | All-Day Event | false              |
-      | Repeat        | false              |
-      | Description   | testfull desc      |
-      | Guests        | Charlie Sheen      |
-      | Color         | Cornflower Blue    |
+      | Title         | Stand-Up        |
+      | All-Day Event | false           |
+      | Repeat        | false           |
+      | Description   | testfull desc   |
+      | Guests        | Charlie Sheen   |
+      | Color         | Cornflower Blue |
     And set Reminders with:
       | Method        | Interval unit | Interval number |
       | Email         | days          | 1               |
@@ -270,30 +270,30 @@ Feature: Activities
     And click "Save"
     And click "Notify"
     Then I should see "Stand-Up" in calendar with:
-      | Description   | testfull desc                       |
-      | Guests        | Charlie Sheen (Charlie1@example.com)|
-      | All-day event | No                                  |
+      | Description   | testfull desc                        |
+      | Guests        | Charlie Sheen (Charlie1@example.com) |
+      | All-day event | No                                   |
 
   Scenario: Manage Calendar Events
     Given go to Activities/ Calendar Events
     And click edit "Stand-Up" in grid
     When I fill "Event Form" with:
-      | All-Day Event| true     |
-      | Repeat       | true     |
-      | Guests       | John Doe |
-      |EndsRecurrence| After:1  |
+      | All-Day Event  | true     |
+      | Repeat         | true     |
+      | Guests         | John Doe |
+      | EndsRecurrence | After:1  |
     And save and close form
     And click "Notify"
     Then should see Event with:
-      |Title        |Stand-Up                                 |
-      |Description  |testfull desc                            |
-      |All-Day Event|Yes                                      |
-      |Guests       |John Doe - Organizer                     |
-      |Recurrence   |Daily every 1 day, end after 1 occurrence|
+      | Title         | Stand-Up                                  |
+      | Description   | testfull desc                             |
+      | All-Day Event | Yes                                       |
+      | Guests        | John Doe - Organizer                      |
+      | Recurrence    | Daily every 1 day, end after 1 occurrence |
     And go to Activities/ Calendar Events
     And I sort grid by "Title"
     And should see following grid:
-      | Title                   | Calendar | Recurrent | Recurrence                               | Invitation status |
-      | All day no repeat Event | John Doe | No        | N/A                                      | Not responded     |
-      | New event               | John Doe | No        | N/A                                      | Not responded     |
-      | Stand-Up                | John Doe | Yes       |Daily every 1 day, end after 1 occurrence | Not responded     |
+      | Title                   | Calendar | Recurrent | Recurrence                                | Invitation status |
+      | All day no repeat Event | John Doe | No        | N/A                                       | Not responded     |
+      | New event               | John Doe | No        | N/A                                       | Not responded     |
+      | Stand-Up                | John Doe | Yes       | Daily every 1 day, end after 1 occurrence | Not responded     |
