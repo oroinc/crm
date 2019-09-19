@@ -411,8 +411,7 @@
                 "reference": "df0ddedcab1a8fdb3a7abafc5fe97819931e7bd5",
                 "shasum": null
             },
-            "type": "bower-asset",
-            "time": "2014-07-21T18:45:41+00:00"
+            "type": "bower-asset"
         },
         {
             "name": "bower-asset/font-awesome",
@@ -2225,30 +2224,28 @@
         },
         {
             "name": "doctrine/lexer",
-            "version": "1.1.0",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/lexer.git",
-                "reference": "e17f069ede36f7534b95adec71910ed1b49c74ea"
+                "reference": "1febd6c3ef84253d7c815bed85fc622ad207a9f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/lexer/zipball/e17f069ede36f7534b95adec71910ed1b49c74ea",
-                "reference": "e17f069ede36f7534b95adec71910ed1b49c74ea",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/1febd6c3ef84253d7c815bed85fc622ad207a9f8",
+                "reference": "1febd6c3ef84253d7c815bed85fc622ad207a9f8",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2"
+                "php": ">=5.3.2"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^6.0",
-                "phpstan/phpstan": "^0.11.8",
-                "phpunit/phpunit": "^8.2"
+                "phpunit/phpunit": "^4.5"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "1.0.x-dev"
                 }
             },
             "autoload": {
@@ -2262,12 +2259,12 @@
             ],
             "authors": [
                 {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
-                },
-                {
                     "name": "Roman Borschel",
                     "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
                 },
                 {
                     "name": "Johannes Schmitt",
@@ -2283,7 +2280,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2019-07-30T19:33:28+00:00"
+            "time": "2019-06-08T11:03:04+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -5064,29 +5061,6 @@
             ]
         },
         {
-            "name": "npm-asset/backbone-undo",
-            "version": "v0.2.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/osartun/Backbone.Undo.js.git",
-                "reference": "9817afb2e37ca59d01b55b14dd43c42c49db7757"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/osartun/Backbone.Undo.js/zipball/9817afb2e37ca59d01b55b14dd43c42c49db7757",
-                "reference": "9817afb2e37ca59d01b55b14dd43c42c49db7757",
-                "shasum": null
-            },
-            "require": {
-                "npm-asset/backbone": ">=1.0.0",
-                "npm-asset/underscore": ">=1.4.4"
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
             "name": "npm-asset/bootstrap",
             "version": "4.3.1",
             "dist": {
@@ -5101,331 +5075,11 @@
             ]
         },
         {
-            "name": "npm-asset/cash-dom",
-            "version": "1.3.7",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/cash-dom/-/cash-dom-1.3.7.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/codemirror",
-            "version": "5.44.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/codemirror/-/codemirror-5.44.0.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/codemirror-formatting",
-            "version": "1.0.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/codemirror-formatting/-/codemirror-formatting-1.0.0.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/core-util-is",
-            "version": "1.0.2",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
             "name": "npm-asset/css-vars-ponyfill",
             "version": "2.0.2",
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/css-vars-ponyfill/-/css-vars-ponyfill-2.0.2.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/file-saver",
-            "version": "1.3.8",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/file-saver/-/file-saver-1.3.8.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/font-awesome",
-            "version": "4.7.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/font-awesome/-/font-awesome-4.7.0.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "(OFL-1.1 AND MIT)"
-            ]
-        },
-        {
-            "name": "npm-asset/grapesjs",
-            "version": "0.15.3-RC.2",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/grapesjs/-/grapesjs-0.15.3-rc.2.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "npm-asset/backbone": ">=1.3.3,<2.0.0",
-                "npm-asset/backbone-undo": ">=0.2.5,<0.3.0",
-                "npm-asset/cash-dom": ">=1.3.7,<2.0.0",
-                "npm-asset/codemirror": ">=5.39.0,<6.0.0",
-                "npm-asset/codemirror-formatting": ">=1.0.0,<2.0.0",
-                "npm-asset/font-awesome": ">=4.7.0,<5.0.0",
-                "npm-asset/keymaster": ">=1.6.2,<2.0.0",
-                "npm-asset/promise-polyfill": ">=8.0.0,<9.0.0",
-                "npm-asset/spectrum-colorpicker": ">=1.8.0,<2.0.0",
-                "npm-asset/underscore": ">=1.9.1,<2.0.0"
-            },
-            "type": "npm-asset",
-            "license": [
-                "BSD-3-Clause"
-            ]
-        },
-        {
-            "name": "npm-asset/grapesjs-aviary",
-            "version": "0.1.2",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/grapesjs-aviary/-/grapesjs-aviary-0.1.2.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "BSD-3-Clause"
-            ]
-        },
-        {
-            "name": "npm-asset/grapesjs-blocks-basic",
-            "version": "0.1.8",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/grapesjs-blocks-basic/-/grapesjs-blocks-basic-0.1.8.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "BSD-3-Clause"
-            ]
-        },
-        {
-            "name": "npm-asset/grapesjs-component-countdown",
-            "version": "0.1.3",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/grapesjs-component-countdown/-/grapesjs-component-countdown-0.1.3.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "BSD-3-Clause"
-            ]
-        },
-        {
-            "name": "npm-asset/grapesjs-navbar",
-            "version": "0.1.5",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/grapesjs-navbar/-/grapesjs-navbar-0.1.5.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "BSD-3-Clause"
-            ]
-        },
-        {
-            "name": "npm-asset/grapesjs-plugin-export",
-            "version": "0.1.5",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/grapesjs-plugin-export/-/grapesjs-plugin-export-0.1.5.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "npm-asset/file-saver": ">=1.3.2,<2.0.0",
-                "npm-asset/jszip": ">=3.0.0,<4.0.0"
-            },
-            "type": "npm-asset",
-            "license": [
-                "BSD-3-Clause"
-            ]
-        },
-        {
-            "name": "npm-asset/grapesjs-plugin-filestack",
-            "version": "0.1.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/grapesjs-plugin-filestack/-/grapesjs-plugin-filestack-0.1.1.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "BSD-3-Clause"
-            ]
-        },
-        {
-            "name": "npm-asset/grapesjs-plugin-forms",
-            "version": "0.3.6",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/grapesjs-plugin-forms/-/grapesjs-plugin-forms-0.3.6.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "BSD-3-Clause"
-            ]
-        },
-        {
-            "name": "npm-asset/grapesjs-preset-webpage",
-            "version": "0.1.11",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/grapesjs-preset-webpage/-/grapesjs-preset-webpage-0.1.11.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "npm-asset/grapesjs-aviary": ">=0.1.2,<0.2.0",
-                "npm-asset/grapesjs-blocks-basic": ">=0.1.7,<0.2.0",
-                "npm-asset/grapesjs-component-countdown": ">=0.1.2,<0.2.0",
-                "npm-asset/grapesjs-navbar": ">=0.1.5,<0.2.0",
-                "npm-asset/grapesjs-plugin-export": ">=0.1.5,<0.2.0",
-                "npm-asset/grapesjs-plugin-filestack": ">=0.1.1,<0.2.0",
-                "npm-asset/grapesjs-plugin-forms": ">=0.3.5,<0.4.0"
-            },
-            "type": "npm-asset",
-            "license": [
-                "BSD-3-Clause"
-            ]
-        },
-        {
-            "name": "npm-asset/immediate",
-            "version": "3.0.6",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/immediate/-/immediate-3.0.6.tgz",
-                "reference": null,
-                "shasum": "9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/calvinmetcalf/immediate/issues"
-                },
-                "npm-asset-files": [
-                    "lib",
-                    "dist"
-                ],
-                "npm-asset-main": "lib/index.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git://github.com/calvinmetcalf/immediate.git"
-                },
-                "npm-asset-scripts": {
-                    "build": "npm run build-node && npm run build-js && npm run uglify",
-                    "build-node": "browserify-transform-cli inline-process-browser unreachable-branch-transform < ./lib/index.js > ./lib/browser.js",
-                    "uglify": "uglifyjs dist/immediate.js -mc > dist/immediate.min.js",
-                    "build-js": "browserify -s immediate ./lib/browser.js | derequire > dist/immediate.js",
-                    "test": "jshint lib/*.js && node test/tests.js"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Domenic Denicola",
-                    "email": "domenic@domenicdenicola.com",
-                    "url": "http://domenicdenicola.com"
-                },
-                {
-                    "name": "Donavon West",
-                    "email": "github@donavon.com",
-                    "url": "http://donavon.com"
-                },
-                {
-                    "name": "Yaffle"
-                },
-                {
-                    "name": "Calvin Metcalf",
-                    "email": "calvin.metcalf@gmail.com"
-                }
-            ],
-            "description": "A cross browser microtask library",
-            "time": "2016-07-28T12:25:21+00:00"
-        },
-        {
-            "name": "npm-asset/inherits",
-            "version": "2.0.3",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "ISC"
-            ]
-        },
-        {
-            "name": "npm-asset/isarray",
-            "version": "1.0.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz",
                 "reference": null,
                 "shasum": null
             },
@@ -5480,113 +5134,6 @@
             ]
         },
         {
-            "name": "npm-asset/jszip",
-            "version": "3.2.2",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/jszip/-/jszip-3.2.2.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "npm-asset/lie": "~3.3.0",
-                "npm-asset/pako": "~1.0.2",
-                "npm-asset/readable-stream": "~2.3.6",
-                "npm-asset/set-immediate-shim": "~1.0.1"
-            },
-            "type": "npm-asset",
-            "license": [
-                "(MIT OR GPL-3.0)"
-            ]
-        },
-        {
-            "name": "npm-asset/keymaster",
-            "version": "1.6.2",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/keymaster/-/keymaster-1.6.2.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset"
-        },
-        {
-            "name": "npm-asset/lie",
-            "version": "3.3.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/lie/-/lie-3.3.0.tgz",
-                "reference": null,
-                "shasum": "dcf82dee545f46074daf200c7c1c5a08e0f40f6a"
-            },
-            "require": {
-                "npm-asset/immediate": "~3.0.5"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/calvinmetcalf/lie/issues"
-                },
-                "npm-asset-files": [
-                    "lib",
-                    "dist",
-                    "polyfill.js",
-                    "lie.d.ts"
-                ],
-                "npm-asset-main": "lib/index.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/calvinmetcalf/lie.git"
-                },
-                "npm-asset-scripts": {
-                    "pretest": "npm run build",
-                    "test": "npm run jshint && mocha -R nyan ./test/cover.js && tsc --noEmit ./test/types.ts",
-                    "build-node": "copyfiles -f src/index.js lib && browserify-transform-cli inline-process-browser unreachable-branch-transform es3ify < src/index.js > lib/browser.js",
-                    "build-js": "browserify -s Promise -p bundle-collapser/plugin . | derequire > ./dist/lie.js",
-                    "build-min": "uglifyjs ./dist/lie.js -mc > ./dist/lie.min.js",
-                    "build-poly-js": "browserify -p bundle-collapser/plugin ./polyfill.js | derequire > ./dist/lie.polyfill.js",
-                    "build-poly-min": "uglifyjs ./dist/lie.polyfill.js -mc > ./dist/lie.polyfill.min.js",
-                    "build-poly": "npm run build-poly-js && npm run build-poly-min",
-                    "build": "npm run build-node && npm run build-js && npm run build-min && npm run build-poly",
-                    "prebuild": "rimraf lib dist && mkdirp lib dist",
-                    "cover": "istanbul cover _mocha ./test/cover.js -- -R spec && istanbul check-coverage --lines 100 --function 100 --statements 100 --branches 100",
-                    "jshint": "jshint src",
-                    "node": "mocha -R spec ./test/cover.js",
-                    "browser": "browserify test/cover.js > test/browser.js && mocha-phantomjs test/test.html"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ruben Verborgh",
-                    "email": "ruben.verborgh@gmail.com"
-                },
-                {
-                    "name": "Calvin Metcalf",
-                    "email": "calvin.metcalf@gmail.com"
-                },
-                {
-                    "name": "Sam Hocevar",
-                    "email": "sam@hocevar.net"
-                },
-                {
-                    "name": "Christoph Burgmer"
-                }
-            ],
-            "description": "A basic but performant promise implementation",
-            "homepage": "https://github.com/calvinmetcalf/lie#readme",
-            "keywords": [
-                "aplus",
-                "async",
-                "lie",
-                "promise"
-            ],
-            "time": "2018-03-06T14:54:08+00:00"
-        },
-        {
             "name": "npm-asset/overlayscrollbars",
             "version": "1.6.3",
             "dist": {
@@ -5598,20 +5145,6 @@
             "type": "npm-asset",
             "license": [
                 "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/pako",
-            "version": "1.0.5",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/pako/-/pako-1.0.5.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "(MIT AND Zlib)"
             ]
         },
         {
@@ -5629,135 +5162,11 @@
             ]
         },
         {
-            "name": "npm-asset/process-nextick-args",
-            "version": "2.0.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz",
-                "reference": null,
-                "shasum": "7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/calvinmetcalf/process-nextick-args/issues"
-                },
-                "npm-asset-main": "index.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/calvinmetcalf/process-nextick-args.git"
-                },
-                "npm-asset-scripts": {
-                    "test": "node test.js"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                ""
-            ],
-            "description": "process.nextTick but always with args",
-            "homepage": "https://github.com/calvinmetcalf/process-nextick-args",
-            "time": "2019-06-19T20:34:39+00:00"
-        },
-        {
-            "name": "npm-asset/promise-polyfill",
-            "version": "8.1.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/promise-polyfill/-/promise-polyfill-8.1.0.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/readable-stream",
-            "version": "2.3.6",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz",
-                "reference": null,
-                "shasum": "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
-            },
-            "require": {
-                "npm-asset/core-util-is": "~1.0.0",
-                "npm-asset/inherits": "~2.0.3",
-                "npm-asset/isarray": "~1.0.0",
-                "npm-asset/process-nextick-args": "~2.0.0",
-                "npm-asset/safe-buffer": "~5.1.1",
-                "npm-asset/string_decoder": "~1.1.1",
-                "npm-asset/util-deprecate": "~1.0.1"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/nodejs/readable-stream/issues"
-                },
-                "npm-asset-main": "readable.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git://github.com/nodejs/readable-stream.git"
-                },
-                "npm-asset-scripts": {
-                    "test": "tap test/parallel/*.js test/ours/*.js && node test/verify-dependencies.js",
-                    "ci": "tap test/parallel/*.js test/ours/*.js --tap | tee test.tap && node test/verify-dependencies.js",
-                    "cover": "nyc npm test",
-                    "report": "nyc report --reporter=lcov"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Streams3, a user-land copy of the stream library from Node.js",
-            "homepage": "https://github.com/nodejs/readable-stream#readme",
-            "keywords": [
-                "pipe",
-                "readable",
-                "stream"
-            ],
-            "time": "2018-04-04T15:40:14+00:00"
-        },
-        {
             "name": "npm-asset/requirejs",
             "version": "2.3.3",
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/requirejs/-/requirejs-2.3.3.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/safe-buffer",
-            "version": "5.1.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.1.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/set-immediate-shim",
-            "version": "1.0.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz",
                 "reference": null,
                 "shasum": null
             },
@@ -5784,80 +5193,11 @@
             ]
         },
         {
-            "name": "npm-asset/spectrum-colorpicker",
-            "version": "1.8.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/spectrum-colorpicker/-/spectrum-colorpicker-1.8.0.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/string_decoder",
-            "version": "1.1.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz",
-                "reference": null,
-                "shasum": "9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
-            },
-            "require": {
-                "npm-asset/safe-buffer": "~5.1.0"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/nodejs/string_decoder/issues"
-                },
-                "npm-asset-main": "lib/string_decoder.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git://github.com/nodejs/string_decoder.git"
-                },
-                "npm-asset-scripts": {
-                    "test": "tap test/parallel/*.js && node test/verify-dependencies",
-                    "ci": "tap test/parallel/*.js test/ours/*.js --tap | tee test.tap && node test/verify-dependencies.js"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "The string_decoder module from Node core",
-            "homepage": "https://github.com/nodejs/string_decoder",
-            "keywords": [
-                "browser",
-                "browserify",
-                "decoder",
-                "string"
-            ],
-            "time": "2018-03-30T08:14:15+00:00"
-        },
-        {
             "name": "npm-asset/underscore",
             "version": "1.9.1",
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/underscore/-/underscore-1.9.1.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/util-deprecate",
-            "version": "1.0.2",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz",
                 "reference": null,
                 "shasum": null
             },
@@ -6230,7 +5570,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "2e85b9382814fdf6ac8dc7112ecaf04b0b15fe0e",
+                "reference": "1ca6f03c06851d30a27ff12897413cba0d6b4997",
                 "shasum": null
             },
             "require": {
@@ -6309,8 +5649,6 @@
                 "npm-asset/backbone": "1.4.*",
                 "npm-asset/bootstrap": "4.3.1",
                 "npm-asset/css-vars-ponyfill": "^2.0",
-                "npm-asset/grapesjs": "0.15.3-RC.2",
-                "npm-asset/grapesjs-preset-webpage": "0.1.11",
                 "npm-asset/jquery": "3.4.*",
                 "npm-asset/jquery-ui": "1.12.*",
                 "npm-asset/jquery.uniform": "4.3.*",
@@ -8775,40 +8113,34 @@
         },
         {
             "name": "symfony/contracts",
-            "version": "v1.1.6",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "3692662d26cd9d204a69748792ae021c35313610"
+                "reference": "d3636025e8253c6144358ec0a62773cae588395b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/3692662d26cd9d204a69748792ae021c35313610",
-                "reference": "3692662d26cd9d204a69748792ae021c35313610",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/d3636025e8253c6144358ec0a62773cae588395b",
+                "reference": "d3636025e8253c6144358ec0a62773cae588395b",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3",
-                "psr/cache": "^1.0",
-                "psr/container": "^1.0"
-            },
-            "replace": {
-                "symfony/cache-contracts": "self.version",
-                "symfony/event-dispatcher-contracts": "self.version",
-                "symfony/http-client-contracts": "self.version",
-                "symfony/service-contracts": "self.version",
-                "symfony/translation-contracts": "self.version"
+                "php": "^7.1.3"
             },
             "require-dev": {
+                "psr/cache": "^1.0",
+                "psr/container": "^1.0",
                 "symfony/polyfill-intl-idn": "^1.10"
             },
             "suggest": {
-                "psr/event-dispatcher": "When using the EventDispatcher contracts",
-                "symfony/cache-implementation": "",
+                "psr/cache": "When using the Cache contracts",
+                "psr/container": "When using the Service contracts",
+                "symfony/cache-contracts-implementation": "",
                 "symfony/event-dispatcher-implementation": "",
-                "symfony/http-client-implementation": "",
-                "symfony/service-implementation": "",
-                "symfony/translation-implementation": ""
+                "symfony/http-client-contracts-implementation": "",
+                "symfony/service-contracts-implementation": "",
+                "symfony/translation-contracts-implementation": ""
             },
             "type": "library",
             "extra": {
@@ -8848,7 +8180,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2019-08-21T15:14:41+00:00"
+            "time": "2019-04-27T14:29:50+00:00"
         },
         {
             "name": "symfony/monolog-bundle",
