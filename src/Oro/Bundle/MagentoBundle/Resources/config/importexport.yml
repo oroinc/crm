@@ -138,8 +138,6 @@ services:
 
     oro_magento.importexport.data_converter.customer:
         class: '%oro_magento.importexport.data_converter.customer.class%'
-        arguments:
-            - "@oro_entity.helper.field_helper"
         calls:
             - [addNodeDataConverter, ['addresses', "@oro_magento.importexport.data_converter.customer_address", true]]
             - [addNodeDataConverter, ['group', "@oro_magento.importexport.data_converter.customer_group"]]
