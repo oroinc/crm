@@ -249,6 +249,7 @@ class ForecastOfOpportunities
             // current moment
             $now        = $this->dateHelper->getCurrentDateTime();
             $diff       = $start->diff($now);
+            /** @var \DateTime $prevMoment */
             $prevMoment = clone $prevStart;
             $prevMoment->add($diff);
             $this->moments[$key] = $prevMoment;
