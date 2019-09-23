@@ -9,12 +9,11 @@ use Oro\Bundle\MagentoBundle\Form\Type\CustomerType;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -94,9 +93,8 @@ class CustomerController extends Controller
      * @param Customer $customer
      * @return JsonResponse
      *
-     * @Route("/register/{id}", name="oro_magento_customer_register", requirements={"id"="\d+"}))
+     * @Route("/register/{id}", name="oro_magento_customer_register", requirements={"id"="\d+"}, methods={"POST"})
      * @AclAncestor("oro_magento_customer_update")
-     * @Method("POST")
      * @CsrfProtection()
      */
     public function registerAction(Customer $customer)

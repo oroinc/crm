@@ -9,11 +9,10 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Magento Order Place Controller
@@ -53,8 +52,12 @@ class OrderPlaceController extends Controller
     }
 
     /**
-     * @Route("/sync/{id}", name="oro_magento_orderplace_new_cart_order_sync", requirements={"id"="\d+"}))
-     * @Method("POST")
+     * @Route(
+     *     "/sync/{id}",
+     *     name="oro_magento_orderplace_new_cart_order_sync",
+     *     requirements={"id"="\d+"},
+     *     methods={"POST"}
+     * )
      * @CsrfProtection()
      *
      * @param Cart $cart
@@ -141,10 +144,11 @@ class OrderPlaceController extends Controller
 
     /**
      * @Route(
-     *   "/customer_sync/{id}",
-     *   name="oro_magento_orderplace_new_customer_order_sync", requirements={"id"="\d+"})
+     *     "/customer_sync/{id}",
+     *     name="oro_magento_orderplace_new_customer_order_sync",
+     *     requirements={"id"="\d+"},
+     *     methods={"POST"}
      * )
-     * @Method("POST")
      * @CsrfProtection()
      *
      * @param Customer $customer
