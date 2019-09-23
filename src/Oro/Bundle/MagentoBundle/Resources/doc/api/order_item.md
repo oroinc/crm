@@ -125,7 +125,7 @@ Delete a collection of records represented by Magento order items.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### name
 
@@ -133,7 +133,7 @@ Delete a collection of records represented by Magento order items.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -149,7 +149,7 @@ Delete a collection of records represented by Magento order items.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 

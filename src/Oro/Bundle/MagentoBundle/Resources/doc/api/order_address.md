@@ -127,7 +127,7 @@ Delete a collection of Magento order address records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ## SUBRESOURCES
 

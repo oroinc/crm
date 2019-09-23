@@ -10,3 +10,8 @@ Oro\Bundle\CaseBundle\Entity\CaseEntity:
             - NotBlank: ~
         priority:
             - NotBlank: ~
+
+Oro\Bundle\CaseBundle\Entity\CaseComment:
+    properties:
+        message:
+            - NotBlank: ~

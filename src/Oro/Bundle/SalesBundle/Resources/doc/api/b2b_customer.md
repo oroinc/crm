@@ -182,7 +182,7 @@ Delete a specific business customer record.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### emails
 
@@ -246,7 +246,7 @@ The phone number that should be set as the primary one.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -262,7 +262,7 @@ The phone number that should be set as the primary one.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 

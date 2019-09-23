@@ -14,7 +14,7 @@ use Oro\Component\ChainProcessor\ProcessorInterface;
 
 /**
  * Renames "contacting activity" (ac_*) fields to have more readable names.
- * Excludes these fields for a specified actions, e.g. "update",
+ * Makes these fields read-only for specified actions, e.g. "update",
  * because they are calculated automatically and should not be updated manually.
  */
 class UpdateActivityContactFields implements ProcessorInterface
@@ -123,18 +123,19 @@ class UpdateActivityContactFields implements ProcessorInterface
             ActivityScope::CONTACT_COUNT_OUT     => 'timesContactedOut'
         ];
         foreach ($renameMap as $fieldName => $resultFieldName) {
-            if ($definition->hasField($fieldName) && !$definition->hasField($resultFieldName)) {
-                $field = $definition->getField($fieldName);
+            $field = $definition->getField($fieldName);
+            if (null !== $field && !$definition->hasField($resultFieldName)) {
                 if (!$field->hasPropertyPath()) {
                     $definition->removeField($fieldName);
                     $field->setPropertyPath($fieldName);
                     $definition->addField($resultFieldName, $field);
                 }
-                if (in_array($targetAction, $this->excludedActions, true)
-                    && !$field->hasExcluded()
-                    && !$field->isExcluded()
-                ) {
-                    $field->setExcluded();
+                if (\in_array($targetAction, $this->excludedActions, true) && !$field->isExcluded()) {
+                    $formOptions = $field->getFormOptions();
+                    if (null === $formOptions || !\array_key_exists('mapped', $formOptions)) {
+                        $formOptions['mapped'] = false;
+                        $field->setFormOptions($formOptions);
+                    }
                 }
             }
         }

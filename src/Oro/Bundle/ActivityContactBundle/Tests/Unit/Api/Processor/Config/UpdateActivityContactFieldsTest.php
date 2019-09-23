@@ -452,7 +452,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 'exclusion_policy' => 'all',
                 'fields'           => [
                     'lastContactedDate'    => [
-                        'exclude'       => true,
+                        'form_options'  => ['mapped' => false],
                         'property_path' => ActivityScope::LAST_CONTACT_DATE
                     ],
                     'lastContactedDateIn'  => [
@@ -460,18 +460,19 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                         'property_path' => ActivityScope::LAST_CONTACT_DATE_IN
                     ],
                     'lastContactedDateOut' => [
+                        'form_options'  => ['mapped' => false],
                         'property_path' => ActivityScope::LAST_CONTACT_DATE_OUT
                     ],
                     'timesContacted'       => [
-                        'exclude'       => true,
+                        'form_options'  => ['mapped' => false],
                         'property_path' => ActivityScope::CONTACT_COUNT
                     ],
                     'timesContactedIn'     => [
-                        'exclude'       => true,
+                        'form_options'  => ['mapped' => false],
                         'property_path' => ActivityScope::CONTACT_COUNT_IN
                     ],
                     'timesContactedOut'    => [
-                        'exclude'       => true,
+                        'form_options'  => ['mapped' => false],
                         'property_path' => ActivityScope::CONTACT_COUNT_OUT
                     ]
                 ]

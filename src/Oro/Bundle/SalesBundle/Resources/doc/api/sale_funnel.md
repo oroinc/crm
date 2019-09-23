@@ -122,7 +122,7 @@ Delete a collection of sales processes records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### startDate
 
@@ -130,7 +130,7 @@ Delete a collection of sales processes records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 

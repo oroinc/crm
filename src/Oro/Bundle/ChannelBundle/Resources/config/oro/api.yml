@@ -2,11 +2,6 @@ api:
     entities:
         Oro\Bundle\ChannelBundle\Entity\Channel:
             documentation_resource: '@OroChannelBundle/Resources/doc/api/channel.md'
-            actions:
-                create: false
-                update: false
-                delete: false
-                delete_list: false
             fields:
                 id: ~
                 name: ~
@@ -25,6 +20,12 @@ api:
                             data_type: entityType
                 data:
                     exclude: true
+            actions:
+                create: false
+                update: false
+                delete: false
+                delete_list: false
+
         Oro\Bundle\ChannelBundle\Entity\EntityName:
             # this entity does not have own API resource
             actions: false

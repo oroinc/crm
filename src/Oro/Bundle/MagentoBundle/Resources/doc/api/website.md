@@ -88,7 +88,7 @@ Delete a collection of Magento website records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### code
 
@@ -96,7 +96,7 @@ Delete a collection of Magento website records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -112,7 +112,7 @@ Delete a collection of Magento website records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
