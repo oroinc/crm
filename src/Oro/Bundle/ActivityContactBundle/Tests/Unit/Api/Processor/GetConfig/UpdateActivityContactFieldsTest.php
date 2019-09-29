@@ -1,11 +1,11 @@
 <?php
 
-namespace Oro\Bundle\ActivityContactBundle\Bundle\Tests\Unit\Api\Processor\Config;
+namespace Oro\Bundle\ActivityContactBundle\Bundle\Tests\Unit\Api\Processor\GetConfig;
 
-use Oro\Bundle\ActivityContactBundle\Api\Processor\Config\UpdateActivityContactFields;
+use Oro\Bundle\ActivityContactBundle\Api\Processor\GetConfig\UpdateActivityContactFields;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
-use Oro\Bundle\ApiBundle\Tests\Unit\Processor\Config\ConfigProcessorTestCase;
+use Oro\Bundle\ApiBundle\Tests\Unit\Processor\GetConfig\ConfigProcessorTestCase;
 use Oro\Bundle\ApiBundle\Util\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;

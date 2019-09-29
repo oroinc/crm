@@ -1,8 +1,8 @@
 <?php
 
-namespace Oro\Bundle\ActivityContactBundle\Api\Processor\Config;
+namespace Oro\Bundle\ActivityContactBundle\Api\Processor\GetConfig;
 
-use Oro\Bundle\ApiBundle\Processor\Config\ConfigContext;
+use Oro\Bundle\ApiBundle\Processor\GetConfig\ConfigContext;
 use Oro\Bundle\ApiBundle\Util\FieldDescriptionUtil;
 use Oro\Component\ChainProcessor\ContextInterface;
 use Oro\Component\ChainProcessor\ProcessorInterface;
