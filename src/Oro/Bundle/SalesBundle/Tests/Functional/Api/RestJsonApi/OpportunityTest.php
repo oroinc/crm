@@ -39,26 +39,26 @@ class OpportunityTest extends RestJsonApiTestCase
         return [
             'without parameters'                                                 => [
                 'parameters'      => [],
-                'expectedContent' => 'opportunity_cget.yml'
+                'expectedContent' => 'cget_opportunity.yml'
             ],
             'filter by status'                                                   => [
                 'parameters'      => [
                     'filter' => ['status' => 'won']
                 ],
-                'expectedContent' => 'opportunity_cget_filter_by_status.yml'
+                'expectedContent' => 'cget_opportunity_filter_by_status.yml'
             ],
             'title without fields and include filters'                           => [
                 'parameters'      => [
                     'meta' => 'title'
                 ],
-                'expectedContent' => 'opportunity_cget_title.yml'
+                'expectedContent' => 'cget_opportunity_title.yml'
             ],
             'fields and include filters for customer association'                => [
                 'parameters'      => [
                     'fields[opportunities]' => 'account,customer',
                     'include'               => 'account,customer'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association.yml'
+                'expectedContent' => 'cget_opportunity_customer_association.yml'
             ],
             'title for customer association'                                     => [
                 'parameters'      => [
@@ -66,7 +66,7 @@ class OpportunityTest extends RestJsonApiTestCase
                     'fields[opportunities]' => 'account,customer',
                     'include'               => 'account,customer'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association_title.yml'
+                'expectedContent' => 'cget_opportunity_customer_association_title.yml'
             ],
             'fields and include filters for nested customer association'         => [
                 'parameters'      => [
@@ -74,7 +74,7 @@ class OpportunityTest extends RestJsonApiTestCase
                     'fields[leads]'         => 'account,customer',
                     'include'               => 'lead.account,lead.customer'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association_nested.yml'
+                'expectedContent' => 'cget_opportunity_customer_association_nested.yml'
             ],
             'title for nested customer association'                              => [
                 'parameters'      => [
@@ -83,7 +83,7 @@ class OpportunityTest extends RestJsonApiTestCase
                     'fields[leads]'         => 'account,customer',
                     'include'               => 'lead.account,lead.customer'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association_nested_title.yml'
+                'expectedContent' => 'cget_opportunity_customer_association_nested_title.yml'
             ],
             'fields and include filters for nested association of lead.account'  => [
                 'parameters'      => [
@@ -93,7 +93,7 @@ class OpportunityTest extends RestJsonApiTestCase
                     'fields[organizations]' => 'name,users',
                     'include'               => 'lead.account.organization'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association_nested1.yml'
+                'expectedContent' => 'cget_opportunity_customer_association_nested1.yml'
             ],
             'title for nested association of lead.account'                       => [
                 'parameters'      => [
@@ -104,7 +104,7 @@ class OpportunityTest extends RestJsonApiTestCase
                     'fields[organizations]' => 'name,users',
                     'include'               => 'lead.account.organization'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association_nested1_title.yml'
+                'expectedContent' => 'cget_opportunity_customer_association_nested1_title.yml'
             ],
             'fields and include filters for nested association of lead.customer' => [
                 'parameters'      => [
@@ -114,7 +114,7 @@ class OpportunityTest extends RestJsonApiTestCase
                     'fields[organizations]' => 'name,users',
                     'include'               => 'lead.customer.organization'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association_nested2.yml'
+                'expectedContent' => 'cget_opportunity_customer_association_nested2.yml'
             ],
             'title for nested association of lead.customer'                      => [
                 'parameters'      => [
@@ -125,7 +125,7 @@ class OpportunityTest extends RestJsonApiTestCase
                     'fields[organizations]' => 'name,users',
                     'include'               => 'lead.customer.organization'
                 ],
-                'expectedContent' => 'opportunity_cget_customer_association_nested2_title.yml'
+                'expectedContent' => 'cget_opportunity_customer_association_nested2_title.yml'
             ],
             'title for close reason and status'                                  => [
                 'parameters'      => [
@@ -133,7 +133,7 @@ class OpportunityTest extends RestJsonApiTestCase
                     'fields[opportunities]' => 'closeReason,status',
                     'include'               => 'closeReason,status'
                 ],
-                'expectedContent' => 'opportunity_cget_dictionary_title.yml'
+                'expectedContent' => 'cget_opportunity_dictionary_title.yml'
             ]
         ];
     }
@@ -144,28 +144,44 @@ class OpportunityTest extends RestJsonApiTestCase
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>']
         );
 
-        $this->assertResponseContains('opportunity_get.yml', $response);
+        $this->assertResponseContains('get_opportunity.yml', $response);
     }
 
-    public function testPost()
+    public function testCreate()
     {
         $response = $this->post(
             ['entity' => 'opportunities'],
-            'opportunity_post.yml'
+            'create_opportunity.yml'
         );
 
-        $this->assertResponseContains('opportunity_post.yml', $response);
+        $this->assertResponseContains('create_opportunity.yml', $response);
 
         // test that the entity was created
         $entity = $this->getEntityManager()->find(Opportunity::class, $this->getResourceId($response));
         self::assertNotNull($entity);
     }
 
-    public function testPostWithoutAccountAndCustomer()
+    public function testCreateWithNullCreatedAtAndUpdatedAt()
+    {
+        $data = $this->getRequestData('create_opportunity_min.yml');
+        $data['data']['attributes']['createdAt'] = null;
+        $data['data']['attributes']['updatedAt'] = null;
+        $response = $this->post(
+            ['entity' => 'opportunities'],
+            $data
+        );
+
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $entity = $this->getEntityManager()->find(Opportunity::class, $this->getResourceId($response));
+        self::assertTrue($entity->getCreatedAt() !== null && $entity->getCreatedAt() <= $now);
+        self::assertTrue($entity->getUpdatedAt() !== null && $entity->getUpdatedAt() <= $now);
+    }
+
+    public function testTryToCreateWithoutAccountAndCustomer()
     {
         $response = $this->post(
             ['entity' => 'opportunities'],
-            $this->getRequestData('opportunity_post_no_account_and_customer.yml'),
+            $this->getRequestData('create_opportunity_no_account_and_customer.yml'),
             [],
             false
         );
@@ -179,11 +195,11 @@ class OpportunityTest extends RestJsonApiTestCase
         );
     }
 
-    public function testPostWithInconsistentCustomer()
+    public function testTryToCreateWithInconsistentCustomer()
     {
         $response = $this->post(
             ['entity' => 'opportunities'],
-            $this->getRequestData('opportunity_post_inconsistent_customer.yml'),
+            $this->getRequestData('create_opportunity_inconsistent_customer.yml'),
             [],
             false
         );
@@ -198,14 +214,70 @@ class OpportunityTest extends RestJsonApiTestCase
         );
     }
 
-    public function testPostWithConsistentCustomer()
+    public function testCreateWithConsistentCustomer()
     {
         $response = $this->post(
             ['entity' => 'opportunities'],
-            'opportunity_post_consistent_customer.yml'
+            'create_opportunity_consistent_customer.yml'
         );
 
-        $this->assertResponseContains('opportunity_post_consistent_customer.yml', $response);
+        $this->assertResponseContains('create_opportunity_consistent_customer.yml', $response);
+    }
+
+    public function testUpdateWithNullCreatedAtAndUpdatedAt()
+    {
+        /** @var Opportunity $opportunity */
+        $opportunity = $this->getReference('opportunity1');
+        $opportunityId = $opportunity->getId();
+        $createdAt = $opportunity->getCreatedAt();
+        $updatedAt = $opportunity->getUpdatedAt();
+        $data = [
+            'data' => [
+                'type'       => 'opportunities',
+                'id'         => (string)$opportunityId,
+                'attributes' => [
+                    'createdAt' => null,
+                    'updatedAt' => null
+                ]
+            ]
+        ];
+        $this->patch(
+            ['entity' => 'opportunities', 'id' => (string)$opportunityId],
+            $data
+        );
+
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $entity = $this->getEntityManager()->find(Opportunity::class, $opportunityId);
+        self::assertEquals($createdAt, $entity->getCreatedAt());
+        self::assertTrue($entity->getUpdatedAt() >= $updatedAt && $entity->getUpdatedAt() <= $now);
+    }
+
+    public function testUpdateShouldIgnoreCreatedAtAndUpdatedAt()
+    {
+        /** @var Opportunity $opportunity */
+        $opportunity = $this->getReference('opportunity1');
+        $opportunityId = $opportunity->getId();
+        $createdAt = $opportunity->getCreatedAt();
+        $updatedAt = $opportunity->getUpdatedAt();
+        $data = [
+            'data' => [
+                'type'       => 'opportunities',
+                'id'         => (string)$opportunityId,
+                'attributes' => [
+                    'createdAt' => '2019-01-01T01:01:01Z',
+                    'updatedAt' => '2019-01-01T01:01:01Z'
+                ]
+            ]
+        ];
+        $this->patch(
+            ['entity' => 'opportunities', 'id' => (string)$opportunityId],
+            $data
+        );
+
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $entity = $this->getEntityManager()->find(Opportunity::class, $opportunityId);
+        self::assertEquals($createdAt, $entity->getCreatedAt());
+        self::assertTrue($entity->getUpdatedAt() >= $updatedAt && $entity->getUpdatedAt() <= $now);
     }
 
     public function testGetLeadRelationship()
@@ -214,7 +286,7 @@ class OpportunityTest extends RestJsonApiTestCase
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'lead']
         );
 
-        $this->assertResponseContains('opportunity_get_relationship_lead.yml', $response);
+        $this->assertResponseContains('get_relationship_opportunity_lead.yml', $response);
     }
 
     public function testGetLeadSubresource()
@@ -223,7 +295,7 @@ class OpportunityTest extends RestJsonApiTestCase
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'lead']
         );
 
-        $this->assertResponseContains('opportunity_get_subresource_lead.yml', $response);
+        $this->assertResponseContains('get_subresource_opportunity_lead.yml', $response);
     }
 
     public function testGetAccountRelationship()
@@ -232,7 +304,7 @@ class OpportunityTest extends RestJsonApiTestCase
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'account']
         );
 
-        $this->assertResponseContains('opportunity_get_relationship_account.yml', $response);
+        $this->assertResponseContains('get_relationship_opportunity_account.yml', $response);
     }
 
     public function testGetAccountSubresource()
@@ -240,7 +312,7 @@ class OpportunityTest extends RestJsonApiTestCase
         $response = $this->getSubresource(
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'account']
         );
-        $this->assertResponseContains('opportunity_get_subresource_account.yml', $response);
+        $this->assertResponseContains('get_subresource_opportunity_account.yml', $response);
     }
 
     public function testGetAccountSubresourceWithIncludeFilter()
@@ -252,7 +324,7 @@ class OpportunityTest extends RestJsonApiTestCase
                 'include'          => 'organization'
             ]
         );
-        $this->assertResponseContains('opportunity_get_subresource_account_include.yml', $response);
+        $this->assertResponseContains('get_subresource_opportunity_account_include.yml', $response);
     }
 
     public function testGetAccountSubresourceWithTitle()
@@ -261,7 +333,7 @@ class OpportunityTest extends RestJsonApiTestCase
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'account'],
             ['meta' => 'title']
         );
-        $this->assertResponseContains('opportunity_get_subresource_account_title.yml', $response);
+        $this->assertResponseContains('get_subresource_opportunity_account_title.yml', $response);
     }
 
     public function testGetCustomerRelationship()
@@ -270,7 +342,7 @@ class OpportunityTest extends RestJsonApiTestCase
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer']
         );
 
-        $this->assertResponseContains('opportunity_get_relationship_customer.yml', $response);
+        $this->assertResponseContains('get_relationship_opportunity_customer.yml', $response);
     }
 
     public function testGetCustomerSubresource()
@@ -278,7 +350,7 @@ class OpportunityTest extends RestJsonApiTestCase
         $response = $this->getSubresource(
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer']
         );
-        $this->assertResponseContains('opportunity_get_subresource_customer.yml', $response);
+        $this->assertResponseContains('get_subresource_opportunity_customer.yml', $response);
     }
 
     public function testGetCustomerSubresourceWithIncludeFilter()
@@ -290,7 +362,7 @@ class OpportunityTest extends RestJsonApiTestCase
                 'include'              => 'organization'
             ]
         );
-        $this->assertResponseContains('opportunity_get_subresource_customer_include.yml', $response);
+        $this->assertResponseContains('get_subresource_opportunity_customer_include.yml', $response);
     }
 
     public function testGetCustomerSubresourceWithTitle()
@@ -299,7 +371,7 @@ class OpportunityTest extends RestJsonApiTestCase
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer'],
             ['meta' => 'title']
         );
-        $this->assertResponseContains('opportunity_get_subresource_customer_title.yml', $response);
+        $this->assertResponseContains('get_subresource_opportunity_customer_title.yml', $response);
     }
 
     public function testGetCustomerSubresourceWithIncludeFilterAndTitle()
@@ -312,10 +384,10 @@ class OpportunityTest extends RestJsonApiTestCase
                 'meta'                 => 'title'
             ]
         );
-        $this->assertResponseContains('opportunity_get_subresource_customer_include_title.yml', $response);
+        $this->assertResponseContains('get_subresource_opportunity_customer_include_title.yml', $response);
     }
 
-    public function testPatchLead()
+    public function testUpdateLead()
     {
         $opportunityId = $this->getReference('opportunity1')->getId();
         $leadId = $this->getReference('lead2')->getId();
@@ -337,7 +409,7 @@ class OpportunityTest extends RestJsonApiTestCase
             ]
         );
 
-        $this->assertResponseContains('opportunity_patch_lead.yml', $response);
+        $this->assertResponseContains('update_opportunity_lead.yml', $response);
 
         // test that the lead was changed
         $opportunity = $this->getEntityManager()->find(Opportunity::class, $opportunityId);
@@ -346,7 +418,7 @@ class OpportunityTest extends RestJsonApiTestCase
         self::assertSame($leadId, $lead->getId());
     }
 
-    public function testPatchAccount()
+    public function testUpdateAccount()
     {
         $opportunityId = $this->getReference('opportunity1')->getId();
         $accountId = $this->getReference('account2')->getId();
@@ -368,7 +440,7 @@ class OpportunityTest extends RestJsonApiTestCase
             ]
         );
 
-        $this->assertResponseContains('opportunity_patch_account.yml', $response);
+        $this->assertResponseContains('update_opportunity_account.yml', $response);
 
         // test that the account was changed
         $opportunity = $this->getEntityManager()->find(Opportunity::class, $opportunityId);
@@ -378,7 +450,7 @@ class OpportunityTest extends RestJsonApiTestCase
         self::assertNull($opportunity->getCustomerAssociation()->getCustomerTarget());
     }
 
-    public function testPatchCustomer()
+    public function testUpdateCustomer()
     {
         $opportunityId = $this->getReference('opportunity1')->getId();
         $customerId = $this->getReference('b2b_customer2')->getId();
@@ -400,7 +472,7 @@ class OpportunityTest extends RestJsonApiTestCase
             ]
         );
 
-        $this->assertResponseContains('opportunity_patch_customer.yml', $response);
+        $this->assertResponseContains('update_opportunity_customer.yml', $response);
 
         // test that the customer was changed
         $opportunity = $this->getEntityManager()->find(Opportunity::class, $opportunityId);
@@ -412,11 +484,11 @@ class OpportunityTest extends RestJsonApiTestCase
         self::assertSame($this->getReference('account2')->getId(), $account->getId());
     }
 
-    public function testPatchWithInconsistentCustomer()
+    public function testTryToUpdateWithInconsistentCustomer()
     {
         $response = $this->patch(
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>'],
-            $this->getRequestData('opportunity_patch_inconsistent_customer.yml'),
+            $this->getRequestData('update_opportunity_inconsistent_customer.yml'),
             [],
             false
         );
@@ -431,7 +503,7 @@ class OpportunityTest extends RestJsonApiTestCase
         );
     }
 
-    public function testPatchLeadAsRelationship()
+    public function testUpdateLeadAsRelationship()
     {
         $opportunityId = $this->getReference('opportunity1')->getId();
         $leadId = $this->getReference('lead2')->getId();
@@ -452,7 +524,7 @@ class OpportunityTest extends RestJsonApiTestCase
         self::assertSame($leadId, $lead->getId());
     }
 
-    public function testPatchAccountAsRelationship()
+    public function testUpdateAccountAsRelationship()
     {
         $opportunityId = $this->getReference('opportunity1')->getId();
         $accountId = $this->getReference('account2')->getId();
@@ -474,7 +546,7 @@ class OpportunityTest extends RestJsonApiTestCase
         self::assertNull($opportunity->getCustomerAssociation()->getCustomerTarget());
     }
 
-    public function testPatchCustomerAsRelationship()
+    public function testUpdateCustomerAsRelationship()
     {
         $opportunityId = $this->getReference('opportunity1')->getId();
         $customerId = $this->getReference('b2b_customer2')->getId();
@@ -498,7 +570,7 @@ class OpportunityTest extends RestJsonApiTestCase
         self::assertSame($this->getReference('account2')->getId(), $account->getId());
     }
 
-    public function testPatchAccountAsRelationshipWithNullValue()
+    public function testTryToUpdateAccountAsRelationshipWithNullValue()
     {
         $response = $this->patchRelationship(
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'account'],
@@ -516,7 +588,7 @@ class OpportunityTest extends RestJsonApiTestCase
         );
     }
 
-    public function testPatchCustomerAsRelationshipWithNullValue()
+    public function testTryToUpdateCustomerAsRelationshipWithNullValue()
     {
         $response = $this->patchRelationship(
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer'],

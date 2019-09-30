@@ -9,10 +9,9 @@ use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Magento Integration Config Controller
@@ -22,9 +21,8 @@ class IntegrationConfigController extends Controller
     /**
      * @return JsonResponse
      *
-     * @Route("/check", name="oro_magento_integration_check")
+     * @Route("/check", name="oro_magento_integration_check", methods={"POST"})
      * @AclAncestor("oro_integration_update")
-     * @Method("POST")
      * @CsrfProtection()
      */
     public function checkAction()

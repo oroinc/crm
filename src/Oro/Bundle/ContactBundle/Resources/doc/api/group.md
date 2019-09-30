@@ -107,7 +107,7 @@ Delete a collection of contact group records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### label
 
@@ -115,7 +115,7 @@ Delete a collection of contact group records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 

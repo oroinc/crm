@@ -30,6 +30,7 @@ class ContactAddressTest extends RestJsonApiTestCase
     private const COUNTRY_REGION_ADDRESS_REF    = 'contact_address1';
     private const PRIMARY_ADDRESS_REF           = 'contact_address1';
     private const UNCHANGEABLE_ADDRESS_REF      = 'contact_address1';
+    private const OWNER_REF                     = 'contact1';
     private const ANOTHER_OWNER_REF             = 'another_contact';
     private const ANOTHER_OWNER_ADDRESS_2_REF   = 'another_contact_address2';
 
@@ -306,7 +307,10 @@ class ContactAddressTest extends RestJsonApiTestCase
 
     public function testTryToUpdateOwner()
     {
-        $addressId = $this->getReference('contact_address1')->getId();
+        /** @var ContactAddress $address */
+        $address = $this->getReference('contact_address1');
+        $addressId = $address->getId();
+        $ownerId = $address->getOwner()->getId();
         $data = [
             'data' => [
                 'type'          => self::ENTITY_TYPE,
@@ -315,7 +319,7 @@ class ContactAddressTest extends RestJsonApiTestCase
                     'owner' => [
                         'data' => [
                             'type' => 'contacts',
-                            'id'   => '<toString(@contact1->id)>'
+                            'id'   => '<toString(@another_contact->id)>'
                         ]
                     ]
                 ]
@@ -324,17 +328,14 @@ class ContactAddressTest extends RestJsonApiTestCase
 
         $response = $this->patch(
             ['entity' => self::ENTITY_TYPE, 'id' => (string)$addressId],
-            $data,
-            [],
-            false
+            $data
         );
 
-        $this->assertResponseValidationError(
-            [
-                'title'  => 'extra fields constraint',
-                'detail' => 'This form should not contain extra fields: "owner".'
-            ],
-            $response
+        $data['data']['relationships']['owner']['data']['id'] = (string)$ownerId;
+        $this->assertResponseContains($data, $response);
+        self::assertSame(
+            $ownerId,
+            $this->getEntityManager()->find(self::ENTITY_CLASS, $addressId)->getOwner()->getId()
         );
     }
 

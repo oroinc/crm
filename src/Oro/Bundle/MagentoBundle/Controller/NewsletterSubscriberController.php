@@ -9,12 +9,11 @@ use Oro\Bundle\MagentoBundle\Model\NewsletterSubscriberManager;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Magento Newsletter Subscriber Controller
@@ -78,9 +77,9 @@ class NewsletterSubscriberController extends AbstractController
      * @Route(
      *      "/subscribe/{id}",
      *      name="oro_magento_newsletter_subscriber_subscribe",
-     *      requirements={"id"="\d+"})
+     *      requirements={"id"="\d+"},
+     *      methods={"POST"}
      * )
-     * @Method({"POST"})
      * @CsrfProtection()
      * @Acl(
      *      id="oro_magento_newsletter_subscriber_subscribe",
@@ -101,9 +100,9 @@ class NewsletterSubscriberController extends AbstractController
      * @Route(
      *      "/unsubscribe/{id}",
      *      name="oro_magento_newsletter_subscriber_unsubscribe",
-     *      requirements={"id"="\d+"})
+     *      requirements={"id"="\d+"},
+     *      methods={"POST"}
      * )
-     * @Method({"POST"})
      * @CsrfProtection()
      * @Acl(
      *      id="oro_magento_newsletter_subscriber_unsubscribe",
@@ -124,9 +123,9 @@ class NewsletterSubscriberController extends AbstractController
      * @Route(
      *      "/subscribe/customer/{id}",
      *      name="oro_magento_newsletter_subscriber_subscribe_customer",
-     *      requirements={"id"="\d+"})
+     *      requirements={"id"="\d+"},
+     *      methods={"POST"}
      * )
-     * @Method({"POST"})
      * @CsrfProtection()
      * @Acl(
      *      id="oro_magento_newsletter_subscriber_subscribe_customer",
@@ -147,9 +146,9 @@ class NewsletterSubscriberController extends AbstractController
      * @Route(
      *      "/unsubscribe/customer/{id}",
      *      name="oro_magento_newsletter_subscriber_unsubscribe_customer",
-     *      requirements={"id"="\d+"})
+     *      requirements={"id"="\d+"},
+     *      methods={"POST"}
      * )
-     * @Method({"POST"})
      * @CsrfProtection()
      * @Acl(
      *      id="oro_magento_newsletter_subscriber_unsubscribe_customer",

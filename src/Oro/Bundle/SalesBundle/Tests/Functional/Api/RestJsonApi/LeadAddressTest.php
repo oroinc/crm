@@ -23,11 +23,12 @@ class LeadAddressTest extends RestJsonApiTestCase
     private const OWNER_ENTITY_TYPE             = 'leads';
     private const OWNER_RELATIONSHIP            = 'owner';
     private const CREATE_MIN_REQUEST_DATA       = 'create_lead_address_min.yml';
-    private const OWNER_CREATE_MIN_REQUEST_DATA = 'lead_post_min.yml';
+    private const OWNER_CREATE_MIN_REQUEST_DATA = 'create_lead_min.yml';
     private const IS_REGION_REQUIRED            = false;
     private const COUNTRY_REGION_ADDRESS_REF    = 'lead_address1';
     private const PRIMARY_ADDRESS_REF           = 'lead_address1';
     private const UNCHANGEABLE_ADDRESS_REF      = 'lead_address1';
+    private const OWNER_REF                     = 'lead1';
     private const ANOTHER_OWNER_REF             = 'another_lead';
     private const ANOTHER_OWNER_ADDRESS_2_REF   = 'another_lead_address2';
 
@@ -254,7 +255,10 @@ class LeadAddressTest extends RestJsonApiTestCase
 
     public function testTryToUpdateOwner()
     {
-        $addressId = $this->getReference('lead_address1')->getId();
+        /** @var LeadAddress $address */
+        $address = $this->getReference('lead_address1');
+        $addressId = $address->getId();
+        $ownerId = $address->getOwner()->getId();
         $data = [
             'data' => [
                 'type'          => self::ENTITY_TYPE,
@@ -263,7 +267,7 @@ class LeadAddressTest extends RestJsonApiTestCase
                     'owner' => [
                         'data' => [
                             'type' => 'leads',
-                            'id'   => '<toString(@lead1->id)>'
+                            'id'   => '<toString(@another_lead->id)>'
                         ]
                     ]
                 ]
@@ -272,17 +276,14 @@ class LeadAddressTest extends RestJsonApiTestCase
 
         $response = $this->patch(
             ['entity' => self::ENTITY_TYPE, 'id' => (string)$addressId],
-            $data,
-            [],
-            false
+            $data
         );
 
-        $this->assertResponseValidationError(
-            [
-                'title'  => 'extra fields constraint',
-                'detail' => 'This form should not contain extra fields: "owner".'
-            ],
-            $response
+        $data['data']['relationships']['owner']['data']['id'] = (string)$ownerId;
+        $this->assertResponseContains($data, $response);
+        self::assertSame(
+            $ownerId,
+            $this->getEntityManager()->find(self::ENTITY_CLASS, $addressId)->getOwner()->getId()
         );
     }
 

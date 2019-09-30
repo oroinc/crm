@@ -163,7 +163,7 @@ Delete a collection of opportunity records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update 
 
@@ -205,7 +205,7 @@ An account the opportunity is assigned to.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### campaign
 

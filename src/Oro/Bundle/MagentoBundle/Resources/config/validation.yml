@@ -307,5 +307,19 @@ Oro\Bundle\MagentoBundle\Entity\OrderAddress:
 
 Oro\Bundle\MagentoBundle\Entity\CreditMemo:
     properties:
+        incrementId:
+            - NotBlank: ~
         order:
             - Valid: ~
+
+Oro\Bundle\MagentoBundle\Entity\CreditMemoItem:
+    properties:
+        qty:
+            - NotBlank: ~
+
+Oro\Bundle\MagentoBundle\Entity\Product:
+    properties:
+        name:
+            - NotBlank: ~
+        type:
+            - NotBlank: ~

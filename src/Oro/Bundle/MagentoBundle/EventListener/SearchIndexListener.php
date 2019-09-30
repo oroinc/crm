@@ -16,6 +16,9 @@ use Oro\Bundle\SearchBundle\Engine\IndexerInterface;
 use Oro\Bundle\SearchBundle\EventListener\IndexListener;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
+/**
+ * Extends search IndexListener to handle Oro\Bundle\MagentoBundle\Entity\Customer entity associations.
+ */
 class SearchIndexListener extends IndexListener
 {
     /** @var array */
@@ -43,7 +46,6 @@ class SearchIndexListener extends IndexListener
     public function postFlush(PostFlushEventArgs $args)
     {
         // Do nothing and waiting until import will be finished
-        // This method should be removed after CRM-8458
     }
 
     /**
@@ -52,15 +54,12 @@ class SearchIndexListener extends IndexListener
     public function onClear(OnClearEventArgs $args)
     {
         // Do nothing and waiting until import will be finished
-        // This method should be removed after CRM-8458
     }
 
     /**
      * Sends collected entities to indexation
      *
      * @param SyncEvent $event
-     *
-     * @todo This method is temporary solution and after CRM-8458 will be not required
      */
     public function onFinish(SyncEvent $event)
     {
@@ -89,7 +88,7 @@ class SearchIndexListener extends IndexListener
                         }
                     } elseif (!empty($association['inversedBy'])) {
                         $associationValue = $this->getAssociationValue($entity, $association);
-                        if ($associationValue !== false) {
+                        if (null !== $associationValue) {
                             $entitiesToReindex[spl_object_hash($associationValue)] = $associationValue;
                         }
                     }

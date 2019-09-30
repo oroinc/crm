@@ -126,7 +126,7 @@ Delete a collection of Magento cart addresses records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ## SUBRESOURCES
 

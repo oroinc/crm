@@ -131,7 +131,7 @@ Delete a collection of lead address records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### country
 
@@ -139,7 +139,7 @@ Delete a collection of lead address records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -155,15 +155,13 @@ Delete a collection of lead address records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**The read-only field. A passed value will be ignored.**
 
 ## SUBRESOURCES
 

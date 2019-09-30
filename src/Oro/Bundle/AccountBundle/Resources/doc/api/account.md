@@ -155,7 +155,7 @@ Delete a collection of account records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -171,7 +171,7 @@ Delete a collection of account records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ## SUBRESOURCES
 
