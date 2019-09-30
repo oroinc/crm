@@ -60,7 +60,7 @@
             "require": "4.2.*"
         },
         "branch-alias": {
-            "dev-master": "4.0-dev"
+            "dev-master": "4.1-dev"
         }
     }
 }
