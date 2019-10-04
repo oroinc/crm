@@ -39,12 +39,7 @@
                 ) }}
             {% endif %}
 
-            {%- set birthdayData -%}
-                {{ entity.birthday is not empty ? entity.birthday|oro_format_date : null }}
-                {% if entity.birthday is not empty %} ({{ entity.birthday|age_string({'default': 'N/A'}) }}){% endif %}
-            {%- endset -%}
-
-            {{ ui.renderProperty('oro.magento.customer.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
+            {{ ui.renderProperty('oro.magento.customer.birthday.label'|trans, ui.render_birthday(entity.birthday)) }}
             {{ ui.renderProperty('oro.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
             {{ ui.renderProperty('oro.magento.customer.vat.label'|trans, entity.vat ) }}
         </div>
