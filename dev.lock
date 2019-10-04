@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8424142dcfbc8457c20204622b0d616e",
+    "content-hash": "ce17368ae3a78c1d89f50fb29630e1af",
     "packages": [
         {
             "name": "akeneo/batch-bundle",
@@ -175,7 +175,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/crossbario/autobahn-js/zipball/5561cb7d39004cb764a01454d922c2b4a083d010",
-                "reference": "5561cb7d39004cb764a01454d922c2b4a083d010"
+                "reference": "5561cb7d39004cb764a01454d922c2b4a083d010",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -190,7 +191,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/gregjacobs/Autolinker.js/zipball/f99f4943b3f1fdab604659966c9903a775b03182",
-                "reference": "f99f4943b3f1fdab604659966c9903a775b03182"
+                "reference": "f99f4943b3f1fdab604659966c9903a775b03182",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -208,7 +210,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jashkenas/backbone/zipball/05fde9e201f7e2137796663081105cd6dad12a98",
-                "reference": "05fde9e201f7e2137796663081105cd6dad12a98"
+                "reference": "05fde9e201f7e2137796663081105cd6dad12a98",
+                "shasum": null
             },
             "require": {
                 "bower-asset/underscore": ">=1.7.0"
@@ -226,7 +229,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/wyuenho/backbone-pageable/zipball/d1063263056195d2534fd7d56595c1816eec2173",
-                "reference": "d1063263056195d2534fd7d56595c1816eec2173"
+                "reference": "d1063263056195d2534fd7d56595c1816eec2173",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -241,7 +245,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/addyosmani/backbone.paginator/zipball/71123a819b2b0fd549da6699f4f0e46b48223025",
-                "reference": "71123a819b2b0fd549da6699f4f0e46b48223025"
+                "reference": "71123a819b2b0fd549da6699f4f0e46b48223025",
+                "shasum": null
             },
             "require": {
                 "bower-asset/backbone": ">=1.2.3,<2.0.0",
@@ -263,7 +268,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/wyuenho/backgrid/zipball/9a45dbc4a2af4a555e8274b7cc1a966a7586cfea",
-                "reference": "9a45dbc4a2af4a555e8274b7cc1a966a7586cfea"
+                "reference": "9a45dbc4a2af4a555e8274b7cc1a966a7586cfea",
+                "shasum": null
             },
             "require": {
                 "bower-asset/backbone": "~1.2.3",
@@ -285,7 +291,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/wyuenho/backgrid-paginator/zipball/77ec7004d0dd0e72d81a11a797bd19e69aa8dfb7",
-                "reference": "77ec7004d0dd0e72d81a11a797bd19e69aa8dfb7"
+                "reference": "77ec7004d0dd0e72d81a11a797bd19e69aa8dfb7",
+                "shasum": null
             },
             "require": {
                 "bower-asset/backbone": ">=1.1.2,<2.0.0",
@@ -309,7 +316,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/davidchambers/Base64.js/zipball/b2d49f347ed1bce61000a82769bffc837b7c79dc",
-                "reference": "b2d49f347ed1bce61000a82769bffc837b7c79dc"
+                "reference": "b2d49f347ed1bce61000a82769bffc837b7c79dc",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -327,7 +335,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/fat/bean/zipball/0bbb3911ec2bb15333fdcf3a0a7904a1d4f62dea",
-                "reference": "0bbb3911ec2bb15333fdcf3a0a7904a1d4f62dea"
+                "reference": "0bbb3911ec2bb15333fdcf3a0a7904a1d4f62dea",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -342,7 +351,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/chaplinjs/downloads/zipball/9b52a254842650787341c67e82edc7758220c19f",
-                "reference": "9b52a254842650787341c67e82edc7758220c19f"
+                "reference": "9b52a254842650787341c67e82edc7758220c19f",
+                "shasum": null
             },
             "require": {
                 "bower-asset/backbone": "dev-1.x|1.x"
@@ -360,7 +370,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/brix/crypto-js/zipball/67d2e996e25e00f66118b3b8ab7f7fc8eae6e8d6",
-                "reference": "67d2e996e25e00f66118b3b8ab7f7fc8eae6e8d6"
+                "reference": "67d2e996e25e00f66118b3b8ab7f7fc8eae6e8d6",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -378,7 +389,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jonthornton/Datepair.js/zipball/5d243d5d513c42dfc07e27db80484e91bc15b9d1",
-                "reference": "5d243d5d513c42dfc07e27db80484e91bc15b9d1"
+                "reference": "5d243d5d513c42dfc07e27db80484e91bc15b9d1",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -396,10 +408,10 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/HumbleSoftware/Flotr2/zipball/df0ddedcab1a8fdb3a7abafc5fe97819931e7bd5",
-                "reference": "df0ddedcab1a8fdb3a7abafc5fe97819931e7bd5"
+                "reference": "df0ddedcab1a8fdb3a7abafc5fe97819931e7bd5",
+                "shasum": null
             },
-            "type": "bower-asset",
-            "time": "2014-07-21T18:45:41+00:00"
+            "type": "bower-asset"
         },
         {
             "name": "bower-asset/font-awesome",
@@ -412,7 +424,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/a8386aae19e200ddb0f6845b5feeee5eb7013687",
-                "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687"
+                "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -432,7 +445,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/fullcalendar/fullcalendar/zipball/447ab267528a211b253058dfb5d898b7a2296492",
-                "reference": "447ab267528a211b253058dfb5d898b7a2296492"
+                "reference": "447ab267528a211b253058dfb5d898b7a2296492",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=2,<4.0",
@@ -454,7 +468,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/krisk/Fuse/zipball/f68a18a9b94eedfc82dfc7d7def8a8966c9f5b33",
-                "reference": "f68a18a9b94eedfc82dfc7d7def8a8966c9f5b33"
+                "reference": "f68a18a9b94eedfc82dfc7d7def8a8966c9f5b33",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -469,7 +484,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/1b30f3ad466ebf2714d47eda34dbd7fdf6849fe3",
-                "reference": "1b30f3ad466ebf2714d47eda34dbd7fdf6849fe3"
+                "reference": "1b30f3ad466ebf2714d47eda34dbd7fdf6849fe3",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -487,7 +503,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/flydreamers/ajaxQueue/zipball/50ffe758abe1a365ad228851ee7028677bfb07b4",
-                "reference": "50ffe758abe1a365ad228851ee7028677bfb07b4"
+                "reference": "50ffe758abe1a365ad228851ee7028677bfb07b4",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -505,7 +522,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/carhartl/jquery-cookie/zipball/7f88a4e631aba8a8c688fd8999ce6b9bcfd50718",
-                "reference": "7f88a4e631aba8a8c688fd8999ce6b9bcfd50718"
+                "reference": "7f88a4e631aba8a8c688fd8999ce6b9bcfd50718",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.2"
@@ -523,7 +541,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jquery-form/form/zipball/c15a69251b36544cda48892c23e0dcec21fff838",
-                "reference": "c15a69251b36544cda48892c23e0dcec21fff838"
+                "reference": "c15a69251b36544cda48892c23e0dcec21fff838",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.7"
@@ -544,7 +563,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jquery/jquery-mousewheel/zipball/67289b6b2aa0066d7d78a5807f520387135ffb22",
-                "reference": "67289b6b2aa0066d7d78a5807f520387135ffb22"
+                "reference": "67289b6b2aa0066d7d78a5807f520387135ffb22",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.2.2"
@@ -562,7 +582,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/ehynds/jquery-ui-multiselect-widget/zipball/a5f3e0cffa6cc1d9fcd75c5977e3185b4bd5d635",
-                "reference": "a5f3e0cffa6cc1d9fcd75c5977e3185b4bd5d635"
+                "reference": "a5f3e0cffa6cc1d9fcd75c5977e3185b4bd5d635",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -577,7 +598,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jzaefferer/jquery-validation/zipball/29b9c702b9c831419f9f774d2acb86f42f803e11",
-                "reference": "29b9c702b9c831419f9f774d2acb86f42f803e11"
+                "reference": "29b9c702b9c831419f9f774d2acb86f42f803e11",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.7.2"
@@ -598,7 +620,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/inuyaksa/jquery.nicescroll/zipball/f599466737ca88d4413014f9d30485d1e7720572",
-                "reference": "f599466737ca88d4413014f9d30485d1e7720572"
+                "reference": "f599466737ca88d4413014f9d30485d1e7720572",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.8.3"
@@ -616,7 +639,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/SamWM/jquery-numeric/zipball/bb9ef0cfbddcd815d21bff6cdbae0133f85e57e9",
-                "reference": "bb9ef0cfbddcd815d21bff6cdbae0133f85e57e9"
+                "reference": "bb9ef0cfbddcd815d21bff6cdbae0133f85e57e9",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.6"
@@ -637,7 +661,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sporritt/jsPlumb/zipball/b2b347b3d20a172d4f73528365bcf01ef953017c",
-                "reference": "b2b347b3d20a172d4f73528365bcf01ef953017c"
+                "reference": "b2b347b3d20a172d4f73528365bcf01ef953017c",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -655,7 +680,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/vakata/jstree/zipball/c9d7c1425f2272c5400536fa631eba8657522ecf",
-                "reference": "c9d7c1425f2272c5400536fa631eba8657522ecf"
+                "reference": "c9d7c1425f2272c5400536fa631eba8657522ecf",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.9.1"
@@ -676,7 +702,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sachinchoolur/lightGallery/zipball/7b7603e9b1bbabee2228fb8411f34ad67993c130",
-                "reference": "7b7603e9b1bbabee2228fb8411f34ad67993c130"
+                "reference": "7b7603e9b1bbabee2228fb8411f34ad67993c130",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.7.0"
@@ -697,7 +724,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/moment/moment/zipball/b8a7fc310eb3625e83fc0c8f1ea2840fa83c7378",
-                "reference": "b8a7fc310eb3625e83fc0c8f1ea2840fa83c7378"
+                "reference": "b8a7fc310eb3625e83fc0c8f1ea2840fa83c7378",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -715,7 +743,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/moment/moment-timezone/zipball/2b8da8f103f019949d45dc86fd6763960c8474d8",
-                "reference": "2b8da8f103f019949d45dc86fd6763960c8474d8"
+                "reference": "2b8da8f103f019949d45dc86fd6763960c8474d8",
+                "shasum": null
             },
             "require": {
                 "bower-asset/moment": ">=2.9.0"
@@ -736,7 +765,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/adamwdraper/Numeral-js/zipball/7de892ffb438af6e63b9c4f6aff0c9bc3932f09f",
-                "reference": "7de892ffb438af6e63b9c4f6aff0c9bc3932f09f"
+                "reference": "7de892ffb438af6e63b9c4f6aff0c9bc3932f09f",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -751,7 +781,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/select2/select2/zipball/13dc8a1ff3af6515c23dbca1ae3dcc0b0dc1b0c1",
-                "reference": "13dc8a1ff3af6515c23dbca1ae3dcc0b0dc1b0c1"
+                "reference": "13dc8a1ff3af6515c23dbca1ae3dcc0b0dc1b0c1",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -766,7 +797,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/requirejs/text/zipball/d04de4ffd7bf5ba6cb80cdca2d40d4f6f52a1b1f",
-                "reference": "d04de4ffd7bf5ba6cb80cdca2d40d4f6f52a1b1f"
+                "reference": "d04de4ffd7bf5ba6cb80cdca2d40d4f6f52a1b1f",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -784,7 +816,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jonthornton/jquery-timepicker/zipball/3f26316a6f417c77737488d763e9a9055c20d8ae",
-                "reference": "3f26316a6f417c77737488d763e9a9055c20d8ae"
+                "reference": "3f26316a6f417c77737488d763e9a9055c20d8ae",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.7"
@@ -805,7 +838,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jashkenas/underscore/zipball/ae037f7c41323807ae6f1533c45512e6d31a1574",
-                "reference": "ae037f7c41323807ae6f1533c45512e6d31a1574"
+                "reference": "ae037f7c41323807ae6f1533c45512e6d31a1574",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -820,7 +854,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/cujojs/when/zipball/a2acf1d86d150f5e9617e761b4c69c3158ed01ea",
-                "reference": "a2acf1d86d150f5e9617e761b4c69c3158ed01ea"
+                "reference": "a2acf1d86d150f5e9617e761b4c69c3158ed01ea",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -973,8 +1008,8 @@
             "authors": [
                 {
                     "name": "Chris Boden",
-                    "role": "Developer",
-                    "email": "cboden@gmail.com"
+                    "email": "cboden@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "PHP WebSocket library",
@@ -4626,9 +4661,9 @@
             "authors": [
                 {
                     "name": "Michel Fortin",
-                    "role": "Developer",
                     "email": "michel.fortin@michelf.ca",
-                    "homepage": "https://michelf.ca/"
+                    "homepage": "https://michelf.ca/",
+                    "role": "Developer"
                 },
                 {
                     "name": "John Gruber",
@@ -5013,7 +5048,9 @@
             "version": "1.4.0",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/backbone/-/backbone-1.4.0.tgz"
+                "url": "https://registry.npmjs.org/backbone/-/backbone-1.4.0.tgz",
+                "reference": null,
+                "shasum": null
             },
             "require": {
                 "npm-asset/underscore": ">=1.8.3"
@@ -5028,7 +5065,9 @@
             "version": "4.3.1",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/bootstrap/-/bootstrap-4.3.1.tgz"
+                "url": "https://registry.npmjs.org/bootstrap/-/bootstrap-4.3.1.tgz",
+                "reference": null,
+                "shasum": null
             },
             "type": "npm-asset",
             "license": [
@@ -5040,7 +5079,9 @@
             "version": "2.0.2",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/css-vars-ponyfill/-/css-vars-ponyfill-2.0.2.tgz"
+                "url": "https://registry.npmjs.org/css-vars-ponyfill/-/css-vars-ponyfill-2.0.2.tgz",
+                "reference": null,
+                "shasum": null
             },
             "type": "npm-asset",
             "license": [
@@ -5052,7 +5093,9 @@
             "version": "3.4.1",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/jquery/-/jquery-3.4.1.tgz"
+                "url": "https://registry.npmjs.org/jquery/-/jquery-3.4.1.tgz",
+                "reference": null,
+                "shasum": null
             },
             "type": "npm-asset",
             "license": [
@@ -5064,7 +5107,9 @@
             "version": "1.12.1",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/jquery-ui/-/jquery-ui-1.12.1.tgz"
+                "url": "https://registry.npmjs.org/jquery-ui/-/jquery-ui-1.12.1.tgz",
+                "reference": null,
+                "shasum": null
             },
             "type": "npm-asset",
             "license": [
@@ -5076,7 +5121,9 @@
             "version": "4.3.0",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/jquery.uniform/-/jquery.uniform-4.3.0.tgz"
+                "url": "https://registry.npmjs.org/jquery.uniform/-/jquery.uniform-4.3.0.tgz",
+                "reference": null,
+                "shasum": null
             },
             "require": {
                 "npm-asset/jquery": ">=3.3.1,<4.0.0"
@@ -5091,7 +5138,9 @@
             "version": "1.6.3",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/overlayscrollbars/-/overlayscrollbars-1.6.3.tgz"
+                "url": "https://registry.npmjs.org/overlayscrollbars/-/overlayscrollbars-1.6.3.tgz",
+                "reference": null,
+                "shasum": null
             },
             "type": "npm-asset",
             "license": [
@@ -5103,7 +5152,9 @@
             "version": "1.14.7",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/popper.js/-/popper.js-1.14.7.tgz"
+                "url": "https://registry.npmjs.org/popper.js/-/popper.js-1.14.7.tgz",
+                "reference": null,
+                "shasum": null
             },
             "type": "npm-asset",
             "license": [
@@ -5115,7 +5166,9 @@
             "version": "2.3.3",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/requirejs/-/requirejs-2.3.3.tgz"
+                "url": "https://registry.npmjs.org/requirejs/-/requirejs-2.3.3.tgz",
+                "reference": null,
+                "shasum": null
             },
             "type": "npm-asset",
             "license": [
@@ -5127,7 +5180,9 @@
             "version": "1.6.0",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/slick-carousel/-/slick-carousel-1.6.0.tgz"
+                "url": "https://registry.npmjs.org/slick-carousel/-/slick-carousel-1.6.0.tgz",
+                "reference": null,
+                "shasum": null
             },
             "require": {
                 "npm-asset/jquery": ">=1.7.2"
@@ -5142,7 +5197,9 @@
             "version": "1.9.1",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/underscore/-/underscore-1.9.1.tgz"
+                "url": "https://registry.npmjs.org/underscore/-/underscore-1.9.1.tgz",
+                "reference": null,
+                "shasum": null
             },
             "type": "npm-asset",
             "license": [
@@ -5154,7 +5211,9 @@
             "version": "3.2.0",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/xregexp/-/xregexp-3.2.0.tgz"
+                "url": "https://registry.npmjs.org/xregexp/-/xregexp-3.2.0.tgz",
+                "reference": null,
+                "shasum": null
             },
             "type": "npm-asset",
             "license": [
@@ -5286,7 +5345,8 @@
             "dist": {
                 "type": "path",
                 "url": "../calendar",
-                "reference": "b2afdad5c1dd9880b1e75b1758fe495556c01c83"
+                "reference": "b2afdad5c1dd9880b1e75b1758fe495556c01c83",
+                "shasum": null
             },
             "require": {
                 "bower-asset/fullcalendar": "3.4.0",
@@ -5330,7 +5390,8 @@
             "dist": {
                 "type": "path",
                 "url": "../call",
-                "reference": "ad98c4dfb9a839c39400ff5364b514d939dae803"
+                "reference": "ad98c4dfb9a839c39400ff5364b514d939dae803",
+                "shasum": null
             },
             "require": {
                 "oro/platform": "4.0.*"
@@ -5371,7 +5432,8 @@
             "dist": {
                 "type": "path",
                 "url": "../task",
-                "reference": "2bfc66f6da842407f9be15573bccb5546d04e980"
+                "reference": "2bfc66f6da842407f9be15573bccb5546d04e980",
+                "shasum": null
             },
             "require": {
                 "oro/platform": "4.0.*"
@@ -5467,7 +5529,8 @@
             "dist": {
                 "type": "path",
                 "url": "../marketing",
-                "reference": "9761c575e8d98c6dac99982a8095d69d022b6a27"
+                "reference": "9761c575e8d98c6dac99982a8095d69d022b6a27",
+                "shasum": null
             },
             "require": {
                 "oro/platform": "4.0.*"
@@ -5507,7 +5570,8 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "f472897915c4b81e16138a756622d306599ea713"
+                "reference": "5bdc44bf4ad7e32c2bfed083facaf63de4bf91cb",
+                "shasum": null
             },
             "require": {
                 "akeneo/batch-bundle": "0.4.11",
@@ -5631,7 +5695,7 @@
                 "oro/twig-inspector": "1.0.*",
                 "phpmd/phpmd": "2.6.*",
                 "phpunit/phpcov": "5.0.*",
-                "phpunit/phpunit": "7.5.*",
+                "phpunit/phpunit": "7.5.15",
                 "sebastian/phpcpd": "4.0.*",
                 "squizlabs/php_codesniffer": "3.3.*",
                 "symfony/phpunit-bridge": "4.3.*",
@@ -5673,7 +5737,8 @@
             "dist": {
                 "type": "path",
                 "url": "../redis-config",
-                "reference": "24cde91e27505c1b636fa53b48c06b2028a1a8ec"
+                "reference": "24cde91e27505c1b636fa53b48c06b2028a1a8ec",
+                "shasum": null
             },
             "require": {
                 "predis/predis": "^1.0",
@@ -7135,8 +7200,8 @@
             "authors": [
                 {
                     "name": "Chris Boden",
-                    "role": "Developer",
-                    "email": "cboden@gmail.com"
+                    "email": "cboden@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "RFC6455 WebSocket protocol handler",
@@ -9066,19 +9131,19 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "role": "Lead Developer",
                     "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org"
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Armin Ronacher",
-                    "role": "Project Founder",
-                    "email": "armin.ronacher@active-4.com"
+                    "email": "armin.ronacher@active-4.com",
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Twig Team",
-                    "role": "Contributors",
-                    "homepage": "https://twig.symfony.com/contributors"
+                    "homepage": "https://twig.symfony.com/contributors",
+                    "role": "Contributors"
                 }
             ],
             "description": "Twig, the flexible, fast, and secure template language for PHP",
@@ -10327,13 +10392,13 @@
             "authors": [
                 {
                     "name": "Justin Bishop",
-                    "role": "Developer",
-                    "email": "jubishop@gmail.com"
+                    "email": "jubishop@gmail.com",
+                    "role": "Developer"
                 },
                 {
                     "name": "Anthon Pang",
-                    "role": "Fork Maintainer",
-                    "email": "apang@softwaredevelopment.ca"
+                    "email": "apang@softwaredevelopment.ca",
+                    "role": "Fork Maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",
@@ -10573,7 +10638,8 @@
             "dist": {
                 "type": "path",
                 "url": "../twig-inspector",
-                "reference": "c23ff1f0ac92b5a8aaa15823a15dc404372ff660"
+                "reference": "c23ff1f0ac92b5a8aaa15823a15dc404372ff660",
+                "shasum": null
             },
             "require": {
                 "symfony/config": "^3.4 | ^4.0",
@@ -10693,18 +10759,18 @@
             "authors": [
                 {
                     "name": "Arne Blankerts",
-                    "role": "Developer",
-                    "email": "arne@blankerts.de"
+                    "email": "arne@blankerts.de",
+                    "role": "Developer"
                 },
                 {
                     "name": "Sebastian Heuer",
-                    "role": "Developer",
-                    "email": "sebastian@phpeople.de"
+                    "email": "sebastian@phpeople.de",
+                    "role": "Developer"
                 },
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "Developer",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "Developer"
                 }
             ],
             "description": "Component for reading phar.io manifest information from a PHP Archive (PHAR)",
@@ -11243,16 +11309,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.5.16",
+            "version": "7.5.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "316afa6888d2562e04aeb67ea7f2017a0eb41661"
+                "reference": "d79c053d972856b8b941bb233e39dc521a5093f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/316afa6888d2562e04aeb67ea7f2017a0eb41661",
-                "reference": "316afa6888d2562e04aeb67ea7f2017a0eb41661",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d79c053d972856b8b941bb233e39dc521a5093f0",
+                "reference": "d79c053d972856b8b941bb233e39dc521a5093f0",
                 "shasum": ""
             },
             "require": {
@@ -11323,7 +11389,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-09-14T09:08:39+00:00"
+            "time": "2019-08-21T07:05:16+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -12298,8 +12364,8 @@
             "authors": [
                 {
                     "name": "Arne Blankerts",
-                    "role": "Developer",
-                    "email": "arne@blankerts.de"
+                    "email": "arne@blankerts.de",
+                    "role": "Developer"
                 }
             ],
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
