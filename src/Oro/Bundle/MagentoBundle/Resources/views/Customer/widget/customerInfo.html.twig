@@ -21,13 +21,9 @@
             {% if customer.store %}
                 {{ UI.renderProperty('oro.magento.customer.store.label'|trans, customer.store.name) }}
             {% endif %}
-            {%- set birthdayData -%}
-                {{ customer.birthday is not empty ? customer.birthday|oro_format_date : null }}
-                {% if customer.birthday is not empty %} ({{ customer.birthday|age_string({'default': 'N/A'}) }}){% endif %}
-            {%- endset -%}
         </div>
         <div class="responsive-block">
-            {{ UI.renderProperty('oro.magento.customer.birthday.label'|trans, customer.birthday ? birthdayData : null) }}
+            {{ UI.renderProperty('oro.magento.customer.birthday.label'|trans, UI.render_birthday(customer.birthday)) }}
             {{ UI.renderProperty('oro.magento.customer.gender.label'|trans, oro_gender(customer.gender)) }}
             {{ UI.renderProperty('oro.magento.customer.vat.label'|trans, customer.vat ) }}
 

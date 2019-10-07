@@ -7,9 +7,9 @@ services:
             - '@oro_activity_contact.provider'
             - ['update']
         tags:
-            - { name: oro.api.processor, action: get_config, extra: '!identifier_fields_only&definition', priority: -40 }
+            - { name: oro.api.processor, action: get_config, extra: '!identifier_fields_only', priority: -40 }
 
     oro_activity_contact.api.get_config.complete_descriptions_for_activity_contact_fields:
         class: Oro\Bundle\ActivityContactBundle\Api\Processor\GetConfig\CompleteDescriptionsForActivityContactFields
         tags:
-            - { name: oro.api.processor, action: get_config, targetAction: update, extra: 'descriptions&!identifier_fields_only&definition', priority: -220 }
+            - { name: oro.api.processor, action: get_config, targetAction: update, extra: 'descriptions&!identifier_fields_only', priority: -220 }
