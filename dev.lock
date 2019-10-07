@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8424142dcfbc8457c20204622b0d616e",
+    "content-hash": "ce17368ae3a78c1d89f50fb29630e1af",
     "packages": [
         {
             "name": "akeneo/batch-bundle",
@@ -5506,7 +5506,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "72ad12ace70986ea34b3125fbdba3090b35005bb"
+                "reference": "77e69ce14315989f3f316cfb1af077a7dea955a5"
             },
             "require": {
                 "akeneo/batch-bundle": "0.4.11",
@@ -5630,7 +5630,7 @@
                 "oro/twig-inspector": "1.0.*",
                 "phpmd/phpmd": "2.6.*",
                 "phpunit/phpcov": "5.0.*",
-                "phpunit/phpunit": "7.5.*",
+                "phpunit/phpunit": "7.5.15",
                 "sebastian/phpcpd": "4.0.*",
                 "squizlabs/php_codesniffer": "3.3.*",
                 "symfony/phpunit-bridge": "4.3.*",
@@ -11242,16 +11242,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.5.16",
+            "version": "7.5.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "316afa6888d2562e04aeb67ea7f2017a0eb41661"
+                "reference": "d79c053d972856b8b941bb233e39dc521a5093f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/316afa6888d2562e04aeb67ea7f2017a0eb41661",
-                "reference": "316afa6888d2562e04aeb67ea7f2017a0eb41661",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d79c053d972856b8b941bb233e39dc521a5093f0",
+                "reference": "d79c053d972856b8b941bb233e39dc521a5093f0",
                 "shasum": ""
             },
             "require": {
@@ -11322,7 +11322,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-09-14T09:08:39+00:00"
+            "time": "2019-08-21T07:05:16+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
