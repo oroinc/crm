@@ -281,7 +281,7 @@ services:
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments:
-            - "oro_sales_b2bcustomer_form"
+            - "oro_sales_b2bcustomer"
             - Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType
 
     oro_sales.b2bcustomer.form.api:

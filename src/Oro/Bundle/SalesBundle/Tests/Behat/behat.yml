@@ -18,28 +18,28 @@ oro_behat_extension:
             type: xpath
 
     Business Customer Form:
-      selector: 'form[name="oro_sales_b2bcustomer_form"]'
+      selector: 'form[name="oro_sales_b2bcustomer"]'
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
       options:
         mapping:
           Billing Address Country:
-            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_billingAddress_country-uid")]/input'
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_billingAddress_country-uid")]/input'
             type: xpath
           Billing Address State:
-            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_billingAddress_region")]/input'
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_billingAddress_region")]/input'
             type: xpath
-          Billing Address City: 'oro_sales_b2bcustomer_form[billingAddress][city]'
-          Billing Address Street: 'oro_sales_b2bcustomer_form[billingAddress][street]'
-          Billing Address Postal Code: 'oro_sales_b2bcustomer_form[billingAddress][postalCode]'
+          Billing Address City: 'oro_sales_b2bcustomer[billingAddress][city]'
+          Billing Address Street: 'oro_sales_b2bcustomer[billingAddress][street]'
+          Billing Address Postal Code: 'oro_sales_b2bcustomer[billingAddress][postalCode]'
           Shipping Address Country:
-            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_shippingAddress_country-uid")]/input'
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_shippingAddress_country-uid")]/input'
             type: xpath
           Shipping Address State:
-            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_form_shippingAddress_region-uid")]/input'
+            locator: '//div[contains(@id,"s2id_oro_sales_b2bcustomer_shippingAddress_region-uid")]/input'
             type: xpath
-          Shipping Address City: 'oro_sales_b2bcustomer_form[shippingAddress][city]'
-          Shipping Address Street: 'oro_sales_b2bcustomer_form[shippingAddress][street]'
-          Shipping Address Postal Code: 'oro_sales_b2bcustomer_form[shippingAddress][postalCode]'
+          Shipping Address City: 'oro_sales_b2bcustomer[shippingAddress][city]'
+          Shipping Address Street: 'oro_sales_b2bcustomer[shippingAddress][street]'
+          Shipping Address Postal Code: 'oro_sales_b2bcustomer[shippingAddress][postalCode]'
 
     Contact create new:
       selector:
@@ -77,7 +77,7 @@ oro_behat_extension:
       class: Oro\Bundle\SalesBundle\Tests\Behat\Element\OpportunityProbabilitiesConfigForm
 
     SalesB2bCustomerForm:
-      selector: 'form[name="oro_sales_b2bcustomer_form"]'
+      selector: 'form[name="oro_sales_b2bcustomer"]'
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
 
     Develop Opportunity Form:
@@ -188,14 +188,14 @@ oro_behat_extension:
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
 
     Business Customers Address Form:
-      selector: 'form[name="oro_sales_b2bcustomer_form"]'
+      selector: 'form[name="oro_sales_b2bcustomer"]'
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
       options:
         mapping:
-          Billing Address Country: 'oro_sales_b2bcustomer_form[billingAddress][country]'
-          Billing Address State: 'oro_sales_b2bcustomer_form[billingAddress][region]'
-          Shipping Address Country: 'oro_sales_b2bcustomer_form[shippingAddress][country]'
-          Shipping Address State: 'oro_sales_b2bcustomer_form[shippingAddress][region]'
+          Billing Address Country: 'oro_sales_b2bcustomer[billingAddress][country]'
+          Billing Address State: 'oro_sales_b2bcustomer[billingAddress][region]'
+          Shipping Address Country: 'oro_sales_b2bcustomer[shippingAddress][country]'
+          Shipping Address State: 'oro_sales_b2bcustomer[shippingAddress][region]'
 
     Bussines Customer Leads Paginator:
       selector: 'div[data-page-component-name="sales-customers-leads-grid"] div.toolbar div.pagination'
