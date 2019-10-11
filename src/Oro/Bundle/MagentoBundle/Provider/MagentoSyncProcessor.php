@@ -14,6 +14,9 @@ use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Sync processor for magento integration.
+ */
 class MagentoSyncProcessor extends SyncProcessor
 {
     const SYNCED_TO = 'initialSyncedTo';
@@ -150,11 +153,11 @@ class MagentoSyncProcessor extends SyncProcessor
     }
 
     /**
-     * @param $syncedTo
-     * @param $interval
-     * @return mixed
+     * @param \DateTime $syncedTo
+     * @param \DateInterval $interval
+     * @return \DateTime
      */
-    protected function getIncrementalSyncedTo($syncedTo, $interval)
+    protected function getIncrementalSyncedTo(\DateTime $syncedTo, \DateInterval $interval): \DateTime
     {
         $syncedTo->add($interval);
         $now = new \DateTime('now', new \DateTimeZone('UTC'));

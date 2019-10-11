@@ -57,13 +57,13 @@ class LeadTest extends RestJsonApiTestCase
         return [
             'without parameters'                                                        => [
                 'parameters'      => [],
-                'expectedContent' => 'lead_cget.yml'
+                'expectedContent' => 'cget_lead.yml'
             ],
             'filter by status'                                                          => [
                 'parameters'      => [
                     'filter' => ['status' => 'new']
                 ],
-                'expectedContent' => 'lead_cget_filter_by_status.yml'
+                'expectedContent' => 'cget_lead_filter_by_status.yml'
             ],
             'fields and include filters for customer association'                       => [
                 'parameters'      => [
@@ -71,7 +71,7 @@ class LeadTest extends RestJsonApiTestCase
                     'fields[accounts]' => 'name,organization',
                     'include'          => 'account,customer'
                 ],
-                'expectedContent' => 'lead_cget_customer_association.yml'
+                'expectedContent' => 'cget_lead_customer_association.yml'
             ],
             'fields and include filters for nested association of customer association' => [
                 'parameters'      => [
@@ -80,7 +80,7 @@ class LeadTest extends RestJsonApiTestCase
                     'fields[organizations]' => 'name',
                     'include'               => 'account,account.organization'
                 ],
-                'expectedContent' => 'lead_cget_customer_association_nested.yml'
+                'expectedContent' => 'cget_lead_customer_association_nested.yml'
             ],
             'title for customer association'                                            => [
                 'parameters'      => [
@@ -89,7 +89,7 @@ class LeadTest extends RestJsonApiTestCase
                     'fields[accounts]' => 'name,organization',
                     'include'          => 'account,customer'
                 ],
-                'expectedContent' => 'lead_cget_customer_association_title.yml'
+                'expectedContent' => 'cget_lead_customer_association_title.yml'
             ]
         ];
     }
@@ -100,56 +100,72 @@ class LeadTest extends RestJsonApiTestCase
             ['entity' => 'leads', 'id' => $this->getReference('lead1')->getId()]
         );
 
-        $this->assertResponseContains('lead_get.yml', $response);
+        $this->assertResponseContains('get_lead.yml', $response);
     }
 
-    public function testPost()
+    public function testCreate()
     {
         $response = $this->post(
             ['entity' => 'leads'],
-            'lead_post.yml'
+            'create_lead.yml'
         );
 
-        $this->assertResponseContains('lead_post.yml', $response);
+        $this->assertResponseContains('create_lead.yml', $response);
 
         // test that the entity was created
         $entity = $this->getEntityManager()->find(Lead::class, $this->getResourceId($response));
         self::assertNotNull($entity);
     }
 
-    public function testPostWithoutAccountAndCustomer()
+    public function testCreateWithNullCreatedAtAndUpdatedAt()
+    {
+        $data = $this->getRequestData('create_lead_min.yml');
+        $data['data']['attributes']['createdAt'] = null;
+        $data['data']['attributes']['updatedAt'] = null;
+        $response = $this->post(
+            ['entity' => 'leads'],
+            $data
+        );
+
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $entity = $this->getEntityManager()->find(Lead::class, $this->getResourceId($response));
+        self::assertTrue($entity->getCreatedAt() !== null && $entity->getCreatedAt() <= $now);
+        self::assertTrue($entity->getUpdatedAt() !== null && $entity->getUpdatedAt() <= $now);
+    }
+
+    public function testCreateWithoutAccountAndCustomer()
     {
         $response = $this->post(
             ['entity' => 'leads'],
-            'lead_post_no_account_and_customer.yml'
+            'create_lead_no_account_and_customer.yml'
         );
 
-        $this->assertResponseContains('lead_post_no_account_and_customer.yml', $response);
+        $this->assertResponseContains('create_lead_no_account_and_customer.yml', $response);
 
         // test that the entity was created
         $entity = $this->getEntityManager()->find(Lead::class, $this->getResourceId($response));
         self::assertNotNull($entity);
     }
 
-    public function testPostWithoutStatus()
+    public function testCreateWithoutStatus()
     {
         $response = $this->post(
             ['entity' => 'leads'],
-            'lead_post_no_status.yml'
+            'create_lead_no_status.yml'
         );
 
-        $this->assertResponseContains('lead_post_no_status.yml', $response);
+        $this->assertResponseContains('create_lead_no_status.yml', $response);
 
         // test that the entity was created
         $entity = $this->getEntityManager()->find(Lead::class, $this->getResourceId($response));
         self::assertNotNull($entity);
     }
 
-    public function testPostWithNullStatus()
+    public function testTryToCreateWithNullStatus()
     {
         $response = $this->post(
             ['entity' => 'leads'],
-            'lead_post_null_status.yml',
+            'create_lead_null_status.yml',
             [],
             false
         );
@@ -164,11 +180,11 @@ class LeadTest extends RestJsonApiTestCase
         );
     }
 
-    public function testPostWithInconsistentCustomer()
+    public function testTryToCreateWithInconsistentCustomer()
     {
         $response = $this->post(
             ['entity' => 'leads'],
-            $this->getRequestData('lead_post_inconsistent_customer.yml'),
+            $this->getRequestData('create_lead_inconsistent_customer.yml'),
             [],
             false
         );
@@ -183,14 +199,70 @@ class LeadTest extends RestJsonApiTestCase
         );
     }
 
-    public function testPostWithConsistentCustomer()
+    public function testCreateWithConsistentCustomer()
     {
         $response = $this->post(
             ['entity' => 'leads'],
-            'lead_post_consistent_customer.yml'
+            'create_lead_consistent_customer.yml'
         );
 
-        $this->assertResponseContains('lead_post_consistent_customer.yml', $response);
+        $this->assertResponseContains('create_lead_consistent_customer.yml', $response);
+    }
+
+    public function testUpdateWithNullCreatedAtAndUpdatedAt()
+    {
+        /** @var Lead $lead */
+        $lead = $this->getReference('lead1');
+        $leadId = $lead->getId();
+        $createdAt = $lead->getCreatedAt();
+        $updatedAt = $lead->getUpdatedAt();
+        $data = [
+            'data' => [
+                'type'       => 'leads',
+                'id'         => (string)$leadId,
+                'attributes' => [
+                    'createdAt' => null,
+                    'updatedAt' => null
+                ]
+            ]
+        ];
+        $this->patch(
+            ['entity' => 'leads', 'id' => (string)$leadId],
+            $data
+        );
+
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $entity = $this->getEntityManager()->find(Lead::class, $leadId);
+        self::assertEquals($createdAt, $entity->getCreatedAt());
+        self::assertTrue($entity->getUpdatedAt() >= $updatedAt && $entity->getUpdatedAt() <= $now);
+    }
+
+    public function testUpdateShouldIgnoreCreatedAtAndUpdatedAt()
+    {
+        /** @var Lead $lead */
+        $lead = $this->getReference('lead1');
+        $leadId = $lead->getId();
+        $createdAt = $lead->getCreatedAt();
+        $updatedAt = $lead->getUpdatedAt();
+        $data = [
+            'data' => [
+                'type'       => 'leads',
+                'id'         => (string)$leadId,
+                'attributes' => [
+                    'createdAt' => '2019-01-01T01:01:01Z',
+                    'updatedAt' => '2019-01-01T01:01:01Z'
+                ]
+            ]
+        ];
+        $this->patch(
+            ['entity' => 'leads', 'id' => (string)$leadId],
+            $data
+        );
+
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $entity = $this->getEntityManager()->find(Lead::class, $leadId);
+        self::assertEquals($createdAt, $entity->getCreatedAt());
+        self::assertTrue($entity->getUpdatedAt() >= $updatedAt && $entity->getUpdatedAt() <= $now);
     }
 
     public function testGetAccountRelationship()
@@ -203,7 +275,7 @@ class LeadTest extends RestJsonApiTestCase
             ]
         );
 
-        $this->assertResponseContains('lead_get_relationship_account.yml', $response);
+        $this->assertResponseContains('get_relationship_lead_account.yml', $response);
     }
 
     /**
@@ -236,20 +308,20 @@ class LeadTest extends RestJsonApiTestCase
         return [
             'without parameters'         => [
                 'parameters'      => [],
-                'expectedContent' => 'lead_get_subresource_account.yml'
+                'expectedContent' => 'get_subresource_lead_account.yml'
             ],
             'fields and include filters' => [
                 'parameters'      => [
                     'fields[accounts]' => 'organization',
                     'include'          => 'organization'
                 ],
-                'expectedContent' => 'lead_get_subresource_account_include.yml'
+                'expectedContent' => 'get_subresource_lead_account_include.yml'
             ],
             'title meta'                 => [
                 'parameters'      => [
                     'meta' => 'title'
                 ],
-                'expectedContent' => 'lead_get_subresource_account_title.yml'
+                'expectedContent' => 'get_subresource_lead_account_title.yml'
             ]
         ];
     }
@@ -264,7 +336,7 @@ class LeadTest extends RestJsonApiTestCase
             ]
         );
 
-        $this->assertResponseContains('lead_get_relationship_customer.yml', $response);
+        $this->assertResponseContains('get_relationship_lead_customer.yml', $response);
     }
 
     /**
@@ -295,25 +367,25 @@ class LeadTest extends RestJsonApiTestCase
         return [
             'without parameters'         => [
                 'parameters'      => [],
-                'expectedContent' => 'lead_get_subresource_customer.yml'
+                'expectedContent' => 'get_subresource_lead_customer.yml'
             ],
             'fields and include filters' => [
                 'parameters'      => [
                     'fields[b2bcustomers]' => 'organization',
                     'include'              => 'organization'
                 ],
-                'expectedContent' => 'lead_get_subresource_customer_include.yml'
+                'expectedContent' => 'get_subresource_lead_customer_include.yml'
             ],
             'title meta'                 => [
                 'parameters'      => [
                     'meta' => 'title'
                 ],
-                'expectedContent' => 'lead_get_subresource_customer_title.yml'
+                'expectedContent' => 'get_subresource_lead_customer_title.yml'
             ]
         ];
     }
 
-    public function testPatchAccount()
+    public function testUpdateAccount()
     {
         $leadId = $this->getReference('lead1')->getId();
         $accountId = $this->getReference('account2')->getId();
@@ -335,7 +407,7 @@ class LeadTest extends RestJsonApiTestCase
             ]
         );
 
-        $this->assertResponseContains('lead_patch_account.yml', $response);
+        $this->assertResponseContains('update_lead_account.yml', $response);
 
         // test that the account was changed
         $lead = $this->getEntityManager()->find(Lead::class, $leadId);
@@ -345,7 +417,7 @@ class LeadTest extends RestJsonApiTestCase
         self::assertNull($lead->getCustomerAssociation()->getCustomerTarget());
     }
 
-    public function testPatchCustomer()
+    public function testUpdateCustomer()
     {
         $leadId = $this->getReference('lead1')->getId();
         $customerId = $this->getReference('b2b_customer2')->getId();
@@ -367,7 +439,7 @@ class LeadTest extends RestJsonApiTestCase
             ]
         );
 
-        $this->assertResponseContains('lead_patch_customer.yml', $response);
+        $this->assertResponseContains('update_lead_customer.yml', $response);
 
         // test that the customer was changed
         $lead = $this->getEntityManager()->find(Lead::class, $leadId);
@@ -379,12 +451,12 @@ class LeadTest extends RestJsonApiTestCase
         self::assertSame($this->getReference('account2')->getId(), $account->getId());
     }
 
-    public function testPatchWithInconsistentCustomer()
+    public function testTryToUpdateWithInconsistentCustomer()
     {
         $leadId = $this->getReference('lead1')->getId();
         $response = $this->patch(
             ['entity' => 'leads', 'id' => $leadId],
-            $this->getRequestData('lead_patch_inconsistent_customer.yml'),
+            $this->getRequestData('update_lead_inconsistent_customer.yml'),
             [],
             false
         );
@@ -399,12 +471,12 @@ class LeadTest extends RestJsonApiTestCase
         );
     }
 
-    public function testPatchWithNullStatus()
+    public function testTryToUpdateWithNullStatus()
     {
         $leadId = $this->getReference('lead1')->getId();
         $response = $this->patch(
             ['entity' => 'leads', 'id' => $leadId],
-            $this->getRequestData('lead_patch_null_status.yml'),
+            $this->getRequestData('update_lead_null_status.yml'),
             [],
             false
         );
@@ -419,7 +491,7 @@ class LeadTest extends RestJsonApiTestCase
         );
     }
 
-    public function testPatchAccountAsRelationship()
+    public function testUpdateAccountAsRelationship()
     {
         $leadId = $this->getReference('lead1')->getId();
         $accountId = $this->getReference('account2')->getId();
@@ -441,7 +513,7 @@ class LeadTest extends RestJsonApiTestCase
         self::assertNull($lead->getCustomerAssociation()->getCustomerTarget());
     }
 
-    public function testPatchCustomerAsRelationship()
+    public function testUpdateCustomerAsRelationship()
     {
         $leadId = $this->getReference('lead1')->getId();
         $customerId = $this->getReference('b2b_customer2')->getId();
@@ -465,7 +537,7 @@ class LeadTest extends RestJsonApiTestCase
         self::assertSame($this->getReference('account2')->getId(), $account->getId());
     }
 
-    public function testPatchAccountAsRelationshipWithNullValue()
+    public function testTryToUpdateAccountAsRelationshipWithNullValue()
     {
         $leadId = $this->getReference('lead1')->getId();
         $response = $this->patchRelationship(
@@ -484,7 +556,7 @@ class LeadTest extends RestJsonApiTestCase
         );
     }
 
-    public function testPatchCustomerAsRelationshipWithNullValue()
+    public function testTryToUpdateCustomerAsRelationshipWithNullValue()
     {
         $leadId = $this->getReference('lead1')->getId();
         $response = $this->patchRelationship(

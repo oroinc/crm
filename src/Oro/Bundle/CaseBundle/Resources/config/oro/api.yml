@@ -2,11 +2,15 @@ api:
     entities:
         Oro\Bundle\CaseBundle\Entity\CaseComment:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case_comment.md'
+
         Oro\Bundle\CaseBundle\Entity\CaseEntity:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case.md'
+
         Oro\Bundle\CaseBundle\Entity\CasePriority:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case.md'
+
         Oro\Bundle\CaseBundle\Entity\CaseSource:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case.md'
+
         Oro\Bundle\CaseBundle\Entity\CaseStatus:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case.md'

@@ -1,11 +1,11 @@
 <?php
 
-namespace Oro\Bundle\ActivityContactBundle\Bundle\Tests\Unit\Api\Processor\Config;
+namespace Oro\Bundle\ActivityContactBundle\Bundle\Tests\Unit\Api\Processor\GetConfig;
 
-use Oro\Bundle\ActivityContactBundle\Api\Processor\Config\UpdateActivityContactFields;
+use Oro\Bundle\ActivityContactBundle\Api\Processor\GetConfig\UpdateActivityContactFields;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
-use Oro\Bundle\ApiBundle\Tests\Unit\Processor\Config\ConfigProcessorTestCase;
+use Oro\Bundle\ApiBundle\Tests\Unit\Processor\GetConfig\ConfigProcessorTestCase;
 use Oro\Bundle\ApiBundle\Util\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
@@ -452,7 +452,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 'exclusion_policy' => 'all',
                 'fields'           => [
                     'lastContactedDate'    => [
-                        'exclude'       => true,
+                        'form_options'  => ['mapped' => false],
                         'property_path' => ActivityScope::LAST_CONTACT_DATE
                     ],
                     'lastContactedDateIn'  => [
@@ -460,18 +460,19 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                         'property_path' => ActivityScope::LAST_CONTACT_DATE_IN
                     ],
                     'lastContactedDateOut' => [
+                        'form_options'  => ['mapped' => false],
                         'property_path' => ActivityScope::LAST_CONTACT_DATE_OUT
                     ],
                     'timesContacted'       => [
-                        'exclude'       => true,
+                        'form_options'  => ['mapped' => false],
                         'property_path' => ActivityScope::CONTACT_COUNT
                     ],
                     'timesContactedIn'     => [
-                        'exclude'       => true,
+                        'form_options'  => ['mapped' => false],
                         'property_path' => ActivityScope::CONTACT_COUNT_IN
                     ],
                     'timesContactedOut'    => [
-                        'exclude'       => true,
+                        'form_options'  => ['mapped' => false],
                         'property_path' => ActivityScope::CONTACT_COUNT_OUT
                     ]
                 ]

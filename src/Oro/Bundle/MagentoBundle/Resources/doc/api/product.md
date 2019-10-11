@@ -119,7 +119,7 @@ Delete a collection of Magento product records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### name
 
@@ -127,7 +127,7 @@ Delete a collection of Magento product records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -143,7 +143,7 @@ Delete a collection of Magento product records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 

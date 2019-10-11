@@ -153,7 +153,7 @@ Delete a collection of lead records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### status
 
@@ -161,7 +161,7 @@ Delete a collection of lead records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 **Please note:**
 
@@ -182,7 +182,7 @@ If this field is missing in the request, the default value is applied.*
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 

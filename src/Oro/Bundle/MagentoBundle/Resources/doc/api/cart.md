@@ -227,7 +227,7 @@ Delete a collection of Magento shopping cartrecords.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### baseCurrencyCode
 
@@ -235,7 +235,7 @@ Delete a collection of Magento shopping cartrecords.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -251,7 +251,7 @@ Delete a collection of Magento shopping cartrecords.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -267,7 +267,7 @@ Delete a collection of Magento shopping cartrecords.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -283,7 +283,7 @@ Delete a collection of Magento shopping cartrecords.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -299,7 +299,7 @@ Delete a collection of Magento shopping cartrecords.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -315,7 +315,7 @@ Delete a collection of Magento shopping cartrecords.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### dataChannel
 
@@ -323,7 +323,7 @@ Delete a collection of Magento shopping cartrecords.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### itemsQty
 
@@ -331,7 +331,7 @@ Delete a collection of Magento shopping cartrecords.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### itemsCount
 
@@ -339,7 +339,7 @@ Delete a collection of Magento shopping cartrecords.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ## SUBRESOURCES
 

@@ -197,7 +197,7 @@ Delete a collection of Magento customer records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### dataChannel
 
@@ -205,7 +205,7 @@ Delete a collection of Magento customer records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### lastName
 
@@ -213,7 +213,7 @@ Delete a collection of Magento customer records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -229,7 +229,7 @@ Delete a collection of Magento customer records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -245,7 +245,7 @@ Delete a collection of Magento customer records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -261,7 +261,7 @@ Delete a collection of Magento customer records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### Store
 
@@ -269,7 +269,7 @@ Delete a collection of Magento customer records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ## SUBRESOURCES
 

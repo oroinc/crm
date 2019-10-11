@@ -7,14 +7,13 @@ use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactReasonType;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * CRUD controller for ContactReason entity
@@ -96,14 +95,13 @@ class ContactReasonController extends Controller
      * @param ContactReason $contactReason
      * @return JsonResponse
      *
-     * @Route("/delete/{id}", name="oro_contactus_reason_delete", requirements={"id"="\d+"})
+     * @Route("/delete/{id}", name="oro_contactus_reason_delete", requirements={"id"="\d+"}, methods={"DELETE"})
      * @Acl(
      *      id="oro_contactus_reason_delete",
      *      type="entity",
      *      permission="DELETE",
      *      class="OroContactUsBundle:ContactReason"
      * )
-     * @Method("DELETE")
      * @CsrfProtection()
      */
     public function deleteAction(ContactReason $contactReason)

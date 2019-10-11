@@ -212,7 +212,7 @@ Delete a collection of Magento credit memo records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### incrementId
 
@@ -220,7 +220,7 @@ Delete a collection of Magento credit memo records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -232,7 +232,7 @@ Delete a collection of Magento credit memo records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -248,7 +248,7 @@ Delete a collection of Magento credit memo records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -264,7 +264,7 @@ Delete a collection of Magento credit memo records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -276,7 +276,7 @@ Delete a collection of Magento credit memo records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -288,7 +288,7 @@ Delete a collection of Magento credit memo records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -304,7 +304,7 @@ Delete a collection of Magento credit memo records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ## SUBRESOURCES
 

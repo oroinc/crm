@@ -13,6 +13,13 @@ api:
 
         Oro\Bundle\MagentoBundle\Entity\Cart:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart.md'
+            fields:
+                createdAt:
+                    form_options:
+                        mapped: true # set manually because by default createdAt field is read-only
+                updatedAt:
+                    form_options:
+                        mapped: true # set manually because by default updatedAt field is read-only
 
         Oro\Bundle\MagentoBundle\Entity\CartAddress:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart_address.md'
@@ -27,6 +34,13 @@ api:
 
         Oro\Bundle\MagentoBundle\Entity\CartItem:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart_item.md'
+            fields:
+                createdAt:
+                    form_options:
+                        mapped: true # set manually because by default createdAt field is read-only
+                updatedAt:
+                    form_options:
+                        mapped: true # set manually because by default updatedAt field is read-only
 
         Oro\Bundle\MagentoBundle\Entity\CartStatus:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart.md'
@@ -34,6 +48,12 @@ api:
         Oro\Bundle\MagentoBundle\Entity\Customer:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/customer.md'
             fields:
+                createdAt:
+                    form_options:
+                        mapped: true # set manually because by default createdAt field is read-only
+                updatedAt:
+                    form_options:
+                        mapped: true # set manually because by default updatedAt field is read-only
                 orders:
                     exclude: true
                 carts:
@@ -52,6 +72,13 @@ api:
 
         Oro\Bundle\MagentoBundle\Entity\Order:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order.md'
+            fields:
+                createdAt:
+                    form_options:
+                        mapped: true # set manually because by default createdAt field is read-only
+                updatedAt:
+                    form_options:
+                        mapped: true # set manually because by default updatedAt field is read-only
             subresources:
                 orderNotes:
                     actions:
@@ -70,6 +97,7 @@ api:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_item.md'
 
         Oro\Bundle\MagentoBundle\Entity\OrderNote:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_note.md'
             actions:
                 create: false
                 update: false
@@ -80,10 +108,16 @@ api:
                 update_relationship: false
                 add_relationship: false
                 delete_relationship: false
-            documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_note.md'
 
         Oro\Bundle\MagentoBundle\Entity\CreditMemo:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/credit_memo.md'
+            fields:
+                createdAt:
+                    form_options:
+                        mapped: true # set manually because by default createdAt field is read-only
+                updatedAt:
+                    form_options:
+                        mapped: true # set manually because by default updatedAt field is read-only
 
         Extend\Entity\EV_Creditmemo_Status:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/credit_memo.md'
@@ -93,6 +127,13 @@ api:
 
         Oro\Bundle\MagentoBundle\Entity\Product:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/product.md'
+            fields:
+                createdAt:
+                    form_options:
+                        mapped: true # set manually because by default createdAt field is read-only
+                updatedAt:
+                    form_options:
+                        mapped: true # set manually because by default updatedAt field is read-only
 
         Oro\Bundle\MagentoBundle\Entity\Region:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/region.md'

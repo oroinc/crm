@@ -142,7 +142,7 @@ Delete a collection of Magento customer address records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### owner
 
@@ -150,7 +150,7 @@ Delete a collection of Magento customer address records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### country
 
@@ -158,7 +158,7 @@ Delete a collection of Magento customer address records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ## SUBRESOURCES
 

@@ -8,7 +8,7 @@
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### emails
 

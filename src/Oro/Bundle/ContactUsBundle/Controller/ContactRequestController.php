@@ -7,12 +7,11 @@ use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Contact Request Controller
@@ -95,14 +94,13 @@ class ContactRequestController extends Controller
     }
 
     /**
-     * @Route("/delete/{id}", name="oro_contactus_request_delete", requirements={"id"="\d+"})
+     * @Route("/delete/{id}", name="oro_contactus_request_delete", requirements={"id"="\d+"}, methods={"DELETE"})
      * @Acl(
      *      id="oro_contactus_request_delete",
      *      type="entity",
      *      permission="DELETE",
      *      class="OroContactUsBundle:ContactRequest"
      * )
-     * @Method("DELETE")
      * @CsrfProtection()
      */
     public function deleteAction(ContactRequest $contactRequest)

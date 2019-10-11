@@ -59,11 +59,13 @@ class CreditMemoWithExistingOrderStrategyTest extends WebTestCase
     public function testProcessWithExistingOrder()
     {
         $creditMemo = new CreditMemo();
+        $creditMemo->setIncrementId('100000002');
         $creditMemo->setChannel($this->channel);
         $order = new Order();
         $order->setOriginId(1);
         $creditMemo->setOrder($order);
         $item = new CreditMemoItem();
+        $item->setQty(1);
         $creditMemo->setItems([$item]);
 
         $this->strategy->setEntityName(CreditMemo::class);

@@ -139,7 +139,7 @@ Delete a collection of Magento shopping cart items records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 ### productId
 
@@ -147,7 +147,7 @@ Delete a collection of Magento shopping cart items records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -163,7 +163,7 @@ Delete a collection of Magento shopping cart items records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -179,7 +179,7 @@ Delete a collection of Magento shopping cart items records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -195,7 +195,7 @@ Delete a collection of Magento shopping cart items records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -211,7 +211,7 @@ Delete a collection of Magento shopping cart items records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -227,7 +227,7 @@ Delete a collection of Magento shopping cart items records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -243,7 +243,7 @@ Delete a collection of Magento shopping cart items records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -259,7 +259,7 @@ Delete a collection of Magento shopping cart items records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 
@@ -275,7 +275,7 @@ Delete a collection of Magento shopping cart items records.
 
 {@inheritdoc}
 
-**The required field**
+**The required field.**
 
 #### update
 

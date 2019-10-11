@@ -1,4 +1,6 @@
 "This value cannot be in the future.": "This value cannot be in the future."
+"The birth date cannot be in the future.": "The birth date cannot be in the future."
+
 oro:
     contact:
         validators:

@@ -182,7 +182,8 @@ api:
                 update:
                     fields:
                         owner:
-                            exclude: true
+                            form_options:
+                                mapped: false
             subresources:
                 owner:
                     actions:
