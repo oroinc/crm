@@ -31,8 +31,8 @@ Feature: Managing business customer
     Given I login as administrator
     Then I go to Customers/ Business Customers
     And I click "Create Business Customer"
+    Then Account is not required field
     And I fill "Business Customer Form" with:
-      | Account                      | Marge Simpson          |
       | Customer Name                | SimpsonCustomer        |
       | Phones                       | [11-11-11, 22-22-22]   |
       | Emails                       | [m1@ex.com]            |
@@ -67,7 +67,7 @@ Feature: Managing business customer
     When I click on Charlie in grid
     And I save and close form
     Then I should see Business Customer with:
-      | Account          | Marge Simpson                            |
+      | Account          | SimpsonCustomer                          |
       | Customer Name    | SimpsonCustomer                          |
       | Channel          | Business Customers                       |
       | Phone            | [11-11-11, 22-22-22]                     |
@@ -79,6 +79,7 @@ Feature: Managing business customer
   Scenario: Edit business customer
     Given I go to Customers/ Business Customers
     And I click Edit Bruce Customer in grid
+    Then Account is a required field
     And I fill "Business Customer Form" with:
       | Account                      | Keanu Reeves           |
       | Customer Name                | Charlie Customer       |

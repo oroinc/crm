@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Form\Extension;
 
 use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Symfony\Component\Form\AbstractTypeExtension;
@@ -65,6 +66,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
             'customer_association_account',
             AccountSelectType::class,
             [
+                'required' => $this->isAccountRequired($builder->getData()),
                 'label'    => 'oro.account.entity_label',
                 'mapped'   => false,
             ]
@@ -90,6 +92,15 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
                 $this->setAccountForCustomer($event);
             }
         );
+    }
+
+    /**
+     * @param Customer|null $target
+     * @return bool
+     */
+    private function isAccountRequired($target)
+    {
+        return $target !== null && !$this->doctrineHelper->isNewEntity($target);
     }
 
     /**

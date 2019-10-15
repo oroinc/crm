@@ -111,11 +111,6 @@
                 {%- endif -%}
             {%- endset -%}
 
-            {%- set birthdayData -%}
-                {{ entity.birthday is not empty ? entity.birthday|oro_format_date : null }}
-                {% if entity.birthday is not empty %} ({{ entity.birthday|age_string({'default': 'N/A'}) }}){% endif %}
-            {%- endset -%}
-
             {%- set assignedToData -%}
                 {%- if entity.assignedTo -%}
                     {{ U.render_user_name(entity.assignedTo) }}
@@ -125,7 +120,7 @@
 
             {{ ui.renderProperty('oro.contact.job_title.label'|trans, entity.jobTitle) }}
             {{ ui.renderHtmlProperty('oro.contact.accounts.label'|trans, accountsData) }}
-            {{ ui.renderProperty('oro.contact.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
+            {{ ui.renderProperty('oro.contact.birthday.label'|trans, ui.render_birthday(entity.birthday)) }}
             {{ ui.renderProperty('oro.contact.gender.label'|trans, oro_gender(entity.gender)) }}
             {{ ui.renderProperty('oro.contact.source.label'|trans, entity.source) }}
             {{ ui.renderHtmlProperty('oro.contact.assigned_to.label'|trans, assignedToData) }}

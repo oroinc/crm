@@ -62,10 +62,10 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
 
-        $form['oro_sales_b2bcustomer_form[name]'] = $name;
-        $form['oro_sales_b2bcustomer_form[customer_association_account]'] = self::$account->getId();
-        $form['oro_sales_b2bcustomer_form[dataChannel]'] = self::$channel->getId();
-        $form['oro_sales_b2bcustomer_form[owner]']   = 1;
+        $form['oro_sales_b2bcustomer[name]'] = $name;
+        $form['oro_sales_b2bcustomer[customer_association_account]'] = self::$account->getId();
+        $form['oro_sales_b2bcustomer[dataChannel]'] = self::$channel->getId();
+        $form['oro_sales_b2bcustomer[owner]']   = 1;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -103,8 +103,8 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
-        $form['oro_sales_b2bcustomer_form[name]'] = $name;
-        $form['oro_sales_b2bcustomer_form[owner]']   = 1;
+        $form['oro_sales_b2bcustomer[name]'] = $name;
+        $form['oro_sales_b2bcustomer[owner]']   = 1;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);

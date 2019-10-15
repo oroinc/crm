@@ -16,6 +16,9 @@ use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 
+/**
+ * Tracks account lifetime value.
+ */
 class ChannelDoctrineListener
 {
     const MAX_UPDATE_CHUNK_SIZE = 50;
@@ -62,6 +65,10 @@ class ChannelDoctrineListener
         $entities = $this->getChangedTrackedEntities();
 
         foreach ($entities as $entity) {
+            if (!array_key_exists(ClassUtils::getClass($entity), $this->customerIdentities)) {
+                continue;
+            }
+
             if ($this->uow->isScheduledForUpdate($entity)) {
                 $this->checkAndUpdate($entity, $this->uow->getEntityChangeSet($entity));
             } else {
@@ -142,32 +149,29 @@ class ChannelDoctrineListener
     }
 
     /**
-     * @return array|[]
+     * @return array
      */
     protected function getChangedTrackedEntities()
     {
-        $entities = array_merge(
+        $entities = [
             $this->uow->getScheduledEntityInsertions(),
             $this->uow->getScheduledEntityDeletions(),
-            $this->uow->getScheduledEntityUpdates()
-        );
+            $this->uow->getScheduledEntityUpdates(),
+        ];
 
-        $collections = array_merge(
+        $collections = [
             $this->uow->getScheduledCollectionDeletions(),
-            $this->uow->getScheduledCollectionUpdates()
-        );
+            $this->uow->getScheduledCollectionUpdates(),
+        ];
 
         /** @var PersistentCollection $collectionToChange */
-        foreach ($collections as $collectionToChange) {
-            $entities = array_merge($entities, $collectionToChange->unwrap()->toArray());
+        foreach ($collections as $collectionsToChange) {
+            foreach ($collectionsToChange as $collection) {
+                $entities[] = $collection->unwrap()->toArray();
+            }
         }
 
-        return array_filter(
-            $entities,
-            function ($entity) {
-                return array_key_exists(ClassUtils::getClass($entity), $this->customerIdentities);
-            }
-        );
+        return array_merge(...$entities);
     }
 
     /**

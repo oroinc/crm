@@ -5,6 +5,7 @@ namespace Oro\Bundle\SalesBundle\Controller;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -13,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
+ * Crud actions for Business Customer entity
  * @Route("/b2bcustomer")
  */
 class B2bCustomerController extends Controller
@@ -99,9 +101,21 @@ class B2bCustomerController extends Controller
      */
     protected function update(B2bCustomer $entity = null)
     {
-        return $this->get('oro_form.model.update_handler')->update(
+        return $this->get('oro_form.model.update_handler')->handleUpdate(
             $entity,
-            $this->get('oro_sales.b2bcustomer.form'),
+            $this->createForm(B2bCustomerType::class, $entity),
+            function (B2bCustomer $entity) {
+                return [
+                    'route' => 'oro_sales_b2bcustomer_update',
+                    'parameters' => ['id' => $entity->getId()],
+                ];
+            },
+            function (B2bCustomer $entity) {
+                return [
+                    'route' => 'oro_sales_b2bcustomer_view',
+                    'parameters' => ['id' => $entity->getId()],
+                ];
+            },
             $this->get('translator')->trans('oro.sales.controller.b2bcustomer.saved.message'),
             $this->get('oro_sales.b2bcustomer.form.handler')
         );

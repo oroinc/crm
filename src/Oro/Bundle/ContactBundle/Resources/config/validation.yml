@@ -15,7 +15,7 @@ Oro\Bundle\ContactBundle\Entity\Contact:
             - Date: ~
             - LessThanOrEqual:
                 value: now UTC
-                message: This value cannot be in the future.
+                message: The birth date cannot be in the future.
         skype:
             - Length:
                 max: 255

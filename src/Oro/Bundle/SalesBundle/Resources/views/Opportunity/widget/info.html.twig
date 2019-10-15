@@ -46,9 +46,9 @@
             </div>
         </div>
         <div class="responsive-block">
-            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.customer_need.label'|trans, entity.customerNeed|oro_html_sanitize, entity, 'customerNeed') }}
-            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution|oro_html_sanitize, entity, 'proposedSolution') }}
-            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.notes.label'|trans, entity.notes|oro_html_sanitize, entity, 'notes') }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.customer_need.label'|trans, entity.customerNeed|oro_html_sanitize_wysiwyg, entity, 'customerNeed') }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution|oro_html_sanitize_wysiwyg, entity, 'proposedSolution') }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.notes.label'|trans, entity.notes|oro_html_sanitize_wysiwyg, entity, 'notes') }}
         </div>
     </div>
 </div>
