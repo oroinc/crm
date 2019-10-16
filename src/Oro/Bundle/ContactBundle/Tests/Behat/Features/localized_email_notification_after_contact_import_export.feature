@@ -41,12 +41,16 @@ Feature: Localized email notification after contact import export
       | Content | English Import Result Body    |
     And I click "French"
     And fill "Email Template Form" with:
-      | Subject | French Import Result Subject |
-      | Content | French Import Result Body    |
+      | Subject Fallback | false                        |
+      | Content Fallback | false                        |
+      | Subject          | French Import Result Subject |
+      | Content          | French Import Result Body    |
     And I click "German"
     And fill "Email Template Form" with:
-      | Subject | German Import Result Subject |
-      | Content | German Import Result Body    |
+      | Subject Fallback | false                        |
+      | Content Fallback | false                        |
+      | Subject          | German Import Result Subject |
+      | Content          | German Import Result Body    |
     And I submit form
     Then I should see "Template saved" flash message
 
@@ -70,12 +74,16 @@ Feature: Localized email notification after contact import export
       | Content | English Import Validation Result Body    |
     And I click "French"
     And fill "Email Template Form" with:
-      | Subject | French Import Validation Result Subject |
-      | Content | French Import Validation Result Body    |
+      | Subject Fallback | false                                   |
+      | Content Fallback | false                                   |
+      | Subject          | French Import Validation Result Subject |
+      | Content          | French Import Validation Result Body    |
     And I click "German"
     And fill "Email Template Form" with:
-      | Subject | German Import Validation Result Subject |
-      | Content | German Import Validation Result Body    |
+      | Subject Fallback | false                                   |
+      | Content Fallback | false                                   |
+      | Subject          | German Import Validation Result Subject |
+      | Content          | German Import Validation Result Body    |
     And I submit form
     Then I should see "Template saved" flash message
 
@@ -99,12 +107,16 @@ Feature: Localized email notification after contact import export
       | Content | English Export Result Body    |
     And I click "French"
     And fill "Email Template Form" with:
-      | Subject | French Export Result Subject |
-      | Content | French Export Result Body    |
+      | Subject Fallback | false                        |
+      | Content Fallback | false                        |
+      | Subject          | French Export Result Subject |
+      | Content          | French Export Result Body    |
     And I click "German"
     And fill "Email Template Form" with:
-      | Subject | German Export Result Subject |
-      | Content | German Export Result Body    |
+      | Subject Fallback | false                        |
+      | Content Fallback | false                        |
+      | Subject          | German Export Result Subject |
+      | Content          | German Export Result Body    |
     And I submit form
     Then I should see "Template saved" flash message
     When I go to System / Emails / Templates
@@ -115,12 +127,16 @@ Feature: Localized email notification after contact import export
       | Content | English Grid Export Result Body    |
     And I click "French"
     And fill "Email Template Form" with:
-      | Subject | French Grid Export Result Subject |
-      | Content | French Grid Export Result Body    |
+      | Subject Fallback | false                             |
+      | Content Fallback | false                             |
+      | Subject          | French Grid Export Result Subject |
+      | Content          | French Grid Export Result Body    |
     And I click "German"
     And fill "Email Template Form" with:
-      | Subject | German Grid Export Result Subject |
-      | Content | German Grid Export Result Body    |
+      | Subject Fallback | false                             |
+      | Content Fallback | false                             |
+      | Subject          | German Grid Export Result Subject |
+      | Content          | German Grid Export Result Body    |
     And I submit form
     Then I should see "Template saved" flash message
 
