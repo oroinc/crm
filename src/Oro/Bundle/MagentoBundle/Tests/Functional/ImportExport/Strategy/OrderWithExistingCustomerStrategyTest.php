@@ -92,8 +92,8 @@ class OrderWithExistingCustomerStrategyTest extends WebTestCase
 
         if ($expectedCustomerAlias !== null) {
             $this->assertSame(
-                $this->getReference($expectedCustomerAlias),
-                $order->getCustomer()
+                $this->getReference($expectedCustomerAlias)->getId(),
+                $order->getCustomer()->getId()
             );
         }
 

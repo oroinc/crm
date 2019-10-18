@@ -1,0 +1,55 @@
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+    contact_email_1001:
+        email: test-1001@example.com
+        primary: true
+
+    contact_email_100500:
+        email: test-100500@example.com
+        primary: true
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+    contact_1001:
+        id: 1001
+        namePrefix: <titleFemale()>
+        firstName: <firstNameFemale()>
+        lastName: <lastName()>
+        gender: female
+        birthday: <dateTimeBetween('-60 years', '-20 years')>
+        description: <sentences(3, true)>
+        emails: ['@contact_email_1001']
+        jobTitle: <jobTitle()>
+        owner: '@admin'
+        organization: '@organization'
+        createdAt: <dateTimeBetween('-30 days', '-10 days')>
+
+    contact_100500:
+        id: 100500
+        namePrefix: <titleFemale()>
+        firstName: <firstNameFemale()>
+        lastName: <lastName()>
+        gender: female
+        birthday: <dateTimeBetween('-60 years', '-20 years')>
+        description: <sentences(3, true)>
+        emails: ['@contact_email_100500']
+        jobTitle: <jobTitle()>
+        owner: '@admin'
+        organization: '@organization'
+        createdAt: <dateTimeBetween('-30 days', '-10 days')>
+
+Oro\Bundle\SegmentBundle\Entity\Segment:
+    segment:
+        name: 'Contact email segment'
+        type: '@segment_dynamic_type'
+        entity: 'Oro\\Bundle\\ContactBundle\\Entity\\Contact'
+        definition: <('{"columns":[{"name":"id","label":"Id","sorting":"ASC","func":null},{"name":"primaryEmail","label":"Contact Email","sorting":"","func":null}]}')>
+        organization: '@organization'
+        owner: '@business_unit'
+
+Oro\Bundle\MarketingListBundle\Entity\MarketingList:
+    marketinglist:
+        owner: '@admin'
+        name: 'Contact Marketing List'
+        organization: '@organization'
+        type: '@marketing_list_dynamic_type'
+        entity: 'Oro\\Bundle\\ContactBundle\\Entity\\Contact'
+        segment: '@segment'
