@@ -1,0 +1,4 @@
+dynamic-imports:
+    orocase:
+        - orocase/js/app/models/comment-model
+        - orocase/js/app/views/comment-view

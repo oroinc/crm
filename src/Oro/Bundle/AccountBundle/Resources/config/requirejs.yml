@@ -1,3 +1,0 @@
-config:
-    paths:
-        'oroaccount/js/app/components/account-contact-component': 'bundles/oroaccount/js/app/components/account-contact-component.js'

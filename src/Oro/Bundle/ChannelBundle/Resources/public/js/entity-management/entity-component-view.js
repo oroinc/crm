@@ -6,11 +6,11 @@ define(function(require) {
     var _ = require('underscore');
     var __ = require('orotranslation/js/translator');
     var EntityModel = require('./model');
-    var componentTemplate = require('text!./templates/component.html');
-    var entityTemplate = require('text!./templates/entity-item.html');
-    var formTemplate = require('text!./templates/form.html');
-    var entitySelectResultTemplate = require('text!./templates/select2/result.html');
-    var entitySelectSelectionTemplate = require('text!./templates/select2/selection.html');
+    var componentTemplate = require('text-loader!./templates/component.html');
+    var entityTemplate = require('text-loader!./templates/entity-item.html');
+    var formTemplate = require('text-loader!./templates/form.html');
+    var entitySelectResultTemplate = require('text-loader!./templates/select2/result.html');
+    var entitySelectSelectionTemplate = require('text-loader!./templates/select2/selection.html');
     var Select2Component = require('oro/select2-component');
 
     require('oroui/js/items-manager/editor');

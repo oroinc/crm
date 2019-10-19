@@ -1,0 +1,3 @@
+dynamic-imports:
+    oroaccount:
+        - oroaccount/js/app/components/account-contact-component

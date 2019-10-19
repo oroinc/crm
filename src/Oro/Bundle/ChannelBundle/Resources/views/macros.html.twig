@@ -31,7 +31,7 @@
 
     <div id="{{ containerIdentifier }}"></div>
     <script type="text/javascript">
-        require(['jquery', 'orochannel/js/entity-management/entity-component-view'],
+        loadModules(['jquery', 'orochannel/js/entity-management/entity-component-view'],
         function ($, EntityComponentView) {
             var entityComponentView = new EntityComponentView({
                 data:     {{ channel.entities|json_encode|raw }},

@@ -30,7 +30,7 @@
         <div class="controls">
             <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({}, translation_domain) }}</button>
             <script type="text/javascript">
-                require(['oro/magento/checker'], function (Checker) {
+                loadModules(['oro/magento/checker'], function (Checker) {
                     "use strict";
                     new Checker({{ fields.getCheckerOptions(form.parent, '#' ~ form.vars.id) }});
                 });
@@ -75,7 +75,7 @@
                         <i class="fa-refresh"></i>{{ 'oro.magento.magentotransport.website_refresh.label'|trans }}
                     </a>
                     <script type="text/javascript">
-                        require(['oro/magento/checker'], function (Checker) {
+                        loadModules(['oro/magento/checker'], function (Checker) {
                             "use strict";
                             new Checker({{ fields.getCheckerOptions(form.parent, '.sync-website-list-link') }});
                         });

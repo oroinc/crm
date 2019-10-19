@@ -1,0 +1,14 @@
+aliases:
+    oro/select2-autocomplete-channel-aware-component$: orochannel/js/app/components/select2-autocomplete-channel-aware-component
+    oro/select2-grid-channel-aware-component$: orochannel/js/app/components/select2-grid-channel-aware-component
+dynamic-imports:
+    commons:
+        - oro/select2-autocomplete-channel-aware-component
+        - oro/select2-grid-channel-aware-component
+    orochannel:
+        - orochannel/js/app/components/channel
+        - orochannel/js/app/components/integration-widget
+        - orochannel/js/app/components/select-create-inline-type-async-component
+        - orochannel/js/app/components/select-create-inline-type-component
+        - orochannel/js/app/views/configure-integration-view
+        - orochannel/js/entity-management/entity-component-view
