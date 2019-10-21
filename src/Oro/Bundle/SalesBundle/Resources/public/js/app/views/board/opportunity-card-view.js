@@ -7,7 +7,7 @@ define(function(require) {
 
     OpportunityCardView = CardView.extend({
         className: 'opportunity-card-view card-view',
-        template: require('tpl!../../../../templates/board/opportunity-card-view.html'),
+        template: require('tpl-loader!../../../../templates/board/opportunity-card-view.html'),
 
         /**
          * @inheritDoc

@@ -156,7 +156,7 @@
         {% set parentId = context.form.parent.vars.id %}
         {% set parentName = context.form.parent.vars.full_name %}
         <script type="text/javascript">
-            require(['jquery'],
+            loadModules(['jquery'],
             function($){
                 $(function() {
                     var container = $('#{{ context.id }}');

@@ -1,0 +1,8 @@
+aliases:
+    oro/magento/checker$: oromagento/js/checker
+dynamic-imports:
+    oromagento:
+        - oro/magento/checker
+        - oromagento/js/app/components/customer-registration-manager
+        - oromagento/js/app/components/place-order-component
+        - oromagento/js/app/components/subscription-manager

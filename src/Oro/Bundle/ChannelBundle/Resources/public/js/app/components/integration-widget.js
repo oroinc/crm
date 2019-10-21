@@ -5,7 +5,7 @@ define([
     'routing',
     'oro/dialog-widget',
     'oroui/js/delete-confirmation',
-    'text!./template/integration-widget-link.html'
+    'text-loader!./template/integration-widget-link.html'
 ],
 function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplate) {
     'use strict';

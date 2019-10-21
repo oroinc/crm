@@ -1,0 +1,3 @@
+dynamic-imports:
+    orocontact:
+        - orocontact/js/datagrid/inline-editing/save-api-accessor

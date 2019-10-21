@@ -1,0 +1,14 @@
+aliases:
+    oro/customer-info-widget$: orosales/js/widget/customer-info-widget
+    oro/select2-sales-customer-component$: orosales/js/app/components/select2-sales-customer-component
+dynamic-imports:
+    commons:
+        - oro/customer-info-widget
+        - oro/select2-sales-customer-component
+    orosales:
+        - orosales/js/app/components/customer-component
+        - orosales/js/app/views/account-multicustomer-view
+        - orosales/js/app/views/board/opportunity-card-view
+        - orosales/js/app/views/opportunity-status-select-view
+        - orosales/js/app/views/update-page-view
+        - orosales/js/datagrid/inline-editing/save-api-accessor
