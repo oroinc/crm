@@ -5,10 +5,10 @@ define(function(require) {
 
     var PlaceOrderComponent = require('oromagento/js/app/components/place-order-component');
     var $ = require('jquery');
-    var requireJsExposure = require('requirejs-exposure');
-    var exposure = requireJsExposure.disclose('oromagento/js/app/components/place-order-component');
+    var jsmoduleExposure = require('jsmodule-exposure');
+    var exposure = jsmoduleExposure.disclose('oromagento/js/app/components/place-order-component');
 
-    describe('Place Order Component', function() {
+    xdescribe('Place Order Component', function() {
         var messenger;
 
         beforeEach(function() {
