@@ -10,13 +10,13 @@ define([
 function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplate) {
     'use strict';
 
-    var $ = Backbone.$;
+    const $ = Backbone.$;
 
     /**
      * @class   orochannel.app.components.IntegrationWidgetView
      * @extends Backbone.View
      */
-    var IntegrationWidgetView = Backbone.View.extend({
+    const IntegrationWidgetView = Backbone.View.extend({
         /**
          * @type {jQuery}
          */
@@ -58,8 +58,8 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
         /**
          * @inheritDoc
          */
-        constructor: function IntegrationWidgetView() {
-            IntegrationWidgetView.__super__.constructor.apply(this, arguments);
+        constructor: function IntegrationWidgetView(options) {
+            IntegrationWidgetView.__super__.constructor.call(this, options);
         },
 
         /**
@@ -85,13 +85,13 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
         openDialog: function(e) {
             e.preventDefault();
 
-            var url = this._getUrl();
-            var routeAdditionalParams = $(e.target).data('route_additional_params');
+            let url = this._getUrl();
+            const routeAdditionalParams = $(e.target).data('route_additional_params');
             if (routeAdditionalParams) {
                 url = url + (url.indexOf('?') === -1 ? '?' : '&') + $.param(routeAdditionalParams);
             }
 
-            var formDialog = new DialogWidget({
+            const formDialog = new DialogWidget({
                 url: url,
                 title: this._getTitle(),
                 stateEnabled: false,
@@ -105,7 +105,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
                 }
             });
 
-            var processFormSave = function(data) {
+            const processFormSave = function(data) {
                 data = _.omit(data, ['_token']);
 
                 this._setValue('name', data.name || '');
@@ -119,7 +119,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
         },
 
         onRemoveIntegrationData: function() {
-            var confirm = new DeleteConfirmation({
+            const confirm = new DeleteConfirmation({
                 content: __('oro.channel.confirmation.delete_confirmation')
             });
             confirm.on('ok', _.bind(this.removeIntegrationData, this));
@@ -141,8 +141,8 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
          * {@inheritDoc}
          */
         render: function() {
-            var name = this._getValue('name');
-            var templateContext = {
+            const name = this._getValue('name');
+            const templateContext = {
                 name: name,
                 title: name ? __('edit') : __('Configure integration')
             };
@@ -161,11 +161,11 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
          * @private
          */
         _getUrl: function() {
-            var entityId = this._getValue('id');
-            var data = this._getValue('data');
-            var route = entityId ? 'oro_channel_integration_update' : 'oro_channel_integration_create';
-            var type = this._getValue('type');
-            var params = {};
+            const entityId = this._getValue('id');
+            const data = this._getValue('data');
+            const route = entityId ? 'oro_channel_integration_update' : 'oro_channel_integration_create';
+            const type = this._getValue('type');
+            const params = {};
 
             params.channelName = encodeURIComponent(this._getValue('channelName'));
 
@@ -189,7 +189,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
          * @private
          */
         _getTitle: function() {
-            var name = this._getValue('name');
+            const name = this._getValue('name');
 
             return name ? name : __('Configure integration');
         },
@@ -204,8 +204,8 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
         _getValue: function(key) {
             this._assertAllowedValueKey(key);
 
-            var preparedData;
-            var data = this[['$', key, 'El'].join('')].val();
+            let preparedData;
+            const data = this[['$', key, 'El'].join('')].val();
 
             switch (key) {
                 case 'data':
@@ -226,7 +226,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
          * @private
          */
         _setValue: function(key, data) {
-            var preparedData;
+            let preparedData;
 
             this._assertAllowedValueKey(key);
             switch (key) {
@@ -259,7 +259,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
      * @param {Object} options
      */
     return function(options) {
-        var view = new IntegrationWidgetView(options);
+        const view = new IntegrationWidgetView(options);
         view.render();
 
         options._sourceElement.remove();

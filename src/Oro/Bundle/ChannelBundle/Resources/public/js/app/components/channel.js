@@ -10,10 +10,10 @@ define([
     'use strict';
 
     /** @type {Object.<Backbone.Collection>} **/
-    var entitiesCollection;
+    let entitiesCollection;
 
     /** @const */
-    var UPDATE_MARKER = 'formUpdateMarker';
+    const UPDATE_MARKER = 'formUpdateMarker';
 
     /**
      * Initialize "Entities selection" component
@@ -23,15 +23,15 @@ define([
      * @param {Array.} lockedEntities
      */
     function initializeEntityComponent(selector, metadata, lockedEntities) {
-        var $storageEl = $(selector);
-        var value = $storageEl.val();
-        var entities = value ? JSON.parse(value) : [];
+        const $storageEl = $(selector);
+        const value = $storageEl.val();
+        const entities = value ? JSON.parse(value) : [];
 
         if (entities.length === 0) {
             return;
         }
 
-        var entityComponentView = new EntityComponentView({
+        const entityComponentView = new EntityComponentView({
             data: entities,
             mode: EntityComponentView.prototype.MODES.EDIT_MODE,
             metadata: metadata,
@@ -53,42 +53,40 @@ define([
      * @param {Object.<string, *>} fields
      */
     function initializeChannelTypeComponent(selector, fields) {
-        var $el = $(selector);
-        var $form = $el.parents('form');
+        const $el = $(selector);
+        const $form = $el.parents('form');
 
         /**
          * Get serialized form string with current element value excluded.
          *
          * @returns {String}
          */
-        var getFormState = function() {
+        const getFormState = function() {
             $el.attr('disabled', true);
-            var result = $form.serialize();
+            const result = $form.serialize();
             $el.attr('disabled', false);
 
             return result;
         };
-        var formStartState = getFormState();
-        var startChannelType = $el.val();
+        const formStartState = getFormState();
+        const startChannelType = $el.val();
 
-        var isAllowOpenConfirmDialog = function() {
+        const isAllowOpenConfirmDialog = function() {
             return startChannelType !== '' && getFormState() !== formStartState;
         };
 
-        var processChangeType = function() {
-            var data;
-            var event;
-            var $form = $el.parents('form');
-            var elementNames = _.map(fields, function(elementIdentifier) {
+        const processChangeType = function() {
+            const $form = $el.parents('form');
+            const elementNames = _.map(fields, function(elementIdentifier) {
                 return $(elementIdentifier).attr('name');
             });
 
-            data = _.filter($form.serializeArray(), function(field) {
+            const data = _.filter($form.serializeArray(), function(field) {
                 return _.indexOf(elementNames, field.name) !== -1;
             });
             data.push({name: UPDATE_MARKER, value: 1});
 
-            event = {formEl: $form, data: data, reloadManually: true};
+            const event = {formEl: $form, data: data, reloadManually: true};
             mediator.trigger('channelFormReload:before', event);
 
             if (event.reloadManually) {
@@ -101,8 +99,8 @@ define([
         };
 
         $el.on('change', function changeTypeHandler(e) {
-            var prevEl = e.removed;
-            var confirm = new DeleteConfirmation({
+            const prevEl = e.removed;
+            const confirm = new DeleteConfirmation({
                 title: __('oro.channel.confirmation.title'),
                 okText: __('oro.channel.confirmation.agree'),
                 content: __('oro.channel.confirmation.text')
@@ -127,7 +125,7 @@ define([
      * @param {Object} options
      */
     return function(options) {
-        var lockedEntities = [];
+        let lockedEntities = [];
 
         if (!_.isArray(options.customerIdentity)) {
             lockedEntities = [options.customerIdentity];

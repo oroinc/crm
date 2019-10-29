@@ -1,22 +1,21 @@
-var ORO_ORDER_EMBED_API = {};
+const ORO_ORDER_EMBED_API = {};
 
 define(function(require) {
     'use strict';
 
-    var PlaceOrderComponent;
-    var BaseComponent = require('oroui/js/app/components/base/component');
-    var PlaceOrderView = require('oromagento/js/app/views/place-order-view');
-    var $ = require('jquery');
-    var _ = require('underscore');
-    var mediator = require('oroui/js/mediator');
-    var widgetManager = require('oroui/js/widget-manager');
-    var messenger = require('oroui/js/messenger');
-    var __ = require('orotranslation/js/translator');
+    const BaseComponent = require('oroui/js/app/components/base/component');
+    const PlaceOrderView = require('oromagento/js/app/views/place-order-view');
+    const $ = require('jquery');
+    const _ = require('underscore');
+    const mediator = require('oroui/js/mediator');
+    const widgetManager = require('oroui/js/widget-manager');
+    const messenger = require('oroui/js/messenger');
+    const __ = require('orotranslation/js/translator');
 
     /**
      * @export oromagento/js/app/components/place-order-component
      */
-    PlaceOrderComponent = BaseComponent.extend({
+    const PlaceOrderComponent = BaseComponent.extend({
         optionNames: BaseComponent.prototype.optionNames.concat([
             'wid', 'errorMessage', 'cartSyncURL', 'customerSyncURL'
         ]),
@@ -28,15 +27,15 @@ define(function(require) {
         /**
          * @inheritDoc
          */
-        constructor: function PlaceOrderComponent() {
-            PlaceOrderComponent.__super__.constructor.apply(this, arguments);
+        constructor: function PlaceOrderComponent(options) {
+            PlaceOrderComponent.__super__.constructor.call(this, options);
         },
 
         /**
          * @inheritDoc
          */
         initialize: function(options) {
-            PlaceOrderComponent.__super__.initialize.apply(this, arguments);
+            PlaceOrderComponent.__super__.initialize.call(this, options);
 
             // handle error
             if (this.errorMessage) {
@@ -67,7 +66,7 @@ define(function(require) {
         },
 
         onOroOrderEmbedApiSuccess: function() {
-            var performMessage = messenger.notificationFlashMessage(
+            const performMessage = messenger.notificationFlashMessage(
                 'warning', __('oro.magento.performing_synchronization')
             );
 
@@ -89,7 +88,7 @@ define(function(require) {
         },
 
         _showMessage: function(data) {
-            var message = data.message;
+            let message = data.message;
 
             if (data.statusType === 'success') {
                 message = this.messageTemplate({

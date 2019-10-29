@@ -1,14 +1,13 @@
 define(function(require) {
     'use strict';
 
-    var Select2GridChannelAwareComponent;
-    var _ = require('underscore');
-    var Select2GridComponent = require('oro/select2-grid-component');
-    var BaseSelect2View = require('oroform/js/app/views/select2-view');
-    var viewFactory = require('orochannel/js/app/factory/select2-channel-aware-view-factory');
-    var Select2View = viewFactory(BaseSelect2View);
+    const _ = require('underscore');
+    const Select2GridComponent = require('oro/select2-grid-component');
+    const BaseSelect2View = require('oroform/js/app/views/select2-view');
+    const viewFactory = require('orochannel/js/app/factory/select2-channel-aware-view-factory');
+    const Select2View = viewFactory(BaseSelect2View);
 
-    Select2GridChannelAwareComponent = Select2GridComponent.extend({
+    const Select2GridChannelAwareComponent = Select2GridComponent.extend({
         $sourceElement: null,
         channelId: '',
         channelFieldName: '',
@@ -17,8 +16,8 @@ define(function(require) {
         /**
          * @inheritDoc
          */
-        constructor: function Select2GridChannelAwareComponent() {
-            Select2GridChannelAwareComponent.__super__.constructor.apply(this, arguments);
+        constructor: function Select2GridChannelAwareComponent(options) {
+            Select2GridChannelAwareComponent.__super__.constructor.call(this, options);
         },
 
         /**
@@ -32,7 +31,7 @@ define(function(require) {
             Select2GridChannelAwareComponent.__super__.initialize.call(this, options);
         },
         prepareViewOptions: function(options, config) {
-            var opts = Select2GridChannelAwareComponent.__super__.prepareViewOptions.apply(this, arguments);
+            const opts = Select2GridChannelAwareComponent.__super__.prepareViewOptions.call(this, options, config);
             opts.$channelSelector = this.findChannelSelectorElement();
             opts.additionalParamsCb = _.bind(this._getAdditionalParams, this);
 
@@ -41,9 +40,9 @@ define(function(require) {
         preConfig: function(config) {
             Select2GridChannelAwareComponent.__super__.preConfig.call(this, config);
 
-            var that = this;
-            config.ajax.data = _.wrap(config.ajax.data, function(parentDataFunction) {
-                var result = parentDataFunction.apply(this, _.rest(arguments));
+            const that = this;
+            config.ajax.data = _.wrap(config.ajax.data, function(parentDataFunction, ...rest) {
+                const result = parentDataFunction.apply(this, rest);
 
                 return _.extend(result, that._getAdditionalParams());
             });
@@ -54,9 +53,9 @@ define(function(require) {
             return this.$sourceElement.closest('form').find('select[name="' + this.channelFieldName + '"]');
         },
         _getAdditionalParams: function() {
-            var result = {};
-            var $channel = this.findChannelSelectorElement();
-            var channelIds = [$channel.val()];
+            const result = {};
+            const $channel = this.findChannelSelectorElement();
+            const channelIds = [$channel.val()];
 
             if (this.channelId) {
                 channelIds.push(this.channelId);

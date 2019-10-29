@@ -1,17 +1,17 @@
 define(function(require) {
     'use strict';
 
-    var $ = require('jquery');
-    var __ = require('orotranslation/js/translator');
-    var mediator = require('oroui/js/mediator');
-    var messenger = require('oroui/js/messenger');
-    var console = window.console;
+    const $ = require('jquery');
+    const __ = require('orotranslation/js/translator');
+    const mediator = require('oroui/js/mediator');
+    const messenger = require('oroui/js/messenger');
+    const console = window.console;
 
     return function(options) {
         options._sourceElement.find('.subscription').click(function(e) {
             e.preventDefault();
 
-            var url = $(this).data('url');
+            const url = $(this).data('url');
 
             mediator.execute('showLoading');
 

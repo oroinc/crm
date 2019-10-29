@@ -1,23 +1,23 @@
 define(['jquery', 'underscore'], function($, _) {
     'use strict';
 
-    var NotBlank = {
+    const NotBlank = {
         message: 'This value should not be blank.',
         payload: null
     };
 
-    var getField = function(name) {
+    const getField = function(name) {
         return $('[name*="[' + name + ']"]');
     };
 
-    var resetFieldStatus = function(allFields, requiredFields, silent) {
-        var isArray = _.isArray(requiredFields);
+    const resetFieldStatus = function(allFields, requiredFields, silent) {
+        const isArray = _.isArray(requiredFields);
 
         _.each(allFields, function(field) {
-            var $field = getField(field);
+            const $field = getField(field);
 
-            var validationData = $field.data('validation') || {};
-            var isRequired = isArray ? _.indexOf(requiredFields, field) !== -1 : field === requiredFields;
+            const validationData = $field.data('validation') || {};
+            const isRequired = isArray ? _.indexOf(requiredFields, field) !== -1 : field === requiredFields;
             if (isRequired) {
                 validationData.NotBlank = NotBlank;
             } else {
@@ -32,13 +32,13 @@ define(['jquery', 'underscore'], function($, _) {
         });
     };
 
-    var resolveFields = function(list) {
+    const resolveFields = function(list) {
         return _.uniq(_.flatten(_.values(list)));
     };
 
-    var validate = function($field, params, silent) {
-        var requiredFields = params.deps[$field.val()];
-        var allFields = resolveFields(params.deps);
+    const validate = function($field, params, silent) {
+        const requiredFields = params.deps[$field.val()];
+        const allFields = resolveFields(params.deps);
 
         resetFieldStatus(allFields, requiredFields, silent);
     };
@@ -46,8 +46,8 @@ define(['jquery', 'underscore'], function($, _) {
     return [
         'Oro\\Bundle\\ContactUsBundle\\Validator\\ContactRequestCallbackValidator',
         function(value, element, params) {
-            var event = 'change.ContactRequestCallbackValidator';
-            var $field = getField(params.target);
+            const event = 'change.ContactRequestCallbackValidator';
+            const $field = getField(params.target);
             $field.off(event).on(event, function() {
                 validate($field, params);
             });

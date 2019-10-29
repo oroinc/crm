@@ -1,12 +1,10 @@
 define(function(require) {
     'use strict';
 
-    var CollectionApiAccessor;
+    const _ = require('underscore');
+    const ApiAccessor = require('oroui/js/tools/api-accessor');
 
-    var _ = require('underscore');
-    var ApiAccessor = require('oroui/js/tools/api-accessor');
-
-    CollectionApiAccessor = ApiAccessor.extend(/** @lends CollectionApiAccessor.prototype */{
+    const CollectionApiAccessor = ApiAccessor.extend(/** @lends CollectionApiAccessor.prototype */{
         /**
          * Validates url parameters
          *
@@ -15,7 +13,7 @@ define(function(require) {
          */
         validateUrlParameters: function(urlParameters) {
             this.initRoute(urlParameters);
-            var parameters = this.prepareUrlParameters(urlParameters);
+            const parameters = this.prepareUrlParameters(urlParameters);
 
             return this.route.validateParameters(parameters);
         },
@@ -27,11 +25,11 @@ define(function(require) {
                 body.primary = true;
             }
 
-            return CollectionApiAccessor.__super__.send.apply(this, arguments);
+            return CollectionApiAccessor.__super__.send.call(this, urlParameters, body, headers, options);
         },
 
         initRoute: function(urlParameters, body) {
-            var _urlParameters = _.clone(urlParameters);
+            let _urlParameters = _.clone(urlParameters);
 
             this.setUpdateEntityRoute();
             _urlParameters = this.prepareUrlParameters(_urlParameters);

@@ -1,20 +1,19 @@
 define(function(require) {
     'use strict';
 
-    var ConfigureIntegrationView;
-    var BaseView = require('oroui/js/app/views/base/view');
-    var $ = require('jquery');
-    var mediator = require('oroui/js/mediator');
-    var widgetManager = require('oroui/js/widget-manager');
+    const BaseView = require('oroui/js/app/views/base/view');
+    const $ = require('jquery');
+    const mediator = require('oroui/js/mediator');
+    const widgetManager = require('oroui/js/widget-manager');
 
-    ConfigureIntegrationView = BaseView.extend({
+    const ConfigureIntegrationView = BaseView.extend({
         optionNames: BaseView.prototype.optionNames.concat(['wid', 'dataFieldSelector', 'apiKeyFieldSelector']),
 
         /**
          * @inheritDoc
          */
-        constructor: function ConfigureIntegrationView() {
-            ConfigureIntegrationView.__super__.constructor.apply(this, arguments);
+        constructor: function ConfigureIntegrationView(options) {
+            ConfigureIntegrationView.__super__.constructor.call(this, options);
         },
 
         /**
@@ -33,11 +32,11 @@ define(function(require) {
             });
 
             widget.on('contentLoad', function() {
-                var $dataField = this.$(this.dataFieldSelector);
-                var $apiKeyField = this.$(this.apiKeyFieldSelector);
+                const $dataField = this.$(this.dataFieldSelector);
+                const $apiKeyField = this.$(this.apiKeyFieldSelector);
 
                 if ($dataField.val() && !$apiKeyField.val()) {
-                    var data = JSON.parse($dataField.val());
+                    const data = JSON.parse($dataField.val());
 
                     if (data.transport.apiKey) {
                         $apiKeyField.val(data.transport.apiKey);
