@@ -1,12 +1,12 @@
 define(function(require) {
     'use strict';
 
-    var _ = require('underscore');
-    var tools = require('oroui/js/tools');
-    var mediator = require('oroui/js/mediator');
-    var BaseComponent = require('oroui/js/app/components/base/component');
-    var CreateCustomerView = require('orosales/js/app/views/create-customer-view');
-    var CustomerComponent = BaseComponent.extend({
+    const _ = require('underscore');
+    const tools = require('oroui/js/tools');
+    const mediator = require('oroui/js/mediator');
+    const BaseComponent = require('oroui/js/app/components/base/component');
+    const CreateCustomerView = require('orosales/js/app/views/create-customer-view');
+    const CustomerComponent = BaseComponent.extend({
         views: [],
         $el: null,
         inputSelector: null,
@@ -18,8 +18,8 @@ define(function(require) {
         /**
          * @inheritDoc
          */
-        constructor: function CustomerComponent() {
-            CustomerComponent.__super__.constructor.apply(this, arguments);
+        constructor: function CustomerComponent(options) {
+            CustomerComponent.__super__.constructor.call(this, options);
         },
 
         /**
@@ -37,7 +37,7 @@ define(function(require) {
             mediator.on('customer-dialog:select', this.onCustomerDialogSelect, this);
             mediator.on('widget_registration:customer-dialog', this.onCustomerDialogInit, this);
 
-            var $customers = this.$el.find(options.customerSelector);
+            const $customers = this.$el.find(options.customerSelector);
             _.each($customers, function(customer) {
                 this.views.push(new CreateCustomerView({
                     el: customer,
@@ -47,12 +47,12 @@ define(function(require) {
         },
 
         onCustomerDialogInit: function(widget) {
-            var routeParams = this.$el.find(this.inputSelector).data('select2_query_additional_params') || {};
+            let routeParams = this.$el.find(this.inputSelector).data('select2_query_additional_params') || {};
             widget.options.routeParams = routeParams;
 
-            var widgetUrl = widget.options.url;
-            var widgetUrlRoot = widgetUrl.substring(0, widgetUrl.indexOf('?'));
-            var widgetUrlParts = tools.unpackFromQueryString(
+            let widgetUrl = widget.options.url;
+            const widgetUrlRoot = widgetUrl.substring(0, widgetUrl.indexOf('?'));
+            const widgetUrlParts = tools.unpackFromQueryString(
                 widgetUrl.substring(widgetUrl.indexOf('?'), widgetUrl.length)
             );
             if (!_.isEmpty(routeParams)) {
@@ -63,7 +63,7 @@ define(function(require) {
         },
 
         onCustomerDialogSelect: function(id) {
-            var $input = this.$el.find(this.inputSelector);
+            const $input = this.$el.find(this.inputSelector);
             $input.inputWidget('val', id, true);
             $input.inputWidget('focus');
         },
@@ -75,7 +75,7 @@ define(function(require) {
 
             mediator.off('customer-dialog:select', this.onCustomerSelect, this);
 
-            CustomerComponent.__super__.dispose.apply(this, arguments);
+            CustomerComponent.__super__.dispose.call(this);
         }
     });
 

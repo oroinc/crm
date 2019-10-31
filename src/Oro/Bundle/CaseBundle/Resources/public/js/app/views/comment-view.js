@@ -4,14 +4,12 @@ define([
 ], function(NoteView, autolinker) {
     'use strict';
 
-    var CommentView;
-
-    CommentView = NoteView.extend({
+    const CommentView = NoteView.extend({
         /**
          * @inheritDoc
          */
-        constructor: function CommentView() {
-            CommentView.__super__.constructor.apply(this, arguments);
+        constructor: function CommentView(options) {
+            CommentView.__super__.constructor.call(this, options);
         },
 
         /**
@@ -26,7 +24,7 @@ define([
          * @return {Object}
          */
         getTemplateData: function() {
-            var data = this.model.toJSON();
+            const data = this.model.toJSON();
 
             data.collapsed = this.collapsed;
             data.message = autolinker.link(data.message, {className: 'no-hash'});

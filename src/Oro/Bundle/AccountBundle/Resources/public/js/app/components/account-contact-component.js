@@ -1,16 +1,15 @@
 define(function(require) {
     'use strict';
 
-    var AccountContactComponent;
-    var MultipleEntityComponent = require('oroform/js/multiple-entity/component');
-    var nameFormatter = require('orolocale/js/formatter/name');
+    const MultipleEntityComponent = require('oroform/js/multiple-entity/component');
+    const nameFormatter = require('orolocale/js/formatter/name');
 
-    AccountContactComponent = MultipleEntityComponent.extend({
+    const AccountContactComponent = MultipleEntityComponent.extend({
         /**
          * @inheritDoc
          */
-        constructor: function AccountContactComponent() {
-            AccountContactComponent.__super__.constructor.apply(this, arguments);
+        constructor: function AccountContactComponent(options) {
+            AccountContactComponent.__super__.constructor.call(this, options);
         },
 
         _getLabel: function(model) {

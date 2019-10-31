@@ -1,12 +1,11 @@
 define(function(require) {
     'use strict';
 
-    var ContactApiAccessor;
 
-    var _ = require('underscore');
-    var ApiAccessor = require('oroui/js/tools/api-accessor');
+    const _ = require('underscore');
+    const ApiAccessor = require('oroui/js/tools/api-accessor');
 
-    ContactApiAccessor = ApiAccessor.extend(/** @lends ContactApiAccessor.prototype */{
+    const ContactApiAccessor = ApiAccessor.extend(/** @lends ContactApiAccessor.prototype */{
         /**
          * Validates url parameters
          *
@@ -14,13 +13,13 @@ define(function(require) {
          * @returns {boolean} - true, if parameters are valid and route url could be built
          */
         validateUrlParameters: function(urlParameters) {
-            var originalRouteName = this.route.get('routeName');
-            var originalHttpMethod = this.httpMethod;
+            const originalRouteName = this.route.get('routeName');
+            const originalHttpMethod = this.httpMethod;
 
             this.initRoute(urlParameters);
-            var parameters = this.prepareUrlParameters(urlParameters);
+            const parameters = this.prepareUrlParameters(urlParameters);
 
-            var valid = this.route.validateParameters(parameters);
+            const valid = this.route.validateParameters(parameters);
 
             /**
              * We need to reset changed stuff as this method is called from inline-editing-plugin.js::isEditable
@@ -48,7 +47,7 @@ define(function(require) {
         },
 
         initRoute: function(urlParameters, body) {
-            var _urlParameters = _.clone(urlParameters);
+            let _urlParameters = _.clone(urlParameters);
 
             this.setUpdateEntityRoute();
             _urlParameters = this.prepareUrlParameters(_urlParameters);

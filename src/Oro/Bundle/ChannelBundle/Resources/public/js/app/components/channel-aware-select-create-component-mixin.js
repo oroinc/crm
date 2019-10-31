@@ -1,11 +1,10 @@
 define(function(require) {
     'use strict';
 
-    var selectCreateComponentMixin;
-    var $ = require('jquery');
-    var _ = require('underscore');
+    const $ = require('jquery');
+    const _ = require('underscore');
 
-    selectCreateComponentMixin = {
+    const selectCreateComponentMixin = {
         channelFieldSelector: null,
         channelRequired: false,
         presetChannelId: null,
@@ -16,16 +15,16 @@ define(function(require) {
 
         initialize: function(options) {
             _.extend(this, _.pick(options, ['channelFieldSelector', 'channelRequired', 'presetChannelId']));
-            this._super().initialize.apply(this, arguments);
+            this._super().initialize.call(this, options);
             $(this.channelFieldSelector).on('change.component' + this.cid, _.bind(this.changeHandler, this));
             this.changeHandler();
         },
 
         changeHandler: function(event) {
-            var $el = $(this.channelFieldSelector);
-            var parts = this.getUrlParts();
-            var channelIds = [];
-            var currentVal = $el.val();
+            const $el = $(this.channelFieldSelector);
+            const parts = this.getUrlParts();
+            const channelIds = [];
+            const currentVal = $el.val();
 
             if (currentVal) {
                 channelIds.push(currentVal);
@@ -39,7 +38,7 @@ define(function(require) {
             }
 
             parts.grid.parameters.params.channelIds = channelIds.join(',');
-            var channelId = this.presetChannelId || $el.val();
+            const channelId = this.presetChannelId || $el.val();
             if (parts.hasOwnProperty('create') && channelId) {
                 parts.create.parameters.channelId = channelId;
                 this.setUrlParts(parts);
@@ -53,7 +52,7 @@ define(function(require) {
                 return;
             }
             $(this.channelFieldSelector).off('change.component' + this.cid);
-            this._super().dispose.apply(this, arguments);
+            this._super().dispose.call(this);
         }
     };
 

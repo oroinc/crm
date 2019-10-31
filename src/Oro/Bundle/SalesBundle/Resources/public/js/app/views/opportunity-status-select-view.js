@@ -1,23 +1,22 @@
 define(function(require) {
     'use strict';
 
-    var OpportunityStatusSelectView;
-    var _ = require('underscore');
-    var BaseView = require('oroui/js/app/views/base/view');
+    const _ = require('underscore');
+    const BaseView = require('oroui/js/app/views/base/view');
 
-    OpportunityStatusSelectView = BaseView.extend({
+    const OpportunityStatusSelectView = BaseView.extend({
         /**
          * @inheritDoc
          */
-        constructor: function OpportunityStatusSelectView() {
-            OpportunityStatusSelectView.__super__.constructor.apply(this, arguments);
+        constructor: function OpportunityStatusSelectView(options) {
+            OpportunityStatusSelectView.__super__.constructor.call(this, options);
         },
 
         /**
          * @inheritDoc
          */
         initialize: function(options) {
-            OpportunityStatusSelectView.__super__.initialize.apply(this, arguments);
+            OpportunityStatusSelectView.__super__.initialize.call(this, options);
 
             this.options = _.defaults(options || {}, this.options);
 
@@ -29,10 +28,10 @@ define(function(require) {
         },
 
         afterLayoutInit: function() {
-            var status = this.$('select[data-name="field__status"]');
-            var probability = this.$('input[data-name="field__probability"]');
-            var defaultProbabilities = status.data('probabilities');
-            var shouldChangeProbability = false;
+            const status = this.$('select[data-name="field__status"]');
+            const probability = this.$('input[data-name="field__probability"]');
+            const defaultProbabilities = status.data('probabilities');
+            let shouldChangeProbability = false;
 
             if (defaultProbabilities.hasOwnProperty(status.val())) {
                 if (parseFloat(defaultProbabilities[status.val()]) === parseFloat(probability.val())) {
@@ -45,7 +44,7 @@ define(function(require) {
             });
 
             status.on('change', function(e) {
-                var val = status.val();
+                const val = status.val();
 
                 if (!shouldChangeProbability) {
                     return;

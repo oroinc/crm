@@ -1,10 +1,9 @@
 define(function(require) {
     'use strict';
 
-    var PlaceOrderView;
-    var BaseView = require('oroui/js/app/views/base/view');
+    const BaseView = require('oroui/js/app/views/base/view');
 
-    PlaceOrderView = BaseView.extend({
+    const PlaceOrderView = BaseView.extend({
         events: {
             load: 'onFrameLoad'
         },
@@ -12,24 +11,24 @@ define(function(require) {
         /**
          * @inheritDoc
          */
-        constructor: function PlaceOrderView() {
-            PlaceOrderView.__super__.constructor.apply(this, arguments);
+        constructor: function PlaceOrderView(options) {
+            PlaceOrderView.__super__.constructor.call(this, options);
         },
 
         /**
          * @inheritDoc
          */
-        initialize: function() {
-            BaseView.__super__.initialize.apply(this, arguments);
+        initialize: function(options) {
+            BaseView.__super__.initialize.call(this, options);
 
-            var $frame = this.$el;
+            const $frame = this.$el;
 
             $frame.attr('src', $frame.data('src').replace(/^https?:/gi, ''));
         },
 
         onFrameLoad: function(e) {
-            var $frame = this.$el;
-            var offset = $frame.closest('.ui-dialog').find('.ui-dialog-titlebar').outerHeight() || 0;
+            const $frame = this.$el;
+            const offset = $frame.closest('.ui-dialog').find('.ui-dialog-titlebar').outerHeight() || 0;
 
             $frame.addClass('loaded').parent().css({top: offset});
 

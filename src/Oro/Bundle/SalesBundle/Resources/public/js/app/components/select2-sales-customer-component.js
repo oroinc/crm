@@ -1,15 +1,15 @@
 define(function(require) {
     'use strict';
 
-    var _ = require('underscore');
-    var Select2AutocompleteComponent = require('oro/select2-autocomplete-component');
+    const _ = require('underscore');
+    const Select2AutocompleteComponent = require('oro/select2-autocomplete-component');
 
-    var Select2SalesCustomerComponent = Select2AutocompleteComponent.extend({
+    const Select2SalesCustomerComponent = Select2AutocompleteComponent.extend({
         /**
          * @inheritDoc
          */
-        constructor: function Select2SalesCustomerComponent() {
-            Select2SalesCustomerComponent.__super__.constructor.apply(this, arguments);
+        constructor: function Select2SalesCustomerComponent(options) {
+            Select2SalesCustomerComponent.__super__.constructor.call(this, options);
         },
 
         setConfig: function(config) {
@@ -18,10 +18,10 @@ define(function(require) {
                     account: config.accountLabel
                 };
             };
-            config = Select2SalesCustomerComponent.__super__.setConfig.apply(this, arguments);
+            config = Select2SalesCustomerComponent.__super__.setConfig.call(this, config);
             if (config.createSearchChoice) {
                 config.createSearchChoice = _.wrap(config.createSearchChoice, function(original, value) {
-                    var result = original(value);
+                    const result = original(value);
                     result.icon = config.newAccountIcon || {};
 
                     return result;

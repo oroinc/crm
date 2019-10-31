@@ -1,14 +1,14 @@
 define(function(require) {
     'use strict';
 
-    var _ = require('underscore');
-    var __ = require('orotranslation/js/translator');
-    var mediator = require('oroui/js/mediator');
-    var routing = require('routing');
-    var DialogWidget = require('oro/dialog-widget');
-    var BaseView = require('oroui/js/app/views/base/view');
+    const _ = require('underscore');
+    const __ = require('orotranslation/js/translator');
+    const mediator = require('oroui/js/mediator');
+    const routing = require('routing');
+    const DialogWidget = require('oro/dialog-widget');
+    const BaseView = require('oroui/js/app/views/base/view');
 
-    var CustomerView = BaseView.extend({
+    const CustomerView = BaseView.extend({
         events: {
             'click button': 'onCreate'
         },
@@ -18,22 +18,22 @@ define(function(require) {
         /**
          * @inheritDoc
          */
-        constructor: function CustomerView() {
-            CustomerView.__super__.constructor.apply(this, arguments);
+        constructor: function CustomerView(options) {
+            CustomerView.__super__.constructor.call(this, options);
         },
 
         /**
          * @inheritDoc
          */
         initialize: function(options) {
-            CustomerView.__super__.initialize.apply(this, arguments);
+            CustomerView.__super__.initialize.call(this, options);
 
             this.options = _.defaults(options || {}, this.options);
         },
 
         onCreate: function() {
-            var customer = this.$('[data-customer]').data('customer');
-            var routeParams = this.$el.parents()
+            const customer = this.$('[data-customer]').data('customer');
+            const routeParams = this.$el.parents()
                 .find(this.options.inputSelector)
                 .data('select2_query_additional_params') || {};
 

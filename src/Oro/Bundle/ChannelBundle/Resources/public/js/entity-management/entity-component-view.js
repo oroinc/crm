@@ -1,22 +1,21 @@
 define(function(require) {
     'use strict';
 
-    var EntityComponentView;
-    var Backbone = require('backbone');
-    var _ = require('underscore');
-    var __ = require('orotranslation/js/translator');
-    var EntityModel = require('./model');
-    var componentTemplate = require('text-loader!./templates/component.html');
-    var entityTemplate = require('text-loader!./templates/entity-item.html');
-    var formTemplate = require('text-loader!./templates/form.html');
-    var entitySelectResultTemplate = require('text-loader!./templates/select2/result.html');
-    var entitySelectSelectionTemplate = require('text-loader!./templates/select2/selection.html');
-    var Select2Component = require('oro/select2-component');
+    const Backbone = require('backbone');
+    const _ = require('underscore');
+    const __ = require('orotranslation/js/translator');
+    const EntityModel = require('./model');
+    const componentTemplate = require('text-loader!./templates/component.html');
+    const entityTemplate = require('text-loader!./templates/entity-item.html');
+    const formTemplate = require('text-loader!./templates/form.html');
+    const entitySelectResultTemplate = require('text-loader!./templates/select2/result.html');
+    const entitySelectSelectionTemplate = require('text-loader!./templates/select2/selection.html');
+    const Select2Component = require('oro/select2-component');
 
     require('oroui/js/items-manager/editor');
     require('oroui/js/items-manager/table');
 
-    var modes = {
+    const modes = {
         VIEW_MODE: 1,
         EDIT_MODE: 2
     };
@@ -25,7 +24,7 @@ define(function(require) {
      * @class   orochannel.entityManagement.EntityComponentView
      * @extends Backbone.View
      */
-    EntityComponentView = Backbone.View.extend({
+    const EntityComponentView = Backbone.View.extend({
         /**
          * Widget mode constants
          *
@@ -82,8 +81,8 @@ define(function(require) {
         /**
          * @inheritDoc
          */
-        constructor: function EntityComponentView() {
-            EntityComponentView.__super__.constructor.apply(this, arguments);
+        constructor: function EntityComponentView(options) {
+            EntityComponentView.__super__.constructor.call(this, options);
         },
 
         /**
@@ -97,7 +96,8 @@ define(function(require) {
                 throw new Error('Missing "metadata" options for entity selection compoment');
             }
 
-            var models = this.options.data.length > 0 ? _.map(this.options.data, _.bind(this._createModel, this)) : [];
+            const models = this.options.data.length > 0
+                ? _.map(this.options.data, _.bind(this._createModel, this)) : [];
             this.collection = this.collection || new (Backbone.Collection)(models, {model: EntityModel});
             this.listenTo(this.collection, 'add remove reset', this._onCollectionChange);
             this.listenTo(this.collection, 'add', this._onItemAdded);
@@ -107,7 +107,7 @@ define(function(require) {
          * Renders component
          */
         render: function() {
-            var templateContext = {__: __};
+            const templateContext = {__: __};
 
             this.$el.html(this.template(_.extend({}, templateContext)));
             this.$formContainer = this.$el.find('.form-container');
@@ -128,13 +128,13 @@ define(function(require) {
          * @private
          */
         _initializeForm: function() {
-            var configs = {
+            const configs = {
                 placeholder: __('oro.channel.form.entity'),
                 result_template: entitySelectResultTemplate,
                 selection_template: entitySelectSelectionTemplate,
                 data: _.bind(function() {
-                    var notSelected = _.omit(this.options.metadata, this.collection.pluck('name'));
-                    var options = _.map(notSelected, function(entityMetadata) {
+                    const notSelected = _.omit(this.options.metadata, this.collection.pluck('name'));
+                    const options = _.map(notSelected, function(entityMetadata) {
                         return {
                             id: entityMetadata.name,
                             text: entityMetadata.label,
@@ -142,10 +142,10 @@ define(function(require) {
                             type: entityMetadata.type
                         };
                     });
-                    var optionGroups = _.groupBy(options, function(entityMetadata) {
+                    const optionGroups = _.groupBy(options, function(entityMetadata) {
                         return entityMetadata.type;
                     });
-                    var results = [];
+                    const results = [];
 
                     _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
                         results.push({
@@ -158,8 +158,8 @@ define(function(require) {
                     return {results: results};
                 }, this)
             };
-            var $el = this.$formContainer.find('[data-purpose="entity-selector"]');
-            var select2Component = new Select2Component({
+            const $el = this.$formContainer.find('[data-purpose="entity-selector"]');
+            const select2Component = new Select2Component({
                 configs: configs,
                 _sourceElement: $el
             });
@@ -179,7 +179,7 @@ define(function(require) {
                 collection: this.collection,
                 itemTemplate: this.itemTemplate,
                 itemRender: function itemRender(template, data) {
-                    var context = _.extend({__: __}, data);
+                    const context = _.extend({__: __}, data);
 
                     return template(context);
                 },
@@ -225,10 +225,10 @@ define(function(require) {
          * @private
          */
         _prepareModelAttributes: function(model) {
-            var entityName = model.get('name');
-            var entityMetadata = this.options.metadata[entityName] || {};
-            var actions = [];
-            var lockedEntities = this.options.lockedEntities;
+            const entityName = model.get('name');
+            const entityMetadata = this.options.metadata[entityName] || {};
+            const actions = [];
+            const lockedEntities = this.options.lockedEntities;
 
             if ((entityName.indexOf(lockedEntities) === -1) && this.options.mode === modes.EDIT_MODE) {
                 actions.push({
@@ -260,7 +260,7 @@ define(function(require) {
          * @private
          */
         _createModel: function(entityName) {
-            var model = new EntityModel({name: entityName});
+            const model = new EntityModel({name: entityName});
             model.set(this._prepareModelAttributes(model));
 
             return model;

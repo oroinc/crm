@@ -1,11 +1,10 @@
 define(function(require) {
     'use strict';
 
-    var CustomerInfoWidget;
-    var mediator = require('oroui/js/mediator');
-    var BlockWidget = require('oro/block-widget');
+    const mediator = require('oroui/js/mediator');
+    const BlockWidget = require('oro/block-widget');
 
-    CustomerInfoWidget = BlockWidget.extend({
+    const CustomerInfoWidget = BlockWidget.extend({
 
         activeTab: null,
 
@@ -19,7 +18,7 @@ define(function(require) {
         },
 
         prepareContentRequestOptions: function(data, method, url) {
-            var options = CustomerInfoWidget.__super__.prepareContentRequestOptions.call(
+            const options = CustomerInfoWidget.__super__.prepareContentRequestOptions.call(
                 this, data, method, url
             );
             if (this.activeTab) {

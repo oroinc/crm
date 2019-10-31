@@ -4,7 +4,7 @@ define([
     'use strict';
 
     return function(BaseSelect2View) {
-        var Select2ChannelAwareView = BaseSelect2View.extend({
+        const Select2ChannelAwareView = BaseSelect2View.extend({
             $channelSelector: null,
 
             requiredOptions: [
@@ -15,15 +15,15 @@ define([
             /**
              * @inheritDoc
              */
-            constructor: function Select2ChannelAwareView() {
-                Select2ChannelAwareView.__super__.constructor.apply(this, arguments);
+            constructor: function Select2ChannelAwareView(options) {
+                Select2ChannelAwareView.__super__.constructor.call(this, options);
             },
 
             /**
              * @inheritDoc
              */
             initialize: function(options) {
-                Select2ChannelAwareView.__super__.initialize.apply(this, arguments);
+                Select2ChannelAwareView.__super__.initialize.call(this, options);
 
                 _.each(this.requiredOptions, function(optionName) {
                     if (!_.has(options, optionName)) {
@@ -31,7 +31,7 @@ define([
                     }
                 });
 
-                var updateData = _.bind(function(initialCall) {
+                const updateData = _.bind(function(initialCall) {
                     initialCall = initialCall || false;
                     this.$el.data('select2_query_additional_params', options.additionalParamsCb());
 
@@ -53,7 +53,7 @@ define([
                 this.$channelSelector.off(this.eventNamespace());
                 delete this.$channelSelector;
 
-                Select2ChannelAwareView.__super__.dispose.apply(this, arguments);
+                Select2ChannelAwareView.__super__.dispose.call(this);
             }
         });
 

@@ -9,9 +9,7 @@ define([
 ], function($, _, routing, Backbone, __, mediator, messenger) {
     'use strict';
 
-    var MadgentoCheckerView;
-
-    MadgentoCheckerView = Backbone.View.extend({
+    const MadgentoCheckerView = Backbone.View.extend({
         events: {
             click: 'processClick'
         },
@@ -55,8 +53,8 @@ define([
         /**
          * @inheritDoc
          */
-        constructor: function MadgentoCheckerView() {
-            MadgentoCheckerView.__super__.constructor.apply(this, arguments);
+        constructor: function MadgentoCheckerView(options) {
+            MadgentoCheckerView.__super__.constructor.call(this, options);
         },
 
         /**
@@ -67,7 +65,7 @@ define([
             this.id = options.transportEntityId || null;
             this.url = this.getUrl();
 
-            var requiredMissed = this.requiredOptions.filter(function(option) {
+            const requiredMissed = this.requiredOptions.filter(function(option) {
                 return _.isUndefined(options[option]);
             });
             if (requiredMissed.length) {
@@ -94,7 +92,7 @@ define([
          * @returns {*}
          */
         getUrl: function(additionalParams) {
-            var params = _.extend({
+            const params = _.extend({
                 id: this.id
             }, additionalParams || {});
 
@@ -102,8 +100,8 @@ define([
         },
 
         getIntegrationAndTransportTypeParams: function(fields) {
-            var params = {};
-            var integrationType = _.first(
+            const params = {};
+            const integrationType = _.first(
                 _.filter(fields, function(field) {
                     return field.name.indexOf('[type]') !== -1;
                 })
@@ -116,13 +114,13 @@ define([
                  * In case we on edit page and field type is disabled
                  * so we can't get it from element data array
                  */
-                var typeEl = this.getForm().find('[name$="[type]"]').first();
+                const typeEl = this.getForm().find('[name$="[type]"]').first();
                 if (typeEl.length) {
                     params.type = typeEl.val();
                 }
             }
 
-            var transportType = _.first(
+            const transportType = _.first(
                 _.filter(fields, function(field) {
                     return field.name.indexOf('[transportType]') !== -1;
                 })
@@ -140,7 +138,7 @@ define([
          * @returns {Array}
          */
         getDataForRequestFromFields: function(fields) {
-            var data = _.filter(fields, function(field) {
+            const data = _.filter(fields, function(field) {
                 return field.name.indexOf('[transport]') !== -1;
             });
 
@@ -154,10 +152,10 @@ define([
          * Click handler
          */
         processClick: function() {
-            var fields = this.getForm().formToArray();
-            var transportAndIntegrationTypeParams = this.getIntegrationAndTransportTypeParams(fields);
-            var url = this.getUrl(transportAndIntegrationTypeParams);
-            var data = this.getDataForRequestFromFields(fields);
+            const fields = this.getForm().formToArray();
+            const transportAndIntegrationTypeParams = this.getIntegrationAndTransportTypeParams(fields);
+            const url = this.getUrl(transportAndIntegrationTypeParams);
+            const data = this.getDataForRequestFromFields(fields);
 
             mediator.execute('showLoading');
             $.post({
@@ -235,8 +233,8 @@ define([
          */
         handleWebsites: function(res) {
             if (this.options.websitesModificationAllowed !== false && res.websites) {
-                var $listEl = $(this.options.websitesListEl);
-                var $websiteSelectEl = $(this.options.websiteSelectEl);
+                const $listEl = $(this.options.websitesListEl);
+                const $websiteSelectEl = $(this.options.websiteSelectEl);
 
                 $listEl.val(JSON.stringify(res.websites));
                 $websiteSelectEl.empty();
@@ -259,7 +257,7 @@ define([
          * @param {Object} res
          */
         handleIsOrderNoteSupportExtensionVersion: function(res) {
-            var isOrderNoteSupportDisabledAttrValue = (res.isOrderNoteSupportExtensionVersion || false) === false;
+            const isOrderNoteSupportDisabledAttrValue = (res.isOrderNoteSupportExtensionVersion || false) === false;
             $(this.options.isDisplayOrderNotesEl).inputWidget('disable', isOrderNoteSupportDisabledAttrValue);
 
             $(this.options.isOrderNoteSupportExtensionVersionEl)
@@ -280,19 +278,19 @@ define([
          */
         handleConnectors: function(res) {
             if (res.connectors) {
-                var connectors = res.connectors;
-                var $form = this.$el.parents('form');
-                var $connectorsEl = $form.find(this.options.connectorsEl);
-                var i = 0;
-                var checkedBoxes = $connectorsEl.find(':checked');
-                var checked = {};
+                const connectors = res.connectors;
+                const $form = this.$el.parents('form');
+                const $connectorsEl = $form.find(this.options.connectorsEl);
+                let i = 0;
+                const checkedBoxes = $connectorsEl.find(':checked');
+                const checked = {};
 
                 _.each(checkedBoxes, function(el) {
                     checked[$(el).val()] = 'checked';
                 });
 
                 $connectorsEl.empty();
-                for (var key in connectors) {
+                for (const key in connectors) {
                     if (connectors.hasOwnProperty(key)) {
                         $connectorsEl.append(
                             this.connectorTemplate({
@@ -317,7 +315,7 @@ define([
         },
 
         handleSharedGuestEmailListEl: function(res) {
-            var disabledAttrValue = (res.isExtensionInstalled || false) === false;
+            const disabledAttrValue = (res.isExtensionInstalled || false) === false;
             $(this.options.sharedGuestEmailListEl).prop(
                 'disabled',
                 disabledAttrValue
@@ -331,7 +329,7 @@ define([
          * @param message string
          */
         renderResult: function(type, message) {
-            var container = this.$el.parent();
+            const container = this.$el.parent();
             container.find('.alert').remove();
             messenger.notificationMessage(type, message, {container: container, template: this.resultTemplate});
         }

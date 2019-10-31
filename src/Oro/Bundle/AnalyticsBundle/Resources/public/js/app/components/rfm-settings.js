@@ -1,12 +1,12 @@
 define(function(require) {
     'use strict';
 
-    var $ = require('jquery');
-    var _ = require('underscore');
-    var __ = require('orotranslation/js/translator');
-    var types = ['recency', 'frequency', 'monetary'];
-    var rows = 0;
-    var rowTemplate = _.template(
+    const $ = require('jquery');
+    const _ = require('underscore');
+    const __ = require('orotranslation/js/translator');
+    const types = ['recency', 'frequency', 'monetary'];
+    let rows = 0;
+    const rowTemplate = _.template(
         '<tr>' +
             '<td class="rfm-cell-index"></td>' +
             '<td class="rfm-cell-recency"></td>' +
@@ -21,14 +21,14 @@ define(function(require) {
     );
 
     return function(options) {
-        var $el = options._sourceElement;
-        var $enableEl = $el.find('#' + options.rfm_enable_id);
-        var $table = $el.find('.grid tbody');
-        var rfmElements = {};
+        const $el = options._sourceElement;
+        const $enableEl = $el.find('#' + options.rfm_enable_id);
+        const $table = $el.find('.grid tbody');
+        const rfmElements = {};
 
-        for (var i = 0; i < types.length; i++) {
-            var type = types[i];
-            var typeEl = $el.find('.rfm-' + type);
+        for (let i = 0; i < types.length; i++) {
+            const type = types[i];
+            const typeEl = $el.find('.rfm-' + type);
 
             rfmElements[type] = {
                 el: typeEl,
@@ -37,11 +37,11 @@ define(function(require) {
             };
         }
 
-        var getIndexInput = function($row) {
+        const getIndexInput = function($row) {
             return $row.find('[name$="[category_index]"]');
         };
 
-        var getInputBy = function($cell, isIncreasing) {
+        const getInputBy = function($cell, isIncreasing) {
             if (isIncreasing) {
                 return $cell.find('[name$="[max_value]"]');
             } else {
@@ -49,25 +49,25 @@ define(function(require) {
             }
         };
 
-        var getRfmCell = function($row, type) {
+        const getRfmCell = function($row, type) {
             return $row.find('.rfm-cell-' + type);
         };
 
-        var getInvisibleInput = function($row, type) {
+        const getInvisibleInput = function($row, type) {
             return getInputBy(getRfmCell($row, type), !rfmElements[type].isIncreasing);
         };
 
-        var getVisibleInput = function($row, type) {
+        const getVisibleInput = function($row, type) {
             return getInputBy(getRfmCell($row, type), rfmElements[type].isIncreasing);
         };
 
-        var recalculateIdx = function() {
-            var rows = $table.find('tr');
-            var rowsNum = rows.length;
-            for (var i = 0; i < rowsNum; i++) {
-                var $row = $(rows[i]);
-                var idx = i + 1;
-                var postfix = '';
+        const recalculateIdx = function() {
+            const rows = $table.find('tr');
+            const rowsNum = rows.length;
+            for (let i = 0; i < rowsNum; i++) {
+                const $row = $(rows[i]);
+                const idx = i + 1;
+                let postfix = '';
                 getIndexInput($row).val(idx);
 
                 if (i === 0) {
@@ -80,11 +80,11 @@ define(function(require) {
             }
         };
 
-        var setupChangeVal = function($row, type) {
+        const setupChangeVal = function($row, type) {
             getVisibleInput($row, type).keyup(function() {
-                var nextRow = $row.next();
-                var nextInput = getInvisibleInput(nextRow, type);
-                var val = $(this).val();
+                const nextRow = $row.next();
+                const nextInput = getInvisibleInput(nextRow, type);
+                const val = $(this).val();
 
                 nextInput.val(val);
 
@@ -92,8 +92,8 @@ define(function(require) {
             });
         };
 
-        var createSettingsRow = function(recency, frequency, monetary, append) {
-            var $row = $(rowTemplate());
+        const createSettingsRow = function(recency, frequency, monetary, append) {
+            const $row = $(rowTemplate());
             $(recency).appendTo($row.find('.rfm-cell-recency'));
             $(frequency).appendTo($row.find('.rfm-cell-frequency'));
             $(monetary).appendTo($row.find('.rfm-cell-monetary'));
@@ -105,18 +105,18 @@ define(function(require) {
             return $row;
         };
 
-        var getPreparedTemplate = function(type) {
+        const getPreparedTemplate = function(type) {
             return rfmElements[type].template.replace(/__name__/g, rows);
         };
 
-        var addRow = function() {
-            var $newRow = createSettingsRow(
+        const addRow = function() {
+            const $newRow = createSettingsRow(
                 getPreparedTemplate('recency'),
                 getPreparedTemplate('frequency'),
                 getPreparedTemplate('monetary')
             );
 
-            var lastRow = $table.find('tr').last();
+            const lastRow = $table.find('tr').last();
             if (lastRow.length) {
                 $newRow.insertBefore($(lastRow));
             } else {
@@ -128,13 +128,13 @@ define(function(require) {
             return $newRow;
         };
 
-        var decorateFirstRow = function(row) {
-            var $row = $(row);
+        const decorateFirstRow = function(row) {
+            const $row = $(row);
             $row.find('.action-delete').hide();
 
-            for (var i = 0; i < types.length; i++) {
-                var type = types[i];
-                var $input = getVisibleInput($row, type);
+            for (let i = 0; i < types.length; i++) {
+                const type = types[i];
+                const $input = getVisibleInput($row, type);
 
                 $input.prop('type', 'text');
                 if (rfmElements[type].isIncreasing) {
@@ -149,12 +149,12 @@ define(function(require) {
             rows++;
         };
 
-        var decorateRow = function(row) {
-            var $row = $(row);
+        const decorateRow = function(row) {
+            const $row = $(row);
 
-            for (var i = 0; i < types.length; i++) {
-                var type = types[i];
-                var $input = getVisibleInput($row, type);
+            for (let i = 0; i < types.length; i++) {
+                const type = types[i];
+                const $input = getVisibleInput($row, type);
 
                 $input.prop('type', 'text');
                 if (rfmElements[type].isIncreasing) {
@@ -171,13 +171,13 @@ define(function(require) {
             rows++;
         };
 
-        var decorateLastRow = function(row) {
-            var $row = $(row);
+        const decorateLastRow = function(row) {
+            const $row = $(row);
             $row.find('.action-delete').hide();
 
-            for (var i = 0; i < types.length; i++) {
-                var type = types[i];
-                var $input = getVisibleInput($row, type);
+            for (let i = 0; i < types.length; i++) {
+                const type = types[i];
+                const $input = getVisibleInput($row, type);
 
                 if (rfmElements[type].isIncreasing) {
                     $('<span>' + __('oro.analytics.more') + '</span> <strong></strong>').insertBefore($input);
@@ -189,17 +189,17 @@ define(function(require) {
             rows++;
         };
 
-        var refresh = function() {
+        const refresh = function() {
             $el.find('input').trigger('keyup');
             recalculateIdx();
         };
 
-        var adoptExistingRecords = function() {
-            var existingRRows = rfmElements.recency.el.find('.rfm-settings-row');
-            var existingFRows = rfmElements.frequency.el.find('.rfm-settings-row');
-            var existingMRows = rfmElements.monetary.el.find('.rfm-settings-row');
-            var totalRows = existingRRows.length;
-            var lastRowIdx = totalRows - 1;
+        const adoptExistingRecords = function() {
+            const existingRRows = rfmElements.recency.el.find('.rfm-settings-row');
+            const existingFRows = rfmElements.frequency.el.find('.rfm-settings-row');
+            const existingMRows = rfmElements.monetary.el.find('.rfm-settings-row');
+            const totalRows = existingRRows.length;
+            const lastRowIdx = totalRows - 1;
 
             if (totalRows < 2) {
                 $table.empty();
@@ -208,7 +208,7 @@ define(function(require) {
             } else {
                 decorateFirstRow(createSettingsRow(existingRRows[0], existingFRows[0], existingMRows[0], true));
                 if (totalRows > 2) {
-                    for (var i = 1; i < totalRows - 1; i++) {
+                    for (let i = 1; i < totalRows - 1; i++) {
                         decorateRow(createSettingsRow(existingRRows[i], existingFRows[i], existingMRows[i], true));
                     }
                 }
@@ -240,7 +240,7 @@ define(function(require) {
             }
         });
 
-        var enableHandler = function() {
+        const enableHandler = function() {
             if ($enableEl.is(':checked')) {
                 $el.addClass('rfm-enabled');
             } else {
@@ -253,7 +253,7 @@ define(function(require) {
         adoptExistingRecords();
         enableHandler();
 
-        var removeValidateInfo = function() {
+        const removeValidateInfo = function() {
             $el.find('.alert-error').hide();
             $el.find('.rfm-settings-data').find('.validation-error').removeClass('validation-error');
         };

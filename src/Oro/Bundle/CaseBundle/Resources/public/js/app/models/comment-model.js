@@ -3,9 +3,7 @@ define([
 ], function(BaseModel) {
     'use strict';
 
-    var CommentModel;
-
-    CommentModel = BaseModel.extend({
+    const CommentModel = BaseModel.extend({
         defaults: {
             'id': null,
             'message': null,
@@ -18,12 +16,11 @@ define([
             'updatedBy': null
         },
 
-
         /**
          * @inheritDoc
          */
-        constructor: function CommentModel() {
-            CommentModel.__super__.constructor.apply(this, arguments);
+        constructor: function CommentModel(...args) {
+            CommentModel.__super__.constructor.apply(this, args);
         }
     });
 

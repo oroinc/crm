@@ -1,15 +1,15 @@
-var ORO_ORDER_EMBED_API = {};
+const ORO_ORDER_EMBED_API = {};
 
 define(function(require) {
     'use strict';
 
-    var PlaceOrderComponent = require('oromagento/js/app/components/place-order-component');
-    var $ = require('jquery');
-    var jsmoduleExposure = require('jsmodule-exposure');
-    var exposure = jsmoduleExposure.disclose('oromagento/js/app/components/place-order-component');
+    const PlaceOrderComponent = require('oromagento/js/app/components/place-order-component');
+    const $ = require('jquery');
+    const jsmoduleExposure = require('jsmodule-exposure');
+    const exposure = jsmoduleExposure.disclose('oromagento/js/app/components/place-order-component');
 
     xdescribe('Place Order Component', function() {
-        var messenger;
+        let messenger;
 
         beforeEach(function() {
             window.setFixtures(
@@ -42,7 +42,7 @@ define(function(require) {
         });
 
         it('Handle Error', function() {
-            var errorMessage = 'Custom Error message.';
+            const errorMessage = 'Custom Error message.';
 
             /* jshint nonew: false */
             new PlaceOrderComponent({
