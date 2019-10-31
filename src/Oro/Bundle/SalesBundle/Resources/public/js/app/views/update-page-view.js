@@ -1,23 +1,22 @@
 define(function(require) {
     'use strict';
 
-    var UpdatePageView;
-    var _ = require('underscore');
-    var BaseView = require('oroui/js/app/views/base/view');
+    const _ = require('underscore');
+    const BaseView = require('oroui/js/app/views/base/view');
 
-    UpdatePageView = BaseView.extend({
+    const UpdatePageView = BaseView.extend({
         /**
          * @inheritDoc
          */
-        constructor: function UpdatePageView() {
-            UpdatePageView.__super__.constructor.apply(this, arguments);
+        constructor: function UpdatePageView(options) {
+            UpdatePageView.__super__.constructor.call(this, options);
         },
 
         /**
          * @inheritDoc
          */
         initialize: function(options) {
-            UpdatePageView.__super__.initialize.apply(this, arguments);
+            UpdatePageView.__super__.initialize.call(this, options);
 
             this.options = _.defaults(options || {}, this.options);
 
@@ -29,10 +28,10 @@ define(function(require) {
         },
 
         afterLayoutInit: function() {
-            var status = this.pageComponent('oro_sales_opportunity_form_status').view.$el;
-            var probability = this.$('input[data-name="field__probability"]:enabled');
-            var probabilities = status.data('probabilities');
-            var shouldChangeProbability = false;
+            const status = this.pageComponent('oro_sales_opportunity_form_status').view.$el;
+            const probability = this.$('input[data-name="field__probability"]:enabled');
+            const probabilities = status.data('probabilities');
+            let shouldChangeProbability = false;
 
             // probability field might be missing or disabled
             if (0 === probability.length) {
@@ -50,7 +49,7 @@ define(function(require) {
             });
 
             status.on('change', function(e) {
-                var val = status.val();
+                const val = status.val();
 
                 if (!shouldChangeProbability) {
                     return;
