@@ -147,18 +147,8 @@
         form_row(form.numberOfEmployees),
         form_row(form.industry)
     ] %}
-    {% for child in form.children if child.vars.extra_field is defined and child.vars.extra_field %}
-        {% set additionalData = additionalData|merge([form_row(child)]) %}
-    {% endfor %}
-    {% set dataBlocks = dataBlocks|merge([{
-            'title': 'Additional'|trans,
-            'subblocks': [{
-                'title': '',
-                'useSpan': false,
-                'data' : additionalData
-            }]
-        }] )
-    %}
+
+    {% set dataBlocks = dataBlocks|merge(oro_form_additional_data(form, 'Additional'|trans, additionalData)) %}
 
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
