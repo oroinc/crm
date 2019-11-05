@@ -12,8 +12,9 @@ oro_entity:
             contactInformation:
                 query:
                     select:
-                        expr:         defaultContact.email
+                        expr:         emails.email
                         return_type:  string
                     join:
                         left:
                             - { join: entity.defaultContact, alias: defaultContact }
+                            - { join: defaultContact.emails, alias: emails, conditionType: 'WITH', condition: 'emails.primary = true' }
