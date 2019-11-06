@@ -1,13 +1,10 @@
 parameters:
     oro_contact_us.contactrequest.entity.class:           Oro\Bundle\ContactUsBundle\Entity\ContactRequest
     oro_contact_us.contactreason.entity.class:            Oro\Bundle\ContactUsBundle\Entity\ContactReason
-    oro_contact_us.embedded_form.class:                   Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType
-    oro_contact_us.contact_request.form.handler.class:    Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler
-    oro_contact_us.provider.phone.abstract_contact_request.class: Oro\Bundle\ContactUsBundle\Provider\AbstractContactRequestPhoneProvider
 
 services:
     oro_contact_us.embedded_form:
-        class: '%oro_contact_us.embedded_form.class%'
+        class: Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         tags:
@@ -23,7 +20,7 @@ services:
             - null
 
     oro_contact_us.contact_request.form.handler:
-        class: '%oro_contact_us.contact_request.form.handler.class%'
+        class: Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -32,7 +29,7 @@ services:
             - "@doctrine"
 
     oro_contact_us.provider.phone.abstract_contact_request:
-        class: '%oro_contact_us.provider.phone.abstract_contact_request.class%'
+        class: Oro\Bundle\ContactUsBundle\Provider\AbstractContactRequestPhoneProvider
         tags:
             - { name: oro_address.phone_provider, class: Oro\Bundle\ContactUsBundle\Entity\AbstractContactRequest }
 

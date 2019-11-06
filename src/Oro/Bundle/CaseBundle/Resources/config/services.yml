@@ -1,18 +1,10 @@
 parameters:
     oro_case.entity.class:              Oro\Bundle\CaseBundle\Entity\CaseEntity
     oro_case.comment.class:             Oro\Bundle\CaseBundle\Entity\CaseComment
-    oro_case.manager.class:             Oro\Bundle\CaseBundle\Model\CaseEntityManager
-    oro_case.manager.api.class:         Oro\Bundle\CaseBundle\Model\CaseApiEntityManager
-    oro_case.manager.comment.api.class: Oro\Bundle\CaseBundle\Model\CommentApiEntityManager
-    oro_case.view_factory.class:        Oro\Bundle\CaseBundle\Model\ViewFactory
-    oro_case.provider.phone.case.class: Oro\Bundle\CaseBundle\Provider\CasePhoneProvider
-    oro_case.provider.mailbox_process.case.class: Oro\Bundle\CaseBundle\Provider\CaseMailboxProcessProvider
-    oro_case.event_listener.mailbox_saved_listener.class: Oro\Bundle\CaseBundle\EventListener\MailboxSavedListener
-    oro_case.event_listener.search_index_data_listener.class: Oro\Bundle\CaseBundle\EventListener\SearchIndexDataListener
 
 services:
     oro_case.manager:
-        class: '%oro_case.manager.class%'
+        class: Oro\Bundle\CaseBundle\Model\CaseEntityManager
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -20,7 +12,7 @@ services:
             - "@oro_security.acl_helper"
 
     oro_case.manager.api:
-        class: '%oro_case.manager.api.class%'
+        class: Oro\Bundle\CaseBundle\Model\CaseApiEntityManager
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
@@ -30,7 +22,7 @@ services:
             - "@oro_case.manager"
 
     oro_case.manager.comment.api:
-        class: '%oro_case.manager.comment.api.class%'
+        class: Oro\Bundle\CaseBundle\Model\CommentApiEntityManager
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
@@ -40,7 +32,7 @@ services:
             - "@oro_case.manager"
 
     oro_case.view_factory:
-        class: '%oro_case.view_factory.class%'
+        class: Oro\Bundle\CaseBundle\Model\ViewFactory
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -51,24 +43,24 @@ services:
             - "@oro_attachment.manager"
 
     oro_case.provider.phone.case:
-        class: '%oro_case.provider.phone.case.class%'
+        class: Oro\Bundle\CaseBundle\Provider\CasePhoneProvider
         tags:
             - { name: oro_address.phone_provider, class: '%oro_case.entity.class%' }
 
     oro_case.provider.mailbox_process.case:
-        class: '%oro_case.provider.mailbox_process.case.class%'
+        class: Oro\Bundle\CaseBundle\Provider\CaseMailboxProcessProvider
         tags:
             - { name: oro_email.mailbox_process, type: case }
 
-    oro_case.event_listener.mailbox_saved_listener.class:
-        class: '%oro_case.event_listener.mailbox_saved_listener.class%'
+    oro_case.event_listener.mailbox_saved_listener:
+        class: Oro\Bundle\CaseBundle\EventListener\MailboxSavedListener
         arguments:
             - "@oro_tag.tag.manager"
         tags:
             - { name: kernel.event_listener, event: oro_email.mailbox_saved, method: onMailboxSave }
 
     oro_case.event_listener.search_index_data_listener:
-        class: '%oro_case.event_listener.search_index_data_listener.class%'
+        class: Oro\Bundle\CaseBundle\EventListener\SearchIndexDataListener
         arguments:
             - '@oro_search.mapper'
         calls:

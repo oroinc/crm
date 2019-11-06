@@ -1,24 +1,16 @@
 parameters:
     oro_account.entity.account.class:            Oro\Bundle\AccountBundle\Entity\Account
-    oro_account.type.account.class:              Oro\Bundle\AccountBundle\Form\Type\AccountType
-    oro_account.handler.account.class:           Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
-    oro_account.form.type.account_select.class:  Oro\Bundle\AccountBundle\Form\Type\AccountSelectType
-
-    oro_account.account.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-    oro_account.type.account.api.class:          Oro\Bundle\AccountBundle\Form\Type\AccountApiType
-
-    oro_account.provider.phone.account.class:    Oro\Bundle\AccountBundle\Provider\AccountPhoneProvider
 
 services:
     oro_account.form.account:
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
-        class:                                      Symfony\Component\Form\Form
+        class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments: ["oro_account_form", Oro\Bundle\AccountBundle\Form\Type\AccountType, null]
 
     oro_account.form.type.account:
-        class:                                      '%oro_account.type.account.class%'
+        class: Oro\Bundle\AccountBundle\Form\Type\AccountType
         arguments:
             - "@router"
             - "@oro_entity.entity_name_resolver"
@@ -29,7 +21,7 @@ services:
     oro_account.form.handler.account:
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
-        class: '%oro_account.handler.account.class%'
+        class: Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
         arguments:
             - "@oro_account.form.account"
             - "@request_stack"
@@ -37,7 +29,7 @@ services:
 
     # Form type
     oro_account.form.type.account_select:
-        class:                                      '%oro_account.form.type.account_select.class%'
+        class: Oro\Bundle\AccountBundle\Form\Type\AccountSelectType
         tags:
             - { name: form.type, alias: oro_account_select }
 
@@ -45,14 +37,14 @@ services:
     oro_account.account.manager.api:
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
-        class:                                      '%oro_account.account.manager.api.class%'
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - '%oro_account.entity.account.class%'
             - "@doctrine.orm.entity_manager"
 
     oro_account.form.type.account.api:
-        class:                                      '%oro_account.type.account.api.class%'
+        class: Oro\Bundle\AccountBundle\Form\Type\AccountApiType
         arguments:
             - "@router"
             - "@oro_entity.entity_name_resolver"
@@ -70,7 +62,7 @@ services:
     oro_account.form.handler.account.api:
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
-        class: '%oro_account.handler.account.class%'
+        class: Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
         arguments:
             - "@oro_account.form.account.api"
             - "@request_stack"
@@ -95,7 +87,7 @@ services:
            - { name: oro_activity.activity_widget_provider, priority: -10 }
 
     oro_account.provider.phone.account:
-        class: '%oro_account.provider.phone.account.class%'
+        class: Oro\Bundle\AccountBundle\Provider\AccountPhoneProvider
         tags:
             - { name: oro_address.phone_provider, class: '%oro_account.entity.account.class%' }
 

@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * The controller for Magento Order entity.
  * @Route("/order")
  */
 class OrderController extends Controller
@@ -26,7 +27,7 @@ class OrderController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_magento.order.entity.class')
+            'entity_class' => $this->container->getParameter('oro_magento.entity.order.class')
         ];
     }
 

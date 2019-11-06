@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * The controller for Magento Cart entity.
  * @Route("/cart")
  */
 class CartController extends Controller
@@ -25,7 +26,7 @@ class CartController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_magento.cart.entity.class')
+            'entity_class' => $this->container->getParameter('oro_magento.entity.cart.class')
         ];
     }
 

@@ -973,7 +973,7 @@ datagrids:
                     - o.currency
                     - COUNT(items.id) as itemsCount
                 from:
-                    - { table: '%oro_magento.order.entity.class%', alias: o }
+                    - { table: '%oro_magento.entity.order.class%', alias: o }
                 join:
                     left:
                         - { join: o.items, alias: items }
@@ -1038,7 +1038,7 @@ datagrids:
                     - MAX(cstatus.label) as statusLabel
                     - c.itemsCount
                 from:
-                    - { table: '%oro_magento.cart.entity.class%' , alias: c }
+                    - { table: '%oro_magento.entity.cart.class%' , alias: c }
                 join:
                     left:
                         - { join: c.status, alias: cstatus }
@@ -1118,7 +1118,7 @@ datagrids:
                     - o.discountPercent
                     - o.couponCode
                 from:
-                    - { table: '%oro_magento.order.entity.class%', alias: o }
+                    - { table: '%oro_magento.entity.order.class%', alias: o }
                 join:
                     left:
                         - { join: o.items, alias: items }
@@ -1244,7 +1244,7 @@ datagrids:
                     - MAX(cstatus.label) as statusLabel
                     - c.itemsCount as itemsCount
                 from:
-                    - { table: '%oro_magento.cart.entity.class%' , alias: c }
+                    - { table: '%oro_magento.entity.cart.class%' , alias: c }
                 join:
                     left:
                         - { join: c.status, alias: cstatus }
