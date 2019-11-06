@@ -1,36 +1,26 @@
-parameters:
-    oro_case.form.type.entity.class:                      Oro\Bundle\CaseBundle\Form\Type\CaseEntityType
-    oro_case.form.type.entity.api.class:                  Oro\Bundle\CaseBundle\Form\Type\CaseEntityApiType
-    oro_case.form.type.comment.class:                     Oro\Bundle\CaseBundle\Form\Type\CaseCommentType
-    oro_case.form.type.comment.api.class:                 Oro\Bundle\CaseBundle\Form\Type\CaseCommentApiType
-    oro_case.form.handler.entity.class:                   Oro\Bundle\CaseBundle\Form\Handler\CaseEntityHandler
-    oro_case.form.type.case_mailbox_process.class:        Oro\Bundle\CaseBundle\Form\Type\CaseMailboxProcessSettingsType
-    oro_case.form.type.case_mailbox_process_settings_tag.class: Oro\Bundle\CaseBundle\Form\Type\CaseMailboxProcessSettingsTagType
-    oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber.class: Oro\Bundle\CaseBundle\Form\EventSubscriber\CaseMailboxProcessSettingsTagSubscriber
-
 services:
     oro_case.form.type.entity:
-        class: '%oro_case.form.type.entity.class%'
+        class: Oro\Bundle\CaseBundle\Form\Type\CaseEntityType
         tags:
             - { name: form.type, alias: oro_case_entity }
 
     oro_case.form.type.entity.api:
-        class: '%oro_case.form.type.entity.api.class%'
+        class: Oro\Bundle\CaseBundle\Form\Type\CaseEntityApiType
         tags:
             - { name: form.type, alias: oro_case_entity_api }
 
     oro_case.form.type.comment:
-        class: '%oro_case.form.type.comment.class%'
+        class: Oro\Bundle\CaseBundle\Form\Type\CaseCommentType
         tags:
             - { name: form.type, alias: oro_case_comment }
 
     oro_case.form.type.comment.api:
-        class: '%oro_case.form.type.comment.api.class%'
+        class: Oro\Bundle\CaseBundle\Form\Type\CaseCommentApiType
         tags:
             - { name: form.type, alias: oro_case_comment_api }
 
     oro_case.form.type.case_mailbox_process:
-        class: '%oro_case.form.type.case_mailbox_process.class%'
+        class: Oro\Bundle\CaseBundle\Form\Type\CaseMailboxProcessSettingsType
         tags:
             - { name: form.type, alias: oro_case_mailbox_process_settings }
 
@@ -71,7 +61,7 @@ services:
             - Oro\Bundle\CaseBundle\Form\Type\CaseCommentApiType
 
     oro_case.form.handler.entity:
-        class: '%oro_case.form.handler.entity.class%'
+        class: Oro\Bundle\CaseBundle\Form\Handler\CaseEntityHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -81,7 +71,7 @@ services:
             - "@event_dispatcher"
 
     oro_case.form.handler.entity.api:
-        class: '%oro_case.form.handler.entity.class%'
+        class: Oro\Bundle\CaseBundle\Form\Handler\CaseEntityHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -91,7 +81,7 @@ services:
             - "@event_dispatcher"
 
     oro_case.form.handler.comment:
-        class: '%oro_case.form.handler.entity.class%'
+        class: Oro\Bundle\CaseBundle\Form\Handler\CaseEntityHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -101,7 +91,7 @@ services:
             - "@event_dispatcher"
 
     oro_case.form.handler.comment.api:
-        class: '%oro_case.form.handler.entity.class%'
+        class: Oro\Bundle\CaseBundle\Form\Handler\CaseEntityHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -111,7 +101,7 @@ services:
             - "@event_dispatcher"
 
     oro_case.form.type.case_mailbox_process_settings_tag:
-        class: '%oro_case.form.type.case_mailbox_process_settings_tag.class%'
+        class: Oro\Bundle\CaseBundle\Form\Type\CaseMailboxProcessSettingsTagType
         arguments:
             - "@oro_tag.form.subscriber.tag_select"
             - "@oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber"
@@ -119,5 +109,5 @@ services:
             - { name: form.type, alias: case_mailbox_process_settings_tag }
 
     oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber:
-        class: '%oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber.class%'
+        class: Oro\Bundle\CaseBundle\Form\EventSubscriber\CaseMailboxProcessSettingsTagSubscriber
         parent: oro_tag.form.subscriber.tag_select

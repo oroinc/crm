@@ -143,7 +143,7 @@ services:
             - { data_class: 'Oro\Bundle\ContactBundle\Entity\ContactAddress' }
 
     oro_contact.form.handler.contact_address:
-        class: '%oro_address.form.handler.address.class%'
+        class: Oro\Bundle\AddressBundle\Form\Handler\AddressHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:

@@ -45,7 +45,7 @@ datagrids:
                 createdAt:
                     data_name: cr.createdAt
             default:
-                createdAt: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC'
+                createdAt: DESC
         filters:
             columns:
                 firstName:

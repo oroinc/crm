@@ -31,7 +31,7 @@ datagrids:
                     - column: visitDate
                       dir: desc
         sorters:
-            visitDate: { history.: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC' }
+            visitDate: { history.: DESC }
         columns:
             name:
                 type: twig

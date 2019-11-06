@@ -30,7 +30,7 @@ class CustomerController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_magento.customer.entity.class')
+            'entity_class' => $this->container->getParameter('oro_magento.entity.customer.class')
         ];
     }
 
