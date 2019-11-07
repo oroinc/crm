@@ -153,7 +153,7 @@ datagrids:
                     data_name: c.firstName
                 lastName:
                     data_name: c.lastName
-            default: { hasGroup: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC' }
+            default: { hasGroup: DESC }
         options:
             entityHint: oro.contact.entity_plural_label
             rowSelection:
@@ -398,8 +398,8 @@ datagrids:
                 reportsName:
                     data_name: reportsName
             default:
-                lastName:  '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
-                firstName: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
+                lastName: ASC
+                firstName: ASC
         filters:
             columns:
                 firstName:
@@ -623,7 +623,7 @@ datagrids:
                 ownerName:         { data_name: ownerName }
                 createdAt:         { data_name: a.createdAt }
                 updatedAt:         { data_name: a.updatedAt }
-            default: { hasContact: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC' }
+            default: { hasContact: DESC }
         filters:
             columns:
                 hasContact:
@@ -739,8 +739,8 @@ datagrids:
                 addressPostalCode:
                     data_name: address.postalCode
             default:
-                lastName:  '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
-                firstName: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
+                lastName: ASC
+                firstName: ASC
         filters:
             columns:
                 firstName:
@@ -851,8 +851,8 @@ datagrids:
                 regionLabel:
                     data_name: regionLabel
             default:
-                lastName:  '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
-                firstName: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
+                lastName: ASC
+                firstName: ASC
         filters:
             columns:
                 firstName:

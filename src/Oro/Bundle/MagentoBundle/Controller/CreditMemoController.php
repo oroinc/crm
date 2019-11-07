@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * The controller for Magento CreditMemo entity.
  * @Route("/credit-memo")
  */
 class CreditMemoController extends Controller
@@ -26,7 +27,7 @@ class CreditMemoController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_magento.credit_memo.entity.class')
+            'entity_class' => $this->container->getParameter('oro_magento.entity.credit_memo.class')
         ];
     }
 

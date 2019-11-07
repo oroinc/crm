@@ -1,50 +1,33 @@
 parameters:
     oro_analytics.entity.rfm_category.class: Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory
 
-    oro_analytics.builder.class: Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder
-    oro_analytics.builder.rfm.class: Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder
-
-    oro_analytics.form.type.category.class: Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategoryType
-    oro_analytics.form.type.category_settings.class: Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType
-
     oro_analytics.model.analytics_aware_interface: Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface
     oro_analytics.model.rfm_aware_interface: Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface
-    oro_analytics.form.channel_type_extension.class: Oro\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension
-
-    oro_analytics.placeholder.rfm_filter.class: Oro\Bundle\AnalyticsBundle\Placeholder\RFMAwareFilter
-
-    oro_analytics.event_listener.timezone_change.class: Oro\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener
-    oro_analytics.event_listener.rfm_category.class: Oro\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener
-
-    oro_analytics.validator.categories.class: Oro\Bundle\AnalyticsBundle\Validator\CategoriesValidator
-
-    oro_analytics.model.state_manager.class: Oro\Bundle\AnalyticsBundle\Model\StateManager
-    oro_analytics.model.rfm_state_manager.class: Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager
 services:
     oro_analytics.builder:
-        class: '%oro_analytics.builder.class%'
+        class: Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder
         arguments:
             - []
 
     oro_analytics.builder.rfm:
-        class: '%oro_analytics.builder.rfm.class%'
+        class: Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder
         arguments:
             - '@oro_entity.doctrine_helper'
         tags:
             - { name: oro_analytics.builder }
 
     oro_analytics.form.type.category:
-        class: '%oro_analytics.form.type.category.class%'
+        class: Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategoryType
         tags:
             - { name: form.type, alias: "oro_analytics_rfm_category" }
 
     oro_analytics.form.type.category_settings:
-        class: '%oro_analytics.form.type.category_settings.class%'
+        class: Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType
         tags:
             - { name: form.type, alias: "oro_analytics_rfm_category_settings" }
 
     oro_analytics.form.channel_type_extension:
-        class: '%oro_analytics.form.channel_type_extension.class%'
+        class: Oro\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension
         arguments:
             - '@oro_entity.doctrine_helper'
             - '%oro_analytics.model.rfm_aware_interface%'
@@ -53,13 +36,13 @@ services:
             - { name: form.type_extension, alias: oro_channel_form, extended_type: Oro\Bundle\ChannelBundle\Form\Type\ChannelType }
 
     oro_analytics.placeholder.rfm_filter:
-        class: '%oro_analytics.placeholder.rfm_filter.class%'
+        class: Oro\Bundle\AnalyticsBundle\Placeholder\RFMAwareFilter
         public: true
         arguments:
             - '%oro_analytics.model.analytics_aware_interface%'
 
     oro_analytics.event_listener.timezone_change:
-        class: '%oro_analytics.event_listener.timezone_change.class%'
+        class: Oro\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener
         arguments:
             - '@oro_analytics.model.rfm_state_manager'
             - '@oro_analytics.calculate_analytics_scheduler'
@@ -67,24 +50,19 @@ services:
             - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
     oro_analytics.validator.categories:
-        class: '%oro_analytics.validator.categories.class%'
+        class: Oro\Bundle\AnalyticsBundle\Validator\CategoriesValidator
         tags:
             - { name: validator.constraint_validator, alias: oro_analytics.categories_validator }
 
-    oro_analytics.model.state_manager:
-        class: '%oro_analytics.model.state_manager.class%'
-        arguments:
-            - '@oro_entity.doctrine_helper'
-
     oro_analytics.model.rfm_state_manager:
-        class: '%oro_analytics.model.rfm_state_manager.class%'
+        class: Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager
         arguments:
             - '@oro_entity.doctrine_helper'
             - '%oro_analytics.model.rfm_aware_interface%'
             - '%oro_channel.entity.class%'
 
     oro_analytics.event_listener.rfm_category:
-        class: '%oro_analytics.event_listener.rfm_category.class%'
+        class: Oro\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener
         arguments:
             - '@oro_analytics.model.rfm_state_manager'
             - '@oro_analytics.calculate_analytics_scheduler'
@@ -95,14 +73,14 @@ services:
             - { name: kernel.event_listener, event: oro_channel.channel.save_succeed, method: onChannelSucceedSave }
 
     oro_analytics.calculate_analytics_scheduler:
-        class: 'Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler'
+        class: Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - '@oro_message_queue.message_producer'
 
     oro_analytics.async.calculate_channel_analytics_processor:
-        class: 'Oro\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor'
+        class: Oro\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor
         arguments:
             - '@oro_entity.doctrine_helper'
             - '@oro_analytics.builder'
@@ -112,7 +90,7 @@ services:
             - { name: 'oro_message_queue.client.message_processor' }
 
     oro_analytics.async.calculate_all_channels_analytics_processor:
-        class: 'Oro\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor'
+        class: Oro\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor
         arguments:
             - '@oro_entity.doctrine_helper'
             - '@oro_analytics.calculate_analytics_scheduler'

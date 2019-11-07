@@ -780,7 +780,7 @@ datagrids:
                 ownerName:
                     data_name: ownerName
             default:
-                startDate: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC'
+                startDate: DESC
         actions:
             view:
                 type:          navigate
@@ -930,8 +930,8 @@ datagrids:
                 addressPostalCode:
                     data_name: addressPostalCode
             default:
-                firstName: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
-                lastName:  '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
+                firstName: ASC
+                lastName: ASC
         filters:
             columns:
                  id:

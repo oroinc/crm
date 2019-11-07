@@ -1,72 +1,16 @@
 parameters:
-    # entity
     oro_channel.entity.class:                                       Oro\Bundle\ChannelBundle\Entity\Channel
-
-    # builder
-    oro_channel.builder.factory.class:                              Oro\Bundle\ChannelBundle\Builder\BuilderFactory
-
-    # handlers
-    oro_channel.channel_form.handler.class:                         Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler
-    oro_channel.channel_integration_form.handler.class:             Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler
-
-    # forms
-    oro_channel.form.type.channel.class:                               Oro\Bundle\ChannelBundle\Form\Type\ChannelType
-    oro_channel.form.type.entity.class:                                Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType
-    oro_channel.form.type.channel_datasource.class:                    Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
-    oro_channel.form.type.channel_select.class:                        Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType
-    oro_channel.form.type.create_or_select_inline_channel_aware.class: Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType
-    oro_channel.form.type.multiple_entity_channel_aware.class:         Oro\Bundle\ChannelBundle\Form\Type\MultipleEntityChannelAwareType
-    oro_channel.form.embedded_type_extension.class:                    Oro\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
-    oro_channel.form.integration_type_extension.class:                 Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
-
-    # manager
-    oro_channel.manager.channel.api.class:                             Oro\Bundle\ChannelBundle\Entity\Manager\ChannelApiEntityManager
-    oro_channel.manager.customer_search.api.class:                     Oro\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager
-
-    # providers
-    oro_channel.provider.channel_entity_exclusion_provider.class:   Oro\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider
-    oro_channel.provider.state_provider.class:                      Oro\Bundle\ChannelBundle\Provider\StateProvider
-    oro_channel.provider.entity_metadata.class:                     Oro\Bundle\ChannelBundle\Provider\MetadataProvider
-    oro_channel.provider.utils.entity_state_provider.class:         Oro\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
-    oro_channel.provider.request_channel.class:                     Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider
-    oro_channel.provider.lifetime.amount_provider.class:            Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider
-
-    # datagrid
-    oro_channel.datagrid.extension.orm_channel_limitation.class:    Oro\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtension
-
-    # autocomplete
-    oro_channel.autocomplete.channel_limitation_handler.class:      Oro\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler
-
-    # config resolver
-    oro_channel.config_resolver.class:                              Oro\Component\Config\Resolver\SystemAwareResolver
-
-    # event listener
-    oro_channel.event_listener.navigation.class:                    Oro\Bundle\ChannelBundle\EventListener\NavigationListener
-    oro_channel.event_listener.update_integration_connectors.class: Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener
-    oro_channel.event_listener.channel_before_deleted.class:        Oro\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
-    oro_channel.event_listener.embedded_form.class:                 Oro\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
-    oro_channel.event_listener.doctrine.class:                      Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
-    oro_channel.event_listener.timezone_change.class:               Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener
-    oro_channel.event_listener.job_execution.class:                 Oro\Bundle\ChannelBundle\EventListener\JobExecutionSubscriber
-    oro_channel.event_listener.transitions_attribute.class:         Oro\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener
-
-    #validators
-    oro_channel.validators.channel_integration_validator.class:     Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
-
-    # import/export
-    oro_channel.importexport.helper.channel.class:                  Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper
 
 services:
     oro_channel.builder.factory:
-        class: '%oro_channel.builder.factory.class%'
+        class: Oro\Bundle\ChannelBundle\Builder\BuilderFactory
         public: true
         arguments:
           - "@doctrine"
           - "@oro_channel.provider.settings_provider"
 
-    # forms
     oro_channel.form.type.channel:
-        class: '%oro_channel.form.type.channel.class%'
+        class: Oro\Bundle\ChannelBundle\Form\Type\ChannelType
         arguments:
             - "@oro_channel.provider.settings_provider"
             - "@oro_channel.form.subscriber.channel_subscriber"
@@ -74,12 +18,12 @@ services:
             - { name: form.type, alias: oro_channel_form }
 
     oro_channel.form.type.entity:
-        class: '%oro_channel.form.type.entity.class%'
+        class: Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType
         tags:
             - { name: form.type, alias: oro_channel_entities }
 
     oro_channel.form.type.channel_datasource:
-        class: '%oro_channel.form.type.channel_datasource.class%'
+        class: Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
         arguments:
             - "@doctrine"
             - '%oro_integration.entity.class%'
@@ -87,19 +31,19 @@ services:
             - { name: form.type, alias: oro_channel_datasource_form }
 
     oro_channel.form.type.channel_select:
-        class: '%oro_channel.form.type.channel_select.class%'
+        class: Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType
         arguments:
             - '@oro_channel.provider.channels_by_entities'
         tags:
             - { name: form.type, alias: oro_channel_select_type }
 
     oro_channel.form.type.create_or_select_inline_channel_aware:
-        class: '%oro_channel.form.type.create_or_select_inline_channel_aware.class%'
+        class: Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType
         tags:
             - { name: form.type, alias: oro_entity_create_or_select_inline_channel_aware }
 
     oro_channel.form.type.multiple_entity_channel_aware:
-        class: '%oro_channel.form.type.multiple_entity_channel_aware.class%'
+        class: Oro\Bundle\ChannelBundle\Form\Type\MultipleEntityChannelAwareType
         tags:
             - { name: form.type, alias: oro_multiple_entity_channel_aware }
 
@@ -108,9 +52,8 @@ services:
         factory: ['@form.factory', 'createNamed']
         arguments: ["oro_channel_form", Oro\Bundle\ChannelBundle\Form\Type\ChannelType, null]
 
-    # handlers
     oro_channel.channel_form.handler:
-        class: '%oro_channel.channel_form.handler.class%'
+        class: Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -120,16 +63,15 @@ services:
             - "@event_dispatcher"
 
     oro_channel.channel_integration_form.handler:
-        class: '%oro_channel.channel_integration_form.handler.class%'
+        class: Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@request_stack"
             - "@form.factory"
 
-    # Channel API
     oro_channel.manager.channel.api:
-        class: '%oro_channel.manager.channel.api.class%'
+        class: Oro\Bundle\ChannelBundle\Entity\Manager\ChannelApiEntityManager
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
@@ -138,7 +80,7 @@ services:
             - "@doctrine.orm.entity_manager"
 
     oro_channel.manager.customer_search.api:
-        class: '%oro_channel.manager.customer_search.api.class%'
+        class: Oro\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
@@ -149,7 +91,6 @@ services:
             - "@event_dispatcher"
             - "@oro_channel.provider.settings_provider"
 
-    # Providers
     oro_channel.provider.settings_provider:
         class: Oro\Bundle\ChannelBundle\Provider\SettingsProvider
         public: true
@@ -166,7 +107,7 @@ services:
             - '@oro_channel.config_resolver'
 
     oro_channel.provider.metadata_provider:
-        class: '%oro_channel.provider.entity_metadata.class%'
+        class: Oro\Bundle\ChannelBundle\Provider\MetadataProvider
         arguments:
             - "@oro_channel.provider.settings_provider"
             - "@oro_entity.entity_provider"
@@ -174,39 +115,36 @@ services:
             - "@router"
 
     oro_channel.provider.request_channel:
-        class: '%oro_channel.provider.request_channel.class%'
+        class: Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider
         arguments:
             - "@request_stack"
             - "@doctrine"
 
-    # datagrid
     oro_channel.datagrid.extension.orm_channel_limitation:
-        class: '%oro_channel.datagrid.extension.orm_channel_limitation.class%'
+        class: Oro\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtension
         tags:
             - { name: oro_datagrid.extension }
 
-    # autocomplete
     oro_channel.autocomplete.channel_limitation_handler:
-        class: '%oro_channel.autocomplete.channel_limitation_handler.class%'
+        class: Oro\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler
         calls:
             - [initDoctrinePropertiesByManagerRegistry, ["@doctrine"]]
             - [initSearchIndexer, ["@oro_search.index", '@oro_search.provider.search_mapping']]
             - [setAclHelper,["@oro_security.acl_helper"]]
 
-    # config resolver
     oro_channel.provider.channel_entity_exclusion_provider:
-        class: '%oro_channel.provider.channel_entity_exclusion_provider.class%'
+        class: Oro\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider
         arguments:
             - "@oro_channel.provider.settings_provider"
 
     oro_channel.provider.channel_entity_provider:
-        class: '%oro_entity.entity_provider.class%'
+        class: Oro\Bundle\EntityBundle\Provider\EntityProvider
         parent: oro_entity.entity_provider.abstract
         calls:
             - [setExclusionProvider,  ["@oro_channel.provider.channel_entity_exclusion_provider"]]
 
     oro_channel.provider.state_provider:
-        class: '%oro_channel.provider.state_provider.class%'
+        class: Oro\Bundle\ChannelBundle\Provider\StateProvider
         arguments:
             - "@oro_channel.provider.settings_provider"
             - "@oro_channel.state_cache"
@@ -220,13 +158,13 @@ services:
             - '@security.token_storage'
 
     oro_channel.provider.utils.entity_state_provider:
-        class: '%oro_channel.provider.utils.entity_state_provider.class%'
+        class: Oro\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
         abstract: true
         calls:
             - [setStateProvider,  ["@oro_channel.provider.state_provider"]]
 
     oro_channel.provider.lifetime.amount_provider:
-        class: '%oro_channel.provider.lifetime.amount_provider.class%'
+        class: Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider
         # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
@@ -244,13 +182,12 @@ services:
         alias: oro_channel.provider.lifetime.average_widget_provider
 
     oro_channel.config_resolver:
-        class: '%oro_channel.config_resolver.class%'
+        class: Oro\Component\Config\Resolver\SystemAwareResolver
         arguments:
             - "@service_container"
 
-    # event listeners
     oro_channel.event_listener.navigation:
-        class: '%oro_channel.event_listener.navigation.class%'
+        class: Oro\Bundle\ChannelBundle\EventListener\NavigationListener
         arguments:
             - "@oro_channel.provider.settings_provider"
             - "@oro_channel.provider.state_provider"
@@ -270,7 +207,7 @@ services:
             - "@oro_channel.provider.settings_provider"
 
     oro_channel.event_listener.update_integration_connectors:
-        class: '%oro_channel.event_listener.update_integration_connectors.class%'
+        class: Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener
         arguments:
             - "@oro_channel.provider.settings_provider"
             - "@doctrine"
@@ -278,14 +215,14 @@ services:
             - { name: kernel.event_listener, event: oro_channel.channel.save_succeed, method: onChannelSave }
 
     oro_channel.event_listener.channel_succeed_deleted:
-        class: '%oro_channel.event_listener.channel_before_deleted.class%'
+        class: Oro\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
         arguments:
             - "@oro_integration.delete_manager"
         tags:
             - { name: kernel.event_listener, event: oro_channel.channel.before_delete, method: onChannelBeforeDelete }
 
     oro_channel.event_listener.embedded_form:
-        class: '%oro_channel.event_listener.embedded_form.class%'
+        class: Oro\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
         arguments:
             - '@request_stack'
         tags:
@@ -293,7 +230,7 @@ services:
             - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }
 
     oro_channel.event_listener.doctrine:
-      class: '%oro_channel.event_listener.doctrine.class%'
+      class: Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
       arguments:
           - "@oro_channel.provider.settings_provider"
       tags:
@@ -309,21 +246,20 @@ services:
             - { name: doctrine.orm.entity_listener, entity: '%oro_channel.entity.class%', event: postRemove }
 
     oro_channel.event_listener.timezone_change:
-      class: 'Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener'
+      class: Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener
       arguments:
           - "@oro_message_queue.message_producer"
       tags:
         - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
     oro_channel.event_listener.job_execution:
-        class: '%oro_channel.event_listener.job_execution.class%'
+        class: Oro\Bundle\ChannelBundle\EventListener\JobExecutionSubscriber
         arguments:
             - "@oro_entity.doctrine_helper"
             - "@security.token_storage"
         tags:
             - { name: kernel.event_subscriber }
 
-    #twig
     oro_channel.twig.metadata_extension:
         class: Oro\Bundle\ChannelBundle\Twig\MetadataExtension
         public: false
@@ -333,14 +269,14 @@ services:
             - { name: twig.extension }
 
     oro_channel.form.integration_type_extension:
-        class: '%oro_channel.form.integration_type_extension.class%'
+        class: Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
         arguments:
             - "@oro_channel.provider.settings_provider"
         tags:
             - { name: form.type_extension, extended_type: Oro\Bundle\IntegrationBundle\Form\Type\ChannelType, alias: oro_integration_channel_form }
 
     oro_channel.form.embedded_type_extension:
-        class: '%oro_channel.form.embedded_type_extension.class%'
+        class: Oro\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
         tags:
             - { name: form.type_extension, alias: embedded_form, extended_type: Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormType }
 
@@ -352,23 +288,25 @@ services:
         tags:
             - { name: twig.extension }
 
-    #validators
     oro_channel.validators.channel_integration_validator:
-        class: '%oro_channel.validators.channel_integration_validator.class%'
+        class: Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
         arguments:
             - "@oro_channel.provider.settings_provider"
         tags:
             - { name: validator.constraint_validator, alias: oro_channel.validator.channel_integration }
 
-    # import/export
+    oro_channel.importexport.template_fixture.channel:
+        class: Oro\Bundle\ChannelBundle\ImportExport\TemplateFixture\ChannelFixture
+        tags:
+            - { name: oro_importexport.template_fixture }
+
     oro_channel.importexport.helper.channel:
-        class: '%oro_channel.importexport.helper.channel.class%'
+        class: Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper
         arguments:
             - "@doctrine"
 
-    # conditions
     oro_workflow.condition.custom:
-        class: 'Oro\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability'
+        class: Oro\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability
         arguments:
             - "@oro_channel.provider.state_provider"
         tags:
@@ -388,7 +326,7 @@ services:
             - { name: form.type_extension, alias: oro_channel_select_type, extended_type: Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType }
 
     oro_channel.event_listener.transitions_attribute:
-        class: '%oro_channel.event_listener.transitions_attribute.class%'
+        class: Oro\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener
         arguments:
             - '@form.factory'
             - '@oro_action.expression.context_accessor'
@@ -396,7 +334,7 @@ services:
             - { name: kernel.event_listener, event: oro_workflow.transitions.attribute.before_add, method: beforeAddAttribute }
 
     oro_channel.async.change_integration_status_processor:
-        class: 'Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor'
+        class: Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor
         arguments:
             - '@doctrine'
             - '@logger'
@@ -404,13 +342,13 @@ services:
             - { name: 'oro_message_queue.client.message_processor' }
 
     oro_channel.async.process_channel_state_processor:
-        class: 'Oro\Bundle\ChannelBundle\Async\ProcessChannelStateProcessor'
+        class: Oro\Bundle\ChannelBundle\Async\ProcessChannelStateProcessor
         arguments: ["@oro_channel.provider.state_provider"]
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
 
     oro_channel.async.aggregate_lifetime_average_processor:
-        class: 'Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor'
+        class: Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor
         arguments:
             - '@doctrine'
             - '@oro_locale.settings'
@@ -419,7 +357,7 @@ services:
             - { name: 'oro_message_queue.client.message_processor' }
 
     oro_channel.security.acl.voter.channel:
-        class: 'Oro\Bundle\ChannelBundle\Acl\Voter\ChannelVoter'
+        class: Oro\Bundle\ChannelBundle\Acl\Voter\ChannelVoter
         arguments:
             - "@oro_entity.doctrine_helper"
         calls:
