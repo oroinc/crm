@@ -3,7 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -18,6 +22,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for CartAddress entity.
+ *
  * @NamePrefix("oro_api_")
  */
 class CartAddressController extends RestController implements ClassResourceInterface
@@ -49,6 +55,8 @@ class CartAddressController extends RestController implements ClassResourceInter
     /**
      * Add shipping address to the cart.
      *
+     * @Post(requirements={"cartId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Add shipping address to the cart",
      *      resource=true
@@ -70,6 +78,8 @@ class CartAddressController extends RestController implements ClassResourceInter
 
     /**
      * Add billing address to the cart.
+     *
+     * @Post(requirements={"cartId"="\d+"})
      *
      * @ApiDoc(
      *      description="Add billing address to the cart",
@@ -95,6 +105,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @param int $cartId
      *
+     * @Get(requirements={"cartId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get address by type",
      *      resource=true
@@ -113,6 +125,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @param int $cartId
      *
+     * @Get(requirements={"cartId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get address item by type",
      *      resource=true
@@ -130,6 +144,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      * Update cart shipping address.
      *
      * @param int $cartId cart id
+     *
+     * @Put(requirements={"cartId"="\d+"})
      *
      * @ApiDoc(
      *      description="Update cart shipping address",
@@ -153,6 +169,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @param int $cartId cart id
      *
+     * @Put(requirements={"cartId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update cart billing address",
      *      resource=true
@@ -170,6 +188,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      * Delete cart shipping address.
      *
      * @param int $cartId
+     *
+     * @Delete(requirements={"cartId"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete cart shipping address",
@@ -192,6 +212,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      * Delete cart billing address.
      *
      * @param int $cartId
+     *
+     * @Delete(requirements={"cartId"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete cart billing address",

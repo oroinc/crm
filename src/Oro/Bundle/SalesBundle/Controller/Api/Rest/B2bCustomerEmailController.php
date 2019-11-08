@@ -8,12 +8,13 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for B2bCustomerEmail entity.
+ *
  * @RouteResource("b2bcustomer_email")
  * @NamePrefix("oro_api_")
  */
@@ -45,6 +46,8 @@ class B2bCustomerEmailController extends RestController implements ClassResource
      * oro_api_delete_b2bcustomer_email
      *
      * @param int $id
+     *
+     * @Rest\Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete B2bCustomerEmail"

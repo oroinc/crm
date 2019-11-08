@@ -44,6 +44,8 @@ class ContactEmailController extends RestController implements ClassResourceInte
      *
      * @param int $id
      *
+     * @Rest\Delete(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete ContactEmail"
      * )

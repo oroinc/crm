@@ -3,7 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -18,6 +22,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for OrderItem entity.
+ *
  * @NamePrefix("oro_api_")
  */
 class OrderItemController extends RestController implements ClassResourceInterface
@@ -48,6 +54,8 @@ class OrderItemController extends RestController implements ClassResourceInterfa
 
     /**
      * Add item to the order.
+     *
+     * @Post(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Add item to the order",
@@ -92,6 +100,8 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * @param int $orderId
      * @param int $itemId
      *
+     * @Get(requirements={"orderId"="\d+", "itemId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get order item",
      *      resource=true
@@ -112,6 +122,8 @@ class OrderItemController extends RestController implements ClassResourceInterfa
 
     /**
      * Get all order items.
+     *
+     * @Get(requirements={"orderId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get all order items",
@@ -138,6 +150,8 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      *
      * @param int $itemId  order item id
      * @param int $orderId order id
+     *
+     * @Put(requirements={"orderId"="\d+", "itemId"="\d+"})
      *
      * @ApiDoc(
      *      description="Update order item",
@@ -173,6 +187,8 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      *
      * @param int $itemId  item id
      * @param int $orderId order id
+     *
+     * @Delete(requirements={"orderId"="\d+", "itemId"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete order item",

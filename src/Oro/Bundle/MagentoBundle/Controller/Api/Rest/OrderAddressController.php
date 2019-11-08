@@ -3,7 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -18,6 +22,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for OrderAddress entity.
+ *
  * @NamePrefix("oro_api_")
  */
 class OrderAddressController extends RestController implements ClassResourceInterface
@@ -49,6 +55,8 @@ class OrderAddressController extends RestController implements ClassResourceInte
     /**
      * Get all addresses items.
      *
+     * @Get(requirements={"orderId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get all addresses items",
      *      resource=true
@@ -70,6 +78,8 @@ class OrderAddressController extends RestController implements ClassResourceInte
 
     /**
      * Add address to the order.
+     *
+     * @Post(requirements={"orderId"="\d+"})
      *
      * @ApiDoc(
      *      description="Add address to the order",
@@ -114,6 +124,8 @@ class OrderAddressController extends RestController implements ClassResourceInte
      * @param int $addressId
      * @param int $orderId
      *
+     * @Get(requirements={"orderId"="\d+", "addressId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get order address",
      *      resource=true
@@ -137,6 +149,8 @@ class OrderAddressController extends RestController implements ClassResourceInte
      *
      * @param int $addressId order address item id
      * @param int $orderId   order id
+     *
+     * @Put(requirements={"orderId"="\d+", "addressId"="\d+"})
      *
      * @ApiDoc(
      *      description="Update order address",
@@ -173,6 +187,8 @@ class OrderAddressController extends RestController implements ClassResourceInte
      *
      * @param int $addressId order address item id
      * @param int $orderId   order id
+     *
+     * @Delete(requirements={"orderId"="\d+", "addressId"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete order address",

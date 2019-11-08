@@ -3,7 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -18,6 +22,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for CartItem entity.
+ *
  * @NamePrefix("oro_api_")
  */
 class CartItemController extends RestController implements ClassResourceInterface
@@ -48,6 +54,8 @@ class CartItemController extends RestController implements ClassResourceInterfac
 
     /**
      * Add item to the the cart.
+     *
+     * @Post(requirements={"cartId"="\d+"})
      *
      * @ApiDoc(
      *      description="Add item to the cart",
@@ -92,6 +100,8 @@ class CartItemController extends RestController implements ClassResourceInterfac
      * @param int $cartId
      * @param int $itemId
      *
+     * @Get(requirements={"cartId"="\d+", "itemId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get cart item",
      *      resource=true
@@ -112,6 +122,8 @@ class CartItemController extends RestController implements ClassResourceInterfac
 
     /**
      * Get all cart items.
+     *
+     * @Get(requirements={"cartId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get all cart items",
@@ -138,6 +150,8 @@ class CartItemController extends RestController implements ClassResourceInterfac
      *
      * @param int $itemId cart item id
      * @param int $cartId cart id
+     *
+     * @Put(requirements={"cartId"="\d+", "itemId"="\d+"})
      *
      * @ApiDoc(
      *      description="Update cart item",
@@ -173,6 +187,8 @@ class CartItemController extends RestController implements ClassResourceInterfac
      *
      * @param int $itemId item id
      * @param int $cartId cart id
+     *
+     * @Delete(requirements={"cartId"="\d+", "itemId"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete cart item",

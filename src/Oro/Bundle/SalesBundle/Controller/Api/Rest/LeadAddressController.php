@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -16,6 +17,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for LeadAddress entity.
+ *
  * @RouteResource("address")
  * @NamePrefix("oro_api_")
  */
@@ -23,6 +26,8 @@ class LeadAddressController extends RestController implements ClassResourceInter
 {
     /**
      * REST GET list
+     *
+     * @Rest\Get(requirements={"leadId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get all addresses items",
@@ -56,7 +61,9 @@ class LeadAddressController extends RestController implements ClassResourceInter
     /**
      * REST GET primary address
      *
-     * @param string $leadId
+     * @param int $leadId
+     *
+     * @Rest\Get(requirements={"leadId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get lead primary address",
@@ -84,12 +91,14 @@ class LeadAddressController extends RestController implements ClassResourceInter
     /**
      * REST DELETE address
      *
+     * @Rest\Delete(requirements={"leadId"="\d+", "addressId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete address items",
      *      resource=true
      * )
      * @AclAncestor("oro_sales_lead_delete")
-     * @param     $leadId
+     * @param int $leadId
      * @param int $addressId
      *
      * @return Response

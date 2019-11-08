@@ -2,21 +2,23 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for B2bCustomerPhone entity.
+ *
  * @RouteResource("b2bcustomer_phone")
  * @NamePrefix("oro_api_")
  */
@@ -24,6 +26,8 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
 {
     /**
      * REST GET list
+     *
+     * @Get(requirements={"customerId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get all phones items",
@@ -55,7 +59,9 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
     /**
      * REST GET primary phone
      *
-     * @param string $customerId
+     * @param int $customerId
+     *
+     * @Get(requirements={"customerId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get customer primary phone",
@@ -106,6 +112,8 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
      * oro_api_delete_b2bcustomer_phone
      *
      * @param int $id
+     *
+     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete B2bCustomerPhone"

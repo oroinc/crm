@@ -14,8 +14,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Case entity.
+ *
  * @Rest\RouteResource("case")
  * @Rest\NamePrefix("oro_case_api_")
+ *
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class CaseController extends RestController implements ClassResourceInterface
 {
@@ -53,7 +57,9 @@ class CaseController extends RestController implements ClassResourceInterface
     /**
      * REST GET item
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Rest\Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *     description="Get CaseEntity item",
@@ -71,6 +77,8 @@ class CaseController extends RestController implements ClassResourceInterface
      * REST PUT
      *
      * @param int $id CaseEntity item id
+     *
+     * @Rest\Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *     description="Update CaseEntity",
@@ -102,6 +110,8 @@ class CaseController extends RestController implements ClassResourceInterface
      * REST DELETE
      *
      * @param int $id
+     *
+     * @Rest\Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *     description="Delete CaseEntity",

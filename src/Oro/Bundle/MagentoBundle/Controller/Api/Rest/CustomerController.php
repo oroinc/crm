@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -15,6 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Customer entity.
+ *
  * @RouteResource("customer")
  * @NamePrefix("oro_api_")
  */
@@ -116,7 +121,9 @@ class CustomerController extends RestController implements ClassResourceInterfac
      * Get magento customer.
      * Deprecated since 1.8. Use /api/rest/{version}/magentocustomers/{id}.{_format} instead.
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get magento customer",
@@ -158,6 +165,8 @@ class CustomerController extends RestController implements ClassResourceInterfac
      *
      * @param int $id Customer item id
      *
+     * @Put(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update magento customer",
      *      resource=true
@@ -178,6 +187,8 @@ class CustomerController extends RestController implements ClassResourceInterfac
      * Deprecated since 1.8. Use /api/rest/{version}/magentocustomers.{_format} instead.
      *
      * @param int $id
+     *
+     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete magento customer",
