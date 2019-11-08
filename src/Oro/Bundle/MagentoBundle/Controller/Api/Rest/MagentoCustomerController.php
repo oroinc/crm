@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -15,6 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for MagentoCustomer entity.
+ *
  * @RouteResource("magentocustomer")
  * @NamePrefix("oro_api_")
  */
@@ -111,7 +116,9 @@ class MagentoCustomerController extends RestController implements ClassResourceI
     /**
      * Get magento customer.
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get magento customer",
@@ -121,7 +128,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      *
      * @return Response
      */
-    public function getAction($id)
+    public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
     }
@@ -146,6 +153,8 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      *
      * @param int $id Customer item id
      *
+     * @Put(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update magento customer",
      *      resource=true
@@ -154,7 +163,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      *
      * @return Response
      */
-    public function putAction($id)
+    public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
     }
@@ -163,6 +172,8 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      * Delete magento customer.
      *
      * @param int $id
+     *
+     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete magento customer",
@@ -176,7 +187,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      * )
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);
     }

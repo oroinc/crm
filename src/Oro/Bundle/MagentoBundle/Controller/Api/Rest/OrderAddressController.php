@@ -3,7 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\MagentoBundle\Entity\Manager\OrderApiEntityManager;
@@ -50,6 +54,8 @@ class OrderAddressController extends RestController implements ClassResourceInte
     /**
      * Get all addresses items.
      *
+     * @Get(requirements={"orderId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get all addresses items",
      *      resource=true
@@ -59,7 +65,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      *
      * @return JsonResponse
      */
-    public function cgetAction($orderId)
+    public function cgetAction(int $orderId)
     {
         $addressItems = $this->getManager()->getAllSerializedItems($orderId);
 
@@ -71,6 +77,8 @@ class OrderAddressController extends RestController implements ClassResourceInte
 
     /**
      * Add address to the order.
+     *
+     * @Post(requirements={"orderId"="\d+"})
      *
      * @ApiDoc(
      *      description="Add address to the order",
@@ -86,7 +94,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      *
      * @return JsonResponse
      */
-    public function postAction($orderId)
+    public function postAction(int $orderId)
     {
         /** @var Order $order */
         $order       = $this->getOrderManager()->find($orderId);
@@ -115,6 +123,8 @@ class OrderAddressController extends RestController implements ClassResourceInte
      * @param int $addressId
      * @param int $orderId
      *
+     * @Get(requirements={"orderId"="\d+", "addressId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get order address",
      *      resource=true
@@ -123,7 +133,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      *
      * @return Response
      */
-    public function getAction($orderId, $addressId)
+    public function getAction(int $orderId, int $addressId)
     {
         $address = $this->getManager()->serializeElement($orderId, $addressId);
 
@@ -139,6 +149,8 @@ class OrderAddressController extends RestController implements ClassResourceInte
      * @param int $addressId order address item id
      * @param int $orderId   order id
      *
+     * @Put(requirements={"orderId"="\d+", "addressId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update order address",
      *      resource=true
@@ -151,7 +163,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      * )
      * @return Response
      */
-    public function putAction($orderId, $addressId)
+    public function putAction(int $orderId, int $addressId)
     {
         /** @var OrderAddress $address */
         $address = $this->getManager()->findOneBy(['owner' => $orderId, 'id' => $addressId]);
@@ -175,6 +187,8 @@ class OrderAddressController extends RestController implements ClassResourceInte
      * @param int $addressId order address item id
      * @param int $orderId   order id
      *
+     * @Delete(requirements={"orderId"="\d+", "addressId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete order address",
      *      resource=true
@@ -187,7 +201,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      * )
      * @return Response
      */
-    public function deleteAction($orderId, $addressId)
+    public function deleteAction(int $orderId, int $addressId)
     {
         $isProcessed = false;
 

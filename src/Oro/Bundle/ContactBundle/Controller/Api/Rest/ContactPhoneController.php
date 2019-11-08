@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -54,7 +56,9 @@ class ContactPhoneController extends RestController implements ClassResourceInte
     /**
      * REST GET primary phone
      *
-     * @param string $contactId
+     * @param int $contactId
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact primary phone",
@@ -63,7 +67,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      * @AclAncestor("oro_contact_view")
      * @return Response
      */
-    public function getPrimaryAction($contactId)
+    public function getPrimaryAction(int $contactId)
     {
         /** @var Contact $contact */
         $contact = $this->getContactManager()->find($contactId);
@@ -106,13 +110,15 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      *
      * @param int $id
      *
+     * @Delete(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete ContactPhone"
      * )
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         try {
             $this->getDeleteHandler()->handleDelete($id, $this->getManager());

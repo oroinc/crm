@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -24,6 +26,8 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
     /**
      * REST GET list
      *
+     * @Get(requirements={"customerId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get all phones items",
      *      resource=true
@@ -32,7 +36,7 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
      * @param int $customerId
      * @return Response
      */
-    public function cgetAction($customerId)
+    public function cgetAction(int $customerId)
     {
         /** @var B2bCustomer $customer */
         $customer = $this->getB2bCustomerManager()->find($customerId);
@@ -54,7 +58,9 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
     /**
      * REST GET primary phone
      *
-     * @param string $customerId
+     * @param int $customerId
+     *
+     * @Get(requirements={"customerId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get customer primary phone",
@@ -63,7 +69,7 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
      * @AclAncestor("oro_b2bcustomer_view")
      * @return Response
      */
-    public function getPrimaryAction($customerId)
+    public function getPrimaryAction(int $customerId)
     {
         /** @var B2bCustomer $customer */
         $customer = $this->getB2bCustomerManager()->find($customerId);
@@ -106,13 +112,15 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
      *
      * @param int $id
      *
+     * @Delete(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete B2bCustomerPhone"
      * )
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         try {
             $this->getDeleteHandler()->handleDelete($id, $this->getManager());

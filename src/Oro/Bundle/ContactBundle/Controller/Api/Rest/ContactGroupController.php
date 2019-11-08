@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -17,6 +20,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for ContactGroup entity.
+ *
  * @RouteResource("contactgroup")
  * @NamePrefix("oro_api_")
  */
@@ -55,7 +60,9 @@ class ContactGroupController extends RestController implements ClassResourceInte
     /**
      * REST GET item
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact item",
@@ -64,7 +71,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      * @AclAncestor("oro_contact_group_view")
      * @return Response
      */
-    public function getAction($id)
+    public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
     }
@@ -74,6 +81,8 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *
      * @param int $id
      *
+     * @Put(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update contact group",
      *      resource=true
@@ -81,7 +90,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      * @AclAncestor("oro_contact_group_update")
      * @return Response
      */
-    public function putAction($id)
+    public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
     }
@@ -105,6 +114,8 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *
      * @param int $id
      *
+     * @Delete(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete Contact Group",
      *      resource=true
@@ -117,7 +128,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      * )
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);
     }

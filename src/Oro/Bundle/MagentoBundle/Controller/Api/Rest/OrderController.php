@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -13,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Order entity.
+ *
  * @RouteResource("order")
  * @NamePrefix("oro_api_")
  */
@@ -89,7 +94,9 @@ class OrderController extends RestController
     /**
      * Get order.
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get order",
@@ -99,7 +106,7 @@ class OrderController extends RestController
      *
      * @return Response
      */
-    public function getAction($id)
+    public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
     }
@@ -108,6 +115,8 @@ class OrderController extends RestController
      * Update order.
      *
      * @param int $id Order id
+     *
+     * @Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Update order",
@@ -121,7 +130,7 @@ class OrderController extends RestController
      * )
      * @return Response
      */
-    public function putAction($id)
+    public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
     }
@@ -130,6 +139,8 @@ class OrderController extends RestController
      * Delete order.
      *
      * @param int $id
+     *
+     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete order",
@@ -143,7 +154,7 @@ class OrderController extends RestController
      * )
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);
     }

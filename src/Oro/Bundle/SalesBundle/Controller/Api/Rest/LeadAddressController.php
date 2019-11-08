@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for LeadAddress entity.
+ *
  * @RouteResource("address")
  * @NamePrefix("oro_api_")
  */
@@ -22,6 +25,8 @@ class LeadAddressController extends RestController implements ClassResourceInter
 {
     /**
      * REST GET list
+     *
+     * @Rest\Get(requirements={"leadId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get all addresses items",
@@ -32,7 +37,7 @@ class LeadAddressController extends RestController implements ClassResourceInter
      *
      * @return JsonResponse
      */
-    public function cgetAction($leadId)
+    public function cgetAction(int $leadId)
     {
         /** @var Lead $lead */
         $lead = $this->getLeadManager()->find($leadId);
@@ -55,7 +60,9 @@ class LeadAddressController extends RestController implements ClassResourceInter
     /**
      * REST GET primary address
      *
-     * @param string $leadId
+     * @param int $leadId
+     *
+     * @Rest\Get(requirements={"leadId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get lead primary address",
@@ -64,7 +71,7 @@ class LeadAddressController extends RestController implements ClassResourceInter
      * @AclAncestor("oro_sales_lead_view")
      * @return Response
      */
-    public function getPrimaryAction($leadId)
+    public function getPrimaryAction(int $leadId)
     {
         /** @var Lead $lead */
         $lead = $this->getLeadManager()->find($leadId);
@@ -83,17 +90,19 @@ class LeadAddressController extends RestController implements ClassResourceInter
     /**
      * REST DELETE address
      *
+     * @Rest\Delete(requirements={"leadId"="\d+", "addressId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete address items",
      *      resource=true
      * )
      * @AclAncestor("oro_sales_lead_delete")
-     * @param     $leadId
+     * @param int $leadId
      * @param int $addressId
      *
      * @return Response
      */
-    public function deleteAction($leadId, $addressId)
+    public function deleteAction(int $leadId, int $addressId)
     {
         /** @var LeadAddress $address */
         $address = $this->getManager()->find($addressId);

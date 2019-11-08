@@ -3,7 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
@@ -50,6 +54,8 @@ class CartAddressController extends RestController implements ClassResourceInter
     /**
      * Add shipping address to the cart.
      *
+     * @Post(requirements={"cartId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Add shipping address to the cart",
      *      resource=true
@@ -64,13 +70,15 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @return JsonResponse
      */
-    public function postShippingAction($cartId)
+    public function postShippingAction(int $cartId)
     {
         return $this->post($cartId, AddressType::TYPE_SHIPPING);
     }
 
     /**
      * Add billing address to the cart.
+     *
+     * @Post(requirements={"cartId"="\d+"})
      *
      * @ApiDoc(
      *      description="Add billing address to the cart",
@@ -86,7 +94,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @return JsonResponse
      */
-    public function postBillingAction($cartId)
+    public function postBillingAction(int $cartId)
     {
         return $this->post($cartId, AddressType::TYPE_BILLING);
     }
@@ -96,6 +104,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @param int $cartId
      *
+     * @Get(requirements={"cartId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get address by type",
      *      resource=true
@@ -104,7 +114,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @return Response
      */
-    public function getShippingAction($cartId)
+    public function getShippingAction(int $cartId)
     {
         return $this->getAddress($cartId, AddressType::TYPE_SHIPPING);
     }
@@ -114,6 +124,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @param int $cartId
      *
+     * @Get(requirements={"cartId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get address item by type",
      *      resource=true
@@ -122,7 +134,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @return Response
      */
-    public function getBillingAction($cartId)
+    public function getBillingAction(int $cartId)
     {
         return $this->getAddress($cartId, AddressType::TYPE_BILLING);
     }
@@ -131,6 +143,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      * Update cart shipping address.
      *
      * @param int $cartId cart id
+     *
+     * @Put(requirements={"cartId"="\d+"})
      *
      * @ApiDoc(
      *      description="Update cart shipping address",
@@ -144,7 +158,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      * )
      * @return Response
      */
-    public function putShippingAction($cartId)
+    public function putShippingAction(int $cartId)
     {
         return $this->put($cartId, AddressType::TYPE_SHIPPING);
     }
@@ -154,6 +168,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @param int $cartId cart id
      *
+     * @Put(requirements={"cartId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update cart billing address",
      *      resource=true
@@ -162,7 +178,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @return Response
      */
-    public function putBillingAction($cartId)
+    public function putBillingAction(int $cartId)
     {
         return $this->put($cartId, AddressType::TYPE_BILLING);
     }
@@ -171,6 +187,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      * Delete cart shipping address.
      *
      * @param int $cartId
+     *
+     * @Delete(requirements={"cartId"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete cart shipping address",
@@ -184,7 +202,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      * )
      * @return Response
      */
-    public function deleteShippingAction($cartId)
+    public function deleteShippingAction(int $cartId)
     {
         return $this->delete($cartId, AddressType::TYPE_SHIPPING);
     }
@@ -194,6 +212,8 @@ class CartAddressController extends RestController implements ClassResourceInter
      *
      * @param int $cartId
      *
+     * @Delete(requirements={"cartId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete cart billing address",
      *      resource=true
@@ -201,7 +221,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      * @AclAncestor("oro_magento_cart_address_delete")
      * @return Response
      */
-    public function deleteBillingAction($cartId)
+    public function deleteBillingAction(int $cartId)
     {
         return $this->delete($cartId, AddressType::TYPE_BILLING);
     }
