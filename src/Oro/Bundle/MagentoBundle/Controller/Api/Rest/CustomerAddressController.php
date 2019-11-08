@@ -3,7 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
@@ -27,6 +31,8 @@ class CustomerAddressController extends RestController implements ClassResourceI
     /**
      * Get all addresses items.
      *
+     * @Get(requirements={"customerId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get all addresses items",
      *      resource=true
@@ -36,7 +42,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      *
      * @return JsonResponse
      */
-    public function cgetAction($customerId)
+    public function cgetAction(int $customerId)
     {
         /** @var Customer $customer */
         $customer = $this->getCustomerManager()->find($customerId);
@@ -59,6 +65,8 @@ class CustomerAddressController extends RestController implements ClassResourceI
     /**
      * Add address to the customer.
      *
+     * @Post(requirements={"customerId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Add address to the customer",
      *      resource=true
@@ -68,7 +76,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      *
      * @return JsonResponse
      */
-    public function postAction($customerId)
+    public function postAction(int $customerId)
     {
         /** @var Customer $customer */
         $customer    = $this->getCustomerManager()->find($customerId);
@@ -96,6 +104,8 @@ class CustomerAddressController extends RestController implements ClassResourceI
      * @param int $addressId
      * @param int $customerId
      *
+     * @Get(requirements={"customerId"="\d+", "addressId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get customer address",
      *      resource=true
@@ -104,7 +114,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      *
      * @return Response
      */
-    public function getAction($customerId, $addressId)
+    public function getAction(int $customerId, int $addressId)
     {
         $address = $this->getManager()->serializeElement($customerId, $addressId);
 
@@ -120,6 +130,8 @@ class CustomerAddressController extends RestController implements ClassResourceI
      * @param int $addressId  address item id
      * @param int $customerId customer item id
      *
+     * @Put(requirements={"customerId"="\d+", "addressId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update customer address",
      *      resource=true
@@ -127,7 +139,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      * @AclAncestor("oro_magento_customer_update")
      * @return Response
      */
-    public function putAction($customerId, $addressId)
+    public function putAction(int $customerId, int $addressId)
     {
         $address = $this->getManager()->findOneBy(['owner' => $customerId, 'id' => $addressId]);
 
@@ -150,6 +162,8 @@ class CustomerAddressController extends RestController implements ClassResourceI
      * @param int $addressId  address item id
      * @param int $customerId customer item id
      *
+     * @Delete(requirements={"customerId"="\d+", "addressId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete customer address",
      *      resource=true
@@ -162,7 +176,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      * )
      * @return Response
      */
-    public function deleteAction($customerId, $addressId)
+    public function deleteAction(int $customerId, int $addressId)
     {
         $isProcessed = false;
         $address     = $this->getManager()->findOneBy(['owner' => $customerId, 'id' => $addressId]);

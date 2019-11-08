@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Lead entity.
+ *
  * @RouteResource("lead")
  * @NamePrefix("oro_api_")
  */
@@ -26,7 +29,9 @@ class LeadController extends RestController implements ClassResourceInterface
     /**
      * REST GET lead address
      *
-     * @param string $leadId
+     * @param int $leadId
+     *
+     * @Rest\Get(requirements={"leadId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get lead address",
@@ -36,7 +41,7 @@ class LeadController extends RestController implements ClassResourceInterface
      * @deprecated since 1.10. Use /api/rest/{version}/leads/{leadId}/addresses.{_format} instead.
      * @return Response
      */
-    public function getAddressAction($leadId)
+    public function getAddressAction(int $leadId)
     {
         /** @var Lead $item */
         $item = $this->getManager()->find($leadId);
@@ -90,7 +95,9 @@ class LeadController extends RestController implements ClassResourceInterface
     /**
      * REST GET item
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Rest\Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact item",
@@ -99,7 +106,7 @@ class LeadController extends RestController implements ClassResourceInterface
      * @AclAncestor("oro_sales_lead_view")
      * @return Response
      */
-    public function getAction($id)
+    public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
     }
@@ -109,6 +116,8 @@ class LeadController extends RestController implements ClassResourceInterface
      *
      * @param int $id
      *
+     * @Rest\Put(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update lead",
      *      resource=true
@@ -116,7 +125,7 @@ class LeadController extends RestController implements ClassResourceInterface
      * @AclAncestor("oro_sales_lead_update")
      * @return Response
      */
-    public function putAction($id)
+    public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
     }
@@ -140,6 +149,8 @@ class LeadController extends RestController implements ClassResourceInterface
      *
      * @param int $id
      *
+     * @Rest\Delete(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete lead",
      *      resource=true
@@ -152,7 +163,7 @@ class LeadController extends RestController implements ClassResourceInterface
      * )
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);
     }

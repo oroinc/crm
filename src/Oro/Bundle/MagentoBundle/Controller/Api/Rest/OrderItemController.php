@@ -3,7 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\MagentoBundle\Entity\Manager\OrderApiEntityManager;
@@ -50,6 +54,8 @@ class OrderItemController extends RestController implements ClassResourceInterfa
     /**
      * Add item to the order.
      *
+     * @Post(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Add item to the order",
      *      resource=true
@@ -64,7 +70,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      *
      * @return Response
      */
-    public function postAction($orderId)
+    public function postAction(int $orderId)
     {
         /** @var Order $order */
         $order       = $this->getOrderManager()->find($orderId);
@@ -93,6 +99,8 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * @param int $orderId
      * @param int $itemId
      *
+     * @Get(requirements={"orderId"="\d+", "itemId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get order item",
      *      resource=true
@@ -101,7 +109,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      *
      * @return Response
      */
-    public function getAction($orderId, $itemId)
+    public function getAction(int $orderId, int $itemId)
     {
         $orderItem = $this->getManager()->getSpecificSerializedItem($orderId, $itemId);
 
@@ -114,6 +122,8 @@ class OrderItemController extends RestController implements ClassResourceInterfa
     /**
      * Get all order items.
      *
+     * @Get(requirements={"orderId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get all order items",
      *      resource=true
@@ -124,7 +134,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      *
      * @return JsonResponse
      */
-    public function cgetAction($orderId)
+    public function cgetAction(int $orderId)
     {
         $orderItems = $this->getManager()->getAllSerializedItems($orderId);
 
@@ -140,6 +150,8 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * @param int $itemId  order item id
      * @param int $orderId order id
      *
+     * @Put(requirements={"orderId"="\d+", "itemId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update order item",
      *      resource=true
@@ -152,7 +164,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * )
      * @return Response
      */
-    public function putAction($orderId, $itemId)
+    public function putAction(int $orderId, int $itemId)
     {
         $orderItem = $this->getManager()->findOneBy(['order' => $orderId, 'id' => $itemId]);
 
@@ -175,6 +187,8 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * @param int $itemId  item id
      * @param int $orderId order id
      *
+     * @Delete(requirements={"orderId"="\d+", "itemId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete order item",
      *      resource=true
@@ -187,7 +201,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * )
      * @return Response
      */
-    public function deleteAction($orderId, $itemId)
+    public function deleteAction(int $orderId, int $itemId)
     {
         $isProcessed = false;
 

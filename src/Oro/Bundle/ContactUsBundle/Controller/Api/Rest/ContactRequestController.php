@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactUsBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -22,7 +23,9 @@ class ContactRequestController extends RestController implements ClassResourceIn
     /**
      * REST GET item
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact request item",
@@ -31,7 +34,7 @@ class ContactRequestController extends RestController implements ClassResourceIn
      * @AclAncestor("oro_contactus_request_view")
      * @return Response
      */
-    public function getAction($id)
+    public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
     }

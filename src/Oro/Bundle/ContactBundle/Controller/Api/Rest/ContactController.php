@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -22,6 +25,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Contact entity.
+ *
  * @RouteResource("contact")
  * @NamePrefix("oro_api_")
  *
@@ -125,7 +130,9 @@ class ContactController extends RestController implements ClassResourceInterface
     /**
      * REST GET item
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact item",
@@ -134,7 +141,7 @@ class ContactController extends RestController implements ClassResourceInterface
      * @AclAncestor("oro_contact_view")
      * @return Response
      */
-    public function getAction($id)
+    public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
     }
@@ -144,6 +151,8 @@ class ContactController extends RestController implements ClassResourceInterface
      *
      * @param int $id Contact item id
      *
+     * @Put(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update contact",
      *      resource=true
@@ -151,7 +160,7 @@ class ContactController extends RestController implements ClassResourceInterface
      * @AclAncestor("oro_contact_update")
      * @return Response
      */
-    public function putAction($id)
+    public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
     }
@@ -175,6 +184,8 @@ class ContactController extends RestController implements ClassResourceInterface
      *
      * @param int $id
      *
+     * @Delete(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete Contact",
      *      resource=true
@@ -187,7 +198,7 @@ class ContactController extends RestController implements ClassResourceInterface
      * )
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);
     }
@@ -253,7 +264,6 @@ class ContactController extends RestController implements ClassResourceInterface
             $request->request->set($formAlias, $contactData);
         }
 
-        // @todo: just a temporary workaround until new API is implemented
         // - convert country name to country code (as result we accept both the code and the name)
         //   also it will be good to accept ISO3 code in future, need to be discussed with product owners
         // - convert region name to region code (as result we accept the combined code, code and name)

@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Opportunity entity.
+ *
  * @RouteResource("opportunity")
  * @NamePrefix("oro_api_")
  */
@@ -73,7 +76,9 @@ class OpportunityController extends RestController implements ClassResourceInter
     /**
      * REST GET item
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Rest\Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get opportunity",
@@ -82,7 +87,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      * @AclAncestor("oro_sales_opportunity_view")
      * @return Response
      */
-    public function getAction($id)
+    public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
     }
@@ -92,6 +97,8 @@ class OpportunityController extends RestController implements ClassResourceInter
      *
      * @param int $id
      *
+     * @Rest\Put(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update opportunity",
      *      resource=true
@@ -99,7 +106,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      * @AclAncestor("oro_sales_opportunity_update")
      * @return Response
      */
-    public function putAction($id)
+    public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
     }
@@ -123,6 +130,8 @@ class OpportunityController extends RestController implements ClassResourceInter
      *
      * @param int $id
      *
+     * @Rest\Delete(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete opportunity",
      *      resource=true
@@ -135,7 +144,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      * )
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);
     }

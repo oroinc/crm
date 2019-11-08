@@ -3,7 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
@@ -50,6 +54,8 @@ class CartItemController extends RestController implements ClassResourceInterfac
     /**
      * Add item to the the cart.
      *
+     * @Post(requirements={"cartId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Add item to the cart",
      *      resource=true
@@ -64,7 +70,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      *
      * @return JsonResponse
      */
-    public function postAction($cartId)
+    public function postAction(int $cartId)
     {
         /** @var Cart $cart */
         $cart        = $this->getCartManager()->find($cartId);
@@ -93,6 +99,8 @@ class CartItemController extends RestController implements ClassResourceInterfac
      * @param int $cartId
      * @param int $itemId
      *
+     * @Get(requirements={"cartId"="\d+", "itemId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get cart item",
      *      resource=true
@@ -114,6 +122,8 @@ class CartItemController extends RestController implements ClassResourceInterfac
     /**
      * Get all cart items.
      *
+     * @Get(requirements={"cartId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get all cart items",
      *      resource=true
@@ -124,7 +134,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      *
      * @return JsonResponse
      */
-    public function cgetAction($cartId)
+    public function cgetAction(int $cartId)
     {
         $cartItems = $this->getManager()->getAllSerializedItems($cartId);
 
@@ -140,6 +150,8 @@ class CartItemController extends RestController implements ClassResourceInterfac
      * @param int $itemId cart item id
      * @param int $cartId cart id
      *
+     * @Put(requirements={"cartId"="\d+", "itemId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update cart item",
      *      resource=true
@@ -152,7 +164,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      * )
      * @return Response
      */
-    public function putAction($cartId, $itemId)
+    public function putAction(int $cartId, int $itemId)
     {
         $cartItem = $this->getManager()->findOneBy(['cart' => $cartId, 'id' => $itemId]);
 
@@ -175,6 +187,8 @@ class CartItemController extends RestController implements ClassResourceInterfac
      * @param int $itemId item id
      * @param int $cartId cart id
      *
+     * @Delete(requirements={"cartId"="\d+", "itemId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete cart item",
      *      resource=true
@@ -187,7 +201,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      * )
      * @return Response
      */
-    public function deleteAction($cartId, $itemId)
+    public function deleteAction(int $cartId, int $itemId)
     {
         $isProcessed = false;
 

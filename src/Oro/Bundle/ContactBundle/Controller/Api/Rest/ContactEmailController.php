@@ -45,13 +45,15 @@ class ContactEmailController extends RestController implements ClassResourceInte
      *
      * @param int $id
      *
+     * @Rest\Delete(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete ContactEmail"
      * )
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         try {
             $this->getDeleteHandler()->handleDelete($id, $this->getManager());

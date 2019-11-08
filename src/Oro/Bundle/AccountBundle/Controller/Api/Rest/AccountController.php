@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\AccountBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -19,6 +22,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Account entity.
+ *
  * @RouteResource("account")
  * @NamePrefix("oro_api_")
  */
@@ -58,7 +63,9 @@ class AccountController extends RestController implements ClassResourceInterface
     /**
      * REST GET item
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get account item",
@@ -67,7 +74,7 @@ class AccountController extends RestController implements ClassResourceInterface
      * @AclAncestor("oro_account_view")
      * @return Response
      */
-    public function getAction($id)
+    public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
     }
@@ -77,6 +84,8 @@ class AccountController extends RestController implements ClassResourceInterface
      *
      * @param int $id Account item id
      *
+     * @Put(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Update account",
      *      resource=true
@@ -84,7 +93,7 @@ class AccountController extends RestController implements ClassResourceInterface
      * @AclAncestor("oro_account_update")
      * @return Response
      */
-    public function putAction($id)
+    public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
     }
@@ -108,6 +117,8 @@ class AccountController extends RestController implements ClassResourceInterface
      *
      * @param int $id
      *
+     * @Delete(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete Account",
      *      resource=true
@@ -120,7 +131,7 @@ class AccountController extends RestController implements ClassResourceInterface
      * )
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);
     }

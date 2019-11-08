@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -46,13 +47,15 @@ class B2bCustomerEmailController extends RestController implements ClassResource
      *
      * @param int $id
      *
+     * @Delete(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete B2bCustomerEmail"
      * )
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         try {
             $this->getDeleteHandler()->handleDelete($id, $this->getManager());

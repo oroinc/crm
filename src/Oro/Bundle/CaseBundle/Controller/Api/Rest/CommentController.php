@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Comment entity.
+ *
  * @Rest\RouteResource("case/comment")
  * @Rest\NamePrefix("oro_case_api_")
  */
@@ -55,7 +57,9 @@ class CommentController extends RestController implements ClassResourceInterface
     /**
      * REST GET item
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Rest\Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *     description="Get CaseComment item",
@@ -64,7 +68,7 @@ class CommentController extends RestController implements ClassResourceInterface
      * @AclAncestor("oro_case_comment_view")
      * @return Response
      */
-    public function getAction($id)
+    public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
     }
@@ -74,6 +78,8 @@ class CommentController extends RestController implements ClassResourceInterface
      *
      * @param int $id CaseComment item id
      *
+     * @Rest\Put(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *     description="Update CaseComment",
      *     resource=true
@@ -81,7 +87,7 @@ class CommentController extends RestController implements ClassResourceInterface
      * @AclAncestor("oro_case_comment_update")
      * @return Response
      */
-    public function putAction($id)
+    public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
     }
@@ -109,6 +115,8 @@ class CommentController extends RestController implements ClassResourceInterface
      *
      * @param int $id
      *
+     * @Rest\Delete(requirements={"id"="\d+"})
+     *
      * @ApiDoc(
      *     description="Delete CaseComment",
      *     resource=true
@@ -116,7 +124,7 @@ class CommentController extends RestController implements ClassResourceInterface
      * @AclAncestor("oro_case_comment_delete")
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);
     }
