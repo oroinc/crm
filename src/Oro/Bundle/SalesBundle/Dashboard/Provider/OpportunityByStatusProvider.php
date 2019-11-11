@@ -12,6 +12,9 @@ use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
+/**
+ * Provides chart data for 'Opportunity By Status' dashboard widget.
+ */
 class OpportunityByStatusProvider
 {
     /** @var RegistryInterface */
@@ -108,10 +111,16 @@ class OpportunityByStatusProvider
      */
     protected function formatResult($result, $excludedStatuses, $orderBy)
     {
-        $resultStatuses = array_flip(array_column($result, 'status', null));
+        $resultStatuses = [];
+        foreach ($result as $resultIndex => $item) {
+            $status = $item['status'];
+            if ($status) {
+                $resultStatuses[$status] = $resultIndex;
+            }
+        }
 
         foreach ($this->getAvailableOpportunityStatuses() as $statusKey => $statusLabel) {
-            $resultIndex = isset($resultStatuses[$statusKey]) ? $resultStatuses[$statusKey] : null;
+            $resultIndex = $resultStatuses[$statusKey] ?? null;
             if (in_array($statusKey, $excludedStatuses)) {
                 if (null !== $resultIndex) {
                     unset($result[$resultIndex]);
