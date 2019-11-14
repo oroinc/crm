@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\AccountBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -19,6 +22,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Account entity.
+ *
  * @RouteResource("account")
  * @NamePrefix("oro_api_")
  */
@@ -58,7 +63,9 @@ class AccountController extends RestController implements ClassResourceInterface
     /**
      * REST GET item
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get account item",
@@ -76,6 +83,8 @@ class AccountController extends RestController implements ClassResourceInterface
      * REST PUT
      *
      * @param int $id Account item id
+     *
+     * @Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Update account",
@@ -107,6 +116,8 @@ class AccountController extends RestController implements ClassResourceInterface
      * REST DELETE
      *
      * @param int $id
+     *
+     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete Account",

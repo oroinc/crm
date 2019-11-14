@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -13,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Cart entity.
+ *
  * @RouteResource("cart")
  * @NamePrefix("oro_api_")
  */
@@ -89,7 +94,9 @@ class CartController extends RestController
     /**
      * Get cart.
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get cart",
@@ -108,6 +115,8 @@ class CartController extends RestController
      * Update cart.
      *
      * @param int $id Cart id
+     *
+     * @Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Update cart",
@@ -130,6 +139,8 @@ class CartController extends RestController
      * Delete cart.
      *
      * @param int $id
+     *
+     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete cart",

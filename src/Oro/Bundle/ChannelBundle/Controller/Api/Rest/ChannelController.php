@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
+use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -22,6 +23,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Channel entity.
+ *
  * @RouteResource("channel")
  * @NamePrefix("oro_api_")
  */
@@ -98,6 +101,8 @@ class ChannelController extends RestController
      * REST DELETE
      *
      * @param int $id
+     *
+     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete Channel",

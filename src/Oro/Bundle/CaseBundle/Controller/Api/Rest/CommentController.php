@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Comment entity.
+ *
  * @Rest\RouteResource("case/comment")
  * @Rest\NamePrefix("oro_case_api_")
  */
@@ -56,7 +58,9 @@ class CommentController extends RestController implements ClassResourceInterface
     /**
      * REST GET item
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Rest\Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *     description="Get CaseComment item",
@@ -74,6 +78,8 @@ class CommentController extends RestController implements ClassResourceInterface
      * REST PUT
      *
      * @param int $id CaseComment item id
+     *
+     * @Rest\Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *     description="Update CaseComment",
@@ -109,6 +115,8 @@ class CommentController extends RestController implements ClassResourceInterface
      * REST DELETE
      *
      * @param int $id
+     *
+     * @Rest\Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *     description="Delete CaseComment",

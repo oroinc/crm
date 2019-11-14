@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -19,6 +20,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for Lead entity.
+ *
  * @RouteResource("lead")
  * @NamePrefix("oro_api_")
  */
@@ -27,7 +30,9 @@ class LeadController extends RestController implements ClassResourceInterface
     /**
      * REST GET lead address
      *
-     * @param string $leadId
+     * @param int $leadId
+     *
+     * @Rest\Get(requirements={"leadId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get lead address",
@@ -91,7 +96,9 @@ class LeadController extends RestController implements ClassResourceInterface
     /**
      * REST GET item
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Rest\Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact item",
@@ -109,6 +116,8 @@ class LeadController extends RestController implements ClassResourceInterface
      * REST PUT
      *
      * @param int $id
+     *
+     * @Rest\Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Update lead",
@@ -140,6 +149,8 @@ class LeadController extends RestController implements ClassResourceInterface
      * REST DELETE
      *
      * @param int $id
+     *
+     * @Rest\Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete lead",

@@ -3,7 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -19,12 +23,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for customer Address entity.
+ *
  * @NamePrefix("oro_api_")
  */
 class CustomerAddressController extends RestController implements ClassResourceInterface
 {
     /**
      * Get all addresses items.
+     *
+     * @Get(requirements={"customerId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get all addresses items",
@@ -57,6 +65,8 @@ class CustomerAddressController extends RestController implements ClassResourceI
 
     /**
      * Add address to the customer.
+     *
+     * @Post(requirements={"customerId"="\d+"})
      *
      * @ApiDoc(
      *      description="Add address to the customer",
@@ -95,6 +105,8 @@ class CustomerAddressController extends RestController implements ClassResourceI
      * @param int $addressId
      * @param int $customerId
      *
+     * @Get(requirements={"customerId"="\d+", "addressId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Get customer address",
      *      resource=true
@@ -118,6 +130,8 @@ class CustomerAddressController extends RestController implements ClassResourceI
      *
      * @param int $addressId  address item id
      * @param int $customerId customer item id
+     *
+     * @Put(requirements={"customerId"="\d+", "addressId"="\d+"})
      *
      * @ApiDoc(
      *      description="Update customer address",
@@ -148,6 +162,8 @@ class CustomerAddressController extends RestController implements ClassResourceI
      *
      * @param int $addressId  address item id
      * @param int $customerId customer item id
+     *
+     * @Delete(requirements={"customerId"="\d+", "addressId"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete customer address",

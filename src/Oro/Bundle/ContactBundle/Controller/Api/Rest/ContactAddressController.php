@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for ContactAddress entity.
+ *
  * @RouteResource("address")
  * @NamePrefix("oro_api_")
  */
@@ -23,8 +26,10 @@ class ContactAddressController extends RestController implements ClassResourceIn
     /**
      * REST GET address
      *
-     * @param string $contactId
-     * @param string $addressId
+     * @param int $contactId
+     * @param int $addressId
+     *
+     * @Rest\Get(requirements={"contactId"="\d+", "addressId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact address",
@@ -84,12 +89,14 @@ class ContactAddressController extends RestController implements ClassResourceIn
     /**
      * REST DELETE address
      *
+     * @Rest\Delete(requirements={"contactId"="\d+", "addressId"="\d+"})
+     *
      * @ApiDoc(
      *      description="Delete address items",
      *      resource=true
      * )
      * @AclAncestor("oro_contact_delete")
-     * @param     $contactId
+     * @param int $contactId
      * @param int $addressId
      *
      * @return Response
@@ -113,9 +120,11 @@ class ContactAddressController extends RestController implements ClassResourceIn
     /**
      * REST GET address by type
      *
-     * @param string $contactId
+     * @param int $contactId
      * @param string $typeName
      *
+     * @Rest\Get(requirements={"contactId"="\d+"})
+
      * @ApiDoc(
      *      description="Get contact address by type",
      *      resource=true
@@ -142,7 +151,9 @@ class ContactAddressController extends RestController implements ClassResourceIn
     /**
      * REST GET primary address
      *
-     * @param string $contactId
+     * @param int $contactId
+     *
+     * @Rest\Get(requirements={"contactId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact primary address",

@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -9,13 +11,14 @@ use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for ContactPhone entity.
+ *
  * @RouteResource("phone")
  * @NamePrefix("oro_api_")
  */
@@ -54,7 +57,9 @@ class ContactPhoneController extends RestController implements ClassResourceInte
     /**
      * REST GET primary phone
      *
-     * @param string $contactId
+     * @param int $contactId
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact primary phone",
@@ -105,6 +110,8 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      * oro_api_delete_contact_phone
      *
      * @param int $id
+     *
+     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete ContactPhone"

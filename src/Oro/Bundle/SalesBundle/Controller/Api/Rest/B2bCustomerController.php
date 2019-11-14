@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -16,6 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * API CRUD controller for B2BCustomer entity.
+ *
  * @RouteResource("b2bcustomer")
  * @NamePrefix("oro_api_")
  */
@@ -54,7 +59,9 @@ class B2bCustomerController extends RestController implements ClassResourceInter
     /**
      * Get B2B customer.
      *
-     * @param string $id
+     * @param int $id
+     *
+     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get business customer",
@@ -72,6 +79,8 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      * Update B2B customer.
      *
      * @param int $id
+     *
+     * @Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Update business customer",
@@ -103,6 +112,8 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      * Delete B2B customer.
      *
      * @param int $id
+     *
+     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete business customer",
@@ -156,7 +167,6 @@ class B2bCustomerController extends RestController implements ClassResourceInter
         $request = $this->get('request_stack')->getCurrentRequest();
         $customerData = $request->request->get($formAlias);
 
-        // @todo: just a temporary workaround until new API is implemented
         // - convert country name to country code (as result we accept both the code and the name)
         //   also it will be good to accept ISO3 code in future, need to be discussed with product owners
         // - convert region name to region code (as result we accept the combined code, code and name)
