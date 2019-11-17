@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * API CRUD controller for Customer entity.
  *
- * @RouteResource("customer")
+ * @RouteResource("magentocustomer")
  * @NamePrefix("oro_api_")
  */
 class CustomerController extends RestController implements ClassResourceInterface
@@ -51,7 +51,6 @@ class CustomerController extends RestController implements ClassResourceInterfac
 
     /**
      * Get all magento customers.
-     * Deprecated since 1.8. Use /api/rest/{version}/magentocustomers.{_format} instead.
      *
      * @QueryParam(
      *     name="startCreatedAt",
@@ -92,8 +91,6 @@ class CustomerController extends RestController implements ClassResourceInterfac
      *      resource=true
      * )
      * @AclAncestor("oro_magento_customer_view")
-     *
-     * @deprecated since 1.8. Use /api/rest/{version}/magentocustomers.{_format} instead.
      * @param Request $request
      * @return Response
      */
@@ -119,7 +116,6 @@ class CustomerController extends RestController implements ClassResourceInterfac
 
     /**
      * Get magento customer.
-     * Deprecated since 1.8. Use /api/rest/{version}/magentocustomers/{id}.{_format} instead.
      *
      * @param int $id
      *
@@ -131,8 +127,6 @@ class CustomerController extends RestController implements ClassResourceInterfac
      * )
      * @AclAncestor("oro_magento_customer_view")
      *
-     * @deprecated since 1.8. Use /api/rest/{version}/magentocustomers/{id}.{_format} instead.
-     *
      * @return Response
      */
     public function getAction(int $id)
@@ -142,15 +136,11 @@ class CustomerController extends RestController implements ClassResourceInterfac
 
     /**
      * Create new magento customer.
-     * Deprecated since 1.8. Use /api/rest/{version}/magentocustomers.{_format} instead.
      *
      * @ApiDoc(
      *      description="Create new magento customer",
      *      resource=true
      * )
-     *
-     * @deprecated since 1.8. Use /api/rest/{version}/magentocustomers/{id}.{_format} instead.
-     *
      * @AclAncestor("oro_magento_customer_create")
      *
      */
@@ -161,7 +151,6 @@ class CustomerController extends RestController implements ClassResourceInterfac
 
     /**
      * Update magento customer.
-     * Deprecated since 1.8. Use /api/rest/{version}/magentocustomers.{_format} instead.
      *
      * @param int $id Customer item id
      *
@@ -173,8 +162,6 @@ class CustomerController extends RestController implements ClassResourceInterfac
      * )
      * @AclAncestor("oro_magento_customer_update")
      *
-     * @deprecated since 1.8. Use /api/rest/{version}/magentocustomers/{id}.{_format} instead.
-     *
      * @return Response
      */
     public function putAction(int $id)
@@ -184,7 +171,6 @@ class CustomerController extends RestController implements ClassResourceInterfac
 
     /**
      * Delete magento customer.
-     * Deprecated since 1.8. Use /api/rest/{version}/magentocustomers.{_format} instead.
      *
      * @param int $id
      *
@@ -200,9 +186,6 @@ class CustomerController extends RestController implements ClassResourceInterfac
      *      permission="DELETE",
      *      class="OroMagentoBundle:Customer"
      * )
-     *
-     * @deprecated since 1.8. Use /api/rest/{version}/magentocustomers/{id}.{_format} instead.
-     *
      * @return Response
      */
     public function deleteAction(int $id)

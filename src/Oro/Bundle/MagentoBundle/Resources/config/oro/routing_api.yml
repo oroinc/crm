@@ -6,10 +6,6 @@ oro_magento_bundle_customer_api:
     resource:     "@OroMagentoBundle/Controller/Api/Rest/CustomerController.php"
     type:         rest
 
-oro_magento_bundle_magento_customer_api:
-    resource:     "@OroMagentoBundle/Controller/Api/Rest/MagentoCustomerController.php"
-    type:         rest
-
 oro_magento_bundle_order_api:
     resource:     "@OroMagentoBundle/Controller/Api/Rest/OrderController.php"
     type:         rest
