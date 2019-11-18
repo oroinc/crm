@@ -17,6 +17,10 @@ The current file describes significant changes in the code that may affect the u
     - `PUT /api/rest/{version}/customers/{id}.{_format}`, use `PUT /api/rest/{version}/magentocustomers/{id}.{_format}` instead
     - `DELETE /api/rest/{version}/customers/{id}.{_format}`, use `DELETE /api/rest/{version}/magentocustomers/{id}.{_format}` instead
 
+#### SalesBundle
+* The deprecated API resource `GET /api/rest/{version}/leads/{leadId}/address.{_format}` was removed,
+  use `GET /api/rest/{version}/leads/{leadId}/addresses.{_format}` instead.
+
 ## 4.0.0 (2019-07-31)
 [Show detailed list of changes](incompatibilities-4-0.md)
 
