@@ -436,7 +436,6 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $customer->setGroup($this->customerGroup);
         // DateTimeZones should be removed in BAP-8710. Tests should be passed for:
         //  - Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest\CustomerControllerTest
-        //  - Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest\MagentoCustomerControllerTest
         $customer->setCreatedAt(new \DateTime('now', new \DateTimezone('UTC')));
         $customer->setUpdatedAt(new \DateTime('now', new \DateTimezone('UTC')));
         $customer->addAddress($address);

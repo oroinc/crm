@@ -9,6 +9,18 @@ The current file describes significant changes in the code that may affect the u
 #### All Bundles
 * All `*.class` parameters were removed from the dependency injection container.
 
+#### MagentoBundle
+* The following deprecated API resources were removed:
+    - `GET /api/rest/{version}/customers.{_format}`, use `GET /api/rest/{version}/magentocustomers.{_format}` instead
+    - `POST /api/rest/{version}/customers.{_format}`, use `POST /api/rest/{version}/magentocustomers.{_format}` instead
+    - `GET /api/rest/{version}/customers/{id}`, use `GET /api/rest/{version}/magentocustomers/{id}.{_format}` instead
+    - `PUT /api/rest/{version}/customers/{id}.{_format}`, use `PUT /api/rest/{version}/magentocustomers/{id}.{_format}` instead
+    - `DELETE /api/rest/{version}/customers/{id}.{_format}`, use `DELETE /api/rest/{version}/magentocustomers/{id}.{_format}` instead
+
+#### SalesBundle
+* The deprecated API resource `GET /api/rest/{version}/leads/{leadId}/address.{_format}` was removed,
+  use `GET /api/rest/{version}/leads/{leadId}/addresses.{_format}` instead.
+
 ## 4.0.0 (2019-07-31)
 [Show detailed list of changes](incompatibilities-4-0.md)
 

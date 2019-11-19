@@ -8,7 +8,6 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
@@ -26,42 +25,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LeadController extends RestController implements ClassResourceInterface
 {
-    /**
-     * REST GET lead address
-     *
-     * @param int $leadId
-     *
-     * @Rest\Get(requirements={"leadId"="\d+"})
-     *
-     * @ApiDoc(
-     *      description="Get lead address",
-     *      resource=true
-     * )
-     * @AclAncestor("oro_sales_lead_view")
-     * @deprecated since 1.10. Use /api/rest/{version}/leads/{leadId}/addresses.{_format} instead.
-     * @return Response
-     */
-    public function getAddressAction(int $leadId)
-    {
-        /** @var Lead $item */
-        $item = $this->getManager()->find($leadId);
-
-        $address = null;
-        if ($item) {
-            $addressEntity = $item->getPrimaryAddress();
-            if ($addressEntity) {
-                $address = $this->getPreparedItem($addressEntity);
-                $address['countryIso2'] = $addressEntity->getCountryIso2();
-                $address['countryIso3'] = $addressEntity->getCountryIso3();
-                $address['regionCode'] = $addressEntity->getRegionCode();
-                $address['country'] = $addressEntity->getCountryName();
-            }
-        }
-        $responseData = $address ? json_encode($address) : '';
-
-        return new Response($responseData, Response::HTTP_OK);
-    }
-
     /**
      * REST GET list
      *
