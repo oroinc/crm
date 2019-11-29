@@ -41,7 +41,6 @@ services:
 
 
     oro_activity_contact.entity_activity_contact_data_provider:
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         class: Oro\Bundle\ActivityContactBundle\Provider\EntityActivityContactDataProvider
         arguments:

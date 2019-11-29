@@ -5,7 +5,6 @@ parameters:
 services:
     oro_contact_us.embedded_form:
         class: Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         tags:
             - { name: oro_embedded_form, type: Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType, label: oro.contactus.contactrequest.entity_label }
@@ -21,7 +20,6 @@ services:
 
     oro_contact_us.contact_request.form.handler:
         class: Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_contact_us.contact_request.form"
@@ -35,7 +33,6 @@ services:
 
     oro_contact_us.contact_request.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:

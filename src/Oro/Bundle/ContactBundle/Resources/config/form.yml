@@ -6,14 +6,12 @@ services:
 
     oro_contact.form.type.contact_phone.type:
         class: Oro\Bundle\ContactBundle\Form\Type\ContactPhoneType
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         tags:
             - { name: form.type, alias: oro_contact_phone }
 
     oro_contact.form.type.contact_phone.handler:
         class: Oro\Bundle\ContactBundle\Form\Handler\ContactPhoneHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_contact.form.type.contact_phone"
@@ -28,14 +26,12 @@ services:
 
     oro_contact.form.type.contact_email.type:
         class: Oro\Bundle\ContactBundle\Form\Type\ContactEmailType
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         tags:
             - { name: form.type, alias: oro_contact_email }
 
     oro_contact.form.type.contact_email.handler:
         class: Oro\Bundle\ContactBundle\Form\Handler\ContactEmailHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_contact.form.type.contact_email"

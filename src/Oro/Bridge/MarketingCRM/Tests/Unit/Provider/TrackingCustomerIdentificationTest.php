@@ -36,11 +36,11 @@ class TrackingCustomerIdentificationTest extends \PHPUnit\Framework\TestCase
         $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()
             ->getMock();
-        $doctrine = $this->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
+        $doctrine = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
             ->disableOriginalConstructor()
             ->getMock();
-        $doctrine->expects($this->once())
-            ->method('getManager')
+        $doctrine->expects($this->any())
+            ->method('getManagerForClass')
             ->willReturn($this->em);
 
         $this->provider = new TrackingCustomerIdentification(

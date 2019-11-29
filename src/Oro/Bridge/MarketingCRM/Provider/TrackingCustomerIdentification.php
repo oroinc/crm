@@ -2,8 +2,7 @@
 
 namespace Oro\Bridge\MarketingCRM\Provider;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
@@ -13,10 +12,13 @@ use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 use Oro\Bundle\TrackingBundle\Provider\TrackingEventIdentifierInterface;
 
+/**
+ * Checks if given tracking event is supported by identifier
+ */
 class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
 {
-    /** @var ObjectManager */
-    protected $em;
+    /** @var ManagerRegistry */
+    protected $registry;
 
     /** @var  ConfigProvider */
     protected $extendConfigProvider;
@@ -25,16 +27,16 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
     protected $settingsProvider;
 
     /**
-     * @param Registry         $doctrine
+     * @param ManagerRegistry  $registry
      * @param ConfigProvider   $extendConfigProvider
      * @param SettingsProvider $settingsProvider
      */
     public function __construct(
-        Registry $doctrine,
+        ManagerRegistry $registry,
         ConfigProvider $extendConfigProvider,
         SettingsProvider $settingsProvider
     ) {
-        $this->em                   = $doctrine->getManager();
+        $this->registry             = $registry;
         $this->extendConfigProvider = $extendConfigProvider;
         $this->settingsProvider     = $settingsProvider;
     }
@@ -57,7 +59,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
                 $type    = $channel ? $channel->getChannelType() : false;
 
                 /**
-                 * @todo Remove dependency on exact magento channel type in CRM-8153
+                 * Remove dependency on exact magento channel type in CRM-8153
                  */
                 if ($type && $type === MagentoChannelType::TYPE) {
                     return true;
@@ -83,12 +85,14 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
             ];
 
             $channel = $trackingVisit->getTrackingWebsite()->getChannel();
-            $target  = $this->em->getRepository($this->getIdentityTarget())->findOneBy(
-                [
-                    'originId'    => $userIdentifier,
-                    'dataChannel' => $channel
-                ]
-            );
+            $target  = $this->registry->getManagerForClass($this->getIdentityTarget())
+                ->getRepository($this->getIdentityTarget())
+                ->findOneBy(
+                    [
+                        'originId'    => $userIdentifier,
+                        'dataChannel' => $channel
+                    ]
+                );
             if ($target) {
                 $result['targetObject'] = $target;
             }
@@ -105,7 +109,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
     public function getIdentityTarget()
     {
         /**
-         * @todo Remove dependency on exact magento channel type in CRM-8153
+         * Remove dependency on exact magento channel type in CRM-8153
          */
         return $this->settingsProvider->getCustomerIdentityFromConfig(MagentoChannelType::TYPE);
     }
@@ -141,7 +145,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
                 $type    = $channel ? $channel->getChannelType() : false;
 
                 /**
-                 * @todo Remove dependency on exact magento channel type in CRM-8153
+                 * Remove dependency on exact magento channel type in CRM-8153
                  */
                 if ($type && $type === MagentoChannelType::TYPE) {
                     return true;
@@ -168,43 +172,53 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
 
         switch ($eventName) {
             case TCI::EVENT_CART_ITEM_ADDED:
-                $targets[] = $this->em->getRepository('OroMagentoBundle:Product')->findOneBy(
-                    [
-                        'originId' => (int)$eventValue
-                    ]
-                );
+                $targets[] = $this->registry->getManagerForClass('OroMagentoBundle:Product')
+                    ->getRepository('OroMagentoBundle:Product')
+                    ->findOneBy(
+                        [
+                            'originId' => (int)$eventValue
+                        ]
+                    );
                 break;
             case TCI::EVENT_ORDER_PLACE_SUCCESS:
-                $targets[] = $this->em->getRepository('OroMagentoBundle:Order')->findOneBy(
-                    [
-                        'subtotalAmount' => $eventValue,
-                        'dataChannel'    => $channel
-                    ]
-                );
+                $targets[] = $this->registry->getManagerForClass('OroMagentoBundle:Order')
+                    ->getRepository('OroMagentoBundle:Order')
+                    ->findOneBy(
+                        [
+                            'subtotalAmount' => $eventValue,
+                            'dataChannel'    => $channel
+                        ]
+                    );
                 break;
             case TCI::EVENT_ORDER_PLACED:
-                $targets[] = $this->em->getRepository('OroMagentoBundle:Order')->findOneBy(
-                    [
-                        'incrementId' => $eventValue,
-                        'dataChannel' => $channel
-                    ]
-                );
+                $targets[] = $this->registry->getManagerForClass('OroMagentoBundle:Order')
+                    ->getRepository('OroMagentoBundle:Order')
+                    ->findOneBy(
+                        [
+                            'incrementId' => $eventValue,
+                            'dataChannel' => $channel
+                        ]
+                    );
                 break;
             case TCI::EVENT_CHECKOUT_STARTED:
-                $targets[] = $this->em->getRepository('OroMagentoBundle:Cart')->findOneBy(
-                    [
-                        'subTotal'    => $eventValue,
-                        'dataChannel' => $channel
-                    ]
-                );
+                $targets[] = $this->registry->getManagerForClass('OroMagentoBundle:Cart')
+                    ->getRepository('OroMagentoBundle:Cart')
+                    ->findOneBy(
+                        [
+                            'subTotal'    => $eventValue,
+                            'dataChannel' => $channel
+                        ]
+                    );
                 break;
             case TCI::EVENT_CUSTOMER_LOGOUT:
-                $targets[] = $this->em->getRepository('OroMagentoBundle:Customer')->findOneBy(
-                    [
-                        'originId'    => (int)$eventValue,
-                        'dataChannel' => $channel
-                    ]
-                );
+                $targets[] = $this->registry->getManagerForClass('OroMagentoBundle:Customer')
+                    ->getRepository('OroMagentoBundle:Customer')
+                    ->findOneBy(
+                        [
+                            'originId'    => (int)$eventValue,
+                            'dataChannel' => $channel
+                        ]
+                    );
                 break;
         }
 
