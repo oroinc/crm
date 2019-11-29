@@ -1,14 +1,12 @@
 services:
     oro_contact.form.contact:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments: ["oro_contact_form", Oro\Bundle\ContactBundle\Form\Type\ContactType, null]
 
     oro_contact.form.group:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments: ["oro_contact_group_form", Oro\Bundle\ContactBundle\Form\Type\GroupType]
@@ -23,7 +21,6 @@ services:
 
     oro_contact.form.handler.contact:
         class: Oro\Bundle\ContactBundle\Form\Handler\ContactHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_contact.form.contact"
@@ -32,7 +29,6 @@ services:
 
     oro_contact.contact.manager:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
@@ -46,7 +42,6 @@ services:
 
     oro_contact.form.handler.group:
         class: Oro\Bundle\ContactBundle\Form\Handler\GroupHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_contact.form.group"
@@ -60,7 +55,6 @@ services:
 
     oro_contact.contact.manager.api:
         class: Oro\Bundle\ContactBundle\Entity\Manager\ContactApiEntityManager
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
@@ -70,7 +64,6 @@ services:
 
     oro_contact.contact_address.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
@@ -87,14 +80,12 @@ services:
 
     oro_contact.form.contact.api:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments: ["contact", Oro\Bundle\ContactBundle\Form\Type\ContactApiType, null]
 
     oro_contact.form.handler.contact.api:
         class: Oro\Bundle\ContactBundle\Form\Handler\ContactHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_contact.form.contact.api"
@@ -103,7 +94,6 @@ services:
 
     oro_contact.group.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
@@ -117,14 +107,12 @@ services:
 
     oro_contact.form.group.api:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments: ["contact_group", Oro\Bundle\ContactBundle\Form\Type\GroupApiType, null]
 
     oro_contact.form.handler.group.api:
         class: Oro\Bundle\ContactBundle\Form\Handler\GroupHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_contact.form.group.api"
@@ -133,7 +121,6 @@ services:
 
     oro_contact.contact_address.form:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments:
@@ -144,7 +131,6 @@ services:
 
     oro_contact.form.handler.contact_address:
         class: Oro\Bundle\AddressBundle\Form\Handler\AddressHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_contact.contact_address.form"
@@ -255,7 +241,6 @@ services:
 
     oro_contact.contact_phone.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
@@ -264,7 +249,6 @@ services:
 
     oro_contact.contact_email.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:

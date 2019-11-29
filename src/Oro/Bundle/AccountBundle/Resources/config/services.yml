@@ -3,7 +3,6 @@ parameters:
 
 services:
     oro_account.form.account:
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
@@ -19,7 +18,6 @@ services:
             - { name: form.type, alias: oro_account }
 
     oro_account.form.handler.account:
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         class: Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
         arguments:
@@ -35,7 +33,6 @@ services:
 
     # Account API
     oro_account.account.manager.api:
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         parent: oro_soap.manager.entity_manager.abstract
@@ -53,14 +50,12 @@ services:
             - { name: form.type, alias: account }
 
     oro_account.form.account.api:
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         class: Symfony\Component\Form\Form
         factory: ['@form.factory', createNamed]
         arguments: ["account", Oro\Bundle\AccountBundle\Form\Type\AccountApiType, null]
 
     oro_account.form.handler.account.api:
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         class: Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
         arguments:

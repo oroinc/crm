@@ -46,7 +46,6 @@ services:
 
     oro_sales.opportunity.form:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments:
@@ -55,7 +54,6 @@ services:
 
     oro_sales.opportunity.form.api:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments:
@@ -83,7 +81,6 @@ services:
 
     oro_sales.lead_to_opportunity.form.handler:
         class: Oro\Bundle\SalesBundle\Form\Handler\LeadToOpportunityHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_sales.lead_to_opportunity.form"
@@ -95,7 +92,6 @@ services:
 
     oro_sales.opportunity.form.handler.api:
         class: 'Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler'
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_sales.opportunity.form.api"
@@ -121,7 +117,6 @@ services:
 
     oro_sales.lead.form:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments:
@@ -130,7 +125,6 @@ services:
 
     oro_sales.lead.form.api:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments:
@@ -139,7 +133,6 @@ services:
 
     oro_sales.lead.form.handler:
         class: Oro\Bundle\SalesBundle\Form\Handler\LeadHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_sales.lead.form"
@@ -149,7 +142,6 @@ services:
 
     oro_sales.lead.form.handler.api:
         class: Oro\Bundle\SalesBundle\Form\Handler\LeadHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_sales.lead.form.api"
@@ -159,7 +151,6 @@ services:
 
     oro_sales.lead_address.form:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments:
@@ -170,7 +161,6 @@ services:
 
     oro_sales.lead_address.form.handler:
         class: Oro\Bundle\AddressBundle\Form\Handler\AddressHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_sales.lead_address.form"
@@ -211,7 +201,6 @@ services:
 
     oro_sales.salesfunnel.form:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments:
@@ -220,7 +209,6 @@ services:
 
     oro_sales.salesfunnel.form.api:
         class: Symfony\Component\Form\Form
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         factory: ['@form.factory', createNamed]
         arguments:
@@ -229,7 +217,6 @@ services:
 
     oro_sales.salesfunnel.form.handler:
         class: Oro\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_sales.salesfunnel.form"
@@ -238,7 +225,6 @@ services:
 
     oro_sales.salesfunnel.form.handler.api:
         class: Oro\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@oro_sales.salesfunnel.form.api"
@@ -327,14 +313,12 @@ services:
 
     oro_sales.form.type.lead_phone.type:
         class: Oro\Bundle\SalesBundle\Form\Type\LeadPhoneType
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         tags:
             - { name: form.type, alias: oro_sales_lead_phone }
 
     oro_sales.form.type.lead_phone.handler:
         class: Oro\Bundle\SalesBundle\Form\Handler\LeadPhoneHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@form.factory"
@@ -344,14 +328,12 @@ services:
 
     oro_sales.form.type.lead_email.type:
         class: Oro\Bundle\SalesBundle\Form\Type\LeadEmailType
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         tags:
             - { name: form.type, alias: oro_sales_lead_email }
 
     oro_sales.form.type.lead_email.handler:
         class: Oro\Bundle\SalesBundle\Form\Handler\LeadEmailHandler
-        # This service marked as public for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         arguments:
             - "@form.factory"
