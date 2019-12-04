@@ -1,7 +1,8 @@
-const ORO_ORDER_EMBED_API = {};
-
+/* global ORO_ORDER_EMBED_API */
 define(function(require) {
     'use strict';
+
+    global.ORO_ORDER_EMBED_API = {};
 
     const BaseComponent = require('oroui/js/app/components/base/component');
     const PlaceOrderView = require('oromagento/js/app/views/place-order-view');
