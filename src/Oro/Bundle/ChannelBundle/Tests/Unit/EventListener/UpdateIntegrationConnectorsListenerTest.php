@@ -2,17 +2,17 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class UpdateIntegrationConnectorsListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject|RegistryInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ManagerRegistry */
     protected $registry;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject|SettingsProvider */
@@ -32,7 +32,7 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit\Framework\TestCas
 
     protected function setUp()
     {
-        $this->registry        = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $this->registry        = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->settingProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
         $this->event           = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent')

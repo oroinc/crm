@@ -413,9 +413,9 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
         return $category;
     }
 
-    public function testGetExtendedType()
+    public function testGetExtendedTypes()
     {
-        $this->assertEquals(ChannelType::class, $this->extension->getExtendedType());
+        $this->assertEquals([ChannelType::class], ChannelTypeExtension::getExtendedTypes());
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
@@ -10,11 +11,10 @@ use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class IndeterminateForecastProvider
 {
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $doctrine;
 
     /** @var AclHelper */
@@ -36,7 +36,7 @@ class IndeterminateForecastProvider
     protected $data = [];
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param ManagerRegistry $doctrine
      * @param AclHelper $aclHelper
      * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param FilterProcessor $filterProcessor
@@ -44,7 +44,7 @@ class IndeterminateForecastProvider
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
-        RegistryInterface $doctrine,
+        ManagerRegistry $doctrine,
         AclHelper $aclHelper,
         WidgetProviderFilterManager $widgetProviderFilter,
         FilterProcessor $filterProcessor,

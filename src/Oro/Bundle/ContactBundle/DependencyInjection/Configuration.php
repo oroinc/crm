@@ -13,8 +13,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('oro_contact')
+        $treeBuilder = new TreeBuilder('oro_contact');
+        $treeBuilder->getRootNode()
             ->children()
                 ->arrayNode('social_url_format')
                     ->addDefaultsIfNotSet()

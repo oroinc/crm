@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\MagentoBundle\Async;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\IntegrationBundle\Authentication\Token\IntegrationTokenAwareTrait;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository as IntegrationRepository;
@@ -13,7 +14,6 @@ use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
 use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterface, TopicSubscriberInterface
@@ -26,7 +26,7 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
     private $cartExpirationProcessor;
 
     /**
-     * @var RegistryInterface
+     * @var ManagerRegistry
      */
     private $doctrine;
 
@@ -41,14 +41,14 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
     private $logger;
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param ManagerRegistry $doctrine
      * @param CartExpirationProcessor $cartExpirationProcessor
      * @param JobRunner $jobRunner
      * @param TokenStorageInterface $tokenStorage
      * @param LoggerInterface $logger
      */
     public function __construct(
-        RegistryInterface $doctrine,
+        ManagerRegistry $doctrine,
         CartExpirationProcessor $cartExpirationProcessor,
         JobRunner $jobRunner,
         TokenStorageInterface $tokenStorage,

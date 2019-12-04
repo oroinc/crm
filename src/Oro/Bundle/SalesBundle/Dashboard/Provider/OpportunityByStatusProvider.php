@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Dashboard\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
@@ -10,14 +11,13 @@ use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Provides chart data for 'Opportunity By Status' dashboard widget.
  */
 class OpportunityByStatusProvider
 {
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $registry;
 
     /** @var AclHelper */
@@ -33,14 +33,14 @@ class OpportunityByStatusProvider
     protected $qbTransformer;
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param ManagerRegistry $doctrine
      * @param AclHelper $aclHelper
      * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param DateFilterProcessor $processor
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
-        RegistryInterface $doctrine,
+        ManagerRegistry $doctrine,
         AclHelper $aclHelper,
         WidgetProviderFilterManager $widgetProviderFilter,
         DateFilterProcessor $processor,

@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
@@ -17,11 +18,10 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ForecastProvider
 {
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $doctrine;
 
     /** @var AclHelper */
@@ -58,7 +58,7 @@ class ForecastProvider
     ];
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param ManagerRegistry $doctrine
      * @param AclHelper $aclHelper
      * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param EnumValueProvider $enumProvider
@@ -67,7 +67,7 @@ class ForecastProvider
      * @param OwnerHelper $ownerHelper
      */
     public function __construct(
-        RegistryInterface $doctrine,
+        ManagerRegistry $doctrine,
         AclHelper $aclHelper,
         WidgetProviderFilterManager $widgetProviderFilter,
         EnumValueProvider $enumProvider,

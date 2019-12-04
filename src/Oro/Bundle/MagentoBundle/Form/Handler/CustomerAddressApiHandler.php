@@ -7,7 +7,7 @@ use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -30,13 +30,13 @@ class CustomerAddressApiHandler
     /**
      * @param FormInterface          $form
      * @param RequestStack           $requestStack
-     * @param RegistryInterface      $registry
+     * @param ManagerRegistry        $registry
      * @param TokenAccessorInterface $security
      */
     public function __construct(
         FormInterface $form,
         RequestStack $requestStack,
-        RegistryInterface $registry,
+        ManagerRegistry $registry,
         TokenAccessorInterface $security
     ) {
         $this->form = $form;

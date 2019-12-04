@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Async;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository as IntegrationRepository;
 use Oro\Bundle\MagentoBundle\Async\SyncCartExpirationIntegrationProcessor;
@@ -16,7 +17,6 @@ use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
@@ -289,11 +289,12 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|RegistryInterface
+     * @param IntegrationRepository|null $integrationRepository
+     * @return \PHPUnit\Framework\MockObject\MockObject|ManagerRegistry
      */
     private function createRegistryStub(IntegrationRepository $integrationRepository = null)
     {
-        $registryMock = $this->createMock(RegistryInterface::class);
+        $registryMock = $this->createMock(ManagerRegistry::class);
         $registryMock
             ->expects(self::any())
             ->method('getRepository')

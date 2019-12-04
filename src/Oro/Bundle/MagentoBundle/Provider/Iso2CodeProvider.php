@@ -2,14 +2,14 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Repository\CountryRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class Iso2CodeProvider
 {
     /**
-     * @var RegistryInterface
+     * @var ManagerRegistry
      */
     private $registry;
 
@@ -29,9 +29,9 @@ class Iso2CodeProvider
     private $nameMapping = [];
 
     /**
-     * @param RegistryInterface $registry
+     * @param ManagerRegistry $registry
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         $this->registry = $registry;
     }

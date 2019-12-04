@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
@@ -12,7 +13,6 @@ use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,7 +32,7 @@ class RestTokenProvider implements LoggerAwareInterface
     const TOKEN_RETRIEVAL_URL = 'integration/admin/token';
 
     /**
-     * @var RegistryInterface
+     * @var ManagerRegistry
      */
     protected $doctrine;
 
@@ -42,10 +42,10 @@ class RestTokenProvider implements LoggerAwareInterface
     protected $crypter;
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param ManagerRegistry $doctrine
      * @param SymmetricCrypterInterface $crypter
      */
-    public function __construct(RegistryInterface $doctrine, SymmetricCrypterInterface $crypter)
+    public function __construct(ManagerRegistry $doctrine, SymmetricCrypterInterface $crypter)
     {
         $this->doctrine = $doctrine;
         $this->crypter  = $crypter;
@@ -175,7 +175,7 @@ class RestTokenProvider implements LoggerAwareInterface
          * Save api-token only if entity already saved to the database
          */
         if ($transportEntity->getId()) {
-            $em = $this->doctrine->getEntityManagerForClass(Transport::class);
+            $em = $this->doctrine->getManagerForClass(Transport::class);
             $em->persist($transportEntity);
             $em->flush($transportEntity);
         }

@@ -1,6 +1,8 @@
 <?php
+
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Async;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
@@ -9,7 +11,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -97,7 +98,7 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
     }
 
     /**
-     * @return RegistryInterface
+     * @return ManagerRegistry
      */
     private function getDoctrine()
     {

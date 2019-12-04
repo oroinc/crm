@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Handler;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -21,7 +21,7 @@ class ChannelHandler
     /** @var RequestStack */
     protected $requestStack;
 
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $registry;
 
     /** @var FormInterface */
@@ -33,13 +33,13 @@ class ChannelHandler
     /**
      * @param RequestStack $requestStack
      * @param FormInterface $form
-     * @param RegistryInterface $registry
+     * @param ManagerRegistry $registry
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         RequestStack $requestStack,
         FormInterface $form,
-        RegistryInterface $registry,
+        ManagerRegistry $registry,
         EventDispatcherInterface $dispatcher
     ) {
         $this->requestStack = $requestStack;

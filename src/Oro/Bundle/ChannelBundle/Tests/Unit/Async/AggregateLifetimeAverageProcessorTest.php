@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
 use Oro\Bundle\ChannelBundle\Async\Topics;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
@@ -13,7 +14,7 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
 {
@@ -243,11 +244,12 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|RegistryInterface
+     * @param ObjectRepository $entityRepository
+     * @return \PHPUnit\Framework\MockObject\MockObject|ManagerRegistry
      */
     private function createRegistryStub($entityRepository = null)
     {
-        $registryMock = $this->createMock(RegistryInterface::class);
+        $registryMock = $this->createMock(ManagerRegistry::class);
         $registryMock
             ->expects($this->any())
             ->method('getRepository')

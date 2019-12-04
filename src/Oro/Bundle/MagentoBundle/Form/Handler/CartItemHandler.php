@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\MagentoBundle\Entity\CartItem;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -18,15 +18,15 @@ class CartItemHandler
     /** @var RequestStack */
     protected $requestStack;
 
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $manager;
 
     /**
-     * @param FormInterface     $form
-     * @param RequestStack      $requestStack
-     * @param RegistryInterface $registry
+     * @param FormInterface $form
+     * @param RequestStack $requestStack
+     * @param ManagerRegistry $registry
      */
-    public function __construct(FormInterface $form, RequestStack $requestStack, RegistryInterface $registry)
+    public function __construct(FormInterface $form, RequestStack $requestStack, ManagerRegistry $registry)
     {
         $this->form = $form;
         $this->requestStack = $requestStack;

@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Handler;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
 use Oro\Component\Testing\Unit\Form\Type\Stub\FormStub;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
@@ -26,7 +26,7 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var Request */
     protected $request;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|RegistryInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ManagerRegistry */
     protected $registry;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject|EventDispatcherInterface */
@@ -49,7 +49,7 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
         $this->form = $this->createMock(Form::class);
         $this->em = $this->createMock(EntityManager::class);
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
-        $this->registry = $this->createMock(RegistryInterface::class);
+        $this->registry = $this->createMock(ManagerRegistry::class);
         $this->entity = new Channel();
         $this->handler = new ChannelHandler($requestStack, $this->form, $this->registry, $this->dispatcher);
     }

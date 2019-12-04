@@ -2,6 +2,7 @@
 
 namespace Oro\Bridge\MarketingCRM\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
@@ -11,13 +12,12 @@ use Oro\Bundle\MagentoBundle\Provider\DateFilterTrait;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteVisitProviderInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class WebsiteVisitProvider implements WebsiteVisitProviderInterface, FeatureToggleableInterface
 {
     use DateFilterTrait, FeatureCheckerHolderTrait;
 
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $doctrine;
 
     /** @var AclHelper */
@@ -27,12 +27,12 @@ class WebsiteVisitProvider implements WebsiteVisitProviderInterface, FeatureTogg
     protected $dateHelper;
 
     /**
-     * @param RegistryInterface   $doctrine
+     * @param ManagerRegistry     $doctrine
      * @param AclHelper           $aclHelper
      * @param BigNumberDateHelper $dateHelper
      */
     public function __construct(
-        RegistryInterface $doctrine,
+        ManagerRegistry $doctrine,
         AclHelper $aclHelper,
         BigNumberDateHelper $dateHelper
     ) {

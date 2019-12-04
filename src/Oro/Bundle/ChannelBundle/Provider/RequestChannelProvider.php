@@ -2,15 +2,15 @@
 
 namespace Oro\Bundle\ChannelBundle\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class RequestChannelProvider
 {
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $registry;
 
     /** @var RequestStack */
@@ -18,9 +18,9 @@ class RequestChannelProvider
 
     /**
      * @param RequestStack      $requestStack
-     * @param RegistryInterface $registry
+     * @param ManagerRegistry   $registry
      */
-    public function __construct(RequestStack $requestStack, RegistryInterface $registry)
+    public function __construct(RequestStack $requestStack, ManagerRegistry $registry)
     {
         $this->registry = $registry;
         $this->requestStack = $requestStack;

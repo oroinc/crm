@@ -1,15 +1,13 @@
-const ORO_ORDER_EMBED_API = {};
-
+/* global ORO_ORDER_EMBED_API */
 define(function(require) {
     'use strict';
 
-    const PlaceOrderComponent = require('oromagento/js/app/components/place-order-component');
     const $ = require('jquery');
-    const jsmoduleExposure = require('jsmodule-exposure');
-    const exposure = jsmoduleExposure.disclose('oromagento/js/app/components/place-order-component');
+    const placeOrderComponentModuleInjector = require('inject-loader!oromagento/js/app/components/place-order-component');
 
-    xdescribe('Place Order Component', function() {
+    describe('Place Order Component', function() {
         let messenger;
+        let PlaceOrderComponent;
 
         beforeEach(function() {
             window.setFixtures(
@@ -19,17 +17,18 @@ define(function(require) {
             );
 
             messenger = jasmine.createSpyObj('messenger', ['notificationFlashMessage']);
-            exposure.substitute('messenger').by(messenger);
+            PlaceOrderComponent = placeOrderComponentModuleInjector({
+                'oroui/js/messenger': messenger
+            });
         });
 
         afterEach(function() {
-            exposure.recover('messenger');
+            ORO_ORDER_EMBED_API = {};
         });
 
         it('Initialize', function() {
             expect(ORO_ORDER_EMBED_API).toEqual({});
 
-            /* jshint nonew: false */
             new PlaceOrderComponent({
                 _sourceElement: $('#container'),
                 wid: 'wid-123',
@@ -44,7 +43,6 @@ define(function(require) {
         it('Handle Error', function() {
             const errorMessage = 'Custom Error message.';
 
-            /* jshint nonew: false */
             new PlaceOrderComponent({
                 el: '#container',
                 errorMessage: errorMessage

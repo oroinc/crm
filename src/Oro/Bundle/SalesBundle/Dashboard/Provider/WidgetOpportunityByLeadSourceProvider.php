@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Dashboard\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class WidgetOpportunityByLeadSourceProvider
 {
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $registry;
 
     /** @var AclHelper */
@@ -34,7 +34,7 @@ class WidgetOpportunityByLeadSourceProvider
     protected $qbTransformer;
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param ManagerRegistry $doctrine
      * @param AclHelper $aclHelper
      * @param DateFilterProcessor $dateFilterProcessor
      * @param TranslatorInterface $translator
@@ -42,7 +42,7 @@ class WidgetOpportunityByLeadSourceProvider
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
-        RegistryInterface $doctrine,
+        ManagerRegistry $doctrine,
         AclHelper $aclHelper,
         DateFilterProcessor $dateFilterProcessor,
         TranslatorInterface $translator,

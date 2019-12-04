@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor;
 use Oro\Bundle\ChannelBundle\Async\Topics;
@@ -14,7 +16,6 @@ use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 {
@@ -336,11 +337,12 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|RegistryInterface
+     * @param ObjectManager $entityManager
+     * @return \PHPUnit\Framework\MockObject\MockObject|ManagerRegistry
      */
     private function createRegistryStub($entityManager = null)
     {
-        $registryMock = $this->createMock(RegistryInterface::class);
+        $registryMock = $this->createMock(ManagerRegistry::class);
         $registryMock
             ->expects($this->any())
             ->method('getManager')

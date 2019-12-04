@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\ChannelBundle\Async;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
@@ -10,12 +11,11 @@ use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class AggregateLifetimeAverageProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
     /**
-     * @var RegistryInterface
+     * @var ManagerRegistry
      */
     private $registry;
 
@@ -30,11 +30,11 @@ class AggregateLifetimeAverageProcessor implements MessageProcessorInterface, To
     private $jobRunner;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ManagerRegistry $registry
      * @param LocaleSettings $localeSettings
      * @param JobRunner $jobRunner
      */
-    public function __construct(RegistryInterface $registry, LocaleSettings $localeSettings, JobRunner $jobRunner)
+    public function __construct(ManagerRegistry $registry, LocaleSettings $localeSettings, JobRunner $jobRunner)
     {
         $this->registry = $registry;
         $this->localeSettings = $localeSettings;
