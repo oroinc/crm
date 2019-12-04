@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
 use Oro\Bundle\ChannelBundle\Async\Topics;
@@ -14,7 +15,6 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Doctrine\Common\Persistence\ManagerRegistry;
 
 class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
 {
