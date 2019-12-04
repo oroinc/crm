@@ -2,13 +2,13 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -34,14 +34,14 @@ class CustomerApiHandler
     /**
      * @param FormInterface           $form
      * @param RequestStack            $requestStack
-     * @param RegistryInterface       $registry
+     * @param ManagerRegistry         $registry
      * @param TokenAccessorInterface  $security
      * @param AccountCustomerManager  $accountCustomerManager
      */
     public function __construct(
         FormInterface $form,
         RequestStack $requestStack,
-        RegistryInterface $registry,
+        ManagerRegistry $registry,
         TokenAccessorInterface $security,
         AccountCustomerManager $accountCustomerManager
     ) {

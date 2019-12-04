@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartItem;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -21,19 +21,19 @@ class CartHandler
     /** @var RequestStack */
     protected $requestStack;
 
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $manager;
 
     /**
      * @param FormInterface          $form
      * @param RequestStack           $requestStack
-     * @param RegistryInterface      $registry
+     * @param ManagerRegistry        $registry
      * @param TokenAccessorInterface $security
      */
     public function __construct(
         FormInterface $form,
         RequestStack $requestStack,
-        RegistryInterface $registry,
+        ManagerRegistry $registry,
         TokenAccessorInterface $security
     ) {
         $this->form = $form;

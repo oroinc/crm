@@ -2,15 +2,15 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Repository\CountryRepository;
 use Oro\Bundle\MagentoBundle\Provider\Iso2CodeProvider;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class Iso2CodeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var RegistryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registry;
 
@@ -21,7 +21,7 @@ class Iso2CodeProviderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->registry = $this->createMock(RegistryInterface::class);
+        $this->registry = $this->createMock(ManagerRegistry::class);
         $this->provider = new Iso2CodeProvider($this->registry);
     }
 

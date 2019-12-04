@@ -50,10 +50,7 @@ class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
 
     public function testGetExtendedType()
     {
-        $this->assertEquals(
-            $this->extension->getExtendedType(),
-            EmbeddedFormType::class
-        );
+        $this->assertEquals([EmbeddedFormType::class], EmbeddedFormTypeExtension::getExtendedTypes());
     }
 
     public function testBuildForm()

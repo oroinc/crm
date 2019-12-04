@@ -15,8 +15,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('oro_reportcrm');
+        $treeBuilder = new TreeBuilder('oro_reportcrm');
+        $treeBuilder->getRootNode();
 
         return $treeBuilder;
     }

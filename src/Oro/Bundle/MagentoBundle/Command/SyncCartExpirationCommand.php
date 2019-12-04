@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Command;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository as IntegrationRepository;
@@ -11,7 +12,6 @@ use Oro\Component\Log\OutputLogger;
 use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,17 +25,17 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface
     /** @var string */
     protected static $defaultName = 'oro:cron:magento:cart:expiration';
 
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     private $registry;
 
     /** @var MessageProducerInterface */
     private $messageProducer;
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param ManagerRegistry $doctrine
      * @param MessageProducerInterface $messageProducer
      */
-    public function __construct(RegistryInterface $doctrine, MessageProducerInterface $messageProducer)
+    public function __construct(ManagerRegistry $doctrine, MessageProducerInterface $messageProducer)
     {
         parent::__construct();
 

@@ -2,13 +2,13 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Utils\EditModeUtils;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Handles channel's integration connections.
@@ -18,14 +18,14 @@ class UpdateIntegrationConnectorsListener
     /** @var SettingsProvider */
     protected $settingsProvider;
 
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $registry;
 
     /**
      * @param SettingsProvider  $settingsProvider
-     * @param RegistryInterface $registry
+     * @param ManagerRegistry $registry
      */
-    public function __construct(SettingsProvider $settingsProvider, RegistryInterface $registry)
+    public function __construct(SettingsProvider $settingsProvider, ManagerRegistry $registry)
     {
         $this->settingsProvider = $settingsProvider;
         $this->registry         = $registry;

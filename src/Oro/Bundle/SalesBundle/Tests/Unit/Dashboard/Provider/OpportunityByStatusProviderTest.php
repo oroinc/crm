@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -12,11 +13,10 @@ use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var RegistryInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registry;
 
     /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
@@ -31,6 +31,7 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
     /** @var  CurrencyQueryBuilderTransformerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $qbTransformer;
 
+    /** @var array */
     protected $opportunityStatuses = [
         ['id' => 'won', 'name' => 'Won'],
         ['id' => 'identification_alignment', 'name' => 'Identification'],

@@ -2,13 +2,13 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -22,7 +22,7 @@ class OrderHandler
     /** @var RequestStack */
     protected $requestStack;
 
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $manager;
 
     /** @var Organization */
@@ -31,13 +31,13 @@ class OrderHandler
     /**
      * @param FormInterface          $form
      * @param RequestStack           $requestStack
-     * @param RegistryInterface      $registry
+     * @param ManagerRegistry        $registry
      * @param TokenAccessorInterface $security
      */
     public function __construct(
         FormInterface $form,
         RequestStack $requestStack,
-        RegistryInterface $registry,
+        ManagerRegistry $registry,
         TokenAccessorInterface $security
     ) {
         $this->form = $form;

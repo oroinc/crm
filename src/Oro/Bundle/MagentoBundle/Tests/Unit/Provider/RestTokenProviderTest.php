@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Test\FakeRestClient;
@@ -12,7 +13,6 @@ use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 use Psr\Log\NullLogger;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -66,9 +66,9 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->entityManager = $this->createMock(EntityManager::class);
 
-        $doctrine = $this->createMock(RegistryInterface::class);
+        $doctrine = $this->createMock(ManagerRegistry::class);
         $doctrine
-            ->method('getEntityManagerForClass')
+            ->method('getManagerForClass')
             ->with(Transport::class)
             ->willReturn($this->entityManager);
 

@@ -2,17 +2,17 @@
 
 namespace Oro\Bundle\SalesBundle\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 abstract class B2bBigNumberProvider
 {
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $doctrine;
 
     /** @var AclHelper */
@@ -25,13 +25,13 @@ abstract class B2bBigNumberProvider
     protected $dateHelper;
 
     /**
-     * @param RegistryInterface           $doctrine
+     * @param ManagerRegistry             $doctrine
      * @param AclHelper                   $aclHelper
      * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param BigNumberDateHelper         $dateHelper
      */
     public function __construct(
-        RegistryInterface $doctrine,
+        ManagerRegistry $doctrine,
         AclHelper $aclHelper,
         WidgetProviderFilterManager $widgetProviderFilter,
         BigNumberDateHelper $dateHelper

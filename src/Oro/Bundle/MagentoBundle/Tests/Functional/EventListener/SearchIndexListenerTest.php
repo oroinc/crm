@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\EventListener;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\IntegrationBundle\Event\SyncEvent;
@@ -12,7 +13,6 @@ use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadCustomerData;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueAssertTrait;
 use Oro\Bundle\SearchBundle\Async\Topics;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @group search
@@ -25,7 +25,7 @@ class SearchIndexListenerTest extends WebTestCase
     /** @var SearchIndexListener */
     private $listener;
 
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     private $registry;
 
     /**

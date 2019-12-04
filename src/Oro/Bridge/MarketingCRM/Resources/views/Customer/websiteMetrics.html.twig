@@ -9,7 +9,7 @@
         {% set difference = date(eventDate).diff(now) %}
 
         {{ eventDate|oro_format_datetime }}
-        ({{ 'oro.magento.website_activity.days_ago'|transchoice(difference.days) }})
+        ({{ 'oro.magento.website_activity.days_ago'|trans({'%count%': difference.days}) }})
     {% else %}
         {{ 'oro.ui.empty'|trans }}
     {% endif %}

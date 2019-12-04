@@ -22,8 +22,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('oro_magento');
+        $treeBuilder = new TreeBuilder('oro_magento');
+        $root = $treeBuilder->getRootNode();
 
         $root
             ->children()

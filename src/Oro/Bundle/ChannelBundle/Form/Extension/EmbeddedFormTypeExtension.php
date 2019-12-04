@@ -15,9 +15,9 @@ class EmbeddedFormTypeExtension extends AbstractTypeExtension
     /**
      * {@inheritdoc}
      */
-    public function getExtendedType()
+    public static function getExtendedTypes(): iterable
     {
-        return EmbeddedFormType::class;
+        return [EmbeddedFormType::class];
     }
 
     /**

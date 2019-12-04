@@ -3,9 +3,9 @@
 namespace Oro\Bundle\ChannelBundle\Provider;
 
 use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Provider that allows to check whether entity is enabled in current system state
@@ -21,7 +21,7 @@ class StateProvider
     /** @var Cache */
     protected $cache;
 
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $registry;
 
     /** @var TokenAccessorInterface */
@@ -30,13 +30,13 @@ class StateProvider
     /**
      * @param SettingsProvider       $settingsProvider
      * @param Cache                  $cache
-     * @param RegistryInterface      $registry
+     * @param ManagerRegistry        $registry
      * @param TokenAccessorInterface $tokenAccessor
      */
     public function __construct(
         SettingsProvider $settingsProvider,
         Cache $cache,
-        RegistryInterface $registry,
+        ManagerRegistry $registry,
         TokenAccessorInterface $tokenAccessor
     ) {
         $this->settingsProvider = $settingsProvider;

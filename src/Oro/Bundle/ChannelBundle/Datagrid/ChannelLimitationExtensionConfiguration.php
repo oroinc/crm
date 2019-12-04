@@ -12,9 +12,9 @@ class ChannelLimitationExtensionConfiguration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder();
+        $builder = new TreeBuilder('root');
 
-        $builder->root('root')
+        $builder->getRootNode()
             ->children()
                 ->scalarNode('channel_relation_path')
                     ->defaultValue('.dataChannel')
