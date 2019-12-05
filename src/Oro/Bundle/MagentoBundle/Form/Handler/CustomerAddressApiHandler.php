@@ -2,15 +2,18 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Handles customer address form submit on API request.
+ */
 class CustomerAddressApiHandler
 {
     use RequestHandlerTrait;
