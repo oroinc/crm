@@ -19,8 +19,9 @@ Feature: Formatting contact id in marketing lists
       | Primary Email |
     And I save and close form
     Then I should see "Marketing list saved" flash message
-    When I click view "Contact Marketing List" in grid
-    And I should see following grid:
+    When I go to Marketing/Marketing Lists
+    And I click view "Contact Marketing List" in grid
+    Then I should see following grid:
       | Id     | Primary Email           |
       | 1001   | test-1001@example.com   |
       | 100500 | test-100500@example.com |
