@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Api\Processor\GetConfig;
 
+use Oro\Bundle\ApiBundle\Processor\GetConfig\CompleteDescriptions\FieldDescriptionUtil;
 use Oro\Bundle\ApiBundle\Processor\GetConfig\ConfigContext;
-use Oro\Bundle\ApiBundle\Util\FieldDescriptionUtil;
 use Oro\Component\ChainProcessor\ContextInterface;
 use Oro\Component\ChainProcessor\ProcessorInterface;
 
