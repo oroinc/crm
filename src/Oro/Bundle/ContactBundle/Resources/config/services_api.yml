@@ -1,23 +1,23 @@
 services:
-    oro_contact.api.contact.customize_loaded_data.compute_primary_phone:
+    oro_contact.api.contact.compute_primary_phone:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\ComputePrimaryField
         arguments: [primaryPhone, phones, phone]
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Oro\Bundle\ContactBundle\Entity\Contact }
 
-    oro_contact.api.contact.customize_form_data.map_primary_phone:
+    oro_contact.api.contact.map_primary_phone:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeFormData\MapPrimaryField
         arguments: ['@property_accessor', 'Unknown primary phone number.', primaryPhone, phones, phone]
         tags:
             - { name: oro.api.processor, action: customize_form_data, event: pre_submit|post_submit|post_validate, class: Oro\Bundle\ContactBundle\Entity\Contact }
 
-    oro_contact.api.contact.customize_loaded_data.compute_primary_email:
+    oro_contact.api.contact.compute_primary_email:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\ComputePrimaryField
         arguments: [primaryEmail, emails, email]
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Oro\Bundle\ContactBundle\Entity\Contact }
 
-    oro_contact.api.contact.customize_form_data.map_primary_email:
+    oro_contact.api.contact.map_primary_email:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeFormData\MapPrimaryField
         arguments: ['@property_accessor', 'Unknown primary email address.', primaryEmail, emails, email]
         tags:
