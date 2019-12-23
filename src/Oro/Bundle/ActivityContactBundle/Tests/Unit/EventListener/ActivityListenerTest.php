@@ -10,6 +10,10 @@ use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestTarget;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ActivityListenerTest extends \PHPUnit\Framework\TestCase
@@ -35,33 +39,26 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $configProvider;
 
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    protected $config;
+
     public function setUp()
     {
-        $this->provider    = new ActivityContactProvider();
+        $this->provider = new ActivityContactProvider();
         $directionProvider = new TestDirectionProvider();
         $this->provider->addProvider($directionProvider);
 
-        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $this->configManager = $this->createMock(ConfigManager::class);
+        $this->configProvider = $this->createMock(ConfigProvider::class);
+        $this->config = $this->createMock(ConfigInterface::class);
 
-        $this->configManager = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
-            ->setMethods(['getProvider'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
-            ->setMethods(['getConfig', 'is'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->configManager
+        $this->configManager->expects($this->any())
             ->method('getProvider')
             ->will($this->returnValue($this->configProvider));
-
-        $this->configProvider
+        $this->configProvider->expects($this->any())
             ->method('getConfig')
-            ->will($this->returnValue($this->configProvider));
+            ->willReturn($this->config);
 
         $this->listener = new ActivityListener($this->provider, $this->doctrineHelper, $this->configManager);
     }
@@ -76,7 +73,7 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
         $this->testTarget = new TestTarget();
         $event            = new ActivityEvent($object, $this->testTarget);
 
-        $this->configProvider
+        $this->config->expects($this->once())
             ->method('is')
             ->with('is_extend')
             ->will($this->returnValue(true));
@@ -131,7 +128,7 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
         $object = new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, $this->testDate);
         $event = new ActivityEvent($object, $this->testTarget);
 
-        $this->configProvider
+        $this->config->expects($this->once())
             ->method('is')
             ->with('is_extend')
             ->will($this->returnValue(false));
