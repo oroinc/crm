@@ -4,19 +4,20 @@ namespace Oro\Bundle\AnalyticsBundle\Builder;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
+/**
+ * Delegates the building of analytics to child builders.
+ */
 class AnalyticsBuilder
 {
-    /**
-     * @var AnalyticsBuilderInterface[]
-     */
-    protected $builders = [];
+    /** @var iterable|AnalyticsBuilderInterface[] */
+    private $builders;
 
     /**
-     * @param AnalyticsBuilderInterface $analyticsBuilder
+     * @param iterable|AnalyticsBuilderInterface[] $builders
      */
-    public function addBuilder(AnalyticsBuilderInterface $analyticsBuilder)
+    public function __construct($builders)
     {
-        $this->builders[] = $analyticsBuilder;
+        $this->builders = $builders;
     }
 
     /**

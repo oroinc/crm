@@ -7,11 +7,12 @@ services:
     oro_analytics.builder:
         class: Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder
         arguments:
-            - []
+            - !tagged_iterator oro_analytics.builder
 
     oro_analytics.builder.rfm:
         class: Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder
         arguments:
+            - !tagged_iterator oro_analytics.builder.rfm
             - '@oro_entity.doctrine_helper'
         tags:
             - { name: oro_analytics.builder }

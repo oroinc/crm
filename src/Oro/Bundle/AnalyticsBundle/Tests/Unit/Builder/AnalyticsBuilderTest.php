@@ -9,30 +9,14 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 class AnalyticsBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AnalyticsBuilder
-     */
-    protected $builder;
-
-    protected function setUp()
-    {
-        $this->builder = new AnalyticsBuilder();
-    }
-
-    /**
-     * @param array $builders
-     *
      * @dataProvider buildDataProvider
      */
     public function testBuild(array $builders)
     {
-        /** @var Channel|\PHPUnit\Framework\MockObject\MockObject $entity */
-        $entity = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $entity = $this->createMock(Channel::class);
 
-        foreach ($builders as $builder) {
-            $this->builder->addBuilder($builder);
-        }
-
-        $this->builder->build($entity);
+        $builder = new AnalyticsBuilder($builders);
+        $builder->build($entity);
     }
 
     /**
@@ -60,18 +44,14 @@ class AnalyticsBuilderTest extends \PHPUnit\Framework\TestCase
      * @param bool $supported
      * @return AnalyticsBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getSupportedBuilder($supported = true)
+    private function getSupportedBuilder($supported = true)
     {
-        $supportedBuilder = $this->getBuilderMock();
-
-        $supportedBuilder
-            ->expects($this->any())
+        $supportedBuilder = $this->createMock(AnalyticsBuilderInterface::class);
+        $supportedBuilder->expects($this->any())
             ->method('supports')
             ->will($this->returnValue($supported));
-
         if ($supported) {
-            $supportedBuilder
-                ->expects($this->once())
+            $supportedBuilder->expects($this->once())
                 ->method('build');
         }
 
@@ -81,16 +61,8 @@ class AnalyticsBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return \PHPUnit\Framework\MockObject\MockObject|AnalyticsBuilderInterface
      */
-    protected function getNotSupportedBuilder()
+    private function getNotSupportedBuilder()
     {
         return $this->getSupportedBuilder(false);
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|AnalyticsBuilderInterface
-     */
-    protected function getBuilderMock()
-    {
-        return $this->createMock('Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilderInterface');
     }
 }
