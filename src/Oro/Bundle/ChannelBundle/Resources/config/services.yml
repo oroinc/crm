@@ -136,6 +136,7 @@ services:
     oro_channel.provider.channel_entity_provider:
         class: Oro\Bundle\EntityBundle\Provider\EntityProvider
         parent: oro_entity.entity_provider.abstract
+        lazy: true
         calls:
             - [setExclusionProvider,  ["@oro_channel.provider.channel_entity_exclusion_provider"]]
 
