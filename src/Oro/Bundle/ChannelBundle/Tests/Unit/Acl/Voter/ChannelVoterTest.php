@@ -29,20 +29,11 @@ class ChannelVoterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param object $object
-     * @param string $className
-     * @param array  $attributes
-     * @param bool   $isSystemChannel
-     * @param bool   $expected
-     *
      * @dataProvider attributesDataProvider
      */
-    public function testVote($object, $className, $attributes, $isSystemChannel, $expected)
+    public function testVote($object, $attributes, $isSystemChannel, $expected)
     {
-        $this->doctrineHelper->expects(self::any())
-            ->method('getEntityClass')
-            ->with($object)
-            ->willReturn($className);
+        $this->voter->setClassName(Channel::class);
 
         $this->doctrineHelper->expects(self::any())
             ->method('getSingleEntityIdentifier')
@@ -53,11 +44,7 @@ class ChannelVoterTest extends \PHPUnit\Framework\TestCase
             ->method('isSystemChannel')
             ->willReturn($isSystemChannel);
 
-        /** @var TokenInterface $token */
         $token = $this->createMock(TokenInterface::class);
-
-        $this->voter->setClassName(Channel::class);
-
         self::assertEquals(
             $expected,
             $this->voter->vote($token, $object, $attributes)
@@ -69,33 +56,29 @@ class ChannelVoterTest extends \PHPUnit\Framework\TestCase
      */
     public function attributesDataProvider()
     {
-        $className = Channel::class;
-
         return [
             // channel system
-            [$this->getChannel(), $className, ['VIEW'], false, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), $className, ['CREATE'], false, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), $className, ['EDIT'], false, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), $className, ['DELETE'], false, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), $className, ['ASSIGN'], false, ChannelVoter::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['VIEW'], false, ChannelVoter::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['CREATE'], false, ChannelVoter::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['EDIT'], false, ChannelVoter::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['DELETE'], false, ChannelVoter::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['ASSIGN'], false, ChannelVoter::ACCESS_ABSTAIN],
             // channel non system
-            [$this->getChannel(), $className, ['VIEW'], true, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), $className, ['CREATE'], true, ChannelVoter::ACCESS_DENIED],
-            [$this->getChannel(), $className, ['EDIT'], true, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), $className, ['DELETE'], true, ChannelVoter::ACCESS_DENIED],
-            [$this->getChannel(), $className, ['ASSIGN'], true, ChannelVoter::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['VIEW'], true, ChannelVoter::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['CREATE'], true, ChannelVoter::ACCESS_DENIED],
+            [$this->getChannel(), ['EDIT'], true, ChannelVoter::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['DELETE'], true, ChannelVoter::ACCESS_DENIED],
+            [$this->getChannel(), ['ASSIGN'], true, ChannelVoter::ACCESS_ABSTAIN]
         ];
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|Channel
+     * @return Channel
      */
     private function getChannel()
     {
-        $channel = $this->createMock(Channel::class);
-        $channel->expects(self::any())
-            ->method('getChannelType')
-            ->willReturn('test_channel');
+        $channel = new Channel();
+        $channel->setChannelType('test_channel');
 
         return $channel;
     }

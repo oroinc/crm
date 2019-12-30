@@ -54,11 +54,6 @@ class OrganizationAnnotationVoterTest extends \PHPUnit\Framework\TestCase
         $hasOrganizationApplicableChannels,
         $expected
     ) {
-        $this->doctrineHelper->expects($this->any())
-            ->method('getEntityClass')
-            ->with($object)
-            ->will($this->returnValue($className));
-
         $this->voter->setClassName($className);
 
         $this->settingsProvider->expects($this->any())
