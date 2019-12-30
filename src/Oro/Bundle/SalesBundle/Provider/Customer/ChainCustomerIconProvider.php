@@ -2,19 +2,20 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Customer;
 
+/**
+ * Delegates receiving of an icon for a specific customer to child providers.
+ */
 class ChainCustomerIconProvider implements CustomerIconProviderInterface
 {
-    /** @var CustomerIconProviderInterface[] */
-    protected $providers = [];
+    /** @var iterable|CustomerIconProviderInterface[] */
+    private $providers;
 
     /**
-     * @param CustomerIconProviderInterface $provider
+     * @param iterable|CustomerIconProviderInterface[] $providers
      */
-    public function addProvider(CustomerIconProviderInterface $provider)
+    public function __construct(iterable $providers)
     {
-        if (!in_array($provider, $this->providers, true)) {
-            $this->providers[] = $provider;
-        }
+        $this->providers = $providers;
     }
 
     /**
@@ -23,8 +24,9 @@ class ChainCustomerIconProvider implements CustomerIconProviderInterface
     public function getIcon($entity)
     {
         foreach ($this->providers as $provider) {
-            if ($image = $provider->getIcon($entity)) {
-                return $image;
+            $icon = $provider->getIcon($entity);
+            if (null !== $icon) {
+                return $icon;
             }
         }
 

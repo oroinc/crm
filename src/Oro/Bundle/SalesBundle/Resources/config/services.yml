@@ -453,8 +453,10 @@ services:
         tags:
             - { name: oro_migration.extension, extension_name: customer }
 
-    oro_sales.provider.customer.chain_customer_icon:
+    oro_sales.provider.customer.icon:
         class: Oro\Bundle\SalesBundle\Provider\Customer\ChainCustomerIconProvider
+        arguments:
+            - !tagged_iterator oro_sales.customer_icon
 
     oro_sales.provider.customer.customer_icon:
         class: Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProvider
@@ -495,12 +497,12 @@ services:
         public: true
         parent: oro_activity.form.handler.autocomplete
         calls:
-            - [setCustomerIconProvider, ['@oro_sales.provider.customer.chain_customer_icon']]
+            - [setCustomerIconProvider, ['@oro_sales.provider.customer.icon']]
             - [setCustomerConfigProvider, ['@oro_sales.customer.account_config_provider']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
             - [setRoutingHelper, ['@oro_entity.routing_helper']]
             - [setAccountCustomerManager, ['@oro_sales.manager.account_customer']]
-            - [setChainAccountAutocompleteProvider, ['@oro_sales.provider.customer.account_autocomplete.chain']]
+            - [setChainAccountAutocompleteProvider, ['@oro_sales.provider.customer.account_autocomplete']]
 
     oro_sales.customers.opportunities_listener:
         class: Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener
@@ -546,7 +548,7 @@ services:
         arguments:
             - '@oro_entity.doctrine_helper'
             - '@oro_sales.customer.config_provider'
-            - '@oro_sales.provider.customer.account_creation.chain'
+            - '@oro_sales.provider.customer.account_creation'
 
     Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager:
         alias: oro_sales.manager.account_customer
@@ -586,8 +588,10 @@ services:
             - { name: doctrine.event_listener, event: onFlush, method: onFlush }
             - { name: doctrine.event_listener, event: postFlush, method: postFlush }
 
-    oro_sales.provider.customer.account_creation.chain:
+    oro_sales.provider.customer.account_creation:
         class: Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\ChainAccountProvider
+        arguments:
+            - !tagged_iterator oro_sales.provider.customer.account_creation
 
     oro_sales.provider.customer.account_creation.default:
         class: Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\DefaultProvider
@@ -644,8 +648,10 @@ services:
         tags:
             - { name: oro_action.action, alias: find_customer_association }
 
-    oro_sales.provider.customer.account_autocomplete.chain:
+    oro_sales.provider.customer.account_autocomplete:
         class: Oro\Bundle\SalesBundle\Provider\Customer\AccountAutocomplete\ChainAccountAutocompleteProvider
+        arguments:
+            - !tagged_iterator oro_sales.provider.customer.account_autocomplete
 
     oro_sales.customer_account_change_subscriber:
          class: Oro\Bundle\SalesBundle\EventListener\CustomerAccountChangeSubscriber
@@ -655,7 +661,7 @@ services:
     oro_sales.provider.customer.account_creation.b2bcustomer:
         class: Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\B2bAccountProvider
         tags:
-         - { name: oro_sales.provider.customer.account_creation, priority: 10 }
+            - { name: oro_sales.provider.customer.account_creation, priority: 10 }
 
     oro_sales.event_listener.import_export_opportunity_probability_subscriber:
         class: Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityProbabilitySubscriber

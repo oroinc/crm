@@ -4,19 +4,20 @@ namespace Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation;
 
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
+/**
+ * Delegates receiving of an account for a specific customer to child providers.
+ */
 class ChainAccountProvider implements AccountProviderInterface
 {
-    /** @var AccountProviderInterface[] */
-    protected $providers = [];
+    /** @var iterable|AccountProviderInterface[] */
+    private $providers;
 
     /**
-     * @param AccountProviderInterface $provider
+     * @param iterable|AccountProviderInterface[] $providers
      */
-    public function addProvider(AccountProviderInterface $provider)
+    public function __construct(iterable $providers)
     {
-        if (!in_array($provider, $this->providers, true)) {
-            $this->providers[] = $provider;
-        }
+        $this->providers = $providers;
     }
 
     /**
@@ -25,7 +26,8 @@ class ChainAccountProvider implements AccountProviderInterface
     public function getAccount($targetCustomer)
     {
         foreach ($this->providers as $provider) {
-            if ($account = $provider->getAccount($targetCustomer)) {
+            $account = $provider->getAccount($targetCustomer);
+            if (null !== $account) {
                 return $account;
             }
         }
