@@ -23,11 +23,6 @@ class CallDirectionProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider = new CallDirectionProvider($this->activityManager);
     }
 
-    public function testGetSupportedClass()
-    {
-        $this->assertEquals('Oro\Bundle\CallBundle\Entity\Call', $this->provider->getSupportedClass());
-    }
-
     public function testGetDirection()
     {
         $directionName = 'incoming';

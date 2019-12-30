@@ -6,21 +6,28 @@ use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
+use Oro\Component\Testing\Unit\TestContainerBuilder;
 
 class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ActivityContactProvider */
-    protected $provider;
+    private $provider;
 
     /** @var TestDirectionProvider */
-    protected $directionProvider;
+    private $directionProvider;
 
     public function setUp()
     {
-        $this->provider          = new ActivityContactProvider();
         $this->directionProvider = new TestDirectionProvider();
 
-        $this->provider->addProvider($this->directionProvider);
+        $providers = TestContainerBuilder::create()
+            ->add(TestActivity::class, $this->directionProvider)
+            ->getContainer($this);
+
+        $this->provider = new ActivityContactProvider(
+            [TestActivity::class],
+            $providers
+        );
     }
 
     public function testGetActivityDirection()
@@ -49,7 +56,7 @@ class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
         $activity = new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, $date);
         $this->assertEquals($date, $this->provider->getActivityDate($activity));
 
-        $this->assertFalse($this->provider->getActivityDate(new \stdClass()));
+        $this->assertNull($this->provider->getActivityDate(new \stdClass()));
     }
 
     public function testGetSupportedActivityClasses()

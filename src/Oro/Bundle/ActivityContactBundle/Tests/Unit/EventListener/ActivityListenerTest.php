@@ -14,6 +14,7 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Oro\Component\Testing\Unit\TestContainerBuilder;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ActivityListenerTest extends \PHPUnit\Framework\TestCase
@@ -44,9 +45,14 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->provider = new ActivityContactProvider();
-        $directionProvider = new TestDirectionProvider();
-        $this->provider->addProvider($directionProvider);
+        $providers = TestContainerBuilder::create()
+            ->add(TestActivity::class, new TestDirectionProvider())
+            ->getContainer($this);
+
+        $this->provider = new ActivityContactProvider(
+            [TestActivity::class],
+            $providers
+        );
 
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->configManager = $this->createMock(ConfigManager::class);

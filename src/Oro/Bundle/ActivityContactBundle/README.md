@@ -26,7 +26,7 @@ and make it a tagged service, e.g.
 
 ```
     tags:
-        - {name: oro_activity_direction.provider}
+        - { name: oro_activity_direction.provider, class: Acme\Bundle\AppBundle\Entity\MyActivity }
 ```
 
 ## Install and update features

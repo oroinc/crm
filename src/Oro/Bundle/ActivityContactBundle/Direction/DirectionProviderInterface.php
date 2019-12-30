@@ -4,19 +4,15 @@ namespace Oro\Bundle\ActivityContactBundle\Direction;
 
 use Doctrine\ORM\EntityManager;
 
+/**
+ * Represents a service that provides the direction information for a contact activity.
+ */
 interface DirectionProviderInterface
 {
     const DIRECTION_INCOMING = 'incoming';
     const DIRECTION_OUTGOING = 'outgoing';
     const DIRECTION_UNKNOWN  = 'unknown';
     const CONTACT_INFORMATION_SCOPE_EMAIL = 'email';
-
-    /**
-     * Return supported activity entity class name
-     *
-     * @return string
-     */
-    public function getSupportedClass();
 
     /**
      * Return direction of activity for target
@@ -40,7 +36,7 @@ interface DirectionProviderInterface
     /**
      * Return activity datetime
      *
-     * @param $activity
+     * @param object $activity
      *
      * @return \DateTime
      */
