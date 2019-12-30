@@ -3,10 +3,23 @@
 namespace Oro\Bundle\MagentoBundle\Converter\Rest;
 
 use Oro\Bundle\MagentoBundle\Converter\RestResponseConverterInterface;
+use Psr\Container\ContainerInterface;
 
+/**
+ * The Magento REST API response converter.
+ */
 class ResponseConverterManager
 {
-    protected $converters = [];
+    /** @var ContainerInterface */
+    private $converters;
+
+    /**
+     * @param ContainerInterface $converters
+     */
+    public function __construct(ContainerInterface $converters)
+    {
+        $this->converters = $converters;
+    }
 
     /**
      * @param array $data
@@ -16,19 +29,13 @@ class ResponseConverterManager
      */
     public function convert($data, $type)
     {
-        if (!$type || !isset($this->converters[$type])) {
+        if (!$type || !$this->converters->has($type)) {
             return $data;
         }
 
-        return $this->converters[$type]->convert($data);
-    }
+        /** @var RestResponseConverterInterface $converter */
+        $converter = $this->converters->get($type);
 
-    /**
-     * @param string $responseType
-     * @param RestResponseConverterInterface $converter
-     */
-    public function addConverter($responseType, RestResponseConverterInterface $converter)
-    {
-        $this->converters[$responseType] = $converter;
+        return $converter->convert($data);
     }
 }

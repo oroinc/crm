@@ -1113,6 +1113,8 @@ services:
 
     oro_magento.converter.rest.response_converter_manager:
         class: Oro\Bundle\MagentoBundle\Converter\Rest\ResponseConverterManager
+        arguments:
+            - ~ # service locator for response converters
 
     oro_magento.converter.rest.region_converter:
         class: Oro\Bundle\MagentoBundle\Converter\Rest\RegionConverter
