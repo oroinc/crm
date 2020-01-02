@@ -10,47 +10,30 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
+/**
+ * The RFM analytics builder.
+ */
 class RFMBuilder implements AnalyticsBuilderInterface
 {
     const BATCH_SIZE = 200;
 
-    /**
-     * @var DoctrineHelper
-     */
+    /** @var DoctrineHelper */
     protected $doctrineHelper;
 
-    /**
-     * @var RFMProviderInterface[]
-     */
-    protected $providers = [];
+    /** @var iterable|RFMProviderInterface[] */
+    protected $providers;
 
-    /**
-     * @var array categories by channel
-     */
+    /** @var array categories by channel */
     protected $categories = [];
 
     /**
-     * @param DoctrineHelper $doctrineHelper
+     * @param iterable|RFMProviderInterface[] $providers
+     * @param DoctrineHelper                  $doctrineHelper
      */
-    public function __construct(DoctrineHelper $doctrineHelper)
+    public function __construct(iterable $providers, DoctrineHelper $doctrineHelper)
     {
+        $this->providers = $providers;
         $this->doctrineHelper = $doctrineHelper;
-    }
-
-    /**
-     * @param RFMProviderInterface $provider
-     */
-    public function addProvider(RFMProviderInterface $provider)
-    {
-        $type = $provider->getType();
-
-        if (!in_array($type, RFMMetricCategory::$types, true)) {
-            throw new \InvalidArgumentException(
-                sprintf('Expected one of "%s" type, "%s" given', implode(',', RFMMetricCategory::$types), $type)
-            );
-        }
-
-        $this->providers[] = $provider;
     }
 
     /**
@@ -58,7 +41,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
      */
     public function supports(Channel $channel)
     {
-        return is_a($channel->getCustomerIdentity(), 'Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface', true);
+        return is_a($channel->getCustomerIdentity(), RFMAwareInterface::class, true);
     }
 
     /**
@@ -249,7 +232,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
         }
 
         $categories = $this->doctrineHelper
-            ->getEntityRepository('OroAnalyticsBundle:RFMMetricCategory')
+            ->getEntityRepository(RFMMetricCategory::class)
             ->findBy(['channel' => $channelId, 'categoryType' => $type], ['categoryIndex' => Criteria::ASC]);
 
         $this->categories[$channelId][$type] = $categories;

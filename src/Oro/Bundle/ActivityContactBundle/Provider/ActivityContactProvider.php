@@ -5,22 +5,31 @@ namespace Oro\Bundle\ActivityContactBundle\Provider;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
+use Psr\Container\ContainerInterface;
 
+/**
+ * The registry for providers of the direction information for contact activities.
+ */
 class ActivityContactProvider
 {
-    /** @var DirectionProviderInterface[] */
-    protected $providers;
+    /** @var string[] */
+    private $supportedClasses;
+
+    /** @var ContainerInterface */
+    private $providers;
 
     /**
-     * @param DirectionProviderInterface $provider
+     * @param string[]           $supportedClasses
+     * @param ContainerInterface $providers
      */
-    public function addProvider(DirectionProviderInterface $provider)
+    public function __construct(array $supportedClasses, ContainerInterface $providers)
     {
-        $this->providers[$provider->getSupportedClass()] = $provider;
+        $this->supportedClasses = $supportedClasses;
+        $this->providers = $providers;
     }
 
     /**
-     * Return direction of given activity.
+     * Gets a direction of the given activity.
      *
      * @param object $activity
      * @param object $target
@@ -38,11 +47,11 @@ class ActivityContactProvider
     }
 
     /**
-     * Get contact date
+     * Gets a contact date for the given activity.
      *
-     * @param $activity
+     * @param object $activity
      *
-     * @return bool
+     * @return \DateTime|null
      */
     public function getActivityDate($activity)
     {
@@ -51,34 +60,34 @@ class ActivityContactProvider
             return $provider->getDate($activity);
         }
 
-        return false;
+        return null;
     }
 
 
     /**
-     * Return list of supported activity classes
+     * Gets the list of supported activity classes.
      *
-     * @return array
+     * @return string[]
      */
     public function getSupportedActivityClasses()
     {
-        return array_keys($this->providers);
+        return $this->supportedClasses;
     }
 
     /**
-     * Check if given entity class is supports
+     * Checks if the given entity class supports a direction information.
      *
-     * @param $activityClass
+     * @param string $activityClass
      *
      * @return bool
      */
     public function isSupportedEntity($activityClass)
     {
-        return isset($this->providers[$activityClass]);
+        return in_array($activityClass, $this->supportedClasses, true);
     }
 
     /**
-     * Get array with all and direction dates for given target
+     * Gets an array contains last dates for given target entity.
      *
      * @param EntityManager $em
      * @param object        $targetEntity
@@ -86,7 +95,7 @@ class ActivityContactProvider
      * @param integer       $skippedId
      * @param string        $class
      *
-     * @return array of all and direction dates
+     * @return array ['all' => date, 'direction' => date]
      *   - all: Last activity date without regard to the direction
      *   - direction: Last activity date for given direction
      */
@@ -97,13 +106,15 @@ class ActivityContactProvider
         $skippedId = null,
         $class = null
     ) {
-        $allDate        = null;
+        $allDate = null;
         $directionDate  = null;
-        $allDates       = [];
+        $allDates = [];
         $directionDates = [];
-        foreach ($this->providers as $supportedClass => $provider) {
+        foreach ($this->supportedClasses as $supportedClass) {
             $skippedId = ($skippedId && $supportedClass === $class) ? $skippedId : null;
-            $result    = $provider->getLastActivitiesDateForTarget($em, $targetEntity, $direction, $skippedId);
+            /** @var DirectionProviderInterface $provider */
+            $provider = $this->providers->get($supportedClass);
+            $result = $provider->getLastActivitiesDateForTarget($em, $targetEntity, $direction, $skippedId);
             if (!empty($result)) {
                 $allDates[] = $result['all'];
                 if ($result['direction']) {
@@ -124,13 +135,30 @@ class ActivityContactProvider
     }
 
     /**
-     * Get max date from the array of dates
+     * Gets a direction provider for the given contact activity.
+     *
+     * @param object $activity
+     *
+     * @return DirectionProviderInterface|null
+     */
+    public function getActivityDirectionProvider($activity)
+    {
+        $activityClass = ClassUtils::getClass($activity);
+        if (!in_array($activityClass, $this->supportedClasses, true)) {
+            return null;
+        }
+
+        return $this->providers->get($activityClass);
+    }
+
+    /**
+     * Extracts the max date from the array of dates.
      *
      * @param \DateTime[] $datesArray
      *
      * @return \DateTime
      */
-    protected function getMaxDate($datesArray)
+    private function getMaxDate($datesArray)
     {
         if (count($datesArray) > 1) {
             usort(
@@ -148,22 +176,5 @@ class ActivityContactProvider
         }
 
         return array_shift($datesArray);
-    }
-
-    /**
-     * Get contact activity direction provider
-     *
-     * @param $activity
-     *
-     * @return bool|DirectionProviderInterface
-     */
-    public function getActivityDirectionProvider($activity)
-    {
-        $activityClass = ClassUtils::getClass($activity);
-        if (isset($this->providers[$activityClass])) {
-            return $this->providers[$activityClass];
-        }
-
-        return false;
     }
 }

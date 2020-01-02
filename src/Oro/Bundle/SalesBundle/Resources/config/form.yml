@@ -387,7 +387,7 @@ services:
             - '@oro_sales.customer_to_string_transformer'
             - '@oro_sales.customer.account_config_provider'
             - '@oro_entity.entity_alias_resolver'
-            - '@oro_sales.provider.customer.chain_customer_icon'
+            - '@oro_sales.provider.customer.icon'
             - '@translator'
             - '@security.authorization_checker'
             - '@oro_datagrid.datagrid.manager'

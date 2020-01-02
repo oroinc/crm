@@ -2,23 +2,24 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Customer\AccountAutocomplete;
 
+/**
+ * Delegates receiving of entity autocomplete data to child providers.
+ */
 class ChainAccountAutocompleteProvider
 {
-    /** @var AccountAutocompleteProviderInterface[] */
-    protected $providers = [];
+    /** @var iterable|AccountAutocompleteProviderInterface[] */
+    private $providers;
 
     /**
-     * @param AccountAutocompleteProviderInterface $provider
+     * @param iterable|AccountAutocompleteProviderInterface[] $providers
      */
-    public function addProvider(AccountAutocompleteProviderInterface $provider)
+    public function __construct(iterable $providers)
     {
-        if (!in_array($provider, $this->providers, true)) {
-            $this->providers[] = $provider;
-        }
+        $this->providers = $providers;
     }
 
     /**
-     * Collect additional data about entity to show in autocomplete results
+     * Collect additional data about entity to show in autocomplete results.
      *
      * @param $entity
      *
@@ -27,7 +28,6 @@ class ChainAccountAutocompleteProvider
     public function getData($entity)
     {
         $data = [];
-
         foreach ($this->providers as $provider) {
             if ($provider->isSupportEntity($entity)) {
                 $data['emails'] = $provider->getEmails($entity);

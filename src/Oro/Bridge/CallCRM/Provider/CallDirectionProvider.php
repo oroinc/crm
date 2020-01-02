@@ -10,6 +10,9 @@ use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\CallBundle\Entity\Call;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
+/**
+ * Provides the direction information for Call activity.
+ */
 class CallDirectionProvider implements DirectionProviderInterface
 {
     /** @var ActivityManager */
@@ -25,18 +28,10 @@ class CallDirectionProvider implements DirectionProviderInterface
 
     /**
      * {@inheritdoc}
-     */
-    public function getSupportedClass()
-    {
-        return 'Oro\Bundle\CallBundle\Entity\Call';
-    }
-
-    /**
-     * {@inheritdoc}
+     * @param Call $activity
      */
     public function getDirection($activity, $target)
     {
-        /** @var $activity Call */
         return $activity->getDirection()->getName();
     }
 
@@ -45,19 +40,15 @@ class CallDirectionProvider implements DirectionProviderInterface
      */
     public function isDirectionChanged($changeSet = [])
     {
-        if (!empty($changeSet)) {
-            return in_array('direction', array_keys($changeSet));
-        }
-
-        return false;
+        return array_key_exists('direction', $changeSet);
     }
 
     /**
      * {@inheritdoc}
+     * @param Call $activity
      */
     public function getDate($activity)
     {
-        /** @var $activity Call */
         return $activity->getCallDateTime() ? : new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
@@ -66,7 +57,7 @@ class CallDirectionProvider implements DirectionProviderInterface
      */
     public function getLastActivitiesDateForTarget(EntityManager $em, $target, $direction, $skipId = null)
     {
-        $result         = [];
+        $result = [];
         $resultActivity = $this->getLastActivity($em, $target, $skipId);
         if ($resultActivity) {
             $result['all'] = $this->getDate($resultActivity);
@@ -95,21 +86,16 @@ class CallDirectionProvider implements DirectionProviderInterface
      */
     protected function getLastActivity(EntityManager $em, $target, $skipId, $direction = null)
     {
-        if (!$this->activityManager->hasActivityAssociation(
-            ClassUtils::getClass($target),
-            $this->getSupportedClass()
-        )) {
+        $targetClass = ClassUtils::getClass($target);
+        if (!$this->activityManager->hasActivityAssociation($targetClass, Call::class)) {
             return null;
         }
 
-        $qb = $em->getRepository('Oro\Bundle\CallBundle\Entity\Call')
+        $qb = $em->getRepository(Call::class)
             ->createQueryBuilder('call')
             ->select('call')
             ->innerJoin(
-                sprintf(
-                    'call.%s',
-                    ExtendHelper::buildAssociationName(ClassUtils::getClass($target), ActivityScope::ASSOCIATION_KIND)
-                ),
+                sprintf('call.%s', ExtendHelper::buildAssociationName($targetClass, ActivityScope::ASSOCIATION_KIND)),
                 'target'
             )
             ->andWhere('target = :target')

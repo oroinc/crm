@@ -17,6 +17,9 @@ services:
 
     oro_activity_contact.provider:
         class: Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider
+        arguments:
+            - [] # supported classes
+            - ~ # service locator for direction providers
 
     oro_activity_contact.listener.activity_listener:
         class: Oro\Bundle\ActivityContactBundle\EventListener\ActivityListener
@@ -37,7 +40,7 @@ services:
             - "@oro_entity.doctrine_helper"
             - "@oro_email.email_holder_helper"
         tags:
-            - {name: oro_activity_direction.provider}
+            - { name: oro_activity_direction.provider, class: Oro\Bundle\EmailBundle\Entity\Email }
 
 
     oro_activity_contact.entity_activity_contact_data_provider:

@@ -3,57 +3,23 @@
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Builder;
 
 use Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder;
-use Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface;
-use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 class RFMBuilderTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var RFMBuilder
-     */
-    protected $builder;
+    /** @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper */
+    private $doctrineHelper;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
-     */
-    protected $doctrineHelper;
+    /** @var RFMBuilder */
+    private $builder;
 
     protected function setUp()
     {
-        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
 
-        $this->builder = new RFMBuilder($this->doctrineHelper);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected one of "recency,frequency,monetary" type, "wrong_type" given
-     */
-    public function testAddProviderFailed()
-    {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|RFMProviderInterface $provider */
-        $provider = $this->createMock('Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface');
-        $provider->expects($this->once())
-            ->method('getType')
-            ->will($this->returnValue('wrong_type'));
-
-        $this->builder->addProvider($provider);
-    }
-
-    public function testAddProviderSuccess()
-    {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|RFMProviderInterface $provider */
-        $provider = $this->createMock('Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface');
-        $provider->expects($this->once())
-            ->method('getType')
-            ->will($this->returnValue(RFMMetricCategory::TYPE_FREQUENCY));
-
-        $this->builder->addProvider($provider);
+        $this->builder = new RFMBuilder([], $this->doctrineHelper);
     }
 
     /**
@@ -75,10 +41,11 @@ class RFMBuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function supportsDataProvider()
     {
-        $mock = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $mock = $this->createMock(Channel::class);
         $mock->expects($this->once())
             ->method('getCustomerIdentity')
             ->willReturn(new RFMAwareStub());
+
         return [
             [new Channel(), false],
             [$mock, true],

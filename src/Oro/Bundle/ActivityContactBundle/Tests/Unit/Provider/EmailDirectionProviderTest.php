@@ -59,11 +59,6 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider = new EmailDirectionProvider($configProvider, $doctrineHelper, $emailHolderHelper);
     }
 
-    public function testGetSupportedClass()
-    {
-        $this->assertEquals('Oro\Bundle\EmailBundle\Entity\Email', $this->provider->getSupportedClass());
-    }
-
     public function testGetDirection()
     {
         $sender  = new TestEmailHolder(self::FROM_EMAIL);

@@ -3,26 +3,23 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
+use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class NewsletterSubscriberVoterTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper */
     private $doctrineHelper;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ChannelSettingsProvider
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ChannelSettingsProvider */
     private $settingsProvider;
 
-    /**
-     * @var NewsletterSubscriberVoter
-     */
+    /** @var NewsletterSubscriberVoter */
     private $voter;
 
     protected function setUp()
@@ -33,29 +30,12 @@ class NewsletterSubscriberVoterTest extends \PHPUnit\Framework\TestCase
         $this->voter->setSettingsProvider($this->settingsProvider);
     }
 
-    protected function tearDown()
-    {
-        unset($this->voter, $this->doctrineHelper);
-    }
-
     /**
-     * @param object $object
-     * @param string $className
-     * @param array $attributes
-     * @param bool $hasApplicableChannels
-     * @param bool $isChannelApplicable
-     * @param bool $expected
-     *
      * @dataProvider attributesDataProvider
      */
-    public function testVote($object, $className, $attributes, $hasApplicableChannels, $isChannelApplicable, $expected)
+    public function testVote($object, $attributes, $hasApplicableChannels, $isChannelApplicable, $expected)
     {
-        $this->doctrineHelper->expects($this->any())
-            ->method('getEntityClass')
-            ->with($object)
-            ->will($this->returnValue($className));
-
-        $this->voter->setClassName('Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber');
+        $this->voter->setClassName(NewsletterSubscriber::class);
 
         $this->doctrineHelper->expects($this->any())
             ->method('getSingleEntityIdentifier')
@@ -70,8 +50,7 @@ class NewsletterSubscriberVoterTest extends \PHPUnit\Framework\TestCase
             ->method('hasApplicableChannels')
             ->will($this->returnValue($hasApplicableChannels));
 
-        /** @var TokenInterface $token */
-        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock(TokenInterface::class);
         $this->assertEquals(
             $expected,
             $this->voter->vote($token, $object, $attributes)
@@ -80,122 +59,48 @@ class NewsletterSubscriberVoterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function attributesDataProvider()
     {
-        $className = 'Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber';
-        $objectIdentityClass = 'Symfony\Component\Security\Acl\Model\ObjectIdentityInterface';
-
+        $oid = $this->getObjectIdentity(NewsletterSubscriber::class);
 
         return [
             // has not applicable channels
-            [
-                $this->getObjectIdentity($objectIdentityClass, $className),
-                $objectIdentityClass,
-                ['VIEW'],
-                false,
-                false,
-                NewsletterSubscriberVoter::ACCESS_ABSTAIN,
-            ],
-            [
-                $this->getObjectIdentity($objectIdentityClass, $className),
-                $objectIdentityClass,
-                ['CREATE'],
-                false,
-                false,
-                NewsletterSubscriberVoter::ACCESS_DENIED,
-            ],
-            [
-                $this->getObjectIdentity($objectIdentityClass, $className),
-                $objectIdentityClass,
-                ['EDIT'],
-                false,
-                false,
-                NewsletterSubscriberVoter::ACCESS_DENIED,
-            ],
-            [
-                $this->getObjectIdentity($objectIdentityClass, $className),
-                $objectIdentityClass,
-                ['DELETE'],
-                false,
-                false,
-                NewsletterSubscriberVoter::ACCESS_ABSTAIN
-            ],
-            [
-                $this->getObjectIdentity($objectIdentityClass, $className),
-                $objectIdentityClass,
-                ['ASSIGN'],
-                false,
-                false,
-                NewsletterSubscriberVoter::ACCESS_ABSTAIN
-            ],
+            [$oid, ['VIEW'], false, false, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$oid, ['CREATE'], false, false, NewsletterSubscriberVoter::ACCESS_DENIED],
+            [$oid, ['EDIT'], false, false, NewsletterSubscriberVoter::ACCESS_DENIED],
+            [$oid, ['DELETE'], false, false, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$oid, ['ASSIGN'], false, false, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
             // channel not applicable
-            [$this->getSubscriber(), $className, ['VIEW'], true, false, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$this->getSubscriber(), $className, ['CREATE'], true, false, NewsletterSubscriberVoter::ACCESS_DENIED],
-            [$this->getSubscriber(), $className, ['EDIT'], true, false, NewsletterSubscriberVoter::ACCESS_DENIED],
-            [$this->getSubscriber(), $className, ['DELETE'], true, false, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$this->getSubscriber(), $className, ['ASSIGN'], true, false, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(), ['VIEW'], true, false, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(), ['CREATE'], true, false, NewsletterSubscriberVoter::ACCESS_DENIED],
+            [$this->getSubscriber(), ['EDIT'], true, false, NewsletterSubscriberVoter::ACCESS_DENIED],
+            [$this->getSubscriber(), ['DELETE'], true, false, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(), ['ASSIGN'], true, false, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
             // without customer
-            [$this->getSubscriber(), $className, ['VIEW'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$this->getSubscriber(), $className, ['CREATE'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$this->getSubscriber(), $className, ['EDIT'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$this->getSubscriber(), $className, ['DELETE'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$this->getSubscriber(), $className, ['ASSIGN'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(), ['VIEW'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(), ['CREATE'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(), ['EDIT'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(), ['DELETE'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(), ['ASSIGN'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
             // with customer and without origin id
-            [$this->getSubscriber(true), $className, ['VIEW'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$this->getSubscriber(true), $className, ['CREATE'], true, true, NewsletterSubscriberVoter::ACCESS_DENIED],
-            [$this->getSubscriber(true), $className, ['EDIT'], true, true, NewsletterSubscriberVoter::ACCESS_DENIED],
-            [$this->getSubscriber(true), $className, ['DELETE'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$this->getSubscriber(true), $className, ['ASSIGN'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(true), ['VIEW'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(true), ['CREATE'], true, true, NewsletterSubscriberVoter::ACCESS_DENIED],
+            [$this->getSubscriber(true), ['EDIT'], true, true, NewsletterSubscriberVoter::ACCESS_DENIED],
+            [$this->getSubscriber(true), ['DELETE'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(true), ['ASSIGN'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
             // applicable with origin id
-            [
-                $this->getSubscriber(true, 1),
-                $className,
-                ['VIEW'],
-                true,
-                true,
-                NewsletterSubscriberVoter::ACCESS_ABSTAIN
-            ],
-            [
-                $this->getSubscriber(true, 1),
-                $className,
-                ['CREATE'],
-                true,
-                true,
-                NewsletterSubscriberVoter::ACCESS_ABSTAIN
-            ],
-            [
-                $this->getSubscriber(true, 1),
-                $className,
-                ['EDIT'],
-                true,
-                true,
-                NewsletterSubscriberVoter::ACCESS_ABSTAIN
-            ],
-            [
-                $this->getSubscriber(true, 1),
-                $className,
-                ['DELETE'],
-                true,
-                true,
-                NewsletterSubscriberVoter::ACCESS_ABSTAIN
-            ],
-            [
-                $this->getSubscriber(true, 1),
-                $className,
-                ['ASSIGN'],
-                true,
-                true,
-                NewsletterSubscriberVoter::ACCESS_ABSTAIN
-            ],
+            [$this->getSubscriber(true, 1), ['VIEW'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(true, 1), ['CREATE'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(true, 1), ['EDIT'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(true, 1), ['DELETE'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(true, 1), ['ASSIGN'], true, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
             // applicable but without channels
-            [$this->getSubscriber(1), $className, ['VIEW'], false, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$this->getSubscriber(1), $className, ['CREATE'], false, true, NewsletterSubscriberVoter::ACCESS_DENIED],
-            [$this->getSubscriber(1), $className, ['EDIT'], false, true, NewsletterSubscriberVoter::ACCESS_DENIED],
-            [$this->getSubscriber(1), $className, ['DELETE'], false, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$this->getSubscriber(1), $className, ['ASSIGN'], false, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN]
+            [$this->getSubscriber(1), ['VIEW'], false, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(1), ['CREATE'], false, true, NewsletterSubscriberVoter::ACCESS_DENIED],
+            [$this->getSubscriber(1), ['EDIT'], false, true, NewsletterSubscriberVoter::ACCESS_DENIED],
+            [$this->getSubscriber(1), ['DELETE'], false, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
+            [$this->getSubscriber(1), ['ASSIGN'], false, true, NewsletterSubscriberVoter::ACCESS_ABSTAIN]
         ];
     }
 
@@ -203,11 +108,11 @@ class NewsletterSubscriberVoterTest extends \PHPUnit\Framework\TestCase
      * @param string $objectIdentityClass
      * @param string $className
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject|NewsletterSubscriber
+     * @return ObjectIdentityInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    public function getObjectIdentity($objectIdentityClass, $className)
+    private function getObjectIdentity($className)
     {
-        $objectIdentity = $this->createMock($objectIdentityClass);
+        $objectIdentity = $this->createMock(ObjectIdentityInterface::class);
         $objectIdentity->expects($this->any())
             ->method('getType')
             ->will($this->returnValue($className));
@@ -219,28 +124,17 @@ class NewsletterSubscriberVoterTest extends \PHPUnit\Framework\TestCase
      * @param bool $hasCustomer
      * @param int $customerOriginId
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject|NewsletterSubscriber
+     * @return NewsletterSubscriber
      */
-    protected function getSubscriber($hasCustomer = false, $customerOriginId = null)
+    private function getSubscriber($hasCustomer = false, $customerOriginId = null)
     {
-        $newsletterSubscriber = $this->createMock('Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber');
-
-        $channel = $this->createMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
-        $newsletterSubscriber->expects($this->any())
-            ->method('getChannel')
-            ->will($this->returnValue($channel));
-
+        $newsletterSubscriber = new NewsletterSubscriber();
+        $newsletterSubscriber->setChannel(new Channel());
         if ($hasCustomer) {
-            $customer = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Customer');
-
-            $newsletterSubscriber->expects($this->any())
-                ->method('getCustomer')
-                ->will($this->returnValue($customer));
-
+            $customer = new Customer();
+            $newsletterSubscriber->setCustomer($customer);
             if ($customerOriginId) {
-                $customer->expects($this->once())
-                    ->method('getOriginId')
-                    ->will($this->returnValue($customerOriginId));
+                $customer->setOriginId($customerOriginId);
             }
         }
 

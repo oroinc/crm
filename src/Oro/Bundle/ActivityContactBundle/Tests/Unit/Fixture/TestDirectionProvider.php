@@ -9,14 +9,7 @@ class TestDirectionProvider implements DirectionProviderInterface
 {
     /**
      * {@inheritdoc}
-     */
-    public function getSupportedClass()
-    {
-        return 'Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity';
-    }
-
-    /**
-     * {@inheritdoc}
+     * @param TestActivity $activity
      */
     public function getDirection($activity, $target)
     {
@@ -33,6 +26,7 @@ class TestDirectionProvider implements DirectionProviderInterface
 
     /**
      * {@inheritdoc}
+     * @param TestActivity $activity
      */
     public function getDate($activity)
     {
