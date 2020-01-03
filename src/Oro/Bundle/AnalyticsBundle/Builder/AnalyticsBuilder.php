@@ -15,7 +15,7 @@ class AnalyticsBuilder
     /**
      * @param iterable|AnalyticsBuilderInterface[] $builders
      */
-    public function __construct($builders)
+    public function __construct(iterable $builders)
     {
         $this->builders = $builders;
     }
