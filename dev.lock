@@ -8688,6 +8688,7 @@
                 "code",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-code",
             "time": "2019-12-10T19:21:15+00:00"
         },
         {
@@ -8742,6 +8743,7 @@
                 "events",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-eventmanager",
             "time": "2018-04-25T15:33:34+00:00"
         },
         {
@@ -8787,6 +8789,7 @@
                 "loader",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-loader",
             "time": "2019-09-04T19:38:14+00:00"
         },
         {
@@ -8849,6 +8852,7 @@
                 "mail",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-mail",
             "time": "2018-06-07T13:37:07+00:00"
         },
         {
@@ -8899,6 +8903,7 @@
                 "mime",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-mime",
             "time": "2019-10-16T19:30:37+00:00"
         },
         {
@@ -8945,6 +8950,7 @@
                 "stdlib",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-stdlib",
             "time": "2018-08-28T21:34:05+00:00"
         },
         {
@@ -9020,6 +9026,7 @@
                 "validator",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-validator",
             "time": "2019-12-28T04:07:18+00:00"
         }
     ],

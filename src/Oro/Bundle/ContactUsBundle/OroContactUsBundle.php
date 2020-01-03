@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\ContactUsBundle;
 
-use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\LocaleBundle\DependencyInjection\Compiler\DefaultFallbackExtensionPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Add localizable titles to ContactReason entity
+ * The ContactUsBundle bundle class.
  */
 class OroContactUsBundle extends Bundle
 {
@@ -19,11 +18,10 @@ class OroContactUsBundle extends Bundle
     {
         parent::build($container);
 
-        $container
-            ->addCompilerPass(new DefaultFallbackExtensionPass([
-                ContactReason::class => [
-                    'title' => 'titles'
-                ]
-            ]));
+        $container->addCompilerPass(new DefaultFallbackExtensionPass([
+            'Oro\Bundle\ContactUsBundle\Entity\ContactReason' => [
+                'title' => 'titles'
+            ]
+        ]));
     }
 }
