@@ -41,7 +41,7 @@ class DashboardController extends AbstractController
      * @Route(
      *      "/opportunities_by_lead_source/chart/{widget}",
      *      name="oro_sales_dashboard_opportunities_by_lead_source_chart",
-     *      requirements={"widget"="[\w-]+"}
+     *      requirements={"widget"="[\w\-]+"}
      * )
      * @Template("OroSalesBundle:Dashboard:opportunitiesByLeadSource.html.twig")
      * @param Request $request
@@ -89,7 +89,7 @@ class DashboardController extends AbstractController
      * @Route(
      *      "/opportunity_state/chart/{widget}",
      *      name="oro_sales_dashboard_opportunity_by_state_chart",
-     *      requirements={"widget"="[\w-]+"}
+     *      requirements={"widget"="[\w\-]+"}
      * )
      * @Template("OroSalesBundle:Dashboard:opportunityByStatus.html.twig")
      * @param Request $request
