@@ -2,6 +2,14 @@ Please refer first to [UPGRADE.md](UPGRADE.md) for the most important items that
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
+## 4.1.0
+
+### Removed
+
+#### ActivityContactBundle
+* The `getSupportedClass()` method was removed from `Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface`.
+  Use the `class` attribute of the `oro_activity_direction.provider` DIC tag instead.
+
 ## 4.1.0-rc (2019-12-10)
 [Show detailed list of changes](incompatibilities-4-1-rc.md)
 
