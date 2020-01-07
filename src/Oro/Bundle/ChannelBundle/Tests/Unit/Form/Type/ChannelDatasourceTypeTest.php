@@ -19,6 +19,7 @@ use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
 use Oro\Component\Testing\Unit\PreloadedExtension;
+use Oro\Component\Testing\Unit\TestContainerBuilder;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Csrf\Type\FormTypeCsrfExtension;
@@ -102,8 +103,9 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         $searchHandler = $this->createMock('Oro\Bundle\FormBundle\Autocomplete\SearchHandlerInterface');
         $searchHandler->expects($this->any())->method('getEntityName')
             ->will($this->returnValue('OroUser:User'));
-        $searchRegistry = new SearchRegistry();
-        $searchRegistry->addSearchHandler('acl_users', $searchHandler);
+        $searchRegistry = new SearchRegistry(
+            TestContainerBuilder::create()->add('acl_users', $searchHandler)->getContainer($this)
+        );
 
         $config = $this->createMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
         $config->expects($this->any())->method('has')->with($this->equalTo('grid_name'))
