@@ -27,7 +27,6 @@ use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\EmailCollectionTypeParent;
 use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\EmailCollectionTypeStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\PhoneCollectionTypeParent;
 use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\PhoneCollectionTypeStub;
-use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
 use Oro\Component\Testing\Unit\EntityTrait;
 use Oro\Component\Testing\Unit\Form\Type\Stub\EntityType;
 use Oro\Component\Testing\Unit\FormIntegrationTestCase;
@@ -110,7 +109,7 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
                 [
                     FormType::class => [
                         new AdditionalAttrExtension(),
-                        new StripTagsExtensionStub($this->createMock(HtmlTagHelper::class))
+                        new StripTagsExtensionStub($this)
                     ]
                 ]
             )
