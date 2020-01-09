@@ -63,7 +63,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
         }
 
         $dataClassName = $formConfig->getDataClass();
-        if (!$dataClassName || !$this->getConfigProvider()->isCustomerClass($dataClassName)) {
+        if (!$dataClassName || !$this->isCustomerClass($dataClassName)) {
             return;
         }
 
@@ -97,6 +97,18 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
                 $this->setAccountForCustomer($event);
             }
         );
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return bool
+     */
+    private function isCustomerClass($className)
+    {
+        return
+            $this->doctrineHelper->isManageableEntityClass($className)
+            && $this->getConfigProvider()->isCustomerClass($className);
     }
 
     /**

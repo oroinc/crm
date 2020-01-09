@@ -17,5 +17,5 @@ trusted_data:
         Oro\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager:
             getChannelFieldName: true
     check_methods_safety:
-        Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeSubscriber:
+        Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeListener:
             createNoCustomerCondition: true

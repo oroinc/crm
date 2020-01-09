@@ -12,7 +12,7 @@ use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-class AccountLifetimeSubscriberTest extends WebTestCase
+class AccountLifetimeListenerTest extends WebTestCase
 {
     protected function setUp()
     {

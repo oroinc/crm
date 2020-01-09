@@ -362,10 +362,13 @@ services:
         tags:
             - { name: security.voter, priority: 500 }
 
-    oro_channel.account_lifetime_subscriber:
-        class: Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeSubscriber
+    oro_channel.account_lifetime_listener:
+        class: Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeListener
         arguments:
-            - '@oro_currency.query.currency_transformer'
-            - '@oro_sales.manager.account_customer'
+            - '@Psr\Container\ContainerInterface'
         tags:
-            - { name: doctrine.event_subscriber }
+            - { name: doctrine.event_listener, event: onFlush, connection: default }
+            - { name: doctrine.event_listener, event: postFlush, connection: default }
+            - { name: doctrine.event_listener, event: onClear, connection: default }
+            - { name: container.service_subscriber, id: oro_currency.query.currency_transformer }
+            - { name: container.service_subscriber, id: oro_sales.manager.account_customer }
