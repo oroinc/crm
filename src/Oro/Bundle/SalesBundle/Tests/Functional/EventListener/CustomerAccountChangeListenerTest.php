@@ -8,7 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-class CustomerAccountChangeSubscriberTest extends WebTestCase
+class CustomerAccountChangeListenerTest extends WebTestCase
 {
     public function setUp()
     {

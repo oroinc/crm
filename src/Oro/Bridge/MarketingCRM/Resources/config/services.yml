@@ -13,10 +13,10 @@ services:
         tags:
            - {name: oro_tracking.provider.identification, priority: 10}
 
-    oro_channel.listener.channel_repository_subscriber:
-        class: Oro\Bridge\MarketingCRM\EventListener\LoadClassMetadataSubscriber
+    oro_channel.listener.channel_repository_listener:
+        class: Oro\Bridge\MarketingCRM\EventListener\LoadClassMetadataListener
         tags:
-            - { name: doctrine.event_subscriber }
+            - { name: doctrine.event_listener, event: loadClassMetadata }
 
     oro_magento.provider.tracking_visit_precalculated.abstract:
         class: Oro\Bridge\MarketingCRM\Provider\AbstractPrecalculatedVisitProvider

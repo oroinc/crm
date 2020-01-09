@@ -7,39 +7,44 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * Adds associated account field for customers form.
  */
-class CustomerAssociationAccountExtension extends AbstractTypeExtension
+class CustomerAssociationAccountExtension extends AbstractTypeExtension implements ServiceSubscriberInterface
 {
-    /** @var ConfigProvider */
-    protected $customerConfigProvider;
-
-    /** @var AccountCustomerManager */
-    protected $manager;
-
     /** @var DoctrineHelper */
-    protected $doctrineHelper;
+    private $doctrineHelper;
+
+    /** @var ContainerInterface */
+    private $container;
 
     /**
-     * @param ConfigProvider         $customerConfigProvider
-     * @param AccountCustomerManager $manager
-     * @param DoctrineHelper         $doctrineHelper
+     * @param DoctrineHelper     $doctrineHelper
+     * @param ContainerInterface $container
      */
-    public function __construct(
-        ConfigProvider $customerConfigProvider,
-        AccountCustomerManager $manager,
-        DoctrineHelper $doctrineHelper
-    ) {
-        $this->customerConfigProvider = $customerConfigProvider;
-        $this->manager                = $manager;
-        $this->doctrineHelper         = $doctrineHelper;
+    public function __construct(DoctrineHelper $doctrineHelper, ContainerInterface $container)
+    {
+        $this->doctrineHelper = $doctrineHelper;
+        $this->container = $container;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return [
+            'oro_sales.customer.config_provider' => ConfigProvider::class,
+            'oro_sales.manager.account_customer' => AccountCustomerManager::class
+        ];
     }
 
     /**
@@ -58,7 +63,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
         }
 
         $dataClassName = $formConfig->getDataClass();
-        if (!$dataClassName || !$this->customerConfigProvider->isCustomerClass($dataClassName)) {
+        if (!$dataClassName || !$this->isCustomerClass($dataClassName)) {
             return;
         }
 
@@ -80,7 +85,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
                     return;
                 }
 
-                $customer = $this->manager->getAccountCustomerByTarget($target, false);
+                $customer = $this->getManager()->getAccountCustomerByTarget($target, false);
                 if ($customer) {
                     $event->getForm()->get('customer_association_account')->setData($customer->getAccount());
                 }
@@ -92,6 +97,18 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
                 $this->setAccountForCustomer($event);
             }
         );
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return bool
+     */
+    private function isCustomerClass($className)
+    {
+        return
+            $this->doctrineHelper->isManageableEntityClass($className)
+            && $this->getConfigProvider()->isCustomerClass($className);
     }
 
     /**
@@ -111,7 +128,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
         $target  = $event->getData();
         $account = $event->getForm()->get('customer_association_account')->getData();
         if ($this->doctrineHelper->isNewEntity($target)) {
-            $account = $account ?? $this->manager->createAccountForTarget($target);
+            $account = $account ?? $this->getManager()->createAccountForTarget($target);
             $customer = AccountCustomerManager::createCustomer($account, $target);
             $this->doctrineHelper->getEntityManager($customer)->persist($customer);
 
@@ -122,7 +139,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
             return;
         }
 
-        $customer = $this->manager->getAccountCustomerByTarget($target, false);
+        $customer = $this->getManager()->getAccountCustomerByTarget($target, false);
         if ($customer) {
             $customer->setTarget($account, $target);
         } else {
@@ -147,5 +164,21 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
     public static function getExtendedTypes(): iterable
     {
         return ['Symfony\Component\Form\Extension\Core\Type\FormType'];
+    }
+
+    /**
+     * @return ConfigProvider
+     */
+    private function getConfigProvider(): ConfigProvider
+    {
+        return $this->container->get('oro_sales.customer.config_provider');
+    }
+
+    /**
+     * @return AccountCustomerManager
+     */
+    private function getManager(): AccountCustomerManager
+    {
+        return $this->container->get('oro_sales.manager.account_customer');
     }
 }

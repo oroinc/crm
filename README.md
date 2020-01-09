@@ -19,6 +19,8 @@ OroCRM is a composer package that requires an application to initialize and run 
 A [crm-application](https://github.com/orocrm/crm-application) is an example of such application which
 simplifies initial project setup and configuration.
 
-## Documentation
-  
-The documentation for OroCRM can be found on [www.orocrm.com](http://www.oroinc.com/doc/orocrm/) website.
+Resources
+---------
+
+  * [OroCRM Documentation](https://doc.oroinc.com)
+  * [Contributing](https://doc.oroinc.com/community/contribute/)

@@ -2,22 +2,13 @@
 
 namespace Oro\Bridge\MarketingCRM\EventListener;
 
-use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
-use Doctrine\ORM\Events;
 
-class LoadClassMetadataSubscriber implements EventSubscriber
+/**
+ * Replace the repository for Channel entity.
+ */
+class LoadClassMetadataListener
 {
-    /**
-     * @inheritdoc
-     */
-    public function getSubscribedEvents()
-    {
-        return [
-            Events::loadClassMetadata
-        ];
-    }
-
     /**
      * @param LoadClassMetadataEventArgs $eventArgs
      */

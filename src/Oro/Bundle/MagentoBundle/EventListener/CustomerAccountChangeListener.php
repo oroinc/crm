@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\EventListener;
 
-use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
@@ -15,21 +14,10 @@ use Oro\Bundle\SalesBundle\Entity\Customer as SalesCustomer;
  * It should be moved to crm-magento-bridge once it's created and thought about
  * possibility to remove this listener and use just one field without duplicating account information.
  */
-class CustomerAccountChangeSubscriber implements EventSubscriber
+class CustomerAccountChangeListener
 {
     /** @var SalesCustomer[] */
     protected $changedCustomers = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSubscribedEvents()
-    {
-        return [
-            'onFlush',
-            'postFlush',
-        ];
-    }
 
     /**
      * Stores MagentoCustomers with changed Account
