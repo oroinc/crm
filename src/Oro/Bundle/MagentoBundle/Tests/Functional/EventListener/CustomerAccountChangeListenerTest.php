@@ -8,7 +8,7 @@ use Oro\Bundle\MagentoBundle\Entity\Customer as MagentoCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-class CustomerAccountChangeSubscriberTest extends WebTestCase
+class CustomerAccountChangeListenerTest extends WebTestCase
 {
     public function setUp()
     {

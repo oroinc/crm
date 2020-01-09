@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener;
 
-use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
@@ -12,21 +11,10 @@ use Oro\Bundle\SalesBundle\Entity\Customer as SalesCustomer;
 /**
  * This listener synchronizes account of B2bCustomer and SalesCustomer
  */
-class CustomerAccountChangeSubscriber implements EventSubscriber
+class CustomerAccountChangeListener
 {
     /** @var SalesCustomer[] */
     protected $changedCustomers = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSubscribedEvents()
-    {
-        return [
-            'onFlush',
-            'postFlush',
-        ];
-    }
 
     /**
      * Stores B2bCustomers with changed Account
