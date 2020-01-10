@@ -8,7 +8,7 @@ branches:
     - /^\d+\.\d+$/
 
 php:
-    - 7.1.26
+    - 7.3.13
 
 env:
   - COMPOSER=travis.json
