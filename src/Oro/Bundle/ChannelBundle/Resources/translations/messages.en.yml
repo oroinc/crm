@@ -1,6 +1,7 @@
 oro:
     channel:
         entity_plural_label:     Channels
+        entity_grid_all_view_label: All %entity_plural_label%
         entity_label:            Channel
         id.label:                Id
         name:
@@ -35,6 +36,7 @@ oro:
             name.label:           Name
             entity_label:         Customer identity
             entity_plural_label:  Customer identities
+            entity_grid_all_view_label: All %entity_plural_label%
             account.label:        Account
             contact.label:        Contact
             owner.label:          Owner

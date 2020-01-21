@@ -34,6 +34,7 @@ oro:
         rfmmetriccategory:
             entity_label: RFM Metric Category
             entity_plural_label: RFM Metric Categories
+            entity_grid_all_view_label: All %entity_plural_label%
             category_index.label: Index
             category_type.label: Type
             id.label: Id

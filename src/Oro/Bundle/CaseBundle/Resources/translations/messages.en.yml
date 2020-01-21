@@ -27,6 +27,7 @@ oro:
             #
             entity_label:                   Case
             entity_plural_label:            Cases
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:             Issues that were reported by customers or found internally and are managed by users.
             subject:
                 label:                      Subject
@@ -76,6 +77,7 @@ oro:
             #
             entity_label:                   Case Comment
             entity_plural_label:            Case Comments
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:             The comments made on the case.
             message:
                 label:                      Message
@@ -119,6 +121,7 @@ oro:
         casepriority:
             entity_label:                   Case Priority
             entity_plural_label:            Case Priorities
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:             The case priority helps determine the order in which cases must be managed.
             name:
                 label:                      Name
@@ -133,6 +136,7 @@ oro:
         casesource:
             entity_label:                   Case Source
             entity_plural_label:            Case Sources
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:             How the information about the issue was recieved.
             name:
                 label:                      Name
@@ -144,6 +148,7 @@ oro:
         casestatus:
             entity_label:                   Case Status
             entity_plural_label:            Case Statuses
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:             The phase of work on the case.
             name:
                 label:                      Name
@@ -169,6 +174,7 @@ oro:
         casemailboxprocesssettings:
             entity_label:                   Case Mailbox Process Settings
             entity_plural_label:            Case Mailbox Process Settings
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:                       Id
             assign_to.label:                Assign To
             owner.label:                    Owner
