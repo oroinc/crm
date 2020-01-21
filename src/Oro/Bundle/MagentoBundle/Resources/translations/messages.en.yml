@@ -159,6 +159,7 @@ oro:
         customer:
             entity_label:         Magento Customer
             entity_plural_label:  Magento Customers
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:   Magento Customers represent clients of Magento-based stores.
             create_order:         Create Order
             register.label:       Register
@@ -274,6 +275,7 @@ oro:
         customergroup:
             entity_label:        Magento Customer Group
             entity_plural_label: Magento Customer Groups
+            entity_grid_all_view_label: All %entity_plural_label%
             name.label:          Name
             id.label:            Id
             origin_id.label:     Origin Id
@@ -285,6 +287,7 @@ oro:
         cart:
             entity_label:               Magento Shopping Cart
             entity_plural_label:        Magento Shopping Carts
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:         A Magento shopping cart stores items that a Magento customer wishes to purchase.
 
             refresh_label:              Sync Data
@@ -396,6 +399,7 @@ oro:
         cartitem:
             entity_label:               Magento Shopping Cart Item
             entity_plural_label:        Magento Shopping Cart items
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:         The items added to the Magento cart.
             custom_price:
                 label:                  Custom price
@@ -478,6 +482,7 @@ oro:
         cartstatus:
             entity_label:         Magento Shopping Cart Status
             entity_plural_label:  Magento Shopping Cart Statuses
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:   The statuses of a Magento cart (Open, Purchased, Lost, Expired, Processing, Converted to Opportunity, etc).
             label:
                 label:            Label
@@ -487,6 +492,7 @@ oro:
         orderitem:
             entity_label:           Magento Order Item
             entity_plural_label:    Magento Order Items
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:     The items that a Magento order contains.
             discount_amount:
                 label:              Discount amount
@@ -545,6 +551,7 @@ oro:
         magentotransport:
             entity_label:                 Magento Integration Channel Transport
             entity_plural_label:          Magento Integration Channel Transports
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:           Represent integration channel transport
             admin_url.label:              Admin url
             all_sites:                    All web sites
@@ -587,6 +594,7 @@ oro:
         order:
             entity_label:           Magento Order
             entity_plural_label:    Magento Orders
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:     Magento orders represent purchases made by customers in a Magento store.
 
             refresh_label:          Sync Data
@@ -725,6 +733,7 @@ oro:
         product:
             entity_label:         Magento Product
             entity_plural_label:  Magento Products
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:   Magento products represent goods on the Magento side.
 
             id.label:             Id
@@ -759,6 +768,7 @@ oro:
         address:
             entity_label:             Magento Customer Address
             entity_plural_label:      Magento Customer Addresses
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:       The address configured for a Magento customer.
             label:
                 label:                Label
@@ -846,6 +856,7 @@ oro:
         cartaddress:
             entity_label:             Magento Cart Address
             entity_plural_label:      Magento Cart Addresses
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:       The customer address specified for a Magento cart.
             id.label:                 Id
             label:
@@ -917,6 +928,7 @@ oro:
         orderaddress:
             entity_label:             Magento Order Address
             entity_plural_label:      Magento Order Addresses
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:       The address specified for a Magento order.
             id.label:                 Id
             city:
@@ -978,6 +990,7 @@ oro:
         store:
             entity_label:         Magento Store
             entity_plural_label:  Magento Stores
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:   A Magento store represents a website by means of which goods are sold and bought by Magento customers.
             id.label:             Id
             origin_id:
@@ -1000,6 +1013,7 @@ oro:
         website:
             entity_label:         Magento Website
             entity_plural_label:  Magento Websites
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:   Magento websites through which goods are sold and bought by Magento customers.
             id.label:             Id
             origin_id:
@@ -1027,6 +1041,7 @@ oro:
         creditmemo:
             entity_label:                         Magento Credit Memo
             entity_plural_label:                  Magento Credit Memos
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:                   Allows you to operate with credit memos for orders.
             id.label:                             Id
             channel:
@@ -1104,6 +1119,7 @@ oro:
         creditmemoitem:
             entity_label:                         Magento Credit Memo Item
             entity_plural_label:                  Magento Credit Memo Items
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:                   Allows you to operate with credit memos items.
             id.label:                             Id
             channel:
@@ -1153,6 +1169,7 @@ oro:
         ordernote:
             entity_label:                         Magento Order Note
             entity_plural_label:                  Magento Order Notes
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:                   A note added by a store admin to an order on the Magento side.
             id.label:                             Id
             owner.label:                          Owner
@@ -1221,6 +1238,7 @@ oro:
             label:               Newsletter Subscriber
             entity_label:        Magento Newsletter Subscriber
             entity_plural_label: Magento Newsletter Subscribers
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:            Id
             origin_id.label:     Origin Id
             channel.label:       Integration
