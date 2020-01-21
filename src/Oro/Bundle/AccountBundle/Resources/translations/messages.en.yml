@@ -34,6 +34,7 @@ oro:
         #
         entity_label:               Account
         entity_plural_label:        Accounts
+        entity_grid_all_view_label: All %entity_plural_label%
         entity_description:         Accounts represent a person, a company or a group of people. Account aggregates details of all the customer identities assigned to it, providing for a 360-degree view of the customer activity.
         id:
             label:                  Id

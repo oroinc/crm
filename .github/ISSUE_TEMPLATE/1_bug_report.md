@@ -16,7 +16,7 @@ about: Report unexpected behavior or a bug in the source code
 **Expected Result**  
 <!-- Suggestions for correct behavior -->
 
-**Details about your environment:**:
+**Details about your environment**
 - OroCRM version: x.y.z
 - PHP version: x.y.z
 - Database (MySQL, PostgreSQL) version

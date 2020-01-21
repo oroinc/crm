@@ -44,6 +44,7 @@ oro:
         entity_description:  Personal information of people with whom a user gets in touch during the business activities.
         entity_label:        Contact
         entity_plural_label: Contacts
+        entity_grid_all_view_label: All %entity_plural_label%
 
         import:
             strategy:
@@ -148,6 +149,7 @@ oro:
             entity_description:  The address configured for the contact.
             entity_label:        Contact Address
             entity_plural_label: Contact Addresses
+            entity_grid_all_view_label: All %entity_plural_label%
             first_name:
                 label:           First name
                 description:     The first name that is specified in the contact address.
@@ -216,6 +218,7 @@ oro:
             entity_description:  Represent contact's email
             entity_label:        Contact Email
             entity_plural_label: Contact Emails
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:            Id
             owner.label:         Owner
             primary.label:       Primary
@@ -227,6 +230,7 @@ oro:
             entity_description:  Represent contact's phone
             entity_label:        Contact Phone
             entity_plural_label: Contact Phones
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:            Id
             owner.label:         Owner
             phone.label:         Phone
@@ -239,6 +243,7 @@ oro:
             entity_description:  The set of contacts classed together by some common factor. Contact groups are mainly used to simplify the configuration of filters and segments.
             entity_label:        Contact Group
             entity_plural_label: Contact Groups
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:            Id
             label:
                 label:           Label
@@ -255,6 +260,7 @@ oro:
             entity_description:  The mean of communications with the contact.
             entity_label:        Contact Method
             entity_plural_label: Contact Methods
+            entity_grid_all_view_label: All %entity_plural_label%
             name.label:          Name
 
             description:         Preferred way of communication for this contact.
@@ -272,6 +278,7 @@ oro:
             entity_description:  How the information about the contact was recieved.
             entity_label:        Contact Source
             entity_plural_label: Contact Sources
+            entity_grid_all_view_label: All %entity_plural_label%
             name.label:          Name
             description:             Source of the contact.
             label:                   Source
