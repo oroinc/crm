@@ -1,6 +1,3 @@
-parameters:
-    oro_account.entity.account.class:            Oro\Bundle\AccountBundle\Entity\Account
-
 services:
     oro_account.form.account:
         public: true
@@ -37,7 +34,7 @@ services:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_account.entity.account.class%'
+            - 'Oro\Bundle\AccountBundle\Entity\Account'
             - "@doctrine.orm.entity_manager"
 
     oro_account.form.type.account.api:
@@ -66,7 +63,7 @@ services:
     oro_account.form.autocomplete.account.search_handler:
         parent: oro_form.autocomplete.search_handler
         arguments:
-            - '%oro_account.entity.account.class%'
+            - 'Oro\Bundle\AccountBundle\Entity\Account'
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: oro_account_view }
@@ -77,14 +74,14 @@ services:
            - "@oro_entity.entity_identifier_accessor"
            - "@oro_ui.twig.tab_extension"
            - 'account_activity_tab_panel'
-           - '%oro_account.entity.account.class%'
+           - 'Oro\Bundle\AccountBundle\Entity\Account'
         tags:
            - { name: oro_activity.activity_widget_provider, priority: -10 }
 
     oro_account.provider.phone.account:
         class: Oro\Bundle\AccountBundle\Provider\AccountPhoneProvider
         tags:
-            - { name: oro_address.phone_provider, class: '%oro_account.entity.account.class%' }
+            - { name: oro_address.phone_provider, class: 'Oro\Bundle\AccountBundle\Entity\Account' }
 
     oro_account.event_listener.datagrid.my_accounts_activity:
         class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener

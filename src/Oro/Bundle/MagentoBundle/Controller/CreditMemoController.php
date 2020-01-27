@@ -27,7 +27,7 @@ class CreditMemoController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_magento.entity.credit_memo.class')
+            'entity_class' => CreditMemo::class
         ];
     }
 

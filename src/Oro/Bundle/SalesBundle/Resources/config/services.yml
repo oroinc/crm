@@ -200,7 +200,7 @@ services:
         class: Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
         parent: oro_form.autocomplete.search_handler
         arguments:
-            - '%oro_organization.business_unit.entity.class%'
+            - 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
             - ["name"]
             - '@oro_organization.provider.busines_unit_acl'
             - 'Oro\Bundle\SalesBundle\Entity\Opportunity'

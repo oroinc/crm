@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * Displays RFM categories settings for an entity.
+ *
  * @Route("/analytics")
  */
 class RFMCategoryController extends Controller
@@ -70,8 +72,7 @@ class RFMCategoryController extends Controller
     protected function getRFMMetricCategoryRepository()
     {
         if (!$this->rfmMetricCategoryRepository) {
-            $this->rfmMetricCategoryRepository = $this->getDoctrine()
-                ->getRepository($this->container->getParameter('oro_analytics.entity.rfm_category.class'));
+            $this->rfmMetricCategoryRepository = $this->getDoctrine()->getRepository(RFMMetricCategory::class);
         }
 
         return $this->rfmMetricCategoryRepository;
