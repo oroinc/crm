@@ -1,26 +1,3 @@
-parameters:
-    oro_magento.entity.cart.class:                                       Oro\Bundle\MagentoBundle\Entity\Cart
-    oro_magento.entity.cart_address.class:                               Oro\Bundle\MagentoBundle\Entity\CartAddress
-    oro_magento.entity.cart_item.class:                                  Oro\Bundle\MagentoBundle\Entity\CartItem
-    oro_magento.entity.cart_status.class:                                Oro\Bundle\MagentoBundle\Entity\CartStatus
-
-    oro_magento.entity.customer.class:                                   Oro\Bundle\MagentoBundle\Entity\Customer
-    oro_magento.entity.customer_group.class:                             Oro\Bundle\MagentoBundle\Entity\CustomerGroup
-    oro_magento.entity.address.class:                                    Oro\Bundle\MagentoBundle\Entity\Address
-
-    oro_magento.entity.order.class:                                      Oro\Bundle\MagentoBundle\Entity\Order
-    oro_magento.entity.order_address.class:                              Oro\Bundle\MagentoBundle\Entity\OrderAddress
-    oro_magento.entity.order_item.class:                                 Oro\Bundle\MagentoBundle\Entity\OrderItem
-
-    oro_magento.entity.credit_memo.class:                                Oro\Bundle\MagentoBundle\Entity\CreditMemo
-
-    oro_magento.entity.product.class:                                    Oro\Bundle\MagentoBundle\Entity\Product
-    oro_magento.entity.region.class:                                     Oro\Bundle\MagentoBundle\Entity\Region
-    oro_magento.entity.store.class:                                      Oro\Bundle\MagentoBundle\Entity\Store
-    oro_magento.entity.website.class:                                    Oro\Bundle\MagentoBundle\Entity\Website
-
-    oro_magento.entity.newsletter_subscriber.class:                      Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
-
 services:
     oro_magento.transport.soap_transport:
         class: Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport
@@ -177,8 +154,8 @@ services:
     oro_magento.form.type.customer:
         class: Oro\Bundle\MagentoBundle\Form\Type\CustomerType
         arguments:
-            - '%oro_magento.entity.customer.class%'
-            - '%oro_magento.entity.address.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Customer'
+            - 'Oro\Bundle\MagentoBundle\Entity\Address'
         tags:
             - { name: form.type, alias: oro_magento_customer }
 
@@ -204,7 +181,7 @@ services:
         arguments:
             - '@oro_channel.provider.channels_by_entities'
         calls:
-            - [setChannelClass, ['%oro_channel.entity.class%']]
+            - [setChannelClass, ['Oro\Bundle\ChannelBundle\Entity\Channel']]
         tags:
             - { name: form.type, alias: oro_magento_customer_channel_select }
 
@@ -270,7 +247,7 @@ services:
     oro_magento.form.type.order.api:
         class: Oro\Bundle\MagentoBundle\Form\Type\OrderApiType
         arguments:
-            - '%oro_magento.entity.order.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Order'
         tags:
             - { name: form.type, alias: order_api_type }
 
@@ -313,7 +290,7 @@ services:
     oro_magento.form.type.customer.api:
         class: Oro\Bundle\MagentoBundle\Form\Type\CustomerApiType
         arguments:
-            - '%oro_magento.entity.customer.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Customer'
         tags:
             - { name: form.type, alias: api_customer_type }
 
@@ -336,7 +313,7 @@ services:
     oro_magento.form.type.customer_address.api:
         class: Oro\Bundle\MagentoBundle\Form\Type\CustomerAddressApiType
         arguments:
-            - '%oro_magento.entity.customer.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Customer'
         tags:
             - { name: form.type, alias: customer_address_api_type }
 
@@ -344,7 +321,7 @@ services:
     oro_magento.form.autocomplete.order.search_handler:
         parent: oro_form.autocomplete.search_handler
         arguments:
-            - '%oro_magento.entity.order.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Order'
             - ["incrementId"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: oro_magento.orders, acl_resource: oro_magento_order_view }
@@ -353,7 +330,7 @@ services:
     oro_magento.form.autocomplete.customer.search_handler:
         parent: oro_form.autocomplete.full_name.search_handler
         arguments:
-            - '%oro_magento.entity.customer.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Customer'
             - ["namePrefix", "firstName", "middleName", "lastName", "nameSuffix"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: oro_magento.customers, acl_resource: oro_magento_customer_view }
@@ -362,7 +339,7 @@ services:
     oro_magento.form.autocomplete.cart.search_handler:
         parent: oro_form.autocomplete.search_handler
         arguments:
-            - '%oro_magento.entity.cart.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Cart'
             - ["originId"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: oro_magento.carts, acl_resource: oro_magento_cart_view }
@@ -382,15 +359,15 @@ services:
         arguments:
             - '@oro_locale.settings'
         tags:
-            - { name: doctrine.orm.entity_listener, entity: '%oro_magento.entity.customer.class%', event: prePersist }
+            - { name: doctrine.orm.entity_listener, entity: 'Oro\Bundle\MagentoBundle\Entity\Customer', event: prePersist }
 
     oro_magento.event_listener.order:
         class: Oro\Bundle\MagentoBundle\EventListener\OrderListener
         arguments:
             - "@oro_channel.event_listener.doctrine"
         tags:
-            - { name: doctrine.orm.entity_listener, entity: '%oro_magento.entity.order.class%', event: prePersist }
-            - { name: doctrine.orm.entity_listener, entity: '%oro_magento.entity.order.class%', event: preUpdate }
+            - { name: doctrine.orm.entity_listener, entity: 'Oro\Bundle\MagentoBundle\Entity\Order', event: prePersist }
+            - { name: doctrine.orm.entity_listener, entity: 'Oro\Bundle\MagentoBundle\Entity\Order', event: preUpdate }
             - { name: doctrine.event_listener, event: postFlush, priority: 5 }
 
     oro_magento.event_listener.customer_order_grid_listener:
@@ -423,7 +400,7 @@ services:
         class: Oro\Bundle\MagentoBundle\EventListener\StoreGridListener
         arguments:
             - '@security.authorization_checker'
-            - '%oro_channel.entity.class%'
+            - 'Oro\Bundle\ChannelBundle\Entity\Channel'
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-store-by-channel-grid, method: onBuildAfter }
@@ -500,7 +477,7 @@ services:
             - '@request_stack'
             - '@oro_sales.customer.config_provider'
             - '@oro_sales.manager.account_customer'
-            - '%oro_magento.entity.customer.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Customer'
         tags:
             - { name: kernel.event_listener, event: oro_ui.scroll_data.before.magentoCustomerView, method: onView }
 
@@ -510,7 +487,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_magento.entity.address.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Address'
             - "@doctrine.orm.entity_manager"
 
     oro_magento.customer.manager.api:
@@ -518,7 +495,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_magento.entity.customer.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Customer'
             - "@doctrine.orm.entity_manager"
 
     oro_magento.customer_birthday_type_transformer:
@@ -623,29 +600,29 @@ services:
     oro_magento.provider.phone.address:
         class: Oro\Bundle\MagentoBundle\Provider\AddressPhoneProvider
         tags:
-            - { name: oro_address.phone_provider, class: '%oro_magento.entity.address.class%' }
+            - { name: oro_address.phone_provider, class: 'Oro\Bundle\MagentoBundle\Entity\Address' }
 
     oro_magento.provider.phone.cart_address:
         class: Oro\Bundle\MagentoBundle\Provider\CartAddressPhoneProvider
         tags:
-            - { name: oro_address.phone_provider, class: '%oro_magento.entity.cart_address.class%' }
+            - { name: oro_address.phone_provider, class: 'Oro\Bundle\MagentoBundle\Entity\CartAddress' }
 
     oro_magento.provider.phone.order_address:
         class: Oro\Bundle\MagentoBundle\Provider\OrderAddressPhoneProvider
         tags:
-            - { name: oro_address.phone_provider, class: '%oro_magento.entity.order_address.class%' }
+            - { name: oro_address.phone_provider, class: 'Oro\Bundle\MagentoBundle\Entity\OrderAddress' }
 
     oro_magento.provider.phone.customer:
         class: Oro\Bundle\MagentoBundle\Provider\CustomerPhoneProvider
         tags:
-            - { name: oro_address.phone_provider, class: '%oro_magento.entity.customer.class%' }
+            - { name: oro_address.phone_provider, class: 'Oro\Bundle\MagentoBundle\Entity\Customer' }
 
     oro_magento.provider.analytics.customer_recency:
         class: Oro\Bundle\MagentoBundle\Provider\Analytics\CustomerRecencyProvider
         arguments:
             - "@oro_entity.doctrine_helper"
             - "@oro_channel.provider.settings_provider"
-            - '%oro_magento.entity.customer.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Customer'
         tags:
             - { name: oro_analytics.builder.rfm }
 
@@ -654,7 +631,7 @@ services:
         arguments:
             - "@oro_entity.doctrine_helper"
             - "@oro_channel.provider.settings_provider"
-            - '%oro_magento.entity.customer.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Customer'
         tags:
             - { name: oro_analytics.builder.rfm }
 
@@ -663,7 +640,7 @@ services:
         arguments:
             - "@oro_entity.doctrine_helper"
             - "@oro_channel.provider.settings_provider"
-            - '%oro_magento.entity.customer.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Customer'
         tags:
             - { name: oro_analytics.builder.rfm }
 
@@ -671,12 +648,12 @@ services:
     oro_magento.form.autocomplete.customer_group.search_handler:
         class: Oro\Bundle\MagentoBundle\Autocomplete\CustomerGroupSearchHandler
         arguments:
-            - '%oro_magento.entity.customer_group.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\CustomerGroup'
             - ["name"]
         calls:
             - [initDoctrinePropertiesByManagerRegistry,  ["@doctrine"]]
             - [setAclHelper,["@oro_security.acl_helper"]]
-            - [setDataChannelClass, ['%oro_channel.entity.class%']]
+            - [setDataChannelClass, ['Oro\Bundle\ChannelBundle\Entity\Channel']]
             - [setAuthorizationChecker, ['@security.authorization_checker']]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: "magento_customer_group", acl_resource: "oro_magento_customer_view" }
@@ -684,12 +661,12 @@ services:
     oro_magento.form.autocomplete.store.search_handler:
         class: Oro\Bundle\MagentoBundle\Autocomplete\StoreSearchHandler
         arguments:
-            - '%oro_magento.entity.store.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Store'
             - ["name"]
         calls:
             - [initDoctrinePropertiesByManagerRegistry,  ["@doctrine"]]
             - [setAclHelper,["@oro_security.acl_helper"]]
-            - [setDataChannelClass, ['%oro_channel.entity.class%']]
+            - [setDataChannelClass, ['Oro\Bundle\ChannelBundle\Entity\Channel']]
             - [setAuthorizationChecker, ['@security.authorization_checker']]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: "magento_store", acl_resource: "oro_magento_customer_view" }
@@ -725,7 +702,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Acl\Voter\CustomerVoter
         parent: oro_magento.security.acl.voter.two_way_sync
         calls:
-            - [setClassName, ['%oro_magento.entity.customer.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\Customer']]
         tags:
             - { name: security.voter, priority: 500 }
 
@@ -733,7 +710,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter
         parent: oro_magento.security.acl.voter.two_way_sync
         calls:
-            - [setClassName, ['%oro_magento.entity.newsletter_subscriber.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber']]
         tags:
             - { name: security.voter, priority: 500 }
 
@@ -741,7 +718,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Acl\Voter\OrganizationAnnotationVoter
         parent: oro_magento.security.acl.voter.two_way_sync
         calls:
-            - [setClassName, ['%oro_organization.organization.entity.class%']]
+            - [setClassName, ['Oro\Bundle\OrganizationBundle\Entity\Organization']]
         tags:
             - { name: security.voter, priority: 600 }
 
@@ -791,7 +768,7 @@ services:
             - "@oro_entity.doctrine_helper"
             - "@oro_magento.strategy.automatic_discovery.default"
             - "@oro_security.owner.ownership_metadata_provider"
-            - '%oro_magento.entity.customer.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Customer'
             - []
         calls:
             - [addStrategy, ['addresses', "@oro_magento.strategy.automatic_discovery.addresses"]]
@@ -840,7 +817,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider
         arguments:
             - "@oro_entity.doctrine_helper"
-            - '%oro_integration.entity.class%'
+            - 'Oro\Bundle\IntegrationBundle\Entity\Channel'
 
     oro_magento.provider.big_number:
         class: Oro\Bundle\MagentoBundle\Provider\MagentoBigNumberProvider
@@ -881,7 +858,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_magento.entity.cart.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Cart'
             - "@doctrine.orm.entity_manager"
 
     oro_magento.cart_address.manager.api:
@@ -889,7 +866,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_magento.entity.cart_address.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\CartAddress'
             - "@doctrine.orm.entity_manager"
 
     oro_magento.cart_item.manager.api:
@@ -897,7 +874,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_magento.entity.cart_item.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\CartItem'
             - "@doctrine.orm.entity_manager"
 
     oro_magento.order.manager.api:
@@ -905,7 +882,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_magento.entity.order.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Order'
             - "@doctrine.orm.entity_manager"
 
     oro_magento.order_item.manager.api:
@@ -913,7 +890,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_magento.entity.order_item.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\OrderItem'
             - "@doctrine.orm.entity_manager"
 
     oro_magento.order_address.manager.api:
@@ -921,7 +898,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_magento.entity.order_address.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\OrderAddress'
             - "@doctrine.orm.entity_manager"
 
     # handler
@@ -1154,6 +1131,6 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider
         public: false
         arguments:
-            - '%oro_magento.entity.customer.class%'
+            - 'Oro\Bundle\MagentoBundle\Entity\Customer'
         tags:
            - { name: oro_entity.virtual_relation_provider, priority: 150 }

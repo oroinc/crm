@@ -10,6 +10,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * CRUD for accounts.
+ */
 class AccountController extends Controller
 {
     /**
@@ -86,7 +89,7 @@ class AccountController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_account.entity.account.class')
+            'entity_class' => Account::class
         ];
     }
 

@@ -1,6 +1,3 @@
-parameters:
-    oro_channel.entity.class:                                       Oro\Bundle\ChannelBundle\Entity\Channel
-
 services:
     oro_channel.builder.factory:
         class: Oro\Bundle\ChannelBundle\Builder\BuilderFactory
@@ -26,7 +23,7 @@ services:
         class: Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
         arguments:
             - "@doctrine"
-            - '%oro_integration.entity.class%'
+            - 'Oro\Bundle\IntegrationBundle\Entity\Channel'
         tags:
             - { name: form.type, alias: oro_channel_datasource_form }
 
@@ -73,7 +70,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_channel.entity.class%'
+            - 'Oro\Bundle\ChannelBundle\Entity\Channel'
             - "@doctrine.orm.entity_manager"
 
     oro_channel.manager.customer_search.api:
@@ -81,7 +78,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_channel.entity.class%'
+            - 'Oro\Bundle\ChannelBundle\Entity\Channel'
             - "@doctrine.orm.entity_manager"
             - "@oro_search.index"
             - "@event_dispatcher"
@@ -238,8 +235,8 @@ services:
           arguments:
               - '@oro_channel.provider.state_provider'
           tags:
-            - { name: doctrine.orm.entity_listener, entity: '%oro_channel.entity.class%', event: prePersist }
-            - { name: doctrine.orm.entity_listener, entity: '%oro_channel.entity.class%', event: postRemove }
+            - { name: doctrine.orm.entity_listener, entity: 'Oro\Bundle\ChannelBundle\Entity\Channel', event: prePersist }
+            - { name: doctrine.orm.entity_listener, entity: 'Oro\Bundle\ChannelBundle\Entity\Channel', event: postRemove }
 
     oro_channel.event_listener.timezone_change:
       class: Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener

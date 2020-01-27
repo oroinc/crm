@@ -27,7 +27,7 @@ class OrderController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_magento.entity.order.class')
+            'entity_class' => Order::class
         ];
     }
 

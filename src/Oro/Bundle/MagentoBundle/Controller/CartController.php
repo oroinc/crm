@@ -26,7 +26,7 @@ class CartController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_magento.entity.cart.class')
+            'entity_class' => Cart::class
         ];
     }
 

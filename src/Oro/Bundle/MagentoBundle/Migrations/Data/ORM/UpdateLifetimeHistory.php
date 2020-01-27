@@ -17,6 +17,9 @@ use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Fixes sales lifetime value history if it does not match with the account's sales lifetime value.
+ */
 class UpdateLifetimeHistory extends AbstractFixture implements ContainerAwareInterface
 {
     const MAX_UPDATE_CHUNK_SIZE = 50;
@@ -48,8 +51,8 @@ class UpdateLifetimeHistory extends AbstractFixture implements ContainerAwareInt
         $customerIdentityClass = $magentoChannelSettings['entity'];
         $lifetimeField = $magentoChannelSettings['field'];
 
-        $accountClass = $this->container->getParameter('oro_account.entity.account.class');
-        $channelClass = $this->container->getParameter('oro_channel.entity.class');
+        $accountClass = Account::class;
+        $channelClass = Channel::class;
 
         /** @var LifetimeHistoryRepository $lifetimeRepo */
         $lifetimeRepo = $manager->getRepository('OroChannelBundle:LifetimeValueHistory');

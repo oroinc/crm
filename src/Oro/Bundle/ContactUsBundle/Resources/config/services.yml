@@ -1,7 +1,3 @@
-parameters:
-    oro_contact_us.contactrequest.entity.class:           Oro\Bundle\ContactUsBundle\Entity\ContactRequest
-    oro_contact_us.contactreason.entity.class:            Oro\Bundle\ContactUsBundle\Entity\ContactReason
-
 services:
     oro_contact_us.embedded_form:
         class: Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType
@@ -36,7 +32,7 @@ services:
         public: true
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - '%oro_contact_us.contactrequest.entity.class%'
+            - 'Oro\Bundle\ContactUsBundle\Entity\ContactRequest'
             - "@doctrine.orm.entity_manager"
 
     oro_contact_us.form.type.contact_reason:

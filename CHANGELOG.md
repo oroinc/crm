@@ -6,6 +6,11 @@ The current file describes significant changes in the code that may affect the u
 [Show detailed list of changes](incompatibilities-4-1.md)
 
 ### Removed
+* `*.class` parameters for all entities were removed from the dependency injection container.
+The entity class names should be used directly, e.g. `'Oro\Bundle\EmailBundle\Entity\Email'`
+instead of `'%oro_email.email.entity.class%'` (in service definitions, datagrid config files, placeholders, etc.), and
+`\Oro\Bundle\EmailBundle\Entity\Email::class` instead of `$container->getParameter('oro_email.email.entity.class')`
+(in PHP code).
 
 #### ActivityContactBundle
 * The `getSupportedClass()` method was removed from `Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface`.
@@ -20,7 +25,7 @@ The current file describes significant changes in the code that may affect the u
 ### Removed
 
 #### All Bundles
-* All `*.class` parameters were removed from the dependency injection container.
+* All `*.class` parameters for service definitions were removed from the dependency injection container.
 
 #### MagentoBundle
 * The following deprecated API resources were removed:

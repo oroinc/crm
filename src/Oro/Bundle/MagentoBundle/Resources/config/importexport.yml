@@ -89,7 +89,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector
         parent: oro_magento.connector.abstract
         calls:
-            - [setClassName, ['%oro_magento.entity.website.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\Website']]
         tags:
             - { name: oro_integration.connector, type: website_dictionary, channel_type: magento }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
@@ -98,7 +98,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Connector\Rest\WebsiteConnector
         parent: oro_magento.connector.abstract
         calls:
-            - [setClassName, ['%oro_magento.entity.website.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\Website']]
         tags:
             - { name: oro_integration.connector, type: website_dictionary, channel_type: magento2 }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
@@ -107,7 +107,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Connector\StoreConnector
         parent: oro_magento.connector.abstract
         calls:
-            - [setClassName, ['%oro_magento.entity.store.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\Store']]
         tags:
             - { name: oro_integration.connector, type: store_dictionary, channel_type: magento }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
@@ -116,7 +116,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Connector\Rest\StoreConnector
         parent: oro_magento.connector.abstract
         calls:
-            - [setClassName, ['%oro_magento.entity.store.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\Store']]
         tags:
             - { name: oro_integration.connector, type: store_dictionary, channel_type: magento2 }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
@@ -125,7 +125,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Connector\CustomerGroupConnector
         parent: oro_magento.connector.abstract
         calls:
-            - [setClassName, ['%oro_magento.entity.customer_group.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\CustomerGroup']]
         tags:
             - { name: oro_integration.connector, type: customer_group_dictionary, channel_type: magento }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
@@ -134,7 +134,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Connector\InitialOrderConnector
         parent: oro_magento.mage.order_connector
         calls:
-            - [setClassName, ['%oro_magento.entity.order.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\Order']]
         tags:
             - { name: oro_integration.connector, type: order_initial, channel_type: magento }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
@@ -143,7 +143,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Connector\InitialCartConnector
         parent: oro_magento.mage.cart_connector
         calls:
-            - [setClassName, ['%oro_magento.entity.cart.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\Cart']]
         tags:
             - { name: oro_integration.connector, type: cart_initial, channel_type: magento }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
@@ -152,7 +152,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Connector\InitialCustomerConnector
         parent: oro_magento.mage.customer_connector
         calls:
-            - [setClassName, ['%oro_magento.entity.customer.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\Customer']]
         tags:
             - { name: oro_integration.connector, type: customer_initial, channel_type: magento }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
@@ -197,7 +197,7 @@ services:
         class: 'Oro\Bundle\MagentoBundle\Provider\Connector\InitialCreditMemoConnector'
         parent: oro_magento.mage.credit_memo_connector
         calls:
-            - [setClassName, ['%oro_magento.entity.credit_memo.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\CreditMemo']]
         tags:
             - { name: oro_integration.connector, type: credit_memo_initial, channel_type: magento }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
@@ -214,7 +214,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Connector\NewsletterSubscriberConnector
         parent: oro_magento.connector.abstract
         calls:
-            - [setClassName, ['%oro_magento.entity.newsletter_subscriber.class%']]
+            - [setClassName, ['Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber']]
         tags:
             - { name: oro_integration.connector, type: newsletter_subscriber, channel_type: magento }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
@@ -224,7 +224,7 @@ services:
         class: Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\PaymentDetailsNormalizer
         parent: oro_importexport.serializer.configurable_entity_normalizer
         calls:
-            - [setSupportedClass, ['%oro_magento.entity.order.class%']]
+            - [setSupportedClass, ['Oro\Bundle\MagentoBundle\Entity\Order']]
         tags:
             - { name: oro_importexport.normalizer }
 
@@ -237,7 +237,7 @@ services:
         class: Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\PaymentDetailsNormalizer
         parent: oro_importexport.serializer.configurable_entity_normalizer
         calls:
-            - [setSupportedClass, ['%oro_magento.entity.cart.class%']]
+            - [setSupportedClass, ['Oro\Bundle\MagentoBundle\Entity\Cart']]
         tags:
             - { name: oro_importexport.normalizer }
 
@@ -259,7 +259,7 @@ services:
         class: Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\PaymentDetailsNormalizer
         parent: oro_importexport.serializer.configurable_entity_normalizer
         calls:
-            - [setSupportedClass, ['%oro_magento.entity.credit_memo.class%']]
+            - [setSupportedClass, ['Oro\Bundle\MagentoBundle\Entity\CreditMemo']]
         tags:
             - { name: oro_importexport.normalizer }
 
@@ -345,7 +345,7 @@ services:
         class: Oro\Bundle\MagentoBundle\ImportExport\Strategy\CreditMemoStrategy
         parent: oro_magento.import.strategy.abstract
         calls:
-            - [setEntityName, ['%oro_magento.entity.credit_memo.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\CreditMemo']]
 
     oro_magento.import.strategy.credit_memo_with_order.add_or_update:
         class: Oro\Bundle\MagentoBundle\ImportExport\Strategy\CreditMemoWithExistingOrderStrategy
@@ -357,36 +357,36 @@ services:
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.newsletter_subscriber"]]
             - [setStrategy, ["@oro_magento.import.strategy.newsletter_subscriber.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.newsletter_subscriber.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.newsletter_subscriber.class%', alias: oro_magento.add_or_update_newsletter_subscriber }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber', alias: oro_magento.add_or_update_newsletter_subscriber }
 
     oro_magento.importexport.processor.import_customer:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.customer"]]
             - [setStrategy, ["@oro_magento.import.strategy.customer.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.customer.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Customer']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.customer.class%', alias: oro_magento.add_or_update_customer }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\Customer', alias: oro_magento.add_or_update_customer }
 
     oro_magento.importexport.processor.import_guest_customer:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.guest_customer"]]
             - [setStrategy, ["@oro_magento.import.strategy.guest_customer.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.customer.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Customer']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.customer.class%', alias: oro_magento.import_guest_customer }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\Customer', alias: oro_magento.import_guest_customer }
 
     oro_magento.importexport.processor.import_customer_address:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.customer_address"]]
             - [setStrategy, ["@oro_magento.import.strategy.customer_address.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.address.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Address']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.address.class%', alias: oro_magento.add_or_update_customer_address }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\Address', alias: oro_magento.add_or_update_customer_address }
 
     oro_magento.importexport.processor.import_region:
         parent: oro_integration.importexport.processor.import
@@ -394,32 +394,32 @@ services:
             - [setDataConverter, ["@oro_importexport.data_converter.default"]]
             - [setStrategy, ["@oro_magento.import.strategy.region.add_or_update"]]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.region.class%', alias: oro_magento.add_or_update_region }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\Region', alias: oro_magento.add_or_update_region }
 
     oro_magento.importexport.processor.import_cart:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.cart"]]
             - [setStrategy, ["@oro_magento.import.strategy.cart.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.cart.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Cart']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.cart.class%', alias: oro_magento.add_or_update_cart }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\Cart', alias: oro_magento.add_or_update_cart }
 
     oro_magento.importexport.processor.import_order:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.order"]]
             - [setStrategy, ["@oro_magento.import.strategy.order.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.order.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Order']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.order.class%', alias: oro_magento.add_or_update_order }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\Order', alias: oro_magento.add_or_update_order }
 
     oro_magento.importexport.processor.import_order_with_customer:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.order"]]
             - [setStrategy, ["@oro_magento.import.strategy.order_with_customer.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.order.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Order']]
             - [setContextRegistry, ["@oro_importexport.context_registry"]]
 
     oro_magento.importexport.processor.import_cart_with_customer:
@@ -427,7 +427,7 @@ services:
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.cart"]]
             - [setStrategy, ["@oro_magento.import.strategy.cart_with_customer.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.cart.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Cart']]
             - [setContextRegistry, ["@oro_importexport.context_registry"]]
 
     oro_magento.importexport.processor.import_newsletter_subscriber_with_customer:
@@ -435,7 +435,7 @@ services:
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.newsletter_subscriber"]]
             - [setStrategy, ["@oro_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.newsletter_subscriber.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber']]
             - [setContextRegistry, ["@oro_importexport.context_registry"]]
 
     oro_magento.importexport.processor.order_notes.validation_note_processor:
@@ -470,7 +470,7 @@ services:
         tags:
             - { name: oro_magento.bundle_config.aware }
         calls:
-            - [setChannelClassName, ['%oro_integration.entity.class%']]
+            - [setChannelClassName, ['Oro\Bundle\IntegrationBundle\Entity\Channel']]
 
     oro_magento.provider.initial_processor:
         class: Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor
@@ -507,9 +507,9 @@ services:
         parent: oro_magento.importexport.processor.context
         calls:
             - [setStrategy, ["@oro_magento.import.strategy.order.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.order.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Order']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.order.class%', alias: oro_magento.order_context }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\Order', alias: oro_magento.order_context }
 
     oro_magento.importexport.processor.context_cart:
         parent: oro_magento.importexport.processor.context
@@ -521,7 +521,7 @@ services:
         calls:
             - [setStrategy, ["@oro_magento.import.strategy.credit_memo.add_or_update"]]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.credit_memo.class%', alias: oro_magento.credit_memo_context }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\CreditMemo', alias: oro_magento.credit_memo_context }
 
     oro_magento.importexport.processor.context_newsletter_subscriber:
         parent: oro_magento.importexport.processor.context
@@ -533,59 +533,59 @@ services:
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.store"]]
             - [setStrategy, ["@oro_magento.import.strategy.store"]]
-            - [setEntityName, ['%oro_magento.entity.store.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Store']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.store.class%', alias: oro_magento.store }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\Store', alias: oro_magento.store }
 
     oro_magento.importexport.processor.rest.store:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.rest.store"]]
             - [setStrategy, ["@oro_magento.import.strategy.store"]]
-            - [setEntityName, ['%oro_magento.entity.store.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Store']]
 
     oro_magento.importexport.processor.website:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.website"]]
             - [setStrategy, ["@oro_magento.import.strategy.website"]]
-            - [setEntityName, ['%oro_magento.entity.website.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Website']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.website.class%', alias: oro_magento.website }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\Website', alias: oro_magento.website }
 
     oro_magento.importexport.processor.rest.website:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.website"]]
             - [setStrategy, ["@oro_magento.import.strategy.website"]]
-            - [setEntityName, ['%oro_magento.entity.website.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\Website']]
 
     oro_magento.importexport.processor.customer_group:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.customer_group"]]
             - [setStrategy, ["@oro_magento.import.strategy.customer_group"]]
-            - [setEntityName, ['%oro_magento.entity.customer_group.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\CustomerGroup']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.customer_group.class%', alias: oro_magento.customer_group }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\CustomerGroup', alias: oro_magento.customer_group }
 
     oro_magento.importexport.processor.import_credit_memo:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.credit_memo"]]
             - [setStrategy, ["@oro_magento.import.strategy.credit_memo.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.credit_memo.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\CreditMemo']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.credit_memo.class%', alias: oro_magento.add_or_update_credit_memo }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\CreditMemo', alias: oro_magento.add_or_update_credit_memo }
 
     oro_magento.importexport.processor.import_credit_memo_with_existing_order:
         parent: oro_integration.importexport.processor.import
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.credit_memo"]]
             - [setStrategy, ["@oro_magento.import.strategy.credit_memo_with_order.add_or_update"]]
-            - [setEntityName, ['%oro_magento.entity.credit_memo.class%']]
+            - [setEntityName, ['Oro\Bundle\MagentoBundle\Entity\CreditMemo']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%oro_magento.entity.credit_memo.class%', alias: oro_magento.add_or_update_credit_memo_with_existing_order }
+            - { name: oro_importexport.processor, type: import, entity: 'Oro\Bundle\MagentoBundle\Entity\CreditMemo', alias: oro_magento.add_or_update_credit_memo_with_existing_order }
 
     # Export processor
     oro_magento.importexport.processor.customer_export:
@@ -593,7 +593,7 @@ services:
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.customer"]]
         tags:
-            - { name: oro_importexport.processor, type: export, entity: '%oro_magento.entity.customer.class%', alias: oro_magento.customer_export }
+            - { name: oro_importexport.processor, type: export, entity: 'Oro\Bundle\MagentoBundle\Entity\Customer', alias: oro_magento.customer_export }
 
     oro_magento.importexport.processor.customer_address_export:
         parent: oro_integration.importexport.processor.export
@@ -608,14 +608,14 @@ services:
              - [setStateHandler, ["@oro_magento.customer_state_handler"]]
              - [setTransport, ["@oro_magento.transport.soap_transport"]]
         tags:
-            - { name: oro_importexport.processor, type: export, entity: '%oro_magento.entity.address.class%', alias: oro_magento.customer_address_export }
+            - { name: oro_importexport.processor, type: export, entity: 'Oro\Bundle\MagentoBundle\Entity\Address', alias: oro_magento.customer_address_export }
 
     oro_magento.importexport.processor.newsletter_subscriber_export:
         parent: oro_integration.importexport.processor.export
         calls:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.newsletter_subscriber"]]
         tags:
-            - { name: oro_importexport.processor, type: export, entity: '%oro_magento.entity.newsletter_subscriber.class%', alias: oro_magento.newsletter_subscriber_export }
+            - { name: oro_importexport.processor, type: export, entity: 'Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber', alias: oro_magento.newsletter_subscriber_export }
 
     # Writers
     oro_magento.writer.proxy_entity_writer:
@@ -633,7 +633,7 @@ services:
         abstract: true
         calls:
             - [setTransport, ["@oro_magento.transport.soap_transport"]]
-            - [setChannelClassName, ['%oro_integration.entity.class%']]
+            - [setChannelClassName, ['Oro\Bundle\IntegrationBundle\Entity\Channel']]
 
     oro_magento.importexport.writer.customer:
         class: Oro\Bundle\MagentoBundle\ImportExport\Writer\CustomerExportWriter
@@ -646,7 +646,7 @@ services:
         class: Oro\Bundle\MagentoBundle\ImportExport\Writer\CustomerAddressExportWriter
         parent: oro_magento.importexport.writer.abstract_export
         calls:
-            - [setMagentoRegionClass, ['%oro_magento.entity.region.class%']]
+            - [setMagentoRegionClass, ['Oro\Bundle\MagentoBundle\Entity\Region']]
             - [setStrategy, ["@oro_magento.provider.strategy.two_way_sync.customer_address"]]
             - [setStateHandler, ["@oro_magento.customer_state_handler"]]
 
