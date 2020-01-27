@@ -1,6 +1,6 @@
 datagrids:
     orcrm-contact-requests-grid:
-        extended_entity_name: '%oro_contact_us.contactrequest.entity.class%'
+        extended_entity_name: 'Oro\Bundle\ContactUsBundle\Entity\ContactRequest'
         acl_resource: oro_contactus_request_view
         source:
             type: orm
@@ -13,7 +13,7 @@ datagrids:
                     - cr.phone
                     - cr.createdAt
                 from:
-                    - { table: '%oro_contact_us.contactrequest.entity.class%', alias: cr }
+                    - { table: 'Oro\Bundle\ContactUsBundle\Entity\ContactRequest', alias: cr }
                 join:
                     left:
                         - { join: cr.contactReason, alias: rsn }

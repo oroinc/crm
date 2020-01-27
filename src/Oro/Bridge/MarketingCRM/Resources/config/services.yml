@@ -50,6 +50,6 @@ services:
         class: 'Oro\Bridge\MarketingCRM\Entity\Repository\ChannelRepository'
         parent: oro_entity.abstract_repository
         arguments:
-            - '%oro_channel.entity.class%'
+            - 'Oro\Bundle\ChannelBundle\Entity\Channel'
         calls:
             - [setConfigManager, ['@oro_config.manager']]

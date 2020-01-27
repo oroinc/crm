@@ -1,6 +1,4 @@
 parameters:
-    oro_analytics.entity.rfm_category.class: Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory
-
     oro_analytics.model.analytics_aware_interface: Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface
     oro_analytics.model.rfm_aware_interface: Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface
 services:
@@ -32,7 +30,7 @@ services:
         arguments:
             - '@oro_entity.doctrine_helper'
             - '%oro_analytics.model.rfm_aware_interface%'
-            - '%oro_analytics.entity.rfm_category.class%'
+            - 'Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory'
         tags:
             - { name: form.type_extension, alias: oro_channel_form, extended_type: Oro\Bundle\ChannelBundle\Form\Type\ChannelType }
 
@@ -60,15 +58,15 @@ services:
         arguments:
             - '@oro_entity.doctrine_helper'
             - '%oro_analytics.model.rfm_aware_interface%'
-            - '%oro_channel.entity.class%'
+            - 'Oro\Bundle\ChannelBundle\Entity\Channel'
 
     oro_analytics.event_listener.rfm_category:
         class: Oro\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener
         arguments:
             - '@oro_analytics.model.rfm_state_manager'
             - '@oro_analytics.calculate_analytics_scheduler'
-            - '%oro_analytics.entity.rfm_category.class%'
-            - '%oro_channel.entity.class%'
+            - 'Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory'
+            - 'Oro\Bundle\ChannelBundle\Entity\Channel'
         tags:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: kernel.event_listener, event: oro_channel.channel.save_succeed, method: onChannelSucceedSave }

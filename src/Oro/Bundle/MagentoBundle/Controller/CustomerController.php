@@ -4,7 +4,10 @@ namespace Oro\Bundle\MagentoBundle\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Form\Type\CustomerType;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -30,7 +33,7 @@ class CustomerController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_magento.entity.customer.class')
+            'entity_class' => Customer::class
         ];
     }
 
@@ -191,9 +194,9 @@ class CustomerController extends Controller
         return [
             'customer'            => $customer,
             'channel'             => $channel,
-            'orderClassName'      => $this->container->getParameter('oro_magento.entity.order.class'),
-            'cartClassName'       => $this->container->getParameter('oro_magento.entity.cart.class'),
-            'creditMemoClassName' => $this->container->getParameter('oro_magento.entity.credit_memo.class')
+            'orderClassName'      => Order::class,
+            'cartClassName'       => Cart::class,
+            'creditMemoClassName' => CreditMemo::class
         ];
     }
 
