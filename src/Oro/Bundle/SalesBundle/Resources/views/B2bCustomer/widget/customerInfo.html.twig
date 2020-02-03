@@ -49,15 +49,15 @@
     }
 ]) %}
 
+{% set tabPanelOptions = {
+    subTabs: isMobileVersion()
+} %}
 {% if activeTab %}
     {% set tabPanelOptions = tabPanelOptions|merge({
         activeTabAlias: 'oro_sales_b2bcustomer_' ~ activeTab ~ uniqueSuffix
     }) %}
 {% endif %}
 
-{% set tabPanelOptions = {
-    subTabs: isMobileVersion()
-} %}
 <div class="widget-content row-fluid">
     <div class="account-customer-title">{{ customer|oro_format_name }}
         <div class="pull-right label label-large label-success orocrm-channel-lifetime-value-label">
