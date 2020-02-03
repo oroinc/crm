@@ -12,6 +12,9 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
+/**
+ * Loads Business Customers
+ */
 class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtureInterface
 {
     /** @var array */
@@ -80,7 +83,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
 
         $customer->setName($data['Company']);
         $customer->setOwner($this->getRandomUserReference());
-        $customer->setAccount($this->getAccount());
+        $customer->setAccount($this->getAccount($organization));
         $customer->setOrganization($organization);
 
         $phone = new B2bCustomerPhone($data['TelephoneNumber']);
@@ -136,12 +139,13 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
     }
 
     /**
+     * @param Organization $organization
      * @return Account
      */
-    private function getAccount()
+    private function getAccount(Organization $organization)
     {
         if (empty($this->accountIds)) {
-            $this->accountIds = $this->loadAccountsIds();
+            $this->accountIds = $this->loadAccountsIds($organization);
             shuffle($this->accountIds);
             $this->accountsCount = count($this->accountIds) - 1;
         }
@@ -152,13 +156,16 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
     }
 
     /**
+     * @param Organization $organization
      * @return array
      */
-    private function loadAccountsIds()
+    private function loadAccountsIds(Organization $organization)
     {
         $items = $this->em->createQueryBuilder()
             ->from('OroAccountBundle:Account', 'a')
             ->select('a.id')
+            ->andWhere('a.organization = :organization')
+            ->setParameter('organization', $organization)
             ->getQuery()
             ->getArrayResult();
 
