@@ -3,9 +3,14 @@
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractLoadAclData;
 use Oro\Bundle\UserBundle\Entity\Role;
+use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadRolesData as LoadUserRolesData;
 
+/**
+ * Sets permissions defined in "@OroDemoDataBundle/Migrations/Data/ORM/CrmRoles/roles.yml" file.
+ */
 class LoadRolesData extends AbstractLoadAclData
 {
     /**
@@ -14,8 +19,8 @@ class LoadRolesData extends AbstractLoadAclData
     public function getDependencies()
     {
         return [
-            'Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData',
-            'Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadRolesData'
+            LoadOrganizationAndBusinessUnitData::class,
+            LoadUserRolesData::class
         ];
     }
 
@@ -25,16 +30,6 @@ class LoadRolesData extends AbstractLoadAclData
     public function getDataPath()
     {
         return '@OroDemoDataBundle/Migrations/Data/ORM/CrmRoles/roles.yml';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function load(ObjectManager $manager)
-    {
-        parent::load($manager);
-
-        $manager->flush();
     }
 
     /**

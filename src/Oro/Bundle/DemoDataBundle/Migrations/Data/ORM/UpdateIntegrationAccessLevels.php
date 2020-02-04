@@ -2,29 +2,25 @@
 
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
-use Oro\Bundle\UserBundle\Entity\Role;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractUpdatePermissions;
 
-class UpdateIntegrationAccessLevels extends AbstractFixture implements
-    ContainerAwareInterface,
-    DependentFixtureInterface
+/**
+ * Updates permissions for Channel entity for the following roles:
+ * * ROLE_SALES_REP
+ * * ROLE_ONLINE_SALES_REP
+ * * ROLE_LEADS_DEVELOPMENT_REP
+ */
+class UpdateIntegrationAccessLevels extends AbstractUpdatePermissions implements DependentFixtureInterface
 {
-    use ContainerAwareTrait;
-
-    /** @var ObjectManager */
-    protected $objectManager;
-
     /**
      * {@inheritdoc}
      */
     public function getDependencies()
     {
-        return ['Oro\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData'];
+        return [LoadRolesData::class];
     }
 
     /**
@@ -36,47 +32,25 @@ class UpdateIntegrationAccessLevels extends AbstractFixture implements
             return;
         }
 
-        $this->objectManager = $manager;
-
-        /** @var AclManager $aclManager */
-        $aclManager = $this->container->get('oro_security.acl.manager');
-
-        if ($aclManager->isAclEnabled()) {
-            $this->addIntegrationPermissions($aclManager);
-            $aclManager->flush();
+        $aclManager = $this->getAclManager();
+        if (!$aclManager->isAclEnabled()) {
+            return;
         }
-    }
 
-    /**
-     * @param AclManager $manager
-     */
-    protected function addIntegrationPermissions(AclManager $manager)
-    {
-        $roles = [
+        $roleNames = [
             'ROLE_SALES_REP',
             'ROLE_ONLINE_SALES_REP',
             'ROLE_LEADS_DEVELOPMENT_REP',
         ];
-
-        $oid = $manager->getOid('entity:Oro\Bundle\IntegrationBundle\Entity\Channel');
-        foreach ($roles as $roleName) {
-            $role = $this->getRole($roleName);
-            if ($role) {
-                $sid = $manager->getSid($role);
-
-                $maskBuilder = $manager->getMaskBuilder($oid)
-                    ->add('VIEW_SYSTEM');
-                $manager->setPermission($sid, $oid, $maskBuilder->get());
-            }
+        $permissions = ['VIEW_SYSTEM'];
+        foreach ($roleNames as $roleName) {
+            $this->setEntityPermissions(
+                $aclManager,
+                $this->getRole($manager, $roleName),
+                Channel::class,
+                $permissions
+            );
         }
-    }
-
-    /**
-     * @param string $roleName
-     * @return Role|null
-     */
-    protected function getRole($roleName)
-    {
-        return $this->objectManager->getRepository('OroUserBundle:Role')->findOneBy(['role' => $roleName]);
+        $aclManager->flush();
     }
 }

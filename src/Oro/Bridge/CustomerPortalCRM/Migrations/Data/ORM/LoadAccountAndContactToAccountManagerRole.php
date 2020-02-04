@@ -2,37 +2,24 @@
 
 namespace Oro\Bridge\CustomerPortalCRM\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
-use Oro\Bundle\UserBundle\Entity\Role;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface as SID;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\FrontendBundle\Migrations\Data\ORM\LoadUserRolesData;
+use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractUpdatePermissions;
 
 /**
- * Adds permissions for Account and Contact CRM entities to ROLE_ACCOUNT_MANAGER role.
+ * Updates permissions for Account and Contact entities for ROLE_ACCOUNT_MANAGER role.
  */
-class LoadAccountAndContactToAccountManagerRole extends AbstractFixture implements
-    DependentFixtureInterface,
-    ContainerAwareInterface
+class LoadAccountAndContactToAccountManagerRole extends AbstractUpdatePermissions implements DependentFixtureInterface
 {
-    use ContainerAwareTrait;
-
-    const ACCOUNT_MANAGER_ROLE = 'ROLE_ACCOUNT_MANAGER';
-
-    const ACCOUNT_ENTITY = 'Oro\Bundle\AccountBundle\Entity\Account';
-    const CONTACT_ENTITY = 'Oro\Bundle\ContactBundle\Entity\Contact';
-
     /**
      * {@inheritdoc}
      */
     public function getDependencies()
     {
-        return [
-            'Oro\Bundle\FrontendBundle\Migrations\Data\ORM\LoadUserRolesData'
-        ];
+        return [LoadUserRolesData::class];
     }
 
     /**
@@ -44,68 +31,24 @@ class LoadAccountAndContactToAccountManagerRole extends AbstractFixture implemen
             return;
         }
 
-        /** @var AclManager $aclManager */
-        $aclManager = $this->container->get('oro_security.acl.manager');
+        $aclManager = $this->getAclManager();
         if (!$aclManager->isAclEnabled()) {
             return;
         }
 
-        $role = $this->getAccountManagerRole($manager);
-        if (null === $role) {
-            return;
-        }
-
-        $sid = $aclManager->getSid($role);
-        $this->updateEntityPermissions(
+        $role = $this->getRole($manager, 'ROLE_ACCOUNT_MANAGER');
+        $this->setEntityPermissions(
             $aclManager,
-            $sid,
-            self::ACCOUNT_ENTITY,
+            $role,
+            Account::class,
             ['VIEW_SYSTEM', 'CREATE_SYSTEM', 'EDIT_SYSTEM', 'DELETE_SYSTEM', 'ASSIGN_SYSTEM']
         );
-        $this->updateEntityPermissions(
+        $this->setEntityPermissions(
             $aclManager,
-            $sid,
-            self::CONTACT_ENTITY,
+            $role,
+            Contact::class,
             ['VIEW_SYSTEM', 'CREATE_SYSTEM', 'EDIT_SYSTEM', 'DELETE_SYSTEM', 'ASSIGN_SYSTEM']
         );
-
         $aclManager->flush();
-    }
-
-    /**
-     * @param ObjectManager $manager
-     *
-     * @return Role|null
-     */
-    private function getAccountManagerRole(ObjectManager $manager)
-    {
-        return $manager
-            ->getRepository(Role::class)
-            ->findOneBy(['role' => self::ACCOUNT_MANAGER_ROLE]);
-    }
-
-    /**
-     * @param AclManager $aclManager
-     * @param SID        $sid
-     * @param string     $entityClass
-     * @param string[]   $permissions
-     */
-    private function updateEntityPermissions(AclManager $aclManager, SID $sid, $entityClass, array $permissions)
-    {
-        $oid = $aclManager->getOid('entity:' . $entityClass);
-        $maskBuilders = $aclManager->getExtensionSelector()->selectByExtensionKey('entity')->getAllMaskBuilders();
-        foreach ($maskBuilders as $maskBuilder) {
-            $hasChanges = false;
-            $maskBuilder->reset();
-            foreach ($permissions as $permission) {
-                if ($maskBuilder->hasMask('MASK_' . $permission)) {
-                    $maskBuilder->add($permission);
-                    $hasChanges = true;
-                }
-            }
-            if ($hasChanges) {
-                $aclManager->setPermission($sid, $oid, $maskBuilder->get());
-            }
-        }
     }
 }
