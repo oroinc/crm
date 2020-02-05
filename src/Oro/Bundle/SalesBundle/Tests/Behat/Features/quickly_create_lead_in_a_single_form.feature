@@ -75,13 +75,13 @@ Feature: Quickly create Lead in a single form
   Scenario: Inline edit Lead
     Given I go to Sales/ Leads
     When I edit first record from grid:
-      | Lead Name    | editedName       |
-      | Status       | Qualified        |
-      | First Name   | editedFirstName  |
-      | Last Name    | editedLastName   |
-      | Email        | edit@example.com |
-      | Phone Number | +111111111111    |
-      | Owner        | Marge Simpson    |
+      | Lead Name    | editedName          |
+      | Status       | Qualified           |
+      | First Name   | editedFirstName     |
+      | Last Name    | editedLastName      |
+      | Email        | edit@example.com    |
+      | Phone Number | +111111111111       |
+      | Owner        | Marge Marge Simpson |
     Then I should see editedName in grid with following data:
       | First Name   | editedFirstName    |
       | Last Name    | editedLastName     |
