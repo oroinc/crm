@@ -4,6 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Acl\Voter;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\SecurityBundle\Acl\BasicPermission;
 use Oro\Bundle\SecurityBundle\Acl\Voter\AbstractEntityVoter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -12,13 +13,10 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class ChannelVoter extends AbstractEntityVoter
 {
-    const ATTRIBUTE_CREATE = 'CREATE';
-    const ATTRIBUTE_DELETE = 'DELETE';
-
     /**
      * @var array
      */
-    protected $supportedAttributes = [self::ATTRIBUTE_CREATE, self::ATTRIBUTE_DELETE];
+    protected $supportedAttributes = [BasicPermission::CREATE, BasicPermission::DELETE];
 
     /**
      * @var SettingsProvider
