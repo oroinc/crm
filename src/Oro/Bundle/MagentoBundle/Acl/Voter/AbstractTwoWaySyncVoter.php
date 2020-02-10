@@ -4,19 +4,20 @@ namespace Oro\Bundle\MagentoBundle\Acl\Voter;
 
 use Oro\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
 use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
+use Oro\Bundle\SecurityBundle\Acl\BasicPermission;
 use Oro\Bundle\SecurityBundle\Acl\Voter\AbstractEntityVoter;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * The base class for security voters for Magento entities involved in two-way synchronization with Magento store.
+ */
 abstract class AbstractTwoWaySyncVoter extends AbstractEntityVoter
 {
-    const ATTRIBUTE_CREATE = 'CREATE';
-    const ATTRIBUTE_EDIT = 'EDIT';
-
     /**
      * @var array
      */
-    protected $supportedAttributes = [self::ATTRIBUTE_CREATE, self::ATTRIBUTE_EDIT];
+    protected $supportedAttributes = [BasicPermission::CREATE, BasicPermission::EDIT];
 
     /**
      * @var ObjectIdentityInterface|IntegrationAwareInterface

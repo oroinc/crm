@@ -6,6 +6,9 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Entity\Website;
 
+/**
+ * The autocomplete handler to search Magento stores.
+ */
 class StoreSearchHandler extends IntegrationAwareSearchHandler
 {
     /**
@@ -40,7 +43,7 @@ class StoreSearchHandler extends IntegrationAwareSearchHandler
             $queryBuilder->andWhere('1 = 0');
         }
 
-        $query = $this->aclHelper->apply($queryBuilder, 'VIEW');
+        $query = $this->aclHelper->apply($queryBuilder);
 
         return $query->getResult();
     }
