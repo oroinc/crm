@@ -122,7 +122,9 @@ class SettingsFormSubscriber implements EventSubscriberInterface
         }
         $choices = [];
         foreach ($websites as $website) {
-            $choices[$website['label']] = $website['id'];
+            if (\is_array($website) && isset($website['id'], $website['label'])) {
+                $choices[$website['label']] = $website['id'];
+            }
         }
 
         FormUtils::replaceField($form, 'websiteId', ['choices' => $choices]);
