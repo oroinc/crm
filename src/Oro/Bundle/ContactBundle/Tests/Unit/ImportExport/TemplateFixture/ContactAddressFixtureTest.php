@@ -82,7 +82,7 @@ class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $data);
 
         /** @var ContactAddress $address */
-        $address = current($data);
+        $address = $data->current();
         $this->assertInstanceOf('Oro\Bundle\ContactBundle\Entity\ContactAddress', $address);
         $this->assertEquals('Jerry', $address->getFirstName());
         $this->assertEquals('Coleman', $address->getLastName());
