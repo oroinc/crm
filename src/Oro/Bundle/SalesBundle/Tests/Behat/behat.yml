@@ -57,6 +57,7 @@ oro_behat_extension:
         mapping:
           Budget Amount: 'oro_sales_opportunity_form[budgetAmount][value]'
           Budget Currency: 'oro_sales_opportunity_form[budgetAmount][currency]'
+          Expected close date: 'oro_sales_opportunity_form[closeDate]'
           Close Revenue Amount: 'oro_sales_opportunity_form[closeRevenue][value]'
           Close Revenue Currency: 'oro_sales_opportunity_form[closeRevenue][currency]'
 
@@ -235,10 +236,6 @@ oro_behat_extension:
       selector:
         type: 'xpath'
         locator: '//div[@title="Leads List"]/..//button[contains(@id,"dashboard-action")]'
-
-    Opportunity form:
-      class: Oro\Bundle\SalesBundle\Tests\Behat\Element\OpportunityForm
-      selector: 'form[name="oro_sales_opportunity_form"]'
 
     Lead Statistics:
       selector:
