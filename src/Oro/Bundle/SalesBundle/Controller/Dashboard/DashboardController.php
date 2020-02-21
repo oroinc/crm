@@ -10,13 +10,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Handles dashboard actions logic
+ */
 class DashboardController extends Controller
 {
     /**
      * @Route(
      *      "/opportunities_by_lead_source/chart/{widget}",
      *      name="oro_sales_dashboard_opportunities_by_lead_source_chart",
-     *      requirements={"widget"="[\w-]+"}
+     *      requirements={"widget"="[\w\-]+"}
      * )
      * @Template("OroSalesBundle:Dashboard:opportunitiesByLeadSource.html.twig")
      * @param Request $request
@@ -67,7 +70,7 @@ class DashboardController extends Controller
      * @Route(
      *      "/opportunity_state/chart/{widget}",
      *      name="oro_sales_dashboard_opportunity_by_state_chart",
-     *      requirements={"widget"="[\w-]+"}
+     *      requirements={"widget"="[\w\-]+"}
      * )
      * @Template("OroSalesBundle:Dashboard:opportunityByStatus.html.twig")
      * @param Request $request

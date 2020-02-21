@@ -27,9 +27,10 @@ class DropFields implements Migration, OrderedMigrationInterface
         $this->modifyOrocrmAccountTable($schema, $queries);
         $queries->addQuery(new UpdateExtendedFieldQuery());
     }
+
     // @codingStandardsIgnoreStart
     /**
-     * @param Schema   $schema
+     * @param Schema $schema
      * @param QueryBag $queries
      */
     protected function modifyOrocrmLeadTable(Schema $schema, QueryBag $queries)
@@ -41,7 +42,7 @@ class DropFields implements Migration, OrderedMigrationInterface
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
-<<<DQL
+                <<<DQL
             DELETE FROM oro_entity_config_field
             WHERE field_name = 'account'
             AND entity_id IN (
@@ -55,7 +56,7 @@ DQL
     }
 
     /**
-     * @param Schema   $schema
+     * @param Schema $schema
      * @param QueryBag $queries
      */
     protected function modifyOrocrmOpportunityTable(Schema $schema, QueryBag $queries)
@@ -67,7 +68,7 @@ DQL
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
-<<<DQL
+                <<<DQL
             DELETE FROM oro_entity_config_field
             WHERE field_name = 'account'
             AND entity_id IN (
@@ -81,7 +82,7 @@ DQL
     }
 
     /**
-     * @param Schema   $schema
+     * @param Schema $schema
      * @param QueryBag $queries
      */
     protected function modifyOrocrmAccountTable(Schema $schema, QueryBag $queries)
@@ -104,7 +105,7 @@ DQL
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
-<<<DQL
+                <<<DQL
              DELETE FROM oro_entity_config_field
                    WHERE
                     field_name IN (
