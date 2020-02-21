@@ -11,7 +11,7 @@ Feature: Activities
     Given login as administrator
     When go to Activities/ Tasks
     And click "Create Task"
-    And fill form with:
+    And fill "Task Form" with:
       | Subject     | Test1                   |
       | Description | test description        |
       | Due date    | <DateTime:+1 day 12:00> |
@@ -39,7 +39,7 @@ Feature: Activities
     And save and close form
     When click "More actions"
     And click "Add task"
-    And fill form with:
+    And fill "Task Form" with:
       | Subject     | Sprint Demo             |
       | Description | test description        |
       | Due date    | <DateTime:+1 day 12:00> |
@@ -61,7 +61,7 @@ Feature: Activities
     And click view "Charlie1@example.com" in grid
     When click "More actions"
     And click "Assign task"
-    And fill form with:
+    And fill "Task Form" with:
       | Subject     | SalesRep Task           |
       | Description | test description        |
       | Due date    | <DateTime:+1 day 12:00> |
@@ -112,7 +112,7 @@ Feature: Activities
   Scenario:Create a call record in the Calls grid
     Given go to Activities/ Calls
     And click "Log call"
-    When I fill form with:
+    And fill "Log Call Form" with:
       | Subject             | Call to Someone                           |
       | Additional comments | Offered $40 discount on her next purchase |
       | Call date & time    | 2016-10-31 08:00:00                       |
@@ -131,7 +131,7 @@ Feature: Activities
     And click view "OroInc" in grid
     When click "More actions"
     And click "Log call"
-    And I fill form with:
+    And fill "Log Call Form" with:
       | Subject             | Call for lead                             |
       | Additional comments | Offered $50 discount on her next purchase |
       | Call date & time    | 2016-11-21 08:00:00                       |
