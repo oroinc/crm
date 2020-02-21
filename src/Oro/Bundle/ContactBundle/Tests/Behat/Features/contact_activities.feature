@@ -48,7 +48,7 @@ Feature: Contact activities
   Scenario: Create "Task" activity as "Admin" and assert createdBy and updatedBy values
     And I go to Activities/Tasks
     And I click "Create Task"
-    And fill form with:
+    And fill "Task Form" with:
       | Subject     | Contact with Charlie |
       | Description | Offer him a role     |
       | Due date    | <DateTime:+ 1 day>   |
