@@ -116,14 +116,6 @@ Delete a collection of sales processes records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### startDate
 
 #### create

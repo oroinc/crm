@@ -236,14 +236,6 @@ Delete a collection of Magento order records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### incrementId
 
 #### create

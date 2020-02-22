@@ -119,14 +119,6 @@ Delete a collection of records represented by Magento order items.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### name
 
 #### create

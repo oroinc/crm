@@ -117,16 +117,6 @@ Delete a collection of records represented by Magento credit memo items.
 
 {@inheritdoc}
 
-## FIELDS
-
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ## SUBRESOURCES
 
 ### parent

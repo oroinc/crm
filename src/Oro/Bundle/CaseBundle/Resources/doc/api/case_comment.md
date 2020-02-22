@@ -113,14 +113,6 @@ Delete a collection of case comment records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### case
 
 #### create

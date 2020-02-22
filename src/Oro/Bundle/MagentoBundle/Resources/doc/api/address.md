@@ -136,14 +136,6 @@ Delete a collection of Magento customer address records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### owner
 
 #### create

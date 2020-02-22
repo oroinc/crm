@@ -125,14 +125,6 @@ Delete a collection of contact address records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### country
 
 #### create

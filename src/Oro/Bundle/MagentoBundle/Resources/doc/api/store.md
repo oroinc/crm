@@ -93,14 +93,6 @@ Delete a collection of Magento store records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### website
 
 #### create

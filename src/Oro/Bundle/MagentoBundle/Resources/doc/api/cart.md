@@ -221,14 +221,6 @@ Delete a collection of Magento shopping cartrecords.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### baseCurrencyCode
 
 #### create
