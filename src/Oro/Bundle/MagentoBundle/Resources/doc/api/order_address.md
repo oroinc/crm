@@ -119,16 +119,6 @@ Delete a collection of Magento order address records.
 
 {@inheritdoc}
 
-## FIELDS
-
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ## SUBRESOURCES
 
 ### types

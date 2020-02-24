@@ -147,14 +147,6 @@ Delete a collection of lead records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### status
 
 #### create

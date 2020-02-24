@@ -190,14 +190,6 @@ Delete a collection of case records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### subject
 
 #### create

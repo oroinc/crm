@@ -206,14 +206,6 @@ Delete a collection of Magento credit memo records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### incrementId
 
 #### create
