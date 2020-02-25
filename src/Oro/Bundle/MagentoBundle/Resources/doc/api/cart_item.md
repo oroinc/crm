@@ -133,14 +133,6 @@ Delete a collection of Magento shopping cart items records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### productId
 
 #### create

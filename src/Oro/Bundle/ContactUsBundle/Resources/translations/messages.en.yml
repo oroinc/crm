@@ -3,6 +3,7 @@ oro:
         contactrequest:
             entity_label:                   Contact Request
             entity_plural_label:            Contact Requests
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:                       ID
             first_name.label:               First name
             last_name.label:                Last name
@@ -40,6 +41,7 @@ oro:
         contactreason:
             entity_label: Contact Reason
             entity_plural_label: Contact Reasons
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description: Represents contact reason
             id.label:    ID
             label.label: Label

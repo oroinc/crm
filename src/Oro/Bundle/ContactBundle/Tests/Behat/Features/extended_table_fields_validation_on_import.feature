@@ -76,4 +76,4 @@ Feature: Extended table fields validation on import
       |    | TestContact1 | TestContact1 | admin          | test3@example.com | 456-538-2135   | ORO               | fail   | account_1                | account_1                               | account_1               |
       |    | TestContact2 | TestContact2 | admin          | test@example.com  | 765-538-2134   | ORO               | 2      | account_1                | account_1                               | account_1               |
     When I import file
-    Then Email should contains the following "Errors: 3 processed: 2, read: 4, added: 1, updated: 0, replaced: 1" text
+    Then Email should contains the following "Errors: 2 processed: 2, read: 4, added: 1, updated: 0, replaced: 1" text

@@ -56,7 +56,7 @@ class ContactEmailAddressHandlerTest extends WebTestCase
 
         $emailAddresses = $this->getEmailAddresses($emailAddressManager);
         $this->assertCount(3, $emailAddresses);
-        $this->assertEquals(
+        $this->assertEqualsCanonicalizing(
             [
                 $detachedEmailAddress1->getEmail(),
                 $detachedEmailAddress2->getEmail(),
@@ -81,7 +81,7 @@ class ContactEmailAddressHandlerTest extends WebTestCase
         $handler->actualizeContactEmailAssociations();
         $emailAddresses = $this->getEmailAddresses($emailAddressManager);
         $this->assertCount(6, $emailAddresses);
-        $this->assertEquals(
+        $this->assertEqualsCanonicalizing(
             [
                 'detached_with_email@test.com',
                 'detached_with_recipient@test.com',

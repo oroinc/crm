@@ -113,14 +113,6 @@ Delete a collection of Magento product records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### name
 
 #### create

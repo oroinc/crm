@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Autocomplete;
 
+/**
+ * The autocomplete handler to search Magento customer groups.
+ */
 class CustomerGroupSearchHandler extends IntegrationAwareSearchHandler
 {
     /**
@@ -29,7 +32,7 @@ class CustomerGroupSearchHandler extends IntegrationAwareSearchHandler
             $queryBuilder->andWhere('1 = 0');
         }
 
-        $query = $this->aclHelper->apply($queryBuilder, 'VIEW');
+        $query = $this->aclHelper->apply($queryBuilder);
 
         return $query->getResult();
     }

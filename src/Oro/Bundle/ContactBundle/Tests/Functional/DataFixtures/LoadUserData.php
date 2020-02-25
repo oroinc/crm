@@ -5,41 +5,33 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
+use Oro\Bundle\SecurityBundle\Tests\Functional\DataFixtures\SetRolePermissionsTrait;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadBusinessUnit;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadUserData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
+    use ContainerAwareTrait;
+    use SetRolePermissionsTrait;
+
     const USER_NAME     = 'user';
     const USER_PASSWORD = 'password';
-
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
 
     public static $roleData = [
         'name'        => 'ROLE_TEST',
         'label'       => 'Role Test',
         'permissions' => [
-            'entity|Oro\Bundle\ContactBundle\Entity\Contact' => [
+            'entity:' . Contact::class => [
                 'VIEW_BASIC', 'EDIT_SYSTEM'
             ]
         ]
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
 
     /**
      * {@inheritdoc}
@@ -50,9 +42,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
     }
 
     /**
-     * Load roles
-     *
-     * @param \Doctrine\Common\Persistence\ObjectManager $manager
+     * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {
@@ -62,25 +52,14 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
 
         /** @var AclManager $aclManager */
         $aclManager = $this->container->get('oro_security.acl.manager');
-
-        if ($aclManager->isAclEnabled()) {
-            $sid = $aclManager->getSid($role);
-            foreach (LoadUserData::$roleData['permissions'] as $permission => $acls) {
-                $oid     = $aclManager->getOid(str_replace('|', ':', $permission));
-                $builder = $aclManager->getMaskBuilder($oid);
-                $mask    = $builder->reset()->get();
-                if (!empty($acls)) {
-                    foreach ($acls as $acl) {
-                        $mask = $builder->add($acl)->get();
-                    }
-                }
-                $aclManager->setPermission($sid, $oid, $mask);
-            }
-        }
+        $this->setPermissions(
+            $aclManager,
+            $role,
+            self::$roleData['permissions']
+        );
 
         /** @var UserManager $userManager */
         $userManager = $this->container->get('oro_user.manager');
-
         $user = $userManager->createUser();
         $organization = $this->getReference('organization');
         $user->setUsername(self::USER_NAME)
@@ -93,10 +72,9 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
             ->setOrganization($organization)
             ->addOrganization($organization)
             ->setSalt('');
-
         $userManager->updateUser($user);
 
-        $aclManager->flush();
         $manager->flush();
+        $aclManager->flush();
     }
 }

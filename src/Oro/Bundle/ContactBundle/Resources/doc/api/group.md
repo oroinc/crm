@@ -101,14 +101,6 @@ Delete a collection of contact group records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### label
 
 #### create

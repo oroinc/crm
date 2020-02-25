@@ -12,7 +12,7 @@ Feature: Log a call for nameless lead
     And I click "View" on first row in grid
     And follow "More actions"
     And follow "Log call"
-    And fill form with:
+    And fill "Log Call Form" with:
       | Subject             | Very important call           |
       | Additional comments | Propose something interesting |
       | Call date & time    | 2017-08-24 11:00              |

@@ -3,7 +3,13 @@
 namespace Oro\Bundle\MagentoBundle\Acl\Voter;
 
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\SecurityBundle\Acl\BasicPermission;
 
+/**
+ * Implements the following logic:
+ * * denies editing of non guest Magento customers that does not have an origin
+ * * denies an access Magento customers that belong to not applicable channels
+ */
 class CustomerVoter extends AbstractTwoWaySyncVoter
 {
     /**
@@ -16,16 +22,16 @@ class CustomerVoter extends AbstractTwoWaySyncVoter
      */
     protected function getPermissionForAttribute($class, $identifier, $attribute)
     {
-        if (is_a($this->object, $this->className, true)
-            && (
-                $attribute === self::ATTRIBUTE_EDIT
-                && (!$this->object->getOriginId() && !$this->object->isGuest())
-            )
+        $isCustomer = is_a($this->object, $this->className, true);
+        if ($isCustomer
+            && BasicPermission::EDIT === $attribute
+            && !$this->object->getOriginId()
+            && !$this->object->isGuest()
         ) {
             return self::ACCESS_DENIED;
         }
 
-        if (is_a($this->object, $this->className, true)
+        if ($isCustomer
             && $this->object->getChannel()
             && !$this->settingsProvider->isChannelApplicable($this->object->getChannel()->getId(), false)
         ) {

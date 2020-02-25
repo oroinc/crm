@@ -191,14 +191,6 @@ Delete a collection of Magento customer records.
 
 ## FIELDS
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ### dataChannel
 
 #### create

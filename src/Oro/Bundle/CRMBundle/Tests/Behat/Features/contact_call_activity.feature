@@ -16,7 +16,7 @@ Feature: Contact call activity
     And click view Charlie in grid
     And follow "More actions"
     And follow "Log call"
-    And fill form with:
+    And fill "Log Call Form" with:
       | Subject             | Proposed Charlie to star in new film |
       | Additional comments | Charlie was in a good mood           |
       | Call date & time    | 2017-08-24 11:00:00                  |
@@ -57,7 +57,7 @@ Feature: Contact call activity
   Scenario: Edit Call from entity view page
     Given I move backward one page
     And I click "Update call log" on "Proposed Charlie to star in new film" in activity list
-    And fill form with:
+    And fill "Log Call Form" with:
       | Owner               | Theresa                         |
       | Subject             | Offered Charlie a drink with me |
       | Additional comments | Charlie was in a bad mood       |

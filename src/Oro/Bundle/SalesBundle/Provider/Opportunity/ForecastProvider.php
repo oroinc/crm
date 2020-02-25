@@ -19,6 +19,9 @@ use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
+/**
+ * Provides a sales forecast based on opportunities
+ */
 class ForecastProvider
 {
     /** @var ManagerRegistry */
@@ -188,7 +191,7 @@ class ForecastProvider
             $qb->setParameter(
                 $parameter->getName(),
                 $parameter->getValue(),
-                $parameter->getType()
+                $parameter->typeWasSpecified() ? $parameter->getType() : null
             );
         }
     }

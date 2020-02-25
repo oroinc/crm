@@ -2,32 +2,26 @@
 
 namespace Oro\Bridge\CallCRM\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
+use Oro\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData;
+use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractUpdatePermissions;
 use Symfony\Component\Yaml\Yaml;
 
-class UpdateCallAccessLevels extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
+/**
+ * Sets permissions defined in "@OroCallCRMBridgeBundle/Migrations/Data/ORM/CrmRoles/roles.yml" file.
+ */
+class UpdateCallAccessLevels extends AbstractUpdatePermissions implements DependentFixtureInterface
 {
-    use ContainerAwareTrait;
-
     /**
      * {@inheritdoc}
      */
     public function getDependencies()
     {
-        return [
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData'
-        ];
+        return [LoadRolesData::class];
     }
 
     /**
-     * Update call access levels
-     *
      * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
@@ -36,63 +30,33 @@ class UpdateCallAccessLevels extends AbstractFixture implements DependentFixture
             return;
         }
 
-        /** @var AclManager $aclManager */
-        $aclManager = $this->container->get('oro_security.acl.manager');
+        $aclManager = $this->getAclManager();
+        if (!$aclManager->isAclEnabled()) {
+            return;
+        }
 
         $fileName = $this->container
             ->get('kernel')
             ->locateResource('@OroCallCRMBridgeBundle/Migrations/Data/ORM/CrmRoles/roles.yml');
-
-        $fileName  = str_replace('/', DIRECTORY_SEPARATOR, $fileName);
+        $fileName = str_replace('/', DIRECTORY_SEPARATOR, $fileName);
         $rolesData = Yaml::parse(file_get_contents($fileName));
-
         foreach ($rolesData as $roleName => $roleConfigData) {
             if (!array_key_exists('bap_role', $roleConfigData)) {
                 continue;
             }
 
-            $role = $manager->getRepository('OroUserBundle:Role')
-                            ->findOneBy(['role' => $roleConfigData['bap_role']]);
-
-            if ($role && $aclManager->isAclEnabled()) {
-                $sid = $aclManager->getSid($role);
-                foreach ($roleConfigData['permissions'] as $permission => $acls) {
-                    $this->processPermission($aclManager, $sid, $permission, $acls);
+            $role = $this->getRole($manager, $roleConfigData['bap_role']);
+            if (null !== $role) {
+                foreach ($roleConfigData['permissions'] as $oid => $permissions) {
+                    $this->replacePermissions(
+                        $aclManager,
+                        $role,
+                        $aclManager->getOid(str_replace('|', ':', $oid)),
+                        $permissions
+                    );
                 }
             }
         }
-
         $aclManager->flush();
-        $manager->flush();
-    }
-
-    /**
-     * @param AclManager $aclManager
-     * @param SecurityIdentityInterface $sid
-     * @param string $permission
-     * @param array $acls
-     */
-    protected function processPermission(
-        AclManager $aclManager,
-        SecurityIdentityInterface $sid,
-        $permission,
-        array $acls
-    ) {
-        $oid = $aclManager->getOid(str_replace('|', ':', $permission));
-
-        $extension = $aclManager->getExtensionSelector()->select($oid);
-        $maskBuilders = $extension->getAllMaskBuilders();
-
-        foreach ($maskBuilders as $maskBuilder) {
-            $mask = $maskBuilder->reset()->get();
-
-            foreach ($acls as $acl) {
-                if ($maskBuilder->hasMask('MASK_' . $acl)) {
-                    $mask = $maskBuilder->add($acl)->get();
-                }
-            }
-
-            $aclManager->setPermission($sid, $oid, $mask);
-        }
     }
 }

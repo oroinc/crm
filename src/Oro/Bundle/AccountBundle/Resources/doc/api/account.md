@@ -165,14 +165,6 @@ Delete a collection of account records.
 
 *This field is **required** and must remain defined.*
 
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ## SUBRESOURCES
 
 ### contacts

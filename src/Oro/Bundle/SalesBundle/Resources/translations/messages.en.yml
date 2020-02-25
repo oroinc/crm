@@ -21,6 +21,7 @@ oro:
             lead_source:
                 entity_label:         Lead Source
                 entity_plural_label:  Lead Sources
+                entity_grid_all_view_label: All %entity_plural_label%
                 entity_description:   Represents a list of all lead sources
 
     query_designer:
@@ -135,6 +136,7 @@ oro:
         opportunity:
             entity_label:         Opportunity
             entity_plural_label:  Opportunities
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:   The Opportunity represent highly probable potential or actual sales to a new or established customer.
             id.label:             Id
             name:
@@ -233,6 +235,7 @@ oro:
         opportunityclosereason:
             entity_label:         Opportunity Close Reason
             entity_plural_label:  Opportunity Close Reasons
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:   The reason for closing an opportunity.
             name.label:           Name
             label:
@@ -244,6 +247,7 @@ oro:
         lead:
             entity_label:         Lead
             entity_plural_label:  Leads
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:   Leads are prospects or potential sales in a form of contact data. Lead records represent commercial activity with people or businesses that have authority, budget and interest to purchase goods and/or services.
             add_entity:           Add lead
             id.label:             Id
@@ -389,6 +393,7 @@ oro:
             entity_description:  The address configured for a lead.
             entity_label:        Lead Address
             entity_plural_label: Lead Addresses
+            entity_grid_all_view_label: All %entity_plural_label%
             first_name:
                 label:           First name
                 description:     The first name that is specified in the lead address.
@@ -452,6 +457,7 @@ oro:
             entity_description:  Represent lead's phone
             entity_label:        Lead Phone
             entity_plural_label: Lead Phones
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:            Id
             owner.label:         Owner
             phone.label:         Phone
@@ -465,6 +471,7 @@ oro:
             entity_description:  Represent lead's email
             entity_label:        Lead Email
             entity_plural_label: Lead Emails
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:            Id
             owner.label:         Owner
             primary.label:       Primary
@@ -472,6 +479,7 @@ oro:
         salesfunnel:
             entity_label:         Sales Process
             entity_plural_label:  Sales Processes
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:   Sales funnel is a sales process that involves a series of steps which enable sales force to close deals (Currently deprecated).
             new_entity:           New Sales Process
             id.label:             'Sales #'
@@ -502,6 +510,7 @@ oro:
         b2bcustomer:
             entity_label:               Business Customer
             entity_plural_label:        Business Customers
+            entity_grid_all_view_label: All %entity_plural_label%
             entity_description:         Customer identity that represents customers involved in business-to-business activities.
             id.label:                   Id
             name:
@@ -584,6 +593,7 @@ oro:
             entity_description:  Represent Business Customer phone
             entity_label:        Business Customer Phone
             entity_plural_label: Business Customer Phones
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:            Id
             owner.label:         Owner
             phone.label:         Phone
@@ -597,6 +607,7 @@ oro:
             entity_description:  Represent Business Customer email
             entity_label:        Business Customer Email
             entity_plural_label: Business Customer Emails
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:            Id
             owner.label:         Owner
             primary.label:       Primary
@@ -608,6 +619,7 @@ oro:
         customer:
             entity_label:               Customer
             entity_plural_label:        Customers
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:                   Id
             account.label:              Account
             importexport.empty_account: 'Customer Account must not be empty.'
@@ -626,6 +638,7 @@ oro:
         leadmailboxprocesssettings:
             entity_label:            Lead Mailbox Process Settings
             entity_plural_label:     Lead Mailbox Process Settings
+            entity_grid_all_view_label: All %entity_plural_label%
             id.label:                Id
             source.label:            Source
             channel.label:           Channel

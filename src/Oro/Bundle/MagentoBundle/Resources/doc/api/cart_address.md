@@ -118,16 +118,6 @@ Delete a collection of Magento cart addresses records.
 
 {@inheritdoc}
 
-## FIELDS
-
-### id
-
-#### update
-
-{@inheritdoc}
-
-**The required field.**
-
 ## SUBRESOURCES
 
 ### country

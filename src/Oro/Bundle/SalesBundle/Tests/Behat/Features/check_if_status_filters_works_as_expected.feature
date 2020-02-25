@@ -8,7 +8,7 @@ Feature: Check if status filters works as expected
   Scenario: Click status filter multiple times and check
     Given I login as administrator
     And I go to Sales/Opportunities
-    And I click "Filters"
+    And I click "Filter Toggle"
     And I click "OpportunityStatusFilter"
     And I click "OpportunityStatusFilter"
     And I click "OpportunityStatusFilter"
