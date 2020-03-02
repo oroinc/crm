@@ -22,6 +22,7 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "3.1.2",
+        "behat/gherkin": "4.6.0",
         "behat/behat": "3.2.2",
         "behat/mink-extension": "2.2.*",
         "behat/mink-selenium2-driver": "1.*",
