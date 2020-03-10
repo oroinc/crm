@@ -15,3 +15,5 @@ Oro\Bundle\CaseBundle\Entity\CaseComment:
     properties:
         message:
             - NotBlank: ~
+        case:
+            - NotBlank: ~
