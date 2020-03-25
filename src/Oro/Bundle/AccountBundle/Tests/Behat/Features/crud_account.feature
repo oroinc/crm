@@ -53,7 +53,7 @@ Scenario: Edit Account
   And Todd Greene should be an owner
 
 Scenario: Delete Account
-  And click "Delete"
+  And click "Delete" in "PageActionButtonsContainer" element
   When confirm deletion
   Then I should see "item deleted" flash message
   And there is no records in grid
