@@ -3,6 +3,7 @@
 namespace Oro\Bundle\AccountBundle\Provider;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\EntityBundle\Provider\EntityNameProvider;
 use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 
 /**
@@ -10,6 +11,14 @@ use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
  */
 class AccountEntityNameProvider implements EntityNameProviderInterface
 {
+    /** @var EntityNameProvider */
+    private $defaultEntityNameProvider;
+
+    public function __construct(EntityNameProvider $defaultEntityNameProvider)
+    {
+        $this->defaultEntityNameProvider = $defaultEntityNameProvider;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -27,6 +36,15 @@ class AccountEntityNameProvider implements EntityNameProviderInterface
      */
     public function getNameDQL($format, $locale, $className, $alias)
     {
-        return false;
+        if (!is_a($className, Account::class, true)) {
+            return false;
+        }
+
+        return $this->defaultEntityNameProvider->getNameDQL(
+            EntityNameProviderInterface::SHORT,
+            $locale,
+            $className,
+            $alias
+        );
     }
 }
