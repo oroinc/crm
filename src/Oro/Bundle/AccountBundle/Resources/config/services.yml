@@ -113,5 +113,7 @@ services:
     oro_account.provider.account_entity_name:
         class: 'Oro\Bundle\AccountBundle\Provider\AccountEntityNameProvider'
         public: false
+        arguments:
+            - '@oro_entity.entity_name_provider.default'
         tags:
             - { name: oro_entity.name_provider, priority: 100 }
