@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Async;
 
 use Doctrine\DBAL\Connection;
@@ -14,8 +15,8 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
-use Oro\Component\MessageQueue\Transport\Null\NullMessage;
-use Oro\Component\MessageQueue\Transport\Null\NullSession;
+use Oro\Component\MessageQueue\Transport\Message;
+use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Psr\Log\LoggerInterface;
@@ -54,7 +55,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldLogAndRejectIfMessageBodyMissChannelId()
     {
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody('[]');
 
         $logger = $this->createLoggerMock();
@@ -70,7 +71,10 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             new JobRunner(),
             $logger
         );
-        $status = $processor->process($message, new NullSession());
+
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, new $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -88,10 +92,12 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             $this->createLoggerMock()
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody('[}');
 
-        $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $processor->process($message, $session);
     }
 
     public function testShouldRejectMessageIfChannelNotExist()
@@ -112,7 +118,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('build')
         ;
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
 
         $logger = $this->createLoggerMock();
@@ -130,7 +136,9 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             $logger
         );
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -157,7 +165,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         ;
 
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
 
         $logger = $this->createLoggerMock();
@@ -175,8 +183,9 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             $logger
         );
 
-
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -203,7 +212,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('build')
         ;
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
 
         $logger = $this->createLoggerMock();
@@ -220,8 +229,9 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             $logger
         );
 
-
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -259,10 +269,12 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             $this->createLoggerMock()
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
     }
@@ -300,13 +312,15 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             $this->createLoggerMock()
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode([
             'channel_id' => 'theChannelId',
             'customer_ids' => ['theCustomerFooId', 'theCustomerBarId'],
         ]));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
     }
@@ -339,14 +353,16 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             $this->createLoggerMock()
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setMessageId('theMessageId');
         $message->setBody(JSON::encode([
             'channel_id' => 'theChannelId',
             'customer_ids' => ['theCustomerFooId', 'theCustomerBarId'],
         ]));
 
-        $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $processor->process($message, $session);
 
         $uniqueJobs = $jobRunner->getRunUniqueJobs();
         self::assertCount(1, $uniqueJobs);
@@ -387,6 +403,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param \PHPUnit\Framework\MockObject\MockObject|EntityManagerInterface $entityManager
      * @return \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
      */
     private function createDoctrineHelperStub($entityManager = null)

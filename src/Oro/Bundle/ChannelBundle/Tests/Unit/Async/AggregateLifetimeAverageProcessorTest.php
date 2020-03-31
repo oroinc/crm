@@ -11,8 +11,8 @@ use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
-use Oro\Component\MessageQueue\Transport\Null\NullMessage;
-use Oro\Component\MessageQueue\Transport\Null\NullSession;
+use Oro\Component\MessageQueue\Transport\Message;
+use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 
@@ -59,10 +59,12 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
             new JobRunner()
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody('[}');
 
-        $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $processor->process($message, $session);
     }
 
     public function testShouldDoAggregateAndWithoutForceByDefault()
@@ -94,10 +96,12 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
             new JobRunner()
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode([]));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
     }
@@ -131,12 +135,14 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
             new JobRunner()
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode([
             'force' => true
         ]));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
     }
@@ -170,13 +176,15 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
             new JobRunner()
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode([
             'force' => true,
             'use_truncate' => false,
         ]));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
     }
@@ -212,14 +220,16 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
             $jobRunner
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setMessageId('theMessageId');
         $message->setBody(JSON::encode([
             'force' => true,
             'use_truncate' => false,
         ]));
 
-        $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $processor->process($message, $session);
 
         $uniqueJobs = $jobRunner->getRunUniqueJobs();
         self::assertCount(1, $uniqueJobs);
