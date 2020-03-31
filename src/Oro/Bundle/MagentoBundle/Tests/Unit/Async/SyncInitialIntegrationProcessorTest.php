@@ -20,8 +20,8 @@ use Oro\Bundle\SearchBundle\Engine\IndexerInterface;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
-use Oro\Component\MessageQueue\Transport\Null\NullMessage;
-use Oro\Component\MessageQueue\Transport\Null\NullSession;
+use Oro\Component\MessageQueue\Transport\Message;
+use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Psr\Log\LoggerInterface;
@@ -71,6 +71,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->entityRepository = $this->createMock(EntityRepository::class);
 
+        /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject $doctrine */
         $doctrine = $this->createMock(DoctrineHelper::class);
         $doctrine
             ->expects($this->any())
@@ -93,14 +94,21 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
         $this->jobRunner = new JobRunner();
         $this->logger = $this->createMock(LoggerInterface::class);
 
+        /** @var CalculateAnalyticsScheduler|\PHPUnit\Framework\MockObject\MockObject $scheduler */
+        $scheduler = $this->createMock(CalculateAnalyticsScheduler::class);
+        /** @var IndexerInterface|\PHPUnit\Framework\MockObject\MockObject $indexer */
+        $indexer = $this->createMock(IndexerInterface::class);
+        /** @var TokenStorageInterface|\PHPUnit\Framework\MockObject\MockObject $tokenStorage */
+        $tokenStorage = $this->createMock(TokenStorageInterface::class);
+
         $this->processor = new SyncInitialIntegrationProcessor(
             $doctrine,
             $this->initialSyncProcessor,
             $this->optionalListenerManager,
-            $this->createMock(CalculateAnalyticsScheduler::class),
+            $scheduler,
             $this->jobRunner,
-            $this->createMock(IndexerInterface::class),
-            $this->createMock(TokenStorageInterface::class),
+            $indexer,
+            $tokenStorage,
             $this->logger
         );
     }
@@ -122,7 +130,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldLogAndRejectIfMessageBodyMissIntegrationId()
     {
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody('[]');
 
         $this->logger
@@ -143,7 +151,9 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
             ->expects($this->never())
             ->method('enableListeners');
 
-        $status = $this->processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $this->processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -154,15 +164,17 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testThrowIfMessageBodyInvalidJson()
     {
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody('[}');
 
-        $this->processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $this->processor->process($message, $session);
     }
 
     public function testShouldRejectMessageIfIntegrationNotExist()
     {
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['integration_id' => 'theIntegrationId']));
 
         $this->logger
@@ -177,7 +189,9 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
             ->expects($this->never())
             ->method('enableListener');
 
-        $status = $this->processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $this->processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -192,7 +206,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
             ->with(Integration::class)
             ->willReturn($integration);
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['integration_id' => 'theIntegrationId']));
 
         $this->logger
@@ -207,7 +221,9 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
             ->expects($this->never())
             ->method('enableListener');
 
-        $status = $this->processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $this->processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -239,7 +255,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn(true);
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode([
             'integration_id' => 'theIntegrationId',
             'connector' => 'theConnector',
@@ -272,7 +288,9 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
                 ['oro_entity.event_listener.entity_modify_created_updated_properties_listener']
             );
 
-        $result = $this->processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $result = $this->processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $result);
     }
@@ -298,7 +316,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn(false);
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode([
             'integration_id' => 'theIntegrationId',
             'connector' => 'theConnector',
@@ -331,7 +349,9 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
                 ['oro_entity.event_listener.entity_modify_created_updated_properties_listener']
             );
 
-        $result = $this->processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $result = $this->processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $result);
     }
@@ -347,7 +367,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
             ->with(Integration::class)
             ->willReturn($integration);
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['integration_id' => 'theIntegrationId']));
         $message->setMessageId('theMessageId');
 
@@ -376,7 +396,9 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
                 ['oro_entity.event_listener.entity_modify_created_updated_properties_listener']
             );
 
-        $this->processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $this->processor->process($message, $session);
 
         $uniqueJobs = $this->jobRunner->getRunUniqueJobs();
 

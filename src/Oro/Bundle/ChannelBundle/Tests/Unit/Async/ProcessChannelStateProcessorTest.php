@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 
 use Oro\Bundle\ChannelBundle\Async\ProcessChannelStateProcessor;
@@ -6,8 +7,8 @@ use Oro\Bundle\ChannelBundle\Async\Topics;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
-use Oro\Component\MessageQueue\Transport\Null\NullMessage;
-use Oro\Component\MessageQueue\Transport\Null\NullSession;
+use Oro\Component\MessageQueue\Transport\Message;
+use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\Testing\ClassExtensionTrait;
 
 class ProcessChannelStateProcessorTest extends \PHPUnit\Framework\TestCase
@@ -44,7 +45,9 @@ class ProcessChannelStateProcessorTest extends \PHPUnit\Framework\TestCase
 
         $processor = new ProcessChannelStateProcessor($providerMock);
 
-        $processor->process(new NullMessage(), new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $processor->process(new Message(), new $session);
     }
 
     /**

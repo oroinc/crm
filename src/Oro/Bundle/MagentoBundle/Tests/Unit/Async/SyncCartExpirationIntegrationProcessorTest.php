@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Async;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -12,8 +13,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
-use Oro\Component\MessageQueue\Transport\Null\NullMessage;
-use Oro\Component\MessageQueue\Transport\Null\NullSession;
+use Oro\Component\MessageQueue\Transport\Message;
+use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Psr\Log\LoggerInterface;
@@ -57,7 +58,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
 
     public function testShouldLogAndRejectIfMessageBodyMissIntegrationId()
     {
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody('[]');
 
         $logger = $this->createLoggerMock();
@@ -75,7 +76,9 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
             $logger
         );
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, new $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -94,10 +97,12 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
             $this->createLoggerMock()
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody('[}');
 
-        $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $processor->process($message, $session);
     }
 
     public function testShouldRejectMessageIfIntegrationNotExist()
@@ -105,7 +110,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
         $repositoryStub = $this->createIntegrationRepositoryStub(null);
         $registryStub = $this->createRegistryStub($repositoryStub);
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
 
         $logger = $this->createLoggerMock();
@@ -123,8 +128,9 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
             $logger
         );
 
-
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -137,7 +143,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
         $repositoryMock = $this->createIntegrationRepositoryStub($integration);
         $registryStub = $this->createRegistryStub($repositoryMock);
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
 
         $logger = $this->createLoggerMock();
@@ -155,7 +161,9 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
             $logger
         );
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -169,7 +177,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
         $repositoryMock = $this->createIntegrationRepositoryStub($integration);
         $registryStub = $this->createRegistryStub($repositoryMock);
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
 
         $logger = $this->createLoggerMock();
@@ -192,7 +200,9 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
             $logger
         );
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -232,10 +242,12 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
             $logger
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -265,15 +277,18 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
             $this->createLoggerMock()
         );
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
     }
 
     /**
+     * @param Integration|null $integration
      * @return \PHPUnit\Framework\MockObject\MockObject|IntegrationRepository
      */
     private function createIntegrationRepositoryStub(Integration $integration = null)

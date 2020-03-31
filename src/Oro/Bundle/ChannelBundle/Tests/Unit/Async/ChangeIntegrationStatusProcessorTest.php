@@ -11,8 +11,8 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
-use Oro\Component\MessageQueue\Transport\Null\NullMessage;
-use Oro\Component\MessageQueue\Transport\Null\NullSession;
+use Oro\Component\MessageQueue\Transport\Message;
+use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Psr\Log\LoggerInterface;
@@ -43,7 +43,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldLogAndRejectIfMessageBodyMissChangeId()
     {
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody('[]');
 
         $logger = $this->createLoggerMock();
@@ -55,8 +55,9 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
         $processor = new ChangeIntegrationStatusProcessor($this->createRegistryStub(), $logger);
 
-
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -69,10 +70,12 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $processor = new ChangeIntegrationStatusProcessor($this->createRegistryStub(), $this->createLoggerMock());
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody('[}');
 
-        $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $processor->process($message, $session);
     }
 
     public function testShouldRejectMessageIfChannelNotExist()
@@ -86,7 +89,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
         ;
 
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'theChannelId']));
 
         $logger = $this->createLoggerMock();
@@ -100,7 +103,9 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
         $processor = new ChangeIntegrationStatusProcessor($registryStub, $logger);
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
@@ -122,10 +127,12 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
         $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'theChannelId']));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
     }
@@ -157,10 +164,12 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
         $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
     }
@@ -187,10 +196,12 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
         $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
 
@@ -220,10 +231,12 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
         $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
 
@@ -253,10 +266,12 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
         $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
 
@@ -286,10 +301,12 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
         $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
 
@@ -318,10 +335,12 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
         $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
-        $message = new NullMessage();
+        $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
 
-        $status = $processor->process($message, new NullSession());
+        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        $session = $this->createMock(SessionInterface::class);
+        $status = $processor->process($message, $session);
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
 
