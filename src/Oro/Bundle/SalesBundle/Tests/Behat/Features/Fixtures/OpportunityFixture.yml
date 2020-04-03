@@ -4,6 +4,7 @@ parameters:
 Oro\Bundle\AccountBundle\Entity\Account:
   account1:
     name: 'mister customer 1'
+    owner: '@admin'
     organization: '@organization'
 
 Oro\Bundle\ContactBundle\Entity\ContactEmail:
@@ -15,6 +16,8 @@ Oro\Bundle\ContactBundle\Entity\Contact:
     namePrefix: 'Mrs.'
     firstName: 'Catherine'
     lastName: 'Hinojosa'
+    owner: '@admin'
+    organization: '@organization'
     __calls:
       - addEmail: ['@contactEmail1']
 

@@ -40,6 +40,7 @@ Feature: Country and region translations for opportunity
     When I click on "Contact hamburger"
     Then should see following "Select Contact" grid:
       | First name   | Last name    | Email             | Phone      | Country           | State       | Zip/Postal Code |
+      | Catherine    | Hinojosa     |                   |            |                   |             |                 |
       | Charlie      | Sheen        | charlie@gmail.com | 4157319375 | GermanyZulu       | BerlinZulu  |                 |
       | TestContact1 | TestContact1 | test1@test.com    | 5556668888 | GermanyZulu       | BerlinZulu  | 10001           |
       | TestContact2 | TestContact2 | test2@test.com    | 5556669999 | United StatesZulu | FloridaZulu | 10002           |
