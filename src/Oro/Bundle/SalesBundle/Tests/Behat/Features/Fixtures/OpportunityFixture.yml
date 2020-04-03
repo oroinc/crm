@@ -29,3 +29,4 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
     organization: '@organization'
     status: '@opportunity_status_in_progress'
     owner: '@admin'
+    customerNeed: '\<p\>some needs\</p\>'
