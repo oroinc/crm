@@ -47,12 +47,11 @@ class OroMagentoExtensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $missedConfigDefinitions, 'Should contain config array');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Strategy configuration contains unknown fields "unknown_field"
-     */
     public function testInvalidAccountDiscoveryConfiguration()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Strategy configuration contains unknown fields "unknown_field"');
+
         $config = [
             [
                 'account_discovery' => [

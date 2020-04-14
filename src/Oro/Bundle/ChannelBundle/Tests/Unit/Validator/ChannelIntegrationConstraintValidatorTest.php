@@ -26,11 +26,9 @@ class ChannelIntegrationConstraintValidatorTest extends \PHPUnit\Framework\TestC
         unset($this->provider);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     */
     public function testValidateException()
     {
+        $this->expectException(\Symfony\Component\Validator\Exception\UnexpectedTypeException::class);
         $constraint = $this->createMock('Symfony\Component\Validator\Constraint');
         $validator  = new ChannelIntegrationConstraintValidator($this->provider);
         $validator->validate(false, $constraint);

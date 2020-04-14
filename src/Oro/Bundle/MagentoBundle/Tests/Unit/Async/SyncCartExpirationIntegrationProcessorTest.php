@@ -83,12 +83,11 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The malformed json given.
-     */
     public function testThrowIfMessageBodyInvalidJson()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The malformed json given.');
+
         $processor = new SyncCartExpirationIntegrationProcessor(
             $this->createRegistryStub(),
             $this->createSyncProcessorMock(),
@@ -299,7 +298,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit\Framework\Test
             ->method('getOrLoadById')
             ->willReturn($integration)
         ;
-        
+
         return $repositoryMock;
     }
 

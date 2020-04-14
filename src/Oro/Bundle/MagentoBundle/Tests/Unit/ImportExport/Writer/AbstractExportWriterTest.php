@@ -12,12 +12,11 @@ abstract class AbstractExportWriterTest extends PersistentBatchWriterTest
      */
     protected $writer;
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Channel id is missing
-     */
     public function testChannelIdMissing()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Channel id is missing');
+
         $transport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $this->writer->setTransport($transport);
 
@@ -41,12 +40,11 @@ abstract class AbstractExportWriterTest extends PersistentBatchWriterTest
         $this->writer->write([['customer_id' => 1]]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Channel is missing
-     */
     public function testChannelMissing()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Channel is missing');
+
         $transport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $this->writer->setTransport($transport);
 

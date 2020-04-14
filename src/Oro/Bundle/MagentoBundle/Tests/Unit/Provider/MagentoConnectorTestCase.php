@@ -159,23 +159,20 @@ abstract class MagentoConnectorTestCase extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testInitializationErrors()
     {
+        $this->expectException(\LogicException::class);
         $connector = $this->getConnector(null, $this->stepExecutionMock);
         $this->transportMock->expects($this->never())->method('init');
 
         $connector->setStepExecution($this->stepExecutionMock);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Option "transport" should implement "MagentoTransportInterface"
-     */
     public function testInitializationErrorsBadTransportGiven()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Option "transport" should implement "MagentoTransportInterface"');
+
         $badTransport = $this->createMock('Oro\\Bundle\\IntegrationBundle\\Provider\\TransportInterface');
         $connector    = $this->getConnector($badTransport, $this->stepExecutionMock);
         $this->transportMock->expects($this->never())->method('init');

@@ -62,12 +62,11 @@ class LeadPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($leadPhone);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage The delete operation is forbidden. Reason: access denied.
-     */
     public function testAssertDeleteGrantedWhenAccessDenied()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
+
         $leadPhone = new LeadPhone();
         $lead = new Lead();
         $leadPhone->setOwner($lead);
@@ -82,12 +81,11 @@ class LeadPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($leadPhone);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage The delete operation is forbidden. Reason: translated exception message.
-     */
     public function testAssertDeleteGrantedWhenPrimaryPhoneIsDeletedAndThereIsOtherPhones()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
+
         $leadPhone = new LeadPhone();
         $lead = new Lead();
         $leadPhone->setOwner($lead);

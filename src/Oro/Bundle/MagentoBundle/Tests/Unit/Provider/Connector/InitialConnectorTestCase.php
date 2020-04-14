@@ -30,12 +30,11 @@ abstract class InitialConnectorTestCase extends MagentoConnectorTestCase
         $this->assertInternalType('string', $connector->getLabel());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Entity FQCN is missing
-     */
     public function testGetImportEntityFQCNFailed()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Entity FQCN is missing');
+
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
         $connector->getImportEntityFQCN();

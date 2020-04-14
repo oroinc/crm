@@ -89,22 +89,20 @@ class SocialUrlFormatterTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown social network type "type"
-     */
     public function testGetSocialUrlNoSocial()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown social network type "type"');
+
         $formatter = new SocialUrlFormatter(array());
         $formatter->getSocialUrl('type', 'me');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown social network type "type"
-     */
     public function testGetSocialUsernameNoSocial()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown social network type "type"');
+
         $formatter = new SocialUrlFormatter(array());
         $formatter->getSocialUsername('type', 'me');
     }

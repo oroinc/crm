@@ -55,7 +55,7 @@ class AutomaticDiscoveryActionTest extends \PHPUnit\Framework\TestCase
      */
     public function testInitializeErrors(array $options, $expectedExceptionMessage)
     {
-        $this->expectException('Oro\Component\Action\Exception\InvalidParameterException');
+        $this->expectException(\Oro\Component\Action\Exception\InvalidParameterException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
         $this->action->initialize($options);
     }
@@ -90,7 +90,7 @@ class AutomaticDiscoveryActionTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteExceptions(array $options, $context, $expectedExceptionMessage)
     {
-        $this->expectException('Oro\Component\Action\Exception\InvalidParameterException');
+        $this->expectException(\Oro\Component\Action\Exception\InvalidParameterException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $this->action->initialize($options);

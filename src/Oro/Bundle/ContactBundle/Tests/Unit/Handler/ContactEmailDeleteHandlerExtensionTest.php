@@ -65,12 +65,11 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage The delete operation is forbidden. Reason: access denied.
-     */
     public function testAssertDeleteGrantedWhenAccessDenied()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
+
         $contactEmail = new ContactEmail();
         $contact = new Contact();
         $contactEmail->setOwner($contact);
@@ -85,12 +84,11 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage The delete operation is forbidden. Reason: translated exception message.
-     */
     public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
+
         $contactEmail = new ContactEmail();
         $contact = new Contact();
         $contactEmail->setOwner($contact);
@@ -150,12 +148,11 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage The delete operation is forbidden. Reason: translated exception message.
-     */
     public function testAssertDeleteGrantedWhenLastEmailIsDeletedAndContactDoesNotHaveOtherIdentification()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
+
         $contactEmail = new ContactEmail();
         $contact = new Contact();
         $contactEmail->setOwner($contact);

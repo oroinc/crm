@@ -55,12 +55,11 @@ class ContextOptionReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->reader->read());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Context key is missing
-     */
     public function testReadFailed()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Context key is missing');
+
         $this->reader->setStepExecution($this->stepExecution);
     }
 }

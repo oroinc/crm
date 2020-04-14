@@ -59,7 +59,7 @@ class ChannelHelperTest extends OrmTestCase
             ->method('getId')->will($this->returnValue($integrationId));
 
         if (false === $expected) {
-            $this->expectException('\LogicException');
+            $this->expectException(\LogicException::class);
             $this->expectExceptionMessage('Unable to find channel for given integration');
         }
 

@@ -173,12 +173,11 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->settingsProvider->getIntegrationType('channel4'));
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The channel "channel2" is not defined.
-     */
     public function testGetIntegrationTypeForUnknownChannel()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The channel "channel2" is not defined.');
+
         $this->configProvider->expects(self::any())
             ->method('getChannelTypes')
             ->willReturn([
@@ -203,12 +202,11 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->settingsProvider->isSystemChannel('channel3'));
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The channel "channel2" is not defined.
-     */
     public function testIsSystemChannelForUnknownChannel()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The channel "channel2" is not defined.');
+
         $this->configProvider->expects(self::once())
             ->method('getChannelTypes')
             ->willReturn([

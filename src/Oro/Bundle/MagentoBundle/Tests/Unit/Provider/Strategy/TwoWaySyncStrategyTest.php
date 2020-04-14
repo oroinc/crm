@@ -88,12 +88,11 @@ class TwoWaySyncStrategyTest extends \PHPUnit\Framework\TestCase
         unset($this->strategy, $this->importProcessor, $this->exportProcessor);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Strategy "wrong" is not supported, expected one of "remote,local"
-     */
     public function testWrongStrategy()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Strategy "wrong" is not supported, expected one of "remote,local"');
+
         $this->strategy->merge([], [], [], 'wrong');
     }
 

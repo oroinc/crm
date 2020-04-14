@@ -99,12 +99,11 @@ class ContextReaderTest extends \PHPUnit\Framework\TestCase
         return [$obj, $obj2];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Context key is missing
-     */
     public function testReadFailed()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Context key is missing');
+
         $reader = $this->getReader(null);
 
         /** @var \PHPUnit\Framework\MockObject\MockObject|StepExecution $stepExecution */

@@ -82,12 +82,11 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
         return $strategy;
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Execution context is not configured
-     */
     public function testProcessFailed()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Execution context is not configured');
+
         $customer = new Customer();
         $customer->setOriginId(1);
         $channel = new Channel();

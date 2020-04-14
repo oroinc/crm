@@ -127,7 +127,7 @@ class SoapTransportTest extends \PHPUnit\Framework\TestCase
     {
         $this->sessionId = uniqid();
 
-        $this->expectException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
         $this->settings->set('api_key', $this->encryptedApiKey);
         $this->settings->set('wsdl_url', 'http://localhost/?wsdl');
         $this->transport->init($this->transportEntity);

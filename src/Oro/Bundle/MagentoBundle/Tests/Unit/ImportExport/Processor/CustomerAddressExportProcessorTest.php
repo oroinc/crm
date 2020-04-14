@@ -58,12 +58,13 @@ class CustomerAddressExportProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($customer->getAddresses()->toArray());
     }
 
-    /**
-     * @expectedException \Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Expected instance of Oro\Bundle\MagentoBundle\Entity\Address, "stdClass" given.
-     */
     public function testExpectedInvalidArgumentException()
     {
+        $this->expectException(\Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Expected instance of Oro\Bundle\MagentoBundle\Entity\Address, "stdClass" given.'
+        );
+
         $object = new \stdClass();
         $this->processor->process($object);
     }

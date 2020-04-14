@@ -39,11 +39,9 @@ class CartExpirationProcessorTest extends \PHPUnit\Framework\TestCase
         unset($this->em, $this->helper, $this->processor);
     }
 
-    /**
-     * @expectedException \Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException
-     */
     public function testProcessConfigurationExceptionScenario()
     {
+        $this->expectException(\Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException::class);
         $settingBag = new ParameterBag();
 
         $transport = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Transport')
@@ -63,11 +61,9 @@ class CartExpirationProcessorTest extends \PHPUnit\Framework\TestCase
         $this->processor->process($channel);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testProcessDataExceptionScenario()
     {
+        $this->expectException(\LogicException::class);
         $testWebsiteId   = 1;
         $testStoresArray = new \ArrayIterator([]);
         $settingBag      = new ParameterBag(['website_id' => $testWebsiteId]);

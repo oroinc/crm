@@ -19,12 +19,11 @@ class ChannelLimitationExtensionConfigurationTest extends \PHPUnit\Framework\Tes
         $this->assertSame(['channel_relation_path' => '.channel'], $resolved);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Must contains relative path with single nesting
-     */
     public function testInvalidRelationGiven()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Must contains relative path with single nesting');
+
         $this->processConfiguration(['root' => ['channel_relation_path' => '.entity.channel']]);
     }
 

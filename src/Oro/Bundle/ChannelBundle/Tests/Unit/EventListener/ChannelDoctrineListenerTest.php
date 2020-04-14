@@ -190,12 +190,11 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         $this->assertAttributeNotEmpty('queued', $this->channelDoctrineListener);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage UOW is missing, listener is not initialized
-     */
     public function testScheduleEntityUpdateFailed()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('UOW is missing, listener is not initialized');
+
         $account = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
         $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
