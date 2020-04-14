@@ -1,0 +1,92 @@
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact_entity:
+    firstName: 'New'
+    lastName: 'Contact'
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  account_entity:
+    name: 'New Account'
+    organization: '@organization'
+
+Oro\Bundle\CallBundle\Entity\Call:
+  call_entity:
+    subject: 'New Call'
+    phoneNumber: '1'
+    notes: ''
+    organization: '@organization'
+    owner: '@admin'
+
+Oro\Bundle\TaskBundle\Entity\Task:
+  task_entity:
+    subject: 'New Task'
+    description: ''
+    status: '@task_status_open'
+    taskPriority: '@task_priority_normal'
+    owner: '@admin'
+    createdBy: '@admin'
+    organization: '@organization'
+    dueDate: '<dateTime()>'
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+  sales_customer_entity:
+    account: '@account_entity'
+
+Oro\Bundle\SalesBundle\Entity\Opportunity:
+  opportunity_entity:
+    name: 'New Opportunity'
+    owner: '@admin'
+    organization: '@organization'
+    status: '@opportunity_status_in_progress'
+    customerAssociation: '@sales_customer_entity'
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+  lead_entity:
+    name: 'New Lead'
+    owner: '@admin'
+    organization: '@organization'
+    status: '@lead_status_new'
+
+Oro\Bundle\ChannelBundle\Entity\Channel:
+  sales_channel_entity:
+    owner: '@organization'
+    name: 'Business Customers'
+    channelType: 'b2b'
+    status: 1
+    customerIdentity: 'Oro\\Bundle\\SalesBundle\\Entity\\B2bCustomer'
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+  b2b_customer_entity:
+    name: 'New B2B Customer'
+    owner: '@admin'
+    organization: '@organization'
+    account: '@account_entity'
+    dataChannel: '@sales_channel_entity'
+
+Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
+  contact_request_entity:
+    firstName: 'New'
+    lastName: 'Contact Request'
+    emailAddress: 'new_contact_request@example.org'
+    phone: ''
+    owner: '@organization'
+    comment: ''
+
+Oro\Bundle\CaseBundle\Entity\CaseEntity:
+  case_entity:
+    subject: 'New Case'
+    description: ''
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\PromotionBundle\Entity\DiscountConfiguration:
+  discount_configuration_entity:
+    type: 'line_item'
+    options:
+      discount_type: 'amount'
+      discount_currency: 'USD'
+      discount_product_unit_code: 'item'
+      discount_value: 1
+      apply_to: 'each_item'
+      maximum_qty: 100
