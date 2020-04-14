@@ -36,7 +36,7 @@ class AddContactsToMagentoCustomersCommandTest extends WebTestCase
 
         self::assertNotNull($customer->getContact());
 
-        $this->assertContains('Executing command started.', $result);
-        $this->assertContains('Executing command finished.', $result);
+        static::assertStringContainsString('Executing command started.', $result);
+        static::assertStringContainsString('Executing command finished.', $result);
     }
 }

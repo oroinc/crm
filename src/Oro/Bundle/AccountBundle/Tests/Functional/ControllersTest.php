@@ -36,7 +36,7 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Account saved", $crawler->html());
+        static::assertStringContainsString("Account saved", $crawler->html());
     }
 
     /**
@@ -66,7 +66,7 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Account saved", $crawler->html());
+        static::assertStringContainsString("Account saved", $crawler->html());
 
         return $id;
     }
@@ -83,7 +83,7 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Account_name_update - Accounts - Customers", $crawler->html());
+        static::assertStringContainsString("Account_name_update - Accounts - Customers", $crawler->html());
     }
 
     /**

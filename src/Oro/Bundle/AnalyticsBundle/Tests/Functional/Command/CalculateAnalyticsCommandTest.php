@@ -33,8 +33,11 @@ class CalculateAnalyticsCommandTest extends WebTestCase
 
         $result = $this->runCommand('oro:cron:analytic:calculate', ['--channel='.$channel->getId()]);
 
-        self::assertContains('Schedule analytics calculation for "'.$channel->getId().'" channel.', $result);
-        self::assertContains('Completed', $result);
+        static::assertStringContainsString(
+            \sprintf('Schedule analytics calculation for "%s" channel.', $channel->getId()),
+            $result
+        );
+        static::assertStringContainsString('Completed', $result);
 
         self::assertMessageSent(
             Topics::CALCULATE_CHANNEL_ANALYTICS,
@@ -56,8 +59,11 @@ class CalculateAnalyticsCommandTest extends WebTestCase
 
         $result = $this->runCommand('oro:cron:analytic:calculate', ['--channel=' . $channelId]);
 
-        self::assertContains('Schedule analytics calculation for "'. $channelId.'" channel.', $result);
-        self::assertContains(sprintf('Channel is not supposed to calculate analytics: %s', $channelId), $result);
+        static::assertStringContainsString('Schedule analytics calculation for "'. $channelId.'" channel.', $result);
+        static::assertStringContainsString(
+            \sprintf('Channel is not supposed to calculate analytics: %s', $channelId),
+            $result
+        );
     }
 
     public function testShouldNotScheduleCalculateAnalyticsForNonActiveChannel()
@@ -68,16 +74,16 @@ class CalculateAnalyticsCommandTest extends WebTestCase
 
         $result = $this->runCommand('oro:cron:analytic:calculate', ['--channel=' . $channelId]);
 
-        self::assertContains('Schedule analytics calculation for "'. $channelId . '" channel.', $result);
-        self::assertContains(sprintf('Channel not active: %s', $channelId), $result);
+        static::assertStringContainsString('Schedule analytics calculation for "'. $channelId . '" channel.', $result);
+        static::assertStringContainsString(sprintf('Channel not active: %s', $channelId), $result);
     }
 
     public function testShouldScheduleAnalyticsCalculationForAllAvailableChannels()
     {
         $result = $this->runCommand('oro:cron:analytic:calculate');
 
-        self::assertContains('Schedule analytics calculation for all channels.', $result);
-        self::assertContains('Completed', $result);
+        static::assertStringContainsString('Schedule analytics calculation for all channels.', $result);
+        static::assertStringContainsString('Completed', $result);
 
         self::assertMessageSent(
             Topics::CALCULATE_ALL_CHANNELS_ANALYTICS,
@@ -89,8 +95,8 @@ class CalculateAnalyticsCommandTest extends WebTestCase
     {
         $result = $this->runCommand('oro:cron:analytic:calculate', ['--ids=1', '--ids=2']);
 
-        self::assertContains('In CalculateAnalyticsCommand.php', $result);
-        self::assertContains('Option "ids" does not work without "channel"', $result);
+        static::assertStringContainsString('In CalculateAnalyticsCommand.php', $result);
+        static::assertStringContainsString('Option "ids" does not work without "channel"', $result);
     }
 
     public function testShouldScheduleCalculateAnalyticsForGivenChannelWithCustomerIdsSet()
@@ -110,8 +116,11 @@ class CalculateAnalyticsCommandTest extends WebTestCase
             '--ids='.$customerTwo->getId(),
         ]);
 
-        self::assertContains('Schedule analytics calculation for "'.$channel->getId().'" channel.', $result);
-        self::assertContains('Completed', $result);
+        static::assertStringContainsString(
+            \sprintf('Schedule analytics calculation for "%s" channel.', $channel->getId()),
+            $result
+        );
+        static::assertStringContainsString('Completed', $result);
 
         self::assertMessageSent(
             Topics::CALCULATE_CHANNEL_ANALYTICS,

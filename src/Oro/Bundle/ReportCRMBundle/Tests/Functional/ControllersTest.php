@@ -37,7 +37,7 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains($reportName, $result->getContent());
+        static::assertStringContainsString($reportName, $result->getContent());
     }
 
     /**

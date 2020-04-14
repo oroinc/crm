@@ -110,11 +110,11 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
         if ($shouldAdd) {
             $this->assertArrayHasKey('attr', $ownerView->vars);
             $this->assertArrayHasKey('class', $ownerView->vars['attr']);
-            $this->assertContains('hide', $ownerView->vars['attr']['class']);
+            static::assertStringContainsString('hide', $ownerView->vars['attr']['class']);
         } else {
             $class = isset($ownerView->vars['attr'], $ownerView->vars['attr']['class'])
                 ? $ownerView->vars['attr']['class'] : '';
-            $this->assertNotContains('hide', $class);
+            $this->assertStringNotContainsString('hide', $class);
         }
     }
 
@@ -127,8 +127,8 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
 
         $this->type->finishView($mainView, $this->createMock('Symfony\Component\Form\Test\FormInterface'), []);
 
-        $this->assertContains('hide', $ownerView->vars['attr']['class']);
-        $this->assertContains('testClass', $ownerView->vars['attr']['class']);
+        static::assertStringContainsString('hide', $ownerView->vars['attr']['class']);
+        static::assertStringContainsString('testClass', $ownerView->vars['attr']['class']);
     }
 
     /**

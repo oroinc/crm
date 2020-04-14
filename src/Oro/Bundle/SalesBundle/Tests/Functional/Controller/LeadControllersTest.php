@@ -84,7 +84,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Lead saved", $crawler->html());
+        static::assertStringContainsString("Lead saved", $crawler->html());
 
         return $name;
     }
@@ -120,7 +120,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains(
+        static::assertStringContainsString(
             'This value is not a valid URL. Allowed URL protocols are: http, https.',
             $crawler->html()
         );
@@ -170,7 +170,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Lead saved", $crawler->html());
+        static::assertStringContainsString("Lead saved", $crawler->html());
 
         $returnValue['name'] = $name;
 
@@ -192,7 +192,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("{$returnValue['name']} - Leads - Sales", $crawler->html());
+        static::assertStringContainsString("{$returnValue['name']} - Leads - Sales", $crawler->html());
     }
 
     /**
@@ -213,8 +213,8 @@ class LeadControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains($returnValue['firstName'], $crawler->html());
-        $this->assertContains($returnValue['lastName'], $crawler->html());
+        static::assertStringContainsString($returnValue['firstName'], $crawler->html());
+        static::assertStringContainsString($returnValue['lastName'], $crawler->html());
     }
 
     /**

@@ -58,14 +58,14 @@ class DashboardControllerTest extends WebTestCase
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains('Average order amount', $result->getContent());
+        static::assertStringContainsString('Average order amount', $result->getContent());
 
         /** @var Channel[] $channels */
         $channels = $this->doctrine
             ->getRepository('OroChannelBundle:Channel')
             ->findBy(['channelType' => MagentoChannelType::TYPE]);
         foreach ($channels as $channel) {
-            $this->assertContains($channel->getName(), $result->getContent());
+            static::assertStringContainsString($channel->getName(), $result->getContent());
         }
     }
 
@@ -80,7 +80,7 @@ class DashboardControllerTest extends WebTestCase
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains('New Magento Customers', $result->getContent());
+        static::assertStringContainsString('New Magento Customers', $result->getContent());
 
         $aclHelper = $this->getContainer()->get('oro_security.acl_helper');
 
@@ -88,7 +88,7 @@ class DashboardControllerTest extends WebTestCase
         $channels = $this->doctrine->getRepository('OroChannelBundle:Channel')
             ->getAvailableChannelNames($aclHelper, MagentoChannelType::TYPE);
         foreach ($channels as $channel) {
-            $this->assertContains($channel['name'], $result->getContent());
+            static::assertStringContainsString($channel['name'], $result->getContent());
         }
     }
 }

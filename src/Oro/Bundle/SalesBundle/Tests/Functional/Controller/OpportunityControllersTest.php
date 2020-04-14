@@ -67,7 +67,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Opportunity saved", $crawler->html());
+        static::assertStringContainsString("Opportunity saved", $crawler->html());
     }
 
     public function testCreate()
@@ -91,7 +91,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Opportunity saved", $crawler->html());
+        static::assertStringContainsString("Opportunity saved", $crawler->html());
 
         return $name;
     }
@@ -130,7 +130,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Opportunity saved", $crawler->html());
+        static::assertStringContainsString("Opportunity saved", $crawler->html());
 
         $returnValue['name'] = $name;
 
@@ -152,7 +152,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("{$returnValue['name']} - Opportunities - Sales", $crawler->html());
+        static::assertStringContainsString("{$returnValue['name']} - Opportunities - Sales", $crawler->html());
     }
 
     /**

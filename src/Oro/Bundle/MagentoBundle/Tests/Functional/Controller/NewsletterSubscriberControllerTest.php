@@ -64,11 +64,11 @@ class NewsletterSubscriberControllerTest extends AbstractController
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains('General Information', $result->getContent());
-        $this->assertContains($this->subscriber->getCustomer()->getFirstName(), $result->getContent());
-        $this->assertContains($this->subscriber->getCustomer()->getLastName(), $result->getContent());
-        $this->assertContains($this->subscriber->getEmail(), $result->getContent());
-        $this->assertContains($this->subscriber->getStatus()->getName(), $result->getContent());
+        static::assertStringContainsString('General Information', $result->getContent());
+        static::assertStringContainsString($this->subscriber->getCustomer()->getFirstName(), $result->getContent());
+        static::assertStringContainsString($this->subscriber->getCustomer()->getLastName(), $result->getContent());
+        static::assertStringContainsString($this->subscriber->getEmail(), $result->getContent());
+        static::assertStringContainsString($this->subscriber->getStatus()->getName(), $result->getContent());
     }
 
     /**

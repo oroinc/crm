@@ -14,27 +14,27 @@ class OrderControllerTest extends AbstractController
         $this->client->request('GET', $this->getUrl('oro_magento_order_view', ['id' => $this->getMainEntityId()]));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains('Orders', $result->getContent());
-        $this->assertContains('General Information', $result->getContent());
-        $this->assertContains('Order items', $result->getContent());
-        $this->assertContains('Activity', $result->getContent());
-        $this->assertContains('Sync Data', $result->getContent());
-        $this->assertContains('$4.40', $result->getContent());
-        $this->assertContains('open', $result->getContent());
-        $this->assertContains('test@example.com', $result->getContent());
-        $this->assertContains('$12.47', $result->getContent());
-        $this->assertContains('$5.00', $result->getContent());
-        $this->assertContains('$17.85', $result->getContent());
-        $this->assertContains('$11.00', $result->getContent());
-        $this->assertContains('$4.00', $result->getContent());
-        $this->assertContains('$0.00', $result->getContent());
-        $this->assertContains('Some unique shipping method', $result->getContent());
-        $this->assertContains('127.0.0.1', $result->getContent());
-        $this->assertContains('some very unique gift message', $result->getContent());
-        $this->assertContains('web site', $result->getContent());
-        $this->assertContains('Demo Web store', $result->getContent());
-        $this->assertContains('John Doe', $result->getContent());
-        $this->assertContains('Shopping Cart', $result->getContent());
+        static::assertStringContainsString('Orders', $result->getContent());
+        static::assertStringContainsString('General Information', $result->getContent());
+        static::assertStringContainsString('Order items', $result->getContent());
+        static::assertStringContainsString('Activity', $result->getContent());
+        static::assertStringContainsString('Sync Data', $result->getContent());
+        static::assertStringContainsString('$4.40', $result->getContent());
+        static::assertStringContainsString('open', $result->getContent());
+        static::assertStringContainsString('test@example.com', $result->getContent());
+        static::assertStringContainsString('$12.47', $result->getContent());
+        static::assertStringContainsString('$5.00', $result->getContent());
+        static::assertStringContainsString('$17.85', $result->getContent());
+        static::assertStringContainsString('$11.00', $result->getContent());
+        static::assertStringContainsString('$4.00', $result->getContent());
+        static::assertStringContainsString('$0.00', $result->getContent());
+        static::assertStringContainsString('Some unique shipping method', $result->getContent());
+        static::assertStringContainsString('127.0.0.1', $result->getContent());
+        static::assertStringContainsString('some very unique gift message', $result->getContent());
+        static::assertStringContainsString('web site', $result->getContent());
+        static::assertStringContainsString('Demo Web store', $result->getContent());
+        static::assertStringContainsString('John Doe', $result->getContent());
+        static::assertStringContainsString('Shopping Cart', $result->getContent());
     }
 
     /**

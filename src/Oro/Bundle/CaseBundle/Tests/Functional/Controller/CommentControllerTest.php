@@ -59,7 +59,7 @@ class CommentControllerTest extends WebTestCase
 
         $this->assertHtmlResponseStatusCodeEquals($this->client->getResponse(), 200);
         $this->assertEquals(0, $crawler->filter('div')->count());
-        $this->assertContains(
+        static::assertStringContainsString(
             '{"widget":{"trigger":[{"eventBroker":"widget","name":"formSave","args":[',
             $this->client->getResponse()->getContent()
         );
@@ -102,7 +102,7 @@ class CommentControllerTest extends WebTestCase
 
         $this->assertHtmlResponseStatusCodeEquals($this->client->getResponse(), 200);
         $this->assertEquals(0, $crawler->filter('div')->count());
-        $this->assertContains(
+        static::assertStringContainsString(
             '{"widget":{"trigger":[{"eventBroker":"widget","name":"formSave","args":[',
             $this->client->getResponse()->getContent()
         );

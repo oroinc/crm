@@ -36,7 +36,7 @@ class ControllersGroupTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Group saved", $crawler->html());
+        static::assertStringContainsString("Group saved", $crawler->html());
     }
 
     /**
@@ -66,7 +66,7 @@ class ControllersGroupTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Group saved", $crawler->html());
+        static::assertStringContainsString("Group saved", $crawler->html());
 
         return $id;
     }

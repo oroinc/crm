@@ -45,7 +45,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $others = array_pop($data);
 
         $this->assertEquals(37, $others['value']);
-        $this->assertContains('others', $others['source']);
+        static::assertStringContainsString('others', $others['source']);
     }
 
     /**
@@ -76,7 +76,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $others = array_pop($data);
 
         $this->assertEquals(11, $others['value']);
-        $this->assertContains('others', $others['source']);
+        static::assertStringContainsString('others', $others['source']);
     }
 
     /**
@@ -91,7 +91,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $unclassified = array_shift($data);
 
         $this->assertEquals(27, $unclassified['value']);
-        $this->assertContains('unclassified', $unclassified['source']);
+        static::assertStringContainsString('unclassified', $unclassified['source']);
     }
 
     /**

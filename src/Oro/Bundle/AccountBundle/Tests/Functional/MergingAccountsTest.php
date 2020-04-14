@@ -53,7 +53,7 @@ class MergingAccountsTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertHtmlResponseStatusCodeEquals($this->client->getResponse(), Response::HTTP_OK);
-        $this->assertContains('Entities were successfully merged', $crawler->html());
+        static::assertStringContainsString('Entities were successfully merged', $crawler->html());
 
         $accounts = $this->getContainer()
             ->get('doctrine')

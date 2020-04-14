@@ -80,9 +80,9 @@ class OrderPlaceControllerTest extends WebTestCase
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains('iframe', $result->getContent());
-        $this->assertContains('orderPlaceFrame', $result->getContent());
-        $this->assertContains($widgetId, $result->getContent());
+        static::assertStringContainsString('iframe', $result->getContent());
+        static::assertStringContainsString('orderPlaceFrame', $result->getContent());
+        static::assertStringContainsString($widgetId, $result->getContent());
     }
 
     public function testSyncAction()
@@ -130,13 +130,13 @@ class OrderPlaceControllerTest extends WebTestCase
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
         $resultContent = $result->getContent();
-        $this->assertContains('Cart Information', $resultContent);
-        $this->assertContains(self::TEST_NEW_EMAIL, $resultContent);
-        $this->assertContains((string)self::TEST_NEW_ITEMS_QTY, $resultContent);
-        $this->assertContains('Expired', $resultContent);
+        static::assertStringContainsString('Cart Information', $resultContent);
+        static::assertStringContainsString(self::TEST_NEW_EMAIL, $resultContent);
+        static::assertStringContainsString((string)self::TEST_NEW_ITEMS_QTY, $resultContent);
+        static::assertStringContainsString('Expired', $resultContent);
 
-        $this->assertContains('Customer Information', $resultContent);
-        $this->assertContains('test@example.com', $resultContent);
+        static::assertStringContainsString('Customer Information', $resultContent);
+        static::assertStringContainsString('test@example.com', $resultContent);
     }
 
     /**
@@ -236,12 +236,12 @@ class OrderPlaceControllerTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
-        $this->assertContains('General Information', $result->getContent());
-        $this->assertContains('100000307', $result->getContent());
-        $this->assertContains('$750', $result->getContent());
-        $this->assertContains('pending', $result->getContent());
-        $this->assertContains('$755', $result->getContent());
-        $this->assertContains('$755', $result->getContent());
+        static::assertStringContainsString('General Information', $result->getContent());
+        static::assertStringContainsString('100000307', $result->getContent());
+        static::assertStringContainsString('$750', $result->getContent());
+        static::assertStringContainsString('pending', $result->getContent());
+        static::assertStringContainsString('$755', $result->getContent());
+        static::assertStringContainsString('$755', $result->getContent());
     }
 
     /**
@@ -351,11 +351,11 @@ class OrderPlaceControllerTest extends WebTestCase
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
         $resultContent = $result->getContent();
-        $this->assertContains('Cart Information', $resultContent);
-        $this->assertContains(self::TEST_NEW_GUEST_EMAIL, $resultContent);
+        static::assertStringContainsString('Cart Information', $resultContent);
+        static::assertStringContainsString(self::TEST_NEW_GUEST_EMAIL, $resultContent);
 
-        $this->assertContains('Customer Information', $resultContent);
-        $this->assertContains(self::TEST_NEW_GUEST_EMAIL, $resultContent);
+        static::assertStringContainsString('Customer Information', $resultContent);
+        static::assertStringContainsString(self::TEST_NEW_GUEST_EMAIL, $resultContent);
 
         $this->assertEquals(
             $arrayJson['url'],
@@ -365,8 +365,8 @@ class OrderPlaceControllerTest extends WebTestCase
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
         $resultContent = $result->getContent();
-        $this->assertContains('Customer Information', $resultContent);
-        $this->assertContains(self::TEST_NEW_GUEST_EMAIL, $resultContent);
+        static::assertStringContainsString('Customer Information', $resultContent);
+        static::assertStringContainsString(self::TEST_NEW_GUEST_EMAIL, $resultContent);
     }
 
     /**

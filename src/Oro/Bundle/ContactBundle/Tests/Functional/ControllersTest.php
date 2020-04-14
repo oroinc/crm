@@ -41,7 +41,7 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Contact saved", $crawler->html());
+        static::assertStringContainsString("Contact saved", $crawler->html());
     }
 
     /**
@@ -75,7 +75,7 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Contact saved", $crawler->html());
+        static::assertStringContainsString("Contact saved", $crawler->html());
 
         return $id;
     }

@@ -114,7 +114,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
     {
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains($name, $crawler->filter('h1.page-title__entity-title')->html());
+        static::assertStringContainsString($name, $crawler->filter('h1.page-title__entity-title')->html());
     }
 
     /**
@@ -155,7 +155,10 @@ class AbstractContactPaginationTestCase extends WebTestCase
     protected function assertPositionEntity(Crawler $crawler, $position, $total)
     {
         $this->assertEquals((string)$position, $crawler->filter('#entity-pagination .page-current')->html());
-        $this->assertContains((string)$total, $crawler->filter('#entity-pagination .entity-pagination_total')->html());
+        static::assertStringContainsString(
+            (string)$total,
+            $crawler->filter('#entity-pagination .entity-pagination_total')->html()
+        );
     }
 
     /**

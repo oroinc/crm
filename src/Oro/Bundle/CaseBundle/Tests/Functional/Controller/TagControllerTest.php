@@ -40,6 +40,6 @@ class TagControllerTest extends WebTestCase
 
         static::assertResponseStatusCodeEquals($response, 200);
 
-        static::assertContains($processSettings->getMailbox()->getLabel(), $response->getContent());
+        static::assertStringContainsString($processSettings->getMailbox()->getLabel(), $response->getContent());
     }
 }

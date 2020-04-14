@@ -29,8 +29,8 @@ class SyncCartExpirationCommandTest extends WebTestCase
 
         $result = $this->runCommand('oro:cron:magento:cart:expiration', ['--channel-id='.$integration->getId()]);
 
-        $this->assertContains('Run sync for "Demo Web store" channel', $result);
-        $this->assertContains('Completed', $result);
+        static::assertStringContainsString('Run sync for "Demo Web store" channel', $result);
+        static::assertStringContainsString('Completed', $result);
 
         self::assertMessageSent(
             Topics::SYNC_CART_EXPIRATION_INTEGRATION,
