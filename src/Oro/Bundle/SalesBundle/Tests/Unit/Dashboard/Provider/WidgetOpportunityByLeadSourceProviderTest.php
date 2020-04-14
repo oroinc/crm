@@ -21,16 +21,12 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
     public function testSortByValue(array $inputData)
     {
         $provider = $this->getProvider($inputData);
+
         $data = $provider->getChartData([], []);
 
-        $this->assertArraySubset(
-            [
-                1 => ['source' => 'affiliate', 'value' => 19],
-                2 => ['source' => 'direct_mail', 'value' => 15],
-                3 => ['source' => 'website', 'value' => 12],
-            ],
-            $data
-        );
+        $this->assertSame(['source' => 'affiliate', 'value' => 19], $data[1]);
+        $this->assertSame(['source' => 'direct_mail', 'value' => 15], $data[2]);
+        $this->assertSame(['source' => 'website', 'value' => 12], $data[3]);
     }
 
     /**
