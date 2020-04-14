@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
 
+use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatisticsWidgetFixture;
 use Symfony\Component\DomCrawler\Crawler;
@@ -17,7 +18,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         'won_opportunities_to_date_amount' => 'Won Opportunities to date amount'
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
         $this->loadFixtures([
@@ -25,16 +26,22 @@ class OpportunityStatisticsTest extends BaseStatistics
         ]);
     }
 
-    public function testDefaultConfiguration()
+    public function testDefaultConfiguration(): void
     {
         $this->getConfigureDialog();
 
         $crawler = $this->client->getCrawler();
         $form = $crawler->selectButton('Save')->form();
-        $this->createAndSetDateRangeFormElements($form, ['type' => AbstractDateFilterType::TYPE_ALL_TIME]);
-        $this->createMetricsElements($form);
-        $form['opportunity_statistics[usePreviousInterval]'] = 1;
-        $this->client->submit($form);
+
+        $data = $form->getPhpValues();
+
+        $this->createMetricsElements($data, 'opportunity_statistics');
+        $this->setComparePrevious($data, 'opportunity_statistics', true);
+        $this->createAndSetDateRangeFormElements($data, 'opportunity_statistics', [
+            'type' => AbstractDateFilterType::TYPE_ALL_TIME
+        ]);
+
+        $this->client->request($form->getMethod(), $form->getUri(), $data);
 
         $response = $this->client->getResponse();
         $this->assertEquals($response->getStatusCode(), 200, 'Failed in submit widget configuration options !');
@@ -118,7 +125,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         array $advancedFilters,
         array $result,
         array $previousResult
-    ) {
+    ): void {
         $this->getConfigureDialog();
 
         /**
@@ -127,13 +134,16 @@ class OpportunityStatisticsTest extends BaseStatistics
          */
         $crawler = $this->client->getCrawler();
         $form = $crawler->selectButton('Save')->form();
-        $form['opportunity_statistics[owners][users]'] = $owners;
-        $this->createMetricsElements($form);
-        $this->setComparePrevious($form, $comparePrevious);
-        $this->setAdvancedFilters($form, $advancedFilters);
-        $this->createAndSetDateRangeFormElements($form, $dateRange);
 
-        $this->client->submit($form);
+        $data = $form->getPhpValues();
+        $data['opportunity_statistics']['owners']['users'] = $owners;
+
+        $this->createMetricsElements($data, 'opportunity_statistics');
+        $this->setComparePrevious($data, 'opportunity_statistics', $comparePrevious);
+        $this->setAdvancedFilters($data, 'opportunity_statistics', $advancedFilters);
+        $this->createAndSetDateRangeFormElements($data, 'opportunity_statistics', $dateRange);
+
+        $this->client->request($form->getMethod(), $form->getUri(), $data);
 
         $this->inspectResult($result, $previousResult);
     }
@@ -143,7 +153,7 @@ class OpportunityStatisticsTest extends BaseStatistics
      *
      * @return array
      */
-    public function widgetProvider()
+    public function widgetProvider(): array
     {
         return [
             'Apply owner filter with date range filter on today' => [
@@ -305,7 +315,7 @@ class OpportunityStatisticsTest extends BaseStatistics
     /**
      * {@inheritdoc}
      */
-    protected function getWidget()
+    protected function getWidget(): Widget
     {
         return $this->getReference('widget_opportunity_statistics');
     }
@@ -314,7 +324,7 @@ class OpportunityStatisticsTest extends BaseStatistics
      * @param array $result
      * @param array $previousResult
      */
-    protected function inspectResult(array $result, array $previousResult)
+    protected function inspectResult(array $result, array $previousResult): void
     {
         $response = $this->client->getResponse();
         $this->assertEquals($response->getStatusCode(), 200, "Failed in submit widget configuration options !");
