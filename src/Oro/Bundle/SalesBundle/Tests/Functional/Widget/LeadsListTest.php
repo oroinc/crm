@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
 
+use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadLeadsListWidgetFixture;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -103,7 +104,7 @@ class LeadsListTest extends BaseStatistics
     /**
      * {@inheritdoc}
      */
-    protected function getWidget()
+    protected function getWidget(): Widget
     {
         return $this->getReference('widget_leads_list');
     }

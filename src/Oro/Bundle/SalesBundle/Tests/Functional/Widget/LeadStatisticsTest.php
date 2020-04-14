@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
 
+use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadLeadStatisticsWidgetFixture;
 
@@ -13,7 +14,7 @@ class LeadStatisticsTest extends BaseStatistics
         'new_leads_count' => 'New Leads'
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
         $this->loadFixtures([
@@ -21,16 +22,23 @@ class LeadStatisticsTest extends BaseStatistics
         ]);
     }
 
-    public function testDefaultConfiguration()
+    public function testDefaultConfiguration(): void
     {
         $this->getConfigureDialog();
 
         $crawler = $this->client->getCrawler();
+
         $form = $crawler->selectButton('Save')->form();
-        $this->createAndSetDateRangeFormElements($form, ['type' => AbstractDateFilterType::TYPE_ALL_TIME]);
-        $this->createMetricsElements($form);
-        $form['lead_statistics[usePreviousInterval]'] = 1;
-        $this->client->submit($form);
+
+        $data = $form->getPhpValues();
+
+        $this->createMetricsElements($data, 'lead_statistics');
+        $this->setComparePrevious($data, 'lead_statistics', true);
+        $this->createAndSetDateRangeFormElements($data, 'lead_statistics', [
+            'type' => AbstractDateFilterType::TYPE_ALL_TIME
+        ]);
+
+        $this->client->request($form->getMethod(), $form->getUri(), $data);
 
         $response = $this->client->getResponse();
         $this->assertEquals($response->getStatusCode(), 200, 'Failed in submit widget configuration options!');
@@ -96,13 +104,16 @@ class LeadStatisticsTest extends BaseStatistics
 
         $crawler = $this->client->getCrawler();
         $form = $crawler->selectButton('Save')->form();
-        $form['lead_statistics[owners][users]'] = $owners;
-        $this->createMetricsElements($form);
-        $this->setComparePrevious($form, $comparePrevious);
-        $this->setAdvancedFilters($form, $advancedFilters);
-        $this->createAndSetDateRangeFormElements($form, $dateRange);
 
-        $this->client->submit($form);
+        $data = $form->getPhpValues();
+        $data['lead_statistics']['owners']['users'] = $owners;
+
+        $this->createMetricsElements($data, 'lead_statistics');
+        $this->setComparePrevious($data, 'lead_statistics', $comparePrevious);
+        $this->setAdvancedFilters($data, 'lead_statistics', $advancedFilters);
+        $this->createAndSetDateRangeFormElements($data, 'lead_statistics', $dateRange);
+
+        $this->client->request($form->getMethod(), $form->getUri(), $data);
 
         $this->inspectResult($result, $previousResult);
     }
@@ -112,7 +123,7 @@ class LeadStatisticsTest extends BaseStatistics
      *
      * @return array
      */
-    public function widgetProvider()
+    public function widgetProvider(): array
     {
         return [
             'Apply owner filter with date range filter on today' => [
@@ -239,7 +250,7 @@ class LeadStatisticsTest extends BaseStatistics
     /**
      * {@inheritdoc}
      */
-    protected function getWidget()
+    protected function getWidget(): Widget
     {
         return $this->getReference('widget_lead_statistics');
     }
@@ -248,7 +259,7 @@ class LeadStatisticsTest extends BaseStatistics
      * @param array $result
      * @param array $previousResult
      */
-    protected function inspectResult(array $result, array $previousResult)
+    protected function inspectResult(array $result, array $previousResult): void
     {
         $response = $this->client->getResponse();
         $this->assertEquals($response->getStatusCode(), 200, 'Failed in submit widget configuration options !');
@@ -268,7 +279,7 @@ class LeadStatisticsTest extends BaseStatistics
 
         $response = $this->client->getResponse();
 
-        $this->assertEquals($response->getStatusCode(), 200, 'Failed in gettting widget view !');
+        $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting widget view !');
         $this->assertNotEmpty($crawler->html());
 
         $openLeadsMetric = $crawler->filterXPath(

@@ -168,7 +168,8 @@ datagrids:
                 label:        oro.grid.action.delete
                 icon:         trash
                 link:         delete_link
-    cases-grid:
+
+    base-cases-with-relations-grid:
         extends: base-case-grid
         filters:
             columns:
@@ -184,6 +185,11 @@ datagrids:
                     enabled: false
         options:
             entity_pagination: true
+
+    cases-grid:
+        extends: base-cases-with-relations-grid
+        extended_entity_name: 'Oro\Bundle\CaseBundle\Entity\CaseEntity'
+
     account-cases-grid:
         extends: base-case-grid
         filters:
@@ -219,7 +225,7 @@ datagrids:
                 - id
 
     user-cases-grid:
-        extends: cases-grid
+        extends: base-cases-with-relations-grid
         source:
             query:
                 where:

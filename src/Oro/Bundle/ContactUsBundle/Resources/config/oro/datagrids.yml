@@ -107,7 +107,9 @@ datagrids:
         options:
             entityHint: oro.contactus.contactrequest.entity_plural_label
             entity_pagination: true
+
     orcrm-contact-reasons-grid:
+        extended_entity_name: 'Oro\Bundle\ContactUsBundle\Entity\ContactReason'
         acl_resource: oro_contactus_reason_view
         options:
             entity_pagination: true
