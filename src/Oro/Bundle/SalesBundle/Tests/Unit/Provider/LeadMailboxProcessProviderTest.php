@@ -11,7 +11,7 @@ class LeadMailboxProcessProviderTest extends \PHPUnit\Framework\TestCase
     /** @var LeadMailboxProcessProvider */
     protected $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->provider = new LeadMailboxProcessProvider();
     }

@@ -11,7 +11,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadOpportunitiesDa
 
 class OpportunityTest extends RestJsonApiTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures([LoadOpportunitiesData::class]);

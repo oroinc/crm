@@ -17,7 +17,7 @@ class CommentControllerTest extends WebTestCase
      */
     protected static $adminUserId = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
 
@@ -50,7 +50,6 @@ class CommentControllerTest extends WebTestCase
         $form = $crawler->selectButton('Save')->form();
         $form['oro_case_comment_form[message]'] = 'New comment';
 
-        /** TODO Change after BAP-1813 */
         $form->getFormNode()->setAttribute(
             'action',
             $form->getFormNode()->getAttribute('action')
@@ -94,7 +93,6 @@ class CommentControllerTest extends WebTestCase
         $form = $crawler->selectButton('Save')->form();
         $form['oro_case_comment_form[message]'] = 'Updated comment';
 
-        /** TODO Change after BAP-1813 */
         $form->getFormNode()->setAttribute(
             'action',
             $form->getFormNode()->getAttribute('action') . '?_widgetContainer=dialog'

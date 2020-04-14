@@ -18,7 +18,7 @@ class ConnectorChoicesProviderTest extends \PHPUnit\Framework\TestCase
     /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $translator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->typesRegistry = $this->createMock(TypesRegistry::class);
         $this->translator    = $this->createMock(Translator::class);
@@ -34,7 +34,7 @@ class ConnectorChoicesProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

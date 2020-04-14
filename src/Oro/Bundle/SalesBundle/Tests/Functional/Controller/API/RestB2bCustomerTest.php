@@ -19,7 +19,7 @@ class RestB2bCustomerTest extends WebTestCase
     /** @var  Channel */
     protected static $dataChannel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             [],

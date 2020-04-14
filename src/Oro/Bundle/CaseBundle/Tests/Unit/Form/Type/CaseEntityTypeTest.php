@@ -11,7 +11,7 @@ class CaseEntityTypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $formType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formType = new CaseEntityType();
     }

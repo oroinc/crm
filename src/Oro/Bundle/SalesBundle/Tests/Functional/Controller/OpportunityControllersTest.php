@@ -18,7 +18,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
     /** @var bool */
     protected $isRealGridRequest = false;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             ['debug' => false],

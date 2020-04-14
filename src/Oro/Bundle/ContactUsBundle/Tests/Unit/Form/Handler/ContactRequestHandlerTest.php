@@ -30,7 +30,7 @@ class ContactRequestHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var ContactRequest */
     protected $entity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->form = $this->createMock(Form::class);
         $this->request = new Request();
@@ -48,7 +48,7 @@ class ContactRequestHandlerTest extends \PHPUnit\Framework\TestCase
         $this->handler = new ContactRequestHandler($this->form, $requestStack, $registry);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->form, $this->request, $this->em, $this->handler, $this->entity);
     }

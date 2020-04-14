@@ -11,7 +11,7 @@ class AddressPhoneProviderTest extends \PHPUnit\Framework\TestCase
     /** @var AddressPhoneProvider */
     protected $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->provider = new AddressPhoneProvider();
     }

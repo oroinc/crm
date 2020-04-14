@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class CustomerAddressApiHandlerTest extends AbstractHandlerTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->form = $this->createMock(Form::class);
         $this->request = new Request();

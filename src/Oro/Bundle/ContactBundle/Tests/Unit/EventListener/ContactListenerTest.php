@@ -20,14 +20,14 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $tokenStorage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
 
         $this->contactListener = new ContactListener($this->tokenStorage);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->tokenStorage);
         unset($this->contactListener);

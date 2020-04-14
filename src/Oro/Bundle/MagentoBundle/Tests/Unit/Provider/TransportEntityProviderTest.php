@@ -31,7 +31,7 @@ class TransportEntityProviderTest extends \PHPUnit\Framework\TestCase
     /** @var  MagentoSoapTransport */
     protected $transportEntity;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->formFactory      = $this->createMock(FormFactoryInterface::class);
         $this->form             = $this->createMock(FormInterface::class);
@@ -45,7 +45,7 @@ class TransportEntityProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         unset(

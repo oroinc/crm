@@ -60,7 +60,7 @@ class GuestCustomerStrategyTest extends AbstractStrategyTest
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         unset($this->guestCustomerStrategyHelper);

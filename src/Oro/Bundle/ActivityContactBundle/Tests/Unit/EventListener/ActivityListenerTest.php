@@ -43,7 +43,7 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $config;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $providers = TestContainerBuilder::create()
             ->add(TestActivity::class, new TestDirectionProvider())

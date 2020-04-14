@@ -13,7 +13,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
     /** @var SettingsProvider */
     private $settingsProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configProvider = $this->createMock(ChannelConfigurationProvider::class);
 

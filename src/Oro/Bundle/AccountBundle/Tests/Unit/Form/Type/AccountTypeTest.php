@@ -22,7 +22,7 @@ class AccountTypeTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $authorizationChecker;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
             ->disableOriginalConstructor()

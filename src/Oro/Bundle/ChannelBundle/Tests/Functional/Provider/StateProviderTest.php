@@ -15,7 +15,7 @@ class StateProviderTest extends WebTestCase
     /** @var StateProvider */
     private $stateProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
         $this->stateProvider = $this->getContainer()->get('oro_channel.provider.state_provider');
@@ -28,7 +28,7 @@ class StateProviderTest extends WebTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

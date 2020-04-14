@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class CartAddressHandlerTest extends AbstractHandlerTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->form = $this->createMock(Form::class);
 

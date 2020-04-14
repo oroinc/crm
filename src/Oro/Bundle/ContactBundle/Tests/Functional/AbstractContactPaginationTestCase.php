@@ -26,7 +26,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
             'i=1&p=25&s%5BlastName%5D=-1&s%5BfirstName%5D=-1&f%5BfirstName%5D%5Bvalue%5D=F&f%5BfirstName%5D%5Btype%5D=1'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         LoadContactEntitiesData::$owner = LoadUserData::USER_NAME;
         $this->initClient([], $this->generateBasicAuthHeader());

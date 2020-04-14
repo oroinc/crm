@@ -12,7 +12,7 @@ class OpportunityEditWithEnabledWorkflowTest extends WebTestCase
     /** @var  WorkflowManager */
     protected $workflowManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             ['debug' => false],

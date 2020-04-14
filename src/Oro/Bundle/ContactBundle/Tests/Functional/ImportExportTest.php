@@ -16,7 +16,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
  */
 class ImportExportTest extends AbstractImportExportTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures(

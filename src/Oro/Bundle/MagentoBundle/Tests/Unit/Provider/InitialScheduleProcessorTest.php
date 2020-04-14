@@ -25,7 +25,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
      */
     protected $doctrineHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

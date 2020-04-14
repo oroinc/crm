@@ -10,7 +10,7 @@ class CartAddressPhoneProviderTest extends \PHPUnit\Framework\TestCase
     /** @var CartAddressPhoneProvider */
     protected $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->provider = new CartAddressPhoneProvider();
     }

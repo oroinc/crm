@@ -16,12 +16,12 @@ class CustomerApiTypeTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerApiType */
     protected $type;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new CustomerApiType();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }

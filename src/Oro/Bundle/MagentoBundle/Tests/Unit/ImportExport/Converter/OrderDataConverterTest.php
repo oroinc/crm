@@ -16,13 +16,13 @@ class OrderDataConverterTest extends \PHPUnit\Framework\TestCase
     protected $now;
 
     /** {@inheritdoc} */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->converter = new OrderDataConverter();
     }
 
     /** {@inheritdoc} */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->converter = null;
     }

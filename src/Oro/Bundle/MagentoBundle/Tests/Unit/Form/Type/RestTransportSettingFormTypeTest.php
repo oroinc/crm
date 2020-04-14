@@ -25,7 +25,7 @@ class RestTransportSettingFormTypeTest extends \PHPUnit\Framework\TestCase
     /** @var  RestTransportSettingFormType */
     protected $type;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->restTransport = $this->getMockBuilder(RestTransport::class)
             ->disableOriginalConstructor()
@@ -44,7 +44,7 @@ class RestTransportSettingFormTypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }

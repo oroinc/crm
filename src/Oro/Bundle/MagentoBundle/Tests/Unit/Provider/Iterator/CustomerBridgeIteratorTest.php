@@ -6,7 +6,7 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator;
 
 class CustomerBridgeIteratorTest extends BaseSoapIteratorTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -55,7 +55,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $connectionMock = $this->createMock(Connection::class);
         $connectionMock

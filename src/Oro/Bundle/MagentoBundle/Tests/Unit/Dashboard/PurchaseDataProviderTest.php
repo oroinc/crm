@@ -36,7 +36,7 @@ class PurchaseDataProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $aclHelper;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
 

@@ -16,7 +16,7 @@ class LifetimeValueExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var LifetimeValueExtension */
     protected $extension;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->provider = $this->getMockBuilder(AmountProvider::class)
             ->disableOriginalConstructor()
@@ -29,7 +29,7 @@ class LifetimeValueExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension = new LifetimeValueExtension($container);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->extension, $this->provider);
     }

@@ -16,7 +16,7 @@ class DashboardControllerTest extends WebTestCase
     /** @var ManagerRegistry */
     protected $doctrine;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
         $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\DataFixtures\LoadDashboardData']);

@@ -26,7 +26,7 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelTypeSubscriber */
     protected $channelTypeSubscriber;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->builder          = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()->getMock();
@@ -46,7 +46,7 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
         $this->type = new ChannelType($this->settingsProvider, $this->channelTypeSubscriber);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type, $this->settingsProvider, $this->builder);
     }

@@ -25,7 +25,7 @@ class TrackingCustomerIdentificationTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $settingsProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->em = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
             ->disableOriginalConstructor()

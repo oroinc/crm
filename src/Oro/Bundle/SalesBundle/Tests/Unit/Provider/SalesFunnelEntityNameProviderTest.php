@@ -19,7 +19,7 @@ class SalesFunnelEntityNameProviderTest extends \PHPUnit\Framework\TestCase
     /** @var ServiceLink */
     protected $dqlNameFormatterLink;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->nameFormatterLink = $this->createMock(ServiceLink::class);
 

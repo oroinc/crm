@@ -8,7 +8,7 @@ use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 
 class CreditMemoItemTest extends RestJsonApiTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures([LoadMagentoChannel::class]);

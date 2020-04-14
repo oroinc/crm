@@ -9,15 +9,15 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ProcessChannelStateProcessorTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
     }
-    
+
     public function testCouldBeGetFromContainerAsService()
     {
         $processor = $this->getContainer()->get('oro_channel.async.process_channel_state_processor');
-        
+
         $this->assertInstanceOf(ProcessChannelStateProcessor::class, $processor);
     }
 }

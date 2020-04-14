@@ -6,7 +6,7 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
 
 class StoresSoapIteratorTest extends BaseSoapIteratorTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->iterator = new StoresSoapIterator($this->transport);

@@ -17,7 +17,7 @@ class RFMBuilderTest extends WebTestCase
      */
     protected $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
         $this->loadFixtures([LoadCustomerData::class, LoadRFMMetricCategoryData::class, LoadOrderData::class]);

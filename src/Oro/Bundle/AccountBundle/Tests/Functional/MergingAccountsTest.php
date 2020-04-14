@@ -10,7 +10,7 @@ class MergingAccountsTest extends WebTestCase
 {
     private const GRID_OF_ACCOUNTS = 'accounts-grid';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], static::generateBasicAuthHeader());
         $this->loadFixtures(

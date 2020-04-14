@@ -29,7 +29,7 @@ class SettingsFormSubscriberTest extends FormIntegrationTestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -247,7 +247,7 @@ class SettingsFormSubscriberTest extends FormIntegrationTestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subscriber,

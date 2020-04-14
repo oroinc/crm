@@ -17,7 +17,7 @@ class IntegrationRemoveListenerTest extends \PHPUnit\Framework\TestCase
      */
     protected $listener;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wsdlManager = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Service\WsdlManager')
             ->disableOriginalConstructor()
@@ -26,7 +26,7 @@ class IntegrationRemoveListenerTest extends \PHPUnit\Framework\TestCase
         $this->listener = new IntegrationRemoveListener($this->wsdlManager);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->listener, $this->wsdlManager);
     }

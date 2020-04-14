@@ -6,7 +6,7 @@ use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 
 class ContactRequestsGridTest extends AbstractDatagridTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

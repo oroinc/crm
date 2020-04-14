@@ -33,7 +33,7 @@ class ValidationNoteProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->importStrategyHelper = $this->createMock(ImportStrategyHelper::class);
@@ -44,7 +44,7 @@ class ValidationNoteProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->doctrineHelper);
         unset($this->importStrategyHelper);

@@ -17,7 +17,7 @@ class HasContactInformationValidatorTest extends \PHPUnit\Framework\TestCase
     /** @var HasContactInformationValidator */
     protected $validator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $translator = $translator = $this->createMock('Symfony\Contracts\Translation\TranslatorInterface');
         $translator

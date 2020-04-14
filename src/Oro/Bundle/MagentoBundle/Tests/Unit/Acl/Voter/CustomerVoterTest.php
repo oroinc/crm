@@ -21,7 +21,7 @@ class CustomerVoterTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerVoter */
     private $voter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->settingsProvider = $this->createMock(ChannelSettingsProvider::class);

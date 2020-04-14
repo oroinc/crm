@@ -27,7 +27,7 @@ class ContactReasonSearchHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->searchHandler = new ContactReasonSearchHandler($this->doctrineHelper, $this->getPropertyAccessor());

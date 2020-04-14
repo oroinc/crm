@@ -9,7 +9,7 @@ class AbstractLoadeableSoapIteratorTest extends BaseSoapIteratorTestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject|AbstractLoadeableSoapIterator */
     protected $iterator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

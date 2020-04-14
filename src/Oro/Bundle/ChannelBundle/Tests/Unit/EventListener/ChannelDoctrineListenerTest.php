@@ -41,7 +41,7 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         ]
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->lifetimeRepo = $this
             ->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository')
@@ -67,7 +67,7 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         $this->channelDoctrineListener = new ChannelDoctrineListener($settingProvider);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->em, $this->uow, $this->channelDoctrineListener);
     }

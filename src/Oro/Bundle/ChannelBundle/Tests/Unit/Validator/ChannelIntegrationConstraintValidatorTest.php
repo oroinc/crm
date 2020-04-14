@@ -15,13 +15,13 @@ class ChannelIntegrationConstraintValidatorTest extends \PHPUnit\Framework\TestC
     /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $provider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->provider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->provider);
     }

@@ -11,12 +11,12 @@ class CartApiFormSubscriberTest extends \PHPUnit\Framework\TestCase
     /** @var CartApiFormSubscriber */
     protected $subscriber;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subscriber = new CartApiFormSubscriber();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subscriber);
     }

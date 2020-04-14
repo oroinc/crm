@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
 
 class WebsiteSoapIteratorTest extends BaseSoapIteratorTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

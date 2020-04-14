@@ -17,7 +17,7 @@ class OroCaseExtensionTest extends \PHPUnit\Framework\TestCase
      */
     private $container;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = new ContainerBuilder();
         $this->extension = new OroCaseExtension();

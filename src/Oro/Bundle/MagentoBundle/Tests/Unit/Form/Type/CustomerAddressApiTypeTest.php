@@ -13,12 +13,12 @@ class CustomerAddressApiTypeTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerAddressApiType */
     protected $type;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new CustomerAddressApiType();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }

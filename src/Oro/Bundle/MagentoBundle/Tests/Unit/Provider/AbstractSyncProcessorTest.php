@@ -64,7 +64,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry = $this->getMockForAbstractClass('Doctrine\Common\Persistence\ManagerRegistry');
         $this->processorRegistry = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry')
@@ -97,7 +97,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->repository));
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->em,

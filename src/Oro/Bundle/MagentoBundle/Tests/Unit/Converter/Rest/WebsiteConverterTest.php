@@ -15,7 +15,7 @@ class WebsiteConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->converter = new WebsiteConverter();
     }

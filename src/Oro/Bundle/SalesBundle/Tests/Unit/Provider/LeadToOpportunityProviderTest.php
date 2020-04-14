@@ -21,7 +21,7 @@ class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $provider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $entityFieldProvider = $this
             ->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityFieldProvider')

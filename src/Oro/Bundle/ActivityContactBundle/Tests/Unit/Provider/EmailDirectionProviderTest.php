@@ -19,7 +19,7 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
     /** @var EmailDirectionProvider */
     protected $provider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $fieldConfigurationMock = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\Config')
             ->disableOriginalConstructor()

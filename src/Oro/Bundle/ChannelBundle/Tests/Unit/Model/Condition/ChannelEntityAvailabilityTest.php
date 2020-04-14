@@ -11,7 +11,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelEntityAvailability */
     protected $condition;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $stateProvider   = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\StateProvider')
             ->disableOriginalConstructor()->getMock();

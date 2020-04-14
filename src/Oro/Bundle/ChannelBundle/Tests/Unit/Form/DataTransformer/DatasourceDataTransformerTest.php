@@ -20,13 +20,13 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
     /** @var DatasourceDataTransformer */
     protected $transformer;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         $this->transformer = new DatasourceDataTransformer($this->formFactory);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->transformer, $this->formFactory);
     }

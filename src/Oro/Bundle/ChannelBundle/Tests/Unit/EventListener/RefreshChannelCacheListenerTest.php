@@ -20,7 +20,7 @@ class RefreshChannelCacheListenerTest extends OrmTestCase
     /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $em;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stateProvider = $this
             ->getMockBuilder(StateProvider::class)

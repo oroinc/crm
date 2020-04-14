@@ -20,7 +20,7 @@ class ChannelHelperTest extends OrmTestCase
     /** @var EntityManager */
     protected $em;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->em = $this->getTestEntityManager();
 
@@ -40,7 +40,7 @@ class ChannelHelperTest extends OrmTestCase
         $this->helper = new ChannelHelper($registry);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->em, $this->helper);
     }

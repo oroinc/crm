@@ -19,7 +19,7 @@ class RestTransportTest extends WebTestCase
      */
     protected $crypter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
 

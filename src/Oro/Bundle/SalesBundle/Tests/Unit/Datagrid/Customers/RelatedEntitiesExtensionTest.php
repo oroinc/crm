@@ -23,7 +23,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $configProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configProvider = $this
             ->getMockBuilder(ConfigProvider::class)

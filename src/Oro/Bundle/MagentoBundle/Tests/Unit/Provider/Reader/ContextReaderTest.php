@@ -19,7 +19,7 @@ class ContextReaderTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject|JobExecution */
     protected $jobExecution;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextRegistry = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Context\ContextRegistry')
             ->disableOriginalConstructor()

@@ -9,7 +9,7 @@ use Symfony\Component\DomCrawler\Form;
 
 class LeadAddressControllersTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             array(),

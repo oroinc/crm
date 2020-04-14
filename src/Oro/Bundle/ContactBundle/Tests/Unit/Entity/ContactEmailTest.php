@@ -9,7 +9,7 @@ class ContactEmailTest extends \PHPUnit\Framework\TestCase
 {
     protected $email;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->email = new ContactEmail();
     }

@@ -17,7 +17,7 @@ class WebsiteChoicesProviderTest extends \PHPUnit\Framework\TestCase
     /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $translator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->transport     = $this->createMock(MagentoTransportInterface::class);
         $this->translator    = $this->createMock(TranslatorInterface::class);
@@ -32,7 +32,7 @@ class WebsiteChoicesProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

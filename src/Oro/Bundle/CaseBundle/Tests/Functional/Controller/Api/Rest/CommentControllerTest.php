@@ -30,7 +30,7 @@ class CommentControllerTest extends WebTestCase
      */
     protected static $adminUserId = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());
 

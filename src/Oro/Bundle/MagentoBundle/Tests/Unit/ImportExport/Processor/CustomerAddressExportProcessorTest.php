@@ -28,7 +28,7 @@ class CustomerAddressExportProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transport  = $this->createMock(MagentoTransportInterface::class);
         $this->serializer = $this->createMock(SerializerInterface::class);

@@ -41,7 +41,7 @@ class TransportHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var  MagentoSoapTransport */
     protected $transportEntity;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->typesRegistry            = $this->createMock(TypesRegistry::class);
         $this->transportEntityProvider  = $this->createMock(TransportEntityProvider::class);
@@ -64,7 +64,7 @@ class TransportHandlerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

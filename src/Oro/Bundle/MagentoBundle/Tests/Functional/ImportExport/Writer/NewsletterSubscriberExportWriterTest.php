@@ -8,7 +8,7 @@ use Oro\Bundle\MagentoBundle\Entity\Store;
 
 class NewsletterSubscriberExportWriterTest extends AbstractExportWriterTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

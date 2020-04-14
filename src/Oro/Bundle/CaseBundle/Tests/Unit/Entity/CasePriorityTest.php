@@ -11,7 +11,7 @@ class CasePriorityTest extends \PHPUnit\Framework\TestCase
      */
     protected $casePriority;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->casePriority = new CasePriority('test');
     }

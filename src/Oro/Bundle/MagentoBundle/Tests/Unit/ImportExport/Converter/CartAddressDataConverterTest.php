@@ -17,7 +17,7 @@ class CartAddressDataConverterTest extends \PHPUnit\Framework\TestCase
      */
     protected $dataConverter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->iso2CodeProvider = $this->getMockBuilder(Iso2CodeProvider::class)
             ->disableOriginalConstructor()

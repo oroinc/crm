@@ -22,7 +22,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $contextAccessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $formArray = [
             'oro_channel_entities' => new ChannelEntityType(),

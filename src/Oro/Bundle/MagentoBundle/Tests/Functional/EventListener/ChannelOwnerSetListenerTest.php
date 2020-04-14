@@ -18,7 +18,7 @@ class ChannelOwnerSetListenerTest extends WebTestCase
 {
     const FIXTURE_NS = 'Oro\\Bundle\\MagentoBundle\\Tests\\Functional\\Fixture\\';
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
         $fixtures = [

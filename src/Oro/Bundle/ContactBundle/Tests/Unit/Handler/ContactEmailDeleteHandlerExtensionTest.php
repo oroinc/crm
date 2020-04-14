@@ -22,7 +22,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var ContactEmailDeleteHandlerExtension */
     private $extension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->translator = $this->createMock(TranslatorInterface::class);

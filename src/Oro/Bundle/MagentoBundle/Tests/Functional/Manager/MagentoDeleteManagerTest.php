@@ -15,7 +15,7 @@ class MagentoDeleteManagerTest extends WebTestCase
      */
     protected $em;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
         $this->em = $this->client->getKernel()->getContainer()->get('doctrine.orm.entity_manager');

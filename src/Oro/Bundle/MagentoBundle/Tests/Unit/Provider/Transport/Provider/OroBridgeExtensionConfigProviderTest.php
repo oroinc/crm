@@ -20,7 +20,7 @@ class OroBridgeExtensionConfigProviderTest extends \PHPUnit\Framework\TestCase
     /** @var  RestResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $clientResponse;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client =  $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface')
             ->disableOriginalConstructor()
@@ -157,7 +157,7 @@ class OroBridgeExtensionConfigProviderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->oroBridgeExtensionConfigProvider, $this->client);
     }

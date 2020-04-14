@@ -33,7 +33,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup test env
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = $this->getFormType(['in_progress']);
     }

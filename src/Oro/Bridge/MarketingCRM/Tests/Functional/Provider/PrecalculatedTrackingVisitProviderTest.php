@@ -20,7 +20,7 @@ class PrecalculatedTrackingVisitProviderTest extends WebTestCase
      */
     private $originalProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
         $this->loadFixtures([

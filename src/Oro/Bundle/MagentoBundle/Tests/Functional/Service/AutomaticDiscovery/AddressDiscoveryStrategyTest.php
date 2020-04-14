@@ -16,7 +16,7 @@ class AddressDiscoveryStrategyTest extends WebTestCase
      */
     protected $strategy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
 

@@ -8,7 +8,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RestOpportunityTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             [],
@@ -65,7 +65,7 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         // Because api return name of status, that can be different, assert id
         $this->assertEquals('in_progress', $this->getStatusByLabel($result['status'])->getId());
-        // TODO: incomplete CRM-816
+        // Incomplete CRM-816
         //$this->assertEquals($request['opportunity']['owner'], $result['owner']['id']);
         return $request;
     }

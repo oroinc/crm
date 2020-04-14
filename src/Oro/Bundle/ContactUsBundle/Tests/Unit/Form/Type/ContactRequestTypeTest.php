@@ -15,12 +15,12 @@ class ContactRequestTypeTest extends TypeTestCase
     /** @var ContactRequestType */
     protected $formType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formType = new ContactRequestType();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->formType);
     }

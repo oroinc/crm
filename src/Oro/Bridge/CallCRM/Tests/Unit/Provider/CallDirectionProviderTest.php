@@ -14,7 +14,7 @@ class CallDirectionProviderTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $activityManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->activityManager = $this->getMockBuilder('Oro\Bundle\ActivityBundle\Manager\ActivityManager')
             ->disableOriginalConstructor()

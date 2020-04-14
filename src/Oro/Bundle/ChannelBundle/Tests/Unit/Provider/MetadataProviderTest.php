@@ -79,7 +79,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     /** @var RouterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $router;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->settingsProvider   = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
@@ -96,7 +96,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->router,

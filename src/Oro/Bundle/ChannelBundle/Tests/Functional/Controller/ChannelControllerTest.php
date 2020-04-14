@@ -19,7 +19,7 @@ class ChannelControllerTest extends WebTestCase
     const CHANNEL_NAME = 'some name';
     const GRID_NAME    = 'oro-channels-grid';
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
         $this->client->enableReboot();

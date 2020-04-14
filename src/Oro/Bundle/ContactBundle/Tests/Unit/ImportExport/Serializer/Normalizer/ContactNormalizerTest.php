@@ -25,7 +25,7 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
      */
     protected $normalizer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->socialUrlFormatter = $this
             ->getMockBuilder('Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter')

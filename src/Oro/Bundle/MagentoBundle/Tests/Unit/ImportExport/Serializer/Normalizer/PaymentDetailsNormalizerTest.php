@@ -20,7 +20,7 @@ class PaymentDetailsNormalizerTest extends \PHPUnit\Framework\TestCase
      */
     protected $fieldHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fieldHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\Helper\FieldHelper')
             ->disableOriginalConstructor()
@@ -29,7 +29,7 @@ class PaymentDetailsNormalizerTest extends \PHPUnit\Framework\TestCase
         $this->normalizer = new PaymentDetailsNormalizer($this->fieldHelper);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->fieldHelper, $this->normalizer);
     }

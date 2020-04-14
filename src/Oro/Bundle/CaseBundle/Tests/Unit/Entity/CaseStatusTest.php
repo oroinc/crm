@@ -11,7 +11,7 @@ class CaseStatusTest extends \PHPUnit\Framework\TestCase
      */
     protected $caseStatus;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->caseStatus = new CaseStatus('test');
     }

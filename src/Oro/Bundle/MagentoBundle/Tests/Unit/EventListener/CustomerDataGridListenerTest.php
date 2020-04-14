@@ -16,7 +16,7 @@ class CustomerDataGridListenerTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerDataGridListener */
     protected $listener;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->selectedFieldsFromFiltersProvider = $this->createMock(SelectedFieldsProviderInterface::class);
         $this->listener = new CustomerDataGridListener($this->selectedFieldsFromFiltersProvider);

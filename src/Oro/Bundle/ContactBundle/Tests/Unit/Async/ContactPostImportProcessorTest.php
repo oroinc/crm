@@ -33,7 +33,7 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $processor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contactEmailAddressHandler = $this->createMock(ContactEmailAddressHandler::class);
         $this->jobStorage = $this->createMock(JobStorage::class);

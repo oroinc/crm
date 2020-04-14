@@ -34,7 +34,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
         return $this->subscriber->getid();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
 

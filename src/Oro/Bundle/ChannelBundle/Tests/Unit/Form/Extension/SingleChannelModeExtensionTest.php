@@ -22,7 +22,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
      */
     protected $channelsProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->channelsProvider = $this
             ->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider')

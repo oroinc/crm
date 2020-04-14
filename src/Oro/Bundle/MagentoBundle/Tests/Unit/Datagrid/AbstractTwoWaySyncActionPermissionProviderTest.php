@@ -11,7 +11,7 @@ abstract class AbstractTwoWaySyncActionPermissionProviderTest extends \PHPUnit\F
      */
     protected $settingsProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider')
             ->disableOriginalConstructor()

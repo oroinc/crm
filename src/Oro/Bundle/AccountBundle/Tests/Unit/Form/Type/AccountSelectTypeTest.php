@@ -15,7 +15,7 @@ class AccountSelectTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up test environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new AccountSelectType();
     }

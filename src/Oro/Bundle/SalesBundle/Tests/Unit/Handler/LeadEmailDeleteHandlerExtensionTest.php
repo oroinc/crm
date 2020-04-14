@@ -21,7 +21,7 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var LeadEmailDeleteHandlerExtension */
     private $extension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->translator = $this->createMock(TranslatorInterface::class);

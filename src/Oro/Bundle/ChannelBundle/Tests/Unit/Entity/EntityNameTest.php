@@ -7,7 +7,7 @@ class EntityNameTest extends AbstractEntityTestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $name         = $this->getEntityFQCN();
         $this->entity = unserialize(sprintf('O:%d:"%s":0:{}', strlen($name), $name));

@@ -18,7 +18,7 @@ class MagentoSoapTransportTest extends WebTestCase
 {
     use MessageQueueExtension;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
         $this->loadFixtures([LoadMagentoChannel::class]);

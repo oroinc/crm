@@ -25,7 +25,7 @@ class AutomaticDiscoveryActionTest extends \PHPUnit\Framework\TestCase
      */
     protected $action;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextAccessor = new ContextAccessor();
         $this->automaticDiscovery = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery')
@@ -42,7 +42,7 @@ class AutomaticDiscoveryActionTest extends \PHPUnit\Framework\TestCase
         $this->action->setDispatcher($dispatcher);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->contextAccessor, $this->automaticDiscovery, $this->action);
     }

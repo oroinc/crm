@@ -26,7 +26,7 @@ class ContactEntityNameProviderTest extends \PHPUnit\Framework\TestCase
     /** @var DQLNameFormatter */
     protected $dqlNameFormatter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contactNameFormatter = $this
             ->getMockBuilder('Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter')

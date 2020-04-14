@@ -21,7 +21,7 @@ class ChainProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->chainProcessor = new ChainProcessor();
     }
@@ -29,7 +29,7 @@ class ChainProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->chainProcessor);
     }

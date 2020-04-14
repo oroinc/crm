@@ -16,7 +16,7 @@ class CaseEntityManagerTest extends WebTestCase
      */
     protected $manager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             array(),

@@ -14,7 +14,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpenOpportunityFixtures;
  */
 class ImportExportTest extends AbstractImportExportTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures(

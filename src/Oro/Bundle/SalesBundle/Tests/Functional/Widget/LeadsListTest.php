@@ -8,7 +8,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class LeadsListTest extends BaseStatistics
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
         $this->loadFixtures([

@@ -44,7 +44,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit\Framework\TestCase
         'sync_settings' => ['mistiming_assumption_interval' => '2 minutes']
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transportMock     = $this
             ->createMock('Oro\\Bundle\\MagentoBundle\\Provider\\Transport\\MagentoTransportInterface');
@@ -80,7 +80,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->integrationRepositoryMock));
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->transportMock, $this->stepExecutionMock);
     }

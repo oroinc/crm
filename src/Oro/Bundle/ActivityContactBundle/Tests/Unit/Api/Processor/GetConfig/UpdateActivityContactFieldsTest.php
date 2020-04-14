@@ -27,7 +27,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
     /** @var UpdateActivityContactFields */
     private $processor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

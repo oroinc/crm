@@ -30,7 +30,7 @@ class InformationLoaderTest extends \PHPUnit\Framework\TestCase
      */
     protected $loader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jobExecutor = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Job\JobExecutor')
             ->disableOriginalConstructor()
@@ -41,7 +41,7 @@ class InformationLoaderTest extends \PHPUnit\Framework\TestCase
         $this->loader = new InformationLoader($this->jobExecutor, $this->connector, $this->processorAlias);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->loader, $this->jobExecutor, $this->connector);
     }

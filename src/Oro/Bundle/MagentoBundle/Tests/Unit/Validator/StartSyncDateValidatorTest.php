@@ -24,13 +24,13 @@ class StartSyncDateValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->validator = new StartSyncDateValidator($this->registry);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->registry, $this->validator);
     }

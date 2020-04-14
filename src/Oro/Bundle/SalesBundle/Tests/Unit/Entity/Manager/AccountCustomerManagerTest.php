@@ -30,7 +30,7 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerRepository|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerRepo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerRepo   = $this
             ->getMockBuilder(CustomerRepository::class)

@@ -13,7 +13,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
      */
     protected $group;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->group = new Group();
     }

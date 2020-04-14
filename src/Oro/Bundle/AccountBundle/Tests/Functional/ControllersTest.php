@@ -7,7 +7,7 @@ use Symfony\Component\DomCrawler\Form;
 
 class ControllersTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             array(),

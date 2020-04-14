@@ -25,7 +25,7 @@ class OrganizationAnnotationVoterTest extends \PHPUnit\Framework\TestCase
      */
     private $voter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->settingsProvider = $this->createMock(ChannelSettingsProvider::class);
@@ -33,7 +33,7 @@ class OrganizationAnnotationVoterTest extends \PHPUnit\Framework\TestCase
         $this->voter->setSettingsProvider($this->settingsProvider);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->voter, $this->doctrineHelper);
     }

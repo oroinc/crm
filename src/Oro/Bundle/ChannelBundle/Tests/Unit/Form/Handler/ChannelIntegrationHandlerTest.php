@@ -31,7 +31,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var FormFactoryInterface */
     protected $formBuilder;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->form        = $this->createMock('Symfony\Component\Form\Test\FormInterface');
         $this->formBuilder = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
@@ -47,7 +47,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
         $this->handler = new ChannelIntegrationHandler($requestStack, $this->formBuilder);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->handler, $this->request, $this->form, $this->entity);
     }

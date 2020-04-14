@@ -18,7 +18,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->businessAclProvider = $this
             ->getMockBuilder('Oro\Bundle\OrganizationBundle\Provider\BusinessUnitAclProvider')

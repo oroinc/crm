@@ -21,7 +21,7 @@ class OrderNoteTest extends WebTestCase
     protected $fieldHelper;
 
     /** {@inheritdoc} */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient([]);
 
@@ -36,7 +36,7 @@ class OrderNoteTest extends WebTestCase
     }
 
     /** {@inheritdoc} */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->manager = null;
         $this->fieldHelper = null;

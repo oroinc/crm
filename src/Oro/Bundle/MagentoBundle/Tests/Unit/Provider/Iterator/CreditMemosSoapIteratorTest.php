@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class CreditMemosSoapIteratorTest extends BaseSoapIteratorTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->iterator = new CreditMemoSoapIterator($this->transport, $this->settings);

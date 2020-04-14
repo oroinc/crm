@@ -15,7 +15,7 @@ class DeleteChannelTest extends WebTestCase
      */
     protected $channel;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
 

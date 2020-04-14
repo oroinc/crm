@@ -32,7 +32,7 @@ class EmailAddressListValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validator = new EmailAddressListValidator();
         $this->constraint = new EmailAddressListConstraint();
@@ -43,7 +43,7 @@ class EmailAddressListValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->validator);
         unset($this->constraint);

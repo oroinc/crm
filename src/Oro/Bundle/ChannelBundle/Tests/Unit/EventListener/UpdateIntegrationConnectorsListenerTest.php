@@ -30,7 +30,7 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit\Framework\TestCas
     /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager */
     protected $em;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry        = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->settingProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
@@ -47,7 +47,7 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit\Framework\TestCas
         $this->entity->setDataSource($this->integration);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->entity, $this->integration);
     }

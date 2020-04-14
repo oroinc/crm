@@ -9,7 +9,7 @@ abstract class AbstractController extends WebTestCase
     /** @var bool */
     protected $isRealGridRequest = false;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
         $this->client->useHashNavigation(true);

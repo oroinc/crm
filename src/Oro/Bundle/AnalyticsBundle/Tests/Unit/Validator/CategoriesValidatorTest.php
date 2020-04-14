@@ -19,7 +19,7 @@ class CategoriesValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $validator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validator = new CategoriesValidator();
     }

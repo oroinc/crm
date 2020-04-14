@@ -19,7 +19,7 @@ class CustomerCurrencyListenerTest extends \PHPUnit\Framework\TestCase
      */
     private $listener;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeSettings = $this->createMock(LocaleSettings::class);
         $this->listener = new CustomerCurrencyListener($this->localeSettings);

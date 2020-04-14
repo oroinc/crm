@@ -24,7 +24,7 @@ class TwoWaySyncStrategyTest extends \PHPUnit\Framework\TestCase
      */
     protected $exportProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->importProcessor = $this
             ->getMockBuilder('Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareImportProcessor')
@@ -83,7 +83,7 @@ class TwoWaySyncStrategyTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->strategy, $this->importProcessor, $this->exportProcessor);
     }

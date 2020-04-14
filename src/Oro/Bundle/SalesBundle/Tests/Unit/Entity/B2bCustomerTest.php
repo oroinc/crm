@@ -14,12 +14,12 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
     /** @var B2bCustomer */
     protected $entity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entity = new B2bCustomer();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->entity);
     }
@@ -65,7 +65,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
             'updatedAt'       => ['updatedAt', $date, $date],
         ];
     }
-    
+
     public function testPrePersist()
     {
         $this->assertNull($this->entity->getCreatedAt());

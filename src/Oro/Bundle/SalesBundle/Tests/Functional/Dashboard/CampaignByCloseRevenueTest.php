@@ -14,7 +14,7 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
     /** @var  Widget */
     protected $widget;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             ['debug' => false],

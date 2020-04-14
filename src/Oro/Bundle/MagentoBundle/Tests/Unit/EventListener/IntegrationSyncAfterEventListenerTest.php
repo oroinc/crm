@@ -11,12 +11,12 @@ class IntegrationSyncAfterEventListenerTest extends \PHPUnit\Framework\TestCase
     /** @var IntegrationSyncAfterEventListener */
     protected $listener;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->listener = new IntegrationSyncAfterEventListener();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->listener);
     }

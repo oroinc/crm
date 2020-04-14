@@ -8,7 +8,7 @@ use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class OrderBridgeIteratorTest extends BaseSoapIteratorTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

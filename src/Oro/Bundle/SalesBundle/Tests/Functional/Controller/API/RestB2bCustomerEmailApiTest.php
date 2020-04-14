@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RestB2bCustomerEmailApiTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());
         $this->loadFixtures([LoadB2bCustomerEmailData::class]);

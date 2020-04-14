@@ -17,7 +17,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
      */
     protected $relationsBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markTestSkipped('Due to CRM-7290');
         $this->relationsBuilder = new OpportunityRelationsBuilder();

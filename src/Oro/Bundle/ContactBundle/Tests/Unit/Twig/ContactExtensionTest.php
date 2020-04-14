@@ -17,7 +17,7 @@ class ContactExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $urlFormatter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlFormatter = $this->getMockBuilder(SocialUrlFormatter::class)
             ->disableOriginalConstructor()

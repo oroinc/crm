@@ -54,7 +54,7 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->parameterBag = new ParameterBag();
 
@@ -80,7 +80,7 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
         $this->client = new FakeRestClient();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->transportEntity,

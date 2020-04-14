@@ -9,7 +9,7 @@ class ContactPhoneTest extends \PHPUnit\Framework\TestCase
 {
     protected $phone;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->phone = new ContactPhone();
     }

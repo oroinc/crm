@@ -11,12 +11,12 @@ class CustomerTypeTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerType */
     protected $type;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new CustomerType('\stdClass', '\stdClass');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }
