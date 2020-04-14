@@ -20,6 +20,7 @@ use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  *
  * @Config(
+ *      routeName="oro_contactus_reason_index",
  *      defaultValues={
  *          "grouping"={
  *              "groups"={"dictionary"}
