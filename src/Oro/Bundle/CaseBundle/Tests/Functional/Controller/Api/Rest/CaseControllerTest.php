@@ -219,7 +219,7 @@ class CaseControllerTest extends WebTestCase
     {
         $this->assertArrayHasKey('id', $actual);
         $this->assertGreaterThan(0, $actual['id']);
-        $this->assertInternalType('integer', $actual['id']);
+        $this->assertIsInt($actual['id']);
 
         $this->assertArrayHasKey('subject', $actual);
         $this->assertArrayHasKey('description', $actual);
@@ -240,7 +240,7 @@ class CaseControllerTest extends WebTestCase
 
         $this->assertArrayHasKey('owner', $actual);
         $this->assertGreaterThan(0, $actual['owner']);
-        $this->assertInternalType('integer', $actual['owner']);
+        $this->assertIsInt($actual['owner']);
 
         $this->assertArrayHasKey('createdAt', $actual);
         $this->assertNotEmpty($actual['createdAt']);

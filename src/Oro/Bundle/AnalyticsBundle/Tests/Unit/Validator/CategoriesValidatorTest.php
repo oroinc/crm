@@ -26,7 +26,7 @@ class CategoriesValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidatedBy()
     {
-        $this->assertInternalType('string', $this->validator->validatedBy());
+        $this->assertIsString($this->validator->validatedBy());
     }
 
     /**

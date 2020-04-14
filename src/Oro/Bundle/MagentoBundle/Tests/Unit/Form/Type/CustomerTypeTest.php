@@ -24,11 +24,11 @@ class CustomerTypeTest extends \PHPUnit\Framework\TestCase
     public function testInterface()
     {
         $typeName = $this->type->getName();
-        $this->assertInternalType('string', $typeName);
+        $this->assertIsString($typeName);
         $this->assertNotEmpty($typeName);
 
         $parent = $this->type->getParent();
-        $this->assertInternalType('string', $parent);
+        $this->assertIsString($parent);
         $this->assertNotEmpty($parent);
     }
 
@@ -46,7 +46,7 @@ class CustomerTypeTest extends \PHPUnit\Framework\TestCase
                 $this->isType('string'),
                 $this->callback(
                     function ($item) {
-                        $this->assertInternalType('array', $item);
+                        $this->assertIsArray($item);
                         $this->assertArrayHasKey('label', $item);
 
                         return true;

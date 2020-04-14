@@ -20,14 +20,14 @@ abstract class InitialConnectorTestCase extends MagentoConnectorTestCase
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
-        $this->assertInternalType('string', $connector->getImportJobName());
+        $this->assertIsString($connector->getImportJobName());
     }
 
     public function testGetLabel()
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
-        $this->assertInternalType('string', $connector->getLabel());
+        $this->assertIsString($connector->getLabel());
     }
 
     public function testGetImportEntityFQCNFailed()
@@ -47,6 +47,6 @@ abstract class InitialConnectorTestCase extends MagentoConnectorTestCase
 
         $connector->setClassName('\stdClass');
 
-        $this->assertInternalType('string', $connector->getImportEntityFQCN());
+        $this->assertIsString($connector->getImportEntityFQCN());
     }
 }

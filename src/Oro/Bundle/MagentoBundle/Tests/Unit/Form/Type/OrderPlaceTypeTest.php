@@ -23,7 +23,7 @@ class OrderPlaceTypeTest extends \PHPUnit\Framework\TestCase
     public function testInterface()
     {
         $typeName = $this->type->getName();
-        $this->assertInternalType('string', $typeName);
+        $this->assertIsString($typeName);
         $this->assertNotEmpty($typeName);
 
         $this->assertSame(WorkflowTransitionType::class, $this->type->getParent());
