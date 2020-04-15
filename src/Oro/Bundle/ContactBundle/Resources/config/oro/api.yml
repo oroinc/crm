@@ -60,6 +60,8 @@ api:
                         update_relationship: false
                         add_relationship: false
                         delete_relationship: false
+            actions:
+                update_list: true
 
         Oro\Bundle\ContactBundle\Entity\ContactAddress:
             documentation_resource: '@OroContactBundle/Resources/doc/api/contact_address.md'
