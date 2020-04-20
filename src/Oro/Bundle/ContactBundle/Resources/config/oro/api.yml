@@ -6,7 +6,7 @@ api:
                 email:
                     exclude: true
                 phones:
-                    data_type: array
+                    data_type: objects
                     exclusion_policy: all
                     fields:
                         phone: ~
@@ -15,7 +15,7 @@ api:
                     depends_on: [phones.phone, phones.primary]
                     property_path: _
                 emails:
-                    data_type: array
+                    data_type: objects
                     exclusion_policy: all
                     fields:
                         email: ~
