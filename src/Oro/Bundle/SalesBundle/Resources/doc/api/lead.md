@@ -29,7 +29,6 @@ Example:
 {  
    "data":{  
       "type":"leads",
-      "id":"1",
       "attributes":{  
          "name":"Frank Lead"
       },

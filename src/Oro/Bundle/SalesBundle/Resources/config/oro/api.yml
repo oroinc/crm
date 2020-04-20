@@ -126,6 +126,8 @@ api:
                         update_relationship: false
                         add_relationship: false
                         delete_relationship: false
+            actions:
+                update_list: true
 
         Extend\Entity\EV_Lead_Status:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/lead.md'
@@ -151,6 +153,8 @@ api:
                     property_path: customerAssociation.account
                 customer:
                     property_path: customerAssociation.target
+            actions:
+                update_list: true
 
         Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity.md'
