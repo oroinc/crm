@@ -75,12 +75,24 @@ class RegionBridgeIteratorTest extends BaseSoapIteratorTestCase
 
     public function testConstructBatchSize()
     {
-        $iterator = new RegionBridgeIterator($this->transport, $this->settings);
-        $this->assertAttributeEquals(RegionBridgeIterator::DEFAULT_REGION_PAGE_SIZE, 'pageSize', $iterator);
+        $iterator1 = new class($this->transport, $this->settings) extends RegionBridgeIterator {
+            public function getPageSize(): int
+            {
+                return $this->pageSize;
+            }
+        };
 
         $batchSize = 2000;
-        $settings = array_merge($this->settings, ['page_size' => $batchSize]);
-        $iterator = new RegionBridgeIterator($this->transport, $settings);
-        $this->assertAttributeEquals($batchSize, 'pageSize', $iterator);
+        $customSettings = \array_merge($this->settings, ['page_size' => $batchSize]);
+
+        $iterator2 = new class($this->transport, $customSettings) extends RegionBridgeIterator {
+            public function getPageSize(): int
+            {
+                return $this->pageSize;
+            }
+        };
+
+        static::assertEquals(RegionBridgeIterator::DEFAULT_REGION_PAGE_SIZE, $iterator1->getPageSize());
+        static::assertEquals($batchSize, $iterator2->getPageSize());
     }
 }

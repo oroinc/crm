@@ -3,23 +3,27 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\AbstractLoadeableSoapIterator;
+use Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator\Stub\AbstractLoadableSoapIteratorStub;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class AbstractLoadeableSoapIteratorTest extends BaseSoapIteratorTestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject|AbstractLoadeableSoapIterator */
+    /** @var MockObject|AbstractLoadeableSoapIterator */
     protected $iterator;
 
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->iterator = $this
-            ->getMockBuilder('Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\AbstractLoadeableSoapIterator')
-            ->setMethods(['getData'])
+            ->getMockBuilder(AbstractLoadableSoapIteratorStub::class)
+            ->onlyMethods(['getData'])
             ->setConstructorArgs([$this->transport])
             ->getMockForAbstractClass();
+    }
 
-        $this->assertAttributeEquals($this->transport, 'transport', $this->iterator);
+    public function testConstructorSetsTransport()
+    {
+        static::assertSame($this->transport, $this->iterator->getTransport());
     }
 
     /**
@@ -30,25 +34,37 @@ class AbstractLoadeableSoapIteratorTest extends BaseSoapIteratorTestCase
     public function testIteration(array $data)
     {
         // should called once even multiple iteration
-        $this->iterator->expects($this->once())->method('getData')
-            ->will($this->returnValue($data));
+        $this->iterator->expects(static::once())
+            ->method('getData')
+            ->willReturn($data);
 
         $expectedKeys   = array_keys($data);
         $expectedValues = array_values($data);
-        foreach (range(1, 2) as $numberOfIteration) {
-            $keys = $values = [];
 
-            foreach ($this->iterator as $key => $value) {
-                $keys[]   = $key;
-                $values[] = $value;
-            }
-
-            $this->assertSame($expectedKeys, $keys, 'Should return correct keys');
-            $this->assertSame($expectedValues, $values, 'Should return correct values');
+        // iteration 1
+        $keys = $values = [];
+        foreach ($this->iterator as $key => $value) {
+            $keys[]   = $key;
+            $values[] = $value;
         }
+        static::assertSame($expectedKeys, $keys, 'Should return correct keys');
+        static::assertSame($expectedValues, $values, 'Should return correct values');
 
-        $this->assertSame($data, iterator_to_array($this->iterator), 'Should return correct data and do not call load');
-        $this->assertCount(count($data), $this->iterator);
+        // iteration 2
+        $keys = $values = [];
+        foreach ($this->iterator as $key => $value) {
+            $keys[]   = $key;
+            $values[] = $value;
+        }
+        static::assertSame($expectedKeys, $keys, 'Should return correct keys');
+        static::assertSame($expectedValues, $values, 'Should return correct values');
+
+        static::assertSame(
+            $data,
+            \iterator_to_array($this->iterator),
+            'Should return correct data and do not call load'
+        );
+        static::assertCount(count($data), $this->iterator);
     }
 
     /**

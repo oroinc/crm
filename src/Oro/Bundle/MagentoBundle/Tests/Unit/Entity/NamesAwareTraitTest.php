@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Fixtures\NamesAwareEntity;
 
 class NamesAwareTraitTest extends \PHPUnit\Framework\TestCase
@@ -17,8 +19,8 @@ class NamesAwareTraitTest extends \PHPUnit\Framework\TestCase
     {
         $entity->doUpdate();
 
-        $this->assertAttributeEquals($expectedFirstName, 'firstName', $entity);
-        $this->assertAttributeEquals($expectedLastName, 'lastName', $entity);
+        static::assertEquals($expectedFirstName, $entity->getFirstName());
+        static::assertEquals($expectedLastName, $entity->getLastName());
     }
 
     /**
@@ -32,21 +34,19 @@ class NamesAwareTraitTest extends \PHPUnit\Framework\TestCase
         $testCustomerFirstName = '$testCustomerFirstName';
         $testCustomerLastName  = '$testCustomerLastName';
 
-        $address = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\AbstractAddress')
-            ->setMethods(['getFirstName', 'getLastName'])->getMockForAbstractClass();
-        $address->expects($this->any())->method('getFirstName')->will($this->returnValue($testAddressFirstName));
-        $address->expects($this->any())->method('getLastName')->will($this->returnValue($testAddressLastName));
+        $address = $this->getMockBuilder(AbstractAddress::class)
+            ->onlyMethods(['getFirstName', 'getLastName'])
+            ->getMockForAbstractClass();
+        $address->method('getFirstName')->willReturn($testAddressFirstName);
+        $address->method('getLastName')->willReturn($testAddressLastName);
 
-        $customer = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Customer');
-        $customer->expects($this->any())->method('getFirstName')->will($this->returnValue($testCustomerFirstName));
-        $customer->expects($this->any())->method('getLastName')->will($this->returnValue($testCustomerLastName));
+        $customer = $this->createMock(Customer::class);
+        $customer->method('getFirstName')->willReturn($testCustomerFirstName);
+        $customer->method('getLastName')->willReturn($testCustomerLastName);
 
         $entity1 = new NamesAwareEntity();
-
         $entity2 = new NamesAwareEntity($address);
-
         $entity3 = new NamesAwareEntity(null, $customer);
-
         $entity4 = new NamesAwareEntity($address, $customer);
 
         return [

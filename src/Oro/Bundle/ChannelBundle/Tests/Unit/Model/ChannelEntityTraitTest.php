@@ -2,28 +2,22 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Model;
 
-use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Model\StubChannelEntity;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 
 class ChannelEntityTraitTest extends \PHPUnit\Framework\TestCase
 {
-    public function testConstruction()
+    public function testPropertyAndAccessors()
     {
-        $stub = new StubChannelEntity();
+        $stub = new class() {
+            use ChannelEntityTrait;
+        };
 
-        $this->assertTrue(method_exists($stub, 'setDataChannel'));
-        $this->assertTrue(method_exists($stub, 'getDataChannel'));
-    }
+        static::assertNull($stub->getDataChannel());
 
-    public function testDataSet()
-    {
-        $stub = new StubChannelEntity();
-
-        $this->assertNull($stub->getDataChannel());
-
-        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock(Channel::class);
         $stub->setDataChannel($channel);
 
-        $this->assertSame($channel, $stub->getDataChannel());
-        $this->assertAttributeSame($channel, 'dataChannel', $stub);
+        static::assertSame($channel, $stub->getDataChannel());
     }
 }

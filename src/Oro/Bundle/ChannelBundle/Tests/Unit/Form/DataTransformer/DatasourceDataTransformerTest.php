@@ -11,8 +11,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
 {
-    const TEST_TYPE = 'testType';
-    const TEST_NAME = 'testName';
+    private const TEST_TYPE = 'testType';
+    private const TEST_NAME = 'testName';
 
     /** @var FormFactoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $formFactory;
@@ -85,15 +85,22 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
 
         $this->initializeMocks($expectedSubmit, $expectedException);
 
-        if (!is_array($expectedResult)) {
-            $this->assertSame($expectedResult, $this->transformer->reverseTransform($data));
-        } else {
-            $result = $this->transformer->reverseTransform($data);
+        $this->assertSame($expectedResult, $this->transformer->reverseTransform($data));
+    }
+    public function testReverseTransformShouldBindData()
+    {
+        $this->initializeMocks(true);
 
-            foreach ($expectedResult as $key => $value) {
-                $this->assertSame($value, self::readAttribute($result, $key));
-            }
-        }
+        $result = $this->transformer->reverseTransform([
+            'data' => [
+                'name' => self::TEST_NAME,
+                'type' => self::TEST_TYPE
+            ],
+            'identifier' => null
+        ]);
+
+        static::assertSame(self::TEST_NAME, $result->getName());
+        static::assertSame(self::TEST_TYPE, $result->getType());
     }
 
     /**
@@ -120,20 +127,6 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
                 '$expectedSubmit'    => true,
                 '$expectedException' => '\LogicException'
             ],
-            'should bind data'                                => [
-                '$data'           => [
-                    'data'       => [
-                        'name' => self::TEST_NAME,
-                        'type' => self::TEST_TYPE
-                    ],
-                    'identifier' => null
-                ],
-                '$expectedResult' => [
-                    'name' => self::TEST_NAME,
-                    'type' => self::TEST_TYPE
-                ],
-                '$expectedSubmit' => true,
-            ],
             'should bind on data that comes form setData'     => [
                 '$data'           => [
                     'data'       => [
@@ -152,7 +145,7 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
      * @param bool  $expectedSubmit
      * @param mixed $expectedException
      */
-    private function initializeMocks($expectedSubmit, $expectedException)
+    private function initializeMocks($expectedSubmit, $expectedException = null)
     {
         if ($expectedSubmit) {
             $formMock = $this->createMock('Symfony\Component\Form\Test\FormInterface');

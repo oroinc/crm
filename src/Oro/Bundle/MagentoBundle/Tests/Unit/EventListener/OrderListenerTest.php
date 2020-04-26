@@ -81,18 +81,20 @@ class OrderListenerTest extends \PHPUnit\Framework\TestCase
             $entityManager = $this->createEntityManagerMock();
         }
 
-        $listener = new OrderListener($this->listener);
+        $listener = new class($this->listener) extends OrderListener {
+            public function xgetOrdersForUpdate(): array
+            {
+                return $this->ordersForUpdate;
+            }
+        };
+
         $listener->preUpdate($order, new PreUpdateEventArgs($order, $entityManager, $changeSet));
 
         if ($isUpdateRequired) {
-            $this->assertAttributeEquals([$order->getId() => true], 'ordersForUpdate', $listener);
+            static::assertEquals([$order->getId() => true], $listener->xgetOrdersForUpdate());
         } else {
-            $this->assertAttributeEmpty('ordersForUpdate', $listener);
+            static::assertEmpty($listener->xgetOrdersForUpdate());
         }
-
-        $listener->preUpdate($order, new PreUpdateEventArgs($order, $entityManager, $changeSet));
-
-        $this->assertObjectHasAttribute('ordersForUpdate', $listener);
     }
 
     /**
