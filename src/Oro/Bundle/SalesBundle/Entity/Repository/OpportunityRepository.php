@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Entity\Repository;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
@@ -60,12 +61,12 @@ class OpportunityRepository extends EntityRepository
         if ($start) {
             $qb
                 ->andWhere('o.createdAt >= :start')
-                ->setParameter('start', $start);
+                ->setParameter('start', $start, Type::DATETIME);
         }
         if ($end) {
             $qb
                 ->andWhere('o.createdAt <= :end')
-                ->setParameter('end', $end);
+                ->setParameter('end', $end, Type::DATETIME);
         }
 
         return $qb;
@@ -127,11 +128,11 @@ class OpportunityRepository extends EntityRepository
     protected function setCreationPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
         if ($start) {
-            $qb->andWhere('o.createdAt >= :dateStart')->setParameter('dateStart', $start);
+            $qb->andWhere('o.createdAt >= :dateStart')->setParameter('dateStart', $start, Type::DATETIME);
         }
 
         if ($end) {
-            $qb->andWhere('o.createdAt <= :dateEnd')->setParameter('dateEnd', $end);
+            $qb->andWhere('o.createdAt <= :dateEnd')->setParameter('dateEnd', $end, Type::DATETIME);
         }
     }
 
@@ -143,11 +144,11 @@ class OpportunityRepository extends EntityRepository
     protected function setClosedPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
         if ($start) {
-            $qb->andWhere('o.closedAt >= :dateStart')->setParameter('dateStart', $start);
+            $qb->andWhere('o.closedAt >= :dateStart')->setParameter('dateStart', $start, Type::DATETIME);
         }
 
         if ($end) {
-            $qb->andWhere('o.closedAt <= :dateEnd')->setParameter('dateEnd', $end);
+            $qb->andWhere('o.closedAt <= :dateEnd')->setParameter('dateEnd', $end, Type::DATETIME);
         }
     }
 

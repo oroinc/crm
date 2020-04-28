@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
@@ -9,6 +10,9 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+/**
+ * Doctrine repository for MagentoBundle Customer entity.
+ */
 class CustomerRepository extends ChannelAwareEntityRepository
 {
     /**
@@ -56,8 +60,8 @@ class CustomerRepository extends ChannelAwareEntityRepository
             ->having('COUNT(orders.id) > 0')
             ->andWhere($qb->expr()->between('customer.createdAt', ':dateStart', ':dateEnd'))
             ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+            ->setParameter('dateStart', $start, Type::DATETIME)
+            ->setParameter('dateEnd', $end, Type::DATETIME);
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
@@ -81,8 +85,8 @@ class CustomerRepository extends ChannelAwareEntityRepository
             ->having('COUNT(orders.id) > 0')
             ->andWhere('customer.createdAt < :dateStart')
             ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+            ->setParameter('dateStart', $start, Type::DATETIME)
+            ->setParameter('dateEnd', $end, Type::DATETIME);
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
@@ -117,12 +121,12 @@ class CustomerRepository extends ChannelAwareEntityRepository
 
         if ($dateTo) {
             $qb->andWhere($qb->expr()->between('c.createdAt', ':dateFrom', ':dateTo'))
-                ->setParameter('dateTo', $dateTo);
+                ->setParameter('dateTo', $dateTo, Type::DATETIME);
         } else {
             $qb->andWhere('c.createdAt > :dateFrom');
         }
 
-        $qb->setParameter('dateFrom', $dateFrom);
+        $qb->setParameter('dateFrom', $dateFrom, Type::DATETIME);
         $qb->addGroupBy('c.dataChannel');
 
         if ($ids) {
