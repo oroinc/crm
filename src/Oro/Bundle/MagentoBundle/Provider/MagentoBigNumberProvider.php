@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryInterface;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
@@ -11,6 +12,9 @@ use Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+/**
+ * Calculates various metrics for Magento channel.
+ */
 class MagentoBigNumberProvider
 {
     use DateFilterTrait;
@@ -136,7 +140,7 @@ class MagentoBigNumberProvider
         if ($start) {
             $qb
                 ->andWhere('customer.createdAt < :start')
-                ->setParameter('start', $start);
+                ->setParameter('start', $start, Type::DATETIME);
         }
         $value = $this->aclHelper->apply($qb)->getOneOrNullResult();
 
@@ -215,7 +219,7 @@ class MagentoBigNumberProvider
     {
         $result = 0;
         /**
-         * @todo Remove dependency on exact magento channel type in CRM-8153
+         * Remove dependency on exact magento channel type in CRM-8153
          */
         $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(MagentoChannelType::TYPE);
         if (!$visitsQb instanceof QueryBuilder) {
@@ -243,7 +247,7 @@ class MagentoBigNumberProvider
         $result = 0;
 
         /**
-         * @todo Remove dependency on exact magento channel type in CRM-8153
+         * Remove dependency on exact magento channel type in CRM-8153
          */
         $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(MagentoChannelType::TYPE);
         if (!$visitsQb instanceof QueryBuilder) {

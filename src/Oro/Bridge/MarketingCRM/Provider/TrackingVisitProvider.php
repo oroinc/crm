@@ -3,6 +3,7 @@
 namespace Oro\Bridge\MarketingCRM\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
@@ -14,6 +15,9 @@ use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProviderInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+/**
+ * Calculates various tracking metrics.
+ */
 class TrackingVisitProvider implements TrackingVisitProviderInterface, FeatureToggleableInterface
 {
     use FeatureCheckerHolderTrait;
@@ -62,7 +66,7 @@ class TrackingVisitProvider implements TrackingVisitProviderInterface, FeatureTo
                 ->andWhere('c.channelType = :channel')
                 ->andWhere($queryBuilder->expr()->eq('c.status', ':status'))
                 /**
-                 * @todo Remove dependency on exact magento channel type in CRM-8153
+                 * Remove dependency on exact magento channel type in CRM-8153
                  */
                 ->setParameters([
                     'channel' => MagentoChannelType::TYPE,
@@ -72,12 +76,12 @@ class TrackingVisitProvider implements TrackingVisitProviderInterface, FeatureTo
             if ($from) {
                 $queryBuilder
                     ->andWhere('t.firstActionTime > :from')
-                    ->setParameter('from', $from);
+                    ->setParameter('from', $from, Type::DATETIME);
             }
             if ($to) {
                 $queryBuilder
                     ->andWhere('t.firstActionTime < :to')
-                    ->setParameter('to', $to);
+                    ->setParameter('to', $to, Type::DATETIME);
             }
 
             return (int) $this->aclHelper->apply($queryBuilder)->getSingleScalarResult();
@@ -110,7 +114,7 @@ class TrackingVisitProvider implements TrackingVisitProviderInterface, FeatureTo
                 ->andWhere('c.channelType = :channel')
                 ->andWhere($queryBuilder->expr()->eq('c.status', ':status'))
                 /**
-                 * @todo Remove dependency on exact magento channel type in CRM-8153
+                 * Remove dependency on exact magento channel type in CRM-8153
                  */
                 ->setParameters([
                     'channel' => MagentoChannelType::TYPE,
@@ -119,12 +123,12 @@ class TrackingVisitProvider implements TrackingVisitProviderInterface, FeatureTo
             if ($from) {
                 $queryBuilder
                     ->andWhere('t.firstActionTime > :from')
-                    ->setParameter('from', $from);
+                    ->setParameter('from', $from, Type::DATETIME);
             }
             if ($to) {
                 $queryBuilder
                     ->andWhere('t.firstActionTime < :to')
-                    ->setParameter('to', $to);
+                    ->setParameter('to', $to, Type::DATETIME);
             }
 
             return (int) $this->aclHelper->apply($queryBuilder)->getSingleScalarResult();

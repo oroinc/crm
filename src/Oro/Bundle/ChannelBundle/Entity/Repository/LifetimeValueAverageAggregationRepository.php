@@ -10,6 +10,9 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 use Symfony\Component\Security\Acl\Util\ClassUtils;
 
+/**
+ * Doctrine repository for LifetimeValueAverageAggregation entity.
+ */
 class LifetimeValueAverageAggregationRepository extends EntityRepository
 {
     const BATCH_SIZE = 50;
@@ -103,8 +106,8 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
         $qb->addSelect('lva.year');
         $qb->andWhere($qb->expr()->between('lva.aggregationDate', ':dateStart', ':dateEnd'));
         $qb->addGroupBy('lva.dataChannel', 'lva.year', 'lva.month', 'lva.amount');
-        $qb->setParameter('dateStart', $startDate);
-        $qb->setParameter('dateEnd', $endDate);
+        $qb->setParameter('dateStart', $startDate, Type::DATETIME);
+        $qb->setParameter('dateEnd', $endDate, Type::DATETIME);
 
         if (null !== $channelIds) {
             $qb->andWhere($qb->expr()->in('lva.dataChannel', ':channelIds'))
