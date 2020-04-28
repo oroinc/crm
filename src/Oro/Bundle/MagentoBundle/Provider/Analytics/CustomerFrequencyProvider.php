@@ -2,10 +2,14 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Analytics;
 
+use Doctrine\DBAL\Types\Type;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 
+/**
+ * Calculates the "frequency" RFM metric.
+ */
 class CustomerFrequencyProvider extends AbstractCustomerRFMProvider
 {
     /**
@@ -40,7 +44,7 @@ class CustomerFrequencyProvider extends AbstractCustomerRFMProvider
             ->orderBy($qb->expr()->asc('c.id'))
             ->setParameter('status', Order::STATUS_CANCELED)
             ->setParameter('channel', $channel)
-            ->setParameter('date', $date->sub(new \DateInterval('P365D')));
+            ->setParameter('date', $date->sub(new \DateInterval('P365D')), Type::DATETIME);
 
         if (!empty($ids)) {
             $qb->andWhere($qb->expr()->in('c.id', ':ids'))

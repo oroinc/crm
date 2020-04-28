@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
@@ -111,7 +112,7 @@ class CartRepository extends ChannelAwareEntityRepository
         }
 
         $queryBuilder = $this->createQueryBuilder('cart');
-        
+
         $this->joinWorkflowStep($queryBuilder, 'workflowStep');
 
         $queryBuilder->select('workflowStep.name as workflowStepName', 'SUM(cart.grandTotal) as total')
@@ -124,12 +125,12 @@ class CartRepository extends ChannelAwareEntityRepository
         if ($dateFrom) {
             $queryBuilder
                 ->andWhere('cart.createdAt > :start')
-                ->setParameter('start', $dateFrom);
+                ->setParameter('start', $dateFrom, Type::DATETIME);
         }
         if ($dateTo) {
             $queryBuilder
                 ->andWhere('cart.createdAt < :end')
-                ->setParameter('end', $dateTo);
+                ->setParameter('end', $dateTo, Type::DATETIME);
         }
 
         if ($this->excludedStatuses) {
@@ -248,8 +249,8 @@ class CartRepository extends ChannelAwareEntityRepository
             ->andWhere('cstatus.name = :statusName')
             ->setParameter('statusName', 'open')
             ->andWhere($qb->expr()->between('cart.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+            ->setParameter('dateStart', $start, Type::DATETIME)
+            ->setParameter('dateEnd', $end, Type::DATETIME);
         $this->applyActiveChannelLimitation($qb);
         $allCards = $aclHelper->apply($qb)->getOneOrNullResult();
         $allCards = (int)$allCards['val'];
@@ -290,12 +291,12 @@ class CartRepository extends ChannelAwareEntityRepository
         if ($start) {
             $qb
                 ->andWhere('cart.createdAt > :start')
-                ->setParameter('start', $start);
+                ->setParameter('start', $start, Type::DATETIME);
         }
         if ($end) {
             $qb
                 ->andWhere('cart.createdAt < :end')
-                ->setParameter('end', $end);
+                ->setParameter('end', $end, Type::DATETIME);
         }
 
         return $qb;
@@ -318,12 +319,12 @@ class CartRepository extends ChannelAwareEntityRepository
             if ($from) {
                 $qb
                     ->andWhere('c.createdAt > :from')
-                    ->setParameter('from', $from);
+                    ->setParameter('from', $from, Type::DATETIME);
             }
             if ($to) {
                 $qb
                     ->andWhere('c.createdAt < :to')
-                    ->setParameter('to', $to);
+                    ->setParameter('to', $to, Type::DATETIME);
             }
             $this->applyActiveChannelLimitation($qb);
 
