@@ -7,6 +7,9 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 
+/**
+ * Creates a segment of contacts.
+ */
 class LoadSegmentsData extends AbstractFixture implements DependentFixtureInterface
 {
     /**
