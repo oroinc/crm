@@ -1,9 +1,10 @@
 <?php
 
-namespace Oro\Bridge\MarketingCRM\Migrations\Migrations\Data\ORM;
+namespace Oro\Bridge\MarketingCRM\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\MigrationBundle\Fixture\RenamedFixtureInterface;
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractUpdatePermissions;
 use Oro\Bundle\UserBundle\Entity\Role;
@@ -13,7 +14,9 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Sets permissions defined in "@OroMarketingCRMBridgeBundle/Migrations/Data/ORM/CrmRoles/roles.yml" file.
  */
-class LoadTrackingRolesData extends AbstractUpdatePermissions implements DependentFixtureInterface
+class LoadTrackingRolesData extends AbstractUpdatePermissions implements
+    DependentFixtureInterface,
+    RenamedFixtureInterface
 {
     /**
      * {@inheritdoc}
@@ -23,6 +26,16 @@ class LoadTrackingRolesData extends AbstractUpdatePermissions implements Depende
         return [
             LoadOrganizationAndBusinessUnitData::class,
             LoadRolesData::class
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPreviousClassNames(): array
+    {
+        return [
+            'Oro\\Bridge\\MarketingCRM\\Migrations\\Migrations\\Data\\ORM\\LoadTrackingRolesData',
         ];
     }
 

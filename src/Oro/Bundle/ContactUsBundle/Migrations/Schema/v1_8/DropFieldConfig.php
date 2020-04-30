@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactUsBundle\Migrations\Schema\v1_7;
+namespace Oro\Bundle\ContactUsBundle\Migrations\Schema\v1_8;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;

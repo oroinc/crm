@@ -1,19 +1,24 @@
 <?php
 
-namespace Oro\Bridge\MarketingCRM\Migrations\Migrations\Data\ORM;
+namespace Oro\Bridge\MarketingCRM\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
+use Oro\Bundle\MigrationBundle\Fixture\RenamedFixtureInterface;
 use Oro\Bundle\ReportBundle\Entity\Report;
 use Oro\Bundle\ReportBundle\Entity\ReportType;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Creates the "Campaign Performance" report.
+ */
 class LoadCampaignPerformanceReport extends AbstractFixture implements
     ContainerAwareInterface,
-    DependentFixtureInterface
+    DependentFixtureInterface,
+    RenamedFixtureInterface
 {
     /** @var ContainerInterface */
     protected $container;
@@ -26,6 +31,16 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
         return [
             'Oro\Bundle\ReportBundle\Migrations\Data\ORM\LoadReportTypes',
             'Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData'
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPreviousClassNames(): array
+    {
+        return [
+            'Oro\\Bridge\\MarketingCRM\\Migrations\\Migrations\\Data\\ORM\\LoadCampaignPerformanceReport',
         ];
     }
 
