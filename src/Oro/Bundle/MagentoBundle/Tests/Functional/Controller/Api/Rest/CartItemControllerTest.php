@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 
-use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class CartItemControllerTest extends WebTestCase
@@ -11,11 +11,7 @@ class CartItemControllerTest extends WebTestCase
     {
         $this->initClient(['debug' => false], $this->generateWsseAuthHeader());
 
-        $this->loadFixtures(
-            [
-                'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel',
-            ]
-        );
+        $this->loadFixtures([LoadMagentoChannel::class]);
     }
 
     /**
@@ -23,7 +19,7 @@ class CartItemControllerTest extends WebTestCase
      */
     public function testPost()
     {
-        $cartId = $this->getOrderId();
+        $cartId = $this->getReference(LoadMagentoChannel::CART_ALIAS_REFERENCE_NAME)->getId();
 
         $request = [
             'sku'            => 'some sku',
@@ -192,13 +188,5 @@ class CartItemControllerTest extends WebTestCase
             )
         );
         $this->getJsonResponseContent($this->client->getResponse(), 404);
-    }
-
-    /**
-     * @return Cart
-     */
-    protected function getOrderId()
-    {
-        return $this->getReference('cart')->getId();
     }
 }

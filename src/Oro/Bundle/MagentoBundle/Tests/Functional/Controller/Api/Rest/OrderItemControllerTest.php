@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 
-use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class OrderItemControllerTest extends WebTestCase
@@ -11,11 +11,7 @@ class OrderItemControllerTest extends WebTestCase
     {
         $this->initClient(['debug' => false], $this->generateWsseAuthHeader());
 
-        $this->loadFixtures(
-            [
-                'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel',
-            ]
-        );
+        $this->loadFixtures([LoadMagentoChannel::class]);
     }
 
     /**
@@ -23,7 +19,7 @@ class OrderItemControllerTest extends WebTestCase
      */
     public function testPost()
     {
-        $orderID = $this->getOrderId();
+        $orderId = $this->getReference(LoadMagentoChannel::ORDER_ALIAS_REFERENCE_NAME)->getId();
 
         $request = [
             'name'            => 'some name',
@@ -37,7 +33,7 @@ class OrderItemControllerTest extends WebTestCase
             'discountPercent' => 5,
             'discountAmount'  => 15,
             'rowTotal'        => 16,
-            'order'           => $orderID,
+            'order'           => $orderId,
             'productType'     => 'some productType',
             'productOptions'  => 'some productOptions',
             'isVirtual'       => true,
@@ -46,7 +42,7 @@ class OrderItemControllerTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            $this->getUrl('oro_api_post_order_item', ['orderId' => $orderID]),
+            $this->getUrl('oro_api_post_order_item', ['orderId' => $orderId]),
             $request
         );
 
@@ -55,7 +51,7 @@ class OrderItemControllerTest extends WebTestCase
         $this->assertArrayHasKey('id', $orderItem);
         $this->assertNotEmpty($orderItem['id']);
 
-        return ['orderItemId' => $orderItem['id'], 'orderId' => $orderID, 'request' => $request];
+        return ['orderItemId' => $orderItem['id'], 'orderId' => $orderId, 'request' => $request];
     }
 
     /**
@@ -186,13 +182,5 @@ class OrderItemControllerTest extends WebTestCase
             )
         );
         $this->getJsonResponseContent($this->client->getResponse(), 404);
-    }
-
-    /**
-     * @return Order
-     */
-    protected function getOrderId()
-    {
-        return $this->getReference('order')->getId();
     }
 }
