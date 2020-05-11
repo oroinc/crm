@@ -6,20 +6,20 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\UserBundle\Entity\User;
 
+/**
+ * @dbIsolationPerTest
+ */
 class CartControllerTest extends WebTestCase
 {
     public function setUp()
     {
         $this->initClient(['debug' => false], $this->generateWsseAuthHeader());
 
-        $this->loadFixtures(
-            [
-                'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
-            ]
-        );
+        $this->loadFixtures([LoadMagentoChannel::class]);
     }
 
     public function testCget()
@@ -122,39 +122,16 @@ class CartControllerTest extends WebTestCase
         $this->assertNotEmpty($cart['shippingAddress']);
         $this->assertInternalType('array', $cart['shippingAddress']);
         $this->assertEquals(1, $cart['itemsCount']);
-
-        return $cart;
     }
 
-    /**
-     * @param array $cart
-     *
-     * @return int $id
-     *
-     * @depends testPost
-     */
-    public function testPut($cart)
+    public function testPut()
     {
-        $cart['giftMessage']     .= '_Updated';
-        $cart['baseCurrencyCode'] .= '_Updated';
+        $id = $this->getReference(LoadMagentoChannel::CART_ALIAS_REFERENCE_NAME)->getId();
+        $cart = [
+            'giftMessage'      => 'some message updated',
+            'baseCurrencyCode' => 'some text updated'
+        ];
 
-        $id = $cart['id'];
-        unset(
-            $cart['id'],
-            $cart['createdAt'],
-            $cart['updatedAt'],
-            $cart['importedAt'],
-            $cart['syncedAt'],
-            $cart['originId'],
-            $cart['billingAddress'],
-            $cart['shippingAddress'],
-            $cart['cartItems'],
-            $cart['itemsCount'],
-            $cart['firstName'],
-            $cart['lastName'],
-            $cart['opportunity'],
-            $cart['organization']
-        );
         $this->client->request(
             'PUT',
             $this->getUrl('oro_api_put_cart', ['id' => $id]),
@@ -175,19 +152,15 @@ class CartControllerTest extends WebTestCase
         $this->assertInternalType('array', $result['shippingAddress']);
         $this->assertEquals(1, $result['itemsCount']);
 
-        $this->assertEquals($cart['giftMessage'], $result['giftMessage'], 'Customer was not updated');
-        $this->assertEquals($cart['baseCurrencyCode'], $result['baseCurrencyCode'], 'Customer was not updated');
+        $this->assertEquals($cart['giftMessage'], $result['giftMessage']);
+        $this->assertEquals($cart['baseCurrencyCode'], $result['baseCurrencyCode']);
 
         return $id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @depends testPut
-     */
-    public function testDelete($id)
+    public function testDelete()
     {
+        $id = $this->getReference(LoadMagentoChannel::CART_ALIAS_REFERENCE_NAME)->getId();
         $this->client->request(
             'DELETE',
             $this->getUrl('oro_api_delete_cart', ['id' => $id])
@@ -215,7 +188,7 @@ class CartControllerTest extends WebTestCase
      */
     protected function getUser()
     {
-        return $this->getEntityManager()->getRepository('OroUserBundle:User')->findOneByUsername(self::USER_NAME);
+        return $this->getEntityManager()->getRepository(User::class)->findOneByUsername(self::USER_NAME);
     }
 
     /**

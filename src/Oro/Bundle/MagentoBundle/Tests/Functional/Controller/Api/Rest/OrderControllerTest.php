@@ -6,20 +6,20 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\UserBundle\Entity\User;
 
+/**
+ * @dbIsolationPerTest
+ */
 class OrderControllerTest extends WebTestCase
 {
     public function setUp()
     {
         $this->initClient(['debug' => false], $this->generateWsseAuthHeader());
 
-        $this->loadFixtures(
-            [
-                'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
-            ]
-        );
+        $this->loadFixtures([LoadMagentoChannel::class]);
     }
 
     public function testCget()
@@ -113,36 +113,15 @@ class OrderControllerTest extends WebTestCase
 
         $this->assertCount(1, $order['items']);
         $this->assertCount(2, $order['addresses']);
-
-        return $order;
     }
 
-    /**
-     * @param array $order
-     *
-     * @return int $id
-     *
-     * @depends testPost
-     */
-    public function testPut($order)
+    public function testPut()
     {
-        $order['giftMessage']     .= '_Updated';
-        $order['totalPaidAmount'] += 100;
-
-        $id = $order['id'];
-        unset(
-            $order['id'],
-            $order['items'],
-            $order['addresses'],
-            $order['createdAt'],
-            $order['updatedAt'],
-            $order['importedAt'],
-            $order['syncedAt'],
-            $order['firstName'],
-            $order['lastName'],
-            $order['cart'],
-            $order['organization']
-        );
+        $id = $this->getReference(LoadMagentoChannel::ORDER_ALIAS_REFERENCE_NAME)->getId();
+        $order = [
+            'giftMessage'     => 'some message updated',
+            'totalPaidAmount' => 100
+        ];
 
         $this->client->request(
             'PUT',
@@ -158,21 +137,17 @@ class OrderControllerTest extends WebTestCase
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertCount(1, $result['items']);
-        $this->assertCount(2, $result['addresses']);
+        $this->assertCount(0, $result['addresses']);
 
-        $this->assertEquals($order['giftMessage'], $result['giftMessage'], 'Customer was not updated');
-        $this->assertEquals($order['totalPaidAmount'], $result['totalPaidAmount'], 'Customer was not updated');
+        $this->assertEquals($order['giftMessage'], $result['giftMessage']);
+        $this->assertEquals($order['totalPaidAmount'], $result['totalPaidAmount']);
 
         return $id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @depends testPut
-     */
-    public function testDelete($id)
+    public function testDelete()
     {
+        $id = $this->getReference(LoadMagentoChannel::ORDER_ALIAS_REFERENCE_NAME)->getId();
         $this->client->request(
             'DELETE',
             $this->getUrl('oro_api_delete_order', ['id' => $id])
@@ -200,7 +175,7 @@ class OrderControllerTest extends WebTestCase
      */
     protected function getUser()
     {
-        return $this->getEntityManager()->getRepository('OroUserBundle:User')->findOneByUsername(self::USER_NAME);
+        return $this->getEntityManager()->getRepository(User::class)->findOneByUsername(self::USER_NAME);
     }
 
     /**
