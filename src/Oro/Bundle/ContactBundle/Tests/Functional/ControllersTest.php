@@ -93,7 +93,10 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertRegExp("/Contact_fname_updated\s+Contact_lname_updated - Contacts - Customers/", $crawler->html());
+        static::assertMatchesRegularExpression(
+            "/Contact_fname_updated\s+Contact_lname_updated - Contacts - Customers/",
+            $crawler->html()
+        );
     }
 
     /**
