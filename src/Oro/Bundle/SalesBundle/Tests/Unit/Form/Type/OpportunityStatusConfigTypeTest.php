@@ -11,6 +11,7 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityConfigBundle\Tests\Unit\ConfigProviderBagMock;
 use Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendDbIdentifierNameGenerator;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Form\FormEvent;
@@ -215,6 +216,11 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit\Framework\TestCase
             ->method('trans')
             ->will($this->returnArgument(0));
 
-        return new EnumFieldConfigSubscriber($this->getEntityConfigManager(), $translator, $enumSynchronizer);
+        return new EnumFieldConfigSubscriber(
+            $this->getEntityConfigManager(),
+            $translator,
+            $enumSynchronizer,
+            $this->createMock(ExtendDbIdentifierNameGenerator::class)
+        );
     }
 }
