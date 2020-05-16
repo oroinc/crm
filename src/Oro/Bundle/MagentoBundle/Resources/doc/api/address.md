@@ -72,6 +72,8 @@ Example:
 
 Edit a specific Magento customer address record.
 
+The updated record is returned in the response.
+
 {@inheritdoc}
 
 {@request:json_api}

@@ -313,7 +313,7 @@ Retrieve contact IDs assigned to a specific lead record.
 
 #### update_relationship
 
-Replace a contact record assigned to a specific lead record.
+Replace the contact record assigned to a specific lead record.
 
 {@request:json_api}
 Example:
@@ -340,7 +340,7 @@ Retrieve the IDs a customer records the opportunity is created for.
 
 #### update_relationship
 
-Update a customer the opportunity is created for.
+Replace the customer record a specific opportunity record is created for.
 
 {@request:json_api}
 Example:
@@ -367,7 +367,7 @@ Retrieve the ID of an account record the opportunity is created for.
 
 #### update_relationship
 
-Update an account the opportunity is created for.
+Replace the account record a specific opportunity record is created for.
 
 {@request:json_api}
 Example:

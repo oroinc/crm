@@ -46,6 +46,8 @@ Example:
 
 Edit a specific Magento website record.
 
+The updated record is returned in the response.
+
 {@inheritdoc}
 
 {@request:json_api}

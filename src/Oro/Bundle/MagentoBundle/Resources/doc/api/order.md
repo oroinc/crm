@@ -123,6 +123,8 @@ Example:
 
 Edit a specific Magento order record.
 
+The updated record is returned in the response.
+
 {@inheritdoc}
 
 {@request:json_api}
