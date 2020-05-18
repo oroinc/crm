@@ -61,6 +61,8 @@ Example:
 
 Edit a specific case comment record.
 
+The updated record is returned in the response.
+
 {@inheritdoc}
 
 {@request:json_api}

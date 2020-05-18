@@ -279,7 +279,7 @@ Retrieve the ID of a customer the opportunity is created for.
 
 #### update_relationship
 
-Update a customer the opportunity is created for.
+Replace the customer record a specific opportunity record is created for.
 
 {@request:json_api}
 Example:
@@ -306,7 +306,7 @@ Retrieve the ID of an account the opportunity is created for.
 
 #### update_relationship
 
-Update an account the opportunity is created for.
+Replace the account record a specific opportunity record is created for.
 
 {@request:json_api}
 Example:
@@ -352,15 +352,15 @@ Example:
 
 #### get_subresource
 
-Retrieve an organization to which the opportunity belongs.
+Retrieve an organization to which a specific opportunity record belongs.
 
 #### get_relationship
 
-Retrieve the ID of an organization to which the opportunity belongs.
+Retrieve the ID of an organization to which a specific opportunity record belongs.
 
 #### update_relationship
 
-Update an organization to which the opportunity belongs.
+Replace the organization record to which a specific opportunity record belongs.
 
 {@request:json_api}
 Example:
@@ -379,15 +379,15 @@ Example:
 
 #### get_subresource
 
-Retrieve an user who owns the opportunity.
+Retrieve an user who owns a specific opportunity record.
 
 #### get_relationship
 
-Retrieve the ID of an user who owns the opportunity
+Retrieve the ID of an user who owns a specific opportunity record.
 
 #### update_relationship
 
-Update an user who owns the opportunity.
+Replace the user who owns a specific opportunity record.
 
 {@request:json_api}
 Example:
@@ -414,7 +414,7 @@ Retrieve the ID of a stage in the process of a sale.
 
 #### update_relationship
 
-Update a stage in the process of a sale.
+Replace the stage in the process of a sale.
 
 {@request:json_api}
 Example:

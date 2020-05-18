@@ -67,6 +67,8 @@ Example:
 
 Edit a specific contact address record.
 
+The updated record is returned in the response.
+
 {@inheritdoc}
 
 {@request:json_api}

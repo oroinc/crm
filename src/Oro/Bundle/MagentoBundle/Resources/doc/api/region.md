@@ -45,6 +45,8 @@ Example:
 
 Edit a specific Magento region record.
 
+The updated record is returned in the response.
+
 The regions specified for Magento orders by Magento customers.
 
 {@request:json_api}
