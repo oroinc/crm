@@ -198,6 +198,8 @@ Example:
 
 Edit a specific contact record.
 
+The updated record is returned in the response.
+
 {@inheritdoc}
 
 {@request:json_api}
@@ -277,7 +279,7 @@ Retrieve the IDs of the account records which a specific contact record is assig
 
 #### update_relationship
 
-Replace accounts assigned to a specific contact record
+Replace accounts record assigned to a specific contact record.
 
 {@request:json_api}
 Example:
@@ -412,7 +414,7 @@ Example:
 
 #### update_relationship
 
-Replace accounts for which a specific contact record is default.
+Replace accounts record for which a specific contact record is default.
 
 {@request:json_api}
 Example:

@@ -55,6 +55,8 @@ Example:
 
 Edit a specific contact group record.
 
+The updated record is returned in the response.
+
 {@inheritdoc}
 
 {@request:json_api}

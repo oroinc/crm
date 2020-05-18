@@ -64,6 +64,8 @@ Example:
 
 Edit a specific sales process record.
 
+The updated record is returned in the response.
+
 {@inheritdoc}
 
 {@request:json_api}
@@ -168,7 +170,7 @@ Retrieve the ID of a lead record that belongs to a specific sales process record
 
 #### update_relationship
 
-Replace a lead record the belongs to a specific sales process record.
+Replace the lead record that belongs to a specific sales process record.
 
 {@request:json_api}
 Example:
@@ -195,7 +197,7 @@ Retrieve the ID of an opportunity record that belongs to a specific sales proces
 
 #### update_relationship
 
-Replace an opportunity record that belongs to a specific sales process record.
+Replace the opportunity record that belongs to a specific sales process record.
 
 {@request:json_api}
 Example:

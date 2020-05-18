@@ -71,6 +71,8 @@ Example:
 
 Edit a specific Magento shopping cart item record.
 
+The updated record is returned in the response.
+
 {@inheritdoc}
 
 {@request:json_api}
