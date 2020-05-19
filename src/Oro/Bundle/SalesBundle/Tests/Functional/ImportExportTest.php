@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
-use Oro\Bundle\ImportExportBundle\Tests\Functional\AbstractImportExportTest;
+use Oro\Bundle\ImportExportBundle\Tests\Functional\AbstractImportExportTestCase;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpenOpportunityFixtures;
@@ -12,7 +12,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpenOpportunityFixtures;
 /**
  * @dbIsolationPerTest
  */
-class ImportExportTest extends AbstractImportExportTest
+class ImportExportTest extends AbstractImportExportTestCase
 {
     protected function setUp(): void
     {
