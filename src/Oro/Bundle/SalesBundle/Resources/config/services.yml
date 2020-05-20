@@ -564,6 +564,11 @@ services:
         tags:
             - { name: oro_datagrid.extension }
 
+    oro_sales.count_query_optimization_listener.customer_account:
+        class: Oro\Bundle\SalesBundle\EventListener\CustomerAccountCountQueryOptimizationListener
+        tags:
+            - { name: kernel.event_listener, event: oro.entity.count_query.optimize, method: onOptimize }
+
     oro_sales.form.extension.customer_association:
         class: Oro\Bundle\SalesBundle\Form\Extension\CustomerAssociationAccountExtension
         arguments:
