@@ -19,7 +19,7 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject|MagentoTransportInterface */
     protected $transport;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

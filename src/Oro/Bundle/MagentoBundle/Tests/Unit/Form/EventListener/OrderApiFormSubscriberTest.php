@@ -10,12 +10,12 @@ class OrderApiFormSubscriberTest extends \PHPUnit\Framework\TestCase
     /** @var OrderApiFormSubscriber */
     protected $subscriber;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subscriber = new OrderApiFormSubscriber();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subscriber);
     }

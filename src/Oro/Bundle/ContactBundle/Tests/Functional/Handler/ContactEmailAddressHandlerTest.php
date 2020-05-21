@@ -14,7 +14,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class ContactEmailAddressHandlerTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], static::generateBasicAuthHeader());
         $listenerManager = $this->getContainer()->get('oro_platform.optional_listeners.manager');
@@ -22,7 +22,7 @@ class ContactEmailAddressHandlerTest extends WebTestCase
         $this->loadFixtures([LoadContactEmailData::class]);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $listenerManager = $this->getContainer()->get('oro_platform.optional_listeners.manager');
         $listenerManager->enableListener('oro_email.listener.entity_listener');

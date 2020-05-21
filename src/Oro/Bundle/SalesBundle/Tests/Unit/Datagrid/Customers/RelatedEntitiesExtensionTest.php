@@ -7,6 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
+use Oro\Bundle\DataGridBundle\Exception\DatasourceException;
 use Oro\Bundle\EntityBundle\Tests\Unit\ORM\Fixtures\TestEntity;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\RelatedEntitiesExtension;
@@ -23,7 +24,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $configProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configProvider = $this
             ->getMockBuilder(ConfigProvider::class)
@@ -130,12 +131,11 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->visitDatasource($config, $datasource);
     }
 
-    /**
-     * @expectedException \Oro\Bundle\DataGridBundle\Exception\DatasourceException
-     * @expectedExceptionMessage Couldn't find Oro\Bundle\SalesBundle\Entity\Opportunity alias in QueryBuilder.
-     */
     public function testVisitDatasourceNotFoundOpportunityFrom()
     {
+        $this->expectException(DatasourceException::class);
+        $this->expectExceptionMessage("Couldn't find Oro\Bundle\SalesBundle\Entity\Opportunity alias in QueryBuilder.");
+
         $qb            = $this->prepareQueryBuilder(TestEntity::class);
         $datasource    = $this->getDatasource($qb);
         $config        = DatagridConfiguration::create([]);

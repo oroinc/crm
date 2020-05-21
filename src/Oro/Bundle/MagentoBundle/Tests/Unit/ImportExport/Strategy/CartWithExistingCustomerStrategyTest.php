@@ -28,12 +28,11 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Execution context is not configured
-     */
     public function testProcessFailed()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Execution context is not configured');
+
         $strategy = $this->getStrategy();
 
         /** @var \PHPUnit\Framework\MockObject\MockObject|ContextInterface $context */

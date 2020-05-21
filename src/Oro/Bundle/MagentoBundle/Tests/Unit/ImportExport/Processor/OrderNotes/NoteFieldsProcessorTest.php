@@ -28,7 +28,7 @@ class NoteFieldsProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->htmlTagHelper = $this->createMock(HtmlTagHelper::class);
         $this->htmlTagHelper
@@ -45,7 +45,7 @@ class NoteFieldsProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->htmlTagHelper);
         unset($this->processor);

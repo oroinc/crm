@@ -12,7 +12,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
     /** @var InitialSyncProcessor */
     protected $processor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

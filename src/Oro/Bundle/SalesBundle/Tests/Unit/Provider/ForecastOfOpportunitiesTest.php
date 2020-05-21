@@ -35,7 +35,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
     /** @var FilterDateRangeConverter|\PHPUnit\Framework\MockObject\MockObject */
     protected $filterDateRangeConverter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->translator = $this->getMockBuilder('Oro\Bundle\TranslationBundle\Translation\Translator')
             ->disableOriginalConstructor()
@@ -86,7 +86,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->numberFormatter,

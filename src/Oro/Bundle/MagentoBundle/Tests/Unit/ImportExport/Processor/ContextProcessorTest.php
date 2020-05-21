@@ -13,7 +13,7 @@ class ContextProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var ContextProcessor */
     protected $processor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->processor = new ContextProcessor();
     }

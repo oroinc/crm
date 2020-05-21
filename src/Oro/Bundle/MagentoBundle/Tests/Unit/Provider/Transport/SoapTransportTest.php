@@ -41,7 +41,7 @@ class SoapTransportTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     protected $decryptedApiKey = 'api_key';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $encoder = $this->createMock('Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface');
         $encoder->expects($this->any())
@@ -73,7 +73,7 @@ class SoapTransportTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->settings));
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->transport, $this->transportEntity, $this->settings, $this->encoder, $this->soapClientMock);
     }
@@ -127,7 +127,7 @@ class SoapTransportTest extends \PHPUnit\Framework\TestCase
     {
         $this->sessionId = uniqid();
 
-        $this->expectException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
         $this->settings->set('api_key', $this->encryptedApiKey);
         $this->settings->set('wsdl_url', 'http://localhost/?wsdl');
         $this->transport->init($this->transportEntity);

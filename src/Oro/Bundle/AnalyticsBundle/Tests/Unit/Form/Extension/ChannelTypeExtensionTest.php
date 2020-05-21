@@ -28,7 +28,7 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
      */
     protected $doctrineHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
             ->disableOriginalConstructor()

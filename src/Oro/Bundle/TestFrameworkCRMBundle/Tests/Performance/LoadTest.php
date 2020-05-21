@@ -15,7 +15,7 @@ class LoadTest extends WebTestCase
     protected $resultData;
     protected $resultLimit;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(array("debug" => false), $this->generateBasicAuthHeader());
     }

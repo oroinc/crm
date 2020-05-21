@@ -8,7 +8,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class LeadsListTest extends BaseStatistics
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
         $this->loadFixtures([
@@ -123,9 +123,9 @@ class LeadsListTest extends BaseStatistics
         $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting widget view!');
         $this->assertNotEmpty($crawler->html());
 
-        $this->assertContains($expectedResults['owner'], $response->getContent());
-        $this->assertContains($expectedResults['excluded_statuses'], $response->getContent());
-        $this->assertContains($expectedResults['sort_by'], $response->getContent());
+        static::assertStringContainsString($expectedResults['owner'], $response->getContent());
+        static::assertStringContainsString($expectedResults['excluded_statuses'], $response->getContent());
+        static::assertStringContainsString($expectedResults['sort_by'], $response->getContent());
     }
 
     /**

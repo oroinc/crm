@@ -15,12 +15,12 @@ class CartItemsApiTypeTest extends \PHPUnit\Framework\TestCase
     /** @var CartItemsApiType */
     protected $type;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new CartItemsApiType();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }

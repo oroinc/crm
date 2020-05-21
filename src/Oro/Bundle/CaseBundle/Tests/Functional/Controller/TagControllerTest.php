@@ -12,7 +12,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class TagControllerTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
 
@@ -40,6 +40,6 @@ class TagControllerTest extends WebTestCase
 
         static::assertResponseStatusCodeEquals($response, 200);
 
-        static::assertContains($processSettings->getMailbox()->getLabel(), $response->getContent());
+        static::assertStringContainsString($processSettings->getMailbox()->getLabel(), $response->getContent());
     }
 }

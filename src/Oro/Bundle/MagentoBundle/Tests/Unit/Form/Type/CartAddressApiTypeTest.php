@@ -11,12 +11,12 @@ class CartAddressApiTypeTest extends \PHPUnit\Framework\TestCase
     /** @var CartAddressApiType */
     protected $type;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new CartAddressApiType();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }

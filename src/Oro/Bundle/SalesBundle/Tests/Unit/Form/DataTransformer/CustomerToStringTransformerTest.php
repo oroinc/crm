@@ -19,7 +19,7 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
     /** @var AccountCustomerManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $accountCustomerManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->dataTransformer = $this
             ->getMockBuilder('Symfony\Component\Form\DataTransformerInterface')

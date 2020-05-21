@@ -34,7 +34,7 @@ class OrderWithExistingCustomerStrategyTest extends WebTestCase
      */
     protected $stepExecution;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
 

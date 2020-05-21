@@ -20,7 +20,7 @@ class CartRepositoryTest extends WebTestCase
      */
     private $repository;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

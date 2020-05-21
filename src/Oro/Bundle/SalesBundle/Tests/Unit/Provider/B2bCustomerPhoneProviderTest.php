@@ -14,7 +14,7 @@ class B2bCustomerPhoneProviderTest extends \PHPUnit\Framework\TestCase
     /** @var B2bCustomerPhoneProvider */
     protected $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rootProvider = $this->createMock('Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface');
         $this->provider = new B2bCustomerPhoneProvider();

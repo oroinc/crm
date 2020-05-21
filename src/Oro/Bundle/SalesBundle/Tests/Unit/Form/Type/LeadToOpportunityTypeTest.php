@@ -33,7 +33,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup test env
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = $this->getFormType(['in_progress']);
     }
@@ -69,7 +69,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit\Framework\TestCase
 
         $formView = new FormView();
         $this->type->finishView($formView, $form, []);
-        $this->assertArraySubset(['use_full_contact_form' => false], $formView->vars);
+        $this->assertSame(false, $formView->vars['use_full_contact_form']);
     }
 
     public function testPreSetDataWithoutContact()
@@ -103,7 +103,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit\Framework\TestCase
 
         $formView = new FormView();
         $this->type->finishView($formView, $form, []);
-        $this->assertArraySubset(['use_full_contact_form' => true], $formView->vars);
+        $this->assertSame(true, $formView->vars['use_full_contact_form']);
     }
 
     public function testBuildForm()

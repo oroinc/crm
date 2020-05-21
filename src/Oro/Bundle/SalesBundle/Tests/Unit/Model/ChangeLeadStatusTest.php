@@ -30,7 +30,7 @@ class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
      */
     private $lead;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->entityManager = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
                               ->setMethods(['getReference', 'persist', 'flush'])
@@ -41,7 +41,7 @@ class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnCallback(function ($statusClass, $statusCode) {
                 return $statusCode;
             }));
-        
+
         $this->validator = $this->getMockForAbstractClass('Symfony\Component\Validator\Validator\ValidatorInterface');
         $this->validator->expects($this->any())->method('validate')
             ->willReturn($this->getMockForAbstractClass('\Countable'));

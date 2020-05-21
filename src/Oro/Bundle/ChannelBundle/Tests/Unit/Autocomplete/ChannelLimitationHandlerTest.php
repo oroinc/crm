@@ -19,7 +19,7 @@ class ChannelLimitationHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelLimitationHandler */
     protected $handler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->handler = new ChannelLimitationHandler(
             self::TEST_ENTITY_NAME,
@@ -29,7 +29,7 @@ class ChannelLimitationHandlerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->handler);
     }

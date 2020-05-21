@@ -19,7 +19,7 @@ class ChannelControllerTest extends WebTestCase
     const CHANNEL_NAME = 'some name';
     const GRID_NAME    = 'oro-channels-grid';
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
         $this->client->enableReboot();
@@ -44,7 +44,7 @@ class ChannelControllerTest extends WebTestCase
         $result  = $this->client->getResponse();
 
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains('Channel saved', $crawler->html());
+        static::assertStringContainsString('Channel saved', $crawler->html());
 
         $channelType  = ucfirst('custom');
         return compact('name', 'channelType');
@@ -74,9 +74,9 @@ class ChannelControllerTest extends WebTestCase
         $result = $this->client->getResponse();
 
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains('Channels', $crawler->html());
-        $this->assertContains($data['name'], $crawler->html());
-        $this->assertContains($data['channelType'], $crawler->html());
+        static::assertStringContainsString('Channels', $crawler->html());
+        static::assertStringContainsString($data['name'], $crawler->html());
+        static::assertStringContainsString($data['channelType'], $crawler->html());
     }
 
     /**
@@ -113,7 +113,7 @@ class ChannelControllerTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains('Channel saved', $crawler->html());
+        static::assertStringContainsString('Channel saved', $crawler->html());
 
         $channel['name'] = $name;
 

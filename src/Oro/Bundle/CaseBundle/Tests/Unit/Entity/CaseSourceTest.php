@@ -11,7 +11,7 @@ class CaseSourceTest extends \PHPUnit\Framework\TestCase
      */
     protected $caseSource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->caseSource = new CaseSource('test');
     }

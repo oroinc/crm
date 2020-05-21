@@ -15,7 +15,7 @@ class ContactReasonSelectTypeTest extends TypeTestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formType = new ContactReasonSelectType();
     }

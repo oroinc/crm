@@ -24,7 +24,7 @@ class ChannelsByEntitiesProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $aclHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $doctrineHelper = $this
             ->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')

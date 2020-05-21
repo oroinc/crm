@@ -19,7 +19,7 @@ class CustomerAddressControllerTest extends WebTestCase
     /** @var Customer */
     protected $customer;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient(['debug' => false], static::generateWsseAuthHeader());
 

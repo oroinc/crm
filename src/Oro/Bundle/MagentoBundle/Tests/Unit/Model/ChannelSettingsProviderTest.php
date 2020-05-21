@@ -20,7 +20,7 @@ class ChannelSettingsProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $doctrineHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
             ->disableOriginalConstructor()
@@ -32,13 +32,14 @@ class ChannelSettingsProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @param mixed $value
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Channel id value is wrong
      *
      * @dataProvider channelIdDataProvider
      */
     public function testChannelId($value)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Channel id value is wrong');
+
         $this->provider->isTwoWaySyncEnable($value);
     }
 

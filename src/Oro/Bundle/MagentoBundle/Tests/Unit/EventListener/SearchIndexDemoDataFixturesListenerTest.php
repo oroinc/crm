@@ -14,7 +14,7 @@ class SearchIndexDemoDataFixturesListenerTest extends \PHPUnit\Framework\TestCas
     /** @var SearchIndexDemoDataFixturesListener */
     protected $listener;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->listenerManager = $this->createMock(OptionalListenerManager::class);
 

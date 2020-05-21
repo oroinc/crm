@@ -39,7 +39,7 @@ abstract class AbstractInfoReaderTest extends \PHPUnit\Framework\TestCase
     /** @var LoggerStrategy */
     protected $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextRegistry = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextRegistry');
 

@@ -13,7 +13,7 @@ class CasePhoneProviderTest extends \PHPUnit\Framework\TestCase
     /** @var CasePhoneProvider */
     protected $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rootProvider = $this->createMock('Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface');
         $this->provider     = new CasePhoneProvider();

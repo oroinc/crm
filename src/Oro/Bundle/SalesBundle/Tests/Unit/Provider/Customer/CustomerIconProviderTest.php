@@ -13,7 +13,7 @@ class CustomerIconProviderTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerIconProvider */
     protected $customerIconProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $entityConfigs = [
             'Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel' => [

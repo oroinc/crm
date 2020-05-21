@@ -22,7 +22,7 @@ class NewsletterSubscriberVoterTest extends \PHPUnit\Framework\TestCase
     /** @var NewsletterSubscriberVoter */
     private $voter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->settingsProvider = $this->createMock(ChannelSettingsProvider::class);

@@ -8,15 +8,15 @@ use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesDa
 use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
-use Oro\Bundle\ImportExportBundle\Tests\Functional\AbstractImportExportTest;
+use Oro\Bundle\ImportExportBundle\Tests\Functional\AbstractImportExportTestCase;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 /**
  * @dbIsolationPerTest
  */
-class ImportExportTest extends AbstractImportExportTest
+class ImportExportTest extends AbstractImportExportTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures(

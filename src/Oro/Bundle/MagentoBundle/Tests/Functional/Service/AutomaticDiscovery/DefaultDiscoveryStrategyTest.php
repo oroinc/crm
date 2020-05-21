@@ -17,7 +17,7 @@ class DefaultDiscoveryStrategyTest extends WebTestCase
     /** @var DefaultDiscoveryStrategy */
     protected $strategy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
 

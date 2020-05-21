@@ -2,7 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
-use Doctrine\Common\Util\ClassUtils;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 
 class LifetimeValueHistoryTest extends AbstractEntityTestCase
@@ -10,23 +11,17 @@ class LifetimeValueHistoryTest extends AbstractEntityTestCase
     /** @var LifetimeValueHistory */
     protected $entity;
 
-    /**
-     * {@inheritDoc}
-     */
     public function getEntityFQCN()
     {
-        return 'Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory';
+        return LifetimeValueHistory::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDataProvider()
     {
         $someDateTime = new \DateTime();
         $someAmount   = 123.12;
-        $account      = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $channel      = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $account      = $this->createMock(Account::class);
+        $channel      = $this->createMock(Channel::class);
         $status       = true;
 
         return [
@@ -40,14 +35,19 @@ class LifetimeValueHistoryTest extends AbstractEntityTestCase
 
     public function testGetId()
     {
-        $this->assertNull($this->entity->getId());
+        $entity = new class() extends LifetimeValueHistory {
+            public function xsetId(int $id): void
+            {
+                $this->id = $id;
+            }
+        };
 
-        $testId = 22;
-        $ref    = new \ReflectionProperty(ClassUtils::getClass($this->entity), 'id');
-        $ref->setAccessible(true);
-        $ref->setValue($this->entity, $testId);
+        static::assertNull($entity->getId());
 
-        $this->assertAttributeSame($testId, 'id', $this->entity);
+        $testId = 2345;
+        $entity->xsetId($testId);
+
+        static::assertEquals($testId, $entity->getId());
     }
 
     public function testPrePersist()

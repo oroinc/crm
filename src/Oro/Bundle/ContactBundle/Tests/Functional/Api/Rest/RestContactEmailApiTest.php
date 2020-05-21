@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RestContactEmailApiTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());
         $this->loadFixtures([LoadContactEmailData::class]);

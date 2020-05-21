@@ -9,11 +9,9 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class ChannelCustomerIdentityConstraintValidatorTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     */
     public function testValidateException()
     {
+        $this->expectException(\Symfony\Component\Validator\Exception\UnexpectedTypeException::class);
         $constraint = $this->createMock('Symfony\Component\Validator\Constraint');
         $validator  = new ChannelCustomerIdentityConstraintValidator();
         $validator->validate(false, $constraint);

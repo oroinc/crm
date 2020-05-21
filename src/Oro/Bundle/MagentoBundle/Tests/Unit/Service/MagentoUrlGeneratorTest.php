@@ -27,7 +27,7 @@ class MagentoUrlGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $transport;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
                         ->disableOriginalConstructor()
@@ -41,7 +41,7 @@ class MagentoUrlGeneratorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->urlGenerator,

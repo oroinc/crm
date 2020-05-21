@@ -45,7 +45,7 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formType = new B2bCustomerType(new PropertyAccessor());
         parent::setUp();
@@ -54,7 +54,7 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->formType = null;
     }

@@ -13,7 +13,7 @@ class ContactNameFormatterTest extends \PHPUnit\Framework\TestCase
     /** @var NameFormatter */
     protected $nameFormatter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->nameFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\NameFormatter')
             ->disableOriginalConstructor()

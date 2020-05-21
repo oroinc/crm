@@ -10,7 +10,7 @@ class B2bCustomerEmailTest extends \PHPUnit\Framework\TestCase
     /** @var B2bCustomerEmail */
     protected $email;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->email = new B2bCustomerEmail();
     }

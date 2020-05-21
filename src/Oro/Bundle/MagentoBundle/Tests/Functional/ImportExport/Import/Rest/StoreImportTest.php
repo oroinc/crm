@@ -8,7 +8,7 @@ use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\Rest\LoadMagentoRestWebsit
 
 class StoreImportTest extends BaseIntegrationTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

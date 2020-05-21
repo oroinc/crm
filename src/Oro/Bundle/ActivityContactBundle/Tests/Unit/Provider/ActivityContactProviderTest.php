@@ -16,7 +16,7 @@ class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
     /** @var TestDirectionProvider */
     private $directionProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->directionProvider = new TestDirectionProvider();
 

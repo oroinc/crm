@@ -11,7 +11,7 @@ use Symfony\Component\Form\Form;
 
 class CustomerHandlerTest extends UpdateHandlerTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -158,12 +158,11 @@ class CustomerHandlerTest extends UpdateHandlerTest
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Test flush exception
-     */
     public function testHandleUpdateWorksWhenFormFlushFailed()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Test flush exception');
+
         $entity = $this->getObject();
         $this->form->expects($this->once())
             ->method('setData')
@@ -200,12 +199,11 @@ class CustomerHandlerTest extends UpdateHandlerTest
         );
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Test flush exception
-     */
     public function testUpdateWorksWhenFormFlushFailed()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Test flush exception');
+
         $data = $this->getObject();
         $this->form->expects($this->once())
             ->method('setData')

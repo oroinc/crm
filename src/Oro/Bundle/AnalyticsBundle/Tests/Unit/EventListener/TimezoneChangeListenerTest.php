@@ -24,7 +24,7 @@ class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
      */
     protected $listener;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->manager = $this->getMockBuilder('Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager')
             ->disableOriginalConstructor()
@@ -35,7 +35,7 @@ class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
         $this->listener = new TimezoneChangeListener($this->manager, $this->scheduler);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->listener, $this->registry);
     }

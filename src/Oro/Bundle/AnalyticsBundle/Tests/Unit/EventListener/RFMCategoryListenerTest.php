@@ -28,7 +28,7 @@ class RFMCategoryListenerTest extends \PHPUnit\Framework\TestCase
      */
     protected $scheduler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->manager = $this->getMockBuilder('Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager')
             ->disableOriginalConstructor()

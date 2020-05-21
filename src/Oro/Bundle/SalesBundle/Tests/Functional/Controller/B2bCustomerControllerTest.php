@@ -23,7 +23,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
     /** @var bool */
     protected $isRealGridRequest = false;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             [],
@@ -72,7 +72,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Customer saved", $crawler->html());
+        static::assertStringContainsString("Customer saved", $crawler->html());
     }
 
     /**
@@ -111,7 +111,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Customer saved", $crawler->html());
+        static::assertStringContainsString("Customer saved", $crawler->html());
 
         $returnValue['name'] = $name;
 
@@ -134,7 +134,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains($returnValue['name'], $crawler->html());
+        static::assertStringContainsString($returnValue['name'], $crawler->html());
     }
 
     /**
@@ -156,7 +156,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains($returnValue['name'], $crawler->html());
+        static::assertStringContainsString($returnValue['name'], $crawler->html());
     }
 
     /**

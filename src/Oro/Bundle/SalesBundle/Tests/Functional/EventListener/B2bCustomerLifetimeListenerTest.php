@@ -13,7 +13,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class B2bCustomerLifetimeListenerTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
         $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);

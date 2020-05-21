@@ -10,7 +10,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class AddContactsToMagentoCustomersCommandTest extends WebTestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
         $this->loadFixtures([LoadMagentoChannel::class]);
@@ -36,7 +36,7 @@ class AddContactsToMagentoCustomersCommandTest extends WebTestCase
 
         self::assertNotNull($customer->getContact());
 
-        $this->assertContains('Executing command started.', $result);
-        $this->assertContains('Executing command finished.', $result);
+        static::assertStringContainsString('Executing command started.', $result);
+        static::assertStringContainsString('Executing command finished.', $result);
     }
 }

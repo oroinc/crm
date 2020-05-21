@@ -26,7 +26,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
             'i=1&p=25&s%5BlastName%5D=-1&s%5BfirstName%5D=-1&f%5BfirstName%5D%5Bvalue%5D=F&f%5BfirstName%5D%5Btype%5D=1'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         LoadContactEntitiesData::$owner = LoadUserData::USER_NAME;
         $this->initClient([], $this->generateBasicAuthHeader());
@@ -114,7 +114,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
     {
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains($name, $crawler->filter('h1.page-title__entity-title')->html());
+        static::assertStringContainsString($name, $crawler->filter('h1.page-title__entity-title')->html());
     }
 
     /**
@@ -155,7 +155,10 @@ class AbstractContactPaginationTestCase extends WebTestCase
     protected function assertPositionEntity(Crawler $crawler, $position, $total)
     {
         $this->assertEquals((string)$position, $crawler->filter('#entity-pagination .page-current')->html());
-        $this->assertContains((string)$total, $crawler->filter('#entity-pagination .entity-pagination_total')->html());
+        static::assertStringContainsString(
+            (string)$total,
+            $crawler->filter('#entity-pagination .entity-pagination_total')->html()
+        );
     }
 
     /**

@@ -14,7 +14,7 @@ class RestTransportAdapterTest extends \PHPUnit\Framework\TestCase
     /** @var  MagentoRestTransport */
     protected $transportEntity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transportEntity = new MagentoRestTransport();
     }

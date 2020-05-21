@@ -31,7 +31,7 @@ class WsdlManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected $manager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fs = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
             ->disableOriginalConstructor()
@@ -44,7 +44,7 @@ class WsdlManagerTest extends \PHPUnit\Framework\TestCase
         $this->manager = new WsdlManager($this->fs, $this->guzzleClient, $this->cacheDir);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->manager, $this->fs, $this->guzzleClient);
     }

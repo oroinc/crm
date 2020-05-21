@@ -13,12 +13,12 @@ class OrderAddressApiTypeTest extends \PHPUnit\Framework\TestCase
     /** @var OrderAddressApiType */
     protected $type;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new OrderAddressApiType();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }

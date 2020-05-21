@@ -34,7 +34,7 @@ class ContactAddressTest extends RestJsonApiTestCase
     private const ANOTHER_OWNER_REF             = 'another_contact';
     private const ANOTHER_OWNER_ADDRESS_2_REF   = 'another_contact_address2';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures(['@OroContactBundle/Tests/Functional/Api/DataFixtures/contact_addresses.yml']);

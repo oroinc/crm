@@ -11,7 +11,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class CopyCustomerAddressesToContactCommandTest extends WebTestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
         $this->loadFixtures([LoadMagentoChannel::class]);
@@ -35,8 +35,8 @@ class CopyCustomerAddressesToContactCommandTest extends WebTestCase
             self::assertEquals(1, $customer->getContact()->getAddresses()->count());
         }
 
-        $this->assertContains('Executing command started.', $result);
-        $this->assertContains('Executing command finished.', $result);
+        static::assertStringContainsString('Executing command started.', $result);
+        static::assertStringContainsString('Executing command finished.', $result);
     }
 
     public function testConvertAddressForCustomerById()
@@ -56,8 +56,8 @@ class CopyCustomerAddressesToContactCommandTest extends WebTestCase
         $customer = $repo->find($id);
         self::assertEquals(1, $customer->getContact()->getAddresses()->count());
 
-        $this->assertContains('Executing command started.', $result);
-        $this->assertContains('Executing command finished.', $result);
+        static::assertStringContainsString('Executing command started.', $result);
+        static::assertStringContainsString('Executing command finished.', $result);
     }
 
     public function testConvertAddressForCustomerByIds()
@@ -84,8 +84,8 @@ class CopyCustomerAddressesToContactCommandTest extends WebTestCase
             self::assertEquals(1, $customer->getContact()->getAddresses()->count());
         }
 
-        $this->assertContains('Executing command started.', $result);
-        $this->assertContains('Executing command finished.', $result);
+        static::assertStringContainsString('Executing command started.', $result);
+        static::assertStringContainsString('Executing command finished.', $result);
     }
 
     public function testConvertAddressForCustomerByIntegrationId()
@@ -110,8 +110,8 @@ class CopyCustomerAddressesToContactCommandTest extends WebTestCase
             self::assertEquals(1, $customer->getContact()->getAddresses()->count());
         }
 
-        $this->assertContains('Executing command started.', $result);
-        $this->assertContains('Executing command finished.', $result);
+        static::assertStringContainsString('Executing command started.', $result);
+        static::assertStringContainsString('Executing command finished.', $result);
     }
 
     public function testConvertAddressForCustomerByIdAndAccountHasAddress()
@@ -134,7 +134,7 @@ class CopyCustomerAddressesToContactCommandTest extends WebTestCase
         $customer = $repo->find($testCustomerId1);
         self::assertEquals(1, $customer->getContact()->getAddresses()->count());
 
-        $this->assertContains('Executing command started.', $result);
-        $this->assertContains('Executing command finished.', $result);
+        static::assertStringContainsString('Executing command started.', $result);
+        static::assertStringContainsString('Executing command finished.', $result);
     }
 }

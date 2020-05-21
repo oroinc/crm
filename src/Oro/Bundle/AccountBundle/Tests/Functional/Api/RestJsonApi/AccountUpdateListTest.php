@@ -10,7 +10,7 @@ use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiUpdateListTestCase;
  */
 class AccountUpdateListTest extends RestJsonApiUpdateListTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures(['@OroAccountBundle/Tests/Functional/DataFixtures/accounts_data.yml']);

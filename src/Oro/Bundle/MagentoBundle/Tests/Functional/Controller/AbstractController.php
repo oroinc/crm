@@ -9,7 +9,7 @@ abstract class AbstractController extends WebTestCase
     /** @var bool */
     protected $isRealGridRequest = false;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
@@ -69,7 +69,11 @@ abstract class AbstractController extends WebTestCase
                 }
                 foreach ($assert as $fieldName => $value) {
                     if (is_string($row[$fieldName])) {
-                        $this->assertContains($value, $row[$fieldName], sprintf('Incorrect value for %s', $fieldName));
+                        static::assertStringContainsString(
+                            $value,
+                            $row[$fieldName],
+                            sprintf('Incorrect value for %s', $fieldName)
+                        );
                     } else {
                         $this->assertEquals($value, $row[$fieldName], sprintf('Incorrect value for %s', $fieldName));
                     }

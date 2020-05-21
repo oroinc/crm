@@ -16,7 +16,7 @@ class MetadataExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var MetadataExtension */
     protected $extension;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->provider = $this->getMockBuilder(MetadataProvider::class)
             ->disableOriginalConstructor()
@@ -29,7 +29,7 @@ class MetadataExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension = new MetadataExtension($container);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->extension, $this->provider);
     }

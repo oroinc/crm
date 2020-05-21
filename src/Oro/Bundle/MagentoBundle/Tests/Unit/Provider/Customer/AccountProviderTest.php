@@ -22,7 +22,7 @@ class AccountProviderTest extends \PHPUnit\Framework\TestCase
     /** @var AccountProvider */
     private $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->automaticDiscovery = $this->createMock(AutomaticDiscovery::class);
         $this->newEntitiesHelper = $this->createMock(NewEntitiesHelper::class);

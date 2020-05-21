@@ -19,7 +19,7 @@ class ChannelVoterTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelVoter */
     private $voter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->settingsProvider = $this->createMock(SettingsProvider::class);

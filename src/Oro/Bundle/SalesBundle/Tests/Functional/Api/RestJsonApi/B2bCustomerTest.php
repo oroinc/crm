@@ -28,7 +28,7 @@ class B2bCustomerTest extends RestJsonApiTestCase
     private const PRIMARY_PHONE             = '5556661112';
     private const NOT_PRIMARY_PHONE         = '5556661111';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures([LoadB2bCustomersData::class]);

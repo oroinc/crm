@@ -45,7 +45,7 @@ class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected $requestChannelProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->form = $this->createMock(Form::class);
         $this->request = new Request();

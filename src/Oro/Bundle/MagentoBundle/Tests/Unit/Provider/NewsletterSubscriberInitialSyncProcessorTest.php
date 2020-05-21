@@ -11,7 +11,7 @@ class NewsletterSubscriberInitialSyncProcessorTest extends AbstractSyncProcessor
     /** @var NewsletterSubscriberInitialSyncProcessor */
     protected $processor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

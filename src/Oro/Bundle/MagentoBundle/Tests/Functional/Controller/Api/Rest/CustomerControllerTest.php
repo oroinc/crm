@@ -31,7 +31,7 @@ class CustomerControllerTest extends WebTestCase
     /** @var CustomerGroup */
     protected $customerGroup;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateWsseAuthHeader());
 

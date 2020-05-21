@@ -22,7 +22,7 @@ class CustomerIconProviderTest extends \PHPUnit\Framework\TestCase
     /** @var TypesRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $channelTypeRegistry;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->channelTypeRegistry = $this->createMock(TypesRegistry::class);
 

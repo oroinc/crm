@@ -25,7 +25,7 @@ class ContextOptionReaderTest extends \PHPUnit\Framework\TestCase
      */
     protected $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextRegistry = $this->getMockbuilder('Oro\Bundle\ImportExportBundle\Context\ContextRegistry')
             ->disableOriginalConstructor()
@@ -55,12 +55,11 @@ class ContextOptionReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->reader->read());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Context key is missing
-     */
     public function testReadFailed()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Context key is missing');
+
         $this->reader->setStepExecution($this->stepExecution);
     }
 }

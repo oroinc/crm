@@ -18,7 +18,7 @@ abstract class BaseIntegrationTest extends WebTestCase
      */
     protected static $fakeRestClientFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->initClient();
@@ -35,7 +35,7 @@ abstract class BaseIntegrationTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->em);
     }
@@ -43,7 +43,7 @@ abstract class BaseIntegrationTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$fakeRestClientFactory = new FakeRestClientFactory();
     }
@@ -51,7 +51,7 @@ abstract class BaseIntegrationTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$fakeRestClientFactory = null;
     }

@@ -12,7 +12,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadLeadsData;
  */
 class LeadUpdateListTest extends RestJsonApiUpdateListTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures([LoadLeadsData::class]);

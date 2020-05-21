@@ -18,7 +18,7 @@ class ChannelOwnerSetListenerTest extends WebTestCase
 {
     const FIXTURE_NS = 'Oro\\Bundle\\MagentoBundle\\Tests\\Functional\\Fixture\\';
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
         $fixtures = [
@@ -76,7 +76,7 @@ class ChannelOwnerSetListenerTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Integration saved", $crawler->html());
+        static::assertStringContainsString("Integration saved", $crawler->html());
 
         /** @var EntityManager $em */
         $notAssociatedAccount = $em->merge($this->getReference('not_associated_account'));

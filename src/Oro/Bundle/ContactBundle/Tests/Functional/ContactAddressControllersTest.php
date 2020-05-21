@@ -8,7 +8,7 @@ use Symfony\Component\DomCrawler\Form;
 
 class ContactAddressControllersTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             array(),
@@ -38,7 +38,7 @@ class ContactAddressControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Contact saved", $crawler->html());
+        static::assertStringContainsString("Contact saved", $crawler->html());
     }
 
     /**

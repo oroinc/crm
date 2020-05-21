@@ -8,7 +8,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class OrderAddressControllerTest extends WebTestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateWsseAuthHeader());
 

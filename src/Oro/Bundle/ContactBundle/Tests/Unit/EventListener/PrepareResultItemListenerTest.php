@@ -19,7 +19,7 @@ class PrepareResultItemListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->nameFormatter = $this->getMockBuilder('Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter')
             ->disableOriginalConstructor()
@@ -134,7 +134,7 @@ class PrepareResultItemListenerTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-    
+
 
     /**
      * @param object $entity

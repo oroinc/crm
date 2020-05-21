@@ -13,7 +13,7 @@ class CaseEntityTest extends \PHPUnit\Framework\TestCase
      */
     protected $case;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->case = new CaseEntity();
     }

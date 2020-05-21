@@ -14,13 +14,13 @@ class OrderNotesDataConverterTest extends \PHPUnit\Framework\TestCase
     protected $dataConverter;
 
     /** {@inheritdoc} */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataConverter = new OrderNotesDataConverter();
     }
 
     /** {@inheritdoc} */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->dataConverter = null;
     }

@@ -35,7 +35,7 @@ class GuestCustomerStrategyTest extends WebTestCase
     protected $stepExecution;
 
     /** {@inheritdoc} */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
 
@@ -59,7 +59,7 @@ class GuestCustomerStrategyTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->strategy,

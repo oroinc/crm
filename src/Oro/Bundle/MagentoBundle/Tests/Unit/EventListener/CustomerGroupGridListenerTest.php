@@ -31,7 +31,7 @@ class CustomerGroupGridListenerTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $datasource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->dataChannelClass = 'Oro\Bundle\IntegrationBundle\Entity\Channel';

@@ -28,7 +28,7 @@ class CustomerAddressExportProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transport  = $this->createMock(MagentoTransportInterface::class);
         $this->serializer = $this->createMock(SerializerInterface::class);
@@ -58,12 +58,13 @@ class CustomerAddressExportProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($customer->getAddresses()->toArray());
     }
 
-    /**
-     * @expectedException \Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Expected instance of Oro\Bundle\MagentoBundle\Entity\Address, "stdClass" given.
-     */
     public function testExpectedInvalidArgumentException()
     {
+        $this->expectException(\Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Expected instance of Oro\Bundle\MagentoBundle\Entity\Address, "stdClass" given.'
+        );
+
         $object = new \stdClass();
         $this->processor->process($object);
     }

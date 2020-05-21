@@ -37,7 +37,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $constraint;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typesRegistry = $this
             ->getMockBuilder(TypesRegistry::class)
@@ -49,7 +49,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit\Framework\TestCase
         $this->constraint = new UniqueCustomerEmailConstraint();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->validator, $this->typesRegistry, $this->constraint, $this->transport);
     }

@@ -15,12 +15,12 @@ class OrderItemsApiTypeTest extends \PHPUnit\Framework\TestCase
     /** @var OrderItemsApiType */
     protected $type;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new OrderItemsApiType();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }

@@ -13,7 +13,7 @@ use Oro\Bundle\UserBundle\Tests\Functional\DataFixtures\LoadUserACLData;
  */
 class MagentoOrderNotesGridTest extends AbstractMagentoGridTest
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
 

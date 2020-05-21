@@ -16,14 +16,14 @@ class BaseSoapIteratorTestCase extends \PHPUnit\Framework\TestCase
     /** @var array */
     protected $settings;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transport = $this->createMock(MagentoSoapTransportInterface::class);
 
         $this->settings  = ['start_sync_date' => new \DateTime('NOW'), 'website_id' => 0];
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->iterator, $this->transport);
     }

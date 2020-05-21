@@ -5,7 +5,6 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Form;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
-use Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
@@ -15,7 +14,7 @@ class MagentoIntegrationFormTest extends WebTestCase
     /** @var  TypesRegistry */
     protected $typesRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
@@ -70,10 +69,6 @@ class MagentoIntegrationFormTest extends WebTestCase
             [
                 'type' => MagentoChannelType::TYPE
             ],
-            // @todo: Configuration runs test for magento2. It should be enabled in CRM-8153
-//            [
-//                'type' => Magento2ChannelType::TYPE
-//            ]
         ];
     }
 

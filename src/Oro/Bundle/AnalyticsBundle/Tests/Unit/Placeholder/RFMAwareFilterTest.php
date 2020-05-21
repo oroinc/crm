@@ -16,7 +16,7 @@ class RFMAwareFilterTest extends \PHPUnit\Framework\TestCase
      */
     protected $filter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filter = new RFMAwareFilter($this->interface);
     }

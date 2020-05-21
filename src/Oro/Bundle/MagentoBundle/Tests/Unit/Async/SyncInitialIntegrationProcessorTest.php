@@ -55,7 +55,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $connectionMock = $this->createMock(Connection::class);
         $connectionMock
@@ -158,12 +158,11 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The malformed json given.
-     */
     public function testThrowIfMessageBodyInvalidJson()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The malformed json given.');
+
         $message = new Message();
         $message->setBody('[}');
 

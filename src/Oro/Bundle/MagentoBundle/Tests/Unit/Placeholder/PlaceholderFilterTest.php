@@ -10,7 +10,7 @@ class PlaceholderFilterTest extends \PHPUnit\Framework\TestCase
     /** @var PlaceholderFilter */
     private $filter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filter = new PlaceholderFilter();
     }

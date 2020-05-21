@@ -7,7 +7,7 @@ use Symfony\Component\DomCrawler\Form;
 
 class ControllersGroupTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             array(),
@@ -36,7 +36,7 @@ class ControllersGroupTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Group saved", $crawler->html());
+        static::assertStringContainsString("Group saved", $crawler->html());
     }
 
     /**
@@ -66,7 +66,7 @@ class ControllersGroupTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Group saved", $crawler->html());
+        static::assertStringContainsString("Group saved", $crawler->html());
 
         return $id;
     }

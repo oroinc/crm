@@ -9,15 +9,15 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ChangeIntegrationStatusProcessorTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
     }
-    
+
     public function testCouldBeGetFromContainerAsService()
     {
         $processor = $this->getContainer()->get('oro_channel.async.change_integration_status_processor');
-        
+
         $this->assertInstanceOf(ChangeIntegrationStatusProcessor::class, $processor);
     }
 }

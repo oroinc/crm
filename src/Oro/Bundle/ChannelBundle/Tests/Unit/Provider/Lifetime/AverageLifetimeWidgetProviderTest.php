@@ -27,7 +27,7 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit\Framework\TestCase
     /** @var AverageLifetimeWidgetProvider */
     protected $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry            = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->localeSettings      = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Model\LocaleSettings')
@@ -45,7 +45,7 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->provider, $this->registry, $this->aclHelper, $this->localeSettings);
     }

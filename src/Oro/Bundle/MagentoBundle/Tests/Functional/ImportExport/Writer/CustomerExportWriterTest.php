@@ -11,7 +11,7 @@ use Oro\Bundle\MagentoBundle\Service\StateManager;
 
 class CustomerExportWriterTest extends AbstractExportWriterTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

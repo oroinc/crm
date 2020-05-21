@@ -57,7 +57,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $translator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->entityConfigProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
             ->disableOriginalConstructor()
@@ -162,7 +162,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         ];
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         unset($this->type, $this->registry, $this->testEntityName);

@@ -54,7 +54,7 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
         /** @var NodeElement $box */
         foreach ($contactBoxes as $box) {
             if (false !== strpos($box->getText(), $name)) {
-                self::assertRegExp('/Default Contact/i', $box->getText());
+                self::assertMatchesRegularExpression('/Default Contact/i', $box->getText());
                 return;
             }
         }

@@ -21,7 +21,7 @@ class CustomerVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerVirtualRelationProvider */
     protected $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->associationManager = $this->createMock(AssociationManager::class);
         $this->configProvider = $this->createMock(ConfigProvider::class);

@@ -33,7 +33,7 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
     /** @var FeatureChecker|\PHPUnit\Framework\MockObject\MockObject */
     protected $featureChecker;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->provider       = $this
             ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider')

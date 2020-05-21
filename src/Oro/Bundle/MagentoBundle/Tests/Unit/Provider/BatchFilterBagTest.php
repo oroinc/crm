@@ -9,7 +9,7 @@ class BatchFilterBagTest extends \PHPUnit\Framework\TestCase
     /** @var BatchFilterBag */
     protected $filter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filter = new BatchFilterBag();
     }

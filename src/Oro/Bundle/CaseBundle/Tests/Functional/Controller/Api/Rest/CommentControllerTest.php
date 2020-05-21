@@ -30,7 +30,7 @@ class CommentControllerTest extends WebTestCase
      */
     protected static $adminUserId = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());
 
@@ -211,7 +211,7 @@ class CommentControllerTest extends WebTestCase
     {
         $this->assertArrayHasKey('id', $actual);
         $this->assertGreaterThan(0, $actual['id']);
-        $this->assertInternalType('integer', $actual['id']);
+        $this->assertIsInt($actual['id']);
 
         $this->assertArrayHasKey('message', $actual);
 
@@ -222,11 +222,11 @@ class CommentControllerTest extends WebTestCase
 
         $this->assertArrayHasKey('case', $actual);
         $this->assertGreaterThan(0, $actual['case']);
-        $this->assertInternalType('integer', $actual['case']);
+        $this->assertIsInt($actual['case']);
 
         $this->assertArrayHasKey('owner', $actual);
         $this->assertGreaterThan(0, $actual['owner']);
-        $this->assertInternalType('integer', $actual['owner']);
+        $this->assertIsInt($actual['owner']);
 
         $this->assertArrayIntersectEquals($expected, $actual);
     }

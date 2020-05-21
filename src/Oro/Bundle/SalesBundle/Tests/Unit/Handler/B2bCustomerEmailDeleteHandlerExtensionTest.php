@@ -21,7 +21,7 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
     /** @var B2bCustomerEmailDeleteHandlerExtension */
     private $extension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->translator = $this->createMock(TranslatorInterface::class);
@@ -62,12 +62,11 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
         $this->extension->assertDeleteGranted($customerEmail);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage The delete operation is forbidden. Reason: access denied.
-     */
     public function testAssertDeleteGrantedWhenAccessDenied()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
+
         $customerEmail = new B2bCustomerEmail();
         $customer = new B2bCustomer();
         $customerEmail->setOwner($customer);
@@ -82,12 +81,11 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
         $this->extension->assertDeleteGranted($customerEmail);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage The delete operation is forbidden. Reason: translated exception message.
-     */
     public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
+
         $customerEmail = new B2bCustomerEmail();
         $customer = new B2bCustomer();
         $customerEmail->setOwner($customer);

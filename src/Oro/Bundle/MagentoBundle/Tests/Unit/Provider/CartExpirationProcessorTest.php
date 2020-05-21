@@ -23,7 +23,7 @@ class CartExpirationProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var ConnectorContextMediator|\PHPUnit\Framework\MockObject\MockObject */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
@@ -34,16 +34,14 @@ class CartExpirationProcessorTest extends \PHPUnit\Framework\TestCase
         $this->processor = new CartExpirationProcessor($this->helper, $this->em, self::BATCH_SIZE);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->em, $this->helper, $this->processor);
     }
 
-    /**
-     * @expectedException \Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException
-     */
     public function testProcessConfigurationExceptionScenario()
     {
+        $this->expectException(\Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException::class);
         $settingBag = new ParameterBag();
 
         $transport = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Transport')
@@ -63,11 +61,9 @@ class CartExpirationProcessorTest extends \PHPUnit\Framework\TestCase
         $this->processor->process($channel);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testProcessDataExceptionScenario()
     {
+        $this->expectException(\LogicException::class);
         $testWebsiteId   = 1;
         $testStoresArray = new \ArrayIterator([]);
         $settingBag      = new ParameterBag(['website_id' => $testWebsiteId]);

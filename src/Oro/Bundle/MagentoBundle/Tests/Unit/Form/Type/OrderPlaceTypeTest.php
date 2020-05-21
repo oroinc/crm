@@ -10,12 +10,12 @@ class OrderPlaceTypeTest extends \PHPUnit\Framework\TestCase
     /** @var OrderPlaceType */
     protected $type;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new OrderPlaceType();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }
@@ -23,7 +23,7 @@ class OrderPlaceTypeTest extends \PHPUnit\Framework\TestCase
     public function testInterface()
     {
         $typeName = $this->type->getName();
-        $this->assertInternalType('string', $typeName);
+        $this->assertIsString($typeName);
         $this->assertNotEmpty($typeName);
 
         $this->assertSame(WorkflowTransitionType::class, $this->type->getParent());

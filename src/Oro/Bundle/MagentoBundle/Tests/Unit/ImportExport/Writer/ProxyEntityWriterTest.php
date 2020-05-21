@@ -28,7 +28,7 @@ class ProxyEntityWriterTest extends \PHPUnit\Framework\TestCase
      */
     protected $guestCustomerStrategyHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wrapped = $this
             ->getMockBuilder('Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface')
@@ -45,7 +45,7 @@ class ProxyEntityWriterTest extends \PHPUnit\Framework\TestCase
         $this->writer->setGuestCustomerStrategyHelper($this->guestCustomerStrategyHelper);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->writer, $this->wrapped);
     }

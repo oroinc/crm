@@ -13,7 +13,7 @@ abstract class AbstractExportWriterTest extends WebTestCase
      */
     protected $transport;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

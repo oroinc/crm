@@ -10,7 +10,7 @@ class OpportunityStatusBoardTest extends AbstractDatagridTestCase
     /** @var bool */
     protected $isRealGridRequest = true;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             ['debug' => false],

@@ -21,7 +21,7 @@ class B2bCustomerPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
     /** @var B2bCustomerPhoneDeleteHandlerExtension */
     private $extension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->translator = $this->createMock(TranslatorInterface::class);
@@ -62,12 +62,11 @@ class B2bCustomerPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
         $this->extension->assertDeleteGranted($customerPhone);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage The delete operation is forbidden. Reason: access denied.
-     */
     public function testAssertDeleteGrantedWhenAccessDenied()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
+
         $customerPhone = new B2bCustomerPhone();
         $customer = new B2bCustomer();
         $customerPhone->setOwner($customer);
@@ -82,12 +81,11 @@ class B2bCustomerPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
         $this->extension->assertDeleteGranted($customerPhone);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage The delete operation is forbidden. Reason: translated exception message.
-     */
     public function testAssertDeleteGrantedWhenPrimaryPhoneIsDeletedAndThereIsOtherPhones()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
+
         $customerPhone = new B2bCustomerPhone();
         $customer = new B2bCustomer();
         $customerPhone->setOwner($customer);

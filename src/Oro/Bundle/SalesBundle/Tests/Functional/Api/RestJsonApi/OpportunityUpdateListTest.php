@@ -14,7 +14,7 @@ class OpportunityUpdateListTest extends RestJsonApiUpdateListTestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures([LoadOpportunitiesData::class]);

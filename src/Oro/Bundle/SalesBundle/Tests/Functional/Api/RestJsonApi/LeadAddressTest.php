@@ -32,7 +32,7 @@ class LeadAddressTest extends RestJsonApiTestCase
     private const ANOTHER_OWNER_REF             = 'another_lead';
     private const ANOTHER_OWNER_ADDRESS_2_REF   = 'another_lead_address2';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures(['@OroSalesBundle/Tests/Functional/Api/DataFixtures/lead_addresses.yml']);

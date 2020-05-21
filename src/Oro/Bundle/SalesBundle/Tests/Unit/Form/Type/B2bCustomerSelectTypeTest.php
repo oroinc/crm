@@ -14,12 +14,12 @@ class B2bCustomerSelectTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup test env
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new B2bCustomerSelectType();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }

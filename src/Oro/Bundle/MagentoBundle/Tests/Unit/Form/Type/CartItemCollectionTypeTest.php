@@ -10,12 +10,12 @@ class CartItemCollectionTypeTest extends \PHPUnit\Framework\TestCase
     /** @var CartItemCollectionType */
     protected $type;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new CartItemCollectionType();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }

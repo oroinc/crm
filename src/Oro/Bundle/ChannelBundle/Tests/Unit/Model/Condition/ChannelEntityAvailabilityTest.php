@@ -11,7 +11,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelEntityAvailability */
     protected $condition;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $stateProvider   = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\StateProvider')
             ->disableOriginalConstructor()->getMock();
@@ -71,12 +71,11 @@ class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Oro\Component\ConfigExpression\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid options count: 0
-     */
     public function testInitializeFailsWhenOptionNotOneElement()
     {
+        $this->expectException(\Oro\Component\ConfigExpression\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid options count: 0');
+
         $this->condition->initialize(array());
     }
 }

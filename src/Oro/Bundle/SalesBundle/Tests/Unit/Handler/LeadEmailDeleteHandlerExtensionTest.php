@@ -21,7 +21,7 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var LeadEmailDeleteHandlerExtension */
     private $extension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->translator = $this->createMock(TranslatorInterface::class);
@@ -62,12 +62,11 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($leadEmail);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage The delete operation is forbidden. Reason: access denied.
-     */
     public function testAssertDeleteGrantedWhenAccessDenied()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
+
         $leadEmail = new LeadEmail();
         $lead = new Lead();
         $leadEmail->setOwner($lead);
@@ -82,12 +81,11 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($leadEmail);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage The delete operation is forbidden. Reason: translated exception message.
-     */
     public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
+
         $leadEmail = new LeadEmail();
         $lead = new Lead();
         $leadEmail->setOwner($lead);

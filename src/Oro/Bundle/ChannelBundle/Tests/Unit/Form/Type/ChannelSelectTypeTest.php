@@ -26,7 +26,7 @@ class ChannelSelectTypeTest extends OrmTestCase
      */
     protected $channelsProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $registry       = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $metadataDriver = new AnnotationDriver(
@@ -67,7 +67,7 @@ class ChannelSelectTypeTest extends OrmTestCase
             ->getFormFactory();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type, $this->factory);
     }

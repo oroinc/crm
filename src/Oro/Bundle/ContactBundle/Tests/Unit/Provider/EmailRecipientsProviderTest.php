@@ -12,7 +12,7 @@ class EmailRecipientsProviderTest extends \PHPUnit\Framework\TestCase
 
     protected $emailRecipientsProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->registry = $this->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
             ->disableOriginalConstructor()

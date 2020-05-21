@@ -27,18 +27,18 @@ class CartControllerTest extends AbstractController
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains('Cart Information', $result->getContent());
-        $this->assertContains('email@email.com', $result->getContent());
-        $this->assertContains('Customer Information', $result->getContent());
-        $this->assertContains('test@example.com', $result->getContent());
-        $this->assertContains('Cart Items', $result->getContent());
-        $this->assertContains('Demo Web store', $result->getContent());
-        $this->assertContains('Sync Data', $result->getContent());
-        $this->assertContains('Open', $result->getContent());
-        $this->assertContains('web site', $result->getContent());
-        $this->assertContains('demo store', $result->getContent());
+        static::assertStringContainsString('Cart Information', $result->getContent());
+        static::assertStringContainsString('email@email.com', $result->getContent());
+        static::assertStringContainsString('Customer Information', $result->getContent());
+        static::assertStringContainsString('test@example.com', $result->getContent());
+        static::assertStringContainsString('Cart Items', $result->getContent());
+        static::assertStringContainsString('Demo Web store', $result->getContent());
+        static::assertStringContainsString('Sync Data', $result->getContent());
+        static::assertStringContainsString('Open', $result->getContent());
+        static::assertStringContainsString('web site', $result->getContent());
+        static::assertStringContainsString('demo store', $result->getContent());
 
-        $filteredHtml = str_replace(['<br/>', '<br />'], ' ', $result->getContent());
+        $filteredHtml = \str_replace(['<br/>', '<br />'], ' ', $result->getContent());
 
         /** @var Organization $organization */
         $organization = $this->client
@@ -47,9 +47,9 @@ class CartControllerTest extends AbstractController
             ->getRepository('OroOrganizationBundle:Organization')
             ->getFirst();
 
-        $this->assertContains(
+        static::assertStringContainsString(
             'John Doe ' . $organization->getName() . ' street CITY AZ US 123456',
-            preg_replace('#\s+#', ' ', $filteredHtml)
+            \preg_replace('#\s+#', ' ', $filteredHtml)
         );
     }
 

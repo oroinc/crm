@@ -19,14 +19,14 @@ class CategoriesValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $validator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validator = new CategoriesValidator();
     }
 
     public function testValidatedBy()
     {
-        $this->assertInternalType('string', $this->validator->validatedBy());
+        $this->assertIsString($this->validator->validatedBy());
     }
 
     /**

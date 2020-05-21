@@ -16,13 +16,13 @@ class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
     /** @var EmbeddedFormTypeExtension */
     protected $extension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->extension = new EmbeddedFormTypeExtension();
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->extension);
         parent::tearDown();

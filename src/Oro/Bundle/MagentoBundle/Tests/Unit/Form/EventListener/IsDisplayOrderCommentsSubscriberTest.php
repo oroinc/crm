@@ -29,7 +29,7 @@ class IsDisplayOrderCommentsSubscriberTest extends FormIntegrationTestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -44,7 +44,7 @@ class IsDisplayOrderCommentsSubscriberTest extends FormIntegrationTestCase
         $this->event->method('getForm')->willReturn($this->form);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         unset(

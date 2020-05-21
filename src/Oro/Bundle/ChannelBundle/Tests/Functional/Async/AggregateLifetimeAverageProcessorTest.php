@@ -18,17 +18,17 @@ use Symfony\Component\Yaml\Yaml;
  */
 class AggregateLifetimeAverageProcessorTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->initClient();
     }
-    
+
     public function testCouldBeGetFromContainerAsService()
     {
         $processor = $this->getContainer()->get('oro_channel.async.aggregate_lifetime_average_processor');
-        
+
         $this->assertInstanceOf(AggregateLifetimeAverageProcessor::class, $processor);
     }
 

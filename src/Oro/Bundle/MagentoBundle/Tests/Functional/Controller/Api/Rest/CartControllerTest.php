@@ -15,7 +15,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  */
 class CartControllerTest extends WebTestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateWsseAuthHeader());
 
@@ -118,9 +118,9 @@ class CartControllerTest extends WebTestCase
 
         $this->assertCount(1, $cart['cartItems']);
         $this->assertNotEmpty($cart['billingAddress']);
-        $this->assertInternalType('array', $cart['billingAddress']);
+        $this->assertIsArray($cart['billingAddress']);
         $this->assertNotEmpty($cart['shippingAddress']);
-        $this->assertInternalType('array', $cart['shippingAddress']);
+        $this->assertIsArray($cart['shippingAddress']);
         $this->assertEquals(1, $cart['itemsCount']);
     }
 
@@ -147,9 +147,9 @@ class CartControllerTest extends WebTestCase
 
         $this->assertCount(1, $result['cartItems']);
         $this->assertNotEmpty($result['billingAddress']);
-        $this->assertInternalType('array', $result['billingAddress']);
+        $this->assertIsArray($result['billingAddress']);
         $this->assertNotEmpty($result['shippingAddress']);
-        $this->assertInternalType('array', $result['shippingAddress']);
+        $this->assertIsArray($result['shippingAddress']);
         $this->assertEquals(1, $result['itemsCount']);
 
         $this->assertEquals($cart['giftMessage'], $result['giftMessage']);

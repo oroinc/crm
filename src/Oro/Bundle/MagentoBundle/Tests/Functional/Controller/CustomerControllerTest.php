@@ -18,17 +18,17 @@ class CustomerControllerTest extends AbstractController
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains('Customers', $result->getContent());
-        $this->assertContains('test@example.com', $result->getContent());
-        $this->assertContains('John', $result->getContent());
-        $this->assertContains('Doe', $result->getContent());
-        $this->assertContains('John Doe', $result->getContent());
-        $this->assertContains('Address Book', $result->getContent());
-        $this->assertContains('Sales', $result->getContent());
-        $this->assertContains('Orders', $result->getContent());
-        $this->assertContains('Shopping Carts', $result->getContent());
-        $this->assertContains('Demo Web store', $result->getContent());
-        $this->assertContains('web site', $result->getContent());
+        static::assertStringContainsString('Customers', $result->getContent());
+        static::assertStringContainsString('test@example.com', $result->getContent());
+        static::assertStringContainsString('John', $result->getContent());
+        static::assertStringContainsString('Doe', $result->getContent());
+        static::assertStringContainsString('John Doe', $result->getContent());
+        static::assertStringContainsString('Address Book', $result->getContent());
+        static::assertStringContainsString('Sales', $result->getContent());
+        static::assertStringContainsString('Orders', $result->getContent());
+        static::assertStringContainsString('Shopping Carts', $result->getContent());
+        static::assertStringContainsString('Demo Web store', $result->getContent());
+        static::assertStringContainsString('web site', $result->getContent());
     }
 
     /**

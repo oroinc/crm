@@ -21,7 +21,10 @@ class ValidationUtilsTest extends \PHPUnit\Framework\TestCase
      */
     public function testErrorPrefixGuess($entity, $shouldContain)
     {
-        $this->assertContains((string)$shouldContain, ValidationUtils::guessValidationMessagePrefix($entity));
+        static::assertStringContainsString(
+            (string)$shouldContain,
+            ValidationUtils::guessValidationMessagePrefix($entity)
+        );
     }
 
     /**

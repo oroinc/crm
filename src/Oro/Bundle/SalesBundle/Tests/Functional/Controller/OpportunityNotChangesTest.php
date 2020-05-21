@@ -9,7 +9,7 @@ use Symfony\Component\DomCrawler\Form;
 
 class OpportunityNotChangesTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             ['debug' => false],

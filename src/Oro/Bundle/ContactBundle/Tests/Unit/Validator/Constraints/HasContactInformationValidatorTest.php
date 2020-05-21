@@ -17,7 +17,7 @@ class HasContactInformationValidatorTest extends \PHPUnit\Framework\TestCase
     /** @var HasContactInformationValidator */
     protected $validator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $translator = $translator = $this->createMock('Symfony\Contracts\Translation\TranslatorInterface');
         $translator
@@ -91,12 +91,13 @@ class HasContactInformationValidatorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Validator expects $value to be instance of "Oro\Bundle\ContactBundle\Entity\Contact"
-     */
     public function testInvalidArgument()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Validator expects $value to be instance of "Oro\Bundle\ContactBundle\Entity\Contact"'
+        );
+
         $this->validator->validate(new ContactEmail(), new HasContactInformation());
     }
 }

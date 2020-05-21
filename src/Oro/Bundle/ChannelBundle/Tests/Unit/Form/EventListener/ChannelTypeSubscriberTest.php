@@ -22,7 +22,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
     /** @var ChannelTypeSubscriber */
     protected $subscriber;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
@@ -53,7 +53,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         parent::setUp();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subscriber, $this->settingsProvider);
     }

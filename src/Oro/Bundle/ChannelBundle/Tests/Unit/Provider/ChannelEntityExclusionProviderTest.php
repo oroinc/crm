@@ -17,7 +17,7 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
     /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $settingsProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
@@ -25,7 +25,7 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
         $this->exclusionProvider = new ChannelEntityExclusionProvider($this->settingsProvider);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->exclusionProvider, $this->settingsProvider);
     }

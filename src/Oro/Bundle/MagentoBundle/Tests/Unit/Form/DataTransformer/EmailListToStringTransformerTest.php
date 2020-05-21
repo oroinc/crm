@@ -55,12 +55,11 @@ class EmailListToStringTransformerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage Expected argument of type "array", "string" given
-     */
     public function testTransformFailsWhenUnexpectedType()
     {
+        $this->expectException(\Symfony\Component\Form\Exception\UnexpectedTypeException::class);
+        $this->expectExceptionMessage('Expected argument of type "array", "string" given');
+
         $transformer = $this->createTestTransfomer();
         $transformer->transform('');
     }
@@ -130,21 +129,19 @@ class EmailListToStringTransformerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage Expected argument of type "string", "array" given
-     */
     public function testReverseTransformFailsWhenUnexpectedType()
     {
+        $this->expectException(\Symfony\Component\Form\Exception\UnexpectedTypeException::class);
+        $this->expectExceptionMessage('Expected argument of type "string", "array" given');
+
         $this->createTestTransfomer()->reverseTransform([]);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Default delimiter ',', should be included in available delimiters list
-     */
     public function testDelimiterIsNotAvailable()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage("Default delimiter ',', should be included in available delimiters list");
+
         return new EmailListToStringTransformer(['|', ';'], ',');
     }
 

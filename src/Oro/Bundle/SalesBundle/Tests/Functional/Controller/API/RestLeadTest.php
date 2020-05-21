@@ -6,7 +6,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RestLeadTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient(
             [],
@@ -62,7 +62,7 @@ class RestLeadTest extends WebTestCase
         $this->assertEquals($request['lead']['lastName'], $result['lastName']);
         $this->assertEquals($request['lead']['name'], $result['name']);
         $this->assertEquals('New', $result['status']);
-        // TODO: incomplete CRM-816
+        // Incomplete CRM-816
         //$this->assertEquals($request['lead']['owner'], $result['owner']['id']);
         return $request;
     }

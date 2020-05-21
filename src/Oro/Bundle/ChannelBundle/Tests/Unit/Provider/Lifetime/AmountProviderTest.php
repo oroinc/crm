@@ -16,7 +16,7 @@ class AmountProviderTest extends OrmTestCase
     /** @var AmountProvider */
     protected $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->em = $this->getTestEntityManager();
 
@@ -37,7 +37,7 @@ class AmountProviderTest extends OrmTestCase
         $this->provider = new AmountProvider($registry);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->provider, $this->registry);
     }

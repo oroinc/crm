@@ -21,16 +21,12 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
     public function testSortByValue(array $inputData)
     {
         $provider = $this->getProvider($inputData);
+
         $data = $provider->getChartData([], []);
 
-        $this->assertArraySubset(
-            [
-                1 => ['source' => 'affiliate', 'value' => 19],
-                2 => ['source' => 'direct_mail', 'value' => 15],
-                3 => ['source' => 'website', 'value' => 12],
-            ],
-            $data
-        );
+        $this->assertSame(['source' => 'affiliate', 'value' => 19], $data[1]);
+        $this->assertSame(['source' => 'direct_mail', 'value' => 15], $data[2]);
+        $this->assertSame(['source' => 'website', 'value' => 12], $data[3]);
     }
 
     /**
@@ -45,7 +41,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $others = array_pop($data);
 
         $this->assertEquals(37, $others['value']);
-        $this->assertContains('others', $others['source']);
+        static::assertStringContainsString('others', $others['source']);
     }
 
     /**
@@ -76,7 +72,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $others = array_pop($data);
 
         $this->assertEquals(11, $others['value']);
-        $this->assertContains('others', $others['source']);
+        static::assertStringContainsString('others', $others['source']);
     }
 
     /**
@@ -91,7 +87,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $unclassified = array_shift($data);
 
         $this->assertEquals(27, $unclassified['value']);
-        $this->assertContains('unclassified', $unclassified['source']);
+        static::assertStringContainsString('unclassified', $unclassified['source']);
     }
 
     /**

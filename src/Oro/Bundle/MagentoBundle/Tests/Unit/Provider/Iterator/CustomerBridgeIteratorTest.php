@@ -6,7 +6,7 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator;
 
 class CustomerBridgeIteratorTest extends BaseSoapIteratorTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -76,12 +76,24 @@ class CustomerBridgeIteratorTest extends BaseSoapIteratorTestCase
 
     public function testConstructBatchSize()
     {
-        $iterator = new CustomerBridgeIterator($this->transport, $this->settings);
-        $this->assertAttributeEquals(CustomerBridgeIterator::DEFAULT_PAGE_SIZE, 'pageSize', $iterator);
+        $iterator1 = new class($this->transport, $this->settings) extends CustomerBridgeIterator {
+            public function xgetPageSize(): int
+            {
+                return $this->pageSize;
+            }
+        };
 
         $batchSize = 2000;
-        $settings = array_merge($this->settings, ['page_size' => $batchSize]);
-        $iterator = new CustomerBridgeIterator($this->transport, $settings);
-        $this->assertAttributeEquals($batchSize, 'pageSize', $iterator);
+        $customSettings = \array_merge($this->settings, ['page_size' => $batchSize]);
+
+        $iterator2 = new class($this->transport, $customSettings) extends CustomerBridgeIterator {
+            public function xgetPageSize(): int
+            {
+                return $this->pageSize;
+            }
+        };
+
+        static::assertEquals(CustomerBridgeIterator::DEFAULT_PAGE_SIZE, $iterator1->xgetPageSize());
+        static::assertEquals($batchSize, $iterator2->xgetPageSize());
     }
 }

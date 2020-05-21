@@ -11,7 +11,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
      */
     protected $comment;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->comment = new CaseComment();
     }

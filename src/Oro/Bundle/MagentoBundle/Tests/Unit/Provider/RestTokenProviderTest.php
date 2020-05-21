@@ -54,7 +54,7 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->parameterBag = new ParameterBag();
 
@@ -80,7 +80,7 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
         $this->client = new FakeRestClient();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->transportEntity,
@@ -208,12 +208,11 @@ class RestTokenProviderTest extends \PHPUnit\Framework\TestCase
         $this->tokenProvider->generateNewToken($this->transportEntity, $this->client);
     }
 
-    /**
-     * @expectedException Oro\Bundle\MagentoBundle\Exception\RuntimeException
-     * @expectedExceptionMessage Unable to parse response body into JSON
-     */
     public function testResponseContainsBrokenJson()
     {
+        $this->expectException(\Oro\Bundle\MagentoBundle\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Unable to parse response body into JSON');
+
         $this->client->setDefaultResponse(
             new FakeRestResponse(Response::HTTP_OK, [], '\token')
         );

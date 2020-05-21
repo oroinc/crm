@@ -22,7 +22,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
     /** @var WorkflowRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $wfRegistry;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->featureChecker = $this
             ->getMockBuilder('Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker')

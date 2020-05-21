@@ -24,7 +24,7 @@ class TwoWaySyncStrategyTest extends \PHPUnit\Framework\TestCase
      */
     protected $exportProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->importProcessor = $this
             ->getMockBuilder('Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareImportProcessor')
@@ -83,17 +83,16 @@ class TwoWaySyncStrategyTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->strategy, $this->importProcessor, $this->exportProcessor);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Strategy "wrong" is not supported, expected one of "remote,local"
-     */
     public function testWrongStrategy()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Strategy "wrong" is not supported, expected one of "remote,local"');
+
         $this->strategy->merge([], [], [], 'wrong');
     }
 

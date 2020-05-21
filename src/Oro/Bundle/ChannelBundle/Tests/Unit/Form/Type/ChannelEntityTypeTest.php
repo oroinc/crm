@@ -10,12 +10,12 @@ class ChannelEntityTypeTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelEntityType */
     protected $type;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->type = new ChannelEntityType();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->type);
     }

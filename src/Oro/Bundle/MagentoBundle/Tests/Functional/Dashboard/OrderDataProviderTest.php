@@ -23,7 +23,7 @@ class OrderDataProviderTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markTestSkipped('Should be fixed in CRM-8594');
         parent::setUp();
@@ -52,7 +52,7 @@ class OrderDataProviderTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->configManager->set('oro_locale.timezone', $this->savedTimezone);
         unset(

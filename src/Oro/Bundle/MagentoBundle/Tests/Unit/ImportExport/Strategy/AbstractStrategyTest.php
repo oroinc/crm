@@ -99,7 +99,7 @@ abstract class AbstractStrategyTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject|RelatedEntityStateHelper */
     protected $relatedEntityStateHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventDispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
@@ -173,7 +173,7 @@ abstract class AbstractStrategyTest extends \PHPUnit\Framework\TestCase
         $this->logger = new NullLogger();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->eventDispatcher,

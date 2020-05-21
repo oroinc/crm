@@ -10,7 +10,7 @@ class B2bCustomerPhoneTest extends \PHPUnit\Framework\TestCase
     /** @var B2bCustomerPhone */
     protected $phone;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->phone = new B2bCustomerPhone();
     }

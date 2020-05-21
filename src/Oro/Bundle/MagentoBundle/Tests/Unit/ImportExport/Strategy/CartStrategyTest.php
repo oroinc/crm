@@ -45,7 +45,7 @@ class CartStrategyTest extends AbstractStrategyTest
      */
     protected $guestCustomerStrategyHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

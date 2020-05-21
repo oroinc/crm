@@ -16,7 +16,7 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
 {
     use MessageQueueExtension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initClient();
         $this->loadFixtures([LoadLifetimeHistoryData::class]);
@@ -26,7 +26,7 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
     {
         $result = $this->runCommand('oro:cron:lifetime-average:aggregate', []);
 
-        $this->assertContains('Completed!', $result);
+        static::assertStringContainsString('Completed!', $result);
 
         self::assertMessageSent(
             Topics::AGGREGATE_LIFETIME_AVERAGE,
