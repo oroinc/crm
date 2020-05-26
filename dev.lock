@@ -5494,7 +5494,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "80906a0e503d760ef9bf38874204c3d3c8dd854a"
+                "reference": "d8f723a76ba53f7b8f9a216d986a6d468b732be8"
             },
             "require": {
                 "akeneo/batch-bundle": "0.4.11",
@@ -5619,7 +5619,7 @@
                     "numeral": "2.0.6",
                     "jquery-form": "4.2.1",
                     "fuse.js": "3.2.*",
-                    "jquery": "3.4.*",
+                    "jquery": "3.5.*",
                     "jquery-ui": "1.12.*",
                     "backbone": "1.4.*",
                     "underscore": "1.9.*",
