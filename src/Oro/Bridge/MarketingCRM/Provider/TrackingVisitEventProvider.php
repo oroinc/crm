@@ -32,7 +32,7 @@ class TrackingVisitEventProvider implements TrackingVisitEventProviderInterface,
      */
     public function getCustomerEventAggregates(array $customers, array $eventNames)
     {
-        if ($this->isFeaturesEnabled()) {
+        if (!$this->isFeaturesEnabled()) {
             return [];
         }
 
@@ -62,7 +62,7 @@ class TrackingVisitEventProvider implements TrackingVisitEventProviderInterface,
      */
     public function getCustomerEventsCountByDate(array $customers, array $eventNames)
     {
-        if ($this->isFeaturesEnabled()) {
+        if (!$this->isFeaturesEnabled()) {
             return [];
         }
 
@@ -83,7 +83,7 @@ class TrackingVisitEventProvider implements TrackingVisitEventProviderInterface,
      */
     public function getCustomerEventsCountByDateAndChannel(array $customers, array $eventNames)
     {
-        if ($this->isFeaturesEnabled()) {
+        if (!$this->isFeaturesEnabled()) {
             return [];
         }
 
@@ -108,7 +108,7 @@ class TrackingVisitEventProvider implements TrackingVisitEventProviderInterface,
      */
     public function getMostViewedPage(array $customers = [])
     {
-        if ($this->isFeaturesEnabled()) {
+        if (!$this->isFeaturesEnabled()) {
             return null;
         }
 
@@ -127,7 +127,7 @@ class TrackingVisitEventProvider implements TrackingVisitEventProviderInterface,
      */
     public function getLastViewedPage(array $customers = [])
     {
-        if ($this->isFeaturesEnabled()) {
+        if (!$this->isFeaturesEnabled()) {
             return null;
         }
 
