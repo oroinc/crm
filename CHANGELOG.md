@@ -2,6 +2,9 @@ Please refer first to [UPGRADE.md](UPGRADE.md) for the most important items that
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
+## 4.2.0-alpha.2 (2020-05-29)
+[Show detailed list of changes](incompatibilities-4-2-alpha-2.md)
+
 ## 4.1.0 (2020-01-31)
 [Show detailed list of changes](incompatibilities-4-1.md)
 
