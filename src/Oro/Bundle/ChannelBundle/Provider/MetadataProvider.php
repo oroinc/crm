@@ -83,7 +83,7 @@ class MetadataProvider implements MetadataProviderInterface
                 $isCustom
                     = $extendConfig->is('is_extend')
                     && $extendConfig->get('owner') === ExtendScope::OWNER_CUSTOM
-                    && $extendConfig->in('state', [ExtendScope::STATE_ACTIVE, ExtendScope::STATE_UPDATED]);
+                    && $extendConfig->in('state', [ExtendScope::STATE_ACTIVE, ExtendScope::STATE_UPDATE]);
 
                 return $isCustom ? $extendConfig->getId()->getClassName() : false;
             }
