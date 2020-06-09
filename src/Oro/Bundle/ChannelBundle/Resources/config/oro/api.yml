@@ -12,7 +12,7 @@ api:
                 customerIdentity:
                     exclude: true
                 entities:
-                    data_type: array
+                    data_type: entityType[]
                     exclusion_policy: all
                     collapse: true
                     fields:
