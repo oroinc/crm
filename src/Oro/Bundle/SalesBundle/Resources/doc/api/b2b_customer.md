@@ -26,75 +26,75 @@ The created record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"b2bcustomers",
-      "attributes":{  
-         "name":"Life Plan Counselling East",
-         "primaryPhone":"585-255-1127",
-         "primaryEmail":"JerryAColeman@armyspy.com",
-         "phones":[  
-            {  
-               "phone":"585-255-1127"
+{
+   "data": {
+      "type": "b2bcustomers",
+      "attributes": {
+         "name": "Life Plan Counselling East",
+         "primaryPhone": "585-255-1127",
+         "primaryEmail": "JerryAColeman@armyspy.com",
+         "phones": [
+            {
+               "phone": "585-255-1127"
             }
          ],
-         "emails":[  
-            {  
-               "email":"JerryAColeman@armyspy.com"
+         "emails": [
+            {
+               "email": "JerryAColeman@armyspy.com"
             }
          ]
       },
-      "relationships":{  
-         "shippingAddress":{  
-            "data":{  
-               "type":"addresses",
-               "id":"1"
+      "relationships": {
+         "shippingAddress": {
+            "data": {
+               "type": "addresses",
+               "id": "1"
             }
          },
-         "billingAddress":{  
-            "data":{  
-               "type":"addresses",
-               "id":"2"
+         "billingAddress": {
+            "data": {
+               "type": "addresses",
+               "id": "2"
             }
          },
-         "account":{  
-            "data":{  
-               "type":"accounts",
-               "id":"26"
+         "account": {
+            "data": {
+               "type": "accounts",
+               "id": "26"
             }
          },
-         "leads":{  
-            "data":[  
-               {  
-                  "type":"leads",
-                  "id":"7"
+         "leads": {
+            "data": [
+               {
+                  "type": "leads",
+                  "id": "7"
                }
             ]
          },
-         "opportunities":{  
-            "data":[  
-               {  
-                  "type":"opportunities",
-                  "id":"24"
+         "opportunities": {
+            "data": [
+               {
+                  "type": "opportunities",
+                  "id": "24"
                }
             ]
          },
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"27"
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "27"
             }
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          },
-         "dataChannel":{  
-            "data":{  
-               "type":"channels",
-               "id":"1"
+         "dataChannel": {
+            "data": {
+               "type": "channels",
+               "id": "1"
             }
          }
       }
@@ -115,47 +115,47 @@ The updated record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"b2bcustomers",
-      "id":"27",
-      "attributes":{  
-         "website":"www.site.com",
-         "employees":"25",
-         "ownership":"founder",
-         "ticker_symbol":"HPQ",
-         "rating":"hight",
-         "lifetime":"256.45"
+{
+   "data": {
+      "type": "b2bcustomers",
+      "id": "27",
+      "attributes": {
+         "website": "www.site.com",
+         "employees": "25",
+         "ownership": "founder",
+         "ticker_symbol": "HPQ",
+         "rating": "hight",
+         "lifetime": "256.45"
       },
-      "relationships":{  
-         "shippingAddress":{  
-            "data":{  
-               "type":"addresses",
-               "id":"7"
+      "relationships": {
+         "shippingAddress": {
+            "data": {
+               "type": "addresses",
+               "id": "7"
             }
          },
-         "billingAddress":{  
-            "data":{  
-               "type":"addresses",
-               "id":"5"
+         "billingAddress": {
+            "data": {
+               "type": "addresses",
+               "id": "5"
             }
          },
-         "contact":{  
-            "data":{  
-               "type":"contacts",
-               "id":"7"
+         "contact": {
+            "data": {
+               "type": "contacts",
+               "id": "7"
             }
          },
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"28"
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "28"
             }
          },
-         "dataChannel":{  
-            "data":{  
-               "type":"channels",
-               "id":"2"
+         "dataChannel": {
+            "data": {
+               "type": "channels",
+               "id": "2"
             }
          }
       }
@@ -412,15 +412,15 @@ Set the leads that a specific business customer will be assinged to.
 Example:
 
 ```JSON
-{  
-   "data":[  
-      {  
-         "type":"leads",
-         "id":"5"
+{
+   "data": [
+      {
+         "type": "leads",
+         "id": "5"
       },
-      {  
-         "type":"leads",
-         "id":"7"
+      {
+         "type": "leads",
+         "id": "7"
       }
    ]
 }
@@ -435,15 +435,15 @@ Replace the leads that a specific business customer is assigned to.
 Example:
 
 ```JSON
-{  
-   "data":[  
-      {  
-         "type":"leads",
-         "id":"5"
+{
+   "data": [
+      {
+         "type": "leads",
+         "id": "5"
       },
-      {  
-         "type":"leads",
-         "id":"7"
+      {
+         "type": "leads",
+         "id": "7"
       }
    ]
 }

@@ -27,67 +27,67 @@ The created record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"cases",
-      "attributes":{  
-         "subject":"Parvis imbutus tentabis grandia tutus",
-         "description":"Pax tibi, Marce, evangelista meus. Hic requiescet corpus tuum.",
-         "resolution":"Per capsulam."
+{
+   "data": {
+      "type": "cases",
+      "attributes": {
+         "subject": "Parvis imbutus tentabis grandia tutus",
+         "description": "Pax tibi, Marce, evangelista meus. Hic requiescet corpus tuum.",
+         "resolution": "Per capsulam."
       },
-      "relationships":{  
-         "source":{  
-            "data":{  
-               "type":"casesources",
-               "id":"other"
+      "relationships": {
+         "source": {
+            "data": {
+               "type": "casesources",
+               "id": "other"
             }
          },
-         "status":{  
-            "data":{  
-               "type":"casestatuses",
-               "id":"open"
+         "status": {
+            "data": {
+               "type": "casestatuses",
+               "id": "open"
             }
          },
-         "priority":{  
-            "data":{  
-               "type":"casepriorities",
-               "id":"high"
+         "priority": {
+            "data": {
+               "type": "casepriorities",
+               "id": "high"
             }
          },
-         "relatedContact":{  
-            "data":{  
-               "type":"contacts",
-               "id":"3"
+         "relatedContact": {
+            "data": {
+               "type": "contacts",
+               "id": "3"
             }
          },
-         "assignedTo":{  
-            "data":{  
-               "type":"users",
-               "id":"20"
+         "assignedTo": {
+            "data": {
+               "type": "users",
+               "id": "20"
             }
          },
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"35"
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "35"
             }
          },
-         "comments":{  
-            "data":[  
-               {  
-                  "type":"casecomments",
-                  "id":"1"
+         "comments": {
+            "data": [
+               {
+                  "type": "casecomments",
+                  "id": "1"
                },
-               {  
-                  "type":"casecomments",
-                  "id":"2"
+               {
+                  "type": "casecomments",
+                  "id": "2"
                }
             ]
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          }
       }
@@ -108,68 +108,68 @@ The updated record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"cases",
-      "id":"22",
-      "attributes":{  
-         "subject":"Parvis imbutus tentabis grandia tutus",
-         "description":"Pax tibi, Marce, evangelista meus. Hic requiescet corpus tuum.",
-         "resolution":"Per capsulam."
+{
+   "data": {
+      "type": "cases",
+      "id": "22",
+      "attributes": {
+         "subject": "Parvis imbutus tentabis grandia tutus",
+         "description": "Pax tibi, Marce, evangelista meus. Hic requiescet corpus tuum.",
+         "resolution": "Per capsulam."
       },
-      "relationships":{  
-         "source":{  
-            "data":{  
-               "type":"casesources",
-               "id":"other"
+      "relationships": {
+         "source": {
+            "data": {
+               "type": "casesources",
+               "id": "other"
             }
          },
-         "status":{  
-            "data":{  
-               "type":"casestatuses",
-               "id":"open"
+         "status": {
+            "data": {
+               "type": "casestatuses",
+               "id": "open"
             }
          },
-         "priority":{  
-            "data":{  
-               "type":"casepriorities",
-               "id":"high"
+         "priority": {
+            "data": {
+               "type": "casepriorities",
+               "id": "high"
             }
          },
-         "relatedContact":{  
-            "data":{  
-               "type":"contacts",
-               "id":"3"
+         "relatedContact": {
+            "data": {
+               "type": "contacts",
+               "id": "3"
             }
          },
-         "assignedTo":{  
-            "data":{  
-               "type":"users",
-               "id":"20"
+         "assignedTo": {
+            "data": {
+               "type": "users",
+               "id": "20"
             }
          },
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"35"
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "35"
             }
          },
-         "comments":{  
-            "data":[  
-               {  
-                  "type":"casecomments",
-                  "id":"1"
+         "comments": {
+            "data": [
+               {
+                  "type": "casecomments",
+                  "id": "1"
                },
-               {  
-                  "type":"casecomments",
-                  "id":"2"
+               {
+                  "type": "casecomments",
+                  "id": "2"
                }
             ]
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          }
       }

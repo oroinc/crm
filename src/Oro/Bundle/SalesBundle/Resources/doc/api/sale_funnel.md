@@ -26,32 +26,32 @@ The created record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"salesfunnels",
-      "attributes":{  
-         "startDate":"2017-02-21"
+{
+   "data": {
+      "type": "salesfunnels",
+      "attributes": {
+         "startDate": "2017-02-21"
       },
-      "relationships":{  
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"1"
+      "relationships": {
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "1"
             }
          },
-         "lead":{  
-            "data":{  
-               "type":"leads",
-               "id":"31"
+         "lead": {
+            "data": {
+               "type": "leads",
+               "id": "31"
             }
          },
-         "opportunity":{  
-            "data":null
+         "opportunity": {
+            "data": null
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          }
       }
@@ -72,30 +72,30 @@ The updated record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"salesfunnels",
-      "id":"1",
-      "attributes":{  
-         "startDate":"2017-02-21"
+{
+   "data": {
+      "type": "salesfunnels",
+      "id": "1",
+      "attributes": {
+         "startDate": "2017-02-21"
       },
-      "relationships":{  
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"1"
+      "relationships": {
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "1"
             }
          },
-         "lead":{  
-            "data":{  
-               "type":"leads",
-               "id":"31"
+         "lead": {
+            "data": {
+               "type": "leads",
+               "id": "31"
             }
          },        
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          }
       }

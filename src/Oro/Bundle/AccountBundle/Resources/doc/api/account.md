@@ -26,46 +26,46 @@ The created record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"accounts",
-      "attributes":{  
-         "extend_description":null,
-         "name":"Gartner management group"
+{
+   "data": {
+      "type": "accounts",
+      "attributes": {
+         "extend_description": null,
+         "name": "Gartner management group"
       },
-      "relationships":{  
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"44"
+      "relationships": {
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "44"
             }
          },
-         "contacts":{  
-            "data":[  
-               {  
-                  "type":"contacts",
-                  "id":"1"
+         "contacts": {
+            "data": [
+               {
+                  "type": "contacts",
+                  "id": "1"
                },
-               {  
-                  "type":"contacts",
-                  "id":"3"
+               {
+                  "type": "contacts",
+                  "id": "3"
                },
-               {  
-                  "type":"contacts",
-                  "id":"22"
+               {
+                  "type": "contacts",
+                  "id": "22"
                }
             ]
          },
-         "defaultContact":{  
-            "data":{  
-               "type":"contacts",
-               "id":"1"
+         "defaultContact": {
+            "data": {
+               "type": "contacts",
+               "id": "1"
             }
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          }
       }
@@ -86,47 +86,47 @@ The updated record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"accounts",
-      "id":"51",
-      "attributes":{  
-         "extend_description":null,
-         "name":"Life Plan Counselling"
+{
+   "data": {
+      "type": "accounts",
+      "id": "51",
+      "attributes": {
+         "extend_description": null,
+         "name": "Life Plan Counselling"
       },
-      "relationships":{  
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"44"
+      "relationships": {
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "44"
             }
          },
-         "contacts":{  
-            "data":[  
-               {  
-                  "type":"contacts",
-                  "id":"1"
+         "contacts": {
+            "data": [
+               {
+                  "type": "contacts",
+                  "id": "1"
                },
-               {  
-                  "type":"contacts",
-                  "id":"3"
+               {
+                  "type": "contacts",
+                  "id": "3"
                },
-               {  
-                  "type":"contacts",
-                  "id":"22"
+               {
+                  "type": "contacts",
+                  "id": "22"
                }
             ]
          },
-         "defaultContact":{  
-            "data":{  
-               "type":"contacts",
-               "id":"1"
+         "defaultContact": {
+            "data": {
+               "type": "contacts",
+               "id": "1"
             }
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          }
       }

@@ -26,35 +26,35 @@ The created record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"contactaddresses",
-      "attributes":{  
-         "primary":true,
-         "label":"Primary Address",
-         "street":"873 John Avenue",
-         "city":"Jackson",
-         "postalCode":"49201",
-         "firstName":"Ramona",
-         "lastName":"Venters"
+{
+   "data": {
+      "type": "contactaddresses",
+      "attributes": {
+         "primary": true,
+         "label": "Primary Address",
+         "street": "873 John Avenue",
+         "city": "Jackson",
+         "postalCode": "49201",
+         "firstName": "Ramona",
+         "lastName": "Venters"
       },
-      "relationships":{  
-         "owner":{  
-            "data":{  
-               "type":"contacts",
-               "id":"1"
+      "relationships": {
+         "owner": {
+            "data": {
+               "type": "contacts",
+               "id": "1"
             }
          },
-         "country":{  
-            "data":{  
-               "type":"countries",
-               "id":"US"
+         "country": {
+            "data": {
+               "type": "countries",
+               "id": "US"
             }
          },
-         "region":{  
-            "data":{  
-               "type":"regions",
-               "id":"US-MI"
+         "region": {
+            "data": {
+               "type": "regions",
+               "id": "US-MI"
             }
          }
       }
@@ -75,36 +75,36 @@ The updated record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"contactaddresses",
-      "id":"79",
-      "attributes":{  
-         "primary":true,
-         "label":"Primary Address",
-         "street":"873 John Avenue",
-         "city":"Jackson",
-         "postalCode":"49201",
-         "firstName":"Ramona",
-         "lastName":"Venters"
+{
+   "data": {
+      "type": "contactaddresses",
+      "id": "79",
+      "attributes": {
+         "primary": true,
+         "label": "Primary Address",
+         "street": "873 John Avenue",
+         "city": "Jackson",
+         "postalCode": "49201",
+         "firstName": "Ramona",
+         "lastName": "Venters"
       },
-      "relationships":{  
-         "owner":{  
-            "data":{  
-               "type":"contacts",
-               "id":"1"
+      "relationships": {
+         "owner": {
+            "data": {
+               "type": "contacts",
+               "id": "1"
             }
          },
-         "country":{  
-            "data":{  
-               "type":"countries",
-               "id":"US"
+         "country": {
+            "data": {
+               "type": "countries",
+               "id": "US"
             }
          },
-         "region":{  
-            "data":{  
-               "type":"regions",
-               "id":"US-MI"
+         "region": {
+            "data": {
+               "type": "regions",
+               "id": "US-MI"
             }
          }
       }
@@ -258,11 +258,11 @@ Set the address types for a specific contact address record.
 Example:
 
 ```JSON
-{  
-   "data":[  
-      {  
-         "type":"addresstypes",
-         "id":"billing"
+{
+   "data": [
+      {
+         "type": "addresstypes",
+         "id": "billing"
       }
    ]
 }
@@ -277,11 +277,11 @@ Replace the address types for a specific contact address record.
 Example:
 
 ```JSON
-{  
-   "data":[  
-      {  
-         "type":"addresstypes",
-         "id":"billing"
+{
+   "data": [
+      {
+         "type": "addresstypes",
+         "id": "billing"
       }
    ]
 }

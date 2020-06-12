@@ -26,35 +26,35 @@ The created record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"leadaddresses",
-      "attributes":{  
-         "primary":true,
-         "label":"Primary Address",
-         "street":"873 John Avenue",
-         "city":"Jackson",
-         "postalCode":"49201",
-         "firstName":"Ramona",
-         "lastName":"Venters"
+{
+   "data": {
+      "type": "leadaddresses",
+      "attributes": {
+         "primary": true,
+         "label": "Primary Address",
+         "street": "873 John Avenue",
+         "city": "Jackson",
+         "postalCode": "49201",
+         "firstName": "Ramona",
+         "lastName": "Venters"
       },
-      "relationships":{  
-         "owner":{  
-            "data":{  
-               "type":"leads",
-               "id":"1"
+      "relationships": {
+         "owner": {
+            "data": {
+               "type": "leads",
+               "id": "1"
             }
          },
-         "country":{  
-            "data":{  
-               "type":"countries",
-               "id":"US"
+         "country": {
+            "data": {
+               "type": "countries",
+               "id": "US"
             }
          },
-         "region":{  
-            "data":{  
-               "type":"regions",
-               "id":"US-MI"
+         "region": {
+            "data": {
+               "type": "regions",
+               "id": "US-MI"
             }
          }
       }
@@ -75,36 +75,36 @@ The updated record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"leadaddresses",
+{
+   "data": {
+      "type": "leadaddresses",
       "id" : "106",
-      "attributes":{  
-         "primary":true,
-         "label":"Primary Address",
-         "street":"873 John Avenue",
-         "city":"Jackson",
-         "postalCode":"49201",
-         "firstName":"Ramona",
-         "lastName":"Venters"
+      "attributes": {
+         "primary": true,
+         "label": "Primary Address",
+         "street": "873 John Avenue",
+         "city": "Jackson",
+         "postalCode": "49201",
+         "firstName": "Ramona",
+         "lastName": "Venters"
       },
-      "relationships":{  
-         "owner":{  
-            "data":{  
-               "type":"leads",
-               "id":"1"
+      "relationships": {
+         "owner": {
+            "data": {
+               "type": "leads",
+               "id": "1"
             }
          },
-         "country":{  
-            "data":{  
-               "type":"countries",
-               "id":"US"
+         "country": {
+            "data": {
+               "type": "countries",
+               "id": "US"
             }
          },
-         "region":{  
-            "data":{  
-               "type":"regions",
-               "id":"US-MI"
+         "region": {
+            "data": {
+               "type": "regions",
+               "id": "US-MI"
             }
          }
       }
