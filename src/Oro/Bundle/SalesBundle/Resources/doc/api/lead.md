@@ -26,38 +26,38 @@ The created record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"leads",
-      "attributes":{  
-         "name":"Frank Lead"
+{
+   "data": {
+      "type": "leads",
+      "attributes": {
+         "name": "Frank Lead"
       },
-      "relationships":{  
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"1"
+      "relationships": {
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "1"
             }
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          },
-         "customer":{
-            "data":{
-               "type":"b2bcustomers",
-               "id":"9"
+         "customer": {
+            "data": {
+               "type": "b2bcustomers",
+               "id": "9"
             }
          },
-         "account":{
-            "data":null
+         "account": {
+            "data": null
          },
-         "status":{  
-            "data":{  
-               "type":"leadstatuses",
-               "id":"new"
+         "status": {
+            "data": {
+               "type": "leadstatuses",
+               "id": "new"
             }
          }
       }
@@ -78,52 +78,52 @@ The updated record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"leads",
-      "id":"1",
-      "attributes":{  
-         "namePrefix":"Mr.",
-         "jobTitle":"HR",
-         "companyName":"Sure Save",
-         "website":"http://qwe.qwe.qwe",
-         "numberOfEmployees":"35",
-         "phones":[  
-            {  
-               "phone":"225-56-78"
+{
+   "data": {
+      "type": "leads",
+      "id": "1",
+      "attributes": {
+         "namePrefix": "Mr.",
+         "jobTitle": "HR",
+         "companyName": "Sure Save",
+         "website": "http://qwe.qwe.qwe",
+         "numberOfEmployees": "35",
+         "phones": [
+            {
+               "phone": "225-56-78"
             }
          ],
-         "emails":[  
-            {  
-               "email":"RamonaCVentersNew@gustr.com"
+         "emails": [
+            {
+               "email": "RamonaCVentersNew@gustr.com"
             }
          ]
       },
-      "relationships":{  
-         "contact":{  
-            "data":{  
-               "type":"contacts",
-               "id":"4"
+      "relationships": {
+         "contact": {
+            "data": {
+               "type": "contacts",
+               "id": "4"
             }
          },
-         "addresses":{  
-            "data":[  
-               {  
-                  "type":"leadaddresses",
-                  "id":"6"
+         "addresses": {
+            "data": [
+               {
+                  "type": "leadaddresses",
+                  "id": "6"
                }
             ]
          },
-         "account":{
-            "data":{
-               "type":"accounts",
-               "id":"3"
+         "account": {
+            "data": {
+               "type": "accounts",
+               "id": "3"
             }
          },
-         "status":{  
-            "data":{  
-               "type":"leadstatuses",
-               "id":"Qualified"
+         "status": {
+            "data": {
+               "type": "leadstatuses",
+               "id": "Qualified"
             }
          }
       }

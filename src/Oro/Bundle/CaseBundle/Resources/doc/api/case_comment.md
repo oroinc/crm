@@ -26,29 +26,29 @@ The created record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"casecomments",
-      "attributes":{       
-         "message":"Hello\n\npublic Signature"
+{
+   "data": {
+      "type": "casecomments",
+      "attributes": {   
+         "message": "Hello\n\npublic Signature"
       },
-      "relationships":{  
-         "case":{  
-            "data":{  
-               "type":"cases",
-               "id":"57"
+      "relationships": {
+         "case": {
+            "data": {
+               "type": "cases",
+               "id": "57"
             }
          },
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"1"
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "1"
             }
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          }
       }
@@ -69,30 +69,30 @@ The updated record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"casecomments",
-      "id":"370",
-      "attributes":{  
-         "message":"Hello\n\npublic Signature"
+{
+   "data": {
+      "type": "casecomments",
+      "id": "370",
+      "attributes": {
+         "message": "Hello\n\npublic Signature"
       },
-      "relationships":{  
-         "case":{  
-            "data":{  
-               "type":"cases",
-               "id":"57"
+      "relationships": {
+         "case": {
+            "data": {
+               "type": "cases",
+               "id": "57"
             }
          },
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"1"
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "1"
             }
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          }
       }

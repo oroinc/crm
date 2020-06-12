@@ -31,46 +31,46 @@ the customer should be a part of the specified account.*
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"opportunities",
-      "attributes":{  
-         "name":"Roy Greenwell",
-         "budgetAmountCurrency":"USD",
-         "budgetAmountValue":"5765.0000"
+{
+   "data": {
+      "type": "opportunities",
+      "attributes": {
+         "name": "Roy Greenwell",
+         "budgetAmountCurrency": "USD",
+         "budgetAmountValue": "5765.0000"
       },
-      "relationships":{  
-         "contact":{  
-            "data":{  
-               "type":"contacts",
-               "id":"2"
+      "relationships": {
+         "contact": {
+            "data": {
+               "type": "contacts",
+               "id": "2"
             }
          },
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"43"
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "43"
             }
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          },
-         "customer":{
-            "data":{  
-               "type":"b2bcustomers",
-               "id":"9"
+         "customer": {
+            "data": {
+               "type": "b2bcustomers",
+               "id": "9"
             }
          },
-         "account":{
-            "data":null
+         "account": {
+            "data": null
          },
-         "status":{  
-            "data":{  
-               "type":"opportunitystatuses",
-               "id":"in_progress"
+         "status": {
+            "data": {
+               "type": "opportunitystatuses",
+               "id": "in_progress"
             }
          }
       }
@@ -97,44 +97,44 @@ These fields could be used independent from each other, but must be correlated i
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"opportunities",
-      "id":"52",
-      "attributes":{  
-         "name":"Roy Greenwell",
-         "budgetAmountCurrency":"USD",
-         "budgetAmountValue":"5765.0000"
+{
+   "data": {
+      "type": "opportunities",
+      "id": "52",
+      "attributes": {
+         "name": "Roy Greenwell",
+         "budgetAmountCurrency": "USD",
+         "budgetAmountValue": "5765.0000"
       },
-      "relationships":{  
-         "contact":{  
-            "data":{  
-               "type":"contacts",
-               "id":"2"
+      "relationships": {
+         "contact": {
+            "data": {
+               "type": "contacts",
+               "id": "2"
             }
          },
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"43"
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "43"
             }
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          },
-         "account":{
-            "data":{
-               "type":"accounts",
-               "id":"3"
+         "account": {
+            "data": {
+               "type": "accounts",
+               "id": "3"
             }
          },
-         "status":{  
-            "data":{  
-               "type":"opportunitystatuses",
-               "id":"in_progress"
+         "status": {
+            "data": {
+               "type": "opportunitystatuses",
+               "id": "in_progress"
             }
          }
       }

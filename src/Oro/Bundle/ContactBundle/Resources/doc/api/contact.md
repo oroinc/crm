@@ -166,26 +166,26 @@ The created record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"contacts",
-      "attributes":{  
-         "firstName":"Jerry",
-         "lastName":"Coleman",
-         "primaryPhone":"585-255-1127",
-         "primaryEmail":"JerryAColeman@armyspy.com"
+{
+   "data": {
+      "type": "contacts",
+      "attributes": {
+         "firstName": "Jerry",
+         "lastName": "Coleman",
+         "primaryPhone": "585-255-1127",
+         "primaryEmail": "JerryAColeman@armyspy.com"
       },
-      "relationships":{  
-         "owner":{  
-            "data":{  
-               "type":"users",
-               "id":"5"
+      "relationships": {
+         "owner": {
+            "data": {
+               "type": "users",
+               "id": "5"
             }
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          }
       }
@@ -206,45 +206,45 @@ The updated record is returned in the response.
 Example:
 
 ```JSON
-{  
-   "data":{  
-      "type":"contacts",
-      "id":"1",
-      "attributes":{  
-         "middleName":"Muriell",
-         "lastName":"Coleman",
-         "jobTitle":"CEO",
-         "skype":"skype.skype"
+{
+   "data": {
+      "type": "contacts",
+      "id": "1",
+      "attributes": {
+         "middleName": "Muriell",
+         "lastName": "Coleman",
+         "jobTitle": "CEO",
+         "skype": "skype.skype"
       },
-      "relationships":{  
-         "method":{  
-            "data":{  
-               "type":"contactmethods",
-               "id":"phone"
+      "relationships": {
+         "method": {
+            "data": {
+               "type": "contactmethods",
+               "id": "phone"
             }
          },
-         "organization":{  
-            "data":{  
-               "type":"organizations",
-               "id":"1"
+         "organization": {
+            "data": {
+               "type": "organizations",
+               "id": "1"
             }
          },
-         "defaultInAccounts":{  
-            "data":[  
-               {  
-                  "type":"accounts",
-                  "id":"1"
+         "defaultInAccounts": {
+            "data": [
+               {
+                  "type": "accounts",
+                  "id": "1"
                },
-               {  
-                  "type":"accounts",
-                  "id":"37"
+               {
+                  "type": "accounts",
+                  "id": "37"
                }
             ]
          },
-         "picture":{  
-            "data":{  
-               "type":"files",
-               "id":"2"
+         "picture": {
+            "data": {
+               "type": "files",
+               "id": "2"
             }
          }
       }
