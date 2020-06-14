@@ -56,7 +56,7 @@ Feature: Opportunities by Status Report
 
   Scenario: Check Expected Close Date filter
     Given records in grid should be 7
-    When I filter Expected close date as between "-3 day" and "now"
+    When I filter Expected close date as between "today - 3" and "today"
     Then number of records should be 7
     And I should see following grid:
       | Status                     | Number of opportunities | Close Revenue | Budget Amount |
@@ -69,7 +69,7 @@ Feature: Opportunities by Status Report
       | Closed Lost                | 0                       | $0.00         | $0.00         |
     And should see "Grand Total 3 $150.00 $24.00"
     And records in grid should be 7
-    When I filter Expected close date as between "-1 day" and "now"
+    When I filter Expected close date as between "today - 1" and "today"
     And I should see following grid:
       | Status                     | Number of opportunities | Close Revenue | Budget Amount |
       | Open                       | 0                       | $0.00         | $0.00         |
@@ -85,7 +85,7 @@ Feature: Opportunities by Status Report
 
   Scenario: Check Created At filter
     Given records in grid should be 7
-    When I filter Created At as between "-1 day" and "today"
+    When I filter Created At as between "now" and "now + 1"
     Then number of records should be 7
     And I should see following grid:
       | Status                     | Number of opportunities | Close Revenue | Budget Amount |
@@ -98,7 +98,7 @@ Feature: Opportunities by Status Report
       | Closed Lost                | 0                       | $0.00         | $0.00         |
     And should see "Grand Total $0.00 $0.00"
     And records in grid should be 7
-    When I filter Created At as between "today" and "+1 day"
+    When I filter Created At as between "now - 1" and "now"
     And I should see following grid:
       | Status                      | Number of opportunities | Close Revenue | Budget Amount |
       | Open                        | 1                       | $0.00         | $5.00         |
@@ -114,7 +114,7 @@ Feature: Opportunities by Status Report
 
   Scenario: Check Updated At filter
     Given records in grid should be 7
-    When I filter Updated At as between "-1 day" and "today"
+    When I filter Updated At as between "now" and "now + 1"
     Then number of records should be 7
     And I should see following grid:
       | Status                     | Number of opportunities | Close Revenue | Budget Amount |
@@ -127,7 +127,7 @@ Feature: Opportunities by Status Report
       | Closed Lost                | 0                       | $0.00         | $0.00         |
     And should see "Grand Total $0.00 $0.00"
     And records in grid should be 7
-    When I filter Updated At as between "today" and "+1 day"
+    When I filter Updated At as between "now - 1" and "now"
     And I should see following grid:
       | Status                      | Number of opportunities | Close Revenue | Budget Amount |
       | Open                        | 1                       | $0.00         | $5.00         |
