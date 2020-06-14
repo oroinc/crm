@@ -13,7 +13,7 @@ Feature: Lead report by date
     And save and close form
     Then I should see "Lead saved" flash message
     And I go to Reports & Segments/ Reports/ Leads/ Leads By Date
-    When I filter Created Date as between "today" and "tomorrow"
+    When I filter Created Date as between "today" and "today + 1"
     And I should see following grid:
       | Leads count |
       | 1           |
