@@ -26,21 +26,21 @@ Feature: Accounts by Opportunities Report
 
   Scenario: Check Close Date filter
     Given records in grid should be 20
-    When I filter Close date as between "-3 day" and "now"
+    When I filter Close date as between "today-3" and "today"
     Then I should see following grid:
       | Account name |
       | Customer 1   |
       | Customer 2   |
     And records in grid should be 2
-    When I filter Close date as between "-1 day" and "now"
+    When I filter Close date as between "today-1" and "today"
     Then there are no records in grid
     And I reset "Close date" filter
 
   Scenario: Check Created At filter
     Given records in grid should be 20
-    When I filter Created At as between "-2 day" and "-1 day"
+    When I filter Created At as between "today-2" and "today-1"
     Then there are no records in grid
-    When I filter Created At as between "-1 day" and "+1 day"
+    When I filter Created At as between "today-1" and "today+1"
     Then records in grid should be 20
     And I reset "Created At" filter
 
