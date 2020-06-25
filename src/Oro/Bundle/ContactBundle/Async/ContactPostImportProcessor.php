@@ -4,8 +4,10 @@ namespace Oro\Bundle\ContactBundle\Async;
 
 use Doctrine\DBAL\Exception\RetryableException;
 use Oro\Bundle\ContactBundle\Handler\ContactEmailAddressHandler;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\MessageQueueBundle\Entity\Job;
+use Oro\Bundle\MessageQueueBundle\Entity\Repository\JobRepository;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
-use Oro\Component\MessageQueue\Job\JobStorage;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Psr\Log\LoggerInterface;
@@ -22,9 +24,9 @@ class ContactPostImportProcessor implements MessageProcessorInterface
     private $contactEmailAddressHandler;
 
     /**
-     * @var JobStorage
+     * @var DoctrineHelper
      */
-    private $jobStorage;
+    private $doctrineHelper;
 
     /**
      * @var LoggerInterface
@@ -33,16 +35,16 @@ class ContactPostImportProcessor implements MessageProcessorInterface
 
     /**
      * @param ContactEmailAddressHandler $contactEmailAddressHandler
-     * @param JobStorage $jobStorage
+     * @param DoctrineHelper $doctrineHelper
      * @param LoggerInterface $logger
      */
     public function __construct(
         ContactEmailAddressHandler $contactEmailAddressHandler,
-        JobStorage $jobStorage,
+        DoctrineHelper $doctrineHelper,
         LoggerInterface $logger
     ) {
         $this->contactEmailAddressHandler = $contactEmailAddressHandler;
-        $this->jobStorage = $jobStorage;
+        $this->doctrineHelper = $doctrineHelper;
         $this->logger = $logger;
     }
 
@@ -59,7 +61,7 @@ class ContactPostImportProcessor implements MessageProcessorInterface
         }
 
         // Skip non contact import jobs
-        $rootImportJob = $this->jobStorage->findJobById($messageBody['rootImportJobId']);
+        $rootImportJob = $this->getJobRepository()->findJobById((int)$messageBody['rootImportJobId']);
         if ($rootImportJob) {
             $importJobData = explode(':', $rootImportJob->getName());
             if (empty($importJobData[2]) || strpos($importJobData[2], 'oro_contact') === false) {
@@ -83,5 +85,13 @@ class ContactPostImportProcessor implements MessageProcessorInterface
         }
 
         return self::ACK;
+    }
+
+    /**
+     * @return JobRepository
+     */
+    private function getJobRepository(): JobRepository
+    {
+        return $this->doctrineHelper->getEntityRepository(Job::class);
     }
 }
