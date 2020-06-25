@@ -1,4 +1,24 @@
 oro_entity:
+    # Hide all Magento entities because Magento integration is disabled in CRM-9202
+    exclusions:
+        - { entity: Oro\Bundle\MagentoBundle\Entity\Address }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\Cart }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\CartAddress }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\CartItem }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\CartStatus }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\CreditMemo }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\CreditMemoItem }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\Customer }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\CustomerGroup }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\Order }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\OrderAddress }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\OrderItem }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\OrderNote }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\Product }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\Store }
+        - { entity: Oro\Bundle\MagentoBundle\Entity\Website }
+
     virtual_relations:
         Oro\Bundle\MagentoBundle\Entity\Customer:
             primaryAddr:

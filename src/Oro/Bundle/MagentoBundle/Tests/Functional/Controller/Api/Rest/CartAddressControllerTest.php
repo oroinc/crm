@@ -9,6 +9,7 @@ class CartAddressControllerTest extends WebTestCase
 {
     public function setUp()
     {
+        $this->markTestSkipped('Magento integration is disabled in CRM-9202');
         $this->initClient(['debug' => false], $this->generateWsseAuthHeader());
 
         $this->loadFixtures(

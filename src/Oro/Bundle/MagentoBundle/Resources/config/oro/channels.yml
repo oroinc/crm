@@ -80,3 +80,6 @@ channels:
             integration_type: magento
             customer_identity: Oro\Bundle\MagentoBundle\Entity\Customer
             lifetime_value: lifetime
+            # Mark the channel as "system" to hide it from the channel list and disallow to create it from UI
+            # because Magento integration is disabled in CRM-9202
+            system: true
