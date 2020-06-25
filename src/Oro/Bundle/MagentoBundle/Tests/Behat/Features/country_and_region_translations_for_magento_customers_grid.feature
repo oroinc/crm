@@ -1,3 +1,5 @@
+# Magento integration is disabled in CRM-9202
+@skip
 @fixture-OroLocaleBundle:ZuluLocalization.yml
 @fixture-OroAddressBundle:CountryNameTranslation.yml
 @fixture-OroContactBundle:LoadContactEntitiesFixture.yml

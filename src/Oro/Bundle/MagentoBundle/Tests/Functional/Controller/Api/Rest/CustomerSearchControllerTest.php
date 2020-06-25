@@ -11,6 +11,7 @@ class CustomerSearchControllerTest extends WebTestCase
 
     protected function setUp(): void
     {
+        $this->markTestSkipped('Magento integration is disabled in CRM-9202');
         $this->markTestSkipped('Due to BAP-8365');
 
         $this->initClient([], $this->generateWsseAuthHeader());

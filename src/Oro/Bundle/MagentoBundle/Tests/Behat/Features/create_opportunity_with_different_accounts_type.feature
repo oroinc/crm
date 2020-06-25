@@ -1,3 +1,5 @@
+# Magento integration is disabled in CRM-9202
+@skip
 @regression
 Feature: Create opportunity with different accounts type
   In order to create opportunity

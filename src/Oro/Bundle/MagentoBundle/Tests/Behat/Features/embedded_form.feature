@@ -1,3 +1,5 @@
+# Magento integration is disabled in CRM-9202
+@skip
 @ticket-BAP-13174
 @automatically-ticket-tagged
 Feature: Embedded form

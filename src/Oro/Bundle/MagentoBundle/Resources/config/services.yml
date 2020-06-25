@@ -29,10 +29,11 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Transport\Provider\OroBridgeExtensionConfigProvider
 
     # Providers
-    oro_magento.provider.magento_channel_type:
-        class: Oro\Bundle\MagentoBundle\Provider\MagentoChannelType
-        tags:
-            - { name: oro_integration.channel, type: magento }
+# Magento integration is disabled in CRM-9202
+#    oro_magento.provider.magento_channel_type:
+#        class: Oro\Bundle\MagentoBundle\Provider\MagentoChannelType
+#        tags:
+#            - { name: oro_integration.channel, type: magento }
 
     oro_magento.provider.cart_expiration_processor:
         class: Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor

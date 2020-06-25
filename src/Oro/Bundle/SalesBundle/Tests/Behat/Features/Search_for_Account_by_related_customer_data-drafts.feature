@@ -370,6 +370,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
     Then nothing appears in search results
   Examples:
         | Entity name       |
-        | Magento Customer  |
+# Magento integration is disabled in CRM-9202
+#        | Magento Customer  |
         | Business Customer |
         | Account           |

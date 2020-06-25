@@ -4,6 +4,12 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 class CustomerControllerTest extends AbstractController
 {
+    protected function setUp(): void
+    {
+        $this->markTestSkipped('Magento integration is disabled in CRM-9202');
+        parent::setUp();
+    }
+
     /** @return int */
     protected function getMainEntityId()
     {

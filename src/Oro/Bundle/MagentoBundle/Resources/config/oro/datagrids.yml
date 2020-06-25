@@ -1,4 +1,12 @@
 datagrids:
+    # Hide all Magento entities because Magento integration is disabled in CRM-9202
+    entityconfig-grid:
+        source:
+            query:
+                where:
+                    and:
+                        - ce.className NOT LIKE 'Oro\\Bundle\\MagentoBundle\\Entity\\%'
+
     # Newsletter subscribers filtering is added by CustomerDataGridListener
     magento-customers-grid:
         extended_entity_name: Oro\Bundle\MagentoBundle\Entity\Customer
