@@ -178,7 +178,7 @@ services:
         class: Oro\Bundle\ContactBundle\Async\ContactPostImportProcessor
         arguments:
             - '@oro_contact.handler.contact_email_address_handler'
-            - '@oro_message_queue.job.storage'
+            - '@oro_entity.doctrine_helper'
             - '@monolog.logger'
         tags:
             - { name: 'oro_message_queue.client.message_processor', topicName: 'oro.importexport.send_import_notification' }

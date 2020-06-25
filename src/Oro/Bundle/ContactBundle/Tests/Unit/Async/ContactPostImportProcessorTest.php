@@ -5,8 +5,10 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Async;
 use Doctrine\DBAL\Exception\DeadlockException;
 use Oro\Bundle\ContactBundle\Async\ContactPostImportProcessor;
 use Oro\Bundle\ContactBundle\Handler\ContactEmailAddressHandler;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\MessageQueueBundle\Entity\Job as JobEntity;
+use Oro\Bundle\MessageQueueBundle\Entity\Repository\JobRepository;
 use Oro\Component\MessageQueue\Job\Job;
-use Oro\Component\MessageQueue\Job\JobStorage;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Psr\Log\LoggerInterface;
@@ -19,9 +21,9 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
     private $contactEmailAddressHandler;
 
     /**
-     * @var JobStorage|\PHPUnit\Framework\MockObject\MockObject
+     * @var JobRepository|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $jobStorage;
+    private $jobRepository;
 
     /**
      * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
@@ -36,12 +38,17 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->contactEmailAddressHandler = $this->createMock(ContactEmailAddressHandler::class);
-        $this->jobStorage = $this->createMock(JobStorage::class);
+        $this->jobRepository = $this->createMock(JobRepository::class);
         $this->logger = $this->createMock(LoggerInterface::class);
+        $doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $doctrineHelper->expects($this->any())
+            ->method('getEntityRepository')
+            ->with(JobEntity::class)
+            ->willReturn($this->jobRepository);
 
         $this->processor = new ContactPostImportProcessor(
             $this->contactEmailAddressHandler,
-            $this->jobStorage,
+            $doctrineHelper,
             $this->logger
         );
     }
@@ -92,7 +99,8 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getBody')
             ->willReturn(json_encode($messageBody));
 
-        $this->jobStorage->expects($this->once())
+        $this->jobRepository
+            ->expects($this->once())
             ->method('findJobById')
             ->with(42)
             ->willReturn(null);
@@ -121,7 +129,8 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
 
         $job = new Job();
         $job->setName($jobName);
-        $this->jobStorage->expects($this->once())
+        $this->jobRepository
+            ->expects($this->once())
             ->method('findJobById')
             ->with(42)
             ->willReturn($job);
@@ -157,7 +166,8 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
 
         $job = new Job();
         $job->setName('oro:import:oro_contact.add_or_replace:csv:1');
-        $this->jobStorage->expects($this->once())
+        $this->jobRepository
+            ->expects($this->once())
             ->method('findJobById')
             ->with(42)
             ->willReturn($job);
@@ -189,7 +199,8 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
 
         $job = new Job();
         $job->setName('oro:import:oro_contact.add_or_replace:csv:1');
-        $this->jobStorage->expects($this->once())
+        $this->jobRepository
+            ->expects($this->once())
             ->method('findJobById')
             ->with(42)
             ->willReturn($job);
@@ -220,7 +231,8 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
 
         $job = new Job();
         $job->setName('oro:import:oro_contact.add_or_replace:csv:1');
-        $this->jobStorage->expects($this->once())
+        $this->jobRepository
+            ->expects($this->once())
             ->method('findJobById')
             ->with(42)
             ->willReturn($job);
@@ -253,7 +265,8 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
 
         $job = new Job();
         $job->setName('oro:import:oro_contact.add_or_replace:csv:1');
-        $this->jobStorage->expects($this->once())
+        $this->jobRepository
+            ->expects($this->once())
             ->method('findJobById')
             ->with(42)
             ->willReturn($job);
