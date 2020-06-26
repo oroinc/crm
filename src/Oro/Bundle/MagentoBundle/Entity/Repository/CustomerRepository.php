@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
@@ -60,8 +60,8 @@ class CustomerRepository extends ChannelAwareEntityRepository
             ->having('COUNT(orders.id) > 0')
             ->andWhere($qb->expr()->between('customer.createdAt', ':dateStart', ':dateEnd'))
             ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start, Type::DATETIME)
-            ->setParameter('dateEnd', $end, Type::DATETIME);
+            ->setParameter('dateStart', $start, Types::DATETIME_MUTABLE)
+            ->setParameter('dateEnd', $end, Types::DATETIME_MUTABLE);
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
@@ -85,8 +85,8 @@ class CustomerRepository extends ChannelAwareEntityRepository
             ->having('COUNT(orders.id) > 0')
             ->andWhere('customer.createdAt < :dateStart')
             ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start, Type::DATETIME)
-            ->setParameter('dateEnd', $end, Type::DATETIME);
+            ->setParameter('dateStart', $start, Types::DATETIME_MUTABLE)
+            ->setParameter('dateEnd', $end, Types::DATETIME_MUTABLE);
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
@@ -121,12 +121,12 @@ class CustomerRepository extends ChannelAwareEntityRepository
 
         if ($dateTo) {
             $qb->andWhere($qb->expr()->between('c.createdAt', ':dateFrom', ':dateTo'))
-                ->setParameter('dateTo', $dateTo, Type::DATETIME);
+                ->setParameter('dateTo', $dateTo, Types::DATETIME_MUTABLE);
         } else {
             $qb->andWhere('c.createdAt > :dateFrom');
         }
 
-        $qb->setParameter('dateFrom', $dateFrom, Type::DATETIME);
+        $qb->setParameter('dateFrom', $dateFrom, Types::DATETIME_MUTABLE);
         $qb->addGroupBy('c.dataChannel');
 
         if ($ids) {

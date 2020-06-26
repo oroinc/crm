@@ -3,7 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
@@ -214,12 +214,12 @@ class ForecastProvider
         if ($start) {
             $qb
                 ->andWhere(QueryBuilderUtil::sprintf('%s >= :start', $field))
-                ->setParameter('start', $start, Type::DATE);
+                ->setParameter('start', $start, Types::DATE_MUTABLE);
         }
         if ($end) {
             $qb
                 ->andWhere(QueryBuilderUtil::sprintf('%s <= :end', $field))
-                ->setParameter('end', $end, Type::DATE);
+                ->setParameter('end', $end, Types::DATE_MUTABLE);
         }
     }
 

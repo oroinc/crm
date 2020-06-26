@@ -3,7 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Migrations\Schema\v1_6;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 use Psr\Log\LoggerInterface;
@@ -47,7 +47,7 @@ class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
         $ids = $this->getChannelIntegrations($logger);
         $updateSql = 'UPDATE oro_integration_channel SET edit_mode = :edit_mode WHERE id IN (:ids)';
         $params = ['ids' => $ids, 'edit_mode' => $this->mode];
-        $types  = ['ids' => Connection::PARAM_INT_ARRAY, 'edit_mode' => Type::INTEGER];
+        $types  = ['ids' => Connection::PARAM_INT_ARRAY, 'edit_mode' => Types::INTEGER];
 
         $this->logQuery($logger, $updateSql, $params, $types);
 

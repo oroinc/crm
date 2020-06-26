@@ -3,7 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_23;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 use Psr\Log\LoggerInterface;
@@ -57,8 +57,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         ];
 
         $types = [
-            'old_workflow_name' => Type::STRING,
-            'new_workflow_name' => Type::STRING,
+            'old_workflow_name' => Types::STRING,
+            'new_workflow_name' => Types::STRING,
         ];
 
         $queries = [
@@ -80,7 +80,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         }
 
         $params = ['old_workflow_name' => 'b2b_flow_sales'];
-        $types  = ['old_workflow_name' => Type::STRING];
+        $types  = ['old_workflow_name' => Types::STRING];
 
         // Delete old workflow definition
         $sql    = 'DELETE FROM oro_workflow_definition WHERE name = :old_workflow_name ';
@@ -121,11 +121,11 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         ];
 
         $types = [
-            'old_name'      => Type::STRING,
-            'new_name'      => Type::STRING,
-            'new_label'     => Type::STRING,
-            'final'         => Type::BOOLEAN,
-            'workflow_name' => Type::STRING,
+            'old_name'      => Types::STRING,
+            'new_name'      => Types::STRING,
+            'new_label'     => Types::STRING,
+            'final'         => Types::BOOLEAN,
+            'workflow_name' => Types::STRING,
         ];
 
         $sql = 'UPDATE oro_workflow_step SET name = :new_name, label = :new_label, is_final = :final' .
@@ -150,8 +150,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'step_to_id'   => $this->getStepIdByName($logger, 'won'),
         ];
         $types = [
-            'step_from_id' => Type::INTEGER,
-            'step_to_id'   => Type::INTEGER,
+            'step_from_id' => Types::INTEGER,
+            'step_to_id'   => Types::INTEGER,
         ];
         $sql = 'DELETE FROM oro_workflow_transition_log' .
                ' WHERE step_from_id = :step_from_id AND step_to_id = :step_to_id';
@@ -166,8 +166,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'old_current_step_id' => $this->getStepIdByName($logger, 'won'),
         ];
         $types = [
-            'new_current_step_id' => Type::INTEGER,
-            'old_current_step_id' => Type::INTEGER,
+            'new_current_step_id' => Types::INTEGER,
+            'old_current_step_id' => Types::INTEGER,
         ];
         $sql = 'UPDATE oro_workflow_item SET current_step_id = :new_current_step_id' .
                ' WHERE current_step_id = :old_current_step_id';
@@ -183,9 +183,9 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'step_to_id'      => $this->getStepIdByName($logger, 'open'),
         ];
         $types = [
-            'new_transition'  => Type::STRING,
+            'new_transition'  => Types::STRING,
             'old_transitions' => Connection::PARAM_STR_ARRAY,
-            'step_to_id'      => Type::INTEGER,
+            'step_to_id'      => Types::INTEGER,
         ];
         $sql = 'UPDATE oro_workflow_transition_log SET transition = :new_transition' .
                ' WHERE transition IN (:old_transitions) AND step_to_id = :step_to_id';
@@ -203,11 +203,11 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'step_from_id'   => $this->getStepIdByName($logger, 'open')
         ];
         $types = [
-            'new_transition' => Type::STRING,
-            'old_transition' => Type::STRING,
-            'new_step_to_id' => Type::INTEGER,
-            'old_step_to_id' => Type::INTEGER,
-            'step_from_id'   => Type::INTEGER,
+            'new_transition' => Types::STRING,
+            'old_transition' => Types::STRING,
+            'new_step_to_id' => Types::INTEGER,
+            'old_step_to_id' => Types::INTEGER,
+            'step_from_id'   => Types::INTEGER,
         ];
         $sql = 'UPDATE oro_workflow_transition_log' .
                ' SET transition = :new_transition, step_to_id = :new_step_to_id, step_from_id = :step_from_id' .
@@ -225,10 +225,10 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'step_from_id'   => $this->getStepIdByName($logger, 'open')
         ];
         $types = [
-            'new_transition' => Type::STRING,
-            'old_transition' => Type::STRING,
-            'step_to_id'     => Type::INTEGER,
-            'step_from_id'   => Type::INTEGER,
+            'new_transition' => Types::STRING,
+            'old_transition' => Types::STRING,
+            'step_to_id'     => Types::INTEGER,
+            'step_from_id'   => Types::INTEGER,
         ];
         $sql = 'UPDATE oro_workflow_transition_log SET transition = :new_transition, step_from_id = :step_from_id' .
                ' WHERE step_to_id = :step_to_id AND transition = :old_transition';
@@ -244,9 +244,9 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'workflow_name'   => 'opportunity_flow'
         ];
         $types = [
-            'transition'      => Type::STRING,
-            'current_step_id' => Type::INTEGER,
-            'workflow_name'   => Type::STRING
+            'transition'      => Types::STRING,
+            'current_step_id' => Types::INTEGER,
+            'workflow_name'   => Types::STRING
         ];
         $sql = <<<SQL
                 UPDATE oro_workflow_item
@@ -290,9 +290,9 @@ SQL;
         ];
 
         $types = [
-            'new_workflow_step_id' => Type::INTEGER,
-            'old_workflow_step_id' => Type::INTEGER,
-            'status_id'            => Type::STRING,
+            'new_workflow_step_id' => Types::INTEGER,
+            'old_workflow_step_id' => Types::INTEGER,
+            'status_id'            => Types::STRING,
         ];
 
         $sql = 'UPDATE orocrm_sales_opportunity SET workflow_step_id = :new_workflow_step_id' .
@@ -339,7 +339,7 @@ SQL;
             'workflow_name' => 'opportunity_flow',
         ];
         $types  = [
-            'workflow_name' => Type::STRING,
+            'workflow_name' => Types::STRING,
         ];
         $sql    = 'SELECT s.id, s.name FROM oro_workflow_step s WHERE s.workflow_name = :workflow_name';
         $this->logQuery($logger, $sql, $params, $types);
@@ -356,7 +356,7 @@ SQL;
     protected function getWorkflowFieldsByWorkflow(LoggerInterface $logger, $name, array $exclude)
     {
         $params = ['workflow_name' => $name];
-        $types  = ['workflow_name' => Type::STRING];
+        $types  = ['workflow_name' => Types::STRING];
 
         $sql = 'SELECT * FROM oro_workflow_definition WHERE name = :workflow_name LIMIT 1';
         $this->logQuery($logger, $sql, $params, $types);

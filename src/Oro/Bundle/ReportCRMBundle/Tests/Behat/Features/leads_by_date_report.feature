@@ -13,14 +13,14 @@ Feature: Leads by Date Report
     When I go to Reports & Segments/ Reports/ Leads/ Leads By Date
     Then number of records should be 7
     And I should see following grid:
-      |Created Date|Leads Count|
-      |Jan 1, 2016 |4          |
-      |Jan 2, 2016 |1          |
-      |Jan 3, 2016 |3          |
-      |Feb 1, 2016 |2          |
-      |May 1, 2016 |2          |
-      |Jun 1, 2016 |2          |
-      |Jan 1, 2017 |2          |
+      | Created Date | Leads Count |
+      | Jan 1, 2016  | 4           |
+      | Jan 2, 2016  | 1           |
+      | Jan 3, 2016  | 3           |
+      | Feb 1, 2016  | 2           |
+      | May 1, 2016  | 2           |
+      | Jun 1, 2016  | 2           |
+      | Jan 1, 2017  | 2           |
     And should see "Grand Total 16"
 
   Scenario: Check Created At Filter
@@ -97,10 +97,10 @@ Feature: Leads by Date Report
       | Jan 3, 2016  | 3           |
     When I sort grid by "Leads count"
     Then I should see following grid:
-      | Created Date | Leads Count |
-      | Jan 2, 2016  | 1           |
-      | Feb 1, 2016  | 2           |
-      | Jun 1, 2016  | 2           |
+      | Leads Count |
+      | 1           |
+      | 2           |
+      | 2           |
     When I sort grid by "Leads count" again
     Then I should see following grid:
       | Created Date | Leads Count |
@@ -133,4 +133,3 @@ Feature: Leads by Date Report
       | Jan 1, 2016  | 4           |
       | Jan 2, 2016  | 1           |
       | Jan 3, 2016  | 3           |
-

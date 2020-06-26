@@ -5,7 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
@@ -14,6 +14,10 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Abstract implementation of Default channel ORM data fixture.
+ * Provides logic for lifetime value updating and filling channel to entity.
+ */
 abstract class AbstractDefaultChannelDataFixture extends AbstractFixture implements
     ContainerAwareInterface,
     DependentFixtureInterface
@@ -157,7 +161,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
             'UPDATE orocrm_channel_lifetime_hist SET status = :status
              WHERE data_channel_id = :channel_id AND account_id IN (:account_ids)',
             ['status' => false, 'channel_id' => $channel->getId(), 'account_ids' => $accountIds],
-            ['status' => Type::BOOLEAN, 'channel_id' => Type::INTEGER, 'account_ids' => Connection::PARAM_INT_ARRAY]
+            ['status' => Types::BOOLEAN, 'channel_id' => Types::INTEGER, 'account_ids' => Connection::PARAM_INT_ARRAY]
         );
         $this->em->getConnection()->executeUpdate(
             'INSERT INTO orocrm_channel_lifetime_hist'
@@ -177,8 +181,8 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
                 'account_ids' => $accountIds
             ],
             [
-                'created_at' => Type::DATETIME,
-                'channel_id' => Type::INTEGER,
+                'created_at' => Types::DATETIME_MUTABLE,
+                'channel_id' => Types::INTEGER,
                 'account_ids' => Connection::PARAM_INT_ARRAY
             ]
         );

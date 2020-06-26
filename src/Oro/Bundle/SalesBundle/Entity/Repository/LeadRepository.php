@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Entity\Repository;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
@@ -67,12 +67,12 @@ class LeadRepository extends EntityRepository
         if ($start) {
             $qb
                 ->andWhere('l.createdAt >= :start')
-                ->setParameter('start', $start, Type::DATETIME);
+                ->setParameter('start', $start, Types::DATETIME_MUTABLE);
         }
         if ($end) {
             $qb
                 ->andWhere('l.createdAt <= :end')
-                ->setParameter('end', $end, Type::DATETIME);
+                ->setParameter('end', $end, Types::DATETIME_MUTABLE);
         }
 
         return $qb;

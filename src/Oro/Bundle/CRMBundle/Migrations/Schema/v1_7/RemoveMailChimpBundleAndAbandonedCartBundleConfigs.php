@@ -3,7 +3,7 @@
 namespace Oro\Bundle\CRMBundle\Migrations\Schema\v1_7;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\EntityConfigBundle\Migration\RemoveTableQuery;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
@@ -42,7 +42,7 @@ class RemoveMailChimpBundleAndAbandonedCartBundleConfigs implements Migration
                     new ParametrizedSqlMigrationQuery(
                         'DELETE FROM orocrm_channel_entity_name WHERE name = :name',
                         ['name' => $className],
-                        ['name' => Type::STRING]
+                        ['name' => Types::STRING]
                     )
                 );
 
@@ -50,7 +50,7 @@ class RemoveMailChimpBundleAndAbandonedCartBundleConfigs implements Migration
                     new ParametrizedSqlMigrationQuery(
                         'DELETE FROM oro_process_definition WHERE related_entity = :related_entity',
                         ['related_entity' => $className],
-                        ['related_entity' => Type::STRING]
+                        ['related_entity' => Types::STRING]
                     )
                 );
             }
@@ -61,7 +61,7 @@ class RemoveMailChimpBundleAndAbandonedCartBundleConfigs implements Migration
                 new ParametrizedSqlMigrationQuery(
                     'DELETE FROM oro_integration_channel WHERE type = :transport;',
                     ['transport' => 'mailchimp'],
-                    ['transport' => Type::STRING]
+                    ['transport' => Types::STRING]
                 )
             );
 

@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
@@ -35,8 +35,8 @@ class OrderRepository extends ChannelAwareEntityRepository
         $qb    = $this->createQueryBuilder('orders');
         $qb->select($select)
             ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start, Type::DATETIME)
-            ->setParameter('dateEnd', $end, Type::DATETIME);
+            ->setParameter('dateStart', $start, Types::DATETIME_MUTABLE)
+            ->setParameter('dateEnd', $end, Types::DATETIME_MUTABLE);
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
@@ -56,8 +56,8 @@ class OrderRepository extends ChannelAwareEntityRepository
         $qb    = $this->createQueryBuilder('o');
         $qb->select('COUNT(o.id) as val')
             ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start, Type::DATETIME)
-            ->setParameter('dateEnd', $end, Type::DATETIME);
+            ->setParameter('dateStart', $start, Types::DATETIME_MUTABLE)
+            ->setParameter('dateEnd', $end, Types::DATETIME_MUTABLE);
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
@@ -84,8 +84,8 @@ class OrderRepository extends ChannelAwareEntityRepository
         $qb    = $this->createQueryBuilder('o');
         $qb->select($select)
             ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start, Type::DATETIME)
-            ->setParameter('dateEnd', $end, Type::DATETIME);
+            ->setParameter('dateStart', $start, Types::DATETIME_MUTABLE)
+            ->setParameter('dateEnd', $end, Types::DATETIME_MUTABLE);
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
@@ -113,8 +113,8 @@ class OrderRepository extends ChannelAwareEntityRepository
             'SUM(CASE WHEN (o.discountAmount IS NOT NULL AND o.discountAmount <> 0) THEN 1 ELSE 0 END) as discounted'
         );
         $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'));
-        $qb->setParameter('dateStart', $start, Type::DATETIME);
-        $qb->setParameter('dateEnd', $end, Type::DATETIME);
+        $qb->setParameter('dateStart', $start, Types::DATETIME_MUTABLE);
+        $qb->setParameter('dateEnd', $end, Types::DATETIME_MUTABLE);
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
@@ -180,8 +180,8 @@ class OrderRepository extends ChannelAwareEntityRepository
 
         $queryBuilder->select($selectClause)
             ->andWhere($queryBuilder->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $dateFrom, Type::DATETIME)
-            ->setParameter('dateEnd', $dateTo, Type::DATETIME)
+            ->setParameter('dateStart', $dateFrom, Types::DATETIME_MUTABLE)
+            ->setParameter('dateEnd', $dateTo, Types::DATETIME_MUTABLE)
             ->groupBy('dataChannelId');
 
         $this->applyActiveChannelLimitation($queryBuilder);
@@ -231,11 +231,11 @@ class OrderRepository extends ChannelAwareEntityRepository
         $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
         if ($to) {
             $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
-                ->setParameter('to', $to, Type::DATETIME);
+                ->setParameter('to', $to, Types::DATETIME_MUTABLE);
         } else {
             $qb->andWhere('o.createdAt > :from');
         }
-        $qb->setParameter('from', $from, Type::DATETIME);
+        $qb->setParameter('from', $from, Types::DATETIME_MUTABLE);
         $this->applyActiveChannelLimitation($qb);
 
         return $aclHelper->apply($qb)->getResult();
@@ -268,11 +268,11 @@ class OrderRepository extends ChannelAwareEntityRepository
 
         if ($to) {
             $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
-                ->setParameter('to', $to, Type::DATETIME);
+                ->setParameter('to', $to, Types::DATETIME_MUTABLE);
         } else {
             $qb->andWhere('o.createdAt > :from');
         }
-        $qb->setParameter('from', $from, Type::DATETIME);
+        $qb->setParameter('from', $from, Types::DATETIME_MUTABLE);
         $this->applyActiveChannelLimitation($qb);
 
         return $aclHelper->apply($qb)->getResult();
@@ -294,12 +294,12 @@ class OrderRepository extends ChannelAwareEntityRepository
             if ($from) {
                 $qb
                     ->andWhere('o.createdAt > :from')
-                    ->setParameter('from', $from, Type::DATETIME);
+                    ->setParameter('from', $from, Types::DATETIME_MUTABLE);
             }
             if ($to) {
                 $qb
                     ->andWhere('o.createdAt > :to')
-                    ->setParameter('to', $to, Type::DATETIME);
+                    ->setParameter('to', $to, Types::DATETIME_MUTABLE);
             }
             $this->applyActiveChannelLimitation($qb);
 

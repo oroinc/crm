@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_23;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigEntityValueQuery as BaseQuery;
 use Psr\Log\LoggerInterface;
 
@@ -48,7 +48,7 @@ class UpdateEntityConfigEntityValueQuery extends BaseQuery
         $data       = $this->connection->fetchColumn($sql, $parameters);
         $this->logQuery($logger, $sql, $parameters);
 
-        $data = $data ? $this->connection->convertToPHPValue($data, Type::TARRAY) : [];
+        $data = $data ? $this->connection->convertToPHPValue($data, Types::ARRAY) : [];
         if (isset($data[$this->scope][$this->code]) && $data[$this->scope][$this->code] === $this->oldValue) {
             return true;
         }

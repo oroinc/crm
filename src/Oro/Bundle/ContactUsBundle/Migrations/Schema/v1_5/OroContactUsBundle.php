@@ -3,7 +3,7 @@
 namespace Oro\Bundle\ContactUsBundle\Migrations\Schema\v1_5;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\EntityBundle\Migrations\Extension\ChangeTypeExtension;
 use Oro\Bundle\EntityBundle\Migrations\Extension\ChangeTypeExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -34,14 +34,14 @@ class OroContactUsBundle implements Migration, ChangeTypeExtensionAwareInterface
             $queries,
             'orocrm_contactus_contact_rsn',
             'id',
-            Type::INTEGER
+            Types::INTEGER
         );
         $this->changeTypeExtension->changePrimaryKeyType(
             $schema,
             $queries,
             'orocrm_contact_group',
             'id',
-            Type::INTEGER
+            Types::INTEGER
         );
     }
 }

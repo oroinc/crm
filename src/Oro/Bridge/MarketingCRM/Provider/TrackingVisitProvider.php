@@ -3,7 +3,7 @@
 namespace Oro\Bridge\MarketingCRM\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
@@ -76,12 +76,12 @@ class TrackingVisitProvider implements TrackingVisitProviderInterface, FeatureTo
             if ($from) {
                 $queryBuilder
                     ->andWhere('t.firstActionTime > :from')
-                    ->setParameter('from', $from, Type::DATETIME);
+                    ->setParameter('from', $from, Types::DATETIME_MUTABLE);
             }
             if ($to) {
                 $queryBuilder
                     ->andWhere('t.firstActionTime < :to')
-                    ->setParameter('to', $to, Type::DATETIME);
+                    ->setParameter('to', $to, Types::DATETIME_MUTABLE);
             }
 
             return (int) $this->aclHelper->apply($queryBuilder)->getSingleScalarResult();
@@ -123,12 +123,12 @@ class TrackingVisitProvider implements TrackingVisitProviderInterface, FeatureTo
             if ($from) {
                 $queryBuilder
                     ->andWhere('t.firstActionTime > :from')
-                    ->setParameter('from', $from, Type::DATETIME);
+                    ->setParameter('from', $from, Types::DATETIME_MUTABLE);
             }
             if ($to) {
                 $queryBuilder
                     ->andWhere('t.firstActionTime < :to')
-                    ->setParameter('to', $to, Type::DATETIME);
+                    ->setParameter('to', $to, Types::DATETIME_MUTABLE);
             }
 
             return (int) $this->aclHelper->apply($queryBuilder)->getSingleScalarResult();

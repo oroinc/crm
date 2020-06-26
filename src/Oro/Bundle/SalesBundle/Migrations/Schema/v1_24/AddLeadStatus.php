@@ -3,7 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
@@ -113,10 +113,10 @@ class AddLeadStatus implements
                           VALUES (:id, :name, :priority, :is_default)',
                 ['id' => $key, 'name' => $value, 'priority' => $i, 'is_default' => 'new' === $key],
                 [
-                    'id' => Type::STRING,
-                    'name' => Type::STRING,
-                    'priority' => Type::INTEGER,
-                    'is_default' => Type::BOOLEAN
+                    'id' => Types::STRING,
+                    'name' => Types::STRING,
+                    'priority' => Types::INTEGER,
+                    'is_default' => Types::BOOLEAN
                 ]
             );
             $queries->addQuery($dropFieldsQuery);

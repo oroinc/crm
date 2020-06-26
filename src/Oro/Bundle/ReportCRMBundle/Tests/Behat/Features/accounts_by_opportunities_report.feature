@@ -100,10 +100,6 @@ Feature: Accounts by Opportunities Report
     And records in grid should be 20
 
   Scenario: Sort by Account Name
-    Given I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
     When I sort grid by "Account name"
     Then I should see following grid:
       | Account name |
@@ -117,162 +113,134 @@ Feature: Accounts by Opportunities Report
     And I reset "Accounts By Opportunities Grid" grid
 
   Scenario: Sort by Open
-    Given I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
     When I sort grid by "Open"
     Then I should see following grid:
-      | Account name |
-      | Customer 20  |
-      | Customer 2   |
+      | Open |
+      | 0    |
+      | 0    |
     When I sort grid by "Open" again
     Then I should see following grid:
-      | Account name |
-      | Customer 5   |
-      | Customer 2   |
+      | Open |
+      | 1    |
+      | 0    |
     And I reset "Accounts By Opportunities Grid" grid
 
   Scenario: Sort by Identification & Alignment
-    Given I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
     When I sort grid by "Identification & Alignment"
     Then I should see following grid:
-      | Account name |
-      | Customer 20  |
-      | Customer 2   |
+      | Identification & Alignment |
+      | 0                          |
+      | 0                          |
     When I sort grid by "Identification & Alignment" again
     Then I should see following grid:
-      | Account name |
-      | Customer 4   |
-      | Customer 2   |
+      | Identification & Alignment |
+      | 1                          |
+      | 0                          |
     And I reset "Accounts By Opportunities Grid" grid
 
   Scenario: Sort by Needs Analysis
-    Given I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
     When I sort grid by "Needs Analysis"
     Then I should see following grid:
-      | Account name |
-      | Customer 20  |
-      | Customer 2   |
+      | Needs Analysis |
+      | 0              |
+      | 0              |
     When I sort grid by "Needs Analysis" again
     Then I should see following grid:
-      | Account name |
-      | Customer 7   |
-      | Customer 2   |
+      | Needs Analysis |
+      | 1              |
+      | 0              |
     And I reset "Accounts By Opportunities Grid" grid
 
   Scenario: Sort by Solution Development
-    Given I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
     When I sort grid by "Solution Development"
     Then I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
+      | Solution Development |
+      | 0                    |
+      | 0                    |
     When I sort grid by "Solution Development" again
     Then I should see following grid:
-      | Account name |
-      | Customer 20  |
-      | Customer 12  |
+      | Solution Development |
+      | 1                    |
+      | 1                    |
     And I reset "Accounts By Opportunities Grid" grid
 
   Scenario: Sort by Closed Won
-    Given I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
     When I sort grid by "Closed Won"
     Then I should see following grid:
-      | Account name |
-      | Customer 20  |
-      | Customer 17  |
+      | Closed Won |
+      | 0          |
+      | 0          |
     When I sort grid by "Closed Won" again
     Then I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
+      | Closed Won |
+      | 2          |
+      | 1          |
+      | 1          |
+      | 0          |
     And I reset "Accounts By Opportunities Grid" grid
 
   Scenario: Sort by Closed Lost
-    Given I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
     When I sort grid by "Closed Lost"
     Then I should see following grid:
-      | Account name |
-      | Customer 20  |
-      | Customer 2   |
+      | Closed Lost |
+      | 0           |
+      | 0           |
     When I sort grid by "Closed Lost" again
     Then I should see following grid:
-      | Account name |
-      | Customer 6   |
-      | Customer 2   |
+      | Closed Lost |
+      | 1           |
+      | 0           |
     And I reset "Accounts By Opportunities Grid" grid
 
   Scenario: Sort by Total
-    Given I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
     When I sort grid by "Total"
     Then I should see following grid:
-      | Account name |
-      | Customer 20  |
-      | Customer 2   |
+      | Total |
+      | 1     |
+      | 1     |
     When I sort grid by "Total" again
     Then I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
+      | Total |
+      | 2     |
+      | 1     |
     And I reset "Accounts By Opportunities Grid" grid
 
   Scenario: Sort by Negotiation
-    Given I should see following grid:
-      | Account name |
-      | Customer 1   |
-      | Customer 2   |
     When I sort grid by "Negotiation"
     Then I should see following grid:
-      | Account name |
-      | Customer 20  |
-      | Customer 2   |
+      | Negotiation |
+      | 0           |
+      | 0           |
     When I sort grid by "Negotiation" again
     Then I should see following grid:
-      | Account name |
-      | Customer 8   |
-      | Customer 2   |
+      | Negotiation |
+      | 1           |
+      | 0           |
 
   Scenario: Check Sorter Applies After Different Actions
-    Given I hide column Negotiation in grid
+    Given I sort grid by "Account name"
+    And sort grid by "Account name" again
+    When I hide column Negotiation in grid
     Then I should see following grid:
       | Account name |
+      | Customer 9   |
       | Customer 8   |
-      | Customer 2   |
     When I select 10 from per page list dropdown
     Then records in grid should be 10
     And I should see following grid:
       | Account name |
+      | Customer 9   |
       | Customer 8   |
-      | Customer 2   |
     When I press next page button
     Then I should see following grid:
       | Account name |
-      | Customer 12  |
-      | Customer 13  |
+      | Customer 18  |
+      | Customer 17  |
     When I reload the page
     Then I should see following grid:
       | Account name |
-      | Customer 12  |
-      | Customer 13  |
+      | Customer 18  |
+      | Customer 17  |
     When I reset "Accounts By Opportunities Grid" grid
     Then there is 20 records in grid
     And records in grid should be 20

@@ -22,11 +22,11 @@ Feature: Account grid export
       | First_3 Last_3 |
       | First_4 Last_4 |
       | First_5 Last_5 |
-    And I should see "Export Grid"
     When I sort grid by "Contact name"
+    And I should see "Export Grid"
     And I click "Export Grid"
     And I click "CSV"
-    Then I should see "Export started successfully. You will receive email notification upon completion."
+    Then I should see "Export started successfully. You will receive email notification upon completion." flash message
     And Email should contains the following "Grid export performed successfully. Download" text
 
   Scenario: "Export Grid" button should be inaccessible if user have not enough privileges
