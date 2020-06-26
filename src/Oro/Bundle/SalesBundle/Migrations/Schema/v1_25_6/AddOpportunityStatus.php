@@ -3,7 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_25_6;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
@@ -30,8 +30,8 @@ class AddOpportunityStatus implements Migration
             $query,
             ['id' => 'in_progress', 'name' => 'Open'],
             [
-                'id' => Type::STRING,
-                'name' => Type::STRING,
+                'id' => Types::STRING,
+                'name' => Types::STRING,
             ]
         );
         $queries->addQuery($updateStatusQuery);

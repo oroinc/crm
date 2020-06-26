@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -46,14 +46,14 @@ class UpdateReportsWithVirtualRelations extends AbstractFixture implements Conta
                 $classId = $connection->executeQuery(
                     'SELECT id FROM oro_entity_config WHERE class_name = :class',
                     ['class' => 'Oro\Bundle\SalesBundle\Entity\Opportunity'],
-                    ['class' => Type::STRING]
+                    ['class' => Types::STRING]
                 )->fetchColumn();
 
                 $connection->executeQuery(
                     'DELETE FROM oro_entity_config_field WHERE field_name IN (:fields)
                     AND entity_id = :id',
                     ['id' => $classId, 'fields' => $fields],
-                    ['id' => Type::INTEGER, 'fields' => Connection::PARAM_STR_ARRAY]
+                    ['id' => Types::INTEGER, 'fields' => Connection::PARAM_STR_ARRAY]
                 );
                 $connection->commit();
             } catch (\Exception $exception) {

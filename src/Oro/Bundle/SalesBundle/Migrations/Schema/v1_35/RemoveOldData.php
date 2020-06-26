@@ -3,7 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_35;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
@@ -24,7 +24,7 @@ EOF;
         $removeDataQuery->addSql(
             $sql,
             ['name' => 'Oro\\Bundle\\SalesBundle\\Entity\\Lead'],
-            ['name' => Type::STRING]
+            ['name' => Types::STRING]
         );
         $queries->addPostQuery($removeDataQuery);
 
@@ -32,7 +32,7 @@ EOF;
         $removeDataQuery->addSql(
             $sql,
             ['name' => 'Oro\\Bundle\\SalesBundle\\Entity\\Opportunity'],
-            ['name' => Type::STRING]
+            ['name' => Types::STRING]
         );
         $queries->addPostQuery($removeDataQuery);
     }

@@ -4,7 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Entity\Manager;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
@@ -17,6 +17,9 @@ use Oro\Component\DoctrineUtils\ORM\SqlQueryBuilder;
 use Oro\Component\DoctrineUtils\ORM\UnionQueryBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * The API manager to find the B2bCustomer entities via search index.
+ */
 class CustomerSearchApiEntityManager extends ApiEntityManager
 {
     const DEFAULT_CHANNEL_FIELD_NAME = 'dataChannel';
@@ -148,8 +151,8 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
 
         $qb = new UnionQueryBuilder($em);
         $qb
-            ->addSelect('channelId', 'channelId', Type::INTEGER)
-            ->addSelect('entityId', 'id', Type::INTEGER)
+            ->addSelect('channelId', 'channelId', Types::INTEGER)
+            ->addSelect('entityId', 'id', Types::INTEGER)
             ->addSelect('entityClass', 'entity')
             ->addSelect('accountName', 'accountName');
         foreach ($this->getCustomerListFilters($searchResult) as $customerClass => $customerIds) {
@@ -241,7 +244,7 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
             array_filter(
                 $this->getObjectManager()->getMetadataFactory()->getAllMetadata(),
                 function (ClassMetadata $metadata) {
-                    // @todo: should be removed in CRM-3263
+                    // will be removed after refactoring in CRM-3263
                     if ($metadata->name === 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity') {
                         return false;
                     }

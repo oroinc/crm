@@ -5,6 +5,7 @@ namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_27;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\CurrencyBundle\DependencyInjection\Configuration as CurrencyConfiguration;
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
@@ -145,7 +146,7 @@ class AddMultiCurrencyFields implements
                     'currency_code' => CurrencyConfiguration::DEFAULT_CURRENCY
                 ],
                 [
-                    'currency_code' => Type::STRING,
+                    'currency_code' => Types::STRING,
                 ]
             )
         );

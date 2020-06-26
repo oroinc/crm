@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_25_2;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\MigrationBundle\Exception\UnsupportedDatabasePlatformException;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
@@ -85,9 +85,9 @@ SQL;
             'objectClass' => 'Oro\Bundle\SalesBundle\Entity\Opportunity'
         ];
         $types          = [
-            'field'       => Type::STRING,
+            'field'       => Types::STRING,
             'statuses'    => Connection::PARAM_STR_ARRAY,
-            'objectClass' => Type::STRING
+            'objectClass' => Types::STRING
         ];
 
         $this->logQuery($logger, $auditInsertSql, $params, $types);
@@ -158,9 +158,9 @@ SQL;
             'status_ids'  => [Opportunity::STATUS_WON, Opportunity::STATUS_LOST]
         ];
         $types  = [
-            'field'       => Type::STRING,
+            'field'       => Types::STRING,
             'statuses'    => Connection::PARAM_STR_ARRAY,
-            'objectClass' => Type::STRING,
+            'objectClass' => Types::STRING,
             'status_ids'  => Connection::PARAM_STR_ARRAY
         ];
 

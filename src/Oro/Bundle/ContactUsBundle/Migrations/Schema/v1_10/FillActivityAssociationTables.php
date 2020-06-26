@@ -3,7 +3,7 @@
 namespace Oro\Bundle\ContactUsBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
@@ -119,14 +119,14 @@ class FillActivityAssociationTables implements
             new ParametrizedSqlMigrationQuery(
                 $this->getFillContactRequestEmailActivityListQuery(),
                 ['class' => 'Oro\Bundle\EmailBundle\Entity\Email'],
-                ['class' => Type::STRING]
+                ['class' => Types::STRING]
             )
         );
         $queries->addPreQuery(
             new ParametrizedSqlMigrationQuery(
                 $this->getFillContactRequestCallActivityListQuery(),
                 ['class' => 'Oro\Bundle\CallBundle\Entity\Call'],
-                ['class' => Type::STRING]
+                ['class' => Types::STRING]
             )
         );
     }

@@ -3,7 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Entity\Repository;
 
 use Carbon\Carbon;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
@@ -106,8 +106,8 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
         $qb->addSelect('lva.year');
         $qb->andWhere($qb->expr()->between('lva.aggregationDate', ':dateStart', ':dateEnd'));
         $qb->addGroupBy('lva.dataChannel', 'lva.year', 'lva.month', 'lva.amount');
-        $qb->setParameter('dateStart', $startDate, Type::DATETIME);
-        $qb->setParameter('dateEnd', $endDate, Type::DATETIME);
+        $qb->setParameter('dateStart', $startDate, Types::DATETIME_MUTABLE);
+        $qb->setParameter('dateEnd', $endDate, Types::DATETIME_MUTABLE);
 
         if (null !== $channelIds) {
             $qb->andWhere($qb->expr()->in('lva.dataChannel', ':channelIds'))
@@ -188,7 +188,7 @@ SQL;
             ->executeQuery(
                 $sql,
                 ['channelId' => $channel->getId(), 'endDate' => $calculationPeriodEnd],
-                ['channelId' => Type::INTEGER, 'endDate' => Type::DATETIME]
+                ['channelId' => Types::INTEGER, 'endDate' => Types::DATETIME_MUTABLE]
             )
             ->fetchColumn(0);
     }

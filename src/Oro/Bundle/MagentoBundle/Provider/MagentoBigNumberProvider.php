@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryInterface;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
@@ -140,7 +140,7 @@ class MagentoBigNumberProvider
         if ($start) {
             $qb
                 ->andWhere('customer.createdAt < :start')
-                ->setParameter('start', $start, Type::DATETIME);
+                ->setParameter('start', $start, Types::DATETIME_MUTABLE);
         }
         $value = $this->aclHelper->apply($qb)->getOneOrNullResult();
 

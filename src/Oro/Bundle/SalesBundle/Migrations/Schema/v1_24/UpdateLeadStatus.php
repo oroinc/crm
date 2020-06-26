@@ -3,7 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
@@ -76,7 +76,7 @@ class UpdateLeadStatus implements
             $query  = 'INSERT INTO oro_enum_lead_status (id, name, priority, is_default)
                        VALUES (:id, :name, :priority, 0)';
             $params = ['id' => $id, 'name' => $name, 'priority' => $priority];
-            $types  = ['id' => Type::STRING, 'name' => Type::STRING, 'priority' => Type::INTEGER];
+            $types  = ['id' => Types::STRING, 'name' => Types::STRING, 'priority' => Types::INTEGER];
 
             $migrationQuery = new ParametrizedSqlMigrationQuery();
             $migrationQuery->addSql(
@@ -102,7 +102,7 @@ class UpdateLeadStatus implements
             $migrationQuery->addSql(
                 $query,
                 ['status_id' => $status, 'status_name' => $status],
-                ['status_id' => Type::STRING, 'status_name' => Type::STRING]
+                ['status_id' => Types::STRING, 'status_name' => Types::STRING]
             );
             $queries->addPostQuery($migrationQuery);
         }

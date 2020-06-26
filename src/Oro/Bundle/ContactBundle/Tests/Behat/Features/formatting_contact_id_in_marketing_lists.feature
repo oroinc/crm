@@ -1,6 +1,7 @@
 @regression
 @ticket-BB-17267
 @fixture-OroContactBundle:contacts_with_big_ids.yml
+
 Feature: Formatting contact id in marketing lists
   In order to manage marketing lists with contacts
   As an Administrator

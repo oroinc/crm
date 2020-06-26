@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_27;
 
 use Doctrine\DBAL\Portability\Connection;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\CurrencyBundle\DependencyInjection\Configuration;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
@@ -96,7 +96,7 @@ class UpdateOpportunityCurrency implements
         $migrationQuery->addSql(
             $query,
             ['currency' => $defaultCurrency],
-            ['currency' => Type::STRING]
+            ['currency' => Types::STRING]
         );
 
         $queries->addPostQuery($migrationQuery);
@@ -111,7 +111,7 @@ class UpdateOpportunityCurrency implements
             $migrationQuery->addSql(
                 $query,
                 ['currency' => $currency, 'organization_id' => $id],
-                ['currency' => Type::STRING, 'organization_id' => Type::INTEGER]
+                ['currency' => Types::STRING, 'organization_id' => Types::INTEGER]
             );
             $queries->addPostQuery($migrationQuery);
         }
