@@ -3,7 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
@@ -72,7 +72,7 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('status', 'boolean', []);
         $table->addColumn('channel_type', 'string', ['length' => 255]);
-        $table->addColumn('data', Type::JSON_ARRAY, ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', Types::JSON_ARRAY, ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
         $table->addColumn('customer_identity', 'string', ['length' => 255]);
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);

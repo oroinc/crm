@@ -3,7 +3,7 @@
 namespace Oro\Bundle\ContactUsBundle\Migrations\Schema\v1_15;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
@@ -24,7 +24,7 @@ EOF;
         $removeDataQuery->addSql(
             $sql,
             ['name' => 'Oro\\Bundle\\ContactUsBundle\\Entity\\ContactRequest'],
-            ['name' => Type::STRING]
+            ['name' => Types::STRING]
         );
         $queries->addPostQuery($removeDataQuery);
     }

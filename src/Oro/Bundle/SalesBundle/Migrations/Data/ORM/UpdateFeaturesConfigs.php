@@ -5,11 +5,19 @@ namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\ConfigBundle\Config\GlobalScopeManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
+/**
+ * Enable corresponding feature for listed classes if at least one active channel contains them, otherwise disable them.
+ *
+ *  | Class                                      | Feature                               |
+ *  | Oro\Bundle\SalesBundle\Entity\Lead         | oro_sales.lead_feature_enabled        |
+ *  | Oro\Bundle\SalesBundle\Entity\Opportunity  | oro_sales.opportunity_feature_enabled |
+ *  | Oro\Bundle\SalesBundle\Entity\SalesFunnel  | oro_sales.salesfunnel_feature_enabled |
+ */
 class UpdateFeaturesConfigs extends AbstractFixture implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
@@ -62,15 +70,14 @@ SQL;
         ];
         $types = [
             'classes' => Connection::PARAM_STR_ARRAY,
-            'status'  => Type::BOOLEAN,
+            'status'  => Types::BOOLEAN,
         ];
 
-        $entities = $this->getConnection()->executeQuery($query, $params, $types)
+        $entities = $this->getConnection()
+            ->executeQuery($query, $params, $types)
             ->fetchAll(\PDO::FETCH_NUM);
 
-        $classes = array_map('current', $entities);
-
-        return $classes;
+        return array_map('current', $entities);
     }
 
     protected function clearChannelsConfigurations()

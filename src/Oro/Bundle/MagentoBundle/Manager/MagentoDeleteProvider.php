@@ -2,14 +2,22 @@
 
 namespace Oro\Bundle\MagentoBundle\Manager;
 
+use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\ORM\EntityManager;
-use Oro\Bundle\EntityBundle\ORM\DatabaseDriverInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
 use Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 
+/**
+ * Integration bundle Delete provider implementation for Magento channel.
+ * Process delete of integration related data:
+ *  - workflow definitions for magento Order
+ *  - workflow definitions for magento Cart
+ *  - magento carts
+ *  - remove magento entities from channel
+ */
 class MagentoDeleteProvider implements DeleteProviderInterface
 {
     /** @var EntityManager */
@@ -104,7 +112,7 @@ class MagentoDeleteProvider implements DeleteProviderInterface
     protected function removeWorkflowDefinitions($entityClassName)
     {
         $identifier = 'o.id';
-        if ($this->em->getConnection()->getDriver()->getName() === DatabaseDriverInterface::DRIVER_POSTGRESQL) {
+        if ($this->em->getConnection()->getDatabasePlatform() instanceof PostgreSqlPlatform) {
             $identifier = sprintf('CAST(%s as string)', $identifier);
         }
 

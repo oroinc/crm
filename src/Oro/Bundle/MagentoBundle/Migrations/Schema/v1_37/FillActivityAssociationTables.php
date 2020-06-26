@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_37;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
@@ -124,14 +124,14 @@ class FillActivityAssociationTables implements
             new ParametrizedSqlMigrationQuery(
                 $this->getFillCartEmailActivityListQuery(),
                 ['class' => 'Oro\Bundle\EmailBundle\Entity\Email'],
-                ['class' => Type::STRING]
+                ['class' => Types::STRING]
             )
         );
         $queries->addPreQuery(
             new ParametrizedSqlMigrationQuery(
                 $this->getFillCartCallActivityListQuery(),
                 ['class' => 'Oro\Bundle\CallBundle\Entity\Call'],
-                ['class' => Type::STRING]
+                ['class' => Types::STRING]
             )
         );
 
@@ -139,14 +139,14 @@ class FillActivityAssociationTables implements
             new ParametrizedSqlMigrationQuery(
                 $this->getFillOrderEmailActivityListQuery(),
                 ['class' => 'Oro\Bundle\EmailBundle\Entity\Email'],
-                ['class' => Type::STRING]
+                ['class' => Types::STRING]
             )
         );
         $queries->addPreQuery(
             new ParametrizedSqlMigrationQuery(
                 $this->getFillOrderCallActivityListQuery(),
                 ['class' => 'Oro\Bundle\CallBundle\Entity\Call'],
-                ['class' => Type::STRING]
+                ['class' => Types::STRING]
             )
         );
     }

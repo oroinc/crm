@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Entity\Repository;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -169,8 +169,8 @@ class SalesFunnelRepository extends EntityRepository
         if ($dateFrom && $dataTo) {
             $queryBuilder
                 ->where($queryBuilder->expr()->between('funnel.createdAt', ':dateFrom', ':dateTo'))
-                ->setParameter('dateFrom', $dateFrom, Type::DATETIME)
-                ->setParameter('dateTo', $dataTo, Type::DATETIME);
+                ->setParameter('dateFrom', $dateFrom, Types::DATETIME_MUTABLE)
+                ->setParameter('dateTo', $dataTo, Types::DATETIME_MUTABLE);
         }
 
         return $queryBuilder;

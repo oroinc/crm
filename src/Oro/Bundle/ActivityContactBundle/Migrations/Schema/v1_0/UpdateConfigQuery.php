@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Migrations\Schema\v1_0;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
@@ -54,7 +54,7 @@ class UpdateConfigQuery extends ParametrizedMigrationQuery
      */
     protected function updateEntityData($className, $data, $logger)
     {
-        $data = $data ? $this->connection->convertToPHPValue($data, Type::TARRAY) : [];
+        $data = $data ? $this->connection->convertToPHPValue($data, Types::ARRAY) : [];
 
         foreach (array_keys(ActivityScope::$fieldsConfiguration) as $fieldName) {
             if (isset($data['extend']['schema']['property'][$fieldName])) {
@@ -66,7 +66,7 @@ class UpdateConfigQuery extends ParametrizedMigrationQuery
             }
         }
 
-        $data = $this->connection->convertToDatabaseValue($data, Type::TARRAY);
+        $data = $this->connection->convertToDatabaseValue($data, Types::ARRAY);
 
         $this->executeQuery(
             $logger,

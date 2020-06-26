@@ -1,3 +1,5 @@
+# Magento integration is disabled in CRM-9202
+@skip
 @ticket-BAP-18682
 Feature: Saving integration form
   In order to create Magento integration channel

@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Entity\Repository;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -57,8 +57,8 @@ abstract class ChannelRepositoryAbstract extends EntityRepository implements Cha
             ))
             ->andWhere($qb->expr()->between('visit.firstActionTime', ':dateStart', ':dateEnd'))
             ->setParameter('type', $type)
-            ->setParameter('dateStart', $start, Type::DATETIME)
-            ->setParameter('dateEnd', $end, Type::DATETIME);
+            ->setParameter('dateStart', $start, Types::DATETIME_MUTABLE)
+            ->setParameter('dateEnd', $end, Types::DATETIME_MUTABLE);
 
         return (int) $aclHelper->apply($qb)->getSingleScalarResult();
     }

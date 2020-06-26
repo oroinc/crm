@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
@@ -26,12 +26,12 @@ trait DateFilterTrait
         if ($start) {
             $qb
                 ->andWhere(QueryBuilderUtil::sprintf('%s >= :start', $field))
-                ->setParameter('start', $start, Type::DATETIME);
+                ->setParameter('start', $start, Types::DATETIME_MUTABLE);
         }
         if ($end) {
             $qb
                 ->andWhere(QueryBuilderUtil::sprintf('%s < :end', $field))
-                ->setParameter('end', $end, Type::DATETIME);
+                ->setParameter('end', $end, Types::DATETIME_MUTABLE);
         }
     }
 }

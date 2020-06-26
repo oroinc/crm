@@ -4,6 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
@@ -33,7 +34,7 @@ class OroMagentoBundle implements Migration, OrderedMigrationInterface
         $schema
             ->getTable('orocrm_magento_customer')
             ->getColumn('vat')
-            ->setType(Type::getType(Type::STRING));
+            ->setType(Type::getType(Types::STRING));
 
         // Copy values back to VAT column
         $query = 'UPDATE orocrm_magento_customer ' .

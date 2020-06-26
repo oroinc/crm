@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_37;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 use Psr\Log\LoggerInterface;
 
@@ -37,7 +37,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'transitions'   => ['no_reply', 'log_call', 'send_email']
         ];
         $types = [
-            'workflow_name' => Type::STRING,
+            'workflow_name' => Types::STRING,
             'transitions'   => Connection::PARAM_STR_ARRAY
         ];
         $sql = 'DELETE FROM oro_workflow_transition_log' .
@@ -59,9 +59,9 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'transition'       => 'record_feedback'
         ];
         $types  = [
-            'not_contacted_id' => Type::INTEGER,
-            'workflow_name'    => Type::STRING,
-            'transition'       => Type::STRING
+            'not_contacted_id' => Types::INTEGER,
+            'workflow_name'    => Types::STRING,
+            'transition'       => Types::STRING
         ];
         $sql = 'UPDATE oro_workflow_transition_log' .
                ' SET step_from_id = :not_contacted_id' .
@@ -78,8 +78,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'names'            => ['emailed', 'called']
         ];
         $types  = [
-            'not_contacted_id' => Type::INTEGER,
-            'workflow_name'    => Type::STRING,
+            'not_contacted_id' => Types::INTEGER,
+            'workflow_name'    => Types::STRING,
             'names'            => Connection::PARAM_STR_ARRAY
         ];
 
@@ -119,8 +119,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'name'          => 'not_contacted'
         ];
         $types  = [
-            'workflow_name' => Type::STRING,
-            'name'          => Type::STRING
+            'workflow_name' => Types::STRING,
+            'name'          => Types::STRING
         ];
         $sql = 'SELECT s.id FROM oro_workflow_step s' .
                ' WHERE s.workflow_name = :workflow_name' .
@@ -147,7 +147,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             ]
         ];
         $types  = [
-            'workflow_name' => Type::STRING,
+            'workflow_name' => Types::STRING,
             'transitions'   => Connection::PARAM_STR_ARRAY
         ];
         $sql = 'DELETE FROM oro_workflow_transition_log' .
@@ -167,9 +167,9 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'name'          => 'contacted'
         ];
         $types  = [
-            'open_id'       => Type::INTEGER,
-            'workflow_name' => Type::STRING,
-            'name'          => Type::STRING
+            'open_id'       => Types::INTEGER,
+            'workflow_name' => Types::STRING,
+            'name'          => Types::STRING
         ];
 
         // Update step_from_id for transition logs.
@@ -219,8 +219,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'name'          => 'open'
         ];
         $types  = [
-            'workflow_name' => Type::STRING,
-            'name'          => Type::STRING
+            'workflow_name' => Types::STRING,
+            'name'          => Types::STRING
         ];
         $sql = 'SELECT s.id FROM oro_workflow_step s' .
                ' WHERE s.workflow_name = :workflow_name' .

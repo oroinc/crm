@@ -1,3 +1,5 @@
+# Magento integration is disabled in CRM-9202
+@skip
 @ticket-CRM-8748
 @fixture-OroMagentoBundle:CustomerReportFixture.yml
 

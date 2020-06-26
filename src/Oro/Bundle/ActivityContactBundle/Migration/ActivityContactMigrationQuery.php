@@ -5,7 +5,7 @@ namespace Oro\Bundle\ActivityContactBundle\Migration;
 use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
@@ -17,6 +17,15 @@ use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Add contact activity related columns to entities that has configured Contact Activity relation. Columns:
+ *  - ac_last_contact_date
+ *  - ac_last_contact_date_out
+ *  - ac_last_contact_date_in
+ *  - ac_contact_count
+ *  - ac_contact_count_out
+ *  - ac_contact_count_in
+ */
 class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
 {
     /** @var Schema */
@@ -122,12 +131,12 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
 
         $sql    = 'SELECT class_name, data FROM oro_entity_config WHERE mode = ?';
         $params = [ConfigModel::MODE_DEFAULT];
-        $types  = [Type::STRING];
+        $types  = [Types::STRING];
 
         $this->logQuery($logger, $sql, $params, $types);
         $rows = $this->connection->fetchAll($sql, $params, $types);
         foreach ($rows as $row) {
-            $result[$row['class_name']] = $this->connection->convertToPHPValue($row['data'], Type::TARRAY);
+            $result[$row['class_name']] = $this->connection->convertToPHPValue($row['data'], Types::ARRAY);
         }
 
         return $result;

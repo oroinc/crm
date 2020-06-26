@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Migrations\Schema\v1_9;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 use Psr\Log\LoggerInterface;
@@ -36,7 +36,7 @@ class ActivateAllChannelsQuery extends ParametrizedMigrationQuery
     {
         $sql = 'UPDATE orocrm_channel SET status = :status';
         $params = ['status' => true];
-        $types = ['status' => Type::BOOLEAN];
+        $types = ['status' => Types::BOOLEAN];
 
         $this->logQuery($logger, $sql, $params, $types);
         if (!$dryRun) {
