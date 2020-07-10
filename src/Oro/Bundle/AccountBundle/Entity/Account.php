@@ -28,7 +28,12 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      routeCreate="oro_account_create",
  *      defaultValues={
  *          "entity"={
- *              "icon"="fa-suitcase"
+ *              "icon"="fa-suitcase",
+ *              "contact_information"={
+ *                  "email"={
+ *                      {"fieldName"="contactInformation"}
+ *                  }
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
