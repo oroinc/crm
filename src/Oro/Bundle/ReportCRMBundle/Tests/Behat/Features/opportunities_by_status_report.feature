@@ -82,6 +82,8 @@ Feature: Opportunities by Status Report
     And records in grid should be 7
     And I reset "Expected close date" filter
 
+  @skip
+  # will be fixed in CRM-9204
   Scenario: Check Created At filter
     Given records in grid should be 7
     When I filter Created At as between "now" and "now + 1"
@@ -110,6 +112,8 @@ Feature: Opportunities by Status Report
     And records in grid should be 7
     And I reset "Created At" filter
 
+  @skip
+  # will be fixed in CRM-9204
   Scenario: Check Updated At filter
     Given records in grid should be 7
     When I filter Updated At as between "now" and "now + 1"
