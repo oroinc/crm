@@ -82,11 +82,9 @@ Feature: Opportunities by Status Report
     And records in grid should be 7
     And I reset "Expected close date" filter
 
-  @skip
-  # will be fixed in CRM-9204
   Scenario: Check Created At filter
     Given records in grid should be 7
-    When I filter Created At as between "now" and "now + 1"
+    When I filter Created At as between "now + 1" and "now + 2"
     Then number of records should be 7
     And I should see following grid:
       | Status                     | Number of opportunities | Close Revenue | Budget Amount |
@@ -98,7 +96,7 @@ Feature: Opportunities by Status Report
       | Closed Won                 | 0                       | $0.00         | $0.00         |
       | Closed Lost                | 0                       | $0.00         | $0.00         |
     And records in grid should be 7
-    When I filter Created At as between "now - 1" and "now"
+    When I filter Created At as between "now - 1" and "now + 1"
     And I should see following grid:
       | Status                     | Number of opportunities | Close Revenue | Budget Amount |
       | Open                       | 1                       | $0.00         | $5.00         |
@@ -112,11 +110,9 @@ Feature: Opportunities by Status Report
     And records in grid should be 7
     And I reset "Created At" filter
 
-  @skip
-  # will be fixed in CRM-9204
   Scenario: Check Updated At filter
     Given records in grid should be 7
-    When I filter Updated At as between "now" and "now + 1"
+    When I filter Updated At as between "now + 1" and "now + 2"
     Then number of records should be 7
     And I should see following grid:
       | Status                     | Number of opportunities | Close Revenue | Budget Amount |
@@ -128,7 +124,7 @@ Feature: Opportunities by Status Report
       | Closed Won                 | 0                       | $0.00         | $0.00         |
       | Closed Lost                | 0                       | $0.00         | $0.00         |
     And records in grid should be 7
-    When I filter Updated At as between "now - 1" and "now"
+    When I filter Updated At as between "now - 1" and "now + 1"
     And I should see following grid:
       | Status                     | Number of opportunities | Close Revenue | Budget Amount |
       | Open                       | 1                       | $0.00         | $5.00         |
