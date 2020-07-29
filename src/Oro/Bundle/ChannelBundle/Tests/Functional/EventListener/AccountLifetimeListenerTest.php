@@ -74,6 +74,7 @@ class AccountLifetimeListenerTest extends WebTestCase
 
                     $opportunities['op1']
                         ->setCloseRevenueValue(5)
+                        ->setCloseRevenueCurrency('USD')
                         ->setStatus($this->findOpportunityStatus(Opportunity::STATUS_WON));
                     $em->flush();
                 },
@@ -106,6 +107,7 @@ class AccountLifetimeListenerTest extends WebTestCase
 
                     $opportunities['op2']
                         ->setCloseRevenueValue(15)
+                        ->setCloseRevenueCurrency('USD')
                         ->setStatus($this->findOpportunityStatus(Opportunity::STATUS_WON));
                     $em->flush();
                 },
@@ -118,6 +120,7 @@ class AccountLifetimeListenerTest extends WebTestCase
                     $opportunities['op3'] = (new Opportunity())
                         ->setName('op3')
                         ->setCloseRevenueValue(3)
+                        ->setCloseRevenueCurrency('USD')
                         ->setStatus($this->findOpportunityStatus(Opportunity::STATUS_WON))
                         ->setCustomerAssociation(
                             (new Customer())
