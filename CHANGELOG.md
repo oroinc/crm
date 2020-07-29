@@ -6,6 +6,9 @@ The current file describes significant changes in the code that may affect the u
 
 The code of OroCRM connector to Magento 1 has been moved to a separate package.
 
+## 4.2.0-alpha.3 (2020-07-30)
+[Show detailed list of changes](incompatibilities-4-2-alpha-3.md)
+
 ## 4.2.0-alpha.2 (2020-05-29)
 [Show detailed list of changes](incompatibilities-4-2-alpha-2.md)
 
