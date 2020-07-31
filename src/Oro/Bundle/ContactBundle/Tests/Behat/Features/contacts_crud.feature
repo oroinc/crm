@@ -114,10 +114,12 @@ Scenario: Assert field values of Contact view page after edit
   And avatar should not be default avatar
 
 Scenario: Delete contact
+  Given I remember number of files in attachment directory
   When I click "Delete Contact"
   And confirm deletion
   Then I should see "Contact deleted" flash message
   And there is no records in grid
+  And number of files in attachment directory is 1 less than remembered
 
 Scenario: Validate Social links length
   Given I login as administrator
