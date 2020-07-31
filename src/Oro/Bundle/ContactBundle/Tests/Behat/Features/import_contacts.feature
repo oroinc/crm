@@ -24,39 +24,55 @@ Feature: Import Contacts
   Scenario: Data Template for Contacts
     Given I go to Customers/ Contacts
     When I download "Contacts" Data Template file
-    Then I see Id column
-    And I see Name prefix column
-    And I see First name column
-    And I see Last name column
-    And I see Gender column
-    And I see Birthday column
-    And I see Source Name column
-    And I see Owner Username column
-    And I see Assigned to Username column
-    And I see Emails 1 Email column
-    And I see Phones 1 Phone column
-    And I see Groups 1 Label column
-    And I see Accounts 1 Account name column
-    And I see Accounts Default Contact 1 Account name column
-    And I see Addresses 1 Label column
-    And I see Addresses 1 First name column
-    And I see Addresses 1 Last name column
-    And I see Addresses 1 Street column
-    And I see Addresses 1 Zip/Postal Code column
-    And I see Addresses 1 City column
-    And I see Addresses 1 State Combined code column
-    And I see Addresses 1 Country ISO2 code column
-    And I see Organization Name column
+    Then I see the following columns in the downloaded csv template:
+      | Id                                      |
+      | Name prefix                             |
+      | First name                              |
+      | Last name                               |
+      | Gender                                  |
+      | Birthday                                |
+      | Source Name                             |
+      | Owner Username                          |
+      | Assigned to Username                    |
+      | Emails 1 Email                          |
+      | Phones 1 Phone                          |
+      | Groups 1 Label                          |
+      | Accounts 1 Account name                 |
+      | Accounts Default Contact 1 Account name |
+      | Addresses 1 Label                       |
+      | Addresses 1 First name                  |
+      | Addresses 1 Last name                   |
+      | Addresses 1 Street                      |
+      | Addresses 1 Zip/Postal Code             |
+      | Addresses 1 City                        |
+      | Addresses 1 State Combined code         |
+      | Addresses 1 Country ISO2 code           |
+      | Organization Name                       |
+      | Picture URI                             |
+      | Picture UUID                            |
 
   Scenario: Import new Contacts
-    Given I fill template with data:
-      | Id | Name prefix | First name | Last name | Gender | Birthday   | Source Name | Owner Username      | Assigned to Username | Emails 1 Email              | Phones 1 Phone | Groups 1 Label           | Accounts 1 Account name | Accounts Default Contact 1 Account name | Addresses 1 Label | Addresses 1 First name | Addresses 1 Last name | Addresses 1 Street  | Addresses 1 Zip\/Postal Code | Addresses 1 City | Addresses 1 State Combined code | Addresses 1 Country ISO2 code | Organization Name |
-      |    | Mr.         | Roy        | Greenwell | male   | 01/18/1968 | website     | austin.rivers_3d974 | austin.rivers_3d974  | RoyLGreenwell@superrito.com | 765-538-2134   | Demographic Segmentation | Big D Supermarkets      | Big D Supermarkets                      | Primary Address   | Roy                    | Greenwell             | 2413 Capitol Avenue | 47981                        | Romney           | US-IN                           | US                            | ORO               |
+    Given I copy contact fixture "charlie-sheen.jpg" to import export upload dir
+    And I remember number of files in attachment directory
+    And I fill template with data:
+      | Id | Name prefix | First name | Last name | Gender | Birthday   | Source Name | Owner Username      | Assigned to Username | Emails 1 Email              | Phones 1 Phone | Groups 1 Label           | Accounts 1 Account name | Accounts Default Contact 1 Account name | Addresses 1 Label | Addresses 1 First name | Addresses 1 Last name | Addresses 1 Street  | Addresses 1 Zip\/Postal Code | Addresses 1 City | Addresses 1 State Combined code | Addresses 1 Country ISO2 code | Organization Name | Picture URI       | Picture UUID |
+      |    | Mr.         | Roy        | Greenwell | male   | 01/18/1968 | website     | austin.rivers_3d974 | austin.rivers_3d974  | RoyLGreenwell@superrito.com | 765-538-2134   | Demographic Segmentation | Big D Supermarkets      | Big D Supermarkets                      | Primary Address   | Roy                    | Greenwell             | 2413 Capitol Avenue | 47981                        | Romney           | US-IN                           | US                            | ORO               | charlie-sheen.jpg |              |
     When I import file
     Then Email should contains the following "Errors: 5 processed: 1, read: 1, added: 1, updated: 0, replaced: 0" text
+    And number of files in attachment directory is 1 more than remembered
 
+  Scenario: Check contacts
     When I reload the page
     And number of records should be 1
     And I should see following grid:
       | First name | Last name | Email                       | Phone        | Source  | Country       | State   | Zip/Postal Code |
       | Roy        | Greenwell | RoyLGreenwell@superrito.com | 765-538-2134 | Website | United States | Indiana | 47981           |
+    When I click view Greenwell in grid
+    Then avatar should not be default avatar
+
+  Scenario: Export contacts
+    Given I go to Customers/ Contacts
+    When I run export
+    Then exported file contains at least the following columns:
+      | Id | Name prefix | First name | Middle name | Last name | Name suffix | Gender | Description | Job Title | Fax | Skype | Twitter | Facebook | Google+ | LinkedIn | Birthday   | Source Name | Contact Method Name | Emails 1 Email              | Phones 1 Phone | Accounts 1 Account name | Accounts Default Contact 1 Account name | Addresses 1 Label | Addresses 1 Organization | Addresses 1 Name prefix | Addresses 1 First name | Addresses 1 Middle name | Addresses 1 Last name | Addresses 1 Name suffix | Addresses 1 Street  | Addresses 1 Street 2 | Addresses 1 Zip/Postal Code | Addresses 1 City | Addresses 1 State | Addresses 1 State Combined code | Addresses 1 Country ISO2 code | Organization Name | Picture URI                       | Picture UUID | Tags |
+      | 1  | Mr.         | Roy        |             | Greenwell |             | male   |             |           |     |       |         |          |         |          | 01/18/1968 | website     |                     | RoyLGreenwell@superrito.com | 765-538-2134   | Big D Supermarkets      | Big D Supermarkets                      | Primary Address   |                          |                         | Roy                    |                         | Greenwell             |                         | 2413 Capitol Avenue |                      | 47981                       | Romney           |                   | US-IN                           | US                            | ORO               | <contains("attachment/download")> | <notEmpty()> |      |

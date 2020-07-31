@@ -6,6 +6,9 @@ use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 
+/**
+ * Import strategy specific for Contact entity.
+ */
 class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {
     /**
@@ -90,8 +93,10 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         /** @var Contact $entity */
         $entity = parent::afterProcessEntity($entity);
 
-        $this->contactImportHelper->updateScalars($entity);
-        $this->contactImportHelper->updatePrimaryEntities($entity);
+        if ($entity) {
+            $this->contactImportHelper->updateScalars($entity);
+            $this->contactImportHelper->updatePrimaryEntities($entity);
+        }
 
         return $entity;
     }
