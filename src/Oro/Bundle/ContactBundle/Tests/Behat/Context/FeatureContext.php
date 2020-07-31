@@ -4,14 +4,17 @@ namespace Oro\Bundle\ContactBundle\Tests\Behat\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Behat\Symfony2Extension\Context\KernelDictionary;
 use Doctrine\Common\Inflector\Inflector;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
 
-class FeatureContext extends OroFeatureContext implements OroPageObjectAware
+class FeatureContext extends OroFeatureContext implements OroPageObjectAware, KernelAwareContext
 {
     use PageObjectDictionary;
+    use KernelDictionary;
 
     /**
      * Assert that value of given field is a primary.
@@ -147,5 +150,26 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
             default:
                 return (int) $count;
         }
+    }
+
+    /**
+     * Example: Given I copy contact fixture "charlie-sheen.jpg" to import export upload dir
+     *
+     * @Given /^I copy contact fixture "(?P<filename>(?:[^"]|\\")*)" to import export upload dir$/
+     *
+     * @param string $filename
+     */
+    public function copyContactFixtureFileToImportExportDir(string $filename): void
+    {
+        $filename = $this->fixStepArgument($filename);
+        $imagePath = sprintf('%s/../Features/Fixtures/%s', __DIR__, $filename);
+
+        $importExportDir = sprintf(
+            '%s%s',
+            $this->getContainer()->getParameter('kernel.project_dir'),
+            '/var/import_export/files/'
+        );
+
+        $this->copyFiles($imagePath, $importExportDir);
     }
 }

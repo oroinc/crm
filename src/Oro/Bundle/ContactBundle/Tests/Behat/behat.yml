@@ -89,5 +89,11 @@ oro_behat_extension:
         - OroNavigationBundle::FeatureContext
         - OroLocaleBundle::LocalizationContext
         - OroNavigationBundle::TabContext
+        - OroAttachmentBundle::AttachmentImageContext:
+            - '@doctrine'
+            - '@oro_website.website.provider'
+            - '@oro_website.manager'
+            - '@oro_config.website'
+            - '@oro_attachment.image_removal.service_locator'
       paths:
         - '@OroContactBundle/Tests/Behat/Features'
