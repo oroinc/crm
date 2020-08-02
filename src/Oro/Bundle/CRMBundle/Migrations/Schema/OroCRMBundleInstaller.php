@@ -24,7 +24,7 @@ class OroCRMBundleInstaller implements Installation, ContainerAwareInterface
      */
     public function getMigrationVersion()
     {
-        return 'v1_7';
+        return 'v4_2_0_1';
     }
 
     /**

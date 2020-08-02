@@ -14,3 +14,11 @@ services:
             - ['addPackage', ['OroCRM', 'oro/crm-zendesk']]
         tags:
             - {name: oro_translation.extension.packages_provider}
+
+    Oro\Bundle\CRMBundle\CacheWarmer\ExtendEntityCacheWarmer:
+        arguments:
+            - '@doctrine'
+            - '@logger'
+            - '%installed%'
+        tags:
+            - { name: oro_entity_extend.warmer }
