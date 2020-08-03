@@ -15,6 +15,7 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
+use Oro\Bundle\OrganizationBundle\Ownership\EntityOwnershipAssociationsSetter;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -88,6 +89,7 @@ class CartStrategyTest extends AbstractStrategyTest
         $strategy->setChannelHelper($this->channelHelper);
         $strategy->setAddressHelper($this->addressHelper);
         $strategy->setGuestCustomerStrategyHelper($this->guestCustomerStrategyHelper);
+        $strategy->setOwnershipSetter($this->createMock(EntityOwnershipAssociationsSetter::class));
 
         return $strategy;
     }
@@ -107,6 +109,8 @@ class CartStrategyTest extends AbstractStrategyTest
         $strategy->setStepExecution($this->stepExecution);
         $strategy->setImportExportContext($this->context);
         $strategy->setEntityName('Oro\Bundle\MagentoBundle\Entity\Cart');
+        $strategy->setOwnershipSetter($this->createMock(EntityOwnershipAssociationsSetter::class));
+
 
         $reflection = new \ReflectionProperty(get_class($strategy), 'existingEntity');
         $reflection->setAccessible(true);

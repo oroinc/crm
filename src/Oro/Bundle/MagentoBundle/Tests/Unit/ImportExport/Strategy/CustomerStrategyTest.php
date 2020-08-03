@@ -11,6 +11,7 @@ use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CustomerStrategy;
+use Oro\Bundle\OrganizationBundle\Ownership\EntityOwnershipAssociationsSetter;
 
 class CustomerStrategyTest extends AbstractStrategyTest
 {
@@ -49,6 +50,7 @@ class CustomerStrategyTest extends AbstractStrategyTest
         $this->jobExecution->expects($this->any())->method('getExecutionContext')
             ->will($this->returnValue($execution));
         $strategy->setStepExecution($this->stepExecution);
+        $strategy->setOwnershipSetter($this->createMock(EntityOwnershipAssociationsSetter::class));
 
         return $strategy;
     }

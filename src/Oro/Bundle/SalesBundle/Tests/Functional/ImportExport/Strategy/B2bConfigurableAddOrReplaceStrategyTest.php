@@ -65,6 +65,7 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
         $this->context = new StepExecutionProxyContext($this->stepExecution);
         $this->strategy->setImportExportContext($this->context);
         $this->strategy->setEntityName(B2bCustomer::class);
+        $this->strategy->setOwnershipSetter($container->get('oro_organization.entity_ownership_associations_setter'));
     }
 
     public function testUpdateAddress()
