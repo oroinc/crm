@@ -10,6 +10,7 @@ use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\GuestCustomerStrategy;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
+use Oro\Bundle\OrganizationBundle\Ownership\EntityOwnershipAssociationsSetter;
 
 class GuestCustomerStrategyTest extends AbstractStrategyTest
 {
@@ -53,6 +54,7 @@ class GuestCustomerStrategyTest extends AbstractStrategyTest
             ->getMock()
         );
         $strategy->setEntityName('Oro\Bundle\MagentoBundle\Entity\Customer');
+        $strategy->setOwnershipSetter($this->createMock(EntityOwnershipAssociationsSetter::class));
 
         return $strategy;
     }
