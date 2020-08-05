@@ -26,6 +26,10 @@ class ImportExportTest extends AbstractImportExportTestCase
 
     public function testExportTemplate()
     {
+        if (\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
+            static::markTestSkipped('Cannot be tested with Magento 1 connector installed');
+        }
+
         $this->assertExportTemplateWorks(
             $this->getExportImportConfiguration(),
             $this->getFullPathToDataFile('export_template.csv'),
@@ -54,6 +58,10 @@ class ImportExportTest extends AbstractImportExportTestCase
 
     public function testExport()
     {
+        if (\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
+            static::markTestSkipped('Cannot be tested with Magento 1 connector installed');
+        }
+
         $this->assertExportWorks(
             $this->getExportImportConfiguration(),
             $this->getFullPathToDataFile('export.csv'),
@@ -82,6 +90,10 @@ class ImportExportTest extends AbstractImportExportTestCase
 
     public function testImportRecordWithAddOrReplaceStrategy()
     {
+        if (\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
+            static::markTestSkipped('Cannot be tested with Magento 1 connector installed');
+        }
+
         $this->assertImportWorks(
             $this->getExportImportConfiguration(),
             $this->getFullPathToDataFile('import_one_record.csv')
