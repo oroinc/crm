@@ -1,0 +1,21 @@
+ROLE_SALES_MANAGER:
+    bap_role: ROLE_MANAGER
+    permissions:
+        workflow|orocrm_contact_us_contact_request: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+
+ROLE_SALES_REP:
+    bap_role: ROLE_USER
+    permissions:
+        workflow|orocrm_contact_us_contact_request: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+
+ROLE_ONLINE_SALES_REP:
+    permissions:
+        workflow|orocrm_contact_us_contact_request: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+
+ROLE_MARKETING_MANAGER:
+    permissions:
+        workflow|orocrm_contact_us_contact_request: [VIEW_WORKFLOW_SYSTEM]
+
+ROLE_LEADS_DEVELOPMENT_REP:
+    permissions:
+        workflow|orocrm_contact_us_contact_request: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]

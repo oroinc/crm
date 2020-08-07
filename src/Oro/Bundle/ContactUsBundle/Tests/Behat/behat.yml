@@ -18,5 +18,24 @@ oro_behat_extension:
               locator: "//input[@type='checkbox'][@value='emailAddress']"
               type: xpath
 
-        Contact Request:
-            selector: '.page-content'
+        Contact Request Workflow Convert to Opportunity Dialog Form:
+            selector: 'form[name="oro_workflow_transition"]'
+            class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+            options:
+                mapping:
+                    Budget Amount: 'oro_workflow_transition[opportunity_budget][value]'
+                    Feedback: 'oro_workflow_transition[feedback]'
+
+        Contact Request Workflow Convert to Lead Dialog Form:
+            selector: 'form[name="oro_workflow_transition"]'
+            class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+            options:
+                mapping:
+                    Feedback: 'oro_workflow_transition[feedback]'
+
+        Contact Request Workflow Resolve Dialog Form:
+            selector: 'form[name="oro_workflow_transition"]'
+            class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+            options:
+                mapping:
+                    Feedback: 'oro_workflow_transition[feedback]'
