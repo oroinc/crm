@@ -70,14 +70,18 @@
 
     {% set dataBlocks = [{
         'title': 'oro.contactus.block.general'|trans,
+        'class': 'active',
         'subblocks': [
             {
                 'title': 'oro.contactus.block.request_information'|trans,
                 'data': [
                     form_row(form.firstName),
                     form_row(form.lastName),
-                    form_row(form.emailAddress),
+                    form_row(form.organizationName),
+                    form_row(form.preferredContactMethod),
                     form_row(form.phone),
+                    form_row(form.emailAddress),
+                    form_row(form.contactReason),
                     form_row(form.comment)
                 ]
             }

@@ -14,6 +14,11 @@ services:
             - Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType
             - null
 
+    Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestEditType:
+        arguments:
+            - '@oro_locale.helper.default_locale_localization'
+        tags: ['form.type']
+
     oro_contact_us.contact_request.form.handler:
         class: Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler
         public: true
