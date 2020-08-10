@@ -70,6 +70,51 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $direction
+     * @param bool $extend
+     * @param int|null $expected
+     *
+     * @dataProvider onRemoveActivityDataProvider
+     */
+    public function testOnRemoveActivity(string $direction, bool $extend, ?int $expected): void
+    {
+        $target = new TestTarget();
+        $activity = new TestActivity($direction, new \DateTime());
+
+        $this->config
+            ->expects($this->any())
+            ->method('is')
+            ->with('is_extend')
+            ->willReturn($extend);
+
+        $event = new ActivityEvent($activity, $target);
+        $this->listener->onRemoveActivity($event);
+
+        $this->assertEquals($expected, $target->ac_contact_count);
+    }
+
+    public function onRemoveActivityDataProvider(): array
+    {
+        return [
+            'Direction unknown' => [
+                'activity' => DirectionProviderInterface::DIRECTION_UNKNOWN,
+                'extend' => false,
+                'expected' => null
+            ],
+            'Direction incoming and target excluded' => [
+                'activity' => DirectionProviderInterface::DIRECTION_INCOMING,
+                'extend' => false,
+                'expected' => null
+            ],
+            'Direction incoming and target not excluded' => [
+                'activity' => DirectionProviderInterface::DIRECTION_INCOMING,
+                'extend' => true,
+                'expected' => -1
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider onAddActivityProvider
      * @param object $object
      * @param string $expectedDirection
