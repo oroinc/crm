@@ -17,6 +17,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
+ * Recalculates and updates contact information, depends on 'activity' actions.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ActivityListener
@@ -115,6 +117,11 @@ class ActivityListener
         $target = $event->getTarget();
         $extendProvider  = $this->configManager->getProvider('extend');
         $targetClassName = ClassUtils::getClass($target);
+
+        $direction = $this->activityContactProvider->getActivityDirection($activity, $target);
+        if ($direction === DirectionProviderInterface::DIRECTION_UNKNOWN) {
+            return;
+        }
 
         if (TargetExcludeList::isExcluded($targetClassName) ||
             !$extendProvider->getConfig($targetClassName)->is('is_extend')) {
