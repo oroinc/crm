@@ -14,14 +14,17 @@ Feature: Activity context widget feature
       | Subject | Test task |
     And save and close form
     Then should see "Task saved" flash message
+
     When I click "Add Context"
     And select "Account" context
     And click on Test Account in grid
     Then I should see "Test Account"
+
     When I click "Add Context"
     And I select "Lead" context
     And click on Test Lead in grid
     Then I should see "Test Lead"
+
     When I click "Add Context"
     And I select "Opportunity" context
     And click on Test Opportunity in grid
