@@ -1,0 +1,97 @@
+Oro\Bundle\EmailBundle\Entity\EmailFolder:
+    email_folder:
+        name: 'EmailFolder.name'
+        fullName: 'EmailFolder.fullName'
+        type: 'incoming'
+        syncEnabled: false
+        synchronizedAt: '<dateTime()>'
+        syncStartDate: '<dateTime()>'
+        outdatedAt: '<dateTime()>'
+        failedCount: '<randomNumber()>'
+        origin: '@email_origin'
+
+Oro\Bundle\EmailBundle\Entity\Mailbox:
+    email_mailbox:
+        email: 'Mailbox.email'
+        label: 'Mailbox.label'
+        createdAt: '<dateTime()>'
+        updatedAt: '<dateTime()>'
+        origin: '@email_origin'
+        organization: '@organization'
+        authorizedUsers: ['@admin']
+        authorizedRoles: ['@adminRole']
+
+Oro\Bundle\EmailBundle\Entity\Email:
+    email{1..3}:
+        created: '<dateTime()>'
+        subject: 'Test Email'
+        fromName: 'Email.fromName'
+        sentAt: '<dateTime()>'
+        importance: 1
+        internalDate: '<dateTime()>'
+        head: true
+        messageId: 'Email.messageId'
+        multiMessageId: 'Email.multiMessageId'
+        xMessageId: 'Email.xMessageId'
+        xThreadId: 'Email.xThreadId'
+        refs: 'Email.refs'
+        acceptLanguageHeader: 'Email.acceptLanguageHeader'
+        bodySynced: true
+        fromEmailAddress: '@email_address'
+        user_d41b1c4b: ['@admin']
+        emailBody: '@email_body_html<current()>'
+
+OroEntityProxy\OroEmailBundle\EmailAddressProxy:
+    email_address:
+        __calls:
+            - beforeSave: []
+        email: 'EmailAddressProxy.email'
+        owner1: '@admin'
+        owner2: '@email_mailbox'
+
+Oro\Bundle\EmailBundle\Entity\EmailBody:
+    email_body_html{1..3}:
+        created: '<dateTime()>'
+        bodyContent: 'EmailBody.bodyContent'
+        textBody: 'EmailBody.textBody'
+        hasAttachments: false
+        persistent: true
+        bodyIsText: false
+        email: '@email<current()>'
+
+Oro\Bundle\ImapBundle\Entity\UserEmailOrigin:
+    email_origin:
+        mailboxName: 'UserEmailOrigin.mailboxName'
+        isActive: true
+        syncCodeUpdatedAt: '<dateTime()>'
+        synchronizedAt: '<dateTime()>'
+        syncCode: '<randomNumber()>'
+        syncCount: '<randomNumber()>'
+        imapHost: 'UserEmailOrigin.imapHost'
+        imapPort: '<randomNumber()>'
+        smtpHost: 'UserEmailOrigin.smtpHost'
+        smtpPort: '<randomNumber()>'
+        imapEncryption: l3
+        smtpEncryption: l3
+        user: 'UserEmailOrigin.user'
+        password: 'UserEmailOrigin.password'
+        accessToken: 'UserEmailOrigin.accessToken'
+        refreshToken: 'UserEmailOrigin.refreshToken'
+        accessTokenExpiresAt: '<dateTime()>'
+        owner: '@admin'
+        organization: '@organization'
+        mailbox: '@email_mailbox'
+
+# Must be added after email created to guarantee that id != email_id. Required by BAP-20028
+Oro\Bundle\EmailBundle\Entity\EmailUser:
+    email_user:
+        createdAt: '<dateTime()>'
+        receivedAt: '<dateTime()>'
+        seen: true
+        unsyncedFlagCount: '<randomNumber()>'
+        organization: '@organization'
+        owner: '@admin'
+        mailboxOwner: '@email_mailbox'
+        origin: '@email_origin'
+        folders: ['@email_folder']
+        email: '@email3'
