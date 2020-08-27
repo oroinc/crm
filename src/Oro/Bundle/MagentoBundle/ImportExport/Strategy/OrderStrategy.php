@@ -12,6 +12,9 @@ use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\ChainProcessor as
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 use Oro\Bundle\MagentoBundle\Provider\Connector\MagentoConnectorInterface;
 
+/**
+ * Import strategy for sales orders.
+ */
 class OrderStrategy extends AbstractImportStrategy
 {
     const CONTEXT_ORDER_POST_PROCESS_IDS = 'postProcessOrderIds';
@@ -212,6 +215,7 @@ class OrderStrategy extends AbstractImportStrategy
      * BC layer to find existing collection items by old identity filed values
      *
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function findExistingEntity($entity, array $searchContext = [])
     {

@@ -7,6 +7,9 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+/**
+ * Provides applicable subscription permissions (subcsribe, unsubscribe).
+ */
 class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPermissionProvider
 {
     /**
@@ -29,6 +32,7 @@ class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPer
      * @param array $actions
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getActionsPermissions(ResultRecordInterface $record, array $actions)
     {

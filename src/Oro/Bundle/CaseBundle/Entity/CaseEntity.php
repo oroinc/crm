@@ -15,6 +15,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
+ * Holds case details.
+ *
  * @ORM\Entity
  * @ORM\Table(
  *      name="orocrm_case",
@@ -53,6 +55,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      }
  * )
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
 {

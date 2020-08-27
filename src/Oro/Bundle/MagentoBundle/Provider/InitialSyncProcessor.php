@@ -6,6 +6,9 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
 
+/**
+ * Handles initial stages of the data sync.
+ */
 class InitialSyncProcessor extends AbstractInitialProcessor
 {
     const INITIAL_CONNECTOR_SUFFIX = '_initial';
@@ -42,6 +45,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processConnectors(Integration $integration, array $parameters = [], callable $callback = null)
     {

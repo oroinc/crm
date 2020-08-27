@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Class MagentoTransport. Used as base class for REST and SOAP transport entities
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class MagentoTransport extends Transport
 {

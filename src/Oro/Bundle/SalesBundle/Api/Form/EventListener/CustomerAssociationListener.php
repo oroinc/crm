@@ -249,6 +249,7 @@ class CustomerAssociationListener implements EventSubscriberInterface
      * @param FormInterface $form
      * @param Account|null  $submittedAccount
      * @param object|null   $submittedCustomer
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function changeCustomerAssociation(
         FormInterface $form,

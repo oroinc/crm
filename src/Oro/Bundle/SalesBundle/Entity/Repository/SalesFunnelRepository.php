@@ -35,6 +35,7 @@ class SalesFunnelRepository extends EntityRepository
      * @param  AclHelper $aclHelper
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFunnelChartData(
         \DateTime $dateFrom = null,

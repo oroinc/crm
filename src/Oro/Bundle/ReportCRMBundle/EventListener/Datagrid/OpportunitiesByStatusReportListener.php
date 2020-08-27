@@ -71,6 +71,7 @@ class OpportunitiesByStatusReportListener
      * event: oro_datagrid.datagrid.build.after.oro_reportcrm-opportunities-by_status
      *
      * @param BuildAfter $event
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function onBuildAfter(BuildAfter $event)
     {

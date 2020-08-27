@@ -9,6 +9,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class OroMagentoBundle implements Migration
 {

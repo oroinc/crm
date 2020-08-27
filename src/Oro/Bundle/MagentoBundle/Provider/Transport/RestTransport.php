@@ -26,7 +26,10 @@ use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * Draft of new REST transport for Magento integration.
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class RestTransport implements
     TransportInterface,
@@ -206,7 +209,7 @@ class RestTransport implements
      */
     public function getOrders()
     {
-        // TODO: Implement getOrders() method. Will be implemented in CRM-8154.
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -214,7 +217,7 @@ class RestTransport implements
      */
     public function getCarts()
     {
-        // TODO: Implement getCarts() method. Will be implemented in CRM-8155.
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -222,7 +225,7 @@ class RestTransport implements
      */
     public function getCustomers()
     {
-        //TODO: Implement CustomerRestIterator. Will be implemented in CRM-8153
+        throw new \LogicException(__METHOD__ . ' not implemented.');
         return new BaseMagentoRestIterator($this, []);
     }
 
@@ -241,7 +244,7 @@ class RestTransport implements
      */
     public function getCustomerGroups()
     {
-        // TODO: Implement getCustomerGroups() method. Will be implemented in CRM-8153
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -303,7 +306,7 @@ class RestTransport implements
      */
     public function getCustomerInfo($originId)
     {
-        // TODO: Implement getCustomerInfo() method. Will be implemented in CRM-8153
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -311,7 +314,7 @@ class RestTransport implements
      */
     public function getCustomerAddresses($originId)
     {
-        // TODO: Implement getCustomerAddresses() method. Will be implemented in CRM-8153
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -319,7 +322,7 @@ class RestTransport implements
      */
     public function getErrorCode(\Exception $e)
     {
-        // TODO: Implement getErrorCode() method. Will be implemented in CRM-8329
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -327,7 +330,7 @@ class RestTransport implements
      */
     public function getOrderInfo($incrementId)
     {
-        // TODO: Implement getOrderInfo() method. Will be implemented in CRM-8154
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -335,7 +338,7 @@ class RestTransport implements
      */
     public function createCustomer(array $customerData)
     {
-        // TODO: Implement createCustomer() method. Will be implemented in CRM-8234
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -343,7 +346,7 @@ class RestTransport implements
      */
     public function updateCustomer($customerId, array $customerData)
     {
-        // TODO: Implement updateCustomer() method. Will be implemented in CRM-8234
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -351,7 +354,7 @@ class RestTransport implements
      */
     public function createCustomerAddress($customerId, array $item)
     {
-        // TODO: Implement createCustomerAddress() method. Will be implemented in CRM-8234
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -359,7 +362,7 @@ class RestTransport implements
      */
     public function updateCustomerAddress($customerAddressId, array $item)
     {
-        // TODO: Implement updateCustomerAddress() method. Will be implemented in CRM-8234
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -367,7 +370,7 @@ class RestTransport implements
      */
     public function getCustomerAddressInfo($customerAddressId)
     {
-        // TODO: Implement getCustomerAddressInfo() method. Will be implemented in CRM-8153
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -375,7 +378,7 @@ class RestTransport implements
      */
     public function getNewsletterSubscribers()
     {
-        // TODO: Implement getNewsletterSubscribers() method. Will be implemented in CRM-8156
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -383,7 +386,7 @@ class RestTransport implements
      */
     public function createNewsletterSubscriber(array $subscriberData)
     {
-        // TODO: Implement createNewsletterSubscriber() method. Will be implemented in CRM-8156
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -391,7 +394,7 @@ class RestTransport implements
      */
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData)
     {
-        // TODO: Implement updateNewsletterSubscriber() method. Will be implemented in CRM-8156
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -464,7 +467,7 @@ class RestTransport implements
      */
     public function getServerTime()
     {
-        // TODO: Implement getServerTime() method. Will be implemented in CRM-8329
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -526,7 +529,7 @@ class RestTransport implements
      */
     public function getCreditMemos()
     {
-        // TODO: Implement getCreditMemos() method. Will be implemented in CRM-8310
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
@@ -534,7 +537,7 @@ class RestTransport implements
      */
     public function getCreditMemoInfo($incrementId)
     {
-        // TODO: Implement getCreditMemoInfo() method. Will be implemented in CRM-8310
+        throw new \LogicException(__METHOD__ . ' not implemented.');
     }
 
     /**
