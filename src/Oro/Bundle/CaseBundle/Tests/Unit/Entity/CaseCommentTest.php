@@ -4,6 +4,9 @@ namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class CaseCommentTest extends \PHPUnit\Framework\TestCase
 {
     /**

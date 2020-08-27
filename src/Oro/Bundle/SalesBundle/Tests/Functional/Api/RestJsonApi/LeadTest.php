@@ -12,6 +12,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadLeadsData;
 
 /**
  * @dbIsolationPerTest
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class LeadTest extends RestJsonApiTestCase
 {

@@ -8,6 +8,9 @@ use Oro\Bundle\CurrencyBundle\Provider\DefaultCurrencyProviderInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * Recalculates and updates various fields of an updated opportunity.
+ */
 class OpportunityListener
 {
     protected $valuableChangesetKeys = [
@@ -134,6 +137,7 @@ class OpportunityListener
      * @param Opportunity $opportunity
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function updateBaseBudgetAmountFields($newStatusId, Opportunity $opportunity, $changeSet)
     {

@@ -17,6 +17,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
+ * Represent contact information (possibly a person or a business).
+ *
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -79,6 +81,8 @@ use Oro\Bundle\UserBundle\Entity\User;
  *          }
  *      }
  * )
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Contact extends ExtendContact implements EmailOwnerInterface
 {
@@ -761,7 +765,7 @@ class Contact extends ExtendContact implements EmailOwnerInterface
 
     /**
      * Get entity class name.
-     * TODO: Remove this temporary solution for get 'view' route in twig after EntityConfigBundle is finished
+     *
      * @return string
      */
     public function getClass()

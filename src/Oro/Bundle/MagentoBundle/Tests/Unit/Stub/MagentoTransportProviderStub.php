@@ -6,6 +6,9 @@ use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class MagentoTransportProviderStub implements MagentoTransportInterface
 {
     /**
@@ -61,7 +64,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function initWithExtraOptions(Transport $transportEntity, array $clientExtraOptions)
     {
-        // @todo: Implement initWithExtraOptions() method.
     }
 
     /**
@@ -85,7 +87,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getOrders()
     {
-        // @todo: Implement getOrders() method.
     }
 
     /**
@@ -93,7 +94,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getCarts()
     {
-        // @todo: Implement getCarts() method.
     }
 
     /**
@@ -101,7 +101,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getCustomers()
     {
-        // @todo: Implement getCustomers() method.
     }
 
     /**
@@ -109,7 +108,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function isCustomerHasUniqueEmail(Customer $customer)
     {
-        // @todo: Implement isCustomerHasUniqueEmail() method.
     }
 
     /**
@@ -117,7 +115,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getCustomerGroups()
     {
-        // @todo: Implement getCustomerGroups() method.
     }
 
     /**
@@ -125,7 +122,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getStores()
     {
-        // @todo: Implement getStores() method.
     }
 
     /**
@@ -133,7 +129,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getWebsites()
     {
-        // @todo: Implement getWebsites() method.
     }
 
     /**
@@ -141,7 +136,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getRegions()
     {
-        // @todo: Implement getRegions() method.
     }
 
     /**
@@ -149,7 +143,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getCustomerInfo($originId)
     {
-        // @todo: Implement getCustomerInfo() method.
     }
 
     /**
@@ -157,7 +150,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getCustomerAddresses($originId)
     {
-        // @todo: Implement getCustomerAddresses() method.
     }
 
     /**
@@ -165,7 +157,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getErrorCode(\Exception $e)
     {
-        // @todo: Implement getErrorCode() method.
     }
 
     /**
@@ -173,7 +164,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getOrderInfo($incrementId)
     {
-        // @todo: Implement getOrderInfo() method.
     }
 
     /**
@@ -181,7 +171,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getCreditMemos()
     {
-        // @todo: Implement getCreditMemos() method.
     }
 
     /**
@@ -189,7 +178,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getCreditMemoInfo($incrementId)
     {
-        // @todo: Implement getCreditMemoInfo() method.
     }
 
     /**
@@ -197,7 +185,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function createCustomer(array $customerData)
     {
-        // @todo: Implement createCustomer() method.
     }
 
     /**
@@ -205,7 +192,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function updateCustomer($customerId, array $customerData)
     {
-        // @todo: Implement updateCustomer() method.
     }
 
     /**
@@ -213,7 +199,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function createCustomerAddress($customerId, array $item)
     {
-        // @todo: Implement createCustomerAddress() method.
     }
 
     /**
@@ -221,7 +206,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function updateCustomerAddress($customerAddressId, array $item)
     {
-        // @todo: Implement updateCustomerAddress() method.
     }
 
     /**
@@ -229,7 +213,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getCustomerAddressInfo($customerAddressId)
     {
-        // @todo: Implement getCustomerAddressInfo() method.
     }
 
     /**
@@ -237,7 +220,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getNewsletterSubscribers()
     {
-        // @todo: Implement getNewsletterSubscribers() method.
     }
 
     /**
@@ -245,7 +227,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function createNewsletterSubscriber(array $subscriberData)
     {
-        // @todo: Implement createNewsletterSubscriber() method.
     }
 
     /**
@@ -253,7 +234,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData)
     {
-        // @todo: Implement updateNewsletterSubscriber() method.
     }
 
     /**
@@ -302,7 +282,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getOrderNoteRequiredExtensionVersion()
     {
-        // @todo: Implement getOrderNoteRequiredExtensionVersion() method.
     }
 
     /**
@@ -310,7 +289,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function resetInitialState()
     {
-        // @todo: Implement resetInitialState() method.
     }
 
     /**
@@ -318,7 +296,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getServerTime()
     {
-        // @todo: Implement getServerTime() method.
     }
 
     /**
@@ -326,7 +303,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function init(Transport $transportEntity)
     {
-        // @todo: Implement init() method.
     }
 
     /**
@@ -334,7 +310,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getLabel()
     {
-        // @todo: Implement getLabel() method.
     }
 
     /**
@@ -342,7 +317,6 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getSettingsFormType()
     {
-        // @todo: Implement getSettingsFormType() method.
     }
 
     /**
@@ -350,6 +324,5 @@ class MagentoTransportProviderStub implements MagentoTransportInterface
      */
     public function getSettingsEntityFQCN()
     {
-        // @todo: Implement getSettingsEntityFQCN() method.
     }
 }

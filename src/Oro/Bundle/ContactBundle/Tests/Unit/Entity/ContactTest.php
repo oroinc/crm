@@ -13,6 +13,7 @@ use Oro\Bundle\ContactBundle\Entity\Group;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ContactTest extends \PHPUnit\Framework\TestCase
 {

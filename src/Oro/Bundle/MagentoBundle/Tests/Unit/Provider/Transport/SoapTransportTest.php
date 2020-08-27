@@ -18,6 +18,9 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class SoapTransportTest extends \PHPUnit\Framework\TestCase
 {
     /** @var SoapTransport|\PHPUnit\Framework\MockObject\MockObject */

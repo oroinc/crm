@@ -43,6 +43,7 @@ class CartRepository extends ChannelAwareEntityRepository
      * @param AclHelper $aclHelper
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFunnelChartData(
         \DateTime $dateFrom = null,

@@ -13,6 +13,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\MagentoBundle\Model\ExtendAddress;
 
 /**
+ * Represents an address.
+ *
  * @ORM\Table("orocrm_magento_customer_addr")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
@@ -29,6 +31,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendAddress;
  *      }
  * )
  * @ORM\Entity
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Address extends ExtendAddress implements OriginAwareInterface, IntegrationAwareInterface
 {

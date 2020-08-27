@@ -6,6 +6,9 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class B2bCustomerTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_ID = 12;

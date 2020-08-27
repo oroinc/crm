@@ -37,6 +37,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  *
  * @package Oro\Bundle\MagentoBundle
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class SoapTransport extends BaseSOAPTransport implements
     MagentoSoapTransportInterface,

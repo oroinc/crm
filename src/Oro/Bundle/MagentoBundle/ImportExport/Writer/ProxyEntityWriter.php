@@ -17,6 +17,9 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
+/**
+ * Prepares items for PersistentBatchWriter, filters for duplicates and takes only latest versions.
+ */
 class ProxyEntityWriter implements
     ItemWriterInterface,
     StepExecutionAwareInterface,
@@ -60,6 +63,7 @@ class ProxyEntityWriter implements
      * {@inheritdoc}
      *
      * Prepare items for PersistentBatchWriter, filters for duplicates and takes only latest versions
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function write(array $items)
     {

@@ -5,6 +5,9 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 use Oro\Bundle\ChannelBundle\Configuration\ChannelConfigurationProvider;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class SettingsProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ChannelConfigurationProvider|\PHPUnit\Framework\MockObject\MockObject */

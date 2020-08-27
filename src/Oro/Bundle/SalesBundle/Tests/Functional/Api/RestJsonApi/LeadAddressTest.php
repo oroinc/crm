@@ -11,6 +11,7 @@ use Oro\Bundle\SalesBundle\Entity\LeadAddress;
 
 /**
  * @dbIsolationPerTest
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class LeadAddressTest extends RestJsonApiTestCase
 {

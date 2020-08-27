@@ -11,6 +11,9 @@ use Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 use Oro\Component\Testing\Unit\Entity\Stub\StubEnumValue;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var LeadActionsAccessProvider */

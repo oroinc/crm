@@ -5,6 +5,11 @@ namespace Oro\Bundle\MagentoBundle\Service;
 use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 
+/**
+ * Processes address and customer changes.
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class CustomerStateHandler
 {
     /**
