@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for Magento Order entity.
  * @Route("/order")
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class OrderController extends Controller
 {

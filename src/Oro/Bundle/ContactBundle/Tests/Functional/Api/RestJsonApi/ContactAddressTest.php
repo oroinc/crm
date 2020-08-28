@@ -13,6 +13,7 @@ use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 /**
  * @dbIsolationPerTest
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ContactAddressTest extends RestJsonApiTestCase
 {

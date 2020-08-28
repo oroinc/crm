@@ -11,6 +11,9 @@ use Oro\Bundle\TrackingBundle\Entity\TrackingEventDictionary;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class TrackingCustomerIdentificationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var TrackingCustomerIdentification */

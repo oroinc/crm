@@ -31,6 +31,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendOrderAddress;
  *          }
  *      }
  * )
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterface, OriginAwareInterface
 {

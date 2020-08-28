@@ -8,7 +8,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendCartItem;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 /**
- * Class CartItem
+ * Represents a single cart item.
  *
  * @package Oro\Bundle\OroMagentoBundle\Entity
  * @ORM\Entity
@@ -42,6 +42,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
  *          }
  *      }
  * )
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CartItem extends ExtendCartItem implements OriginAwareInterface, IntegrationAwareInterface
 {

@@ -9,6 +9,9 @@ use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\UserBundle\Entity\User;
 
+/**
+ * Updates old forecast_of_opportunities configuration
+ */
 class UpdateForecastWidgetOptions extends AbstractFixture
 {
     /**
@@ -35,6 +38,7 @@ class UpdateForecastWidgetOptions extends AbstractFixture
      * Update old forecast_of_opportunities configuration
      *
      * @param Widget $widget
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processWidget(Widget $widget)
     {

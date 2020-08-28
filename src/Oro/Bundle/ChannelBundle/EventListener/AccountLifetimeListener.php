@@ -145,6 +145,7 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
     /**
      * @param Opportunity $entity
      * @param UnitOfWork  $uow
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function scheduleOpportunityAccount(Opportunity $entity, UnitOfWork $uow)
     {

@@ -66,6 +66,7 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
 
     /**
      * @param ObjectManager $om
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function persistDemoCalls(
         ObjectManager $om

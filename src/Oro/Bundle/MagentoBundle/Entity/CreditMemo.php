@@ -13,6 +13,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
+ * Represents a credit memo.
+ *
  * @ORM\Entity
  * @ORM\Table(
  *     name="orocrm_magento_credit_memo",
@@ -49,6 +51,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  * )
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CreditMemo extends ExtendCreditMemo implements
     ChannelAwareInterface,

@@ -21,6 +21,9 @@ use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;

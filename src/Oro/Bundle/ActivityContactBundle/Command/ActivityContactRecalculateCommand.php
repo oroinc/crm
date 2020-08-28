@@ -108,6 +108,7 @@ class ActivityContactRecalculateCommand extends Command
      * @param AbstractLogger $logger
      *
      * @return int
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function recalculate(AbstractLogger $logger)
     {

@@ -163,6 +163,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
      * @param string $className
      * @param string $oldField
      * @param string $newField
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function fixReportDefs(LoggerInterface $logger, $dryRun, $def, $row, $className, $oldField, $newField)
     {

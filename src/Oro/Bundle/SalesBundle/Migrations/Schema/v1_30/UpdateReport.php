@@ -128,6 +128,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
      * @param string $oldField
      * @param string $newField
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function fixDefinition($def, $row, $className, $replacements)
     {
