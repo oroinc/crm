@@ -109,12 +109,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
      */
     protected function persistDemoContactUsForm(ObjectManager $om)
     {
-        /** @var ContactReason[] $contactReasons */
-        $contactReasons = $om->getRepository('OroContactUsBundle:ContactReason')
-            ->getExistedContactReasonsQB()
-            ->addSelect('titles')
-            ->leftJoin('cr.titles', 'titles');
-
+        $contactReasons = $om->getRepository(ContactReason::class)->findAllExistingWithTitles();
         $contactReasonDefaultTitles = [];
 
         foreach ($contactReasons as $contactReason) {

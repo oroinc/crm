@@ -48,8 +48,6 @@ class OroCalendarCRMBridgeBundleInstaller implements
             'orocrm_contact',
             'orocrm_case',
             'orocrm_account',
-            'orocrm_magento_customer',
-            'orocrm_magento_order',
             'orocrm_sales_lead',
             'orocrm_sales_opportunity',
             'orocrm_sales_b2bcustomer',

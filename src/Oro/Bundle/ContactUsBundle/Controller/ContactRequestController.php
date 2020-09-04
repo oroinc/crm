@@ -4,19 +4,22 @@ namespace Oro\Bundle\ContactUsBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
+use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestEditType;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Contact Request Controller
  */
-class ContactRequestController extends Controller
+class ContactRequestController extends AbstractController
 {
     /**
      * @param ContactRequest $contactRequest
@@ -73,9 +76,12 @@ class ContactRequestController extends Controller
      *      class="OroContactUsBundle:ContactRequest"
      * )
      */
-    public function updateAction(ContactRequest $contactRequest)
-    {
-        return $this->update($contactRequest);
+    public function updateAction(
+        ContactRequest $contactRequest,
+        UpdateHandlerFacade $formHandler,
+        TranslatorInterface $translator
+    ) {
+        return $this->update($contactRequest, $formHandler, $translator);
     }
 
     /**
@@ -88,9 +94,11 @@ class ContactRequestController extends Controller
      *      class="OroContactUsBundle:ContactRequest"
      * )
      */
-    public function createAction()
-    {
-        return $this->update(new ContactRequest());
+    public function createAction(
+        UpdateHandlerFacade $formHandler,
+        TranslatorInterface $translator
+    ) {
+        return $this->update(new ContactRequest(), $formHandler, $translator);
     }
 
     /**
@@ -103,7 +111,7 @@ class ContactRequestController extends Controller
      * )
      * @CsrfProtection()
      */
-    public function deleteAction(ContactRequest $contactRequest)
+    public function deleteAction(ContactRequest $contactRequest): JsonResponse
     {
         /** @var EntityManager $em */
         $em = $this->get('doctrine.orm.entity_manager');
@@ -115,26 +123,28 @@ class ContactRequestController extends Controller
     }
 
     /**
-     * @param ContactRequest $contactRequest
-     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    protected function update(ContactRequest $contactRequest)
+    protected function update(
+        ContactRequest $contactRequest,
+        UpdateHandlerFacade $formHandler,
+        TranslatorInterface $translator
+    ) {
+        return $formHandler->update(
+            $contactRequest,
+            $this->createForm(ContactRequestEditType::class, $contactRequest),
+            $translator->trans('oro.contactus.contactrequest.entity.saved')
+        );
+    }
+
+    public static function getSubscribedServices(): array
     {
-        $handler = $this->get('oro_contact_us.contact_request.form.handler');
-
-        if ($handler->process($contactRequest)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                $this->get('translator')->trans('oro.contactus.contactrequest.entity.saved')
-            );
-
-            return $this->get('oro_ui.router')->redirect($contactRequest);
-        }
-
-        return [
-            'entity' => $contactRequest,
-            'form'   => $handler->getForm()->createView()
-        ];
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                UpdateHandlerFacade::class,
+                TranslatorInterface::class
+            ]
+        );
     }
 }

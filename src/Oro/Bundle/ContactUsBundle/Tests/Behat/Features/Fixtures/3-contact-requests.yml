@@ -1,0 +1,47 @@
+Oro\Bundle\ContactUsBundle\Entity\ContactReason:
+    contactReason:
+        defaultTitle: 'Some contact reason'
+
+Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
+    contactRequestArthur:
+        firstName: 'Arthur'
+        lastName: 'Doe'
+        organizationName: 'Company A'
+        preferredContactMethod: 'oro.contactus.contactrequest.method.phone'
+        phone: '(123) 456-7890'
+        contactReason: '@contactReason'
+        comment: 'Awesome!'
+        owner: '@organization'
+    contactRequestBen:
+        firstName: 'Ben'
+        lastName: 'Doe'
+        organizationName: 'Company A'
+        preferredContactMethod: 'oro.contactus.contactrequest.method.both'
+        phone: '(234) 567-8901'
+        emailAddress: 'ben@example.org'
+        contactReason: '@contactReason'
+        comment: 'Brilliant!'
+        owner: '@organization'
+    contactRequestCharlie:
+        firstName: 'Charlie'
+        lastName: 'Doe'
+        organizationName: 'Company A'
+        preferredContactMethod: 'oro.contactus.contactrequest.method.email'
+        emailAddress: 'charlie@example.org'
+        contactReason: '@contactReason'
+        comment: 'Creative!'
+        owner: '@organization'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+    account:
+        name: 'Company A Account'
+        owner: '@admin'
+        organization: '@organization'
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+    contact:
+        firstName: John
+        lastName: Doe
+        email: john@example.org
+        owner: '@admin'
+        organization: '@organization'

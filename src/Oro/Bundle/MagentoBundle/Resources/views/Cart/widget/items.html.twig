@@ -1,9 +1,0 @@
-{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
-
-<div class="widget-content">
-    {% if is_removed == 0 %}
-        {{ dataGrid.renderGrid('magento-cartitem-active-grid', {id: entity.id}) }}
-    {% else %}
-        {{ dataGrid.renderGrid('magento-cartitem-removed-grid', {id: entity.id}) }}
-    {% endif %}
-</div>

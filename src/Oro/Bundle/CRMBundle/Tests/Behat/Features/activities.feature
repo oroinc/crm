@@ -83,7 +83,7 @@ Feature: Activities
     Given go to Sales/ Leads
     And click "Create Lead"
     And fill form with:
-      | Lead name | Magento |
+      | Lead name | SomeCompany |
     And save and close form
     And go to Sales/ Leads
     And click view "OroInc" in grid
@@ -98,10 +98,10 @@ Feature: Activities
     And click "Add Context"
     And click "Context Entity Dropdown"
     And click on "Lead"
-    And click on Magento in grid
+    And click on SomeCompany in grid
     And go to Activities/ Tasks
     And click view "Sprint Nemo" in grid
-    Then should see "Context Magento OroInc"
+    Then should see "Context OroInc SomeCompany"
     When click "Delete"
     And click "Yes, Delete"
     Then I should see "Task deleted" flash message
@@ -219,9 +219,9 @@ Feature: Activities
     When click "Add Context"
     And click "Context Entity Dropdown"
     And click on "Lead"
-    And click on Magento in grid
+    And click on SomeCompany in grid
     Then I should see "The context has been added" flash message
-    And should see "Context Magento"
+    And should see "Context SomeCompany"
     And go to Activities/ Calendar Events
     And should see following grid:
       | Title                   | Calendar | Start                  | End                    | Recurrent | Recurrence | Invitation status |

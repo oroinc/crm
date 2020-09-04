@@ -7,11 +7,32 @@
         <div class="responsive-block">
             {{ ui.renderProperty('oro.contactus.contactrequest.first_name.label'|trans, entity.firstName) }}
             {{ ui.renderProperty('oro.contactus.contactrequest.last_name.label'|trans, entity.lastName) }}
-            {{ ui.renderHtmlProperty('oro.contactus.contactrequest.email_address.label'|trans, email.renderEmailWithActions(entity.emailAddress, entity)) }}
-            {{ ui.renderHtmlProperty('oro.contactus.contactrequest.phone.label'|trans, entity.phone ? ui.renderPhoneWithActions(entity.phone, entity) : null) }}
-            {{ ui.renderHtmlProperty('oro.contactus.contactrequest.comment.label'|trans, entity.comment|nl2br) }}
+            {{ ui.renderProperty('oro.contactus.contactrequest.organization_name.label'|trans, entity.organizationName) }}
+            {{ ui.renderProperty('oro.contactus.contactrequest.preferred_contact_method.label'|trans, entity.preferredContactMethod|trans) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
+
+        <div class="responsive-block">
+            {{ ui.renderHtmlProperty('oro.contactus.contactrequest.email_address.label'|trans, email.renderEmailWithActions(entity.emailAddress, entity)) }}
+            {{ ui.renderHtmlProperty('oro.contactus.contactrequest.phone.label'|trans, entity.phone ? ui.renderPhoneWithActions(entity.phone, entity) : null) }}
+            {{ ui.renderProperty('oro.contactus.contactrequest.contact_reason.label'|trans, entity.contactReason|trans) }}
+            {{ ui.renderHtmlProperty('oro.contactus.contactrequest.comment.label'|trans, entity.comment|nl2br) }}
+            {{ ui.renderHtmlProperty('oro.contactus.contactrequest.feedback.label'|trans, entity.feedback|nl2br) }}
+
+            {% if entity.opportunity %}
+                {{ ui.renderHtmlProperty(
+                    'oro.contactus.contactrequest.opportunity.label'|trans,
+                    ui.entityViewLink(entity.opportunity, entity.opportunity.name, 'oro_sales_opportunity_view')
+                ) }}
+            {% endif %}
+
+            {% if entity.lead %}
+                {{ ui.renderHtmlProperty(
+                    'oro.contactus.contactrequest.lead.label'|trans,
+                    ui.entityViewLink(entity.lead, entity.lead.name, 'oro_sales_lead_view')
+                ) }}
+            {% endif %}
         </div>
     </div>
 </div>

@@ -33,7 +33,7 @@ class SalesContext extends OroFeatureContext implements
     /**
      * Create Channel with enabled entities from frontend
      * Example: And "First Sales Channel" is a channel with enabled Business Customer entity
-     * Example: And "First Sales Channel" is a channel with enabled Business Customer, Magento Customer entities
+     * Example: And "First Sales Channel" is a channel with enabled Business Customer, Customer User entities
      *
      * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) (entities|entity)$/
      */
@@ -93,15 +93,5 @@ class SalesContext extends OroFeatureContext implements
         $repository = $this->getContainer()->get('doctrine')->getRepository(Channel::class);
 
         $this->fixtureLoader->addReference('first_channel', $repository->findOneBy([]));
-    }
-
-    /**
-     * Load accounts_with_customers.yml alice fixture
-     *
-     * @Given they has their own Accounts and Customers
-     */
-    public function accountHasBusinessCustomers()
-    {
-        $this->fixtureLoader->loadFixtureFile('OroMagentoBundle:accounts_with_customers.yml');
     }
 }

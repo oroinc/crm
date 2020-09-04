@@ -39,12 +39,12 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     name:
-                        label: oro.magento.datagrid.columns.page_total
+                        label: oro.reportcrm.datagrid.columns.page_total
 
             grand_total:
                 columns:
                     name:
-                        label: oro.magento.datagrid.columns.grand_total
+                        label: oro.reportcrm.datagrid.columns.grand_total
                     value:
                         expr: SUM( CASE WHEN lifetimeHistory.amount is NULL THEN 0 ELSE lifetimeHistory.amount END )
                         formatter: currency
@@ -108,11 +108,11 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     name:
-                        label: oro.magento.datagrid.columns.page_total
+                        label: oro.reportcrm.datagrid.columns.page_total
             grand_total:
                 columns:
                     name:
-                        label: oro.magento.datagrid.columns.grand_total
+                        label: oro.reportcrm.datagrid.columns.grand_total
         columns:
             name:             { label: oro.reportcrm.datagrid.columns.account_name }
         sorters:
@@ -157,11 +157,11 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     createdDate:
-                        label: oro.magento.datagrid.columns.page_total
+                        label: oro.reportcrm.datagrid.columns.page_total
             grand_total:
                 columns:
                     createdDate:
-                        label: oro.magento.datagrid.columns.grand_total
+                        label: oro.reportcrm.datagrid.columns.grand_total
                     leadsCount:
                         expr: COUNT(l.id)
         columns:
@@ -217,11 +217,11 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     statusLabel:
-                        label: oro.magento.datagrid.columns.page_total
+                        label: oro.reportcrm.datagrid.columns.page_total
             grand_total:
                 columns:
                     statusLabel:
-                        label: oro.magento.datagrid.columns.grand_total
+                        label: oro.reportcrm.datagrid.columns.grand_total
                     numberOfOpportunities:
                         expr: COUNT(opportunity.id)
                     closeRevenue:
@@ -328,11 +328,11 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     period:
-                        label: oro.magento.datagrid.columns.page_total
+                        label: oro.reportcrm.datagrid.columns.page_total
             grand_total:
                 columns:
                     period:
-                        label: oro.magento.datagrid.columns.grand_total
+                        label: oro.reportcrm.datagrid.columns.grand_total
                     cnt:
                         expr: COUNT( o.id )
                     value:
@@ -421,11 +421,11 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     ownerName:
-                        label: oro.magento.datagrid.columns.page_total
+                        label: oro.reportcrm.datagrid.columns.page_total
             grand_total:
                 columns:
                     ownerName:
-                        label: oro.magento.datagrid.columns.grand_total
+                        label: oro.reportcrm.datagrid.columns.grand_total
                     inProgressCount:
                         expr: COUNT( o.id )
                     budgetAmount:

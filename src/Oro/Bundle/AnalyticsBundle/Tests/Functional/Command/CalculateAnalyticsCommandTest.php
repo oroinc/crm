@@ -3,9 +3,7 @@
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Command;
 
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
-use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\Message;
@@ -23,7 +21,13 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         parent::setUp();
 
         $this->initClient();
-        $this->loadFixtures([LoadCustomerData::class]);
+
+        if (!\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
+            static::markTestSkipped('There is no suitable channel data in the system.');
+            return;
+        }
+
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\DataFixtures\LoadCustomerData']);
     }
 
     public function testShouldScheduleCalculateAnalyticsForGivenChannel()
@@ -104,10 +108,10 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.CustomerChannel');
 
-        /** @var Customer $customerOne */
+        /** @var \Oro\Bundle\MagentoBundle\Entity\Customer $customerOne */
         $customerOne = $this->getReference('Channel.CustomerChannel.Customer');
 
-        /** @var Customer $customerTwo */
+        /** @var \Oro\Bundle\MagentoBundle\Entity\Customer $customerTwo */
         $customerTwo = $this->getReference('Channel.CustomerChannel.Customer2');
 
         $result = $this->runCommand('oro:cron:analytic:calculate', [

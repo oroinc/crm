@@ -14,7 +14,6 @@
             "Oro\\Bridge\\CalendarCRM\\": "src/Oro/Bridge/CalendarCRM",
             "Oro\\Bridge\\CallCRM\\": "src/Oro/Bridge/CallCRM",
             "Oro\\Bridge\\CustomerPortalCRM\\": "src/Oro/Bridge/CustomerPortalCRM",
-            "Oro\\Bridge\\MarketingCRM\\": "src/Oro/Bridge/MarketingCRM",
             "Oro\\Bridge\\TaskCRM\\": "src/Oro/Bridge/TaskCRM",
             "Oro\\Bundle\\AccountBundle\\": "src/Oro/Bundle/AccountBundle",
             "Oro\\Bundle\\ActivityContactBundle\\": "src/Oro/Bundle/ActivityContactBundle",
@@ -25,7 +24,6 @@
             "Oro\\Bundle\\ContactUsBundle\\": "src/Oro/Bundle/ContactUsBundle",
             "Oro\\Bundle\\CRMBundle\\": "src/Oro/Bundle/CRMBundle",
             "Oro\\Bundle\\DemoDataBundle\\": "src/Oro/Bundle/DemoDataBundle",
-            "Oro\\Bundle\\MagentoBundle\\": "src/Oro/Bundle/MagentoBundle",
             "Oro\\Bundle\\ReportCRMBundle\\": "src/Oro/Bundle/ReportCRMBundle",
             "Oro\\Bundle\\SalesBundle\\": "src/Oro/Bundle/SalesBundle",
             "Oro\\Bundle\\TestFrameworkCRMBundle\\": "src/Oro/Bundle/TestFrameworkCRMBundle"

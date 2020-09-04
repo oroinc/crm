@@ -1,0 +1,83 @@
+oro:
+    workflow:
+        orocrm_contact_us_contact_request:
+            label: 'Contact Request'
+            step:
+                open:
+                    label: Open
+                resolved:
+                    label: Resolved
+                converted_to_opportunity:
+                    label: 'Converted to Opportunity'
+                converted_to_lead:
+                    label: 'Converted to Lead'
+            attribute:
+                opportunity_name:
+                    label: 'Opportunity name'
+                opportunity_owner:
+                    label: Owner
+                opportunity_budget:
+                    label: 'Budget amount'
+                lead_owner:
+                    label: Owner
+                lead_name:
+                    label: 'Lead name'
+                lead_first_name:
+                    label: 'First name'
+                lead_last_name:
+                    label: 'Last name'
+                lead_phone:
+                    label: 'Phone number'
+                lead_email:
+                    label: Email
+                lead_phone_entity:
+                    label: 'Lead Phone'
+                feedback:
+                    label: Feedback
+                account:
+                    label: Account
+                contact:
+                    label: Contact
+                customer_association:
+                    label: Account
+            transition:
+                convert_to_opportunity:
+                    label: 'Convert to Opportunity'
+                    warning_message: ''
+                    attribute:
+                        contact:
+                            label: Contact
+                        feedback:
+                            label: 'Feedback'
+                        opportunity_budget:
+                            label: 'Budget amount'
+                        opportunity_name:
+                            label: 'Opportunity name'
+                        opportunity_owner:
+                            label: 'Owner'
+                convert_to_lead:
+                    label: 'Convert to Lead'
+                    warning_message: ''
+                    attribute:
+                        contact:
+                            label: Contact
+                        feedback:
+                            label: 'Feedback'
+                        lead_email:
+                            label: 'Email'
+                        lead_first_name:
+                            label: 'First name'
+                        lead_last_name:
+                            label: 'Last name'
+                        lead_name:
+                            label: 'Lead name'
+                        lead_owner:
+                            label: 'Owner'
+                        lead_phone:
+                            label: 'Phone number'
+                resolve:
+                    label: Resolve
+                    warning_message: ''
+                    attribute:
+                        feedback:
+                            label: 'Feedback'

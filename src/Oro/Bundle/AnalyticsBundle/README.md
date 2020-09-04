@@ -2,7 +2,7 @@
 
 OroAnalyticsBundle provides a framework that allows developers to enable analytical metrics in OroCRM applications.
 
-Out-of-the-box, the bundle implement [RFM](https://en.wikipedia.org/wiki/RFM_\(customer_value\)) metric, allows users to enable the metric and to configure score for metric parameters for Magento Channels, then see RFM metric on accounts and Magento customers view pages or build custom reports based on the calculated RFM metric data.
+Out-of-the-box, the bundle implement [RFM](https://en.wikipedia.org/wiki/RFM_\(customer_value\)) metric, allows users to enable the metric and to configure score for metric parameters for various sales channels, then see RFM metric on account and customer view pages or build custom reports based on the calculated RFM metric data.
 
 ## Overview
 

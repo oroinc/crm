@@ -3,24 +3,28 @@
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Builder;
 
 use Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder;
-use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
-use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadOrderData;
-use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadRFMMetricCategoryData;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RFMBuilderTest extends WebTestCase
 {
-    /**
-     * @var RFMBuilder
-     */
+    /** @var RFMBuilder */
     protected $builder;
 
     protected function setUp(): void
     {
         $this->initClient();
-        $this->loadFixtures([LoadCustomerData::class, LoadRFMMetricCategoryData::class, LoadOrderData::class]);
+
+        if (!\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
+            static::markTestSkipped('There is no suitable channel data in the system.');
+            return;
+        }
+
+        $this->loadFixtures([
+            'Oro\Bundle\MagentoBundle\Tests\Functional\DataFixtures\LoadCustomerData',
+            'Oro\Bundle\MagentoBundle\Tests\Functional\DataFixtures\LoadRFMMetricCategoryData',
+            'Oro\Bundle\MagentoBundle\Tests\Functional\DataFixtures\LoadOrderData',
+        ]);
 
         $this->builder = $this->getContainer()->get('oro_analytics.builder.rfm');
     }
@@ -79,8 +83,9 @@ class RFMBuilderTest extends WebTestCase
             ->getRepository('Oro\Bundle\MagentoBundle\Entity\Customer');
 
         $actualData = $repository->findBy(['dataChannel' => $channel]);
-        /** @var Customer[] $actualData */
-        $actualData = array_reduce($actualData, function ($result, Customer $item) {
+        /** @var \Oro\Bundle\MagentoBundle\Entity\Customer[] $actualData */
+        $actualData = array_reduce($actualData, function ($result, $item) {
+            /** @var \Oro\Bundle\MagentoBundle\Entity\Customer $item */
             $result[$item->getId()] = [
                 'recency' => $item->getRecency(),
                 'frequency' => $item->getFrequency(),

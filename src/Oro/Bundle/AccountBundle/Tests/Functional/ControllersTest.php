@@ -1,143 +1,58 @@
 <?php
+declare(strict_types=1);
 
 namespace Oro\Bundle\AccountBundle\Tests\Functional;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DomCrawler\Form;
 
+/**
+ * @dbIsolationPerTest
+ */
 class ControllersTest extends WebTestCase
 {
     protected function setUp(): void
     {
-        $this->initClient(
-            array(),
-            $this->generateBasicAuthHeader()
-        );
+        $this->initClient([], static::generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
+        $this->loadFixtures(['@OroAccountBundle/Tests/Functional/DataFixtures/accounts_data.yml']);
     }
 
-    public function testIndex()
+    public function testContactUpdateGrid()
     {
-        $this->client->request('GET', $this->getUrl('oro_account_index'));
-        $result = $this->client->getResponse();
-        $this->assertHtmlResponseStatusCodeEquals($result, 200);
-    }
+        $accountRepository = static::getContainer()->get('doctrine')->getRepository(Account::class);
+        $accountId = $accountRepository->findOneBy(['name' => 'Account 1'])->getId();
 
-    public function testCreate()
-    {
-        $crawler = $this->client->request('GET', $this->getUrl('oro_account_create'));
-        /** @var Form $form */
-        $form = $crawler->selectButton('Save and Close')->form();
-        $form['oro_account_form[name]'] = 'Account_name';
-        $form['oro_account_form[owner]'] = 1;
+        $this->client->request('GET', $this->getUrl('oro_account_view', ['id' => $accountId]));
 
         $this->client->followRedirects(true);
-        $crawler = $this->client->submit($form);
-
-        $result = $this->client->getResponse();
-        $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Account saved", $crawler->html());
-    }
-
-    /**
-     * @depends testCreate
-     */
-    public function testUpdate()
-    {
-        $response = $this->client->requestGrid(
-            'accounts-grid',
-            array('accounts-grid[_filter][name][value]' => 'Account_name')
-        );
-
-        $result = $this->getJsonResponseContent($response, 200);
-        $result = reset($result['data']);
-
-        $id = $result['id'];
-        $crawler = $this->client->request(
-            'GET',
-            $this->getUrl('oro_account_update', array('id' => $result['id']))
-        );
-        /** @var Form $form */
-        $form = $crawler->selectButton('Save and Close')->form();
-        $form['oro_account_form[name]'] = 'Account_name_update';
-
-        $this->client->followRedirects(true);
-        $crawler = $this->client->submit($form);
-
-        $result = $this->client->getResponse();
-        $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Account saved", $crawler->html());
-
-        return $id;
-    }
-
-    /**
-     * @depends testUpdate
-     */
-    public function testView($id)
-    {
-        $crawler = $this->client->request(
-            'GET',
-            $this->getUrl('oro_account_view', array('id' => $id))
-        );
-
-        $result = $this->client->getResponse();
-        $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Account_name_update - Accounts - Customers", $crawler->html());
-    }
-
-    /**
-     * @depends testUpdate
-     */
-    public function testContactWidget($id)
-    {
-        $this->client->request(
-            'GET',
-            $this->getUrl(
-                'oro_account_widget_contacts_info',
-                array('id' => $id, '_widgetContainer' => 'dialog')
-            )
-        );
-        //just verify method OK
-        $result = $this->client->getResponse();
-        $this->assertHtmlResponseStatusCodeEquals($result, 200);
-    }
-
-    /**
-     * @depends testUpdate
-     */
-    public function testContactUpdateGrid($id)
-    {
         $response = $this->client->requestGrid(
             'account-contacts-update-grid',
-            array('account-contacts-update-grid[account]' => $id)
+            ['account-contacts-update-grid[account]' => $accountId]
         );
 
-        $result = $this->getJsonResponseContent($response, 200);
+        $result = static::getJsonResponseContent($response, 200);
 
-        $this->assertEmpty($result['data']);
-        $this->assertEquals(0, $result['options']['totalRecords']);
+        static::assertCount(2, $result['data'], \var_export($result['data'], true));
+        static::assertEquals(2, $result['options']['totalRecords']);
     }
 
-    /**
-     * @depends testUpdate
-     */
-    public function testDelete($id)
+    public function testDelete()
     {
-        $this->ajaxRequest(
-            'DELETE',
-            $this->getUrl('oro_api_delete_account', array('id' => $id))
-        );
+        $accountRepository = static::getContainer()->get('doctrine')->getRepository(Account::class);
+        $accountId = $accountRepository->findOneBy(['name' => 'Account 1'])->getId();
+
+        $this->client->request('GET', $this->getUrl('oro_account_view', ['id' => $accountId]));
+
+        $this->client->followRedirects(true);
+        $this->ajaxRequest('DELETE', $this->getUrl('oro_api_delete_account', ['id' => $accountId]));
 
         $result = $this->client->getResponse();
-        $this->assertEmptyResponseStatusCodeEquals($result, 204);
+        static::assertEmptyResponseStatusCodeEquals($result, 204);
 
-        $this->client->request(
-            'GET',
-            $this->getUrl('oro_account_view', array('id' => $id))
-        );
+        $this->client->request('GET', $this->getUrl('oro_account_view', ['id' => $accountId]));
 
         $result = $this->client->getResponse();
-        $this->assertHtmlResponseStatusCodeEquals($result, 404);
+        static::assertHtmlResponseStatusCodeEquals($result, 404);
     }
 }

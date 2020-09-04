@@ -12,7 +12,6 @@ use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
 use Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Entity\Customer as CustomerEntity;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Component\TestUtils\ORM\OrmTestCase;
 
@@ -179,9 +178,7 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     {
         $account = $this->createMock(Account::class);
         $channel = $this->createMock(Channel::class);
-        $customer = (new CustomerEntity())
-            ->setAccount($account)
-            ->setDataChannel($channel);
+        $customer = new \stdClass();
 
         $channelDoctrineListener = new class($this->settingsProvider) extends ChannelDoctrineListener {
             public function xgetQueued(): array
@@ -205,9 +202,7 @@ class ChannelDoctrineListenerTest extends OrmTestCase
 
         $account = $this->createMock(Account::class);
         $channel = $this->createMock(Channel::class);
-        $customer = (new CustomerEntity())
-            ->setAccount($account)
-            ->setDataChannel($channel);
+        $customer = new \stdClass();
 
         $this->channelDoctrineListener->scheduleEntityUpdate($customer, $account, $channel);
     }

@@ -1,0 +1,293 @@
+workflows:
+    orocrm_contact_us_contact_request:
+        force_autostart: true
+        entity:   Oro\Bundle\ContactUsBundle\Entity\ContactRequest
+        entity_attribute: request
+        start_step: open
+        steps:
+            open:
+                order: 10
+                allowed_transitions:
+                    - convert_to_opportunity
+                    - convert_to_lead
+                    - resolve
+            resolved:
+                order: 40
+            converted_to_opportunity:
+                order: 30
+            converted_to_lead:
+                order: 30
+
+        attributes:
+            # opportunity attributes
+            opportunity_name:
+                type:   string
+            opportunity_owner:
+                type:  entity
+                options:
+                    class: Oro\Bundle\UserBundle\Entity\User
+            opportunity_budget:
+                type:  object
+                options:
+                    class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
+
+            # lead attributes
+            lead_owner:
+                type:  entity
+                options:
+                    class: Oro\Bundle\UserBundle\Entity\User
+            lead_name:
+                type:      string
+            lead_first_name:
+                type:      string
+            lead_last_name:
+                type:      string
+            lead_phone:
+                type:     string
+            lead_email:
+                type:     string
+            lead_phone_entity:
+                type:  entity
+                options:
+                    class: Oro\Bundle\SalesBundle\Entity\LeadPhone
+
+            # Other workflow attributes
+            feedback:
+                type:          string
+                property_path: request.feedback
+            account:
+                type:   entity
+                options:
+                    class: Oro\Bundle\AccountBundle\Entity\Account
+            contact:
+                type:     entity
+                options:
+                    class: Oro\Bundle\ContactBundle\Entity\Contact
+            customer_association:
+                type: entity
+                options:
+                    class: Oro\Bundle\SalesBundle\Entity\Customer
+        transitions:
+            convert_to_opportunity:
+                step_to:  converted_to_opportunity
+                is_start: true
+                is_unavailable_hidden: true
+                acl_resource: oro_sales_opportunity_create
+                frontend_options:
+                    icon: 'fa-usd'
+                transition_definition: convert_to_opportunity_definition
+                form_options:
+                    attribute_fields:
+                        opportunity_name:
+                            form_type: Symfony\Component\Form\Extension\Core\Type\TextType
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        opportunity_owner:
+                            form_type: Oro\Bundle\UserBundle\Form\Type\UserSelectType
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        customer_association:
+                            form_type: Oro\Bundle\SalesBundle\Form\Type\CustomerType
+                            options:
+                                parent_class: Oro\Bundle\AccountBundle\Entity\Account
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        contact:
+                            form_type: Oro\Bundle\ContactBundle\Form\Type\ContactSelectType
+                            options:
+                                required: false
+                        opportunity_budget:
+                            form_type: Oro\Bundle\CurrencyBundle\Form\Type\MultiCurrencyType
+                            options:
+                                required: false
+                        feedback:
+                            form_type: Symfony\Component\Form\Extension\Core\Type\TextareaType
+                            options:
+                                required: false
+                    form_init:
+                        - '@assign_active_user': $opportunity_owner
+                        - '@format_name':
+                            attribute: $opportunity_name
+                            object:    $request
+                        - '@find_customer_association':
+                            conditions:
+                                '@and': # if customer_association is empty and customer is specified
+                                    - '@empty':     $customer_association
+                                    - '@not_empty': $request.customer_user.customer
+                            customer: $request.customer_user.customer
+                            attribute: $customer_association
+            convert_to_lead:
+                step_to:   converted_to_lead
+                is_start:  true
+                is_unavailable_hidden: true
+                acl_resource: oro_sales_lead_create
+                frontend_options:
+                    icon: 'fa-phone-square'
+                transition_definition: convert_to_lead_definition
+                form_options:
+                    attribute_fields:
+                        lead_owner:
+                            form_type: Oro\Bundle\UserBundle\Form\Type\UserSelectType
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        contact:
+                            form_type: Oro\Bundle\ContactBundle\Form\Type\ContactSelectType
+                            options:
+                                required: false
+                        lead_name:
+                            form_type: Symfony\Component\Form\Extension\Core\Type\TextType
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        lead_first_name:
+                            form_type: Symfony\Component\Form\Extension\Core\Type\TextType
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        lead_last_name:
+                            form_type: Symfony\Component\Form\Extension\Core\Type\TextType
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        lead_phone:
+                            form_type: Symfony\Component\Form\Extension\Core\Type\TextType
+                            options:
+                                required: false
+                        lead_email:
+                            form_type: Symfony\Component\Form\Extension\Core\Type\TextType
+                            options:
+                                required: false
+                                constraints:
+                                   - Email: ~
+                        feedback:
+                            form_type: Symfony\Component\Form\Extension\Core\Type\TextareaType
+                            options:
+                                required: false
+                    form_init:
+                        - '@assign_active_user': $lead_owner
+                        - '@format_name':
+                            attribute: $lead_name
+                            object:    $request
+                        - '@assign_value': [$lead_first_name, $request.firstName]
+                        - '@assign_value': [$lead_last_name,  $request.lastName]
+                        - '@assign_value': [$lead_phone,  $request.phone]
+                        - '@assign_value': [$lead_email,  $request.emailAddress]
+            resolve:
+                step_to:    resolved
+                is_start:   true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'fa-check-square-o'
+                transition_definition: resolve_definition
+                form_options:
+                    attribute_fields:
+                        feedback:
+                            form_type: Symfony\Component\Form\Extension\Core\Type\TextareaType
+                            options:
+                                required: false
+
+        transition_definitions:
+            __start___definition:
+                preconditions:
+                    '@not_empty': $request.id
+            convert_to_opportunity_definition:
+                preconditions:
+                    '@feature_enabled':
+                        feature: 'sales_opportunity'
+                conditions:
+                    '@and':
+                        - '@not_empty':
+                            parameters: $opportunity_name
+                            message:    'Opportunity name must be set'
+                        - '@not_empty':
+                            parameters: $opportunity_owner
+                            message:    'Owner must be set'
+                        - '@not_empty':
+                            parameters: $customer_association
+                            message:    'Account must be set'
+                actions:
+                    - '@request_enum_entity':
+                        enum_code: opportunity_status
+                        identifier:  'in_progress'
+                        attribute:   $.result.opportunity_status
+                    - '@create_entity': # create an opportunity
+                        class:     Oro\Bundle\SalesBundle\Entity\Opportunity
+                        attribute: $request.opportunity
+                        data:
+                            name:                 $opportunity_name
+                            owner:                $opportunity_owner
+                            budgetAmount:         $opportunity_budget
+                            contact:              $contact
+                            status:               $.result.opportunity_status
+                            notes:                $feedback
+                            customer_association: $customer_association
+
+            convert_to_lead_definition:
+                preconditions:
+                    '@feature_enabled':
+                        feature: 'sales_lead'
+                conditions:
+                    '@and':
+                        - '@not_empty':
+                            parameters: $lead_name
+                            message:    'Lead name must be set'
+                        - '@not_empty':
+                            parameters: $lead_owner
+                            message:    'Lead must be set'
+                actions:
+                    - '@request_enum_entity':
+                        enum_code: lead_status
+                        identifier:  'new'
+                        attribute:   $.result.lead_status
+                    - '@create_entity': # create a lead
+                        class:     Oro\Bundle\SalesBundle\Entity\Lead
+                        attribute: $request.lead
+                        data:
+                            name:         $lead_name
+                            firstName:    $lead_first_name
+                            lastName:     $lead_last_name
+                            owner:        $lead_owner
+                            contact:      $contact
+                            status:       $.result.lead_status
+                            notes:        $feedback
+                    - '@tree':
+                        conditions:
+                            '@not_empty': [$lead_phone]
+                        actions:
+                            - '@create_entity': # create Lead phone
+                                class:     Oro\Bundle\SalesBundle\Entity\LeadPhone
+                                attribute: $lead_phone_entity
+                                data:
+                                    phone:   $lead_phone
+                                    primary: true
+                            - '@call_method': # add Lead Phone to Lead
+                                object: $request.lead
+                                method: addPhone
+                                method_parameters: [$lead_phone_entity]
+                    - '@tree':
+                        conditions:
+                            '@not_empty': [$lead_email]
+                        actions:
+                            - '@create_entity': # create a lead email (LeadEmail)
+                                class: Oro\Bundle\SalesBundle\Entity\LeadEmail
+                                attribute: $.result.lead_email
+                                data:
+                                    email: $lead_email
+                                    primary: true
+                            - '@call_method': # add lead email to lead
+                                object: $request.lead
+                                method: addEmail
+                                method_parameters: [$.result.lead_email]
+            resolve_definition:
+                preconditions:
+                    '@not_empty': $request.id

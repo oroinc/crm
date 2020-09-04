@@ -16,7 +16,6 @@ oro:
             shortcut_list_accounts.label: Show Accounts list
             shortcut_list_accounts.description: List of accounts
         widgets:
-            magento_channel:        Magento Channel
             account_information:    Account Information
 
         account_actions:            Account actions
