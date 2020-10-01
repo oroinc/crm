@@ -1,5 +1,4 @@
 @ticket-BAP-16828
-@skip
 
 Feature: Lead report by date
   In order to show lead report

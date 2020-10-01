@@ -1,5 +1,4 @@
 @ticket-BAP-18621
-@skip
 
 Feature: Opportunity won report
   In order to show opportunity report
