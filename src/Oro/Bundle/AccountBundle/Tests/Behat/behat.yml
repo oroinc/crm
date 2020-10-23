@@ -13,5 +13,8 @@ oro_behat_extension:
         - OroEmailBundle::EmailContext
         - OroNavigationBundle::TabContext
         - OroConfigBundle::FeatureContext
+        - OroImportExportBundle::ImportExportContext:
+            - '@oro_entity.entity_alias_resolver'
+            - '@oro_importexport.processor.registry'
       paths:
         - '@OroAccountBundle/Tests/Behat/Features'
