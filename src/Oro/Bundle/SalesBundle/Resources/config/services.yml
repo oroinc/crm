@@ -407,7 +407,7 @@ services:
             - '@oro_security.acl_helper'
             - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_entity_extend.enum_value_provider'
-            - '@oro_query_designer.query_designer.filter_processor'
+            - '@oro_segment.query.filter_processor'
             - '@oro_currency.query.currency_transformer'
             - '@oro_user.dashboard.owner_helper'
 
@@ -426,7 +426,7 @@ services:
             - '@doctrine'
             - '@oro_security.acl_helper'
             - '@oro_dashboard.widget_provider.filter_manager'
-            - '@oro_query_designer.query_designer.filter_processor'
+            - '@oro_segment.query.filter_processor'
             - '@oro_locale.formatter.number'
             - '@oro_currency.query.currency_transformer'
 
