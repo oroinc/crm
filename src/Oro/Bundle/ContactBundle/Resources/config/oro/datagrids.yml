@@ -455,7 +455,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            class: OroContactBundle:Source
+                            class: Oro\Bundle\ContactBundle\Entity\Source
                             choice_label: label
                             translatable_options: false
                 countryName:
@@ -576,7 +576,7 @@ datagrids:
                         THEN true ELSE false END
                       END) as hasContact
                 from:
-                    - { table: OroAccountBundle:Account, alias: a }
+                    - { table: Oro\Bundle\AccountBundle\Entity\Account, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }
@@ -761,7 +761,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            class: OroContactBundle:Source
+                            class: Oro\Bundle\ContactBundle\Entity\Source
                             choice_label: label
                             translatable_options: false
                 countryName:
@@ -770,7 +770,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            class: OroAddressBundle:Country
+                            class: Oro\Bundle\AddressBundle\Entity\Country
                             choice_label: name
                             query_builder: "@oro_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
@@ -873,7 +873,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            class: OroContactBundle:Source
+                            class: Oro\Bundle\ContactBundle\Entity\Source
                             choice_label: label
                             translatable_options: false
                 countryName:
@@ -882,7 +882,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            class: OroAddressBundle:Country
+                            class: Oro\Bundle\AddressBundle\Entity\Country
                             choice_label: name
                             query_builder: "@oro_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
