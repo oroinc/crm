@@ -119,7 +119,7 @@ datagrids:
                 select:
                     - contactReason.id
                 from:
-                    - { table: OroContactUsBundle:ContactReason, alias: contactReason }
+                    - { table: Oro\Bundle\ContactUsBundle\Entity\ContactReason, alias: contactReason }
                 where:
                     and:
                         - contactReason.deletedAt IS NULL

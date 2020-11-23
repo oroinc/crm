@@ -232,7 +232,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            class: OroSalesBundle:OpportunityCloseReason
+                            class: Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
                             choice_label: label
                             translatable_options: false
                 closeDate:
@@ -634,7 +634,7 @@ datagrids:
                     options:
                         lazy: true
                         field_options:
-                            class: OroAddressBundle:Country
+                            class: Oro\Bundle\AddressBundle\Entity\Country
                             choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
@@ -960,7 +960,7 @@ datagrids:
                      options:
                          lazy: true
                          field_options:
-                             class: OroAddressBundle:Country
+                             class: Oro\Bundle\AddressBundle\Entity\Country
                              choice_label: name
                              query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                              translatable_options: false
@@ -1150,7 +1150,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroChannelBundle:Channel
+                            class: Oro\Bundle\ChannelBundle\Entity\Channel
                             choice_label: name
                             translatable_options: false
                  name:
@@ -1297,7 +1297,7 @@ datagrids:
                     options:
                         lazy: true
                         field_options:
-                            class: OroAddressBundle:Country
+                            class: Oro\Bundle\AddressBundle\Entity\Country
                             choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
@@ -1324,7 +1324,7 @@ datagrids:
                     options:
                         lazy: true
                         field_options:
-                            class: OroAddressBundle:Country
+                            class: Oro\Bundle\AddressBundle\Entity\Country
                             choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
@@ -1562,7 +1562,7 @@ datagrids:
                     options:
                         lazy: true
                         field_options:
-                            class: OroAddressBundle:Country
+                            class: Oro\Bundle\AddressBundle\Entity\Country
                             choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
@@ -1909,7 +1909,7 @@ datagrids:
                     data_name: o.owner
                     options:
                         field_options:
-                            class: OroUserBundle:User
+                            class: Oro\Bundle\UserBundle\Entity\User
                             multiple: true
                             choice_label: fullName
                             translatable_options: false
@@ -1954,7 +1954,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroChannelBundle:Channel
+                            class: Oro\Bundle\ChannelBundle\Entity\Channel
                             choice_label: name
                             translatable_options: false
                  name:
@@ -2168,7 +2168,7 @@ datagrids:
                     data_name: o.owner
                     options:
                         field_options:
-                            class: OroUserBundle:User
+                            class: Oro\Bundle\UserBundle\Entity\User
                             multiple: true
                             choice_label: fullName
                             translatable_options: false
@@ -2299,7 +2299,7 @@ datagrids:
                     options:
                         lazy: true
                         field_options:
-                            class: OroAddressBundle:Country
+                            class: Oro\Bundle\AddressBundle\Entity\Country
                             choice_label: name
                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false

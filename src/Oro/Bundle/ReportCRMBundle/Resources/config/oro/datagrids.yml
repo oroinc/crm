@@ -10,10 +10,10 @@ datagrids:
                     - a.name
                     - SUM( CASE WHEN lifetimeHistory.amount is NULL THEN 0 ELSE lifetimeHistory.amount END ) as value
                 from:
-                    - { table: OroAccountBundle:Account, alias: a }
+                    - { table: Oro\Bundle\AccountBundle\Entity\Account, alias: a }
                 join:
                     left:
-                        - { join: OroChannelBundle:LifetimeValueHistory, alias: lifetimeHistory, conditionType: WITH, condition: "lifetimeHistory.account = a and lifetimeHistory.status = true" }
+                        - { join: Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory, alias: lifetimeHistory, conditionType: WITH, condition: "lifetimeHistory.account = a and lifetimeHistory.status = true" }
                 groupBy:  a.id
         columns:
             name:   { label: oro.reportcrm.datagrid.columns.account_name }
@@ -77,7 +77,7 @@ datagrids:
             type: orm
             query:
                 from:
-                    - { table: OroSalesBundle:Opportunity, alias: o }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 select:
                     - a.id
                     - a.name
@@ -148,7 +148,7 @@ datagrids:
                     - COUNT(l.id) as leadsCount
                     - DATE(@oro_datagrid.helper.date->getConvertTimezoneExpression(l.createdAt)) as createdDate
                 from:
-                    - { table: OroSalesBundle:Lead, alias: l }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Lead, alias: l }
                 groupBy: createdDate
         totals:
             total:
@@ -192,7 +192,7 @@ datagrids:
                 join:
                     # if any date filter is used, this will be replaced by OpportunitiesByStatusReportListener
                     left:
-                        - { join: OroSalesBundle:Opportunity, alias: opportunity, conditionType: WITH, condition: "opportunity.status = status" }
+                        - { join: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: opportunity, conditionType: WITH, condition: "opportunity.status = status" }
                 select:
                     - status.name as statusLabel
                     - status.priority as statusPriority
@@ -308,7 +308,7 @@ datagrids:
                         ) as value
                     - COUNT(o.id) as cnt
                 from:
-                    - { table: OroSalesBundle:Opportunity, alias: o }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 join:
                     inner:
                         - { join: o.status, alias: s }
@@ -405,7 +405,7 @@ datagrids:
                             @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(budgetAmount, o) * o.probability
                         ) as weightedForecast
                 from:
-                    - { table: OroSalesBundle:Opportunity, alias: o }
+                    - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 join:
                     inner:
                         - { join: o.status, alias: s }

@@ -357,7 +357,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            class: OroAddressBundle:Country
+                            class: Oro\Bundle\AddressBundle\Entity\Country
                             choice_label: name
                             query_builder: "@oro_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
@@ -545,7 +545,7 @@ datagrids:
                     data_name: a.owner
                     options:
                         field_options:
-                            class: 'Oro\Bundle\UserBundle\Entity\User'
+                            class: Oro\Bundle\UserBundle\Entity\User
                             multiple: true
                             choice_label: fullName
                             translatable_options: false
