@@ -4,57 +4,58 @@ oro_entity:
         - { entity: Oro\Bundle\SalesBundle\Entity\Opportunity, field: baseCloseRevenueValue }
         - { entity: Oro\Bundle\SalesBundle\Entity\Opportunity, field: customerAssociation }
         - { entity: Oro\Bundle\SalesBundle\Entity\Lead, field: customerAssociation }
+
     virtual_fields:
         Oro\Bundle\SalesBundle\Entity\B2bCustomer:
             primaryEmail:
                 query:
                     select:
-                        expr:         emails.email
-                        return_type:  string
+                        expr: emails.email
+                        return_type: string
                     join:
                         left:
-                            - { join: entity.emails, alias: emails, conditionType: 'WITH', condition: 'emails.primary = true' }
+                            - { join: entity.emails, alias: emails, conditionType: WITH, condition: 'emails.primary = true' }
             primaryPhone:
                 query:
                     select:
-                        expr:         phones.phone
-                        return_type:  string
+                        expr: phones.phone
+                        return_type: string
                     join:
                         left:
-                            - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
+                            - { join: entity.phones, alias: phones, conditionType: WITH, condition: 'phones.primary = true' }
             contactInformation:
                 query:
                     select:
-                        expr:         emails.email
-                        return_type:  string
+                        expr: emails.email
+                        return_type: string
                     join:
                         left:
-                            - { join: entity.emails, alias: emails, conditionType: 'WITH', condition: 'emails.primary = true' }
+                            - { join: entity.emails, alias: emails, conditionType: WITH, condition: 'emails.primary = true' }
         Oro\Bundle\SalesBundle\Entity\Lead:
             primaryEmail:
                 query:
                     select:
-                        expr:         emails.email
-                        return_type:  string
+                        expr: emails.email
+                        return_type: string
                     join:
                         left:
-                            - { join: entity.emails, alias: emails, conditionType: 'WITH', condition: 'emails.primary = true' }
+                            - { join: entity.emails, alias: emails, conditionType: WITH, condition: 'emails.primary = true' }
             primaryPhone:
                 query:
                     select:
-                        expr:         phones.phone
-                        return_type:  string
+                        expr: phones.phone
+                        return_type: string
                     join:
                         left:
-                            - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
+                            - { join: entity.phones, alias: phones, conditionType: WITH, condition: 'phones.primary = true' }
             contactInformation:
                 query:
                     select:
-                        expr:         emails.email
-                        return_type:  string
+                        expr: emails.email
+                        return_type: string
                     join:
                         left:
-                            - { join: entity.emails, alias: emails, conditionType: 'WITH', condition: 'emails.primary = true' }
+                            - { join: entity.emails, alias: emails, conditionType: WITH, condition: 'emails.primary = true' }
 
     virtual_relations:
         Oro\Bundle\SalesBundle\Entity\Lead:
@@ -75,8 +76,7 @@ oro_entity:
                 query:
                     join:
                         left:
-                            - { join: entity.addresses, alias: addresses, conditionType: 'WITH', condition: 'addresses.primary = true' }
-
+                            - { join: entity.addresses, alias: addresses, conditionType: WITH, condition: 'addresses.primary = true' }
         Oro\Bundle\SalesBundle\Entity\Opportunity:
             account:
                 relation_type: oneToMany
