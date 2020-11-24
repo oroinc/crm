@@ -4,17 +4,17 @@ oro_entity:
             lifetimeValue:
                 query:
                     select:
-                        expr:         SUM( CASE WHEN h.amount is NULL THEN 0 ELSE h.amount END )
-                        return_type:  money
+                        expr: SUM(CASE WHEN h.amount is NULL THEN 0 ELSE h.amount END)
+                        return_type: money
                     join:
                         left:
-                            - { join: 'OroChannelBundle:LifetimeValueHistory', alias: 'h', conditionType: 'WITH', condition: 'h.account = entity AND h.status = true' }
+                            - { join: Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory, alias: h, conditionType: WITH, condition: 'h.account = entity AND h.status = true' }
             contactInformation:
                 query:
                     select:
-                        expr:         defaultContactEmails.email
-                        return_type:  string
+                        expr: defaultContactEmails.email
+                        return_type: string
                     join:
                         left:
                             - { join: entity.defaultContact, alias: defaultContact }
-                            - { join: defaultContact.emails, alias: defaultContactEmails, conditionType: 'WITH', condition: 'defaultContactEmails.primary = true' }
+                            - { join: defaultContact.emails, alias: defaultContactEmails, conditionType: WITH, condition: 'defaultContactEmails.primary = true' }
