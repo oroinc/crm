@@ -1,0 +1,11 @@
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+  contact-email-1:
+    email: 'JohnRBarrows@cuvox.de'
+    primary: true
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact-1:
+    firstName: John
+    lastName: Barrows
+    emails: ['@contact-email-1']
+    organization: '@organization'

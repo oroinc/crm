@@ -1,0 +1,13 @@
+Oro\Bundle\AccountBundle\Entity\Account:
+  account1:
+    name: 'Account1'
+    owner: '@admin'
+    organization: '@organization'
+  account2:
+    name: 'Account2'
+    owner: '@admin'
+    organization: '@organization'
+  account3:
+    name: 'Account3'
+    owner: '@admin'
+    organization: '@organization'

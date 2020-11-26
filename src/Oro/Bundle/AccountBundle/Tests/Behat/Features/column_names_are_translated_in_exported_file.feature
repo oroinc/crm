@@ -4,6 +4,9 @@
 @fixture-OroAccountBundle:LoadAccountEntitiesFixture.yml
 
 Feature: Column names are translated in exported file
+  In order to ...
+  As an ...
+  I should be able to ...
   Scenario: Configure and switch to German localization
     Given I login as administrator
     When I go to System/Localization/Languages

@@ -6,6 +6,8 @@ oro_behat_extension:
         - OroFormBundle::FormContext
         - OroDataGridBundle::GridContext
         - OroReportCRMBundle::FeatureContext
+        - OroQueryDesignerBundle::QueryDesignerContext
+        - OroFilterBundle::FilterContext
       paths:
         - '@OroReportCRMBundle/Tests/Behat/Features'
 
