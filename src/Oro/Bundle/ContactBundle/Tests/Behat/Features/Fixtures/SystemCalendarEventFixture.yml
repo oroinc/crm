@@ -1,0 +1,28 @@
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact1:
+    firstName: 'Charlie'
+    lastName: 'Sheen'
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\CalendarBundle\Entity\SystemCalendar:
+  systemCalendar1:
+    name: 'System Calendar 1'
+    public: true
+    backgroundColor: '#F83A22'
+    createdAt: '<dateTime()>'
+    updatedAt: '<dateTime()>'
+    organization: '@organization'
+
+Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
+  calendarEvent1:
+    systemCalendar: '@systemCalendar1'
+    uid: 'b492f575-6043-4d19-8f9c-865d6c67a3d8'
+    title: 'System Calendar Event 1'
+    description: 'System Calendar Event 1 Description'
+    start: '<dateTime()>'
+    end: '<dateTime()>'
+    createdAt: '<dateTime()>'
+    updatedAt: '<dateTime()>'
+    __calls:
+      - addActivityTarget: ['@contact1']
