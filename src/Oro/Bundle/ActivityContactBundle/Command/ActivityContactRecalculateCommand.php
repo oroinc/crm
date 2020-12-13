@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Oro\Bundle\ActivityContactBundle\Command;
 
@@ -26,7 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
- * The CLI command to recalculate contacting activities.
+ * Recalculates counters and last contact date for contact activities.
  */
 class ActivityContactRecalculateCommand extends Command
 {
@@ -36,38 +37,15 @@ class ActivityContactRecalculateCommand extends Command
     /** @var string */
     protected static $defaultName = 'oro:activity-contact:recalculate';
 
-    /** @var OroEntityManager $em */
-    protected $em;
+    protected OroEntityManager $em;
+    protected ActivityListRepository $activityListRepository;
+    private ManagerRegistry $registry;
+    private ConfigProvider $activityConfigProvider;
+    private ConfigProvider $extendConfigProvider;
+    private ActivityListener $activityListener;
+    private ActivityListFilterHelper $activityListFilterHelper;
+    private ActivityContactProvider $activityContactProvider;
 
-    /** @var ActivityListRepository $activityListRepository */
-    protected $activityListRepository;
-
-    /** @var ManagerRegistry */
-    private $registry;
-
-    /** @var ConfigProvider */
-    private $activityConfigProvider;
-
-    /** @var ConfigProvider */
-    private $extendConfigProvider;
-
-    /** @var ActivityListener */
-    private $activityListener;
-
-    /** @var ActivityListFilterHelper */
-    private $activityListFilterHelper;
-
-    /** @var ActivityContactProvider */
-    private $activityContactProvider;
-
-    /**
-     * @param ManagerRegistry $registry
-     * @param ConfigProvider $activityConfigProvider
-     * @param ConfigProvider $extendConfigProvider
-     * @param ActivityListener $activityListener
-     * @param ActivityListFilterHelper $activityListFilterHelper
-     * @param ActivityContactProvider $activityContactProvider
-     */
     public function __construct(
         ManagerRegistry $registry,
         ConfigProvider $activityConfigProvider,
@@ -86,16 +64,15 @@ class ActivityContactRecalculateCommand extends Command
         $this->activityContactProvider = $activityContactProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function configure()
     {
-        $this->setDescription('Recalculate contacting activities');
+        $this->setDescription('Recalculates counters and last contact date for contact activities.');
     }
 
     /**
-     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -105,12 +82,9 @@ class ActivityContactRecalculateCommand extends Command
     }
 
     /**
-     * @param AbstractLogger $logger
-     *
-     * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function recalculate(AbstractLogger $logger)
+    public function recalculate(AbstractLogger $logger): int
     {
         $logger->info('Recalculating contacting activities...');
         $logger->info(sprintf('<info>Processing started at %s</info>', date('Y-m-d H:i:s')));
@@ -196,11 +170,7 @@ class ActivityContactRecalculateCommand extends Command
         return self::STATUS_SUCCESS;
     }
 
-    /**
-     * @param string $entityClassName
-     * @param array $recordIdsWithActivities
-     */
-    protected function resetRecordsWithoutActivities($entityClassName, array $recordIdsWithActivities)
+    protected function resetRecordsWithoutActivities(string $entityClassName, array $recordIdsWithActivities): void
     {
         $offset = 0;
         while ($records = $this->getRecordsToReset($entityClassName, $recordIdsWithActivities, $offset)) {
@@ -211,12 +181,7 @@ class ActivityContactRecalculateCommand extends Command
         }
     }
 
-    /**
-     * Resets entity statistics.
-     *
-     * @param object $entity
-     */
-    protected function resetRecordStatistic($entity)
+    protected function resetRecordStatistic(object $entity): void
     {
         /** @var PropertyAccessor $accessor */
         $accessor = PropertyAccess::createPropertyAccessor();
@@ -229,28 +194,14 @@ class ActivityContactRecalculateCommand extends Command
         $accessor->setValue($entity, ActivityScope::LAST_CONTACT_DATE_OUT, null);
     }
 
-    /**
-     * @param string  $entityClassName
-     * @param array   $ids
-     * @param integer $offset
-     *
-     * @return array
-     */
-    protected function getRecordsToRecalculate($entityClassName, $ids, $offset)
+    protected function getRecordsToRecalculate(string $entityClassName, array $ids, int $offset): array
     {
         $entityRepository = $this->em->getRepository($entityClassName);
 
         return $entityRepository->findBy(['id' => $ids], ['id' => 'ASC'], self::BATCH_SIZE, $offset);
     }
 
-    /**
-     * @param string  $entityClassName
-     * @param array   $excludedIds
-     * @param integer $offset
-     *
-     * @return array
-     */
-    protected function getRecordsToReset($entityClassName, array $excludedIds, $offset)
+    protected function getRecordsToReset(string $entityClassName, array $excludedIds, int $offset): array
     {
         $qb = $this->em->getRepository($entityClassName)->createQueryBuilder('e');
 
@@ -267,12 +218,8 @@ class ActivityContactRecalculateCommand extends Command
 
     /**
      * Returns entity ids of records that have associated contacting activities
-     *
-     * @param string $className Target entity class name
-     *
-     * @return array
      */
-    protected function getTargetIds($className)
+    protected function getTargetIds(string $className): array
     {
         $contactingActivityClasses = $this->activityContactProvider->getSupportedActivityClasses();
 
@@ -295,14 +242,7 @@ class ActivityContactRecalculateCommand extends Command
         return $result;
     }
 
-    /**
-     * Get Association name
-     *
-     * @param string $className
-     *
-     * @return string
-     */
-    protected function getAssociationName($className)
+    protected function getAssociationName(string $className): string
     {
         return ExtendHelper::buildAssociationName(
             $className,

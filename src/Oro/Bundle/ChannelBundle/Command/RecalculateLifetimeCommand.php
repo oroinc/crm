@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Oro\Bundle\ChannelBundle\Command;
 
@@ -20,23 +21,14 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  */
 abstract class RecalculateLifetimeCommand extends Command
 {
-    const READ_BATCH_SIZE = 1000;
-    const WRITE_BATCH_SIZE = 200;
-    const STATUS_UPDATE_BATCH_SIZE = 50;
+    public const READ_BATCH_SIZE = 1000;
+    public const WRITE_BATCH_SIZE = 200;
+    public const STATUS_UPDATE_BATCH_SIZE = 50;
 
-    /** @var ManagerRegistry */
-    protected $registry;
+    protected ManagerRegistry $registry;
+    protected SettingsProvider $settingsProvider;
+    protected ProgressBar $progressBar;
 
-    /** @var SettingsProvider */
-    protected $settingsProvider;
-
-    /** @var ProgressBar */
-    protected $progressBar;
-
-    /**
-     * @param ManagerRegistry $registry
-     * @param SettingsProvider $settingsProvider
-     */
     public function __construct(ManagerRegistry $registry, SettingsProvider $settingsProvider)
     {
         parent::__construct();
@@ -45,9 +37,7 @@ abstract class RecalculateLifetimeCommand extends Command
         $this->settingsProvider = $settingsProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function configure()
     {
         $this
@@ -55,13 +45,11 @@ abstract class RecalculateLifetimeCommand extends Command
                 'force',
                 null,
                 InputOption::VALUE_NONE,
-                'Causes the re-calculated lifetime values to be physically saved into the database.'
+                'Saves the recalculated lifetime values to the database.'
             );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->progressBar = new ProgressBar($output);
@@ -83,25 +71,14 @@ abstract class RecalculateLifetimeCommand extends Command
         }
     }
 
-    /**
-     * @return string
-     */
-    abstract protected function getChannelType();
+    abstract protected function getChannelType(): string;
+
+    abstract protected function calculateCustomerLifetime(EntityManager $em, object $customer): float;
 
     /**
-     * @param EntityManager $em
-     * @param object        $customer
-     *
-     * @return float
-     */
-    abstract protected function calculateCustomerLifetime(EntityManager $em, $customer);
-
-    /**
-     * @param string $channelType
-     *
      * @return array|bool
      */
-    protected function getChannelSettings($channelType)
+    protected function getChannelSettings(string $channelType)
     {
         $settingsProvider = $this->settingsProvider;
         $settings         = $settingsProvider->getLifetimeValueSettings();
@@ -111,18 +88,12 @@ abstract class RecalculateLifetimeCommand extends Command
             : false;
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param string          $channelType
-     * @param array           $channelSettings
-     */
     protected function recalculateLifetimeValues(
         InputInterface $input,
         OutputInterface $output,
-        $channelType,
+        string $channelType,
         array $channelSettings
-    ) {
+    ): void {
         $customerClass = $this->getCustomerClass($channelSettings);
         $lifetimeField = $this->getLifetimeField($channelSettings);
 
@@ -169,15 +140,11 @@ abstract class RecalculateLifetimeCommand extends Command
         $output->writeln(''); // Adding a new line after progress bar
     }
 
-    /**
-     * @param EntityManager $em
-     * @param string        $customerClass
-     * @param string        $channelType
-     *
-     * @return QueryBuilder
-     */
-    protected function getCustomersQueryBuilder(EntityManager $em, $customerClass, $channelType)
-    {
+    protected function getCustomersQueryBuilder(
+        EntityManager $em,
+        string $customerClass,
+        string $channelType
+    ): QueryBuilder {
         $customerIdField = $em->getClassMetadata($customerClass)->getSingleIdentifierFieldName();
 
         return $em->getRepository($customerClass)->createQueryBuilder('customer')
@@ -187,12 +154,7 @@ abstract class RecalculateLifetimeCommand extends Command
             ->setParameter('channelType', $channelType);
     }
 
-    /**
-     * @param QueryBuilder $customersQueryBuilder
-     *
-     * @return BufferedQueryResultIteratorInterface
-     */
-    protected function getCustomersIterator(QueryBuilder $customersQueryBuilder)
+    protected function getCustomersIterator(QueryBuilder $customersQueryBuilder): BufferedQueryResultIteratorInterface
     {
         $iterator = new BufferedIdentityQueryResultIterator($customersQueryBuilder);
         $iterator->setBufferSize(static::READ_BATCH_SIZE);
@@ -200,13 +162,7 @@ abstract class RecalculateLifetimeCommand extends Command
         return $iterator;
     }
 
-    /**
-     * Starts the progress output.
-     *
-     * @param InputInterface  $input  An Input instance
-     * @param int|null        $max    Maximum steps
-     */
-    protected function startProcess(InputInterface $input, $max)
+    protected function startProcess(InputInterface $input, ?int $max): void
     {
         if ($input->isInteractive()) {
             $this->progressBar->start($max);
@@ -215,25 +171,14 @@ abstract class RecalculateLifetimeCommand extends Command
         }
     }
 
-    /**
-     * Advances the progress output X steps.
-     *
-     * @param InputInterface $input An Input instance
-     * @param int            $step  Number of steps to advance
-     */
-    protected function advanceProcess(InputInterface $input, $step)
+    protected function advanceProcess(InputInterface $input, int $step): void
     {
         if ($input->isInteractive()) {
             $this->progressBar->advance($step);
         }
     }
 
-    /**
-     * Finishes the progress output.
-     *
-     * @param InputInterface $input An Input instance
-     */
-    protected function finishProcess(InputInterface $input)
+    protected function finishProcess(InputInterface $input): void
     {
         if ($input->isInteractive()) {
             $this->progressBar->finish();
@@ -241,21 +186,17 @@ abstract class RecalculateLifetimeCommand extends Command
     }
 
     /**
-     * @param array $channelSettings
-     *
      * @return mixed
      */
-    protected function getCustomerClass($channelSettings)
+    protected function getCustomerClass(array $channelSettings)
     {
         return $channelSettings['entity'];
     }
 
     /**
-     * @param array $channelSettings
-     *
      * @return mixed
      */
-    protected function getLifetimeField($channelSettings)
+    protected function getLifetimeField(array $channelSettings)
     {
         return $channelSettings['field'];
     }
