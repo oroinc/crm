@@ -1,0 +1,5 @@
+acl_categories:
+    sales_data:
+        label: oro.sales.privilege.category.sales_data.label
+        tab: true
+        priority: 7
