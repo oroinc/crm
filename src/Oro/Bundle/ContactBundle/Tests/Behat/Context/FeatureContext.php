@@ -164,12 +164,6 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware, Ke
         $filename = $this->fixStepArgument($filename);
         $imagePath = sprintf('%s/../Features/Fixtures/%s', __DIR__, $filename);
 
-        $importExportDir = sprintf(
-            '%s%s',
-            $this->getContainer()->getParameter('kernel.project_dir'),
-            '/var/import_export/files/'
-        );
-
-        $this->copyFiles($imagePath, $importExportDir);
+        $this->copyFiles($imagePath, $this->getContainer()->getParameter('oro_attachment.import_files_dir'));
     }
 }
