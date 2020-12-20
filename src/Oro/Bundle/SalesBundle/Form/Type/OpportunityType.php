@@ -23,6 +23,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 
+/**
+ * The form type for Opportunity entity.
+ */
 class OpportunityType extends AbstractType
 {
     const NAME = 'oro_sales_opportunity';
@@ -251,9 +254,8 @@ class OpportunityType extends AbstractType
      */
     private function getDefaultStatus()
     {
-        $enumCode        = $this->typeHelper->getEnumCode(Opportunity::class, 'status');
-        $defaultStatuses = $this->enumValueProvider->getDefaultEnumValuesByCode($enumCode);
-
-        return reset($defaultStatuses);
+        return $this->enumValueProvider->getDefaultEnumValueByCode(
+            $this->typeHelper->getEnumCode(Opportunity::class, 'status')
+        );
     }
 }

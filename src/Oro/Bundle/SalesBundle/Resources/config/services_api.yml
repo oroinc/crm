@@ -12,12 +12,6 @@ services:
         calls:
             - [setIsRelationOptional, [true]]
 
-    oro_sales.api.form_listener.lead_status:
-        class: Oro\Bundle\SalesBundle\Api\Form\EventListener\LeadStatusSubscriber
-        public: true
-        arguments:
-            - '@oro_entity_extend.enum_value_provider'
-
     oro_sales.api.b2bcustomer.compute_primary_phone:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\ComputePrimaryField
         arguments:
@@ -66,6 +60,17 @@ services:
             - phone
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Oro\Bundle\SalesBundle\Entity\Lead }
+
+    oro_sales.api.lead.set_default_status:
+        class: Oro\Bundle\ApiBundle\Processor\CustomizeFormData\SetDefaultEnumValue
+        arguments:
+            - '@oro_entity_extend.enum_value_provider'
+            - '@oro_api.doctrine_helper'
+            - '@oro_api.form_property_accessor'
+            - 'status'
+            - 'lead_status'
+        tags:
+            - { name: oro.api.processor, action: customize_form_data, event: post_submit, class: Oro\Bundle\SalesBundle\Entity\Lead }
 
     oro_sales.api.lead.map_primary_phone:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeFormData\MapPrimaryField
