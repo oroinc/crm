@@ -3,13 +3,13 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
-use Oro\Component\Testing\Unit\Entity\Stub\StubEnumValue;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -127,7 +127,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
         $lead
             ->expects($this->any())
             ->method('getStatus')
-            ->willReturn(new StubEnumValue(ChangeLeadStatus::STATUS_QUALIFY, 'test'));
+            ->willReturn(new TestEnumValue(ChangeLeadStatus::STATUS_QUALIFY, 'test'));
         $lead
             ->expects($this->any())
             ->method('getOpportunities')
@@ -162,7 +162,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
         $lead
             ->expects($this->once())
             ->method('getStatus')
-            ->willReturn(new StubEnumValue(ChangeLeadStatus::STATUS_DISQUALIFY, 'test'));
+            ->willReturn(new TestEnumValue(ChangeLeadStatus::STATUS_DISQUALIFY, 'test'));
 
         return $lead;
     }
