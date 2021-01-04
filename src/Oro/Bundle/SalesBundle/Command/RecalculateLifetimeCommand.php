@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Oro\Bundle\SalesBundle\Command;
 
@@ -11,21 +12,15 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
 
 /**
- * Perform re-calculation of lifetime values for sales channel.
+ * Recalculates lifetime values for (offline) B2B sales channel customers.
  */
 class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
 {
     /** @var string */
     protected static $defaultName = 'oro:b2b:lifetime:recalculate';
 
-    /** @var CurrencyQueryBuilderTransformerInterface */
-    private $currencyTransformer;
+    private CurrencyQueryBuilderTransformerInterface $currencyTransformer;
 
-    /**
-     * @param ManagerRegistry $registry
-     * @param SettingsProvider $settingsProvider
-     * @param CurrencyQueryBuilderTransformerInterface $currencyTransformer
-     */
     public function __construct(
         ManagerRegistry $registry,
         SettingsProvider $settingsProvider,
@@ -36,38 +31,27 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
         $this->currencyTransformer = $currencyTransformer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure()
     {
         parent::configure();
 
-        $this
-            ->setDescription('Perform re-calculation of lifetime values for sales channel.');
+        $this->setDescription('Recalculates lifetime values for (offline) B2B sales channel customers.')
+            ->addUsage('--force');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getChannelType()
+    protected function getChannelType(): string
     {
         return 'b2b';
     }
 
     /**
-     * @param EntityManager $em
-     * @param B2bCustomer   $customer
-     *
-     * @return float
+     * @param B2bCustomer $customer
      */
-    protected function calculateCustomerLifetime(EntityManager $em, $customer)
+    protected function calculateCustomerLifetime(EntityManager $em, object $customer): float
     {
         /** @var B2bCustomerRepository $customerRepo */
         $customerRepo  = $em->getRepository('OroSalesBundle:B2bCustomer');
-        $qbTransformer = $this->currencyTransformer;
-        $lifetimeValue = $customerRepo->calculateLifetimeValue($customer, $qbTransformer);
 
-        return $lifetimeValue;
+        return $customerRepo->calculateLifetimeValue($customer, $this->currencyTransformer);
     }
 }
