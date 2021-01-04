@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Oro\Bundle\AnalyticsBundle\Command;
 
@@ -13,23 +14,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * The CLI command to calculate all registered analytic metrics.
+ * Calculates all registered analytic metrics.
  */
 class CalculateAnalyticsCommand extends Command implements CronCommandInterface
 {
     /** @var string */
     protected static $defaultName = 'oro:cron:analytic:calculate';
 
-    /** @var ManagerRegistry */
-    private $registry;
+    private ManagerRegistry $registry;
+    private CalculateAnalyticsScheduler $calculateAnalyticsScheduler;
 
-    /** @var CalculateAnalyticsScheduler */
-    private $calculateAnalyticsScheduler;
-
-    /**
-     * @param ManagerRegistry $registry
-     * @param CalculateAnalyticsScheduler $calculateAnalyticsScheduler
-     */
     public function __construct(ManagerRegistry $registry, CalculateAnalyticsScheduler $calculateAnalyticsScheduler)
     {
         parent::__construct();
@@ -38,9 +32,6 @@ class CalculateAnalyticsCommand extends Command implements CronCommandInterface
         $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultDefinition()
     {
         return '0 0 * * *';
@@ -56,25 +47,16 @@ class CalculateAnalyticsCommand extends Command implements CronCommandInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function configure()
     {
         $this
-            ->setDescription('Calculate all registered analytic metrics')
-            ->addOption('channel', null, InputOption::VALUE_OPTIONAL, 'Data Channel id to process')
-            ->addOption(
-                'ids',
-                null,
-                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Customer identity ids for given channel'
-            );
+            ->setDescription('Calculates all registered analytic metrics.')
+            ->addOption('channel', null, InputOption::VALUE_OPTIONAL, 'Channel ID')
+            ->addOption('ids', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Customer IDs');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $channelId = $input->getOption('channel');

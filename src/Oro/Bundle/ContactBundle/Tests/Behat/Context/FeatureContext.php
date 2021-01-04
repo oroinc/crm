@@ -7,10 +7,14 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Doctrine\Common\Inflector\Inflector;
+use Oro\Bundle\GaufretteBundle\FileManager;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
 
+/**
+ * Behat feature content for Contact bundle.
+ */
 class FeatureContext extends OroFeatureContext implements OroPageObjectAware, KernelAwareContext
 {
     use PageObjectDictionary;
@@ -120,7 +124,7 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware, Ke
             $socialNetworks[$link->getAttribute('title')] = trim($link->getAttribute('href'));
         }
 
-        foreach ($table->getRows() as list($networkName, $networkLink)) {
+        foreach ($table->getRows() as [$networkName, $networkLink]) {
             self::assertArrayHasKey(
                 $networkName,
                 $socialNetworks,
@@ -153,17 +157,19 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware, Ke
     }
 
     /**
-     * Example: Given I copy contact fixture "charlie-sheen.jpg" to import export upload dir
+     * Example: Given I copy contact fixture "charlie-sheen.jpg" to import upload dir
      *
-     * @Given /^I copy contact fixture "(?P<filename>(?:[^"]|\\")*)" to import export upload dir$/
+     * @Given /^I copy contact fixture "(?P<filename>(?:[^"]|\\")*)" to import upload dir$/
      *
      * @param string $filename
      */
-    public function copyContactFixtureFileToImportExportDir(string $filename): void
+    public function copyContactFixtureFileToImportFilesDir(string $filename): void
     {
         $filename = $this->fixStepArgument($filename);
         $imagePath = sprintf('%s/../Features/Fixtures/%s', __DIR__, $filename);
 
-        $this->copyFiles($imagePath, $this->getContainer()->getParameter('oro_attachment.import_files_dir'));
+        /** @var FileManager $fileManager */
+        $fileManager = $this->getContainer()->get('oro_attachment.importexport.file_manager.import_files');
+        $fileManager->writeFileToStorage($imagePath, $filename);
     }
 }

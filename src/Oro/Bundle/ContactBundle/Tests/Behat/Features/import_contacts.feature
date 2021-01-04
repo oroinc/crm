@@ -52,7 +52,7 @@ Feature: Import Contacts
       | Picture UUID                            |
 
   Scenario: Import new Contacts
-    Given I copy contact fixture "charlie-sheen.jpg" to import export upload dir
+    Given I copy contact fixture "charlie-sheen.jpg" to import upload dir
     And I remember number of files in attachment directory
     And I fill template with data:
       | Id | Name prefix | First name | Last name | Gender | Birthday   | Source Name | Owner Username      | Assigned to Username | Emails 1 Email              | Phones 1 Phone | Groups 1 Label           | Accounts 1 Account name | Accounts Default Contact 1 Account name | Addresses 1 Label | Addresses 1 First name | Addresses 1 Last name | Addresses 1 Street  | Addresses 1 Zip\/Postal Code | Addresses 1 City | Addresses 1 State Combined code | Addresses 1 Country ISO2 code | Organization Name | Picture URI       | Picture UUID |
