@@ -670,36 +670,32 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    oro_sales.customer_virtual_relations.provider:
+    oro_sales.virtual_relation_provider.customer.lead:
         class: Oro\Bundle\SalesBundle\Provider\CustomerVirtualRelationProvider
-        abstract: true
         arguments:
             - '@oro_entity_extend.association_manager'
             - '@oro_entity_config.provider.entity'
-
-    oro_sales.customer_virtual_relations.provider.lead:
-        parent: oro_sales.customer_virtual_relations.provider
-        public: false
-        tags:
-           - { name: oro_entity.virtual_relation_provider, priority: 150 }
         calls:
-           - [setSourceClass, [ Oro\Bundle\SalesBundle\Entity\Lead ]]
+            - [setSourceClass, [ Oro\Bundle\SalesBundle\Entity\Lead ]]
+        tags:
+            - { name: oro_entity.virtual_relation_provider, priority: 150 }
 
-    oro_sales.customer_virtual_relations.provider.opportunity:
-       parent: oro_sales.customer_virtual_relations.provider
-       public: false
-       tags:
-          - { name: oro_entity.virtual_relation_provider, priority: 150 }
-       calls:
-          - [setSourceClass, [ Oro\Bundle\SalesBundle\Entity\Opportunity ]]
+    oro_sales.virtual_relation_provider.customer.opportunity:
+        class: Oro\Bundle\SalesBundle\Provider\CustomerVirtualRelationProvider
+        arguments:
+            - '@oro_entity_extend.association_manager'
+            - '@oro_entity_config.provider.entity'
+        calls:
+            - [setSourceClass, [ Oro\Bundle\SalesBundle\Entity\Opportunity ]]
+        tags:
+            - { name: oro_entity.virtual_relation_provider, priority: 150 }
 
-    oro_sales.b2bcustomer_virtual_relations.provider:
+    oro_sales.virtual_relation_provider.b2bcustomer:
         class: Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider
-        public: false
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity\B2bCustomer'
         tags:
-           - { name: oro_entity.virtual_relation_provider, priority: 150 }
+            - { name: oro_entity.virtual_relation_provider, priority: 150 }
 
     oro_sales.widget_config_value.widget_opportunity_status.converter:
         parent: oro_dashboard.widget_config_value.widget_enum_select.converter
