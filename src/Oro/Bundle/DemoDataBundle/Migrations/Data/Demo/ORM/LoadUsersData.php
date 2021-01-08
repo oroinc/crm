@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -15,53 +17,40 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
+ * Loads users into the default_organization and assigns them to ROLE_MANAGER.
+ *
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoadUsersData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
-    const FLUSH_MAX = 10;
+    private const FLUSH_MAX = 10;
 
-    /** @var ContainerInterface */
-    protected $container;
+    protected ?ContainerInterface $container;
 
-    /** @var UserManager */
-    protected $userManager;
+    protected UserManager $userManager;
 
-    /** @var Role */
-    protected $role;
+    protected Role $role;
 
     /** @var  EntityManager */
     protected $em;
 
-    /**
-     * @var Organization
-     */
-    protected $organization;
+    protected Organization $organization;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDependencies()
     {
         return [
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUserData',
+            LoadBusinessUnitData::class,
+            LoadUserData::class,
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
-    protected function initSupportingEntities(ObjectManager $manager = null)
+    private function initSupportingEntities(ObjectManager $manager = null)
     {
         if ($manager) {
             $this->em = $manager;
@@ -69,26 +58,17 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         $this->organization = $this->getReference('default_organization');
         $this->userManager  = $this->container->get('oro_user.manager');
         $this->role = $this->em->getRepository('OroUserBundle:Role')->findOneBy(
-            array('role' => LoadRolesData::ROLE_MANAGER)
+            ['role' => LoadRolesData::ROLE_MANAGER]
         );
     }
 
-    /**
-     * {@inheritDoc}
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
         $this->loadUsers();
     }
 
-    /**
-     * Load users
-     *
-     * @return void
-     */
-    public function loadUsers()
+    private function loadUsers(): void
     {
         for ($i = 0; $i < 50; ++$i) {
             $firstName = $this->generateFirstName();
@@ -110,29 +90,24 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
             $this->userManager->updatePassword($user);
             $this->userManager->updateUser($user);
 
-            if ($i % self::FLUSH_MAX == 0) {
-                $this->flush();
+            if (0 === $i % self::FLUSH_MAX) {
+                $this->em->flush();
                 $this->em->clear();
                 $this->initSupportingEntities();
             }
         }
-        $this->flush();
+        $this->em->flush();
     }
 
-    /**
-     * Creates a user
-     *
-     * @param  string    $username
-     * @param  string    $email
-     * @param  string    $firstName
-     * @param  string    $lastName
-     * @param  \DateTime $birthday
-     * @param  mixed     $role
-     * @return User
-     */
-    private function createUser($username, $email, $firstName, $lastName, $birthday, $role)
-    {
-        /** @var $user User */
+    private function createUser(
+        string $username,
+        string $email,
+        string $firstName,
+        string $lastName,
+        \DateTime $birthday,
+        $role
+    ): User {
+        /** @var User $user */
         $user = $this->userManager->createUser();
 
         $user->setEmail($email);
@@ -149,133 +124,73 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         return $user;
     }
 
-    /**
-     * Generates a username
-     *
-     * @param  string $firstName
-     * @param  string $lastName
-     * @return string
-     */
-    private function generateUsername($firstName, $lastName)
+    private function generateUsername(string $firstName, string $lastName): string
     {
-        $uniqueString = substr(uniqid(rand()), -5, 5);
+        $uniqueString = \substr(\uniqid(\strval(\rand()), false), -5, 5);
 
-        return sprintf("%s.%s_%s", strtolower($firstName), strtolower($lastName), $uniqueString);
+        return \sprintf('%s.%s_%s', \strtolower($firstName), \strtolower($lastName), $uniqueString);
     }
 
-    /**
-     * Generates an email
-     *
-     * @param  string $firstName
-     * @param  string $lastName
-     * @return string
-     */
-    private function generateEmail($firstName, $lastName)
+    private function generateEmail(string $firstName, string $lastName): string
     {
-        $uniqueString = substr(uniqid(rand()), -5, 5);
-        $domains = array('yahoo.com', 'gmail.com', 'example.com', 'hotmail.com', 'aol.com', 'msn.com');
-        $randomIndex = rand(0, count($domains) - 1);
+        $uniqueString = \substr(\uniqid(\strval(\rand()), false), -5, 5);
+        $domains = ['yahoo.com', 'gmail.com', 'example.com', 'hotmail.com', 'aol.com', 'msn.com'];
+        $randomIndex = \rand(0, \count($domains) - 1);
         $domain = $domains[$randomIndex];
 
-        return sprintf("%s.%s_%s@%s", strtolower($firstName), strtolower($lastName), $uniqueString, $domain);
+        return \sprintf('%s.%s_%s@%s', \strtolower($firstName), \strtolower($lastName), $uniqueString, $domain);
     }
 
-    /**
-     * Generate a first name
-     *
-     * @return string
-     */
-    private function generateFirstName()
+    private function generateFirstName(): string
     {
-        $firstNamesDictionary = $this->loadDictionary('first_names.txt');
-        $randomIndex = rand(0, count($firstNamesDictionary) - 1);
+        $firstNamesDictionary = $this->loadDictionaryFromFile('first_names.txt');
+        $randomIndex = \rand(0, \count($firstNamesDictionary) - 1);
 
-        return trim($firstNamesDictionary[$randomIndex]);
+        return \trim($firstNamesDictionary[$randomIndex]);
     }
 
-    /**
-     * Loads dictionary from file by name
-     *
-     * @param  string $name
-     * @return array
-     */
-    private function loadDictionary($name)
+    private function loadDictionaryFromFile(string $fileName): array
     {
-        static $dictionaries = array();
+        static $dictionaries = [];
 
         $dictionaryDir = $this->container
             ->get('kernel')
             ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
 
-        if (!isset($dictionaries[$name])) {
-            $dictionary = array();
-            $fileName = $dictionaryDir . DIRECTORY_SEPARATOR . $name;
-            foreach (file($fileName) as $item) {
+        if (!isset($dictionaries[$fileName])) {
+            $dictionary = [];
+            $filePath = $dictionaryDir . DIRECTORY_SEPARATOR . $fileName;
+            foreach (file($filePath) as $item) {
                 $dictionary[] = trim($item);
             }
-            $dictionaries[$name] = $dictionary;
+            $dictionaries[$fileName] = $dictionary;
         }
 
-        return $dictionaries[$name];
+        return $dictionaries[$fileName];
     }
 
-    /**
-     * Generates a last name
-     *
-     * @return string
-     */
-    private function generateLastName()
+    private function generateLastName(): string
     {
-        $lastNamesDictionary = $this->loadDictionary('last_names.txt');
-        $randomIndex = rand(0, count($lastNamesDictionary) - 1);
+        $lastNamesDictionary = $this->loadDictionaryFromFile('last_names.txt');
+        $randomIndex = \rand(0, \count($lastNamesDictionary) - 1);
 
-        return trim($lastNamesDictionary[$randomIndex]);
+        return \trim($lastNamesDictionary[$randomIndex]);
     }
 
-    /**
-     * Generates a date of birth
-     *
-     * @return \DateTime
-     */
-    private function generateBirthday()
+    private function generateBirthday(): \DateTime
     {
-        // Convert to timetamps
-        $min = strtotime('1950-01-01');
-        $max = strtotime('2000-01-01');
+        // Convert to timestamps
+        $min = \strtotime('1950-01-01');
+        $max = \strtotime('2000-01-01');
 
         // Generate random number using above bounds
-        $val = rand($min, $max);
+        $val = \rand($min, $max);
 
         // Convert back to desired date format
         return new \DateTime(date('Y-m-d', $val), new \DateTimeZone('UTC'));
     }
 
-    /**
-     * Persist object
-     *
-     * @param  mixed $object
-     * @return void
-     */
-    private function persist($object)
-    {
-        $this->em->persist($object);
-    }
-
-    /**
-     * Flush objects
-     *
-     * @return void
-     */
-    private function flush()
-    {
-        $this->em->flush();
-    }
-
-    /**
-     * @param $name
-     * @return BusinessUnit
-     */
-    protected function getBusinessUnit($name)
+    private function getBusinessUnit(string $name): BusinessUnit
     {
         return $this->em->getRepository('OroOrganizationBundle:BusinessUnit')->findOneBy(['name' => $name]);
     }

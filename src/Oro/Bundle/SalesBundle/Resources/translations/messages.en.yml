@@ -624,7 +624,6 @@ oro:
             id.label:                   Id
             account.label:              Account
             importexport.empty_account: 'Customer Account must not be empty.'
-            importexport.multiple_association: 'Association with multiple Customers is not allowed.'
             importexport.not_matched_account: 'Customer does not match the Account.'
             label:            Account
 

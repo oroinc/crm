@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Oro\Bundle\SalesBundle\Tools;
 
@@ -6,22 +7,20 @@ use Oro\Bundle\EntityExtendBundle\Tools\GeneratorExtensions\AbstractAssociationE
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
+/**
+ * Generates PHP code for CustomerScope::ASSOCIATION_KIND association.
+ */
 class CustomerGeneratorExtension extends AbstractAssociationEntityGeneratorExtension
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function supports(array $schema)
+    public function supports(array $schema): bool
     {
         return
             $schema['class'] === Customer::class
             && parent::supports($schema);
     }
-    
-    /**
-     * {@inheritdoc}
-     */
-    protected function getAssociationKind()
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    protected function getAssociationKind(): ?string
     {
         return CustomerScope::ASSOCIATION_KIND;
     }
