@@ -5,10 +5,11 @@ namespace Oro\Bundle\SalesBundle\Model;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 
 /**
+ * The real implementation of this class is auto generated.
+ *
  * @method bool                    supportCustomerTarget($targetClass)
  * @method ExtendCustomer|Customer setCustomerTarget($target)
  * @method object|null             getCustomerTarget()
- * @method []                      getCustomerTargetEntities()
  */
 class ExtendCustomer
 {

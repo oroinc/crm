@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Oro\Bundle\SalesBundle\ImportExport\EventListener;
 
@@ -11,26 +12,16 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Listens on oro_importexport.strategy.process_after to validate customer association for leads and opportunities.
+ */
 class CustomerAssociationListener
 {
-    /** @var TranslatorInterface */
-    protected $translator;
+    protected TranslatorInterface $translator;
+    protected ImportStrategyHelper $importStrategyHelper;
+    protected AccountCustomerManager $accountCustomerManager;
+    protected DoctrineHelper $doctrineHelper;
 
-    /** @var ImportStrategyHelper */
-    protected $importStrategyHelper;
-
-    /** @var AccountCustomerManager */
-    protected $accountCustomerManager;
-
-    /** @var DoctrineHelper */
-    protected $doctrineHelper;
-
-    /**
-     * @param TranslatorInterface    $translator
-     * @param DoctrineHelper         $doctrineHelper
-     * @param ImportStrategyHelper   $importStrategyHelper
-     * @param AccountCustomerManager $accountCustomerManager
-     */
     public function __construct(
         TranslatorInterface $translator,
         DoctrineHelper $doctrineHelper,
@@ -43,10 +34,7 @@ class CustomerAssociationListener
         $this->accountCustomerManager = $accountCustomerManager;
     }
 
-    /**
-     * @param StrategyEvent $event
-     */
-    public function onProcessAfter(StrategyEvent $event)
+    public function onProcessAfter(StrategyEvent $event): void
     {
         $entity = $event->getEntity();
         if ($entity instanceof Opportunity || $entity instanceof Lead) {
@@ -54,15 +42,11 @@ class CustomerAssociationListener
         }
     }
 
-    /**
-     * @param object        $entity
-     * @param StrategyEvent $event
-     */
-    protected function validateCustomerAssociation($entity, StrategyEvent $event)
+    protected function validateCustomerAssociation(object $entity, StrategyEvent $event): void
     {
         /** @var Customer $customerAssociation */
         $customerAssociation = $entity->getCustomerAssociation();
-        if ($customerAssociation === null && $entity instanceof Lead) {
+        if (null === $customerAssociation && $entity instanceof Lead) {
             return;
         }
 
@@ -74,19 +58,12 @@ class CustomerAssociationListener
         }
 
         $account = $customerAssociation->getAccount();
-        // reject if entity has association with several customers
-        if (count($customerAssociation->getCustomerTargetEntities()) > 1) {
-            $this->addValidationError($event, 'oro.sales.customer.importexport.multiple_association');
-
-            return;
-        }
-
         $target = $customerAssociation->getTarget();
         if ($target->getId()) {
             // use existing customer association for customer target if accounts are the same, reject otherwise
             $oldCustomerAssociation = $this->accountCustomerManager->getAccountCustomerByTarget($target, false);
             if ($oldCustomerAssociation) {
-                if ($oldCustomerAssociation->getAccount() == $account) {
+                if ($oldCustomerAssociation->getAccount() === $account) {
                     $entity->setCustomerAssociation($oldCustomerAssociation);
                 } else {
                     $this->addValidationError($event, 'oro.sales.customer.importexport.not_matched_account');
@@ -95,11 +72,7 @@ class CustomerAssociationListener
         }
     }
 
-    /**
-     * @param StrategyEvent $event
-     * @param string        $error
-     */
-    protected function addValidationError(StrategyEvent $event, $error)
+    protected function addValidationError(StrategyEvent $event, string $error): void
     {
         $entity = $event->getEntity();
 
