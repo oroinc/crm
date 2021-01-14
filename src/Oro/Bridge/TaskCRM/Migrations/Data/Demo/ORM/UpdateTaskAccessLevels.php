@@ -3,7 +3,7 @@
 namespace Oro\Bridge\TaskCRM\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData;
 use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractUpdatePermissions;
 use Oro\Bundle\TaskBundle\Entity\Task;

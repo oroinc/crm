@@ -5,8 +5,8 @@ namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
@@ -181,7 +181,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         $className = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
         $defaultStatus = $manager->getRepository($className)->find(ExtendHelper::buildEnumValueId('new'));
-        
+
         $lead->setStatus($defaultStatus);
         $lead->setName($data['Company']);
         $lead->setFirstName($data['GivenName']);

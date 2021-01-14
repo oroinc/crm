@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Entity\Manager;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
 use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;

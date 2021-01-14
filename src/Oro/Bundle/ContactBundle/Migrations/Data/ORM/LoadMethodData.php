@@ -3,7 +3,7 @@
 namespace Oro\Bundle\ContactBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Method;
 
 class LoadMethodData extends AbstractFixture
@@ -18,7 +18,7 @@ class LoadMethodData extends AbstractFixture
     );
 
     /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $manager
+     * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {

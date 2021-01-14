@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\EventListener;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\EventListener\PrepareResultItemListener;

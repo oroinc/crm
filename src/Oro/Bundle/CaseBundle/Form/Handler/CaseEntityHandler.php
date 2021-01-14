@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\CaseBundle\Form\Handler;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CaseBundle\Event\Events;
 use Oro\Bundle\CaseBundle\Event\FormHandlerEvent;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;

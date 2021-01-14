@@ -29,7 +29,7 @@ class AmountProviderTest extends OrmTestCase
         $config->setMetadataDriverImpl($metadataDriver);
         $config->setEntityNamespaces(['OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
 
-        $registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $registry = $this->createMock('Doctrine\Persistence\ManagerRegistry');
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->will($this->returnValue($this->em));

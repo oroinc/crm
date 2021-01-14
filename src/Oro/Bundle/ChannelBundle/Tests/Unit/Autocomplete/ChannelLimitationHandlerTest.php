@@ -69,7 +69,7 @@ class ChannelLimitationHandlerTest extends \PHPUnit\Framework\TestCase
         $em->expects($this->once())->method('getMetadataFactory')
             ->will($this->returnValue($metadataFactory));
 
-        $managerRegistry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $managerRegistry = $this->createMock('Doctrine\Persistence\ManagerRegistry');
         $managerRegistry->expects($this->once())->method('getManagerForClass')->with(self::TEST_ENTITY_NAME)
             ->will($this->returnValue($em));
 
