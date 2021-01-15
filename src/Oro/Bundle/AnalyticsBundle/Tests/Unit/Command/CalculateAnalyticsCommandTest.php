@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Command;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;

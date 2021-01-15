@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 
 class LoadLeadPhoneData extends AbstractFixture implements DependentFixtureInterface

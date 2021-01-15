@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Provider\Lifetime;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;

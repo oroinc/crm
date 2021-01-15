@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Form\Handler;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler;
 use Symfony\Component\Form\Form;

@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor;
 use Oro\Bundle\ChannelBundle\Async\Topics;
 use Oro\Bundle\ChannelBundle\Entity\Channel;

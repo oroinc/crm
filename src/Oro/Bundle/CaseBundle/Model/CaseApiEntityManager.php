@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\CaseBundle\Model;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 class CaseApiEntityManager extends ApiEntityManager

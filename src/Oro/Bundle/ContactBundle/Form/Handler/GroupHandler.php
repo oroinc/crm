@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Form\Handler;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;

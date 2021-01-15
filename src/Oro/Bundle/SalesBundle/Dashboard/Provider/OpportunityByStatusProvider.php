@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Dashboard\Provider;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
@@ -61,7 +61,7 @@ class OpportunityByStatusProvider
     public function getOpportunitiesGroupedByStatus(WidgetOptionBag $widgetOptions)
     {
         $dateRange        = $widgetOptions->get('dateRange');
-        
+
         /**
          * Excluded statuses will be filtered from result in method `formatResult` below.
          * Due to performance issues with `NOT IN` clause in database.

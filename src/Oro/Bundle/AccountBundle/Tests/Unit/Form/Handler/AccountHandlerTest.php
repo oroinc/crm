@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Handler;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AccountBundle\Form\Handler\AccountHandler;
 use Symfony\Component\Form\Form;

@@ -5,8 +5,8 @@ namespace Oro\Bundle\ReportCRMBundle\Tests\Functional\DataFixtures;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
@@ -225,10 +225,10 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     protected function createLead(ObjectManager $manager, array $data, $user)
     {
         $lead = new Lead();
-        
+
         $className = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
         $defaultStatus = $manager->getRepository($className)->find(ExtendHelper::buildEnumValueId('new'));
-        
+
         $lead->setStatus($defaultStatus);
         $lead->setName($data['Company']);
         $lead->setFirstName($data['GivenName']);

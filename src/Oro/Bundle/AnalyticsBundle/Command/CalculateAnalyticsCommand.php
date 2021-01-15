@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Oro\Bundle\AnalyticsBundle\Command;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;

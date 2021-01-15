@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Dashboard\Provider;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;

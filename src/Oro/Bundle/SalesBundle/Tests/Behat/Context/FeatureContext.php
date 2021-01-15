@@ -8,7 +8,7 @@ use Behat\Symfony2Extension\Context\KernelDictionary;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ConfigBundle\Tests\Behat\Element\SidebarConfigMenu;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
-use Oro\Bundle\EntityBundle\ORM\Registry;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -119,7 +119,7 @@ class FeatureContext extends OroFeatureContext implements
      */
     private function getCustomers($channelName, $username)
     {
-        /** @var Registry $doctrine */
+        /** @var DoctrineHelper $doctrine */
         $doctrine = $this->getContainer()->get('oro_entity.doctrine_helper');
         $customerRepository = $doctrine->getEntityManagerForClass(B2bCustomer::class)
             ->getRepository(B2bCustomer::class);

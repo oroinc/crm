@@ -3,8 +3,8 @@
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ObjectManager;
 
 /**
  * Update organization_id field with organization_id from account

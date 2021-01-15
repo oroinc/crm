@@ -3,7 +3,7 @@
 namespace Oro\Bridge\CallCRM\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData;
 use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractUpdatePermissions;
 use Symfony\Component\Yaml\Yaml;

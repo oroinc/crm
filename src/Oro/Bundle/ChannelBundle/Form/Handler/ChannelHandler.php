@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Handler;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;

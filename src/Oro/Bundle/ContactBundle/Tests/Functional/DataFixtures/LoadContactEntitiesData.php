@@ -4,7 +4,7 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 

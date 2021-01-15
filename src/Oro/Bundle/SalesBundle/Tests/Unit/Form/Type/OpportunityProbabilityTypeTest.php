@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Oro\Bundle\EntityBundle\ORM\Registry;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;

@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 use Oro\Bundle\FormBundle\Model\UpdateHandler;
 use Oro\Bundle\SalesBundle\Entity\Lead;

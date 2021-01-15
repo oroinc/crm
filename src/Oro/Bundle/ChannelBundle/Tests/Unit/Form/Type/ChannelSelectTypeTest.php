@@ -28,7 +28,7 @@ class ChannelSelectTypeTest extends OrmTestCase
 
     protected function setUp(): void
     {
-        $registry       = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $registry = $this->createMock('Doctrine\Persistence\ManagerRegistry');
         $metadataDriver = new AnnotationDriver(
             new AnnotationReader(),
             'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'

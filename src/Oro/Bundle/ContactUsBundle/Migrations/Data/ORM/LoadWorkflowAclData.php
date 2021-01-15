@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Oro\Bundle\ContactUsBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData;
 use Oro\Bundle\MigrationBundle\Entity\DataFixture;
 use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractLoadAclData;

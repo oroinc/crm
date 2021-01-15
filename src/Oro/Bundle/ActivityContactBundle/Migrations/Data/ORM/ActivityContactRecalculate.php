@@ -3,7 +3,7 @@
 namespace Oro\Bundle\ActivityContactBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
 use Oro\Bundle\CronBundle\Async\Topics;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;

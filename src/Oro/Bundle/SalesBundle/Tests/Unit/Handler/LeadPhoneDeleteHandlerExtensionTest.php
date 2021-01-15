@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\EntityBundle\Handler\EntityDeleteAccessDeniedExceptionFactory;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;

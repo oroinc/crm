@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Formatter;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;

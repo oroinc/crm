@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
@@ -29,8 +29,8 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->registry            = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
-        $this->localeSettings      = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Model\LocaleSettings')
+        $this->registry = $this->createMock('Doctrine\Persistence\ManagerRegistry');
+        $this->localeSettings = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Model\LocaleSettings')
             ->disableOriginalConstructor()->getMock();
         $this->aclHelper           = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
             ->disableOriginalConstructor()->getMock();

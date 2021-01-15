@@ -3,8 +3,8 @@
 namespace Oro\Bundle\ChannelBundle\Provider;
 
 use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 
 /**

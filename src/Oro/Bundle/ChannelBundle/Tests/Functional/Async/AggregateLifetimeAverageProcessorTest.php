@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Async;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;

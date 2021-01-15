@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Provider;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
