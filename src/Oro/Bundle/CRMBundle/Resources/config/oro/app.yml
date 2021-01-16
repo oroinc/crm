@@ -7,3 +7,7 @@ oro_theme:
             logo: bundles/orocrm/images/oro-crm-logo.svg
         demo:
             logo: bundles/orocrm/images/oro-crm-logo.svg
+
+oro_translation:
+    package_names:
+        - OroCRM
