@@ -7,13 +7,13 @@ use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ContactAddressController extends Controller
+class ContactAddressController extends AbstractController
 {
     /**
      * @Route("/address-book/{id}", name="oro_contact_address_book", requirements={"id"="\d+"})

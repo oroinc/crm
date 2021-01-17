@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Provider;
 
-use Doctrine\Common\Inflector\Inflector;
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\Inflector\Inflector;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
@@ -27,20 +27,18 @@ class EmailDirectionProvider implements DirectionProviderInterface
 
     /** @var EmailHolderHelper */
     protected $emailHolderHelper;
+    private Inflector $inflector;
 
-    /**
-     * @param ConfigProvider    $configProvider
-     * @param DoctrineHelper    $doctrineHelper
-     * @param EmailHolderHelper $emailHolderHelper
-     */
     public function __construct(
         ConfigProvider $configProvider,
         DoctrineHelper $doctrineHelper,
-        EmailHolderHelper $emailHolderHelper
+        EmailHolderHelper $emailHolderHelper,
+        Inflector $inflector
     ) {
         $this->configProvider = $configProvider;
         $this->doctrineHelper = $doctrineHelper;
         $this->emailHolderHelper = $emailHolderHelper;
+        $this->inflector = $inflector;
     }
 
     /**
@@ -57,7 +55,7 @@ class EmailDirectionProvider implements DirectionProviderInterface
             foreach ($columns as $column) {
                 // check only columns with 'contact_information'
                 if ($this->isEmailType($targetClass, $column)) {
-                    $getMethodName = 'get' . Inflector::classify($column);
+                    $getMethodName = 'get' . $this->inflector->classify($column);
                     if ($activity->getFromEmailAddress()->getEmail() === $target->$getMethodName()) {
                         return DirectionProviderInterface::DIRECTION_OUTGOING;
                     }

@@ -93,7 +93,7 @@ SQL;
         $this->logQuery($logger, $auditInsertSql, $params, $types);
 
         if (!$dryRun) {
-            $this->connection->executeUpdate($auditInsertSql, $params, $types);
+            $this->connection->executeStatement($auditInsertSql, $params, $types);
         }
     }
 
@@ -167,7 +167,7 @@ SQL;
         $this->logQuery($logger, $updateSql, $params, $types);
 
         if (!$dryRun) {
-            $this->connection->executeUpdate($updateSql, $params, $types);
+            $this->connection->executeStatement($updateSql, $params, $types);
         }
     }
 }

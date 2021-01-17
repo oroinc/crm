@@ -78,7 +78,7 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
         } else {
             $connection = $this->getEntityManager()->getConnection();
             $platform   = $connection->getDatabasePlatform();
-            $connection->executeUpdate($platform->getTruncateTableSQL($table, true));
+            $connection->executeStatement($platform->getTruncateTableSQL($table, true));
         }
     }
 

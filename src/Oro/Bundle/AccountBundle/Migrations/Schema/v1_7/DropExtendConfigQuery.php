@@ -51,7 +51,7 @@ DQL;
 
         $this->logQuery($logger, $updateSql, $params);
         if (!$dryRun) {
-            $this->connection->executeUpdate($updateSql, $params);
+            $this->connection->executeStatement($updateSql, $params);
         }
     }
 }

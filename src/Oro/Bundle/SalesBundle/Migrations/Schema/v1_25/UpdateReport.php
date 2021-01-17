@@ -99,7 +99,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
     {
         $this->logQuery($logger, $query, $params);
         if (!$dryRun) {
-            $this->connection->executeUpdate($query, $params);
+            $this->connection->executeStatement($query, $params);
         }
     }
 }

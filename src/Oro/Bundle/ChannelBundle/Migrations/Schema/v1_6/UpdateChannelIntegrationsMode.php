@@ -52,7 +52,7 @@ class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
         $this->logQuery($logger, $updateSql, $params, $types);
 
         if (!$dryRun) {
-            $this->connection->executeUpdate($updateSql, $params, $types);
+            $this->connection->executeStatement($updateSql, $params, $types);
         }
     }
 

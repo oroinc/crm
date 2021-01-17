@@ -39,7 +39,7 @@ class AccountNameExprIndexQuery extends ParametrizedMigrationQuery
 
             $this->logQuery($logger, $createIndex);
             if (!$dryRun) {
-                $this->connection->executeUpdate($createIndex);
+                $this->connection->executeStatement($createIndex);
             }
         }
     }
