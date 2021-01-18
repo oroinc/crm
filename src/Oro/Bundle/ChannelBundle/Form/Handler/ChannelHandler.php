@@ -101,7 +101,7 @@ class ChannelHandler
         $this->getManager()->persist($entity);
         $this->getManager()->flush();
 
-        $this->dispatcher->dispatch(ChannelSaveEvent::EVENT_NAME, new ChannelSaveEvent($entity));
+        $this->dispatcher->dispatch(new ChannelSaveEvent($entity), ChannelSaveEvent::EVENT_NAME);
     }
 
     /**

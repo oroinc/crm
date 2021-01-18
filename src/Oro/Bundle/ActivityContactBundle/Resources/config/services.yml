@@ -39,6 +39,7 @@ services:
             - "@oro_entity_config.provider.entity"
             - "@oro_entity.doctrine_helper"
             - "@oro_email.email_holder_helper"
+            - '@Doctrine\Inflector\Inflector'
         tags:
             - { name: oro_activity_direction.provider, class: Oro\Bundle\EmailBundle\Entity\Email }
 

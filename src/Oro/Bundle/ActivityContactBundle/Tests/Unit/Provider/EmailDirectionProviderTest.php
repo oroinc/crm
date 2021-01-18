@@ -2,7 +2,8 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\Inflector;
+use Doctrine\Inflector\Rules\English\InflectorFactory;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider;
 use Oro\Bundle\EmailBundle\Entity\Email;
@@ -18,6 +19,7 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
 
     /** @var EmailDirectionProvider */
     protected $provider;
+    private Inflector $inflector;
 
     protected function setUp(): void
     {
@@ -56,7 +58,13 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->provider = new EmailDirectionProvider($configProvider, $doctrineHelper, $emailHolderHelper);
+        $this->inflector = (new InflectorFactory())->build();
+        $this->provider = new EmailDirectionProvider(
+            $configProvider,
+            $doctrineHelper,
+            $emailHolderHelper,
+            $this->inflector
+        );
     }
 
     public function testGetDirection()
@@ -81,7 +89,7 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testOutgoingDirectionForCustomEntity()
     {
-        $getMethodName = "get" . Inflector::classify(self::COLUMN_NAME);
+        $getMethodName = "get" . $this->inflector->classify(self::COLUMN_NAME);
         $target = $this->getMockBuilder(\ArrayObject::class)
             ->addMethods([$getMethodName])
             ->getMock();
@@ -102,7 +110,7 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testIncomingDirectionForCustomEntity()
     {
-        $getMethodName = "get" . Inflector::classify(self::COLUMN_NAME);
+        $getMethodName = "get" . $this->inflector->classify(self::COLUMN_NAME);
         $target = $this->getMockBuilder(\ArrayObject::class)
             ->addMethods([$getMethodName])
             ->getMock();
@@ -129,7 +137,7 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testUnknownDirectionForCustomEntity()
     {
-        $getMethodName = "get" . Inflector::classify(self::COLUMN_NAME);
+        $getMethodName = "get" . $this->inflector->classify(self::COLUMN_NAME);
         $target = $this->getMockBuilder(\ArrayObject::class)
             ->addMethods([$getMethodName])
             ->getMock();

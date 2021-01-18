@@ -6,7 +6,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\Rules\English\InflectorFactory;
 use Oro\Bundle\GaufretteBundle\FileManager;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
@@ -31,7 +31,10 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware, Ke
      */
     public function fieldValueShouldBePrimary($field, $value)
     {
-        $labelSelector = sprintf("label:contains('%s')", ucfirst(Inflector::pluralize($field)));
+        $labelSelector = sprintf(
+            "label:contains('%s')",
+            ucfirst((new InflectorFactory())->build()->pluralize($field))
+        );
         /** @var NodeElement $label */
         $label = $this->getSession()->getPage()->find('css', $labelSelector);
         self::assertNotNull($label, sprintf('Label "%s" not found', $field));

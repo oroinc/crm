@@ -120,12 +120,12 @@ class ChannelController extends RestController
             $channel = $this->getManager()->find($id);
 
             $this->get('event_dispatcher')->dispatch(
-                ChannelBeforeDeleteEvent::EVENT_NAME,
-                new ChannelBeforeDeleteEvent($channel)
+                new ChannelBeforeDeleteEvent($channel),
+                ChannelBeforeDeleteEvent::EVENT_NAME
             );
 
             $this->getDeleteHandler()->handleDelete($id, $this->getManager());
-            $this->get('event_dispatcher')->dispatch(ChannelDeleteEvent::EVENT_NAME, new ChannelDeleteEvent($channel));
+            $this->get('event_dispatcher')->dispatch(new ChannelDeleteEvent($channel), ChannelDeleteEvent::EVENT_NAME);
         } catch (EntityNotFoundException $e) {
             return $this->handleView($this->view(null, Response::HTTP_NOT_FOUND));
         } catch (AccessDeniedException $e) {

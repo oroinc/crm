@@ -376,7 +376,7 @@ class CustomerSearchHandler extends ContextSearchHandler
         if (!empty($item['searchItem'])) {
             /** @var Item $searchItem */
             $searchItem = $item['searchItem'];
-            $this->dispatcher->dispatch(PrepareResultItemEvent::EVENT_NAME, new PrepareResultItemEvent($searchItem));
+            $this->dispatcher->dispatch(new PrepareResultItemEvent($searchItem), PrepareResultItemEvent::EVENT_NAME);
 
             $text = $searchItem->getRecordTitle();
             $className = $searchItem->getEntityName();

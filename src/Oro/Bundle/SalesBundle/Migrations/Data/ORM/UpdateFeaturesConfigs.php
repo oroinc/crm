@@ -82,7 +82,7 @@ SQL;
 
     protected function clearChannelsConfigurations()
     {
-        $this->getConnection()->executeUpdate(
+        $this->getConnection()->executeStatement(
             'DELETE FROM orocrm_channel_entity_name WHERE name IN (:classes)',
             [
                 'classes' => [

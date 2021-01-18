@@ -5,13 +5,13 @@ namespace Oro\Bundle\ChannelBundle\Controller;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/integration")
  */
-class ChannelIntegrationController extends Controller
+class ChannelIntegrationController extends AbstractController
 {
     /**
      * @Route("/create/{type}/{channelName}", requirements={"type"="\w+"}, name="oro_channel_integration_create")
