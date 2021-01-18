@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Controller;
 use Oro\Bundle\FormBundle\Model\AutocompleteRequest;
 use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -16,7 +16,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 /**
  * @Route("/sales")
  */
-class AutocompleteController extends Controller
+class AutocompleteController extends AbstractController
 {
     /**
      * @param Request $request

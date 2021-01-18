@@ -4,7 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Twig;
 
 use Oro\Bundle\ChannelBundle\Provider\MetadataProviderInterface;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

@@ -68,7 +68,7 @@ DQL;
 
         $this->logQuery($logger, $query, $params, $types);
         if (!$dryRun) {
-            $this->connection->executeUpdate($query, $params, $types);
+            $this->connection->executeStatement($query, $params, $types);
         }
 
         $logger->info('Assign leads and opportunities to new b2b customers');
@@ -93,8 +93,8 @@ DQL;
         $this->logQuery($logger, $leadUpdateQuery);
         $this->logQuery($logger, $opportunityUpdateQuery);
         if (!$dryRun) {
-            $this->connection->executeUpdate($leadUpdateQuery);
-            $this->connection->executeUpdate($opportunityUpdateQuery);
+            $this->connection->executeStatement($leadUpdateQuery);
+            $this->connection->executeStatement($opportunityUpdateQuery);
         }
     }
 
@@ -121,7 +121,7 @@ DQL;
 
         $this->logQuery($logger, $query);
         if (!$dryRun) {
-            $this->connection->executeUpdate($query);
+            $this->connection->executeStatement($query);
         }
     }
 

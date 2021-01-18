@@ -7,10 +7,10 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Component\MessageQueue\Client\MessageProducer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ChannelController extends Controller
+class ChannelController extends AbstractController
 {
     /**
      * @Route(

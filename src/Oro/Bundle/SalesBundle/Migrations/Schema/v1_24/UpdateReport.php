@@ -218,7 +218,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
         $types = ['definition' => 'text', 'id' => 'integer'];
         $this->logQuery($logger, $query, $params, $types);
         if (!$dryRun) {
-            $this->connection->executeUpdate($query, $params, $types);
+            $this->connection->executeStatement($query, $params, $types);
         }
     }
 

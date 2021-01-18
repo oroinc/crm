@@ -41,8 +41,8 @@ class CaseEntityHandler extends ApiFormHandler
         $this->entityManager->persist($entity);
 
         $this->dispatcher->dispatch(
-            Events::BEFORE_SAVE,
-            new FormHandlerEvent($this->form, $entity)
+            new FormHandlerEvent($this->form, $entity),
+            Events::BEFORE_SAVE
         );
 
         $this->entityManager->flush();

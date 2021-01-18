@@ -7,10 +7,10 @@ use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CaseController extends Controller
+class CaseController extends AbstractController
 {
     /**
      * @Route(name="oro_case_index")

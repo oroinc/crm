@@ -39,7 +39,7 @@ class UpdateChannelJsonArrayQuery extends ParametrizedMigrationQuery
 
             $this->logQuery($logger, $updateSql);
             if (!$dryRun) {
-                $this->connection->executeUpdate($updateSql);
+                $this->connection->executeStatement($updateSql);
             }
         }
     }

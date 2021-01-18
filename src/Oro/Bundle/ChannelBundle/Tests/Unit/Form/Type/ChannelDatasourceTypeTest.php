@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
+use Doctrine\Inflector\Rules\English\InflectorFactory;
 use Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
 use Oro\Bundle\FormBundle\Autocomplete\SearchRegistry;
@@ -243,7 +244,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         $settingsProvider = $this->createMock(SettingsProvider::class);
         $tokenAccessor = $this->createMock(TokenAccessorInterface::class);
 
-        $channelSubscriber = new ChannelFormSubscriber($registry, $settingsProvider);
+        $channelSubscriber = new ChannelFormSubscriber($registry, $settingsProvider, (new InflectorFactory())->build());
         $ownerSubscriber = $this->getMockBuilder(DefaultOwnerSubscriber::class)
             ->setConstructorArgs([$tokenAccessor, $registry])
             ->setMethods(['postSet'])

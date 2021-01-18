@@ -3,11 +3,11 @@
 namespace Oro\Bundle\ActivityContactBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ActivityContactController extends Controller
+class ActivityContactController extends AbstractController
 {
     /**
      * @param string  $entityClass The entity class which metrics should be rendered

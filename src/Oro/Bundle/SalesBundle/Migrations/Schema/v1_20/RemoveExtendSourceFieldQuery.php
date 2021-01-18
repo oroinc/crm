@@ -57,7 +57,7 @@ class RemoveExtendSourceFieldQuery extends ParametrizedMigrationQuery
         $params = ['class' => 'Oro\Bundle\SalesBundle\Entity\Lead', 'field' => 'extend_source'];
         $this->logQuery($logger, $sql, $params);
         if (!$dryRun) {
-            $this->connection->executeUpdate($sql, $params);
+            $this->connection->executeStatement($sql, $params);
         }
     }
 
@@ -78,7 +78,7 @@ class RemoveExtendSourceFieldQuery extends ParametrizedMigrationQuery
         $params = ['class' => 'Oro\Bundle\SalesBundle\Entity\Lead', 'field' => 'extend_source'];
         $this->logQuery($logger, $sql, $params);
         if (!$dryRun) {
-            $this->connection->executeUpdate($sql, $params);
+            $this->connection->executeStatement($sql, $params);
         }
     }
 
@@ -102,7 +102,7 @@ class RemoveExtendSourceFieldQuery extends ParametrizedMigrationQuery
             $types  = ['data' => 'array', 'id' => 'integer'];
             $this->logQuery($logger, $query, $params, $types);
             if (!$dryRun) {
-                $this->connection->executeUpdate($query, $params, $types);
+                $this->connection->executeStatement($query, $params, $types);
             }
         }
     }

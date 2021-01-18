@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\CaseBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class FormHandlerEvent extends Event
 {

@@ -108,8 +108,8 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with(
-                $this->equalTo(ChannelSaveEvent::EVENT_NAME),
-                $this->isInstanceOf('Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent')
+                $this->isInstanceOf('Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent'),
+                $this->equalTo(ChannelSaveEvent::EVENT_NAME)
             );
 
         $this->assertTrue($this->handler->process($this->entity));

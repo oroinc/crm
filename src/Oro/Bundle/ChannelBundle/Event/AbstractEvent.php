@@ -3,7 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Event;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class AbstractEvent extends Event
 {

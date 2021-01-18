@@ -75,7 +75,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         foreach ($queries as $sql) {
             $this->logQuery($logger, $sql, $params, $types);
             if (!$dryRun) {
-                $this->connection->executeUpdate($sql, $params, $types);
+                $this->connection->executeStatement($sql, $params, $types);
             }
         }
 
@@ -86,7 +86,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         $sql    = 'DELETE FROM oro_workflow_definition WHERE name = :old_workflow_name ';
         $this->logQuery($logger, $sql, $params, $types);
         if (!$dryRun) {
-            $this->connection->executeUpdate($sql, $params, $types);
+            $this->connection->executeStatement($sql, $params, $types);
         }
     }
 
@@ -132,7 +132,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
                ' WHERE workflow_name = :workflow_name AND name = :old_name';
         foreach ($params as $param) {
             $this->logQuery($logger, $sql, $param, $types);
-            $this->connection->executeUpdate($sql, $param, $types);
+            $this->connection->executeStatement($sql, $param, $types);
         }
     }
 
@@ -157,7 +157,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
                ' WHERE step_from_id = :step_from_id AND step_to_id = :step_to_id';
         $this->logQuery($logger, $sql, $params, $types);
         if (!$dryRun) {
-            $this->connection->executeUpdate($sql, $params, $types);
+            $this->connection->executeStatement($sql, $params, $types);
         }
 
         // Update current step for workflow items from won to open
@@ -173,7 +173,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
                ' WHERE current_step_id = :old_current_step_id';
         $this->logQuery($logger, $sql, $params, $types);
         if (!$dryRun) {
-            $this->connection->executeUpdate($sql, $params, $types);
+            $this->connection->executeStatement($sql, $params, $types);
         }
 
         // Update old requalify transition to reopen
@@ -191,7 +191,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
                ' WHERE transition IN (:old_transitions) AND step_to_id = :step_to_id';
         $this->logQuery($logger, $sql, $params, $types);
         if (!$dryRun) {
-            $this->connection->executeUpdate($sql, $params, $types);
+            $this->connection->executeStatement($sql, $params, $types);
         }
 
         // Define and specify won step
@@ -214,7 +214,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
                ' WHERE step_to_id = :old_step_to_id AND transition = :old_transition';
         $this->logQuery($logger, $sql, $params, $types);
         if (!$dryRun) {
-            $this->connection->executeUpdate($sql, $params, $types);
+            $this->connection->executeStatement($sql, $params, $types);
         }
 
         // Update old lost transition
@@ -234,7 +234,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
                ' WHERE step_to_id = :step_to_id AND transition = :old_transition';
         $this->logQuery($logger, $sql, $params, $types);
         if (!$dryRun) {
-            $this->connection->executeUpdate($sql, $params, $types);
+            $this->connection->executeStatement($sql, $params, $types);
         }
 
         // Update current steps in won workflows items
@@ -266,7 +266,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
 SQL;
         $this->logQuery($logger, $sql, $params, $types);
         if (!$dryRun) {
-            $this->connection->executeUpdate($sql, $params, $types);
+            $this->connection->executeStatement($sql, $params, $types);
         }
     }
 
@@ -301,7 +301,7 @@ SQL;
         foreach ($params as $param) {
             $this->logQuery($logger, $sql, $param, $types);
             if (!$dryRun) {
-                $this->connection->executeUpdate($sql, $param, $types);
+                $this->connection->executeStatement($sql, $param, $types);
             }
         }
     }

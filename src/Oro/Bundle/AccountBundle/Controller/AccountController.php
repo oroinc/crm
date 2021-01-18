@@ -8,13 +8,13 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * CRUD for accounts.
  */
-class AccountController extends Controller
+class AccountController extends AbstractController
 {
     /**
      * @Route("/view/{id}", name="oro_account_view", requirements={"id"="\d+"})
