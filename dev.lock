@@ -5963,7 +5963,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "827424c8c49727055324c049e7bb9c54b009cba8"
+                "reference": "7e0fb3ece1263bebec0e5523979093dc51864bee"
             },
             "require": {
                 "akeneo/batch-bundle": "0.4.13",
@@ -6016,7 +6016,7 @@
                 "ocramius/proxy-manager": "~2.11.1",
                 "oro/doctrine-extensions": "2.0.0",
                 "oro/redis-config": "4.2.*",
-                "php": "~7.4.11",
+                "php": "~7.4.14",
                 "php-http/httplug-bundle": "~1.20.0",
                 "phpdocumentor/reflection-docblock": "5.2.*",
                 "psr/container": "^1.0",
