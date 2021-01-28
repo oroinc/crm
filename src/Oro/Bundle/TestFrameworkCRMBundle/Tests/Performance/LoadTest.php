@@ -47,7 +47,7 @@ class LoadTest extends WebTestCase
         $this->resultData = $container->averageTime;
     }
 
-    protected function assertPostConditions()
+    protected function assertPostConditions(): void
     {
         $data = $this->getName() . ',' . date('d/m/y') .  ',' . $this->resultLimit. ',' . $this->resultData . "\n";
         file_put_contents(
