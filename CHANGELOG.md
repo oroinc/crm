@@ -2,7 +2,10 @@ Please refer first to [UPGRADE.md](UPGRADE.md) for the most important items that
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
-## 4.2.0-beta
+## 4.2.0 (2020-01-29)
+[Show detailed list of changes](incompatibilities-4-2.md)
+
+## 4.2.0-beta (2020-09-28)
 
 The code of OroCRM connector to Magento 1 has been moved to a separate package.
 
