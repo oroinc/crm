@@ -2,19 +2,6 @@ parameters:
     oro_platform.collector.template: '@@OroCRM/Collector/crm.html.twig'
 
 services:
-    oro_crm.extension.transtation_packages_provider:
-        parent: oro_translation.extension.transtation_packages_provider.abstract
-        calls:
-            - ['addPackage', ['OroCRM', 'oro/crm', '/src']]
-            - ['addPackage', ['OroCRM', 'oro/crm-call-bundle']]
-            - ['addPackage', ['OroCRM', 'oro/crm-dotmailer']]
-            - ['addPackage', ['OroCRM', 'oro/crm-hangouts-call-bundle']]
-            - ['addPackage', ['OroCRM', 'oro/marketing', '/src']]
-            - ['addPackage', ['OroCRM', 'oro/crm-task-bundle']]
-            - ['addPackage', ['OroCRM', 'oro/crm-zendesk']]
-        tags:
-            - {name: oro_translation.extension.packages_provider}
-
     Oro\Bundle\CRMBundle\CacheWarmer\ExtendEntityCacheWarmer:
         arguments:
             - '@doctrine'
