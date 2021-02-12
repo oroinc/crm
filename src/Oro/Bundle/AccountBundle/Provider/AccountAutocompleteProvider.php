@@ -20,22 +20,14 @@ class AccountAutocompleteProvider implements AccountAutocompleteProviderInterfac
      */
     public function getEmails($entity)
     {
-        $data = [];
-
-        if (!$entity instanceof Account) {
-            return $data;
-        }
-
-        $contacts = $entity->getContacts();
-        foreach ($contacts as $contact) {
-            $contactEmails = $contact->getEmails();
-            foreach ($contactEmails as $contactEmail) {
-                $email = $contactEmail->getEmail();
-                $data[] = $email;
+        return $this->getContactInfo(
+            $entity,
+            static function($contact, &$data) {
+                foreach ($contact->getEmails() as $contactEmail) {
+                    $data[] = $contactEmail->getEmail();
+                }
             }
-        }
-
-        return $data;
+        );
     }
 
     /**
@@ -43,22 +35,14 @@ class AccountAutocompleteProvider implements AccountAutocompleteProviderInterfac
      */
     public function getPhones($entity)
     {
-        $data = [];
-
-        if (!$entity instanceof Account) {
-            return $data;
-        }
-
-        $contacts = $entity->getContacts();
-        foreach ($contacts as $contact) {
-            $contactPhones = $contact->getPhones();
-            foreach ($contactPhones as $contactPhone) {
-                $phone = $contactPhone->getPhone();
-                $data[] = $phone;
+        return $this->getContactInfo(
+            $entity,
+            static function($contact, &$data) {
+                foreach ($contact->getPhones() as $contactPhone) {
+                    $data[] = $contactPhone->getPhone();
+                }
             }
-        }
-
-        return $data;
+        );
     }
 
     /**
@@ -66,23 +50,28 @@ class AccountAutocompleteProvider implements AccountAutocompleteProviderInterfac
      */
     public function getNames($entity)
     {
-        $data = [];
-
-        if (!$entity instanceof Account) {
-            return $data;
-        }
-
-        $contacts = $entity->getContacts();
-        foreach ($contacts as $contact) {
-            $contactName = $contact->getNamePrefix() .
+        return $this->getContactInfo(
+            $entity,
+            static function($contact, &$data) {
+                $data[] = $contact->getNamePrefix() .
                 $contact->getFirstName() .
                 $contact->getMiddleName() .
                 $contact->getLastName() .
                 $contact->getNameSuffix();
+            }
+        );
+    }
 
-            $data[] = $contactName;
+    protected function getContactInfo($entity, $callback)
+    {
+        if (!$this->isSupportEntity($entity)) {
+            return [];
         }
 
-        return $data;
+        foreach ($entity->getContacts() as $contact) {
+            $callback($contact, &$data);
+        }
+        
+        return $data ?? [];
     }
 }
