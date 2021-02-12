@@ -106,7 +106,6 @@ class AccountType extends AbstractType
      */
     protected function getInitialElements(Collection $contacts, $default)
     {
-        $result = array();
         /** @var Contact $contact */
         foreach ($contacts as $contact) {
             if (!$contact->getId()) {
@@ -126,7 +125,7 @@ class AccountType extends AbstractType
             );
         }
 
-        return $result;
+        return $result ?? [];
     }
 
     /**
