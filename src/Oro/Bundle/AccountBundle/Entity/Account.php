@@ -468,12 +468,7 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      */
     public function getEmail()
     {
-        $contact = $this->getDefaultContact();
-        if (!$contact) {
-            return null;
-        }
-
-        return $contact->getEmail();
+        return ($this->getDefaultContact())?->getEmail();
     }
 
     /**
