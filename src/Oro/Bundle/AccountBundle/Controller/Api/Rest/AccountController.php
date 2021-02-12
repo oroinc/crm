@@ -179,35 +179,26 @@ class AccountController extends RestController implements ClassResourceInterface
      */
     protected function getPreparedItems($entities, $resultFields = [])
     {
-        $result = [];
-        $ids = array_map(
-            function (Account $account) {
-                return $account->getId();
-            },
-            $entities
-        );
-
-        $ap = $this->get('oro_channel.provider.lifetime.amount_provider');
-        $lifetimeValues = $ap->getAccountsLifetimeQueryBuilder($ids)
+        foreach (($this->get('oro_channel.provider.lifetime.amount_provider'))
+            ->getAccountsLifetimeQueryBuilder(
+                array_map(
+                    function (Account $account) {
+                        return $account->getId();
+                    },
+                    $entities
+                )
+            )
             ->getQuery()
-            ->getArrayResult();
-        $lifetimeMap = [];
-        foreach ($lifetimeValues as $value) {
+            ->getArrayResult() as $value) {
             $lifetimeMap[$value['accountId']] = (float)$value['lifetimeValue'];
         }
 
         foreach ($entities as $entity) {
             /** @var Account $entity */
-            $entityArray = parent::getPreparedItem($entity, $resultFields);
-            if (array_key_exists($entity->getId(), $lifetimeMap)) {
-                $entityArray['lifetimeValue'] = $lifetimeMap[$entity->getId()];
-            } else {
-                $entityArray['lifetimeValue'] = 0.0;
-            }
-
-            $result[] = $entityArray;
+            $result[] = parent::getPreparedItem($entity, $resultFields);
+            $result[count($result) - 1]['lifetimeValue'] = $lifetimeMap[$entity->getId()] ?? 0.0;
         }
 
-        return $result;
+        return $result ?? [];
     }
 }
