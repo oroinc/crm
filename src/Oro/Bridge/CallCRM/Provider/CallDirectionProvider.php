@@ -57,23 +57,17 @@ class CallDirectionProvider implements DirectionProviderInterface
      */
     public function getLastActivitiesDateForTarget(EntityManager $em, $target, $direction, $skipId = null)
     {
-        $result = [];
-        $resultActivity = $this->getLastActivity($em, $target, $skipId);
-        if ($resultActivity) {
+        if ($resultActivity = $this->getLastActivity($em, $target, $skipId)) {
             $result['all'] = $this->getDate($resultActivity);
-            if ($this->getDirection($resultActivity, $target) !== $direction) {
-                $resultActivity = $this->getLastActivity($em, $target, $skipId, $direction);
-                if ($resultActivity) {
-                    $result['direction'] = $this->getDate($resultActivity);
-                } else {
-                    $result['direction'] = null;
-                }
-            } else {
-                $result['direction'] = $result['all'];
-            }
+            $result['direction'] = $this->getDirection($resultActivity, $target) !== $direction
+                ? (($resultActivity = $this->getLastActivity($em, $target, $skipId, $direction))
+                    ? $this->getDate($resultActivity)
+                    : null
+                )
+                : $result['all'];
         }
 
-        return $result;
+        return $result ?? [];
     }
 
     /**
