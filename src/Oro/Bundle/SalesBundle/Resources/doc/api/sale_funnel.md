@@ -130,9 +130,7 @@ Delete a collection of sales processes records.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ### lead
 
@@ -141,7 +139,7 @@ Delete a collection of sales processes records.
 {@inheritdoc}
 
 **Conditionally required field:**
-*At least one of the fields Lead or Opportunity must be defined.*
+Either **lead** or **opportunity** must be defined.
 
 ### opportunity
 
@@ -150,7 +148,7 @@ Delete a collection of sales processes records.
 {@inheritdoc}
 
 **Conditionally required field:**
-*At least one of the fields Lead or Opportunity must be defined.*
+Either **lead** or **opportunity** must be defined.
 
 ### campaign
 

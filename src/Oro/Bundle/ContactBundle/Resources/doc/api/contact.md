@@ -14,22 +14,21 @@ Example of data: **\[{"email": "first@email.com"}, {"email": "second@email.com"}
 
 {@inheritdoc}
 
-**Please note:**
-
-*Data should contain all email addresses of the contact, including the primary email address.*
+**Note:**
+Data should contain all email addresses of the contact, including the primary email address.
 
 **Conditionally required field:**
-*At least one of the fields First name, Last name, Emails or Phones must be defined.*
+Either **firstName**, **lastName**, **emails** or **phones** must be defined.
 
 #### update
 
 {@inheritdoc}
 
-**Please note:**
+**Note:**
+Data should contain all email addresses of the contact, including the primary email address.
 
-*Data should contain all email addresses of the contact, including the primary email address.*
-
-*At least one of the fields First name, Last name, Emails or Phones must remain defined.*
+**Conditionally required field:**
+Either **firstName**, **lastName**, **emails** or **phones** must remain defined.
 
 ### phones
 
@@ -43,22 +42,21 @@ Example of data: **\[{"phone": "202-555-0141"}, {"phone": "202-555-0171"}\]**
 
 {@inheritdoc}
 
-**Please note:**
-
-*Data should contain all phone numbers of the contact, including the primary phone number.*
+**Note:**
+Data should contain all phone numbers of the contact, including the primary phone number.
 
 **Conditionally required field:**
-*At least one of the fields First name, Last name, Emails or Phones must be defined.*
+Either **firstName**, **lastName**, **emails** or **phones** must be defined.
 
 #### update
 
 {@inheritdoc}
 
-**Please note:**
+**Note:**
+Data should contain all phone numbers of the contact, including the primary phone number.
 
-*Data should contain all phone numbers of the contact, including the primary phone number.*
-
-*At least one of the fields First name, Last name, Emails or Phones must remain defined.*
+**Conditionally required field:**
+Either **firstName**, **lastName**, **emails** or **phones** must remain defined.
 
 ### primaryEmail
 
@@ -68,9 +66,8 @@ Primary email address of the contact.
 
 The email address that should be set as the primary one.
 
-**Please note:**
-
-*The **emails** collection should contain the primary email address if the request has this collection.*
+**Note:**
+The **emails** collection should contain the primary email address if the request has this collection.
 
 ### primaryPhone
 
@@ -80,9 +77,8 @@ Primary phone number of the contact.
 
 The phone number that should be set as the primary one.
 
-**Please note:**
-
-*The **phones** collection should contain the primary phone number if the request has this collection.*
+**Note:**
+The **phones** collection should contain the primary phone number if the request has this collection.
 
 ### firstName
 
@@ -91,15 +87,14 @@ The phone number that should be set as the primary one.
 {@inheritdoc}
 
 **Conditionally required field:**
-*At least one of the fields First name, Last name, Emails or Phones must be defined.*
- 
-#### update
- 
-{@inheritdoc}
- 
-**Please note:**
+Either **firstName**, **lastName**, **emails** or **phones** must be defined.
 
-*At least one of the fields First name, Last name, Emails or Phones must remain defined.*
+#### update
+
+{@inheritdoc}
+
+**Conditionally required field:**
+Either **firstName**, **lastName**, **emails** or **phones** must remain defined.
 
 ### lastName
 
@@ -108,15 +103,14 @@ The phone number that should be set as the primary one.
 {@inheritdoc}
 
 **Conditionally required field:**
-*At least one of the fields First name, Last name, Emails or Phones must be defined.*
- 
-#### update
- 
-{@inheritdoc}
- 
-**Please note:**
+Either **firstName**, **lastName**, **emails** or **phones** must be defined.
 
-*At least one of the fields First name, Last name, Emails or Phones must remain defined.*
+#### update
+
+{@inheritdoc}
+
+**Conditionally required field:**
+Either **firstName**, **lastName**, **emails** or **phones** must remain defined.
 
 ## FILTERS
 

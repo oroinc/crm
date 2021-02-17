@@ -3,9 +3,9 @@
 ## ACTIONS
 
 ### get
-            
+
 Retrieve a specific account record.
-             
+
 {@inheritdoc}
 
 ### get_list
@@ -161,9 +161,7 @@ Delete a collection of account records.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ## SUBRESOURCES
 
@@ -322,25 +320,22 @@ Example:
 
 Retrieve the account records that refer to a specific account record.
 
-**Please note:**
-
-*This parameter is currently unavailable via the OroCRM interface.*
+**Note:**
+This relationship is currently unavailable via the OroCRM interface.
 
 #### get_relationship
 
 Retrieve the IDs of account records that refer to a specific account record.
 
-**Please note:**
-
-*This parameter is currently unavailable via the OroCRM interface.*
+**Note:**
+This relationship is currently unavailable via the OroCRM interface.
 
 #### update_relationship
 
 Replace the account records that refer to a specific account record.
 
-**Please note:**
-
-*This parameter is currently unavailable via the OroCRM interface.*
+**Note:**
+This relationship is currently unavailable via the OroCRM interface.
 
 {@request:json_api}
 Example:

@@ -22,10 +22,9 @@ The created record is returned in the response.
 
 {@inheritdoc}
 
-**Please note:**
-
-*Either **account** or **customer** field should be specified. In case when both fields are provided
-the customer should be a part of the specified account.*
+**Note:**
+Either **account** or **customer** field should be specified. In case when both fields are provided
+the customer should belongs to the specified account.
 
 {@request:json_api}
 Example:
@@ -87,11 +86,10 @@ The updated record is returned in the response.
 
 {@inheritdoc}
 
-**Please note:**
-
-*The **account** and **customer** fields are related and you cannot pass them together if
+**Note:**
+The **account** and **customer** fields are related and you cannot pass them together if
 the customer is not a part of the specified account.
-These fields could be used independent from each other, but must be correlated if both of them are specified.*
+These fields could be used independent from each other, but must be correlated if both of them are specified.
 
 {@request:json_api}
 Example:
@@ -169,9 +167,7 @@ Delete a collection of opportunity records.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ### customer
 
@@ -181,11 +177,10 @@ A customer the opportunity is assigned to.
 
 {@inheritdoc}
 
-**Please note:**
+**Notes:**
 
-*This field is **required** if the **account** field is not specified.*
-
-*If both **customer** and **account** fields are provided the customer should be a part of the specified account.*
+* This field is required if the **account** field is not specified.
+* If both **customer** and **account** fields are provided the customer should belongs to the specified account.
 
 ### account
 
@@ -195,9 +190,8 @@ An account the opportunity is assigned to.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** if the **customer** field is not specified.*
+**Note:**
+This field is required if the **customer** field is not specified.
 
 ### status
 
