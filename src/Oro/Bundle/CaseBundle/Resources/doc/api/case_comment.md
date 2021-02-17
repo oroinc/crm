@@ -127,9 +127,7 @@ Delete a collection of case comment records.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ### message
 
@@ -143,9 +141,7 @@ Delete a collection of case comment records.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ## SUBRESOURCES
 
@@ -262,7 +258,7 @@ Example:
 #### get_subresource
 
 Retrieve the records of the user who is an owner of a specific case comment record.
- 
+
 This user is also considered the case comment author if the *contact* field value is not specified for the case comment.
 
 #### get_relationship

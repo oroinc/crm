@@ -190,9 +190,8 @@ Example of data: **\[{"email": "first@email.com"}, {"email": "second@email.com"}
 
 {@inheritdoc}
 
-**Please note:**
-
-*Data should contain all email addresses of the business customer, including the primary email address.*
+**Note:**
+Data should contain all email addresses of the business customer, including the primary email address.
 
 ### phones
 
@@ -206,9 +205,8 @@ Example of data: **\[{"phone": "202-555-0141"}, {"phone": "202-555-0171"}\]**
 
 {@inheritdoc}
 
-**Please note:**
-
-*Data should contain all phone numbers of the business customer, including the primary phone number.*
+**Note:**
+Data should contain all phone numbers of the business customer, including the primary phone number.
 
 ### primaryEmail
 
@@ -218,9 +216,8 @@ Primary email address of the business customer.
 
 The email address that should be set as the primary one.
 
-**Please note:**
-
-*The **emails** collection should contain the primary email address if the request has this collection.*
+**Note:**
+The **emails** collection should contain the primary email address if the request has this collection.
 
 ### primaryPhone
 
@@ -230,9 +227,8 @@ Primary phone number of the business customer.
 
 The phone number that should be set as the primary one.
 
-**Please note:**
-
-*The **phones** collection should contain the primary phone number if the request has this collection.*
+**Note:**
+The **phones** collection should contain the primary phone number if the request has this collection.
 
 ### account
 
@@ -246,9 +242,7 @@ The phone number that should be set as the primary one.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ### dataChannel
 
@@ -262,9 +256,7 @@ The phone number that should be set as the primary one.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ## FILTERS
 
