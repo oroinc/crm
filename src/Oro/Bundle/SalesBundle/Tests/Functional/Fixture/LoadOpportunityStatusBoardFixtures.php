@@ -44,7 +44,7 @@ class LoadOpportunityStatusBoardFixtures extends AbstractFixture
             $opportunity->setName('opname_' . $i);
             $budgetAmount = MultiCurrency::create(50.00, 'USD');
             $opportunity->setBudgetAmount($budgetAmount);
-            $opportunity->setProbability(10);
+            $opportunity->setProbability(0.1);
             $opportunity->setOrganization($this->organization);
             $statusName = $opportunityStatuses[$i % self::STATUSES_COUNT];
             $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
