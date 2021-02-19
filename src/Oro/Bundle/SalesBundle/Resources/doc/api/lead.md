@@ -154,18 +154,15 @@ Delete a collection of lead records.
 
 **The required field.**
 
-**Please note:**
-
-*This field is optional if the default value is set in the Lead entity configuration.
-If this field is missing in the request, the default value is applied.*
+**Note:**
+This field is optional if the default value is set in the Lead entity configuration.
+If this field is missing in the request, the default value is applied.
 
 #### update
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ### name
 
@@ -179,9 +176,7 @@ If this field is missing in the request, the default value is applied.*
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ### emails
 
@@ -195,9 +190,8 @@ Example of data: **\[{"email": "first@email.com"}, {"email": "second@email.com"}
 
 {@inheritdoc}
 
-**Please note:**
-
-*Data should contain all email addresses of the lead, including the primary email address.*
+**Note:**
+Data should contain all email addresses of the lead, including the primary email address.
 
 ### phones
 
@@ -211,9 +205,8 @@ Example of data: **\[{"phone": "202-555-0141"}, {"phone": "202-555-0171"}\]**
 
 {@inheritdoc}
 
-**Please note:**
-
-*Data should contain all phone numbers of the lead, including the primary phone number.*
+**Note:**
+Data should contain all phone numbers of the lead, including the primary phone number.
 
 ### primaryEmail
 
@@ -223,9 +216,8 @@ Primary email address of the lead.
 
 The email address that should be set as the primary one.
 
-**Please note:**
-
-*The **emails** collection should contain the primary email address if the request has this collection.*
+**Note:**
+The **emails** collection should contain the primary email address if the request has this collection.
 
 ### primaryPhone
 
@@ -235,9 +227,8 @@ Primary phone number of the lead.
 
 The phone number that should be set as the primary one.
 
-**Please note:**
-
-*The **phones** collection should contain the primary phone number if the request has this collection.*
+**Note:**
+The **phones** collection should contain the primary phone number if the request has this collection.
 
 ### customer
 
@@ -247,11 +238,10 @@ A customer the lead is assigned to.
 
 {@inheritdoc}
 
-**Please note:**
-
-*The **customer** is related to the specific **account**.
+**Note:**
+The **customer** is related to the specific **account**.
 In case when both fields (**account** and **customer**) are provided
-the **customer** should be assigned to the specified **account**.*
+the **customer** should be assigned to the specified **account**.
 
 ### account
 
@@ -261,15 +251,14 @@ An account the lead is assigned to.
 
 {@inheritdoc}
 
-**Please note:**
-
-*The **account** is related to the specific **customer**.
+**Note:**
+The **account** is related to the specific **customer**.
 In case when both fields (**account** and **customer**) are provided
-the **customer** should be assigned to the specified **account**.*
+the **customer** should be assigned to the specified **account**.
 
 ### campaign
 
-The marketing campaign as a result of which the lead was created
+The marketing campaign as a result of which the lead was created.
 
 ## FILTERS
 
@@ -446,7 +435,7 @@ Retrieve the ID of an organization record that a lead belongs to.
 
 #### update_relationship
 
-Replace the organization a specific lead belongs to
+Replace the organization a specific lead belongs to.
 
 {@request:json_api}
 Example:

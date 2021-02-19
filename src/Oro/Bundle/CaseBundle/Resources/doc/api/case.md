@@ -10,7 +10,6 @@ Retrieve a specific case record.
 
 ### get_list
 
-
 Retrieve a collection of case records.
 
 {@inheritdoc}
@@ -204,9 +203,7 @@ Delete a collection of case records.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ### source
 
@@ -220,9 +217,7 @@ Delete a collection of case records.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ### status
 
@@ -236,9 +231,7 @@ Delete a collection of case records.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ### priority
 
@@ -252,9 +245,7 @@ Delete a collection of case records.
 
 {@inheritdoc}
 
-**Please note:**
-
-*This field is **required** and must remain defined.*
+**This field must not be empty, if it is passed.**
 
 ## SUBRESOURCES
 
