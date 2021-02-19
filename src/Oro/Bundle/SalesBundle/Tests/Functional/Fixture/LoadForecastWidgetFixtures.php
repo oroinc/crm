@@ -60,19 +60,19 @@ class LoadForecastWidgetFixtures extends AbstractFixture
             [
                 'status' => 'in_progress',
                 'close_date' => null,
-                'probability' => 10, //percents
+                'probability' => 0.1, //percents
                 'budget_amount' => 100, //USD
             ],
             [
                 'status' => 'in_progress',
                 'close_date' => $today,
-                'probability' => 10, //percents
+                'probability' => 0.1, //percents
                 'budget_amount' => 100, //USD
             ],
             [
                 'status' => 'in_progress',
                 'close_date' => $firstOfCurrentMonth,
-                'probability' => 100, //percents
+                'probability' => 1, //percents
                 'budget_amount' => 100, //USD
             ],
         ];

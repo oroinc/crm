@@ -57,7 +57,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['oro_sales_opportunity_form[name]'] = 'opname';
-        $form['oro_sales_opportunity_form[probability]'] = 1000;
+        $form['oro_sales_opportunity_form[probability]'] = 10;
         $form['oro_sales_opportunity_form[budgetAmount][value]'] = 50;
         $form['oro_sales_opportunity_form[budgetAmount][currency]'] = 'USD';
         $form['oro_sales_opportunity_form[owner]'] = 1;
@@ -212,7 +212,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                     'assert'              => [
                         'name'         => 'opname',
                         'budgetAmount' => 'USD50.0000',
-                        'probability'  => 10,
+                        'probability'  => 0.1,
                     ],
                     'expectedResultCount' => 2
                 ],
@@ -229,7 +229,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                     'assert'              => [
                         'name'              => 'opname',
                         'budgetAmount'      => 'USD50.0000',
-                        'probability'       => 10,
+                        'probability'       => 0.1,
                     ],
                     'expectedResultCount' => 2
                 ]

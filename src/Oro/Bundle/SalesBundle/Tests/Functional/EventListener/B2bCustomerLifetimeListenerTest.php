@@ -189,7 +189,7 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $closeRevenue = $budgetAmount = MultiCurrency::create(50.00, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
         $opportunity->setBudgetAmount($budgetAmount);
-        $opportunity->setProbability(10);
+        $opportunity->setProbability(0.1);
         $opportunity->setStatus($em->getReference($enumClass, 'won'));
         $opportunity->setOrganization($organization);
         /** @var Customer $customer */

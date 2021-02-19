@@ -5,13 +5,9 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
             - Length:
                 max: 255
         probability:
-            - Range:
+            - Oro\Bundle\FormBundle\Validator\Constraints\PercentRange:
                 min: 0
                 max: 100
-            - Range:
-                min: 0
-                max: 1
-                groups: [api]
         status:
             - NotBlank: ~
 
