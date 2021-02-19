@@ -35,7 +35,7 @@ class LoadFullOpportunityFixtures extends AbstractOpportunityFixtures
         $closeRevenue = MultiCurrency::create(0, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
 
-        $opportunity->setProbability(40);
+        $opportunity->setProbability(0.4);
 
         $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         $opportunity->setStatus($this->em->getReference($enumClass, 'in_progress'));

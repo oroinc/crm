@@ -26,7 +26,7 @@ class LoadClosedOpportunityFixtures extends AbstractOpportunityFixtures
         $closeRevenue = MultiCurrency::create(100, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
 
-        $opportunity->setProbability(100);
+        $opportunity->setProbability(1);
         $opportunity->setOrganization($this->getOrganization());
         $opportunity->setCloseDate(new \DateTime());
 

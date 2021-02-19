@@ -182,7 +182,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $opportunity->setCustomerAssociation($this->getReference('default_account_customer'));
         $budgetAmount = MultiCurrency::create(50.00, 'USD');
         $opportunity->setBudgetAmount($budgetAmount);
-        $opportunity->setProbability(10);
+        $opportunity->setProbability(0.1);
         $opportunity->setOrganization($this->organization);
 
         $this->em->persist($opportunity);
