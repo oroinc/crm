@@ -28,7 +28,7 @@ class OpportunityProbabilitySubscriberTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('10', $this->opportunity->getProbability());
     }
 
-    public function testafterDenormalize()
+    public function testAfterDenormalize()
     {
         $this->opportunity->setProbability('10');
         $event = new DenormalizeEntityEvent($this->opportunity, []);

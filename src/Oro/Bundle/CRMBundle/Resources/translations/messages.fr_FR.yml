@@ -1,0 +1,10 @@
+oro:
+    auth:
+        description:
+            logo: OroCRM
+            main: Le CRM pour le marketing et les ventes
+            text: Toutes les fonctionnalités nécessaires pour booster les ventes, optimiser le marketing et augmenter la satisfaction client
+        copy: © {{year}} Oro, Inc., Tous les droits sont réservés.
+    demo_auth:
+        simple_data_info: Veuillez noter que l'application se réinitialise toutes les 30 minutes et que toutes les données seront restaurées à leur état par défaut.
+Login: S'identifier
