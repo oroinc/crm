@@ -33,7 +33,7 @@ class OroCaseBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_10';
+        return 'v1_12';
     }
 
     /**
@@ -146,7 +146,7 @@ class OroCaseBundleInstaller implements
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('foreign_key', 'string', ['length' => 16]);
         $table->addColumn('content', 'string', ['length' => 255]);
-        $table->addColumn('locale', 'string', ['length' => 8]);
+        $table->addColumn('locale', 'string', ['length' => 16]);
         $table->addColumn('object_class', 'string', ['length' => 255]);
         $table->addColumn('field', 'string', ['length' => 32]);
         $table->setPrimaryKey(['id']);
@@ -182,7 +182,7 @@ class OroCaseBundleInstaller implements
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('foreign_key', 'string', ['length' => 16]);
         $table->addColumn('content', 'string', ['length' => 255]);
-        $table->addColumn('locale', 'string', ['length' => 8]);
+        $table->addColumn('locale', 'string', ['length' => 16]);
         $table->addColumn('object_class', 'string', ['length' => 255]);
         $table->addColumn('field', 'string', ['length' => 32]);
         $table->setPrimaryKey(['id']);
@@ -218,7 +218,7 @@ class OroCaseBundleInstaller implements
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('foreign_key', 'string', ['length' => 16]);
         $table->addColumn('content', 'string', ['length' => 255]);
-        $table->addColumn('locale', 'string', ['length' => 8]);
+        $table->addColumn('locale', 'string', ['length' => 16]);
         $table->addColumn('object_class', 'string', ['length' => 255]);
         $table->addColumn('field', 'string', ['length' => 32]);
         $table->setPrimaryKey(['id']);
