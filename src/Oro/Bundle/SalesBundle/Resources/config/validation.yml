@@ -55,7 +55,7 @@ Oro\Bundle\SalesBundle\Entity\LeadAddress:
             - NotBlank: ~
             - Oro\Bundle\FormBundle\Validator\Constraints\UnchangeableField:
                 message: oro.address.validation.owner_changed
-                groups: ['api']
+                groups: [api]
 
 Oro\Bundle\SalesBundle\Entity\SalesFunnel:
     properties:
