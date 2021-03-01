@@ -22,12 +22,9 @@ class OpportunityTest extends RestJsonApiTestCase
     }
 
     /**
-     * @param array  $parameters
-     * @param string $expectedDataFileName
-     *
      * @dataProvider cgetDataProvider
      */
-    public function testCget(array $parameters, $expectedDataFileName)
+    public function testCget(array $parameters, string $expectedDataFileName)
     {
         $response = $this->cget(['entity' => 'opportunities'], $parameters);
 
@@ -35,10 +32,9 @@ class OpportunityTest extends RestJsonApiTestCase
     }
 
     /**
-     * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function cgetDataProvider()
+    public function cgetDataProvider(): array
     {
         return [
             'without parameters'                                                 => [
@@ -170,15 +166,44 @@ class OpportunityTest extends RestJsonApiTestCase
         $data = $this->getRequestData('create_opportunity_min.yml');
         $data['data']['attributes']['createdAt'] = null;
         $data['data']['attributes']['updatedAt'] = null;
-        $response = $this->post(
-            ['entity' => 'opportunities'],
-            $data
-        );
+        $response = $this->post(['entity' => 'opportunities'], $data);
 
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
         $entity = $this->getEntityManager()->find(Opportunity::class, $this->getResourceId($response));
         self::assertTrue($entity->getCreatedAt() !== null && $entity->getCreatedAt() <= $now);
         self::assertTrue($entity->getUpdatedAt() !== null && $entity->getUpdatedAt() <= $now);
+    }
+
+    public function testTryToCreateWithNegativeProbability()
+    {
+        $data = $this->getRequestData('create_opportunity_min.yml');
+        $data['data']['attributes']['probability'] = -0.01;
+        $response = $this->post(['entity' => 'opportunities'], $data, [], false);
+
+        $this->assertResponseValidationError(
+            [
+                'title'  => 'range constraint',
+                'detail' => 'This value should be between 0% and 100%.',
+                'source' => ['pointer' => '/data/attributes/probability']
+            ],
+            $response
+        );
+    }
+
+    public function testTryToCreateWithProbabilityGreaterThan100Percent()
+    {
+        $data = $this->getRequestData('create_opportunity_min.yml');
+        $data['data']['attributes']['probability'] = 1.01;
+        $response = $this->post(['entity' => 'opportunities'], $data, [], false);
+
+        $this->assertResponseValidationError(
+            [
+                'title'  => 'range constraint',
+                'detail' => 'This value should be between 0% and 100%.',
+                'source' => ['pointer' => '/data/attributes/probability']
+            ],
+            $response
+        );
     }
 
     public function testTryToCreateWithoutAccountAndCustomer()
@@ -316,6 +341,7 @@ class OpportunityTest extends RestJsonApiTestCase
         $response = $this->getSubresource(
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'account']
         );
+
         $this->assertResponseContains('get_subresource_opportunity_account.yml', $response);
     }
 
@@ -328,6 +354,7 @@ class OpportunityTest extends RestJsonApiTestCase
                 'include'          => 'organization'
             ]
         );
+
         $this->assertResponseContains('get_subresource_opportunity_account_include.yml', $response);
     }
 
@@ -337,6 +364,7 @@ class OpportunityTest extends RestJsonApiTestCase
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'account'],
             ['meta' => 'title']
         );
+
         $this->assertResponseContains('get_subresource_opportunity_account_title.yml', $response);
     }
 
@@ -354,6 +382,7 @@ class OpportunityTest extends RestJsonApiTestCase
         $response = $this->getSubresource(
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer']
         );
+
         $this->assertResponseContains('get_subresource_opportunity_customer.yml', $response);
     }
 
@@ -366,6 +395,7 @@ class OpportunityTest extends RestJsonApiTestCase
                 'include'              => 'organization'
             ]
         );
+
         $this->assertResponseContains('get_subresource_opportunity_customer_include.yml', $response);
     }
 
@@ -375,6 +405,7 @@ class OpportunityTest extends RestJsonApiTestCase
             ['entity' => 'opportunities', 'id' => '<toString(@opportunity1->id)>', 'association' => 'customer'],
             ['meta' => 'title']
         );
+
         $this->assertResponseContains('get_subresource_opportunity_customer_title.yml', $response);
     }
 
@@ -388,6 +419,7 @@ class OpportunityTest extends RestJsonApiTestCase
                 'meta'                 => 'title'
             ]
         );
+
         $this->assertResponseContains('get_subresource_opportunity_customer_include_title.yml', $response);
     }
 
