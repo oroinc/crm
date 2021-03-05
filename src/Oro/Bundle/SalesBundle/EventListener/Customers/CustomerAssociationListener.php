@@ -13,12 +13,15 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
+/**
+ * Creates missing associations related to the existing customers.
+ */
 class CustomerAssociationListener implements OptionalListenerInterface
 {
     /** @var bool */
     protected $enabled = true;
 
-    /** @var [object[]] */
+    /** @var array [object[]] */
     protected $createdTargetCustomers = [];
 
     /** @var ConfigProvider */

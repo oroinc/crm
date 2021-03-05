@@ -122,11 +122,10 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
     }
 
     /**
-     * @param array $def
-     * @param array $row
+     * @param array  $def
+     * @param array  $row
      * @param string $className
-     * @param string $oldField
-     * @param string $newField
+     * @param array  $replacements
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
