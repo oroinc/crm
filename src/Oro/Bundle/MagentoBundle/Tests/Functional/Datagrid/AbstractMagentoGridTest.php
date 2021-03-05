@@ -18,7 +18,7 @@ abstract class AbstractMagentoGridTest extends WebTestCase
     abstract public function gridAclDataProvider();
 
     /**
-     * @return mixed[]
+     * @return array
      */
     abstract public function gridDataProvider();
 
@@ -128,9 +128,9 @@ abstract class AbstractMagentoGridTest extends WebTestCase
      *      'param2' => 'value'
      * ]
      *
-     * @param string    $gridName
-     * @param mixed[]
-     * @return mixed[]
+     * @param string $gridName
+     * @param array  $params
+     * @return array
      */
     protected function createGridParameters($gridName, array $params)
     {

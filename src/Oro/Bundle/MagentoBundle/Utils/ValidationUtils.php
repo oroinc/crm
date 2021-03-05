@@ -5,6 +5,9 @@ namespace Oro\Bundle\MagentoBundle\Utils;
 use Oro\Bundle\IntegrationBundle\Utils\SecureErrorMessageHelper;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 
+/**
+ * Helpers to guess the validation message prefix and sanitize security info in a validation message
+ */
 class ValidationUtils
 {
     /**
@@ -29,7 +32,7 @@ class ValidationUtils
     /**
      * Sanitise error message for secure info
      *
-     * @param string
+     * @param string $message
      *
      * @return string
      */

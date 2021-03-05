@@ -105,7 +105,6 @@ class NewsletterSubscriberVoterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $objectIdentityClass
      * @param string $className
      *
      * @return ObjectIdentityInterface|\PHPUnit\Framework\MockObject\MockObject

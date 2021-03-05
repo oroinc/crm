@@ -4,6 +4,9 @@ namespace Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 
 use Doctrine\ORM\QueryBuilder;
 
+/**
+ * An interface to define a discovery strategy
+ */
 interface DiscoveryStrategyInterface
 {
     /**
@@ -12,7 +15,6 @@ interface DiscoveryStrategyInterface
      * @param string $field
      * @param array $configuration
      * @param object $entity
-     * @return
      */
     public function apply(QueryBuilder $qb, $rootAlias, $field, array $configuration, $entity);
 }

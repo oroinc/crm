@@ -11,6 +11,9 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Router;
 
+/**
+ * Generates URLs for magento integration
+ */
 class MagentoUrlGenerator
 {
     const GATEWAY_ROUTE = 'oro_gateway/do';
@@ -239,9 +242,9 @@ class MagentoUrlGenerator
     /**
      * Generates a URL from the given parameters.
      *
-     * @param string         $route         The name of the route
-     * @param array          $parameters    An array of parameters
-     * @param Boolean|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     * @param string  $route         The name of the route
+     * @param array   $parameters    An array of parameters
+     * @param integer $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
      *
      * @return string The generated URL
      *
