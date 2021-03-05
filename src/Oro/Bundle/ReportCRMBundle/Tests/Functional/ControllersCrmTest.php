@@ -22,9 +22,6 @@ class ControllersCrmTest extends BaseControllersTest
     }
 
     /**
-     * @param array $report
-     * @param array $reportResult
-     *
      * @dataProvider exportDataProvider
      */
     public function testExport()

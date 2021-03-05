@@ -279,7 +279,7 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
     }
 
     /**
-     * @param \DateTime
+     * @param \DateTime $created
      *
      * @return Account
      */
@@ -301,7 +301,7 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
     }
 
     /**
-     * @param \DateTime
+     * @param \DateTime $updated
      *
      * @return Account
      */
