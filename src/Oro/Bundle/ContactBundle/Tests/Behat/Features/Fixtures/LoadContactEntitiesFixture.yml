@@ -42,6 +42,7 @@ Oro\Bundle\ContactBundle\Entity\Contact:
     contact_1:
         owner: '@admin'
         organization: '@organization'
+        birthday: '<(new \DateTime("2000-01-01", new \DateTimeZone("UTC")))>'
         firstName: 'TestContact1'
         lastName: 'TestContact1'
         __calls:
@@ -51,6 +52,7 @@ Oro\Bundle\ContactBundle\Entity\Contact:
     contact_2:
         owner: '@admin'
         organization: '@organization'
+        birthday: '<(new \DateTime("2000-01-02", new \DateTimeZone("UTC")))>'
         firstName: 'TestContact2'
         lastName: 'TestContact2'
         __calls:
