@@ -161,18 +161,7 @@ class ActivityContactProvider
     private function getMaxDate($datesArray)
     {
         if (count($datesArray) > 1) {
-            usort(
-                $datesArray,
-                function (\DateTime $a, \DateTime $b) {
-                    $firstStamp  = $a->getTimestamp();
-                    $secondStamp = $b->getTimestamp();
-                    if ($firstStamp === $secondStamp) {
-                        return 0;
-                    }
-
-                    return ($firstStamp > $secondStamp) ? -1 : 1;
-                }
-            );
+            usort($datesArray, static fn (\DateTime $a, \DateTime $b) => $b->getTimestamp() <=> $a->getTimestamp());
         }
 
         return array_shift($datesArray);

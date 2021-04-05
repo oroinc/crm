@@ -89,7 +89,7 @@ class UpdateOpportunityCurrency implements
 
         if (!empty($currencies)) {
             $query .= sprintf(' WHERE organization_id 
-                          NOT IN (%s)', implode(array_keys($currencies), ','));
+                          NOT IN (%s)', implode(',', array_keys($currencies)));
         }
         $migrationQuery = new ParametrizedSqlMigrationQuery();
 
