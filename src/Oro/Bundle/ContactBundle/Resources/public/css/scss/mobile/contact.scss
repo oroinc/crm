@@ -14,7 +14,7 @@
     }
 
     &-widget-wrapper {
-        padding-#{$start}: $contact-widget-wrapper-mobile-inner-offset-start;
+        padding-left: $contact-widget-wrapper-mobile-inner-offset-start;
 
         .box-type1 {
             margin: $contact-box-type1-mobile-offset;

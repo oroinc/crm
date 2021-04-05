@@ -9,7 +9,7 @@ form[name="opportunity"] {
         .control-group-oro_sales_opportunity_probability,
         .control-group-oro_sales_opportunity_status_config {
             > .controls {
-                margin-#{$start}: 0;
+                margin-left: 0;
             }
         }
 
@@ -17,7 +17,7 @@ form[name="opportunity"] {
             display: block;
 
             .control-group-collection > .controls {
-                margin-#{$start}: 206px;
+                margin-left: 206px;
             }
         }
 
@@ -31,7 +31,7 @@ form[name="opportunity"] {
             }
 
             > .controls {
-                margin-#{$start}: 0;
+                margin-left: 0;
             }
         }
     }
@@ -48,7 +48,7 @@ form[name="opportunity"] {
     input[type="text"].add-on-input {
         display: inline-block;
         text-shadow: 0 1px 0 #fff;
-        margin-#{$start}: -2px;
+        margin-left: -2px;
         border-radius: 0;
         width: 40px;
     }

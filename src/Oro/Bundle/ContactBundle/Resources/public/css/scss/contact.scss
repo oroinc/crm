@@ -8,7 +8,7 @@
 }
 
 .contact-element-label {
-    margin-#{$end}: $contact-element-label-offset-end;
+    margin-right: $contact-element-label-offset-end;
 }
 
 .contact {
@@ -37,7 +37,7 @@
             font-weight: $contact-box-name-link-font-weight;
 
             .label {
-                margin-#{$start}: $contact-box-name-link-label-offset-start;
+                margin-left: $contact-box-name-link-label-offset-start;
                 vertical-align: $contact-box-name-link-label-vertical-align;
             }
         }
