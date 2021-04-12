@@ -39,7 +39,6 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
      */
     public function testValuesAggregation($systemTimezone)
     {
-        $this->getContainer()->set('oro_locale.settings', null);
         $cm = $this->getContainer()->get('oro_config.global');
         $cm->set('oro_locale.timezone', $systemTimezone);
         $cm->flush();
