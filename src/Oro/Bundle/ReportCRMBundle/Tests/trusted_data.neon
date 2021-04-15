@@ -1,0 +1,6 @@
+# Configuration for https://github.com/oroinc/phpstan-rules/
+trusted_data:
+    variables:
+        Oro\Bundle\ReportCRMBundle\Filter\PeriodFilter:
+            apply:
+                value: true
