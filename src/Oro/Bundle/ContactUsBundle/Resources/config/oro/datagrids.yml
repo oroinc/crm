@@ -27,6 +27,7 @@ datagrids:
                 frontend_type: phone
             emailAddress:
                 label:         oro.contactus.contactrequest.email_address.label
+                cellClassName: 'direction-ltr'
             createdAt:
                 frontend_type: datetime
                 label:         oro.ui.created_at
