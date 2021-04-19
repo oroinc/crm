@@ -2,11 +2,11 @@
 
 $contact-box-wrapper-display: flex !default;
 $contact-box-wrapper-flex-wrap: wrap !default;
-$contact-box-wrapper-offset: side-values(0 0 0 (-$content-padding-small)) !default;
+$contact-box-wrapper-offset: 0 0 0 (-$content-padding-small) !default;
 $contact-box-wrapper-position: relative !default;
 
 $contact-box-background-color: $primary-900 !default;
-$contact-box-offset: side-values(0 0 $content-padding-small $content-padding-small) !default;
+$contact-box-offset: 0 0 $content-padding-small $content-padding-small !default;
 $contact-box-inner-offset: 12px $content-padding-medium !default;
 $contact-box-width: calc(50% - #{$content-padding-small}) !default;
 

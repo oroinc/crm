@@ -40,6 +40,7 @@ datagrids:
                 template: OroAccountBundle:Account:Datagrid/Property/accountName.html.twig
             contactEmail:
                 label: oro.contact.contactemail.email.label
+                cellClassName: 'direction-ltr'
             contactPhone:
                 label: oro.contact.contactphone.phone.label
                 frontend_type: phone
@@ -110,6 +111,7 @@ datagrids:
                 label:         oro.account.contact.name
             contactEmail:
                 label:         oro.account.contact.email
+                cellClassName: 'direction-ltr'
             contactPhone:
                 label:         oro.account.contact.phone
                 frontend_type: phone
@@ -408,6 +410,7 @@ datagrids:
                 label:   oro.account.contact.name
             contactEmail:
                 label:   oro.account.contact.email
+                cellClassName: 'direction-ltr'
             contactPhone:
                 label:   oro.account.contact.phone
                 frontend_type: phone
