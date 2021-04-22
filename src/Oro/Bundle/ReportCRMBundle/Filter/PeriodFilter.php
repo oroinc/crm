@@ -6,6 +6,9 @@ use Oro\Bundle\FilterBundle\Datasource\FilterDatasourceAdapterInterface;
 use Oro\Bundle\FilterBundle\Filter\ChoiceFilter;
 use Oro\Bundle\FilterBundle\Filter\FilterUtility;
 
+/**
+ * Filter by a period.
+ */
 class PeriodFilter extends ChoiceFilter
 {
     /**
@@ -18,10 +21,11 @@ class PeriodFilter extends ChoiceFilter
             return false;
         }
 
-        if (is_array($data['value'])) {
-            $data['value'] = reset($data['value']);
+        $value = $data['value'];
+        if (is_array($value)) {
+            $value = reset($value);
         }
-        $ds->addGroupBy($data['value']);
+        $ds->addGroupBy($value);
 
         return true;
     }
