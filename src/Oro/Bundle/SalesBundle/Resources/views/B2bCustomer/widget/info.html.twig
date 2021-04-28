@@ -25,11 +25,11 @@
             ) }}
 
             {% if entity.billingAddress is not empty %}
-                {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}
+                {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(entity.billingAddress, true)) }}
             {% endif %}
 
             {% if entity.shippingAddress is not empty %}
-                {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
+                {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress, true)) }}
             {% endif %}
         </div>
         <div class="responsive-block">
