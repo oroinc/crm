@@ -89,7 +89,8 @@
             {{ ui.renderSwitchableHtmlProperty('oro.contact.description.label'|trans, entity.description) }}
             {{ ui.renderHtmlProperty('oro.contact.phones.label'|trans, entity.phones.count ? contactInfo.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
             {{ ui.renderHtmlProperty('oro.contact.emails.label'|trans, entity.emails.count ? contactInfo.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
-            {{ ui.renderHtmlProperty('oro.contact.fax.label'|trans, entity.fax ? ui.renderPhone(entity.fax) : null) }}
+            {% set faxPhone = entity.fax ? ui.renderPhone(entity.fax) : null %}
+            {{ ui.renderHtmlProperty('oro.contact.fax.label'|trans, faxPhone, null, null, {'dir': faxPhone ? 'ltr' : null}) }}
             {{ ui.renderHtmlProperty('oro.contact.skype.label'|trans, skypeData) }}
             {{ ui.renderProperty('oro.contact.method.label'|trans, entity.method) }}
             {{ ui.renderHtmlProperty('oro.contact.social.label'|trans, socialData) }}

@@ -16,8 +16,8 @@
             ) }}
         </div>
         <div class="responsive-block">
-            {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(customer.shippingAddress)) }}
-            {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(customer.billingAddress)) }}
+            {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(customer.shippingAddress, true)) }}
+            {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(customer.billingAddress, true)) }}
         </div>
     </div>
 {% endset %}
