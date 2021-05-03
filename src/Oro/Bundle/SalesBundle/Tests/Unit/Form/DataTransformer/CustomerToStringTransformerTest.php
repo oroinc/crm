@@ -6,6 +6,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Form\DataTransformer\CustomerToStringTransformer;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub as Customer;
 use Oro\Bundle\SalesBundle\Tests\Unit\Stub\AccountCustomerManager;
+use Oro\Component\Testing\ReflectionUtil;
 use Symfony\Component\Form\DataTransformerInterface;
 
 class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
@@ -49,15 +50,13 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
         if (empty($decoded['value'])) {
             $this->dataTransformer->expects($this->once())
                 ->method('reverseTransform')
-                ->will($this->returnCallback(function ($value) {
+                ->willReturnCallback(function ($value) {
                     $decoded = json_decode($value, true);
-                    $entity       = new $decoded['entityClass'];
-                    $accountIdRef = new \ReflectionProperty($decoded['entityClass'], 'id');
-                    $accountIdRef->setAccessible(true);
-                    $accountIdRef->setValue($entity, 1);
+                    $entity = new $decoded['entityClass']();
+                    ReflectionUtil::setId($entity, 1);
 
                     return $entity;
-                }));
+                });
         }
         $expectedAccount = $expectedValue->getAccount();
         $this->accountCustomerManager->expects($this->any())
@@ -76,10 +75,8 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
      */
     public function reverseTransformProvider()
     {
-        $accountIdRef = new \ReflectionProperty(Account::class, 'id');
-        $accountIdRef->setAccessible(true);
         $existingAccount = new Account();
-        $accountIdRef->setValue($existingAccount, 1);
+        ReflectionUtil::setId($existingAccount, 1);
 
         $newAccount = new Account();
         $newAccount->setName('new account');

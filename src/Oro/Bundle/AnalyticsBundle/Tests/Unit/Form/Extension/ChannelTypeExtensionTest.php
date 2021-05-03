@@ -12,6 +12,7 @@ use Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
 use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Component\Testing\ReflectionUtil;
 use Oro\Component\TestUtils\ORM\Mocks\UnitOfWork;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -437,11 +438,8 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue($feature));
 
-        $reflector = new \ReflectionClass(get_class($this->extension));
-        $method = $reflector->getMethod('getValidationGroups');
-        $method->setAccessible(true);
         /** @var callable $result */
-        $result = $method->invokeArgs($this->extension, []);
+        $result = ReflectionUtil::callMethod($this->extension, 'getValidationGroups', []);
 
         $this->assertEquals($expected, $result($form));
     }
