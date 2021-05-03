@@ -105,13 +105,13 @@ class ContactEntityNameProviderTest extends \PHPUnit\Framework\TestCase
             'test unsupported format' => [
                 'format' => '',
                 'locale' => null,
-                'entity' => $this->getEntity(),
+                'entity' => new Contact(),
                 'expected' => false
             ],
             'correct data' => [
                 'format' => EntityNameProviderInterface::FULL,
                 'locale' => '',
-                'entity' => $this->getEntity(),
+                'entity' => new Contact(),
                 'expected' => 'Contact'
             ]
         ];
@@ -156,13 +156,5 @@ class ContactEntityNameProviderTest extends \PHPUnit\Framework\TestCase
                               'AS string))'
             ]
         ];
-    }
-
-    /**
-     * @return Contact
-     */
-    protected function getEntity()
-    {
-        return new Contact();
     }
 }

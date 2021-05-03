@@ -9,6 +9,7 @@ use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub as Opportunity;
+use Oro\Component\Testing\ReflectionUtil;
 
 class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -48,7 +49,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
         $opportunityContact = new Contact();
         $opportunityContact->setId($contactId);
         $customer = new B2bCustomer();
-        $this->setObjectId($customer, $customerId);
+        ReflectionUtil::setId($customer, $customerId);
         $accountCustomer = $this->createAccountCustomer(new Account(), $customer);
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($accountCustomer);
@@ -90,7 +91,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
         $opportunityContact = new Contact();
         $opportunityContact->setId(1);
         $customer = new B2bCustomer();
-        $this->setObjectId($customer, 1);
+        ReflectionUtil::setId($customer, 1);
         $accountCustomer = $this->createAccountCustomer(new Account(), $customer);
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($accountCustomer);
@@ -133,18 +134,6 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
             ['accountId' => null, 'contactId' => 69],
             ['accountId' => null, 'contactId' => null],
         ];
-    }
-
-    /**
-     * @param object $object
-     * @param int $id
-     */
-    private function setObjectId($object, $id)
-    {
-        $reflection = new \ReflectionObject($object);
-        $propertyReflection = $reflection->getProperty('id');
-        $propertyReflection->setAccessible(true);
-        $propertyReflection->setValue($object, $id);
     }
 
     /**

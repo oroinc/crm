@@ -3,6 +3,7 @@
 namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Component\Testing\ReflectionUtil;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -24,11 +25,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->comment->getId());
 
         $value = 100;
-
-        $reflectionProperty = new \ReflectionProperty(get_class($this->comment), 'id');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->comment, $value);
-
+        ReflectionUtil::setId($this->comment, $value);
         $this->assertEquals($value, $this->comment->getId());
     }
 

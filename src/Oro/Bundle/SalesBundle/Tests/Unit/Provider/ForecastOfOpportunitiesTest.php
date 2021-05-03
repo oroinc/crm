@@ -10,6 +10,7 @@ use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
+use Oro\Component\Testing\ReflectionUtil;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
@@ -163,10 +164,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
             ->method('getCurrentDateTime')
             ->willReturn(new \DateTime());
 
-        $reflection = new \ReflectionObject($this->provider);
-        $method     = $reflection->getMethod('getMoment');
-        $method->setAccessible(true);
-        $prevMoment = $method->invokeArgs($this->provider, [$dateRange, $start]);
+        $prevMoment = ReflectionUtil::callMethod($this->provider, 'getMoment', [$dateRange, $start]);
 
         $this->forecastProvider->expects($this->exactly(6))
             ->method('getForecastData')
