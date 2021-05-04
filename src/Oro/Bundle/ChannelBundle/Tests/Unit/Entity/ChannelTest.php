@@ -2,64 +2,50 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
-use Doctrine\Common\Collections\Collection;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\EntityName;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as IntegrationChannel;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Component\Testing\Unit\EntityTestCaseTrait;
 
-class ChannelTest extends AbstractEntityTestCase
+class ChannelTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function getEntityFQCN()
-    {
-        return 'Oro\Bundle\ChannelBundle\Entity\Channel';
-    }
+    use EntityTestCaseTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getDataProvider()
+    public function testProperties()
     {
-        $name             = 'Some name';
-        $owner            = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
-        $integration      = $this->createMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
-        $customerIdentity = $this->createMock('Oro\Bundle\ChannelBundle\Entity\EntityName', [], ['phone']);
-        $status           = true;
-        $channelType      = 'Custom';
-        $someDateTime     = new \DateTime();
-
-        return [
-            'name'                     => ['name', $name, $name],
-            'owner'                    => ['owner', $owner, $owner],
-            'dataSource'               => ['dataSource', $integration, $integration],
-            'dataSource nullable data' => ['dataSource', null, null],
-            'status'                   => ['status', $status, $status],
-            'customerIdentity'         => ['customerIdentity', $customerIdentity, $customerIdentity],
-            'channelType'              => ['channelType', $channelType, $channelType],
-            'createdAt'                => ['createdAt', $someDateTime, $someDateTime],
-            'updatedAt'                => ['updatedAt', $someDateTime, $someDateTime]
+        $properties = [
+            'id'                       => ['id', 1],
+            'name'                     => ['name', 'Some name'],
+            'owner'                    => ['owner', $this->createMock(Organization::class)],
+            'dataSource'               => ['dataSource', $this->createMock(IntegrationChannel::class)],
+            'dataSource nullable data' => ['dataSource', null],
+            'status'                   => ['status', true],
+            'customerIdentity'         => ['customerIdentity', $this->createMock(EntityName::class)],
+            'channelType'              => ['channelType', 'Custom'],
+            'createdAt'                => ['createdAt', new \DateTime()],
+            'updatedAt'                => ['updatedAt', new \DateTime()],
         ];
+
+        $entity = new Channel();
+        self::assertPropertyAccessors($entity, $properties);
     }
 
     /**
      * @dataProvider entitiesDataProvider
-     *
-     * @param array $loadedNames
-     * @param array $toSet
-     * @param array $expectedResult
      */
-    public function testEntities($loadedNames, $toSet, $expectedResult)
+    public function testEntities(array $loadedNames, array $toSet, array $expectedResult)
     {
-        $this->initEntitiesCollectionFromArray($this->entity->getEntitiesCollection(), $loadedNames);
+        $entity = new Channel();
+        foreach ($loadedNames as $name) {
+            $entity->getEntitiesCollection()->add(new EntityName($name));
+        }
 
-        $this->entity->setEntities($toSet);
-        $this->assertSame($expectedResult, array_values($this->entity->getEntities()));
+        $entity->setEntities($toSet);
+        $this->assertSame($expectedResult, array_values($entity->getEntities()));
     }
 
-    /**
-     * @return array
-     */
-    public function entitiesDataProvider()
+    public function entitiesDataProvider(): array
     {
         return [
             'should add new entries'                               => [[], ['testEntity1'], ['testEntity1']],
@@ -77,48 +63,42 @@ class ChannelTest extends AbstractEntityTestCase
         ];
     }
 
-    /**
-     * @param Collection $collection
-     * @param array      $entities
-     *
-     * @return Collection
-     */
-    protected function initEntitiesCollectionFromArray(Collection $collection, array $entities)
-    {
-        foreach ($entities as $entity) {
-            $el = new EntityName($entity);
-            $collection->add($el);
-        }
-
-        return $collection;
-    }
-
-    public function testToString()
-    {
-        $this->assertEmpty((string)$this->entity);
-
-        $testName = uniqid('name');
-        $this->entity->setName($testName);
-        $this->assertSame($testName, $this->entity->getName());
-    }
-
     public function testPrePersist()
     {
-        $this->assertNull($this->entity->getCreatedAt());
+        $entity = new Channel();
+        $entity->prePersist();
 
-        $this->entity->prePersist();
+        self::assertNotNull($entity->getCreatedAt());
+        self::assertNotNull($entity->getUpdatedAt());
+        self::assertEquals($entity->getCreatedAt(), $entity->getUpdatedAt());
+        self::assertNotSame($entity->getCreatedAt(), $entity->getUpdatedAt());
 
-        $this->assertInstanceOf('DateTime', $this->entity->getCreatedAt());
-        $this->assertLessThan(3, $this->entity->getCreatedAt()->diff(new \DateTime())->s);
+        $existingCreatedAt = $entity->getCreatedAt();
+        $existingUpdatedAt = $entity->getUpdatedAt();
+        $entity->prePersist();
+        self::assertSame($existingCreatedAt, $entity->getCreatedAt());
+        self::assertNotSame($existingUpdatedAt, $entity->getUpdatedAt());
     }
 
     public function testPreUpdate()
     {
-        $this->assertNull($this->entity->getUpdatedAt());
+        $entity = new Channel();
+        $entity->preUpdate();
 
-        $this->entity->preUpdate();
+        self::assertNotNull($entity->getUpdatedAt());
 
-        $this->assertInstanceOf('DateTime', $this->entity->getUpdatedAt());
-        $this->assertLessThan(3, $this->entity->getUpdatedAt()->diff(new \DateTime())->s);
+        $existingUpdatedAt = $entity->getUpdatedAt();
+        $entity->preUpdate();
+        self::assertNotSame($existingUpdatedAt, $entity->getUpdatedAt());
+    }
+
+    public function testToString()
+    {
+        $entity = new Channel();
+        $this->assertSame('', (string)$entity);
+
+        $name = 'test name';
+        $entity->setName($name);
+        $this->assertSame($name, (string)$entity);
     }
 }

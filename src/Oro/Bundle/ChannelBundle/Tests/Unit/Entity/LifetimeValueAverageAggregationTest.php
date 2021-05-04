@@ -2,54 +2,54 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
+use Oro\Component\Testing\Unit\EntityTestCaseTrait;
 
-class LifetimeValueAverageAggregationTest extends AbstractEntityTestCase
+class LifetimeValueAverageAggregationTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var LifetimeValueAverageAggregation */
-    protected $entity;
+    use EntityTestCaseTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getEntityFQCN()
+    public function testProperties()
     {
-        return 'Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation';
+        $properties = [
+            'id'          => ['id', 1],
+            'amount'      => ['amount', 121.12],
+            'dataChannel' => ['dataChannel', $this->createMock(Channel::class)],
+            'month'       => ['month', 2],
+            'quarter'     => ['quarter', 3],
+            'year'        => ['year', 2020],
+        ];
+
+        $entity = new LifetimeValueAverageAggregation();
+        self::assertPropertyAccessors($entity, $properties);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getDataProvider()
+    public function testAggregationDate()
     {
-        $channel         = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
-        $someDateTime    = new \DateTime();
-        $someInteger     = 3;
-        $someFloat       = 121.12;
-        $aggregationDate = \DateTime::createFromFormat(\DateTime::ISO8601, date('Y-m-01\T00:00:00+0000'));
+        $entity = new LifetimeValueAverageAggregation();
+        self::assertNull($entity->getAggregationDate());
 
-        return [
-            'amount'          => ['amount', $someFloat, $someFloat],
-            'dataChannel'     => ['dataChannel', $channel, $channel],
-            'month'           => ['month', $someInteger, $someInteger],
-            'quarter'         => ['quarter', $someInteger, $someInteger],
-            'year'            => ['year', $someInteger, $someInteger],
-            'aggregationDate' => ['aggregationDate', $someDateTime, $aggregationDate],
-        ];
+        $date = new \DateTime('2020-05-15', new \DateTimeZone('UTC'));
+        $entity->setAggregationDate($date);
+        self::assertEquals(new \DateTime('2020-05-01', new \DateTimeZone('UTC')), $entity->getAggregationDate());
+        self::assertNotSame($date, $entity->getAggregationDate());
     }
 
     public function testPrePersist()
     {
-        $this->assertNull($this->entity->getAggregationDate());
-        $this->assertNull($this->entity->getMonth());
-        $this->assertNull($this->entity->getQuarter());
-        $this->assertNull($this->entity->getYear());
+        $entity = new LifetimeValueAverageAggregation();
+        $entity->prePersist();
 
-        $this->entity->prePersist();
+        self::assertInstanceOf('DateTime', $entity->getAggregationDate());
+        self::assertNotEmpty($entity->getYear());
+        self::assertNotEmpty($entity->getMonth());
+        self::assertNotEmpty($entity->getQuarter());
 
-        $this->assertInstanceOf('DateTime', $this->entity->getAggregationDate());
-        $this->assertNotEmpty($this->entity->getMonth());
-        $this->assertNotEmpty($this->entity->getQuarter());
-        $this->assertNotEmpty($this->entity->getYear());
+        $entity->setAggregationDate(new \DateTime('2020-05-15', new \DateTimeZone('UTC')));
+        $entity->prePersist();
+        self::assertSame(2020, $entity->getYear());
+        self::assertSame(5, $entity->getMonth());
+        self::assertSame(2, $entity->getQuarter());
     }
 }

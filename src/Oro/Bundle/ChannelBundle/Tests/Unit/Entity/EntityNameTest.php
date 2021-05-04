@@ -2,36 +2,23 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
-class EntityNameTest extends AbstractEntityTestCase
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\EntityName;
+use Oro\Component\Testing\Unit\EntityTestCaseTrait;
+
+class EntityNameTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function setUp(): void
-    {
-        $name         = $this->getEntityFQCN();
-        $this->entity = unserialize(sprintf('O:%d:"%s":0:{}', strlen($name), $name));
-    }
+    use EntityTestCaseTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getDataProvider()
+    public function testProperties()
     {
-        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
-        $name   = 'testName';
-
-        return [
-            'name'   => ['name', $name, $name],
-            'channel' => ['channel', $channel, $channel],
+        $properties = [
+            'id'      => ['id', 1],
+            'name'    => ['name', 'another name', false],
+            'channel' => ['channel', $this->createMock(Channel::class)],
         ];
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getEntityFQCN()
-    {
-        return 'Oro\Bundle\ChannelBundle\Entity\EntityName';
+        $entity = new EntityName('initial name');
+        self::assertPropertyAccessors($entity, $properties);
     }
 }

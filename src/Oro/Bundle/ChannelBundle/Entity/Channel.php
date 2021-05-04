@@ -10,6 +10,8 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 /**
+ * Represents the source of customer data.
+ *
  * @ORM\Entity(repositoryClass="Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository")
  * @ORM\Table(name="orocrm_channel", indexes={
  *     @ORM\Index(name="crm_channel_name_idx", columns={"name"}),
@@ -121,7 +123,7 @@ class Channel
      *      }
      * )
      */
-    protected $status;
+    protected $status = self::STATUS_INACTIVE;
 
     /**
      * @var string
@@ -194,7 +196,6 @@ class Channel
 
     public function __construct()
     {
-        $this->status   = self::STATUS_INACTIVE;
         $this->entities = new ArrayCollection();
     }
 
@@ -233,7 +234,7 @@ class Channel
      */
     public function setEntities(array $entities)
     {
-        list($stillPresent, $removed) = $this->getEntitiesCollection()->partition(
+        [$stillPresent, $removed] = $this->getEntitiesCollection()->partition(
             function ($key, EntityName $entityName) use ($entities) {
                 return in_array($entityName->getName(), $entities, true);
             }
@@ -449,13 +450,10 @@ class Channel
      */
     public function prePersist()
     {
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
-
-        if (!$this->getCreatedAt()) {
-            $this->setCreatedAt($now);
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        if (null === $this->createdAt) {
+            $this->createdAt = clone $this->updatedAt;
         }
-
-        $this->setUpdatedAt($now);
     }
 
     /**
