@@ -7,6 +7,8 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
+ * Represents a record in lifetime history.
+ *
  * @ORM\Entity(
  *     repositoryClass="Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository"
  * )
@@ -35,7 +37,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
      *
      * @ORM\Column(name="status", type="boolean", nullable=false)
      */
-    protected $status;
+    protected $status = self::STATUS_NEW;
 
     /**
      * @var Channel
@@ -58,7 +60,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
      *
      * @ORM\Column(name="amount", type="money", nullable=false)
      */
-    protected $amount;
+    protected $amount = 0;
 
     /**
      * @var \DateTime $createdAt
@@ -66,12 +68,6 @@ class LifetimeValueHistory implements ChannelAwareInterface
      * @ORM\Column(type="datetime", name="created_at")
      */
     protected $createdAt;
-
-    public function __construct()
-    {
-        $this->amount = 0;
-        $this->status = self::STATUS_NEW;
-    }
 
     /**
      * @return int
@@ -100,7 +96,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
     /**
      * @param Channel $dataChannel
      *
-     * @TODO remove null after BAP-5248
+     * remove null after BAP-5248
      */
     public function setDataChannel(Channel $dataChannel = null)
     {
@@ -168,8 +164,8 @@ class LifetimeValueHistory implements ChannelAwareInterface
      */
     public function prePersist()
     {
-        if (!$this->getCreatedAt()) {
-            $this->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+        if (null === $this->createdAt) {
+            $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
         }
     }
 

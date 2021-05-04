@@ -13,6 +13,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
+ * Represents a customer identifier for a channel.
+ *
  * @ORM\Entity()
  * @ORM\Table(name="orocrm_channel_cust_identity")
  * @Config(
@@ -210,7 +212,10 @@ class CustomerIdentity extends ExtendCustomerIdentity implements ChannelAwareInt
      */
     public function prePersist()
     {
-        $this->createdAt = $this->createdAt ? $this->createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        if (null === $this->createdAt) {
+            $this->createdAt = clone $this->updatedAt;
+        }
     }
 
     /**
