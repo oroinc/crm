@@ -70,7 +70,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $settingsProvider;
 
-    /** @var  EntityProvider|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var EntityProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $entityProvider;
 
     /** @var ConfigManager|\PHPUnit\Framework\MockObject\MockObject */

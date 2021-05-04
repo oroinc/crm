@@ -10,7 +10,7 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
  */
 class CampaignLeadsTest extends AbstractWidgetTestCase
 {
-    /** @var  Widget */
+    /** @var Widget */
     protected $widget;
 
     protected function setUp(): void

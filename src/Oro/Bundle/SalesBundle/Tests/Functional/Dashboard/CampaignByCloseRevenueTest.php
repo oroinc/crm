@@ -11,7 +11,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadCampaignByCloseRevenueWi
  */
 class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
 {
-    /** @var  Widget */
+    /** @var Widget */
     protected $widget;
 
     protected function setUp(): void

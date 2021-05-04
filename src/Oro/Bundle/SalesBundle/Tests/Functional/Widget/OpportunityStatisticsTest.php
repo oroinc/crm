@@ -5,8 +5,6 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatisticsWidgetFixture;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\DomCrawler\Form;
 
 class OpportunityStatisticsTest extends BaseStatistics
 {
@@ -128,10 +126,6 @@ class OpportunityStatisticsTest extends BaseStatistics
     ): void {
         $this->getConfigureDialog();
 
-        /**
-         * @var $crawler Crawler
-         * @var $form Form
-         */
         $crawler = $this->client->getCrawler();
         $form = $crawler->selectButton('Save')->form();
 

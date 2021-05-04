@@ -32,8 +32,7 @@ class OpportunityProbabilityTypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildForm(array $enumOptions)
     {
-        /** @var $builder FormBuilderInterface|\PHPUnit\Framework\MockObject\MockObject */
-        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock(FormBuilderInterface::class);
 
         $builder->expects($this->exactly(count($enumOptions)))
             ->method('add');
@@ -96,12 +95,9 @@ class OpportunityProbabilityTypeTest extends \PHPUnit\Framework\TestCase
      */
     protected function getFormType(array $enumOptions)
     {
-        /** @var $enumTypeHelper EnumTypeHelper|\PHPUnit\Framework\MockObject\MockObject */
-        $enumTypeHelper = $this->getMockBuilder(EnumTypeHelper::class)->disableOriginalConstructor()->getMock();
-        /** @var $objectRepository ObjectRepository|\PHPUnit\Framework\MockObject\MockObject */
-        $objectRepository = $this->getMockBuilder(ObjectRepository::class)->disableOriginalConstructor()->getMock();
-        /** @var $registry Registry|\PHPUnit\Framework\MockObject\MockObject */
-        $registry = $this->getMockBuilder(Registry::class)->disableOriginalConstructor()->getMock();
+        $enumTypeHelper = $this->createMock(EnumTypeHelper::class);
+        $objectRepository = $this->createMock(ObjectRepository::class);
+        $registry = $this->createMock(Registry::class);
 
         $enumTypeHelper->expects($this->once())
             ->method('getEnumCode')

@@ -45,7 +45,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     /** @var Country[] */
     private $countries;
 
-    /** @var  Organization */
+    /** @var Organization */
     private $organization;
 
     /**
@@ -166,7 +166,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     private function createAccount(array $data, $iteration = 0)
     {
-        /** @var $account Account */
         $account = new Account();
 
         $name = $data['Username'] . $data['MiddleInitial'] . '_' . $data['Surname'];

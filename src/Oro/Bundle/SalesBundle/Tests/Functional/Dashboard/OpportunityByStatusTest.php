@@ -13,7 +13,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityByStatusWidge
  */
 class OpportunityByStatusTest extends AbstractWidgetTestCase
 {
-    /** @var  Widget */
+    /** @var Widget */
     protected $widget;
 
     protected function setUp(): void

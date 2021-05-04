@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumValueType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,8 +13,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testBuildForm()
     {
-        /** @var $builder FormBuilderInterface|\PHPUnit\Framework\MockObject\MockObject */
-        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock(FormBuilderInterface::class);
 
         $type = $this->getFormType();
         $type->buildForm($builder, ['allow_multiple_selection' => false]);
@@ -31,8 +29,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit\Framework\TestCase
     {
         $type = $this->getFormType();
 
-        /** @var $form FormInterface|\PHPUnit\Framework\MockObject\MockObject */
-        $form = $this->createMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock(FormInterface::class);
         $attr = [];
 
         if ($shouldBeDisabled) {
@@ -66,9 +63,6 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit\Framework\TestCase
 
     protected function getFormType()
     {
-        /** @var $configProvider ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-        $configProvider = $this->getMockBuilder(ConfigProvider::class)->disableOriginalConstructor()->getMock();
-
-        return new OpportunityStatusEnumValueType($configProvider);
+        return new OpportunityStatusEnumValueType();
     }
 }

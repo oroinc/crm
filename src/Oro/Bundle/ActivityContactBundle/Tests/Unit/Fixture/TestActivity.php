@@ -7,7 +7,7 @@ class TestActivity
     /** @var string */
     protected $direction;
 
-    /** @var \DateTime  */
+    /** @var \DateTime */
     protected $created;
 
     /**

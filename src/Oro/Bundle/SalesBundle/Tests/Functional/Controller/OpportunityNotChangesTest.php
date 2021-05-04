@@ -2,7 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadFullOpportunityFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Form;
@@ -23,10 +25,8 @@ class OpportunityNotChangesTest extends WebTestCase
 
     public function testSubmitOpportunityForm()
     {
+        /** @var Opportunity $opportunity */
         $opportunity = $this->getReference('full_opportunity');
-        /**
-         * @var $originUpdatedAt \DateTime
-         */
         $originUpdatedAt = $opportunity->getUpdatedAt();
 
         sleep(1);
@@ -42,10 +42,9 @@ class OpportunityNotChangesTest extends WebTestCase
         $this->client->followRedirects(true);
         $this->client->submit($form);
 
-        /**
-         * @var $manager Registry
-         */
+        /** @var ManagerRegistry $manager */
         $registry = $this->client->getContainer()->get('doctrine');
+        /** @var EntityManagerInterface $manager */
         $manager = $registry->getManagerForClass('OroSalesBundle:Opportunity');
 
         $newOpportunity = $manager->find('OroSalesBundle:Opportunity', $opportunity->getId());

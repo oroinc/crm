@@ -108,9 +108,7 @@ class ImportExportTest extends AbstractImportExportTestCase
             $this->getContactRepository()->findAll()
         );
 
-        /**
-         * @var $updatedContact Contact
-         */
+        /** @var Contact $updatedContact */
         $updatedContact = $this->getReference('Contact_' . LoadContactEntitiesData::FIRST_ENTITY_NAME);
         $this->assertNotEmpty($updatedContact->getLastName());
         $this->assertSame('Ms.', $updatedContact->getNamePrefix());
@@ -179,9 +177,7 @@ class ImportExportTest extends AbstractImportExportTestCase
             ->getManagerForClass(Organization::class)
             ->getRepository(Organization::class);
 
-        /**
-         * @var $organization Organization
-         */
+        /** @var Organization $organization */
         $organization = $organizationRepository->getFirst();
 
         return sprintf(

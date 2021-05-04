@@ -44,7 +44,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var WorkflowManager */
     protected $workflowManager;
 
-    /** @var  EntityManager */
+    /** @var EntityManager */
     protected $em;
 
     /** @var Organization */
@@ -152,7 +152,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 'company_name' => $lead->getCompanyName(),
             ]
         );
-        //@TODO change test according to CRM-6344
+        // change test according to CRM-6344
         if ($this->getRandomBoolean()) {
             /** @var Opportunity $opportunity */
             $opportunity   = $leadWorkflowItem->getResult()->get('opportunity');

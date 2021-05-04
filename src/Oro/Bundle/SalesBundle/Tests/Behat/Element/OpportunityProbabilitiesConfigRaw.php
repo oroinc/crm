@@ -21,7 +21,7 @@ class OpportunityProbabilitiesConfigRaw
     /** @var int */
     private $probabilityValue;
 
-    /** @var  bool */
+    /** @var bool */
     private $isProbabilityReadOnly;
 
     /** @var NodeElement */

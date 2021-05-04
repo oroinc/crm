@@ -13,7 +13,7 @@ class OpportunityStub extends Opportunity
     /** @var object|null */
     protected $dataChannel;
 
-    /** @var AbstractEnumValue $status */
+    /** @var AbstractEnumValue */
     private $status;
 
     /**
