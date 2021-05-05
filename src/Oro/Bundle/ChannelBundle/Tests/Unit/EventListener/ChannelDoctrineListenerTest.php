@@ -43,7 +43,7 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         ]
     ];
 
-    /** @var SettingsProvider  */
+    /** @var SettingsProvider */
     private $settingsProvider;
 
     protected function setUp(): void

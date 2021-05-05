@@ -49,7 +49,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     /** @var AccountCustomerManager */
     protected $accountCustomerManager;
 
-    /** @var  TokenStorage */
+    /** @var TokenStorage */
     protected $securityToken;
 
     /**

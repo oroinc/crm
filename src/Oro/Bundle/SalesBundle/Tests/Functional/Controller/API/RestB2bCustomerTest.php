@@ -16,7 +16,7 @@ class RestB2bCustomerTest extends WebTestCase
         'postalCode' => '12345'
     ];
 
-    /** @var  Channel */
+    /** @var Channel */
     protected static $dataChannel;
 
     protected function setUp(): void

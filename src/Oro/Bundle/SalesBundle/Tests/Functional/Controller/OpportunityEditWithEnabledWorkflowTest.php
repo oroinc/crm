@@ -9,7 +9,7 @@ use Symfony\Component\DomCrawler\Form;
 
 class OpportunityEditWithEnabledWorkflowTest extends WebTestCase
 {
-    /** @var  WorkflowManager */
+    /** @var WorkflowManager */
     protected $workflowManager;
 
     protected function setUp(): void

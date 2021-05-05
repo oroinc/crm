@@ -196,7 +196,6 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit\Framework\TestCase
      */
     protected function getFormEvent(array $data)
     {
-        /* @var $form FormInterface|\PHPUnit\Framework\MockObject\MockObject*/
         $form = $this->createMock(FormInterface::class);
 
         return new FormEvent($form, $data);

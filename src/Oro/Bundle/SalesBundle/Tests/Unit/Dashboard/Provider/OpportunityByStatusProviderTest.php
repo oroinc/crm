@@ -28,7 +28,7 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
     /** @var DateFilterProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $dateFilterProcessor;
 
-    /** @var  CurrencyQueryBuilderTransformerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var CurrencyQueryBuilderTransformerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $qbTransformer;
 
     /** @var array */
@@ -42,7 +42,7 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
         ['id' => 'lost', 'name' => 'Lost']
     ];
 
-    /** @var  OpportunityByStatusProvider */
+    /** @var OpportunityByStatusProvider */
     protected $provider;
 
     /**
