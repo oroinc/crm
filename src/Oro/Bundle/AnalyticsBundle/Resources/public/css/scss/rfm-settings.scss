@@ -10,19 +10,19 @@
         }
 
         th {
-            font-weight: normal;
+            font-weight: font-weight('light');
 
             .tooltip-icon {
                 margin-right: $content-padding-small;
             }
 
             label {
-                font-weight: bold;
+                font-weight: font-weight('bold');
                 margin-bottom: 0;
+            }
 
-                .oro-popover-content {
-                    font-weight: normal;
-                }
+            .oro-popover-content {
+                font-weight: font-weight('light');
             }
         }
     }

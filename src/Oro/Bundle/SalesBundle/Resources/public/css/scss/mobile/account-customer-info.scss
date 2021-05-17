@@ -1,6 +1,10 @@
 /* @theme: admin.oro; */
 
 .account-customer-info {
+    .tab-content .nav-tabs {
+        width: 100%;
+    }
+
     &.multicustomer > .oro-tabs {
         > .nav-tabs {
             margin-bottom: 16px;
@@ -10,14 +14,16 @@
             }
 
             > .dropdown {
+                /* stylelint-disable selector-max-compound-selectors */
                 &.active > a {
-                    border-bottom: 1px solid #ddd;
+                    border-bottom: 1px solid $additional-lighten;
                 }
 
                 > .dropdown-menu.pull-right {
                     left: 0;
                     right: auto;
                 }
+                /* stylelint-enable selector-max-compound-selectors */
             }
         }
 
@@ -36,9 +42,5 @@
             right: 10px;
             top: 16px;
         }
-    }
-
-    .tab-content .nav-tabs {
-        width: 100%;
     }
 }

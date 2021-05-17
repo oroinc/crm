@@ -1,9 +1,11 @@
 /* @theme: admin.oro; */
 
+/* stylelint-disable no-descending-specificity, selector-max-compound-selectors */
+
 /**
 * Fix form style in system configuration
 */
-form[name="opportunity"] {
+form[name='opportunity'] {
     .form-horizontal-large,
     .form-horizontal {
         .control-group-oro_sales_opportunity_probability,
@@ -38,16 +40,15 @@ form[name="opportunity"] {
 }
 
 .oro-item-collection .input-append-sortable {
-
     .system-configuration-content-wrapper & {
-        input[type="text"]:first-child {
+        input[type='text']:first-child {
             width: 220px;
         }
     }
 
-    input[type="text"].add-on-input {
+    input[type='text'].add-on-input {
         display: inline-block;
-        text-shadow: 0 1px 0 #fff;
+        text-shadow: 0 1px 0 $primary-inverse;
         margin-left: -2px;
         border-radius: 0;
         width: 40px;
@@ -72,16 +73,12 @@ form[name="opportunity"] {
     }
 
     .select2-results > .select2-result {
-        border-top: 1px solid #f4f4f4;
+        border-top: 1px solid $primary-860;
         padding-top: 13px;
         margin-bottom: 7px;
     }
 
     .select2-results {
-        .select2-result-with-children.select2-highlighted {
-            background: #fff;
-        }
-
         .select2-result-label {
             .separated-img {
                 width: 16px;
@@ -89,38 +86,40 @@ form[name="opportunity"] {
         }
 
         .select2-result-with-children.select2-highlighted {
+            background: $primary-inverse;
+
             .type {
-                color: #8f8f8f;
+                color: $primary-600;
             }
 
             .match-value {
-                color: #8f8f8f;
+                color: $primary-600;
             }
         }
 
         .select2-highlighted {
-            background: #4476db;
+            background: $info;
 
             .type {
-                color: #fff;
+                color: $primary-inverse;
             }
 
             .match-value {
-                color: #fff;
+                color: $primary-inverse;
             }
         }
 
         .type {
-            color: #8f8f8f;
+            color: $primary-600;
         }
 
         .match-value {
             font-size: 11px;
-            font-weight: normal;
+            font-weight: font-weight('light');
             font-style: normal;
             font-stretch: normal;
             line-height: 1;
-            color: #8f8f8f;
+            color: $primary-600;
             margin-left: 27px;
         }
     }
