@@ -20,9 +20,10 @@ class CalculateAnalyticsSchedulerTest extends WebTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->initClient();
+
+        $this->getOptionalListenerManager()->enableListener('oro_workflow.listener.event_trigger_collector');
+
         $this->loadFixtures([LoadChannel::class]);
     }
 

@@ -2,10 +2,10 @@
 
 .notes.comments {
     .list-item.private {
-        background: #f5f5f5;
+        background: $primary-860;
 
         span.label {
-            font-weight: normal;
+            font-weight: font-weight('light');
         }
     }
 }

@@ -22,7 +22,3 @@ oro_behat_extension:
         mapping:
           Account Name: 'oro_account_form[name]'
           Description: 'oro_account_form[extend_description]'
-
-  optional_listeners:
-    required_for_fixtures:
-      - 'oro_sales.customers.customer_association_listener'

@@ -227,8 +227,8 @@ services:
       arguments:
           - "@oro_channel.provider.settings_provider"
       tags:
-        - { name: doctrine.event_listener, event: onFlush, method: onFlush, connection: default }
-        - { name: doctrine.event_listener, event: postFlush, method: postFlush, connection: default }
+        - { name: doctrine.event_listener, event: onFlush }
+        - { name: doctrine.event_listener, event: postFlush }
 
     oro_channel.event_listener.refresh_channel_cache_listener:
           class: Oro\Bundle\ChannelBundle\EventListener\ORM\RefreshChannelCacheListener
@@ -364,8 +364,8 @@ services:
         arguments:
             - '@Psr\Container\ContainerInterface'
         tags:
-            - { name: doctrine.event_listener, event: onFlush, connection: default }
-            - { name: doctrine.event_listener, event: postFlush, connection: default }
-            - { name: doctrine.event_listener, event: onClear, connection: default }
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postFlush }
+            - { name: doctrine.event_listener, event: onClear }
             - { name: container.service_subscriber, id: oro_currency.query.currency_transformer }
             - { name: container.service_subscriber, id: oro_sales.manager.account_customer }
