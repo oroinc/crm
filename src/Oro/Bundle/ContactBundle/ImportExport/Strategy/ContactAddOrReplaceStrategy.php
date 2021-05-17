@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\ContactBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 
@@ -22,43 +21,6 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     public function setContactImportHelper(ContactImportHelper $contactImportHelper)
     {
         $this->contactImportHelper = $contactImportHelper;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function importExistingEntity(
-        $entity,
-        $existingEntity,
-        $itemData = null,
-        array $excludedFields = array()
-    ) {
-        // manually handle recursive relation to accounts
-        $entityName = ClassUtils::getClass($entity);
-        $fieldName = 'accounts';
-
-        if ($entity instanceof Contact
-            && $existingEntity instanceof Contact
-            && !$this->isFieldExcluded($entityName, $fieldName, $itemData)
-            && !in_array($fieldName, $excludedFields)
-        ) {
-            foreach ($existingEntity->getAccounts() as $account) {
-                $existingEntity->removeAccount($account);
-            }
-
-            foreach ($entity->getAccounts() as $account) {
-                $account->removeContact($entity);
-                $existingEntity->addAccount($account);
-            }
-
-            $excludedFields[] = $fieldName;
-        }
-
-        parent::importExistingEntity($entity, $existingEntity, $itemData, $excludedFields);
-
-        if ($existingEntity instanceof Contact) {
-            $this->fixDuplicateEntities($existingEntity);
-        }
     }
 
     /**
@@ -107,7 +69,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     protected function findEntityByIdentityValues($entityName, array $identityValues)
     {
         // contact last name and first name must be in this order to support compound index
-        if ($entityName == 'Oro\Bundle\ContactBundle\Entity\Contact') {
+        if (is_a($entityName, Contact::class, true)) {
             if (array_key_exists('firstName', $identityValues) && array_key_exists('lastName', $identityValues)) {
                 $firstName = $identityValues['firstName'];
                 $lastName = $identityValues['lastName'];
@@ -121,25 +83,5 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         }
 
         return parent::findEntityByIdentityValues($entityName, $identityValues);
-    }
-
-    /**
-     * @param Contact $existingEntity
-     */
-    private function fixDuplicateEntities(Contact $existingEntity)
-    {
-        // need to remove duplicated entities, because Account and Contact add* related methods calls each other
-        // eg. Contact::addAccount also calls Account::addContact
-        foreach ($existingEntity->getAccounts() as $account) {
-            foreach ($account->getContacts() as $contact) {
-                $contactExistCallback = function ($key, Contact $value) use ($contact) {
-                    return $contact !== $value && (int)$contact->getId() === (int)$value->getId();
-                };
-
-                if ($account->getContacts()->exists($contactExistCallback)) {
-                    $account->removeContact($contact);
-                }
-            }
-        }
     }
 }

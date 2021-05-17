@@ -74,14 +74,11 @@ class CustomerAssociationListener
 
     protected function addValidationError(StrategyEvent $event, string $error): void
     {
-        $entity = $event->getEntity();
-
         $this->importStrategyHelper->addValidationErrors(
             [$this->translator->trans($error)],
             $event->getContext()
         );
 
-        $this->importStrategyHelper->getEntityManager(get_class($entity))->detach($entity);
         $event->getContext()->incrementErrorEntriesCount();
         $event->setEntity(null);
     }
