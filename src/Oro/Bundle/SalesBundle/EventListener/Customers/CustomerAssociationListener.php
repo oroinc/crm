@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\PlatformBundle\EventListener\OptionalListenerInterface;
+use Oro\Bundle\PlatformBundle\EventListener\OptionalListenerTrait;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
@@ -16,10 +16,9 @@ use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 /**
  * Creates missing associations related to the existing customers.
  */
-class CustomerAssociationListener implements OptionalListenerInterface
+class CustomerAssociationListener
 {
-    /** @var bool */
-    protected $enabled = true;
+    use OptionalListenerTrait;
 
     /** @var array [object[]] */
     protected $createdTargetCustomers = [];
@@ -49,14 +48,6 @@ class CustomerAssociationListener implements OptionalListenerInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function setEnabled($enabled = true)
-    {
-        $this->enabled = $enabled;
-    }
-
-    /**
      * Collect created customer targets
      *
      * @param OnFlushEventArgs $args
@@ -79,6 +70,10 @@ class CustomerAssociationListener implements OptionalListenerInterface
      */
     public function postFlush(PostFlushEventArgs $args)
     {
+        if (!$this->enabled) {
+            return;
+        }
+
         if (!$this->createdTargetCustomers) {
             return;
         }

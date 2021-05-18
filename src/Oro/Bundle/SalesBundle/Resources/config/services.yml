@@ -100,8 +100,8 @@ services:
             - '@oro_currency.converter.rate.link'
             - '@oro_currency.query.currency_transformer'
         tags:
-        - { name: doctrine.event_listener, event: onFlush, method: onFlush }
-        - { name: doctrine.event_listener, event: postFlush, method: postFlush }
+        - { name: doctrine.event_listener, event: onFlush }
+        - { name: doctrine.event_listener, event: postFlush }
 
     oro_sales.event_listener.default_probability:
         class: Oro\Bundle\SalesBundle\EventListener\DefaultProbabilityListener
@@ -586,8 +586,8 @@ services:
             - '@oro_sales.customer.config_provider'
             - '@oro_entity.doctrine_helper'
         tags:
-            - { name: doctrine.event_listener, event: onFlush, method: onFlush }
-            - { name: doctrine.event_listener, event: postFlush, method: postFlush }
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postFlush }
 
     oro_sales.provider.customer.account_creation:
         class: Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\ChainAccountProvider

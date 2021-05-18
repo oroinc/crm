@@ -2,6 +2,20 @@ Please refer first to [UPGRADE.md](UPGRADE.md) for the most important items that
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
+## 4.2.4
+
+### Added
+
+### Changed
+
+### Removed
+#### ContactBundle
+* Removed `\Oro\Bundle\ContactBundle\ImportExport\Strategy\ContactAddOrReplaceStrategy::importExistingEntity`, functionality covered by `\Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy`
+* Removed `\Oro\Bundle\ContactBundle\ImportExport\Strategy\ContactAddOrReplaceStrategy::fixDuplicateEntities`, functionality covered by `\Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy`
+
+#### CustomerBundle
+* Removed `\Oro\Bundle\CustomerBundle\ImportExport\Strategy\CustomerAddOrReplaceStrategy::processValidationErrors`, functionality covered by `\Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy`
+
 ## 4.2.0 (2020-01-29)
 [Show detailed list of changes](incompatibilities-4-2.md)
 
