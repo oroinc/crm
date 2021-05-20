@@ -62,13 +62,7 @@ class ChannelDoctrineListener
     public function onFlush(OnFlushEventArgs $args)
     {
         $this->initializeFromEventArgs($args);
-        $entities = $this->getChangedTrackedEntities();
-
-        foreach ($entities as $entity) {
-            if (!array_key_exists(ClassUtils::getClass($entity), $this->customerIdentities)) {
-                continue;
-            }
-
+        foreach ($this->getChangedTrackedEntitiesGenerator() as $entity) {
             if ($this->uow->isScheduledForUpdate($entity)) {
                 $this->checkAndUpdate($entity, $this->uow->getEntityChangeSet($entity));
             } else {
@@ -153,25 +147,45 @@ class ChannelDoctrineListener
      */
     protected function getChangedTrackedEntities()
     {
-        $entities = [
-            $this->uow->getScheduledEntityInsertions(),
-            $this->uow->getScheduledEntityDeletions(),
-            $this->uow->getScheduledEntityUpdates(),
-        ];
+        return iterator_to_array($this->getChangedTrackedEntitiesGenerator());
+    }
 
-        $collections = [
-            $this->uow->getScheduledCollectionDeletions(),
-            $this->uow->getScheduledCollectionUpdates(),
-        ];
+    /**
+     * @return \Generator
+     */
+    private function getChangedTrackedEntitiesGenerator(): \Generator
+    {
+        yield from $this->getCustomerIdentitiesEntities($this->uow->getScheduledEntityInsertions());
+        yield from $this->getCustomerIdentitiesEntities($this->uow->getScheduledEntityDeletions());
+        yield from $this->getCustomerIdentitiesEntities($this->uow->getScheduledEntityUpdates());
+        yield from $this->getCustomerIdentitiesEntitiesFromCollectionChanges(
+            $this->uow->getScheduledCollectionDeletions()
+        );
+        yield from $this->getCustomerIdentitiesEntitiesFromCollectionChanges(
+            $this->uow->getScheduledCollectionUpdates()
+        );
+    }
 
-        /** @var PersistentCollection $collectionToChange */
-        foreach ($collections as $collectionsToChange) {
-            foreach ($collectionsToChange as $collection) {
-                $entities[] = $collection->unwrap()->toArray();
+    private function getCustomerIdentitiesEntitiesFromCollectionChanges($collections): \Generator
+    {
+        foreach ($collections as $collection) {
+            if ($collection instanceof PersistentCollection) {
+                yield from $this->getCustomerIdentitiesEntities($collection->unwrap()->toArray());
+            } else {
+                yield from $this->getCustomerIdentitiesEntities($collection);
             }
         }
+    }
 
-        return array_merge(...$entities);
+    private function getCustomerIdentitiesEntities(iterable $entities): \Generator
+    {
+        foreach ($entities as $entity) {
+            if (!array_key_exists(ClassUtils::getClass($entity), $this->customerIdentities)) {
+                continue;
+            }
+
+            yield $entity;
+        }
     }
 
     /**
