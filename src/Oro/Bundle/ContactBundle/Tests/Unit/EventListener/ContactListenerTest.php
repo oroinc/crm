@@ -14,11 +14,11 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class ContactListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ContactListener */
-    protected $contactListener;
+    /** @var TokenStorageInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $tokenStorage;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $tokenStorage;
+    /** @var ContactListener */
+    private $contactListener;
 
     protected function setUp(): void
     {
@@ -27,38 +27,30 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
         $this->contactListener = new ContactListener($this->tokenStorage);
     }
 
-    protected function tearDown(): void
-    {
-        unset($this->tokenStorage);
-        unset($this->contactListener);
-    }
-
     /**
-     * @param Contact $entity
-     * @param bool $mockToken
-     * @param bool $mockUser
      * @dataProvider prePersistAndPreUpdateDataProvider
      */
-    public function testPrePersist($entity, $mockToken = false, $mockUser = false)
+    public function testPrePersist(Contact $entity, bool $mockToken = false, bool $mockUser = false)
     {
         $user = $mockUser ? new User() : null;
         $this->mockSecurityContext($mockToken, $mockUser, $user);
 
-        $em = $this->getEntityManagerMock();
+        $em = $this->getEntityManager();
 
         if ($mockUser) {
-            $uow = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')->disableOriginalConstructor()->getMock();
+            $uow = $this->createMock(UnitOfWork::class);
 
-            $em->expects($this->any())->method('getUnitOfWork')
-                ->will($this->returnValue($uow));
+            $em->expects($this->any())
+                ->method('getUnitOfWork')
+                ->willReturn($uow);
         }
 
         $args = new LifecycleEventArgs($entity, $em);
 
         $this->contactListener->prePersist($entity, $args);
 
-        $this->assertInstanceOf('\DateTime', $entity->getCreatedAt());
-        $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
+        $this->assertInstanceOf(\DateTime::class, $entity->getCreatedAt());
+        $this->assertInstanceOf(\DateTime::class, $entity->getUpdatedAt());
         if ($mockToken && $mockUser) {
             $this->assertEquals($user, $entity->getCreatedBy());
             $this->assertEquals($user, $entity->getUpdatedBy());
@@ -79,7 +71,7 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
 
         $this->mockSecurityContext();
 
-        $em = $this->getEntityManagerMock();
+        $em = $this->getEntityManager();
 
         $args = new LifecycleEventArgs($entity, $em);
 
@@ -90,27 +82,20 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param Contact $entity
-     * @param bool $mockToken
-     * @param bool $mockUser
-     * @param bool $detachedUser
-     * @param bool $reloadUser
      * @dataProvider prePersistAndPreUpdateDataProvider
      */
     public function testPreUpdate(
-        $entity,
-        $mockToken = false,
-        $mockUser = false,
-        $detachedUser = null,
-        $reloadUser = null
+        Contact $entity,
+        bool $mockToken = false,
+        bool $mockUser = false,
+        bool $detachedUser = null,
+        bool $reloadUser = null
     ) {
         $oldDate = new \DateTime('2012-12-12 12:12:12');
         $oldUser = new User();
         $oldUser->setFirstName('oldUser');
         $entity->setUpdatedAt($oldDate);
         $entity->setUpdatedBy($oldUser);
-
-        $initialEntity = clone $entity;
 
         $newUser = null;
         if ($mockUser) {
@@ -120,37 +105,32 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
 
         $this->mockSecurityContext($mockToken, $mockUser, $newUser);
 
-        $unitOfWork = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
-            ->setMethods(array('propertyChanged', 'getEntityState'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $unitOfWork = $this->createMock(UnitOfWork::class);
 
-
-        $entityManager = $this->getEntityManagerMock($reloadUser, $newUser);
+        $entityManager = $this->getEntityManager($reloadUser, $newUser);
         $entityManager->expects($this->any())
             ->method('getUnitOfWork')
-            ->will($this->returnValue($unitOfWork));
+            ->willReturn($unitOfWork);
 
-        $callIndex = 0;
         if (null !== $detachedUser) {
-            $unitOfWork->expects($this->at($callIndex++))
+            $unitOfWork->expects($this->once())
                 ->method('getEntityState')
                 ->with($newUser)
-                ->will($this->returnValue($detachedUser ? UnitOfWork::STATE_DETACHED : UnitOfWork::STATE_MANAGED));
+                ->willReturn($detachedUser ? UnitOfWork::STATE_DETACHED : UnitOfWork::STATE_MANAGED);
         }
-        $unitOfWork->expects($this->at($callIndex++))
+        $unitOfWork->expects($this->exactly(2))
             ->method('propertyChanged')
-            ->with($entity, 'updatedAt', $oldDate, $this->isInstanceOf('\DateTime'));
-        $unitOfWork->expects($this->at($callIndex))
-            ->method('propertyChanged')
-            ->with($entity, 'updatedBy', $oldUser, $newUser);
+            ->withConsecutive(
+                [$entity, 'updatedAt', $oldDate, $this->isInstanceOf(\DateTime::class)],
+                [$entity, 'updatedBy', $oldUser, $newUser]
+            );
 
-        $changeSet = array();
+        $changeSet = [];
         $args = new PreUpdateEventArgs($entity, $entityManager, $changeSet);
 
         $this->contactListener->preUpdate($entity, $args);
 
-        $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
+        $this->assertInstanceOf(\DateTime::class, $entity->getUpdatedAt());
         if ($mockToken && $mockUser) {
             $this->assertEquals($newUser, $entity->getUpdatedBy());
         } else {
@@ -158,37 +138,34 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @return array
-     */
-    public function prePersistAndPreUpdateDataProvider()
+    public function prePersistAndPreUpdateDataProvider(): array
     {
-        return array(
-            'no token' => array(
+        return [
+            'no token' => [
                 'entity'    => new Contact(),
                 'mockToken' => false,
                 'mockUser'  => false,
-            ),
-            'no user' => array(
+            ],
+            'no user' => [
                 'entity'    => new Contact(),
                 'mockToken' => true,
                 'mockUser'  => false,
-            ),
-            'with a user' => array(
+            ],
+            'with a user' => [
                 'entity'    => new Contact(),
                 'mockToken' => true,
                 'mockUser'  => true,
                 'detachedUser' => false,
                 'reloadUser' => false,
-            ),
-            'with a detached' => array(
+            ],
+            'with a detached' => [
                 'entity' => new Contact(),
                 'mockToken' => true,
                 'mockUser' => true,
                 'detachedUser' => true,
                 'reloadUser' => true,
-            ),
-        );
+            ],
+        ];
     }
 
     public function testPreUpdateWhenNoUser()
@@ -201,7 +178,6 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
             ->method('getToken')
             ->willReturn($token);
 
-        /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject $entityManager */
         $entityManager = $this->createMock(EntityManager::class);
         $entityManager->expects($this->once())
             ->method('getUnitOfWork')
@@ -221,51 +197,39 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param bool $reloadUser
-     * @param object $newUser
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return EntityManager|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getEntityManagerMock($reloadUser = false, $newUser = null)
+    private function getEntityManager(?bool $reloadUser = false, object $newUser = null)
     {
-        $result = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->setMethods(array('getUnitOfWork', 'find'))
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $result = $this->createMock(EntityManager::class);
 
         if ($reloadUser) {
-            $result->expects($this->once())->method('find')
+            $result->expects($this->once())
+                ->method('find')
                 ->with('OroUserBundle:User')
-                ->will($this->returnValue($newUser));
+                ->willReturn($newUser);
         } else {
-            $result->expects($this->never())->method('find');
+            $result->expects($this->never())
+                ->method('find');
         }
 
         return $result;
     }
 
-    /**
-     * @param bool $mockToken
-     * @param bool $mockUser
-     * @param User|null $user
-     */
-    protected function mockSecurityContext($mockToken = false, $mockUser = false, $user = null)
+    private function mockSecurityContext(bool $mockToken = false, bool  $mockUser = false, User $user = null): void
     {
         if ($mockToken) {
-            $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')
-                ->setMethods(array('getUser'))
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            $token = $this->createMock(TokenInterface::class);
 
             if ($mockUser) {
                 $token->expects($this->any())
                     ->method('getUser')
-                    ->will($this->returnValue($user));
+                    ->willReturn($user);
             }
 
             $this->tokenStorage->expects($this->any())
                 ->method('getToken')
-                ->will($this->returnValue($token));
+                ->willReturn($token);
         }
     }
 }

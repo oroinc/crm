@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Form\Handler\ContactHandler;
@@ -13,32 +14,22 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    const FORM_DATA = ['field' => 'value'];
+    private const FORM_DATA = ['field' => 'value'];
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|FormInterface
-     */
-    protected $form;
+    /** @var \PHPUnit\Framework\MockObject\MockObject|FormInterface */
+    private $form;
 
-    /**
-     * @var Request
-     */
-    protected $request;
+    /** @var Request */
+    private $request;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|EntityManagerInterface
-     */
-    protected $manager;
+    /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManagerInterface */
+    private $manager;
 
-    /**
-     * @var ContactHandler
-     */
-    protected $handler;
+    /** @var ContactHandler */
+    private $handler;
 
-    /**
-     * @var Contact
-     */
-    protected $entity;
+    /** @var Contact */
+    private $entity;
 
     protected function setUp(): void
     {
@@ -66,9 +57,8 @@ class ContactHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider supportedMethods
-     * @param string $method
      */
-    public function testProcessSupportedRequest($method)
+    public function testProcessSupportedRequest(string $method)
     {
         $this->form->expects($this->once())
             ->method('setData')
@@ -84,20 +74,18 @@ class ContactHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->handler->process($this->entity));
     }
 
-    public function supportedMethods()
+    public function supportedMethods(): array
     {
-        return array(
-            array('POST'),
-            array('PUT')
-        );
+        return [
+            ['POST'],
+            ['PUT']
+        ];
     }
 
     /**
      * @dataProvider processValidDataProvider
-     *
-     * @param bool $isDataChanged
      */
-    public function testProcessValidData($isDataChanged)
+    public function testProcessValidData(bool $isDataChanged)
     {
         $appendedAccount = new Account();
         $appendedAccount->setId(1);
@@ -120,29 +108,24 @@ class ContactHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->form->expects($this->once())
             ->method('isValid')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $appendForm = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $appendForm = $this->createMock(Form::class);
         $appendForm->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue(array($appendedAccount)));
-        $this->form->expects($this->at(5))
-            ->method('get')
-            ->with('appendAccounts')
-            ->will($this->returnValue($appendForm));
+            ->willReturn([$appendedAccount]);
 
-        $removeForm = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $removeForm = $this->createMock(Form::class);
         $removeForm->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue(array($removedAccount)));
-        $this->form->expects($this->at(6))
+            ->willReturn([$removedAccount]);
+
+        $this->form->expects($this->exactly(2))
             ->method('get')
-            ->with('removeAccounts')
-            ->will($this->returnValue($removeForm));
+            ->willReturnMap([
+                ['appendAccounts', $appendForm],
+                ['removeAccounts', $removeForm]
+            ]);
 
         if ($isDataChanged) {
             $this->manager->expects($this->once())
@@ -166,7 +149,7 @@ class ContactHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($appendedAccount, current($actualAccounts));
     }
 
-    public function processValidDataProvider()
+    public function processValidDataProvider(): array
     {
         return [
             [true],
@@ -174,29 +157,21 @@ class ContactHandlerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @param bool $isChangesExists
-     */
-    protected function configureUnitOfWork($isChangesExists)
+    private function configureUnitOfWork(bool $isChangesExists): void
     {
-        $uowMock = $this->getMockBuilder('\Doctrine\ORM\UnitOfWork')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $uow = $this->createMock(UnitOfWork::class);
+        $uow->expects($this->once())
+            ->method('computeChangeSets');
+        $uow->expects($this->once())
+            ->method('getEntityChangeSet')
+            ->with($this->entity)
+            ->willReturn($isChangesExists ? [1] : []);
+        $uow->expects($this->once())
+            ->method('getScheduledEntityUpdates')
+            ->willReturn([1]);
 
         $this->manager->expects($this->once())
             ->method('getUnitOfWork')
-            ->will($this->returnValue($uowMock));
-
-        $uowMock->expects($this->once())
-            ->method('computeChangeSets');
-
-        $uowMock->expects($this->once())
-            ->method('getEntityChangeSet')
-            ->with($this->entity)
-            ->will($this->returnValue($isChangesExists ? [1] : []));
-
-        $uowMock->expects($this->once())
-            ->method('getScheduledEntityUpdates')
-            ->will($this->returnValue([1]));
+            ->willReturn($uow);
     }
 }

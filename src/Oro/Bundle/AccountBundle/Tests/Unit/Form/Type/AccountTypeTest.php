@@ -2,95 +2,89 @@
 
 namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AccountBundle\Form\Type\AccountType;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Oro\Bundle\FormBundle\Form\Type\MultipleEntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AccountTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $router;
+    /** @var RouterInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $router;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $entityNameResolver;
+    /** @var EntityNameResolver|\PHPUnit\Framework\MockObject\MockObject */
+    private $entityNameResolver;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $authorizationChecker;
+
+    /** @var AccountType */
+    private $type;
 
     protected function setUp(): void
     {
-        $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->entityNameResolver = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityNameResolver')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->router = $this->createMock(RouterInterface::class);
+        $this->entityNameResolver = $this->createMock(EntityNameResolver::class);
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
+
+        $this->type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
     }
 
     public function testAddEntityFields()
     {
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
             ->with('oro_contact_view')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $builder->expects($this->at(0))
+        $builder = $this->createMock(FormBuilder::class);
+        $builder->expects($this->exactly(3))
             ->method('add')
-            ->with('name', TextType::class)
-            ->will($this->returnSelf());
-        $builder->expects($this->at(1))
-            ->method('add')
-            ->with('default_contact', EntityIdentifierType::class)
-            ->will($this->returnSelf());
-        $builder->expects($this->at(2))
-            ->method('add')
-            ->with('contacts', MultipleEntityType::class)
-            ->will($this->returnSelf());
+            ->withConsecutive(
+                ['name', TextType::class],
+                ['default_contact', EntityIdentifierType::class],
+                ['contacts', MultipleEntityType::class]
+            )
+            ->willReturnSelf();
 
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
-        $type->buildForm($builder, []);
+        $this->type->buildForm($builder, []);
     }
 
     public function testAddEntityFieldsWithoutContactPermission()
     {
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
             ->with('oro_contact_view')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $builder->expects($this->at(0))
+        $builder = $this->createMock(FormBuilder::class);
+        $builder->expects($this->once())
             ->method('add')
             ->with('name', TextType::class)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
-        $type->buildForm($builder, []);
+        $this->type->buildForm($builder, []);
     }
 
     public function testConfigureOptions()
     {
-        /** @var OptionsResolver $resolver */
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
+        $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with($this->isType('array'));
 
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
-        $type->configureOptions($resolver);
+        $this->type->configureOptions($resolver);
     }
 
     public function testFinishView()
@@ -98,105 +92,75 @@ class AccountTypeTest extends \PHPUnit\Framework\TestCase
         $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
             ->with('oro_contact_view')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $this->router->expects($this->at(0))
+        $this->router->expects($this->exactly(2))
             ->method('generate')
-            ->with('oro_account_widget_contacts_info', array('id' => 100))
-            ->will($this->returnValue('/test-path/100'));
-        $this->router->expects($this->at(1))
-            ->method('generate')
-            ->with('oro_contact_info', array('id' => 1))
-            ->will($this->returnValue('/test-info/1'));
+            ->willReturnMap([
+                ['oro_account_widget_contacts_info', ['id' => 100], RouterInterface::ABSOLUTE_PATH, '/test-path/100'],
+                ['oro_contact_info', ['id' => 1], RouterInterface::ABSOLUTE_PATH, '/test-info/1']
+            ]);
 
-        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $contact->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(1));
-        $phone = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\ContactPhone')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $phone->expects($this->once())
-            ->method('getPhone')
-            ->will($this->returnValue('911'));
-        $contact->expects($this->once())
-            ->method('getPrimaryPhone')
-            ->will($this->returnValue($phone));
-        $email = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\ContactEmail')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $email->expects($this->once())
-            ->method('getEmail')
-            ->will($this->returnValue('john.doe@dummy.net'));
-        $contact->expects($this->once())
-            ->method('getPrimaryEmail')
-            ->will($this->returnValue($email));
-        $contacts = new ArrayCollection(array($contact));
+        $contact = new Contact();
+        $contact->setId(1);
+        $phone = new ContactPhone();
+        $phone->setPhone('911');
+        $contact->addPhone($phone);
+        $contact->setPrimaryPhone($phone);
+        $email = new ContactEmail();
+        $email->setEmail('john.doe@dummy.net');
+        $contact->addEmail($email);
+        $contact->setPrimaryEmail($email);
+
+        $account = new Account();
+        $account->setId(100);
+        $account->addContact($contact);
+        $account->setDefaultContact($contact);
 
         $this->entityNameResolver->expects($this->once())
             ->method('getName')
             ->with($contact)
-            ->will($this->returnValue('John Doe'));
+            ->willReturn('John Doe');
 
-        $account = $this->getMockBuilder('Oro\Bundle\AccountBundle\Entity\Account')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $account->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue(100));
-        $account->expects($this->once())
-            ->method('getContacts')
-            ->will($this->returnValue($contacts));
-        $account->expects($this->exactly(2))
-            ->method('getDefaultContact')
-            ->will($this->returnValue($contact));
-        $form = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $form = $this->createMock(Form::class);
         $form->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue($account));
+            ->willReturn($account);
 
         $formView = new FormView();
         $contactsFormView = new FormView($formView);
         $formView->children['contacts'] = $contactsFormView;
 
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
-        $type->finishView($formView, $form, array());
+        $this->type->finishView($formView, $form, []);
 
-        $this->assertEquals($contactsFormView->vars['grid_url'], '/test-path/100');
-        $expectedInitialElements = array(
-            array(
-                'id' => 1,
-                'label' => 'John Doe',
-                'link' => '/test-info/1',
-                'isDefault' => true,
-                'extraData' => array(
-                    array('label' => 'Phone', 'value' => '911'),
-                    array('label' => 'Email', 'value' => 'john.doe@dummy.net')
-                )
-            )
+        $this->assertEquals('/test-path/100', $contactsFormView->vars['grid_url']);
+        $this->assertEquals(
+            [
+                [
+                    'id' => 1,
+                    'label' => 'John Doe',
+                    'link' => '/test-info/1',
+                    'isDefault' => true,
+                    'extraData' => [
+                        ['label' => 'Phone', 'value' => '911'],
+                        ['label' => 'Email', 'value' => 'john.doe@dummy.net']
+                    ]
+                ]
+            ],
+            $contactsFormView->vars['initial_elements']
         );
-        $this->assertEquals($expectedInitialElements, $contactsFormView->vars['initial_elements']);
     }
 
     public function testFinishViewWithoutContactPermission()
     {
-        $this->authorizationChecker->expects($this->exactly(1))
+        $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
             ->with('oro_contact_view')
-            ->will($this->returnValue(false));
-
-        $form = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->willReturn(false);
 
         $formView = new FormView();
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
-        $type->finishView($formView, $form, array());
+        $this->type->finishView($formView, $this->createMock(Form::class), []);
 
-        $this->assertTrue(empty($formView->children['contacts']));
+        $this->assertArrayNotHasKey('contacts', $formView->children);
     }
 }
