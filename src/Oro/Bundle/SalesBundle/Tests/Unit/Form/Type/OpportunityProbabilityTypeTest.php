@@ -27,52 +27,42 @@ class OpportunityProbabilityTypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider enumOptionsDataProvider
-     *
-     * @param array $enumOptions
      */
     public function testBuildForm(array $enumOptions)
     {
-        $builder = $this->createMock(FormBuilderInterface::class);
-
-        $builder->expects($this->exactly(count($enumOptions)))
-            ->method('add');
-
         $type = $this->getFormType($enumOptions);
 
+        $fields = [];
         $constraint = new Range(['min' => 0, 'max' => 100]);
-        $counter = 0;
         foreach ($enumOptions as $status) {
-            $disabled = in_array($status->getId(), $type::$immutableProbabilityStatuses);
+            $disabled = in_array($status->getId(), $type::$immutableProbabilityStatuses, true);
             $attr = [];
-
             if ($disabled) {
                 $attr['readonly'] = true;
             }
-
-            $builder->expects($this->at($counter))
-                ->method('add')
-                ->with(
-                    $status->getId(),
-                    OroPercentType::class,
-                    [
-                        'required' => false,
-                        'disabled' => $disabled,
-                        'label' => $status->getName(),
-                        'attr' => $attr,
-                        'constraints' => $constraint,
-                    ]
-                )
-                ->willReturnSelf();
-            $counter++;
+            $fields[] = [
+                $status->getId(),
+                OroPercentType::class,
+                [
+                    'required' => false,
+                    'disabled' => $disabled,
+                    'label' => $status->getName(),
+                    'attr' => $attr,
+                    'constraints' => $constraint
+                ]
+            ];
         }
+
+        $builder = $this->createMock(FormBuilderInterface::class);
+        $builder->expects($this->exactly(count($fields)))
+            ->method('add')
+            ->withConsecutive(...$fields)
+            ->willReturnSelf();
 
         $type->buildForm($builder, []);
     }
 
-    /**
-     * @return array
-     */
-    public function enumOptionsDataProvider()
+    public function enumOptionsDataProvider(): array
     {
         return [
             'default' => [
@@ -88,12 +78,7 @@ class OpportunityProbabilityTypeTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @param array $enumOptions
-     *
-     * @return OpportunityProbabilityType
-     */
-    protected function getFormType(array $enumOptions)
+    private function getFormType(array $enumOptions): OpportunityProbabilityType
     {
         $enumTypeHelper = $this->createMock(EnumTypeHelper::class);
         $objectRepository = $this->createMock(ObjectRepository::class);
@@ -101,7 +86,7 @@ class OpportunityProbabilityTypeTest extends \PHPUnit\Framework\TestCase
 
         $enumTypeHelper->expects($this->once())
             ->method('getEnumCode')
-            ->will($this->returnValue('opportunity_status'));
+            ->willReturn('opportunity_status');
 
         $objectRepository->expects($this->once())
             ->method('findBy')

@@ -13,13 +13,13 @@ use Oro\Bundle\SalesBundle\Form\Type\CustomerType;
 use Oro\Bundle\SalesBundle\Form\Type\LeadType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LeadTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var LeadType
-     */
-    protected $type;
+    /** @var LeadType */
+    private $type;
 
     protected function setUp(): void
     {
@@ -28,42 +28,35 @@ class LeadTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testBuildForm()
     {
-        $expectedFields = array(
-            'name' => TextType::class,
-            'status' => EnumSelectType::class,
-            'namePrefix' => TextType::class,
-            'firstName' => TextType::class,
-            'middleName' => TextType::class,
-            'lastName' => TextType::class,
-            'nameSuffix' => TextType::class,
-            'contact' => ContactSelectType::class,
-            'jobTitle' => TextType::class,
-            'phones' => PhoneCollectionType::class,
-            'emails' => EmailCollectionType::class,
-            'customerAssociation' => CustomerType::class,
-            'companyName' => TextType::class,
-            'website' => TextType::class,
-            'numberOfEmployees' => IntegerType::class,
-            'industry' => TextType::class,
-            'addresses' => AddressCollectionType::class,
-            'source' => EnumSelectType::class,
-            'notes' => OroResizeableRichTextType::class,
-            'twitter' => TextType::class,
-            'linkedIn' => TextType::class,
-        );
+        $fields = [
+            ['name', TextType::class],
+            ['status', EnumSelectType::class],
+            ['namePrefix', TextType::class],
+            ['firstName', TextType::class],
+            ['middleName', TextType::class],
+            ['lastName', TextType::class],
+            ['nameSuffix', TextType::class],
+            ['contact', ContactSelectType::class],
+            ['jobTitle', TextType::class],
+            ['phones', PhoneCollectionType::class],
+            ['emails', EmailCollectionType::class],
+            ['customerAssociation', CustomerType::class],
+            ['companyName', TextType::class],
+            ['website', TextType::class],
+            ['numberOfEmployees', IntegerType::class],
+            ['industry', TextType::class],
+            ['addresses', AddressCollectionType::class],
+            ['source', EnumSelectType::class],
+            ['notes', OroResizeableRichTextType::class],
+            ['twitter', TextType::class],
+            ['linkedIn', TextType::class]
+        ];
 
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $counter = 0;
-        foreach ($expectedFields as $fieldName => $formType) {
-            $builder->expects($this->at($counter))
-                ->method('add')
-                ->with($fieldName, $formType)
-                ->will($this->returnSelf());
-            $counter++;
-        }
+        $builder = $this->createMock(FormBuilder::class);
+        $builder->expects($this->exactly(count($fields)))
+            ->method('add')
+            ->withConsecutive(...$fields)
+            ->willReturnSelf();
 
         $this->type->buildForm($builder, ['data_class' => Lead::class]);
     }
@@ -75,14 +68,10 @@ class LeadTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testConfigureOptions()
     {
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
+        $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())
             ->method('setDefaults')
-            ->with(
-                [
-                    'data_class' => 'Oro\Bundle\SalesBundle\Entity\Lead',
-                ]
-            );
+            ->with(['data_class' => Lead::class,]);
 
         $this->type->configureOptions($resolver);
     }

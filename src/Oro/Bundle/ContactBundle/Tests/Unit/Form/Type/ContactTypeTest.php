@@ -16,13 +16,13 @@ use Oro\Bundle\UserBundle\Form\Type\GenderType;
 use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContactTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ContactType
-     */
-    protected $type;
+    /** @var ContactType */
+    private $type;
 
     protected function setUp(): void
     {
@@ -31,7 +31,7 @@ class ContactTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testConfigureOptions()
     {
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
+        $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with($this->isType('array'));
@@ -40,49 +40,41 @@ class ContactTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testBuildForm()
     {
-        $expectedFields = array(
-            'namePrefix' => TextType::class,
-            'firstName' => TextType::class,
-            'middleName' => TextType::class,
-            'lastName' => TextType::class,
-            'nameSuffix' => TextType::class,
-            'gender' => GenderType::class,
-            'birthday' => OroBirthdayType::class,
-            'description' => OroResizeableRichTextType::class,
-            'jobTitle' => TextType::class,
-            'fax' => TextType::class,
-            'skype' => TextType::class,
-            'twitter' => TextType::class,
-            'facebook' => TextType::class,
-            'googlePlus' => TextType::class,
-            'linkedIn' => TextType::class,
-            'picture' => ImageType::class,
+        $fields = [
+            ['namePrefix', TextType::class],
+            ['firstName', TextType::class],
+            ['middleName', TextType::class],
+            ['lastName', TextType::class],
+            ['nameSuffix', TextType::class],
+            ['gender', GenderType::class],
+            ['birthday', OroBirthdayType::class],
+            ['description', OroResizeableRichTextType::class],
+            ['jobTitle', TextType::class],
+            ['fax', TextType::class],
+            ['skype', TextType::class],
+            ['twitter', TextType::class],
+            ['facebook', TextType::class],
+            ['googlePlus', TextType::class],
+            ['linkedIn', TextType::class],
+            ['picture', ImageType::class],
+            ['source', TranslatableEntityType::class],
+            ['assignedTo', OrganizationUserAclSelectType::class],
+            ['reportsTo', ContactSelectType::class],
+            ['method', TranslatableEntityType::class],
+            ['addresses', AddressCollectionType::class],
+            ['emails', EmailCollectionType::class],
+            ['phones', PhoneCollectionType::class],
+            ['groups', EntityType::class],
+            ['appendAccounts', EntityIdentifierType::class],
+            ['removeAccounts', EntityIdentifierType::class]
+        ];
 
-            'source' => TranslatableEntityType::class,
-            'assignedTo' => OrganizationUserAclSelectType::class,
-            'reportsTo' => ContactSelectType::class,
-            'method' => TranslatableEntityType::class,
-            'addresses' => AddressCollectionType::class,
-            'emails' => EmailCollectionType::class,
-            'phones' => PhoneCollectionType::class,
-            'groups' => EntityType::class,
-            'appendAccounts' => EntityIdentifierType::class,
-            'removeAccounts' => EntityIdentifierType::class,
-        );
+        $builder = $this->createMock(FormBuilder::class);
+        $builder->expects($this->exactly(count($fields)))
+            ->method('add')
+            ->withConsecutive(...$fields)
+            ->willReturnSelf();
 
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $counter = 0;
-        foreach ($expectedFields as $fieldName => $formType) {
-            $builder->expects($this->at($counter))
-                ->method('add')
-                ->with($fieldName, $formType)
-                ->will($this->returnSelf());
-            $counter++;
-        }
-
-        $this->type->buildForm($builder, array());
+        $this->type->buildForm($builder, []);
     }
 }

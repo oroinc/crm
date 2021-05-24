@@ -3,13 +3,13 @@
 namespace Oro\Bundle\CaseBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\CaseBundle\Form\Type\CaseEntityType;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CaseEntityTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var CaseEntityType
-     */
-    protected $formType;
+    /** @var CaseEntityType */
+    private $formType;
 
     protected function setUp(): void
     {
@@ -17,31 +17,25 @@ class CaseEntityTypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $widgets
-     *
      * @dataProvider formTypeProvider
      */
     public function testBuildForm(array $widgets)
     {
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $builder->expects($this->exactly(sizeof($widgets)))
+        $builder = $this->createMock(FormBuilder::class);
+        $builder->expects($this->exactly(count($widgets)))
             ->method('add')
-            ->will($this->returnSelf());
-
-        foreach ($widgets as $key => $widget) {
-            $builder->expects($this->at($key))
-                ->method('add')
-                ->with($this->equalTo($widget))
-                ->will($this->returnSelf());
-        }
+            ->withConsecutive(...array_map(
+                function ($widget) {
+                    return [$widget];
+                },
+                $widgets
+            ))
+            ->willReturnSelf();
 
         $this->formType->buildForm($builder, []);
     }
 
-    public function formTypeProvider()
+    public function formTypeProvider(): array
     {
         return [
             'all' => [
@@ -62,10 +56,8 @@ class CaseEntityTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testConfigureOptions()
     {
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
-
-        $resolver
-            ->expects($this->once())
+        $resolver = $this->createMock(OptionsResolver::class);
+        $resolver->expects($this->once())
             ->method('setDefaults');
 
         $this->formType->configureOptions($resolver);

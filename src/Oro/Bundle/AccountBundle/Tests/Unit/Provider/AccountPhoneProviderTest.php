@@ -4,18 +4,20 @@ namespace Oro\Bundle\AccountBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AccountBundle\Provider\AccountPhoneProvider;
+use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class AccountPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $rootProvider;
+    private $rootProvider;
 
     /** @var AccountPhoneProvider */
-    protected $provider;
+    private $provider;
 
     protected function setUp(): void
     {
-        $this->rootProvider = $this->createMock('Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface');
+        $this->rootProvider = $this->createMock(PhoneProviderInterface::class);
         $this->provider = new AccountPhoneProvider();
         $this->provider->setRootProvider($this->rootProvider);
     }
@@ -35,15 +37,13 @@ class AccountPhoneProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetPhoneNumber()
     {
         $entity = new Account();
-        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $contact = new Contact();
         $entity->setDefaultContact($contact);
+
         $this->rootProvider->expects($this->once())
             ->method('getPhoneNumber')
             ->with($this->identicalTo($contact))
-            ->will($this->returnValue('123-123'));
+            ->willReturn('123-123');
 
         $this->assertEquals(
             '123-123',
@@ -67,38 +67,27 @@ class AccountPhoneProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetPhoneNumbers()
     {
         $entity = new Account();
-        $contact1 = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $contact2 = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $entity->setDefaultContact($contact1);
+        $contact1 = new Contact();
+        $contact2 = new Contact();
         $entity->addContact($contact1);
         $entity->addContact($contact2);
+        $entity->setDefaultContact($contact1);
 
-        $this->rootProvider->expects($this->at(0))
+        $this->rootProvider->expects($this->exactly(2))
             ->method('getPhoneNumbers')
-            ->with($this->identicalTo($contact1))
-            ->will(
-                $this->returnValue(
-                    [
-                        ['123-123', $contact1],
-                        ['456-456', $contact1]
-                    ]
-                )
-            );
-        $this->rootProvider->expects($this->at(1))
-            ->method('getPhoneNumbers')
-            ->with($this->identicalTo($contact2))
-            ->will(
-                $this->returnValue(
-                    [
-                        ['789-789', $contact2],
-                        ['111-111', $contact2]
-                    ]
-                )
+            ->withConsecutive(
+                [$this->identicalTo($contact1)],
+                [$this->identicalTo($contact2)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                [
+                    ['123-123', $contact1],
+                    ['456-456', $contact1]
+                ],
+                [
+                    ['789-789', $contact2],
+                    ['111-111', $contact2]
+                ]
             );
 
         $this->assertEquals(

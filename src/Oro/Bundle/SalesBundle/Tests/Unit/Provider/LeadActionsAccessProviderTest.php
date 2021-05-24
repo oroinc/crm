@@ -6,9 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider;
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 
 /**
@@ -16,27 +18,21 @@ use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
  */
 class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var LeadActionsAccessProvider */
-    protected $provider;
-
     /** @var FeatureChecker|\PHPUnit\Framework\MockObject\MockObject */
-    protected $featureChecker;
+    private $featureChecker;
 
     /** @var WorkflowRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    protected $wfRegistry;
+    private $workflowRegistry;
+
+    /** @var LeadActionsAccessProvider */
+    private $provider;
 
     protected function setUp(): void
     {
-        $this->featureChecker = $this
-            ->getMockBuilder('Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->wfRegistry = $this
-            ->getMockBuilder('Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->featureChecker = $this->createMock(FeatureChecker::class);
+        $this->workflowRegistry = $this->createMock(WorkflowRegistry::class);
 
-        $this->provider = new LeadActionsAccessProvider($this->wfRegistry, $this->featureChecker);
+        $this->provider = new LeadActionsAccessProvider($this->workflowRegistry, $this->featureChecker);
     }
 
     public function testIsDisqualifyAllowedWhenLeadDisqualified()
@@ -94,8 +90,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
     {
         $lead = $this->getValidLead();
         $this->makeWorkFlowsDisabled();
-        $this->featureChecker
-            ->expects($this->once())
+        $this->featureChecker->expects($this->once())
             ->method('isFeatureEnabled')
             ->with('sales_opportunity')
             ->willReturn(false);
@@ -107,87 +102,50 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
     {
         $lead = $this->getValidLead();
         $this->makeWorkFlowsDisabled();
-        $this->featureChecker
-            ->expects($this->once())
+        $this->featureChecker->expects($this->once())
             ->method('isFeatureEnabled')
             ->with('sales_opportunity')
             ->willReturn(true);
         $this->assertTrue($this->provider->isConvertToOpportunityAllowed($lead));
     }
 
-    /**
-     * @return Lead|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getValidLead()
+    private function getValidLead(): Lead
     {
-        $lead = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Lead')
-            ->setMethods(['getStatus', 'getOpportunities'])
-            ->getMock();
-        $lead
-            ->expects($this->any())
-            ->method('getStatus')
-            ->willReturn(new TestEnumValue(ChangeLeadStatus::STATUS_QUALIFY, 'test'));
-        $lead
-            ->expects($this->any())
-            ->method('getOpportunities')
-            ->willReturn(new ArrayCollection([]));
+        $lead = new LeadStub();
+        $lead->setStatus(new TestEnumValue(ChangeLeadStatus::STATUS_QUALIFY, 'test'));
 
         return $lead;
     }
 
-    protected function makeWorkFlowsDisabled()
+    private function getDisqualifiedLead(): Lead
     {
-        $this->wfRegistry
-            ->expects($this->at(0))
+        $lead = new LeadStub();
+        $lead->setStatus(new TestEnumValue(ChangeLeadStatus::STATUS_DISQUALIFY, 'test'));
+
+        return $lead;
+    }
+
+    private function getLeadWithOpportunities(): Lead
+    {
+        $lead = new LeadStub();
+        $lead->addOpportunity(new Opportunity());
+
+        return $lead;
+    }
+
+    private function makeWorkFlowsDisabled()
+    {
+        $this->workflowRegistry->expects($this->exactly(2))
             ->method('getActiveWorkflowsByEntityClass')
-            ->with(Lead::class)
-            ->willReturn(new ArrayCollection([]));
-        $this->wfRegistry
-            ->expects($this->at(1))
-            ->method('getActiveWorkflowsByEntityClass')
-            ->with(SalesFunnel::class)
-            ->willReturn(new ArrayCollection([]));
-    }
-
-    /**
-     * @return Lead|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getDisqualifiedLead()
-    {
-        $lead = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Lead')
-            ->setMethods(['getStatus'])
-            ->getMock();
-        $lead
-            ->expects($this->once())
-            ->method('getStatus')
-            ->willReturn(new TestEnumValue(ChangeLeadStatus::STATUS_DISQUALIFY, 'test'));
-
-        return $lead;
-    }
-
-    /**
-     * @return Lead|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getLeadWithOpportunities()
-    {
-        $lead = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Lead')
-            ->setMethods(['getOpportunities'])
-            ->getMock();
-        $lead
-            ->expects($this->once())
-            ->method('getOpportunities')
-            ->willReturn(new ArrayCollection([1]));
-
-        return $lead;
+            ->willReturnMap([
+                [Lead::class, new ArrayCollection([])],
+                [SalesFunnel::class, new ArrayCollection([])]
+            ]);
     }
 
     public function makeLeadWfEnabled()
     {
-        $this->wfRegistry
-            ->expects($this->once())
+        $this->workflowRegistry->expects($this->once())
             ->method('getActiveWorkflowsByEntityClass')
             ->with(Lead::class)
             ->willReturn(new ArrayCollection([1]));
@@ -195,15 +153,11 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
 
     public function makeLeadWfDisabledAndSalesFunnelWfEnabled()
     {
-        $this->wfRegistry
-            ->expects($this->at(0))
+        $this->workflowRegistry->expects($this->exactly(2))
             ->method('getActiveWorkflowsByEntityClass')
-            ->with(Lead::class)
-            ->willReturn(new ArrayCollection([]));
-        $this->wfRegistry
-            ->expects($this->at(1))
-            ->method('getActiveWorkflowsByEntityClass')
-//            ->with(SalesFunnel::class)
-            ->willReturn(new ArrayCollection([1]));
+            ->willReturnMap([
+                [Lead::class, new ArrayCollection([])],
+                [SalesFunnel::class, new ArrayCollection([1])]
+            ]);
     }
 }
