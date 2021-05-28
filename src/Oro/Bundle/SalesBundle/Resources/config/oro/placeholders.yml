@@ -21,7 +21,7 @@ placeholders:
             template:   OroSalesBundle:Dashboard:opportunitiesLaunchpad.html.twig
 
         oro_sales_account_channel_info:
-            action: OroSalesBundle:B2bCustomer:accountCustomersInfo
+            action: Oro\Bundle\SalesBundle\Controller\B2bCustomerController::accountCustomersInfoAction
 
         oro_sales_create_opportunity_button:
             template: OroSalesBundle:Opportunity:createOpportunityButton.html.twig

@@ -14,5 +14,5 @@ placeholders:
             applicable: "@oro_analytics.placeholder.rfm_filter->isApplicable($entity$)"
 
         oro_channel_view_additional_block_rfm:
-            action: OroAnalyticsBundle:RFMCategory:channelView
+            action: Oro\Bundle\AnalyticsBundle\RFMCategoryController::channelViewAction
             applicable: "@oro_analytics.placeholder.rfm_filter->isViewApplicable($entity$)"
