@@ -13,3 +13,7 @@ oro:
                     delete.more_one: "Email address was not deleted, the B2B customer has more than one email addresses, can't set the new primary."
                 phones:
                     delete.more_one: "Phone number was not deleted, the B2B customer has more than one phone number, can't set the new primary."
+        sales_funnel:
+            start_date:
+                type:
+                    message: 'This value is not a valid date.'

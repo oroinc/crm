@@ -12,6 +12,8 @@ use Oro\Bundle\SalesBundle\Model\ExtendSalesFunnel;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
+ * Entity that represents Sales Funnel
+ *
  * @ORM\Table(
  *      name="orocrm_sales_funnel",
  *      indexes={@ORM\Index(name="sales_start_idx",columns={"startDate"})}
@@ -213,10 +215,10 @@ class SalesFunnel extends ExtendSalesFunnel implements
     }
 
     /**
-     * @param  \DateTime   $startDate
+     * @param  \DateTime|null $startDate
      * @return SalesFunnel
      */
-    public function setStartDate($startDate)
+    public function setStartDate(\DateTime $startDate = null)
     {
         $this->startDate = $startDate;
 
@@ -224,9 +226,9 @@ class SalesFunnel extends ExtendSalesFunnel implements
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getStartDate()
+    public function getStartDate(): ?\DateTime
     {
         return $this->startDate;
     }
