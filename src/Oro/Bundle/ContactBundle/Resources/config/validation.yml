@@ -12,7 +12,9 @@ Oro\Bundle\ContactBundle\Entity\Contact:
             - Choice:
                 choices: [male, female]
         birthday:
-            - Date: ~
+            - Type:
+                type: \DateTimeInterface
+                message: oro.contact.contact.birthday.type.message
             - LessThanOrEqual:
                 value: now UTC
                 message: The birth date cannot be in the future.

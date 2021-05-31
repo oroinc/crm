@@ -14,3 +14,7 @@ oro:
                 delete.more_one: "Phone number was not deleted, the contact has more than one phone number, can't set the new primary."
             addresses:
                 contains_primary: "One of the addresses must be set as primary."
+        contact:
+            birthday:
+                type:
+                    message: 'This value is not a valid date.'
