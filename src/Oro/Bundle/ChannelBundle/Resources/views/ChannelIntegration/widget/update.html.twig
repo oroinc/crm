@@ -1,10 +1,10 @@
 {% set isWidgetContext = true %}
 {% set formAction = app.request.uri %}
-{% extends 'OroIntegrationBundle:Integration:update.html.twig' %}
-{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% extends '@OroIntegration/Integration/update.html.twig' %}
+{% import '@OroUI/macros.html.twig' as UI %}
 
 {% block content_data %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {{ parent() }}
     <div class="widget-actions">

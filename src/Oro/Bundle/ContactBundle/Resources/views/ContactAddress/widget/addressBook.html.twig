@@ -1,4 +1,4 @@
-{% extends "OroAddressBundle:widget:addressBook.html.twig" %}
+{% extends "@OroAddress/widget/addressBook.html.twig" %}
 {% set addressListUrl = path('oro_api_get_contact_addresses', {'contactId': entity.id}) %}
 {% set addressCreateUrl = path('oro_contact_address_create', {'contactId': entity.id}) %}
 {% set addressUpdateRoute = 'oro_contact_address_update' %}

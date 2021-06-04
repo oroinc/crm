@@ -1,5 +1,5 @@
 <div class="widget-content">
-    {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+    {% import '@OroDataGrid/macros.html.twig' as dataGrid %}
     {% set gridName = 'account-contacts-update-grid' %}
 
     {% set params = {
@@ -16,7 +16,7 @@
         <input type="hidden" name="removeContacts" id="removeContacts" value="{{ app.request.get('removed') }}" />
     {% endblock %}
 
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     <div {{ UI.renderPageComponentAttributes({
         module: 'oroaccount/js/app/components/account-contact-component',

@@ -191,7 +191,7 @@
             <div class="input-append">
                 {{ form_widget(form) }}
                 {% if hasGridData %}
-                    {% import 'OroUIBundle::macros.html.twig' as UI %}
+                    {% import '@OroUI/macros.html.twig' as UI %}
                     {{ UI.clientLink({
                         'dataUrl': path(
                         'oro_sales_customer_grid_dialog', {

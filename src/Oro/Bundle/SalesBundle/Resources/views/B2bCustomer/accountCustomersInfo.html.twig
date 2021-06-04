@@ -20,7 +20,7 @@
                 subtitle: 'oro.sales.customer.entity_plural_label'|trans
             }%}
         {% endif %}
-        {% import 'OroUIBundle::macros.html.twig' as UI %}
+        {% import '@OroUI/macros.html.twig' as UI %}
         <div class="widget-content account-customer-info multicustomer" {{ UI.renderPageComponentAttributes({
             module: 'oroui/js/app/components/view-component',
             options: {

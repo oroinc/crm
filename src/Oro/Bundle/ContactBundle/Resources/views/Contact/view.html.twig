@@ -1,11 +1,11 @@
-{% extends 'OroUIBundle:actions:view.html.twig' %}
-{% import 'OroUIBundle::macros.html.twig' as macros %}
+{% extends '@OroUI/actions/view.html.twig' %}
+{% import '@OroUI/macros.html.twig' as macros %}
 
 {% set fullname = entity|oro_format_name|default('oro.entity.item'|trans({'%id%': entity.id})) %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if is_granted('EDIT', entity) %}
         {{ UI.editButton({
@@ -37,7 +37,7 @@
 {% endblock pageHeader %}
 
 {% block stats %}
-    {% include 'OroContactBundle:Contact:headerStats.html.twig' with {'entity': entity} %}
+    {% include '@OroContact/Contact/headerStats.html.twig' with {'entity': entity} %}
 {% endblock stats %}
 
 {% block content_data %}

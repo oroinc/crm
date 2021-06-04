@@ -1,4 +1,4 @@
-{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import '@OroUI/macros.html.twig' as UI %}
 
 {{ UI.link({
     'path': path('oro_contact_create', { entityClass: oro_class_name(entity, true), entityId: entity.id }),

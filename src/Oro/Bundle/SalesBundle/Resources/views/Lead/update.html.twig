@@ -1,5 +1,5 @@
-{% extends 'OroUIBundle:actions:update.html.twig' %}
-{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
+{% extends '@OroUI/actions/update.html.twig' %}
+{% form_theme form with ['@OroAddress/Include/fields.html.twig', '@OroForm/Form/fields.html.twig'] %}
 
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 
@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if form.vars.value.id and is_granted('DELETE', form.vars.value) %}
         {{ UI.deleteButton({
@@ -57,7 +57,7 @@
         {{ parent() }}
     {% else %}
         {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.sales.lead.entity_label'|trans}) %}
-        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+        {% include '@OroUI/page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
 
@@ -67,7 +67,7 @@
 {% endblock stats %}
 
 {% block breadcrumbs %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {{ parent() }}
     <span class="page-title__status">
