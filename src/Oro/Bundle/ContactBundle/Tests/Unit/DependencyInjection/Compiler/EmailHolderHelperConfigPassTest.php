@@ -5,45 +5,36 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\DependencyInjection\Compiler;
 use Oro\Bundle\ContactBundle\DependencyInjection\Compiler\EmailHolderHelperConfigPass;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 class EmailHolderHelperConfigPassTest extends \PHPUnit\Framework\TestCase
 {
-    public function testNoTargetService()
+    /** @var EmailHolderHelperConfigPass */
+    private $compiler;
+
+    protected function setUp(): void
     {
-        $container = $this->createMock(ContainerBuilder::class);
+        $this->compiler = new EmailHolderHelperConfigPass();
+    }
 
-        $container->expects($this->once())
-            ->method('hasDefinition')
-            ->with('oro_email.email_holder_helper')
-            ->will($this->returnValue(false));
-        $container->expects($this->never())
-            ->method('getDefinition');
+    public function testProcessWhenNoEmailHolderHelper()
+    {
+        $container = new ContainerBuilder();
 
-        $compiler = new EmailHolderHelperConfigPass();
-        $compiler->process($container);
+        $this->compiler->process($container);
     }
 
     public function testProcess()
     {
-        $container = $this->createMock(ContainerBuilder::class);
+        $container = new ContainerBuilder();
+        $emailHolderHelperDef = $container->register('oro_email.email_holder_helper');
 
-        $serviceDef = $this->createMock(Definition::class);
+        $this->compiler->process($container);
 
-        $container->expects($this->once())
-            ->method('hasDefinition')
-            ->with('oro_email.email_holder_helper')
-            ->will($this->returnValue(true));
-        $container->expects($this->once())
-            ->method('getDefinition')
-            ->with('oro_email.email_holder_helper')
-            ->will($this->returnValue($serviceDef));
-
-        $serviceDef->expects($this->once())
-            ->method('addMethodCall')
-            ->with('addTargetEntity', [Contact::class]);
-
-        $compiler = new EmailHolderHelperConfigPass();
-        $compiler->process($container);
+        self::assertEquals(
+            [
+                ['addTargetEntity', [Contact::class]]
+            ],
+            $emailHolderHelperDef->getMethodCalls()
+        );
     }
 }
