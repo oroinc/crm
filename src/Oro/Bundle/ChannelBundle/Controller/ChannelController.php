@@ -10,6 +10,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * CRUD controller for Channel entity
+ */
 class ChannelController extends AbstractController
 {
     /**
@@ -40,7 +43,7 @@ class ChannelController extends AbstractController
      *      permission="CREATE",
      *      class="OroChannelBundle:Channel"
      * )
-     * @Template("OroChannelBundle:Channel:update.html.twig")
+     * @Template("@OroChannel/Channel/update.html.twig")
      */
     public function createAction()
     {

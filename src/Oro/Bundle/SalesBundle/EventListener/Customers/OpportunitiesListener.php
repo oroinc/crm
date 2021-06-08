@@ -11,6 +11,9 @@ use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider as CustomerConfigPro
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Adds block with associated opportunities grid of viewing entity.
+ */
 class OpportunitiesListener
 {
     // below activity block which have 1000
@@ -71,7 +74,7 @@ class OpportunitiesListener
             $targetClass          = ClassUtils::getClass($entity);
             $priority             = $this->getBlockPriority($targetClass);
             $opportunitiesData    = $environment->render(
-                'OroSalesBundle:Customer:opportunitiesGrid.html.twig',
+                '@OroSales/Customer/opportunitiesGrid.html.twig',
                 [
                     'gridParams' =>
                          [

@@ -89,7 +89,7 @@ class B2bCustomerController extends AbstractController
      *      permission="CREATE",
      *      class="OroSalesBundle:B2bCustomer"
      * )
-     * @Template("OroSalesBundle:B2bCustomer:update.html.twig")
+     * @Template("@OroSales/B2bCustomer/update.html.twig")
      */
     public function createAction()
     {

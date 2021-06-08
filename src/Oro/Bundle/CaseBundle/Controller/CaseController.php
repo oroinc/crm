@@ -10,6 +10,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * The controller for Case entity
+ */
 class CaseController extends AbstractController
 {
     /**
@@ -63,7 +66,7 @@ class CaseController extends AbstractController
      *
      * @Route("/create", name="oro_case_create")
      * @AclAncestor("oro_case_create")
-     * @Template("OroCaseBundle:Case:update.html.twig")
+     * @Template("@OroCase/Case/update.html.twig")
      */
     public function createAction()
     {

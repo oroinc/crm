@@ -31,7 +31,7 @@ class CustomerController extends AbstractController
 
     /**
      * @Route("/customer/grid-dialog/{entityClass}", name="oro_sales_customer_grid_dialog")
-     * @Template("OroDataGridBundle:Grid/dialog:multi.html.twig")
+     * @Template("@OroDataGrid/Grid/dialog/multi.html.twig")
      *
      * @param string $entityClass
      *

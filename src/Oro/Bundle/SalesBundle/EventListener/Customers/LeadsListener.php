@@ -11,6 +11,9 @@ use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider as CustomerConfigPro
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Adds block with leads grid on the B2bCustomer view
+ */
 class LeadsListener
 {
     // above opportunity block which have 1010
@@ -63,7 +66,7 @@ class LeadsListener
             $data         = $event->getData();
             $targetClass  = ClassUtils::getClass($entity);
             $leadsData    = $environment->render(
-                'OroSalesBundle:Customer:leadsGrid.html.twig',
+                '@OroSales/Customer/leadsGrid.html.twig',
                 [
                     'gridParams' =>
                         [

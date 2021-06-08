@@ -24,6 +24,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Form type for Customer entity.
+ */
 class CustomerType extends AbstractType
 {
     /** @var DataTransformerInterface */
@@ -166,8 +169,8 @@ class CustomerType extends AbstractType
                         'per_page'                => CustomerSearchHandler::AMOUNT_SEARCH_RESULT,
                         'route_name'              => 'oro_sales_customers_form_autocomplete_search',
                         'dropdownCssClass'        => 'sales-account-autocomplete',
-                        'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
-                        'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
+                        'selection_template_twig' => '@OroSales/Autocomplete/customer/selection.html.twig',
+                        'result_template_twig'    => '@OroSales/Autocomplete/customer/result.html.twig',
                         'route_parameters'        => [
                             'name'            => 'name',
                             'ownerClassAlias' => $this->entityAliasResolver->getPluralAlias($options['parent_class']),

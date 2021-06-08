@@ -52,7 +52,7 @@ class AccountController extends AbstractController
      *      permission="CREATE",
      *      class="OroAccountBundle:Account"
      * )
-     * @Template("OroAccountBundle:Account:update.html.twig")
+     * @Template("@OroAccount/Account/update.html.twig")
      */
     public function createAction()
     {

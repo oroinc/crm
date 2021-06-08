@@ -60,7 +60,7 @@ class ContactController extends AbstractController
     /**
      * Create contact form
      * @Route("/create", name="oro_contact_create")
-     * @Template("OroContactBundle:Contact:update.html.twig")
+     * @Template("@OroContact/Contact/update.html.twig")
      * @Acl(
      *      id="oro_contact_create",
      *      type="entity",

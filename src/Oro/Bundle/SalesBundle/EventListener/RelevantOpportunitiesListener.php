@@ -9,6 +9,9 @@ use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Adds block with relevant opportunities grid on the Opportunity view.
+ */
 class RelevantOpportunitiesListener
 {
     // below additional information block which have 1200
@@ -63,7 +66,7 @@ class RelevantOpportunitiesListener
 
         $account           = $entity->getCustomerAssociation()->getAccount();
         $opportunitiesData = $environment->render(
-            'OroSalesBundle:Opportunity:relevantOpportunities.html.twig',
+            '@OroSales/Opportunity/relevantOpportunities.html.twig',
             [
                 'gridParams' =>
                     [

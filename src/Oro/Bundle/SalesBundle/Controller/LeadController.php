@@ -55,7 +55,7 @@ class LeadController extends AbstractController
     /**
      * Create lead form
      * @Route("/create", name="oro_sales_lead_create")
-     * @Template("OroSalesBundle:Lead:update.html.twig")
+     * @Template("@OroSales/Lead/update.html.twig")
      * @Acl(
      *      id="oro_sales_lead_create",
      *      type="entity",
@@ -116,7 +116,7 @@ class LeadController extends AbstractController
      * Create lead form with data channel
      *
      * @Route("/create/{channelIds}", name="oro_sales_lead_data_channel_aware_create")
-     * @Template("OroSalesBundle:Lead:update.html.twig")
+     * @Template("@OroSales/Lead/update.html.twig")
      * @AclAncestor("oro_sales_lead_view")
      *
      * @ParamConverter(

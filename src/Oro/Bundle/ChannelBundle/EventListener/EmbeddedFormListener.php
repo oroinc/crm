@@ -7,6 +7,9 @@ use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Add dataChannel field and pre-set dataChannel to entities that implements ChannelAwareInterface.
+ */
 class EmbeddedFormListener
 {
     /** @var RequestStack */
@@ -38,7 +41,7 @@ class EmbeddedFormListener
             $env              = $event->getTwigEnvironment();
             $data             = $event->getFormData();
             $form             = $event->getForm();
-            $dataChannelField = $env->render('OroChannelBundle:Form:dataChannelField.html.twig', ['form' => $form]);
+            $dataChannelField = $env->render('@OroChannel/Form/dataChannelField.html.twig', ['form' => $form]);
 
             /**
              * Setting dataChannel field as first field in first data block

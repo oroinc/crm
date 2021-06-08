@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * The controller for Channel Integration
  * @Route("/integration")
  */
 class ChannelIntegrationController extends AbstractController
@@ -16,7 +17,7 @@ class ChannelIntegrationController extends AbstractController
     /**
      * @Route("/create/{type}/{channelName}", requirements={"type"="\w+"}, name="oro_channel_integration_create")
      * @AclAncestor("oro_integration_create")
-     * @Template("OroChannelBundle:ChannelIntegration:update.html.twig")
+     * @Template("@OroChannel/ChannelIntegration/update.html.twig")
      */
     public function createAction($type, $channelName = null)
     {
