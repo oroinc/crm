@@ -10,7 +10,7 @@ placeholders:
 
     items:
         oro_channel_additional_block_rfm:
-            template: OroAnalyticsBundle:Form:form.html.twig
+            template: '@@OroAnalytics/Form/form.html.twig'
             applicable: "@oro_analytics.placeholder.rfm_filter->isApplicable($entity$)"
 
         oro_channel_view_additional_block_rfm:

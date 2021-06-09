@@ -40,12 +40,12 @@ datagrids:
                 type: twig
                 label: oro.case.datagrid.subject.label
                 frontend_type: html
-                template: OroCaseBundle:Case:Datagrid/Property/subject.html.twig
+                template: '@OroCase/Case/Datagrid/Property/subject.html.twig'
             assignedToName:
                 type: twig
                 label: oro.case.datagrid.assigned_to.label
                 frontend_type: html
-                template: OroCaseBundle:Case:Datagrid/Property/assignedTo.html.twig
+                template: '@OroCase/Case/Datagrid/Property/assignedTo.html.twig'
             reportedAt:
                 inline_editing:
                     enable: false
@@ -276,12 +276,12 @@ datagrids:
                 type: twig
                 label: oro.case.datagrid.subject.label
                 frontend_type: html
-                template: OroCaseBundle:Case:Datagrid/Property/subject.html.twig
+                template: '@OroCase/Case/Datagrid/Property/subject.html.twig'
             assignedToName:
                 type: twig
                 label: oro.case.datagrid.assigned_to.label
                 frontend_type: html
-                template: OroCaseBundle:Case:Datagrid/Property/assignedTo.html.twig
+                template: '@OroCase/Case/Datagrid/Property/assignedTo.html.twig'
             statusLabel:
                 label: oro.case.datagrid.status.label
             priorityLabel:

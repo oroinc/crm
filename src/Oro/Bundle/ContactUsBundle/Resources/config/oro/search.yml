@@ -6,7 +6,7 @@ search:
             name:                       oro_contactus_request_view
             parameters:
                 id:                     id
-        search_template:                OroContactUsBundle:Search:result.html.twig
+        search_template:                '@OroContactUs/Search/result.html.twig'
         fields:
             -
                 name:                   contactReason

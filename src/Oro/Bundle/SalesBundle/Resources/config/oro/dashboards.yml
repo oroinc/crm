@@ -163,27 +163,27 @@ dashboards:
                     data_provider: "@oro_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, inProgressCount, integer)"
                     label:         oro.sales.dashboard.forecast_of_opportunities.in_progress.label
                     acl:           oro_sales_opportunity_view
-                    template:      OroSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
+                    template:      '@OroSales/Dashboard/forecastOfOpportunitiesSubwidget.html.twig'
                 total_forecast:
                     data_provider: "@oro_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, budgetAmount, currency)"
                     label:         oro.sales.dashboard.forecast_of_opportunities.total_forecast.label
                     acl:           oro_sales_opportunity_view
-                    template:      OroSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
+                    template:      '@OroSales/Dashboard/forecastOfOpportunitiesSubwidget.html.twig'
                 weighted_forecast:
                     data_provider: "@oro_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, weightedForecast, currency)"
                     label:         oro.sales.dashboard.forecast_of_opportunities.weighted_forecast.label
                     acl:           oro_sales_opportunity_view
-                    template:      OroSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
+                    template:      '@OroSales/Dashboard/forecastOfOpportunitiesSubwidget.html.twig'
                 total_indeterminate_forecast:
                     data_provider: "@oro_sales.provider.opportunity.indeterminate_forecast->getForecastOfOpportunitiesValues($widgetOptions$, totalIndeterminate)"
                     label:         oro.sales.dashboard.forecast_of_opportunities.total_indeterminate_forecast.label
                     acl:           oro_sales_opportunity_view
-                    template:      OroSalesBundle:Dashboard:forecastOfOpportunitiesSimpleSubwidget.html.twig
+                    template:      '@OroSales/Dashboard/forecastOfOpportunitiesSimpleSubwidget.html.twig'
                 weighted_indeterminate_forecast:
                     data_provider: "@oro_sales.provider.opportunity.indeterminate_forecast->getForecastOfOpportunitiesValues($widgetOptions$, weightedIndeterminate)"
                     label:         oro.sales.dashboard.forecast_of_opportunities.weighted_indeterminate_forecast.label
                     acl:           oro_sales_opportunity_view
-                    template:      OroSalesBundle:Dashboard:forecastOfOpportunitiesSimpleSubwidget.html.twig
+                    template:      '@OroSales/Dashboard/forecastOfOpportunitiesSimpleSubwidget.html.twig'
             configuration:
                 owners:
                     type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
@@ -238,22 +238,22 @@ dashboards:
                     data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getNewOpportunitiesCount, integer)"
                     label:         oro.dashboard.opportunity_statistics.new_opportunities_count.label
                     acl:           oro_sales_opportunity_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                    template:      '@OroDashboard/Dashboard/bigNumberSubwidget.html.twig'
                 new_opportunities_amount:
                     data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getNewOpportunitiesAmount, currency)"
                     label:         oro.dashboard.opportunity_statistics.new_opportunities_amount.label
                     acl:           oro_sales_opportunity_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                    template:      '@OroDashboard/Dashboard/bigNumberSubwidget.html.twig'
                 won_opportunities_to_date_count:
                     data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getWonOpportunitiesToDateCount, integer)"
                     label:         oro.dashboard.opportunity_statistics.won_opportunities_to_date_count.label
                     acl:           oro_sales_opportunity_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                    template:      '@OroDashboard/Dashboard/bigNumberSubwidget.html.twig'
                 won_opportunities_to_date_amount:
                     data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getWonOpportunitiesToDateAmount, currency)"
                     label:         oro.dashboard.opportunity_statistics.won_opportunities_to_date_amount.label
                     acl:           oro_sales_opportunity_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                    template:      '@OroDashboard/Dashboard/bigNumberSubwidget.html.twig'
             configuration:
                 owners:
                     type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType
@@ -307,12 +307,12 @@ dashboards:
                     data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, lead_stats, getOpenLeadsCount, integer, false, false, false)"
                     label:         oro.dashboard.lead_statistics.open_leads_count.label
                     acl:           oro_sales_lead_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                    template:      '@OroDashboard/Dashboard/bigNumberSubwidget.html.twig'
                 new_leads_count:
                     data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, lead_stats, getNewLeadsCount, integer)"
                     label:         oro.dashboard.lead_statistics.new_leads_count.label
                     acl:           oro_sales_lead_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                    template:      '@OroDashboard/Dashboard/bigNumberSubwidget.html.twig'
             configuration:
                 owners:
                     type: Oro\Bundle\UserBundle\Form\Type\WidgetOwnersType

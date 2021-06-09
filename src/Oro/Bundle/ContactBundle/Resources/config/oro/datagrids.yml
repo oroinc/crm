@@ -34,7 +34,7 @@ datagrids:
                 type: twig
                 label: oro.contact.datagrid.contact_name
                 frontend_type: html
-                template: OroContactBundle:Contact:Datagrid/Property/contactName.html.twig
+                template: '@OroContact/Contact/Datagrid/Property/contactName.html.twig'
             primaryEmail:
                 label: oro.contact.email.label
                 cellClassName: 'direction-ltr'

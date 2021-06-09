@@ -8,11 +8,11 @@ placeholders:
 
     items:
         oro_user_cases_grid:
-            template: OroCaseBundle:Case:userCases.html.twig
+            template: '@@OroCase/Case/userCases.html.twig'
             applicable: '@oro_ui.placeholder.filter->isInstanceOf($entity$, Oro\Bundle\UserBundle\Entity\User)'
         oro_account_cases_grid:
-            template: OroCaseBundle:Case:accountCases.html.twig
+            template: '@@OroCase/Case/accountCases.html.twig'
             applicable: '@oro_ui.placeholder.filter->isInstanceOf($entity$, Oro\Bundle\AccountBundle\Entity\Account)'
         oro_contact_cases_grid:
-            template: OroCaseBundle:Case:contactCases.html.twig
+            template: '@@OroCase/Case/contactCases.html.twig'
             applicable: '@oro_ui.placeholder.filter->isInstanceOf($entity$, Oro\Bundle\ContactBundle\Entity\Contact)'

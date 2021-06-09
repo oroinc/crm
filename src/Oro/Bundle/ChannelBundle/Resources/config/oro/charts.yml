@@ -19,4 +19,4 @@ charts:
         xaxis:
             mode: time
             noTicks: 12
-        template: OroChartsBundle:Chart:multiline.html.twig
+        template: '@OroCharts/Chart/multiline.html.twig'
