@@ -153,16 +153,7 @@ class WidgetOpportunityByLeadSourceProvider
     protected function processData(array $rows, $excluded = [], $limit = 10)
     {
         // first sort by value to make sure biggest numbers are not merged to Others (when limit is applied)
-        usort(
-            $rows,
-            function ($a, $b) {
-                if ($a['value'] === $b['value']) {
-                    return 0;
-                }
-
-                return $a['value'] < $b['value'] ? 1 : -1;
-            }
-        );
+        usort($rows, static fn ($a, $b) => $b['value'] <=> $a['value']);
         // get excluded sources (to be merged with Others)
         $others = array_filter(
             $rows,
