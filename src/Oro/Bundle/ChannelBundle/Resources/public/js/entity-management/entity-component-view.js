@@ -97,7 +97,7 @@ define(function(require) {
             }
 
             const models = this.options.data.length > 0
-                ? _.map(this.options.data, _.bind(this._createModel, this)) : [];
+                ? _.map(this.options.data, this._createModel.bind(this)) : [];
             this.collection = this.collection || new (Backbone.Collection)(models, {model: EntityModel});
             this.listenTo(this.collection, 'add remove reset', this._onCollectionChange);
             this.listenTo(this.collection, 'add', this._onItemAdded);
@@ -116,10 +116,10 @@ define(function(require) {
 
             if (this.options.mode === modes.EDIT_MODE) {
                 this.$formContainer.html(this.formTemplate(_.extend({}, templateContext)));
-                _.defer(_.bind(this._initializeForm, this));
+                _.defer(this._initializeForm.bind(this));
             }
 
-            _.defer(_.bind(this._initializeList, this));
+            _.defer(this._initializeList.bind(this));
         },
 
         /**
@@ -132,7 +132,7 @@ define(function(require) {
                 placeholder: __('oro.channel.form.entity'),
                 result_template: entitySelectResultTemplate,
                 selection_template: entitySelectSelectionTemplate,
-                data: _.bind(function() {
+                data: () => {
                     const notSelected = _.omit(this.options.metadata, this.collection.pluck('name'));
                     const options = _.map(notSelected, function(entityMetadata) {
                         return {
@@ -156,7 +156,7 @@ define(function(require) {
                     });
 
                     return {results: results};
-                }, this)
+                }
             };
             const $el = this.$formContainer.find('[data-purpose="entity-selector"]');
             const select2Component = new Select2Component({

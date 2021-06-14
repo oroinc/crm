@@ -114,7 +114,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
                 this.render();
             };
 
-            formDialog.on('formSave', _.bind(processFormSave, this));
+            formDialog.on('formSave', processFormSave.bind(this));
             formDialog.render();
         },
 
@@ -122,7 +122,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
             const confirm = new DeleteConfirmation({
                 content: __('oro.channel.confirmation.delete_confirmation')
             });
-            confirm.on('ok', _.bind(this.removeIntegrationData, this));
+            confirm.on('ok', this.removeIntegrationData.bind(this));
             confirm.open();
         },
 
