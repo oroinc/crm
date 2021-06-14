@@ -16,7 +16,7 @@ define(function(require) {
         initialize: function(options) {
             _.extend(this, _.pick(options, ['channelFieldSelector', 'channelRequired', 'presetChannelId']));
             this._super().initialize.call(this, options);
-            $(this.channelFieldSelector).on('change.component' + this.cid, _.bind(this.changeHandler, this));
+            $(this.channelFieldSelector).on('change.component' + this.cid, this.changeHandler.bind(this));
             this.changeHandler();
         },
 

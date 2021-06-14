@@ -1,7 +1,3 @@
-define(function(require) {
-    'use strict';
+import $ from 'jquery.validate';
 
-    const $ = require('jquery.validate');
-
-    $.validator.loadMethod('orocontactus/js/validator/contact-request-callback');
-});
+$.validator.loadMethod('orocontactus/js/validator/contact-request-callback');
