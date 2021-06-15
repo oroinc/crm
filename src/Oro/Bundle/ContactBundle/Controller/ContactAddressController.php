@@ -2,17 +2,22 @@
 
 namespace Oro\Bundle\ContactBundle\Controller;
 
+use Oro\Bundle\AddressBundle\Form\Handler\AddressHandler;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * The controller for ContactAddress entity.
+ */
 class ContactAddressController extends AbstractController
 {
     /**
@@ -22,10 +27,10 @@ class ContactAddressController extends AbstractController
      */
     public function addressBookAction(Contact $contact)
     {
-        return array(
+        return [
             'entity' => $contact,
             'address_edit_acl_resource' => 'oro_contact_update'
-        );
+        ];
     }
 
     /**
@@ -73,10 +78,10 @@ class ContactAddressController extends AbstractController
      */
     protected function update(Request $request, Contact $contact, ContactAddress $address)
     {
-        $responseData = array(
+        $responseData = [
             'saved' => false,
             'contact' => $contact
-        );
+        ];
 
         if ($request->isMethod('GET') && !$address->getId()) {
             $address->setFirstName($contact->getFirstName());
@@ -95,7 +100,7 @@ class ContactAddressController extends AbstractController
         // Update contact's modification date when an address is changed
         $contact->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
 
-        if ($this->get('oro_contact.form.handler.contact_address')->process($address)) {
+        if ($this->get(AddressHandler::class)->process($address)) {
             $this->getDoctrine()->getManager()->flush();
             $responseData['entity'] = $address;
             $responseData['saved'] = true;
@@ -103,5 +108,19 @@ class ContactAddressController extends AbstractController
 
         $responseData['form'] = $this->get('oro_contact.contact_address.form')->createView();
         return $responseData;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                AddressHandler::class,
+                'oro_contact.contact_address.form' => Form::class,
+            ]
+        );
     }
 }

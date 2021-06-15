@@ -7,6 +7,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+/**
+ * This is the class that loads and manages ActivityContactBundle service configuration
+ */
 class OroActivityContactExtension extends Extension
 {
     /**
@@ -21,6 +24,7 @@ class OroActivityContactExtension extends Extension
         $loader->load('services.yml');
         $loader->load('services_api.yml');
         $loader->load('commands.yml');
+        $loader->load('controllers.yml');
 
         $container->prependExtensionConfig($this->getAlias(), array_intersect_key($config, array_flip(['settings'])));
     }

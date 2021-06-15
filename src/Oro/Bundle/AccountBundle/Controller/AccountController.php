@@ -4,12 +4,17 @@ namespace Oro\Bundle\AccountBundle\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AccountBundle\Event\CollectAccountWebsiteActivityCustomersEvent;
+use Oro\Bundle\AccountBundle\Form\Handler\AccountHandler;
+use Oro\Bundle\FormBundle\Model\UpdateHandler;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * CRUD for accounts.
@@ -33,7 +38,7 @@ class AccountController extends AbstractController
             ->findBy([], ['channelType' => 'ASC', 'name' => 'ASC']);
 
         $event = new CollectAccountWebsiteActivityCustomersEvent($account->getId());
-        $this->get('event_dispatcher')->dispatch($event);
+        $this->get(EventDispatcherInterface::class)->dispatch($event);
 
         return [
             'entity' => $account,
@@ -96,9 +101,9 @@ class AccountController extends AbstractController
     /**
      * @return ApiEntityManager
      */
-    protected function getManager()
+    protected function getManager(): ApiEntityManager
     {
-        return $this->get('oro_account.account.manager.api');
+        return $this->get(ApiEntityManager::class);
     }
 
     /**
@@ -111,11 +116,11 @@ class AccountController extends AbstractController
             $entity = $this->getManager()->createEntity();
         }
 
-        return $this->get('oro_form.model.update_handler')->update(
+        return $this->get(UpdateHandler::class)->update(
             $entity,
             $this->get('oro_account.form.account'),
-            $this->get('translator')->trans('oro.account.controller.account.saved.message'),
-            $this->get('oro_account.form.handler.account')
+            $this->get(TranslatorInterface::class)->trans('oro.account.controller.account.saved.message'),
+            $this->get(AccountHandler::class)
         );
     }
 
@@ -146,5 +151,23 @@ class AccountController extends AbstractController
         return [
             'account' => $account
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                EventDispatcherInterface::class,
+                TranslatorInterface::class,
+                UpdateHandler::class,
+                ApiEntityManager::class,
+                'oro_account.form.account' => Form::class,
+                AccountHandler::class,
+            ]
+        );
     }
 }

@@ -3,12 +3,17 @@
 namespace Oro\Bundle\ContactBundle\Controller;
 
 use Oro\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\ContactBundle\Form\Handler\GroupHandler;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for Group entity.
@@ -85,21 +90,38 @@ class GroupController extends AbstractController
      */
     protected function update(Request $request, Group $entity)
     {
-        if ($this->get('oro_contact.form.handler.group')->process($entity)) {
+        if ($this->get(GroupHandler::class)->process($entity)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('oro.contact.controller.contact_group.saved.message')
+                $this->get(TranslatorInterface::class)->trans('oro.contact.controller.contact_group.saved.message')
             );
 
             if (!$request->get('_widgetContainer')) {
-                return $this->get('oro_ui.router')->redirect($entity);
+                return $this->get(Router::class)->redirect($entity);
             }
         }
 
-        return array(
+        return [
             'entity'           => $entity,
             'form'             => $this->get('oro_contact.form.group')->createView(),
-            'showContactsGrid' => count($this->get('oro_contact.contact.manager')->getList()) ? true : false
+            'showContactsGrid' => count($this->get(ApiEntityManager::class)->getList()) ? true : false
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                TranslatorInterface::class,
+                Router::class,
+                ApiEntityManager::class,
+                GroupHandler::class,
+                'oro_contact.form.group' => Form::class,
+            ]
         );
     }
 }

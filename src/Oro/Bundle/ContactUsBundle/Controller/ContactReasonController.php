@@ -5,6 +5,7 @@ namespace Oro\Bundle\ContactUsBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactReasonType;
+use Oro\Bundle\FormBundle\Model\UpdateHandler;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * CRUD controller for ContactReason entity
@@ -82,10 +84,10 @@ class ContactReasonController extends AbstractController
      */
     protected function update(ContactReason $contactReason)
     {
-        return $this->get('oro_form.model.update_handler')->update(
+        return $this->get(UpdateHandler::class)->update(
             $contactReason,
             $this->createForm(ContactReasonType::class, $contactReason),
-            $this->get('translator')->trans('oro.contactus.contactreason.saved')
+            $this->get(TranslatorInterface::class)->trans('oro.contactus.contactreason.saved')
         );
     }
 
@@ -113,5 +115,20 @@ class ContactReasonController extends AbstractController
         $em->flush();
 
         return new JsonResponse('', Response::HTTP_OK);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                TranslatorInterface::class,
+                UpdateHandler::class,
+                'doctrine.orm.entity_manager' => EntityManager::class,
+            ]
+        );
     }
 }
