@@ -43,6 +43,8 @@ services:
         tags:
             - { name: oro_activity_direction.provider, class: Oro\Bundle\EmailBundle\Entity\Email }
 
+    Oro\Bundle\ActivityContactBundle\Provider\EntityActivityContactDataProvider:
+        alias: oro_activity_contact.entity_activity_contact_data_provider
 
     oro_activity_contact.entity_activity_contact_data_provider:
         public: true

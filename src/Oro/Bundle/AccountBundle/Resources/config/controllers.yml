@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        public: true
+
+    Oro\Bundle\AccountBundle\Controller\AccountController:
+        calls:
+            - ['setContainer', ['@Psr\Container\ContainerInterface']]
+        tags:
+            - { name: container.service_subscriber }
+            - { name: container.service_subscriber, id: oro_account.account.manager.api, key: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager }
+            - { name: container.service_subscriber, id: oro_account.form.account }
+            - { name: container.service_subscriber, id: oro_account.form.handler.account, key: Oro\Bundle\AccountBundle\Form\Handler\AccountHandler }

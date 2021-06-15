@@ -1,4 +1,7 @@
 services:
+    Oro\Bundle\ContactBundle\Form\Type\ContactType:
+        alias: oro_contact.form.contact
+
     oro_contact.form.contact:
         class: Symfony\Component\Form\Form
         public: true

@@ -6,6 +6,7 @@ use Oro\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -63,7 +64,7 @@ class RFMCategoryController extends AbstractController
     protected function getCategories(Channel $channel, $type)
     {
         return $this->getRFMMetricCategoryRepository()
-            ->getCategoriesByChannel($this->get('oro_security.acl_helper'), $channel, $type);
+            ->getCategoriesByChannel($this->get(AclHelper::class), $channel, $type);
     }
 
     /**
@@ -76,5 +77,18 @@ class RFMCategoryController extends AbstractController
         }
 
         return $this->rfmMetricCategoryRepository;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                AclHelper::class,
+            ]
+        );
     }
 }
