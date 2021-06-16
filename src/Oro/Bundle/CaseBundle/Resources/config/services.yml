@@ -1,4 +1,7 @@
 services:
+    Oro\Bundle\CaseBundle\Model\CaseEntityManager:
+        alias: oro_case.manager
+
     oro_case.manager:
         class: Oro\Bundle\CaseBundle\Model\CaseEntityManager
         public: true
@@ -23,6 +26,9 @@ services:
             - 'Oro\Bundle\CaseBundle\Entity\CaseComment'
             - "@doctrine.orm.entity_manager"
             - "@oro_case.manager"
+
+    Oro\Bundle\CaseBundle\Model\ViewFactory:
+        alias: oro_case.view_factory
 
     oro_case.view_factory:
         class: Oro\Bundle\CaseBundle\Model\ViewFactory

@@ -4,14 +4,21 @@ namespace Oro\Bundle\SalesBundle\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\FormBundle\Model\UpdateHandler;
 use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Form\Handler\LeadHandler;
+use Oro\Bundle\SalesBundle\Form\Handler\LeadToOpportunityHandler;
+use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
+use Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for Lead entity.
@@ -31,7 +38,7 @@ class LeadController extends AbstractController
      */
     public function viewAction(Lead $lead)
     {
-        $leadActionsAccessProvider = $this->get('oro_sales.provider.lead_actions_access');
+        $leadActionsAccessProvider = $this->get(LeadActionsAccessProvider::class);
 
         return [
             'entity'                        => $lead,
@@ -146,19 +153,19 @@ class LeadController extends AbstractController
      */
     public function disqualifyAction(Lead $lead)
     {
-        if (!$this->get('oro_sales.provider.lead_actions_access')->isDisqualifyAllowed($lead)) {
+        if (!$this->get(LeadActionsAccessProvider::class)->isDisqualifyAllowed($lead)) {
             throw new AccessDeniedException();
         }
         
-        if ($this->get('oro_sales.model.change_lead_status')->disqualify($lead)) {
+        if ($this->get(ChangeLeadStatus::class)->disqualify($lead)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('oro.sales.controller.lead.saved.message')
+                $this->get(TranslatorInterface::class)->trans('oro.sales.controller.lead.saved.message')
             );
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                $this->get('translator')->trans('oro.sales.lead.status.change_error_message')
+                $this->get(TranslatorInterface::class)->trans('oro.sales.lead.status.change_error_message')
             );
         }
 
@@ -177,19 +184,19 @@ class LeadController extends AbstractController
      */
     public function convertToOpportunityAction(Lead $lead)
     {
-        if (!$this->get('oro_sales.provider.lead_actions_access')->isConvertToOpportunityAllowed($lead)) {
+        if (!$this->get(LeadActionsAccessProvider::class)->isConvertToOpportunityAllowed($lead)) {
             throw new AccessDeniedException('Lead couldn\'t be converted to opportunity!');
         }
 
         $session = $this->get('session');
-        return $this->get('oro_sales.lead_to_opportunity.form.handler')->create(
+        return $this->get(LeadToOpportunityHandler::class)->create(
             $lead,
-            $this->get('oro_form.model.update_handler'),
-            $this->get('translator')->trans('oro.sales.controller.opportunity.saved.message'),
+            $this->get(UpdateHandler::class),
+            $this->get(TranslatorInterface::class)->trans('oro.sales.controller.opportunity.saved.message'),
             function () use ($session) {
                 $session->getFlashBag()->add(
                     'error',
-                    $this->get('translator')->trans('oro.sales.lead.convert.error')
+                    $this->get(TranslatorInterface::class)->trans('oro.sales.lead.convert.error')
                 );
             }
         );
@@ -202,11 +209,30 @@ class LeadController extends AbstractController
      */
     protected function update(Lead $entity)
     {
-        return $this->get('oro_form.model.update_handler')->update(
+        return $this->get(UpdateHandler::class)->update(
             $entity,
             $this->get('oro_sales.lead.form'),
-            $this->get('translator')->trans('oro.sales.controller.lead.saved.message'),
-            $this->get('oro_sales.lead.form.handler')
+            $this->get(TranslatorInterface::class)->trans('oro.sales.controller.lead.saved.message'),
+            $this->get(LeadHandler::class)
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                TranslatorInterface::class,
+                UpdateHandler::class,
+                LeadActionsAccessProvider::class,
+                ChangeLeadStatus::class,
+                LeadToOpportunityHandler::class,
+                LeadHandler::class,
+                'oro_sales.lead.form' => Form::class,
+            ]
         );
     }
 }
