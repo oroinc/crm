@@ -50,7 +50,7 @@ class OpportunityStatisticsTest extends BaseStatistics
                 'oro_dashboard_itemized_data_widget',
                 [
                     'widget' => 'opportunity_statistics',
-                    'bundle' => 'OroDashboardBundle',
+                    'bundle' => 'OroDashboard',
                     'name' => 'bigNumbers',
                     '_widgetId' => $this->getWidget()->getId()
                 ]
@@ -329,7 +329,7 @@ class OpportunityStatisticsTest extends BaseStatistics
                 'oro_dashboard_itemized_data_widget',
                 [
                     'widget' => 'opportunity_statistics',
-                    'bundle' => 'OroDashboardBundle',
+                    'bundle' => 'OroDashboard',
                     'name' => 'bigNumbers',
                     '_widgetId' => $this->getWidget()->getId()
                 ]

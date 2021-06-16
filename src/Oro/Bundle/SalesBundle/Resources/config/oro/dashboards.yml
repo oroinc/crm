@@ -150,7 +150,7 @@ dashboards:
         forecast_of_opportunities:
             label:       oro.sales.dashboard.forecast_of_opportunities.title
             route:       oro_dashboard_itemized_data_widget
-            route_parameters: { bundle: OroSalesBundle, name: forecastOfOpportunities }
+            route_parameters: { bundle: OroSales, name: forecastOfOpportunities }
             acl:         oro_sales_opportunity_view
             description: oro.sales.dashboard.forecast_of_opportunities.description
             icon:        bundles/orosales/img/opportunity_by_status.png
@@ -227,7 +227,7 @@ dashboards:
         opportunity_statistics:
             label:       oro.dashboard.opportunity_statistics.title
             route:       oro_dashboard_itemized_data_widget
-            route_parameters: { bundle: OroDashboardBundle, name: bigNumbers }
+            route_parameters: { bundle: OroDashboard, name: bigNumbers }
             acl:         oro_sales_b2bcustomer_view
             description: oro.dashboard.opportunity_statistics.description
             icon:        bundles/orosales/img/icon-big_numbers.png
@@ -296,7 +296,7 @@ dashboards:
         lead_statistics:
             label:       oro.dashboard.lead_statistics.title
             route:       oro_dashboard_itemized_data_widget
-            route_parameters: { bundle: OroDashboardBundle, name: bigNumbers }
+            route_parameters: { bundle: OroDashboard, name: bigNumbers }
             acl:         oro_sales_lead_view
             description: oro.dashboard.lead_statistics.description
             icon:        bundles/orosales/img/icon-big_numbers.png
@@ -370,7 +370,7 @@ dashboards:
         opportunities_list:
             label:       oro.sales.dashboard.opportunities_list.title
             route:       oro_dashboard_widget
-            route_parameters: { bundle: OroSalesBundle, name: opportunitiesList }
+            route_parameters: { bundle: OroSales, name: opportunitiesList }
             acl:         oro_sales_opportunity_view
             description: oro.sales.dashboard.opportunities_list.description
             icon:        bundles/orosales/img/opportunity_by_status.png
@@ -408,7 +408,7 @@ dashboards:
         leads_list:
             label:       oro.sales.dashboard.leads_list.title
             route:       oro_dashboard_widget
-            route_parameters: { bundle: OroSalesBundle, name: leadsList }
+            route_parameters: { bundle: OroSales, name: leadsList }
             acl:         oro_sales_lead_view
             description: oro.sales.dashboard.leads_list.description
             icon:        bundles/orosales/img/opportunities_by_lead_source.png

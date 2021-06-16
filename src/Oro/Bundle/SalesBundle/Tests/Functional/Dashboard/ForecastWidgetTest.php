@@ -60,7 +60,7 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
                 'oro_dashboard_itemized_data_widget',
                 [
                     'widget' => 'forecast_of_opportunities',
-                    'bundle' => 'OroDashboardBundle',
+                    'bundle' => 'OroDashboard',
                     'name' => 'bigNumbers',
                     '_widgetId' => $widget->getId()
                 ]
