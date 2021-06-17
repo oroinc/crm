@@ -24,7 +24,7 @@ define(function(require) {
         },
 
         render: function() {
-            this.initLayout().then(_.bind(this.afterLayoutInit, this));
+            this.initLayout().then(this.afterLayoutInit.bind(this));
         },
 
         afterLayoutInit: function() {

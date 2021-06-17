@@ -1,7 +1,7 @@
 entity_config:
     customer:
+        # You can find out more about attributes in the documentation: https://doc.oroinc.com/backend/configuration/annotation/config.html#customer
         entity:
             items:
-                enabled: # boolean
-                # priority of associated opportunity grid block on the associated customer entity
-                associated_opportunity_block_priority: #integer
+                enabled:
+                associated_opportunity_block_priority:

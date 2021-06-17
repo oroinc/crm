@@ -4,6 +4,10 @@ namespace Oro\Bundle\ContactBundle\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Form\Handler\ContactHandler;
+use Oro\Bundle\ContactBundle\Form\Type\ContactType;
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
+use Oro\Bundle\FormBundle\Model\UpdateHandler;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
@@ -13,6 +17,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for Contact entity.
@@ -49,7 +55,9 @@ class ContactController extends AbstractController
     public function infoAction(Request $request, Contact $contact)
     {
         if (!$request->get('_wid')) {
-            return $this->redirect($this->get('router')->generate('oro_contact_view', ['id' => $contact->getId()]));
+            return $this->redirect(
+                $this->get(RouterInterface::class)->generate('oro_contact_view', ['id' => $contact->getId()])
+            );
         }
 
         return array(
@@ -76,7 +84,7 @@ class ContactController extends AbstractController
         $contact = null;
         $entityClass = $request->get('entityClass');
         if ($entityClass) {
-            $entityClass = $this->get('oro_entity.routing_helper')->resolveEntityClass($entityClass);
+            $entityClass = $this->get(EntityRoutingHelper::class)->resolveEntityClass($entityClass);
             $entityId = $request->get('entityId');
             if ($entityId && $entityClass === Account::class) {
                 $repository = $this->getDoctrine()->getRepository($entityClass);
@@ -106,6 +114,7 @@ class ContactController extends AbstractController
      *      permission="EDIT",
      *      class="OroContactBundle:Contact"
      * )
+     * @param Contact $entity
      */
     public function updateAction(Contact $entity)
     {
@@ -133,9 +142,9 @@ class ContactController extends AbstractController
     /**
      * @return ApiEntityManager
      */
-    protected function getManager()
+    protected function getManager(): ApiEntityManager
     {
-        return $this->get('oro_contact.contact.manager');
+        return $this->get(ApiEntityManager::class);
     }
 
     protected function update(Contact $entity = null)
@@ -144,11 +153,11 @@ class ContactController extends AbstractController
             $entity = $this->getManager()->createEntity();
         }
 
-        return $this->get('oro_form.model.update_handler')->update(
+        return $this->get(UpdateHandler::class)->update(
             $entity,
-            $this->get('oro_contact.form.contact'),
-            $this->get('translator')->trans('oro.contact.controller.contact.saved.message'),
-            $this->get('oro_contact.form.handler.contact')
+            $this->get(ContactType::class),
+            $this->get(TranslatorInterface::class)->trans('oro.contact.controller.contact.saved.message'),
+            $this->get(ContactHandler::class)
         );
     }
 
@@ -194,6 +203,24 @@ class ContactController extends AbstractController
             'entity'                 => $account,
             'defaultContact'         => $defaultContact,
             'contactsWithoutDefault' => $contactsWithoutDefault
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                EntityRoutingHelper::class,
+                ApiEntityManager::class,
+                UpdateHandler::class,
+                ContactType::class,
+                TranslatorInterface::class,
+                ContactHandler::class,
+            ]
         );
     }
 }

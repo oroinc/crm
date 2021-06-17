@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        public: true
+
+    Oro\Bundle\ActivityContactBundle\Controller\ActivityContactController:
+        calls:
+            - ['setContainer', ['@Psr\Container\ContainerInterface']]
+        tags:
+            - { name: container.service_subscriber }

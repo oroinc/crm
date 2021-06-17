@@ -1,0 +1,28 @@
+services:
+    _defaults:
+        public: true
+
+    Oro\Bundle\ContactBundle\Controller\ContactController:
+        calls:
+            - ['setContainer', ['@Psr\Container\ContainerInterface']]
+        tags:
+            - { name: container.service_subscriber }
+            - { name: container.service_subscriber, id: oro_contact.contact.manager, key: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager }
+            - { name: container.service_subscriber, id: oro_contact.form.handler.contact, key: Oro\Bundle\ContactBundle\Form\Handler\ContactHandler }
+
+    Oro\Bundle\ContactBundle\Controller\ContactAddressController:
+        calls:
+            - ['setContainer', ['@Psr\Container\ContainerInterface']]
+        tags:
+            - { name: container.service_subscriber }
+            - { name: container.service_subscriber, id: oro_contact.form.handler.contact_address, key: Oro\Bundle\AddressBundle\Form\Handler\AddressHandler }
+            - { name: container.service_subscriber, id: oro_contact.contact_address.form }
+
+    Oro\Bundle\ContactBundle\Controller\GroupController:
+        calls:
+            - ['setContainer', ['@Psr\Container\ContainerInterface']]
+        tags:
+            - { name: container.service_subscriber }
+            - { name: container.service_subscriber, id: oro_contact.contact.manager, key: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager }
+            - { name: container.service_subscriber, id: oro_contact.form.handler.group, key: Oro\Bundle\ContactBundle\Form\Handler\GroupHandler }
+            - { name: container.service_subscriber, id: oro_contact.form.group }

@@ -4,14 +4,19 @@ namespace Oro\Bundle\CaseBundle\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Form\Handler\CaseEntityHandler;
+use Oro\Bundle\CaseBundle\Model\CaseEntityManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * The controller for Case entity
+ * CRUD controller for Cases.
  */
 class CaseController extends AbstractController
 {
@@ -70,7 +75,7 @@ class CaseController extends AbstractController
      */
     public function createAction()
     {
-        $case = $this->get('oro_case.manager')->createCase();
+        $case = $this->get(CaseEntityManager::class)->createCase();
 
         return $this->update($case);
     }
@@ -91,18 +96,35 @@ class CaseController extends AbstractController
      */
     protected function update(CaseEntity $case)
     {
-        if ($this->get('oro_case.form.handler.entity')->process($case)) {
+        if ($this->get(CaseEntityHandler::class)->process($case)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('oro.case.message.saved')
+                $this->get(TranslatorInterface::class)->trans('oro.case.message.saved')
             );
 
-            return $this->get('oro_ui.router')->redirect($case);
+            return $this->get(Router::class)->redirect($case);
         }
 
-        return array(
+        return [
             'entity' => $case,
             'form'   => $this->get('oro_case.form.entity')->createView()
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                TranslatorInterface::class,
+                Router::class,
+                CaseEntityManager::class,
+                CaseEntityHandler::class,
+                'oro_case.form.entity' => Form::class,
+            ]
         );
     }
 }
