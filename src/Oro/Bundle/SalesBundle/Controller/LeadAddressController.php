@@ -2,18 +2,21 @@
 
 namespace Oro\Bundle\SalesBundle\Controller;
 
+use Oro\Bundle\AddressBundle\Form\Handler\AddressHandler;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadAddress;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * The controller for LeadAddress entity.
  * @Route("/lead")
  */
 class LeadAddressController extends AbstractController
@@ -25,10 +28,10 @@ class LeadAddressController extends AbstractController
      */
     public function addressBookAction(Lead $lead)
     {
-        return array(
+        return [
             'entity' => $lead,
             'address_edit_acl_resource' => 'oro_sales_lead_update'
-        );
+        ];
     }
 
     /**
@@ -77,10 +80,10 @@ class LeadAddressController extends AbstractController
      */
     protected function update(Request $request, Lead $lead, LeadAddress $address)
     {
-        $responseData = array(
+        $responseData = [
             'saved' => false,
             'lead' => $lead
-        );
+        ];
 
         if ($request->isMethod('GET') && !$address->getId()) {
             $address->setFirstName($lead->getFirstName());
@@ -99,7 +102,7 @@ class LeadAddressController extends AbstractController
         // Update lead's modification date when an address is changed
         $lead->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
 
-        if ($this->get('oro_sales.lead_address.form.handler')->process($address)) {
+        if ($this->get(AddressHandler::class)->process($address)) {
             $this->getDoctrine()->getManager()->flush();
             $responseData['entity'] = $address;
             $responseData['saved'] = true;
@@ -108,5 +111,19 @@ class LeadAddressController extends AbstractController
         $responseData['form'] = $this->get('oro_sales.lead_address.form')->createView();
 
         return $responseData;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                'oro_sales.lead_address.form' => Form::class,
+                AddressHandler::class,
+            ]
+        );
     }
 }

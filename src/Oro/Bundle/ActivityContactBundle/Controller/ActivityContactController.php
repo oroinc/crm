@@ -2,11 +2,16 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Controller;
 
+use Oro\Bundle\ActivityContactBundle\Provider\EntityActivityContactDataProvider;
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Serves activity contact actions.
+ */
 class ActivityContactController extends AbstractController
 {
     /**
@@ -23,12 +28,26 @@ class ActivityContactController extends AbstractController
      */
     public function metricsAction($entityClass, $entityId)
     {
-        $entity       = $this->get('oro_entity.routing_helper')->getEntity($entityClass, $entityId);
-        $dataProvider = $this->get('oro_activity_contact.entity_activity_contact_data_provider');
+        $entity       = $this->get(EntityRoutingHelper::class)->getEntity($entityClass, $entityId);
+        $dataProvider = $this->get(EntityActivityContactDataProvider::class);
         $data         = $dataProvider->getEntityContactData($entity);
 
         return $data
             ? ['entity' => $entity, 'data' => $data]
             : new Response();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                EntityRoutingHelper::class,
+                EntityActivityContactDataProvider::class,
+            ]
+        );
     }
 }

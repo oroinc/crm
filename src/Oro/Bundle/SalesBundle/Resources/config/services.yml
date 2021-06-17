@@ -369,6 +369,9 @@ services:
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
+    Oro\Bundle\SalesBundle\Model\ChangeLeadStatus:
+        alias: oro_sales.model.change_lead_status
+
     oro_sales.model.change_lead_status:
         class: Oro\Bundle\SalesBundle\Model\ChangeLeadStatus
         public: true
@@ -424,6 +427,9 @@ services:
             - '@oro_segment.query.filter_processor'
             - '@oro_locale.formatter.number'
             - '@oro_currency.query.currency_transformer'
+
+    Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider:
+        alias: oro_sales.provider.lead_actions_access
 
     oro_sales.provider.lead_actions_access:
         class: Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider
@@ -486,6 +492,9 @@ services:
         # This service marked as public (origin private) for compatibility with Symfony 4. All dependencies must be refactored after BAP-17037
         public: true
         parent: oro_sales.customer.config_provider
+
+    Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler:
+        alias: oro_sales.autocomplete.customer_search_handler
 
     oro_sales.autocomplete.customer_search_handler:
         class: Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler

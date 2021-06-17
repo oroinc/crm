@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller;
 
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Oro\Bundle\FormBundle\Model\AutocompleteRequest;
 use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -12,8 +13,10 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
+ * Autocomplete search controller for Sales.
  * @Route("/sales")
  */
 class AutocompleteController extends AbstractController
@@ -31,7 +34,7 @@ class AutocompleteController extends AbstractController
     public function autocompleteCustomersAction(Request $request, $ownerClassAlias)
     {
         $autocompleteRequest = new AutocompleteRequest($request);
-        $validator           = $this->get('validator');
+        $validator           = $this->get(ValidatorInterface::class);
         $isXmlHttpRequest    = $request->isXmlHttpRequest();
         $code                = 200;
         $result              = [
@@ -55,9 +58,8 @@ class AutocompleteController extends AbstractController
             throw new HttpException($code, implode(', ', $result['errors']));
         }
 
-        /** @var CustomerSearchHandler $searchHandler */
-        $searchHandler = $this->get('oro_sales.autocomplete.customer_search_handler');
-        $searchHandler->setClass($this->get('oro_entity.routing_helper')->resolveEntityClass($ownerClassAlias));
+        $searchHandler = $this->get(CustomerSearchHandler::class);
+        $searchHandler->setClass($this->get(EntityRoutingHelper::class)->resolveEntityClass($ownerClassAlias));
 
         return new JsonResponse($searchHandler->search(
             $autocompleteRequest->getQuery(),
@@ -65,5 +67,20 @@ class AutocompleteController extends AbstractController
             $autocompleteRequest->getPerPage(),
             $autocompleteRequest->isSearchById()
         ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                ValidatorInterface::class,
+                CustomerSearchHandler::class,
+                EntityRoutingHelper::class,
+            ]
+        );
     }
 }
