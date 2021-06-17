@@ -4,9 +4,11 @@ namespace Oro\Bundle\SalesBundle\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\FormBundle\Model\UpdateHandler;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler;
 use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -14,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for B2bCustomer entity.
@@ -103,7 +106,7 @@ class B2bCustomerController extends AbstractController
      */
     protected function update(B2bCustomer $entity = null)
     {
-        return $this->get('oro_form.model.update_handler')->handleUpdate(
+        return $this->get(UpdateHandler::class)->handleUpdate(
             $entity,
             $this->createForm(B2bCustomerType::class, $entity),
             function (B2bCustomer $entity) {
@@ -118,8 +121,8 @@ class B2bCustomerController extends AbstractController
                     'parameters' => ['id' => $entity->getId()],
                 ];
             },
-            $this->get('translator')->trans('oro.sales.controller.b2bcustomer.saved.message'),
-            $this->get('oro_sales.b2bcustomer.form.handler')
+            $this->get(TranslatorInterface::class)->trans('oro.sales.controller.b2bcustomer.saved.message'),
+            $this->get(B2bCustomerHandler::class)
         );
     }
 
@@ -194,5 +197,20 @@ class B2bCustomerController extends AbstractController
             'leadClassName'        => Lead::class,
             'opportunityClassName' => Opportunity::class
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                UpdateHandler::class,
+                TranslatorInterface::class,
+                B2bCustomerHandler::class,
+            ]
+        );
     }
 }

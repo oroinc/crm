@@ -1,0 +1,19 @@
+services:
+    _defaults:
+        public: true
+
+    Oro\Bundle\CaseBundle\Controller\CaseController:
+        calls:
+            - ['setContainer', ['@Psr\Container\ContainerInterface']]
+        tags:
+            - { name: container.service_subscriber }
+            - { name: container.service_subscriber, id: oro_case.form.handler.entity, key: Oro\Bundle\CaseBundle\Form\Handler\CaseEntityHandler }
+            - { name: container.service_subscriber, id: oro_case.form.entity }
+
+    Oro\Bundle\CaseBundle\Controller\CommentController:
+        calls:
+            - ['setContainer', ['@Psr\Container\ContainerInterface']]
+        tags:
+            - { name: container.service_subscriber }
+            - { name: container.service_subscriber, id: oro_case.form.handler.comment, key: Oro\Bundle\CaseBundle\Form\Handler\CaseEntityHandler }
+            - { name: container.service_subscriber, id: oro_case.form.comment }

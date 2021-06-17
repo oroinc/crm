@@ -2,14 +2,16 @@
 
 namespace Oro\Bundle\ChannelBundle\Controller;
 
+use Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * The controller for Channel Integration
+ * CRUD controller for Channel Integrations.
  * @Route("/integration")
  */
 class ChannelIntegrationController extends AbstractController
@@ -21,7 +23,7 @@ class ChannelIntegrationController extends AbstractController
      */
     public function createAction($type, $channelName = null)
     {
-        $translator      = $this->get('translator');
+        $translator      = $this->get(TranslatorInterface::class);
         $integrationName = urldecode($channelName) . ' ' . $translator->trans('oro.channel.data_source.label');
         $integration     = new Integration();
         $integration->setType(urldecode($type));
@@ -47,7 +49,7 @@ class ChannelIntegrationController extends AbstractController
      */
     protected function update(Integration $integration)
     {
-        $handler = $this->get('oro_channel.channel_integration_form.handler');
+        $handler = $this->get(ChannelIntegrationHandler::class);
 
         $data = null;
         if ($handler->process($integration)) {
@@ -59,5 +61,19 @@ class ChannelIntegrationController extends AbstractController
             'isSubmitted' => null !== $data,
             'savedId'     => $data
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                TranslatorInterface::class,
+                ChannelIntegrationHandler::class,
+            ]
+        );
     }
 }
