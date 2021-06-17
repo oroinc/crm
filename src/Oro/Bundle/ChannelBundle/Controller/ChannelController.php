@@ -3,15 +3,19 @@
 namespace Oro\Bundle\ChannelBundle\Controller;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\UIBundle\Route\Router;
 use Oro\Component\MessageQueue\Client\MessageProducer;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * CRUD controller for Channel entity
+ * CRUD controller for Channels.
  */
 class ChannelController extends AbstractController
 {
@@ -72,15 +76,15 @@ class ChannelController extends AbstractController
      */
     protected function update(Channel $channel)
     {
-        $handler = $this->get('oro_channel.channel_form.handler');
+        $handler = $this->get(ChannelHandler::class);
 
         if ($handler->process($channel)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('oro.channel.controller.message.saved')
+                $this->get(TranslatorInterface::class)->trans('oro.channel.controller.message.saved')
             );
 
-            return $this->get('oro_ui.router')->redirect($channel);
+            return $this->get(Router::class)->redirect($channel);
         }
 
         return [
@@ -118,6 +122,22 @@ class ChannelController extends AbstractController
      */
     protected function getMessageProducer()
     {
-        return $this->get('oro_message_queue.message_producer');
+        return $this->get(MessageProducerInterface::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                TranslatorInterface::class,
+                Router::class,
+                MessageProducerInterface::class,
+                ChannelHandler::class,
+            ]
+        );
     }
 }

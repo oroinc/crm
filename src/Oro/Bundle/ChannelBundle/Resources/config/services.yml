@@ -49,6 +49,9 @@ services:
         factory: ['@form.factory', 'createNamed']
         arguments: ["oro_channel_form", Oro\Bundle\ChannelBundle\Form\Type\ChannelType, null]
 
+    Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler:
+        alias: oro_channel.channel_form.handler
+
     oro_channel.channel_form.handler:
         class: Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler
         public: true
@@ -57,6 +60,9 @@ services:
             - "@oro_channel.form.channel"
             - "@doctrine"
             - "@event_dispatcher"
+
+    Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler:
+        alias: oro_channel.channel_integration_form.handler
 
     oro_channel.channel_integration_form.handler:
         class: Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler
