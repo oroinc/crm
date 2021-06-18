@@ -6,7 +6,7 @@ define([
 
     const CommentView = NoteView.extend({
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function CommentView(options) {
             CommentView.__super__.constructor.call(this, options);

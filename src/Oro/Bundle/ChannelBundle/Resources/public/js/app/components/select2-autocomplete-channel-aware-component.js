@@ -14,13 +14,13 @@ define(function(require) {
         channelFieldName: '',
         ViewType: Select2View,
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function Select2AutocompleteChannelAwareComponent(options) {
             Select2AutocompleteChannelAwareComponent.__super__.constructor.call(this, options);
         },
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         initialize: function(options) {
             this.$sourceElement = options._sourceElement;

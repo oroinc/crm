@@ -10,14 +10,14 @@ define(function(require) {
         optionNames: BaseView.prototype.optionNames.concat(['wid', 'dataFieldSelector', 'apiKeyFieldSelector']),
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function ConfigureIntegrationView(options) {
             ConfigureIntegrationView.__super__.constructor.call(this, options);
         },
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         initialize: function(options) {
             ConfigureIntegrationView.__super__.initialize.call(this, options);

@@ -14,14 +14,14 @@ define(function(require) {
         gridName: '',
         ViewType: Select2View,
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function Select2GridChannelAwareComponent(options) {
             Select2GridChannelAwareComponent.__super__.constructor.call(this, options);
         },
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         initialize: function(options) {
             this.$sourceElement = options._sourceElement;

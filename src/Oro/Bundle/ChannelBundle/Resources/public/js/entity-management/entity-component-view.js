@@ -79,7 +79,7 @@ define(function(require) {
         $noDataContainer: null,
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function EntityComponentView(options) {
             EntityComponentView.__super__.constructor.call(this, options);

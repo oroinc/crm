@@ -17,7 +17,7 @@ define([
         },
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function CommentModel(...args) {
             CommentModel.__super__.constructor.apply(this, args);

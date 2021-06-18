@@ -56,7 +56,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
         },
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function IntegrationWidgetView(options) {
             IntegrationWidgetView.__super__.constructor.call(this, options);
@@ -138,7 +138,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
         },
 
         /**
-         * {@inheritDoc}
+         * @inheritdoc
          */
         render: function() {
             const name = this._getValue('name');
