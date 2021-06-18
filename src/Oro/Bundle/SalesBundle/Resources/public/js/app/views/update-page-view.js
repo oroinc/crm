@@ -6,14 +6,14 @@ define(function(require) {
 
     const UpdatePageView = BaseView.extend({
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function UpdatePageView(options) {
             UpdatePageView.__super__.constructor.call(this, options);
         },
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         initialize: function(options) {
             UpdatePageView.__super__.initialize.call(this, options);

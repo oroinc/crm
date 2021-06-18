@@ -16,14 +16,14 @@ define(function(require) {
         dialogWidget: null,
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function CustomerView(options) {
             CustomerView.__super__.constructor.call(this, options);
         },
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         initialize: function(options) {
             CustomerView.__super__.initialize.call(this, options);

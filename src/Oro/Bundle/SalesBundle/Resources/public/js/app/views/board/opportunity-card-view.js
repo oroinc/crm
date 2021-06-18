@@ -9,7 +9,7 @@ define(function(require) {
         template: require('tpl-loader!../../../../templates/board/opportunity-card-view.html'),
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function OpportunityCardView(options) {
             OpportunityCardView.__super__.constructor.call(this, options);

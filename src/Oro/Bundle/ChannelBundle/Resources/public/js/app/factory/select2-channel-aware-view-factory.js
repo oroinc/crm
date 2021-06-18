@@ -13,14 +13,14 @@ define([
             ],
 
             /**
-             * @inheritDoc
+             * @inheritdoc
              */
             constructor: function Select2ChannelAwareView(options) {
                 Select2ChannelAwareView.__super__.constructor.call(this, options);
             },
 
             /**
-             * @inheritDoc
+             * @inheritdoc
              */
             initialize: function(options) {
                 Select2ChannelAwareView.__super__.initialize.call(this, options);
