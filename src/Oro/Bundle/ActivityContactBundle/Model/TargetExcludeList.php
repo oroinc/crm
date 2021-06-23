@@ -2,20 +2,26 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Model;
 
+use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
+use Oro\Bundle\UserBundle\Entity\User;
+
+/**
+ * Contains a list of classes and interfaces for which activity counts should not be tracked.
+ */
 class TargetExcludeList
 {
     /**
-     * To skipp User and activities entities recalculate to hot fix bug CRM-4767
-     *
      * @var array
      */
     protected static $excludeTargets = [
-        'Oro\Bundle\UserBundle\Entity\AbstractUser',
-        'Oro\Bundle\TaskBundle\Entity\Task',
-        'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
-        'Oro\Bundle\CallBundle\Entity\Call',
-        'Oro\Bundle\EmailBundle\Entity\Email',
+        ActivityInterface::class,
+        User::class
     ];
+
+    public static function addExcludedTarget(string $className)
+    {
+        self::$excludeTargets[] = $className;
+    }
 
     /**
      * @param string $className

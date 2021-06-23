@@ -3,6 +3,11 @@
 namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Model;
 
 use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
+use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
+use Oro\Bundle\CallBundle\Entity\Call;
+use Oro\Bundle\EmailBundle\Entity\Email;
+use Oro\Bundle\TaskBundle\Entity\Task;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class TargetExcludeListTest extends \PHPUnit\Framework\TestCase
 {
@@ -12,12 +17,12 @@ class TargetExcludeListTest extends \PHPUnit\Framework\TestCase
     public function isExcludedDataProvider()
     {
         return [
-            ['Oro\Bundle\UserBundle\Entity\User', true],
-            ['Oro\Bundle\TaskBundle\Entity\Task', true],
-            ['Oro\Bundle\CalendarBundle\Entity\CalendarEvent', true],
-            ['Oro\Bundle\CallBundle\Entity\Call', true],
-            ['Oro\Bundle\EmailBundle\Entity\Email', true],
-            ['DateTime', false],
+            [User::class, true],
+            [Task::class, true],
+            [CalendarEvent::class, true],
+            [Call::class, true],
+            [Email::class, true],
+            [\DateTime::class, false],
         ];
     }
 
