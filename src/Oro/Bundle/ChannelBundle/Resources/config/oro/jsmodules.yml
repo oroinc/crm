@@ -5,7 +5,7 @@ dynamic-imports:
     commons:
         - oro/select2-autocomplete-channel-aware-component
         - oro/select2-grid-channel-aware-component
-    orochannel:
+    orointegration:
         - orochannel/js/app/components/channel
         - orochannel/js/app/components/integration-widget
         - orochannel/js/app/components/select-create-inline-type-async-component
