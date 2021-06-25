@@ -42,7 +42,7 @@ class LoadRestrictedUser extends AbstractFixture implements ContainerAwareInterf
             ->setPlainPassword(uniqid())
             ->setFirstName('Simple')
             ->setLastName('User')
-            ->addRole($role[0])
+            ->addUserRole($role[0])
             ->setEmail('simple@example.com')
             ->setOrganization($org)
             ->addOrganization($org)

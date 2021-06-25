@@ -122,7 +122,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $user->setMiddlename($middleName);
         $user->setLastName($lastName);
         $user->setBirthday($birthday);
-        $user->addRole($this->role[0]);
+        $user->addUserRole($this->role[0]);
         $user->setBusinessUnits(new ArrayCollection([$this->businessUnit]));
         $user->setOwner($this->businessUnit);
         $user->setOrganization($organization);

@@ -7,9 +7,9 @@ request:
         oro_reportcrm_form[column][sorting]: ""
         oro_reportcrm_form[definition]: >
                 {"columns":[{"name":"username","label":"Username","func":null,"sorting":"DESC"},
-                {"name":"roles+Oro\\Bundle\\UserBundle\\Entity\\Role::label","label":"Label","func":null,"sorting":""},
+                {"name":"userRoles+Oro\\Bundle\\UserBundle\\Entity\\Role::label","label":"Label","func":null,"sorting":""},
                 {"name":"owner+Oro\\Bundle\\OrganizationBundle\\Entity\\BusinessUnit::name","label":"Name","func":null,"sorting":""},
-                {"name":"roles+Oro\\Bundle\\UserBundle\\Entity\\Role::role","label":"Role","func":null,"sorting":""},
+                {"name":"userRoles+Oro\\Bundle\\UserBundle\\Entity\\Role::role","label":"Role","func":null,"sorting":""},
                 {"name":"email","label":"Email","func":null,"sorting":"DESC"}],"grouping_columns":[],
                 "filters":[{"columnName":"username","criterion":{"filter":"string","data":{"value":"admin","type":"1"}}}]}
         oro_reportcrm_form[description]: ""
