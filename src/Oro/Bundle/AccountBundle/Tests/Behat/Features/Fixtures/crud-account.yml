@@ -5,7 +5,7 @@ Oro\Bundle\UserBundle\Entity\User:
     username (unique): <username()>
     organization: '@organization'
     organizations: ['@organization']
-    roles: ['@adminRole']
+    userRoles: ['@adminRole']
     owner: '@business_unit'
     businessUnits: ['@business_unit']
     email: 'test.email1@example.com'
@@ -17,7 +17,7 @@ Oro\Bundle\UserBundle\Entity\User:
     username (unique): <username()>
     organization: '@organization'
     organizations: ['@organization']
-    roles: ['@adminRole']
+    userRoles: ['@adminRole']
     owner: '@business_unit'
     businessUnits: ['@business_unit']
     email: 'test.email2@example.com'
