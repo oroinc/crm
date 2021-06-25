@@ -31,14 +31,14 @@ define([
                     }
                 });
 
-                const updateData = _.bind(function(initialCall) {
+                const updateData = initialCall => {
                     initialCall = initialCall || false;
                     this.$el.data('select2_query_additional_params', options.additionalParamsCb());
 
                     if (!initialCall) {
                         this.$el.val(null).change();
                     }
-                }, this);
+                };
 
                 this.$channelSelector = options.$channelSelector;
                 this.$channelSelector.on('change' + this.eventNamespace(), updateData);

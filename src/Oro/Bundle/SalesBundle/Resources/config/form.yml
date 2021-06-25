@@ -79,6 +79,9 @@ services:
     Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler:
         alias: oro_sales.opportunity.form.handler
 
+    Oro\Bundle\SalesBundle\Form\Handler\LeadToOpportunityHandler:
+        alias: oro_sales.lead_to_opportunity.form.handler
+
     oro_sales.lead_to_opportunity.form.handler:
         class: Oro\Bundle\SalesBundle\Form\Handler\LeadToOpportunityHandler
         public: true
@@ -214,6 +217,9 @@ services:
         arguments:
             - "salesfunnel"
             - Oro\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
+
+    Oro\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler:
+        alias: oro_sales.salesfunnel.form.handler
 
     oro_sales.salesfunnel.form.handler:
         class: Oro\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler

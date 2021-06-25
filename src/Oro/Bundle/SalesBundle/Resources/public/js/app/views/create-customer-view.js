@@ -50,7 +50,7 @@ define(function(require) {
                 }
             });
 
-            this.dialogWidget.once('formSave', _.bind(function(id) {
+            this.dialogWidget.once('formSave', id => {
                 this.dialogWidget.remove();
                 this.dialogWidget = null;
 
@@ -58,7 +58,7 @@ define(function(require) {
                     'customer-dialog:select',
                     JSON.stringify({entityClass: customer.className, entityId: id})
                 );
-            }, this));
+            });
 
             this.dialogWidget.render();
         }

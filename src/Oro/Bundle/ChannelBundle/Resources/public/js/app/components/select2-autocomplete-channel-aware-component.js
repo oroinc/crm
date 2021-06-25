@@ -32,7 +32,7 @@ define(function(require) {
             const opts = Select2AutocompleteChannelAwareComponent.
                 __super__.prepareViewOptions.call(this, options, config);
             opts.$channelSelector = this.findChannelSelectorElement();
-            opts.additionalParamsCb = _.bind(this._getAdditionalParams, this);
+            opts.additionalParamsCb = this._getAdditionalParams.bind(this);
 
             return opts;
         },
