@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -12,27 +15,19 @@ use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    protected $registry;
+    private $registry;
 
     /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
-    protected $aclHelper;
-
-    /** @var WidgetProviderFilterManager|\PHPUnit\Framework\MockObject\MockObject */
-    protected $widgetProviderFilter;
-
-    /** @var DateFilterProcessor|\PHPUnit\Framework\MockObject\MockObject */
-    protected $dateFilterProcessor;
-
-    /** @var CurrencyQueryBuilderTransformerInterface|\PHPUnit\Framework\MockObject\MockObject */
-    protected $qbTransformer;
+    private $aclHelper;
 
     /** @var array */
-    protected $opportunityStatuses = [
+    private $opportunityStatuses = [
         ['id' => 'won', 'name' => 'Won'],
         ['id' => 'identification_alignment', 'name' => 'Identification'],
         ['id' => 'in_progress', 'name' => 'Open'],
@@ -43,64 +38,45 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
     ];
 
     /** @var OpportunityByStatusProvider */
-    protected $provider;
+    private $provider;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
-        $this->registry = $this->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->widgetProviderFilter = $this
-            ->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dateFilterProcessor = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->qbTransformer = $this->getMockForAbstractClass(
-            'Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface'
-        );
+        $this->registry = $this->createMock(Registry::class);
+        $this->aclHelper = $this->createMock(AclHelper::class);
 
         $this->provider = new OpportunityByStatusProvider(
             $this->registry,
             $this->aclHelper,
-            $this->widgetProviderFilter,
-            $this->dateFilterProcessor,
-            $this->qbTransformer
+            $this->createMock(WidgetProviderFilterManager::class),
+            $this->createMock(DateFilterProcessor::class),
+            $this->createMock(CurrencyQueryBuilderTransformerInterface::class)
         );
     }
 
     /**
-     * @param WidgetOptionBag $widgetOptions
-     * @param string          $expectation
-     *
      * @dataProvider getOpportunitiesGroupedByStatusDQLDataProvider
      */
-    public function testGetOpportunitiesGroupedByStatusDQL($widgetOptions, $expectation)
+    public function testGetOpportunitiesGroupedByStatusDQL(WidgetOptionBag $widgetOptions, string $expectation)
     {
-        $opportunityQB = new QueryBuilder($this->getMockForAbstractClass('Doctrine\ORM\EntityManagerInterface'));
+        $opportunityQB = new QueryBuilder($this->createMock(EntityManagerInterface::class));
         $opportunityQB
-            ->from('Oro\Bundle\SalesBundle\Entity\Opportunity', 'o', null);
+            ->from(Opportunity::class, 'o', null);
 
-        $statusesQB = $this->getMockQueryBuilder();
+        $statusesQuery = $this->createMock(AbstractQuery::class);
+        $statusesQB = $this->createMock(QueryBuilder::class);
         $statusesQB->expects($this->once())
             ->method('select')
             ->with('s.id, s.name')
             ->willReturnSelf();
         $statusesQB->expects($this->once())
             ->method('getQuery')
-            ->willReturnSelf();
-        $statusesQB->expects($this->once())
+            ->willReturn($statusesQuery);
+        $statusesQuery->expects($this->once())
             ->method('getArrayResult')
             ->willReturn($this->opportunityStatuses);
 
-        $repository = $this->getMockRepository();
+        $repository = $this->createMock(EntityRepository::class);
         $repository->expects($this->exactly(2))
             ->method('createQueryBuilder')
             ->withConsecutive(['o'], ['s'])
@@ -114,8 +90,8 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($repository);
 
-        $mockResult = $this->getMockQueryBuilder();
-        $mockResult->expects($this->once())
+        $query = $this->createMock(AbstractQuery::class);
+        $query->expects($this->once())
             ->method('getArrayResult')
             ->willReturn([]);
 
@@ -130,12 +106,12 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
                     return true;
                 })
             )
-            ->willReturn($mockResult);
+            ->willReturn($query);
 
         $this->provider->getOpportunitiesGroupedByStatus($widgetOptions);
     }
 
-    public function getOpportunitiesGroupedByStatusDQLDataProvider()
+    public function getOpportunitiesGroupedByStatusDQLDataProvider(): array
     {
         return [
             'request quantities'                                                    => [
@@ -192,31 +168,31 @@ DQL
     }
 
     /**
-     * @param WidgetOptionBag $widgetOptions
-     * @param array           $result
-     * @param string          $expected
-     *
      * @dataProvider getOpportunitiesGroupedByStatusResultDataProvider
      */
-    public function testGetOpportunitiesGroupedByStatusResultFormatter($widgetOptions, $result, $expected)
-    {
-        $opportunityQB = new QueryBuilder($this->createMock('Doctrine\ORM\EntityManagerInterface'));
+    public function testGetOpportunitiesGroupedByStatusResultFormatter(
+        WidgetOptionBag $widgetOptions,
+        array $result,
+        array $expected
+    ) {
+        $opportunityQB = new QueryBuilder($this->createMock(EntityManagerInterface::class));
         $opportunityQB
-            ->from('Oro\Bundle\SalesBundle\Entity\Opportunity', 'o', null);
+            ->from(Opportunity::class, 'o', null);
 
-        $statusesQB = $this->getMockQueryBuilder();
+        $statusesQuery = $this->createMock(AbstractQuery::class);
+        $statusesQB = $this->createMock(QueryBuilder::class);
         $statusesQB->expects($this->once())
             ->method('select')
             ->with('s.id, s.name')
             ->willReturnSelf();
         $statusesQB->expects($this->once())
             ->method('getQuery')
-            ->willReturnSelf();
-        $statusesQB->expects($this->once())
+            ->willReturn($statusesQuery);
+        $statusesQuery->expects($this->once())
             ->method('getArrayResult')
             ->willReturn($this->opportunityStatuses);
 
-        $repository = $this->getMockRepository();
+        $repository = $this->createMock(EntityRepository::class);
         $repository->expects($this->exactly(2))
             ->method('createQueryBuilder')
             ->withConsecutive(['o'], ['s'])
@@ -230,21 +206,21 @@ DQL
             )
             ->willReturn($repository);
 
-        $mockResult = $this->getMockQueryBuilder();
-        $mockResult->expects($this->once())
+        $query = $this->createMock(AbstractQuery::class);
+        $query->expects($this->once())
             ->method('getArrayResult')
             ->willReturn($result);
 
         $this->aclHelper->expects($this->once())
             ->method('apply')
-            ->willReturn($mockResult);
+            ->willReturn($query);
 
         $data = $this->provider->getOpportunitiesGroupedByStatus($widgetOptions);
 
         $this->assertEquals($expected, $data);
     }
 
-    public function getOpportunitiesGroupedByStatusResultDataProvider()
+    public function getOpportunitiesGroupedByStatusResultDataProvider(): array
     {
         return [
             'result with all statuses, no exclusions - only labels should be added'               => [
@@ -331,27 +307,5 @@ DQL
                 ]
             ],
         ];
-    }
-
-    /**
-     * @return EntityRepository|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getMockRepository()
-    {
-        return $this->getMockBuilder('Doctrine\ORM\EntityRepository')
-            ->disableOriginalConstructor()
-            ->setMethods(['createQueryBuilder'])
-            ->getMockForAbstractClass();
-    }
-
-    /**
-     * @return QueryBuilder|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getMockQueryBuilder()
-    {
-        return $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->setMethods(['select', 'where', 'setParameter', 'getQuery', 'getArrayResult'])
-            ->getMockForAbstractClass();
     }
 }

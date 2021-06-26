@@ -10,44 +10,32 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
+    /** @var EntityManager */
+    private $entityManager;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ValidatorInterface
-     */
-    protected $validator;
+    /** @var ChangeLeadStatus */
+    private $model;
 
-    /**
-     * @var ChangeLeadStatus
-     */
-    protected $model;
-
-    /**
-     * @var  LeadStub
-     */
+    /** @var LeadStub */
     private $lead;
 
     protected function setUp(): void
     {
-        $this->entityManager = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
-                              ->setMethods(['getReference', 'persist', 'flush'])
-                              ->disableOriginalConstructor()
-                              ->getMock();
+        $this->entityManager = $this->createMock(EntityManager::class);
 
-        $this->entityManager->expects($this->once())->method('getReference')
-            ->will($this->returnCallback(function ($statusClass, $statusCode) {
+        $this->entityManager->expects($this->once())
+            ->method('getReference')
+            ->willReturnCallback(function ($statusClass, $statusCode) {
                 return $statusCode;
-            }));
+            });
 
-        $this->validator = $this->getMockForAbstractClass('Symfony\Component\Validator\Validator\ValidatorInterface');
-        $this->validator->expects($this->any())->method('validate')
-            ->willReturn($this->getMockForAbstractClass('\Countable'));
+        $validator = $this->createMock(ValidatorInterface::class);
+        $validator->expects($this->any())
+            ->method('validate')
+            ->willReturn($this->createMock(\Countable::class));
 
         $this->lead = new LeadStub();
-        $this->model = new ChangeLeadStatus($this->entityManager, $this->validator);
+        $this->model = new ChangeLeadStatus($this->entityManager, $validator);
     }
 
     public function testDisqualify()
@@ -69,8 +57,9 @@ class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
 
     public function testFailQualify()
     {
-        $this->entityManager->expects($this->once())->method('persist')
-            ->will($this->throwException(new ORMInvalidArgumentException('test exception')));
+        $this->entityManager->expects($this->once())
+            ->method('persist')
+            ->willThrowException(new ORMInvalidArgumentException('test exception'));
 
         $this->assertFalse($this->model->qualify($this->lead));
     }

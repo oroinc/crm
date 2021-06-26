@@ -6,61 +6,49 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
 use Oro\Bundle\SalesBundle\Entity\LeadAddress;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
+use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub as Lead;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub as Opportunity;
+use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var LeadToOpportunityProvider
-     */
-    protected $provider;
+    /** @var LeadToOpportunityProvider */
+    private $provider;
 
     protected function setUp(): void
     {
-        $entityFieldProvider = $this
-            ->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityFieldProvider')
-            ->setMethods(['getFields'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $changeLeadStatus = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Model\ChangeLeadStatus')
-            ->setMethods(['qualify'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityFieldProvider = $this->createMock(EntityFieldProvider::class);
+        $changeLeadStatus = $this->createMock(ChangeLeadStatus::class);
 
-        $entityFieldProvider->method('getFields')->willReturn([]);
+        $entityFieldProvider->expects($this->any())
+            ->method('getFields')
+            ->willReturn([]);
 
-        $this->provider = $this->getMockBuilder('Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider')
+        $this->provider = $this->getMockBuilder(LeadToOpportunityProvider::class)
             ->setConstructorArgs([$entityFieldProvider, $changeLeadStatus])
-            ->setMethods(['createOpportunity'])
+            ->onlyMethods(['createOpportunity'])
             ->getMock();
         $this->provider->expects($this->any())
             ->method('createOpportunity')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return new Opportunity();
-            }));
+            });
     }
 
     public function testPrepareOpportunityForFormWithContact()
     {
-        $lead = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub')
-            ->setMethods(['getContact', 'getName', 'getStatus'])
-            ->getMock();
-
-        $lead
-            ->expects($this->once())
+        $lead = $this->createMock(Lead::class);
+        $lead->expects($this->once())
             ->method('getContact')
             ->willReturn(new Contact());
-
-        $lead
-            ->expects($this->once())
+        $lead->expects($this->once())
             ->method('getName')
             ->willReturn('testName');
 
@@ -76,7 +64,7 @@ class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($preparedOpportunity, $expectedOpportunity);
     }
 
-    public function leadProvider()
+    public function leadProvider(): array
     {
         return [
             'lead_with_address'    => $this->prepareLeadAndOpportunity(),
@@ -84,27 +72,27 @@ class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    protected function prepareLeadAndOpportunity($withAddress = true)
+    private function prepareLeadAndOpportunity(bool $withAddress = true): array
     {
         $accessor = PropertyAccess::createPropertyAccessor();
-        $user         = $this->createMock('Oro\Bundle\UserBundle\Entity\User');
+        $user = $this->createMock(User::class);
 
         $opportunityFields = [
-            'firstName'         => 'test_firstName',
-            'jobTitle'          => 'test_jobTitle',
-            'lastName'          => 'test_lastName',
-            'middleName'        => 'test_middleName',
-            'namePrefix'        => 'test_namePrefix',
-            'nameSuffix'        => 10,
-            'owner'             => $user,
+            'firstName'  => 'test_firstName',
+            'jobTitle'   => 'test_jobTitle',
+            'lastName'   => 'test_lastName',
+            'middleName' => 'test_middleName',
+            'namePrefix' => 'test_namePrefix',
+            'nameSuffix' => 10,
+            'owner'      => $user,
         ];
 
         $addressFields = [
-            'firstName'         => 'test_firstName',
-            'lastName'          => 'test_lastName',
-            'middleName'        => 'test_middleName',
-            'namePrefix'        => 'test_namePrefix',
-            'nameSuffix'        => 10,
+            'firstName'    => 'test_firstName',
+            'lastName'     => 'test_lastName',
+            'middleName'   => 'test_middleName',
+            'namePrefix'   => 'test_namePrefix',
+            'nameSuffix'   => 10,
             'city'         => 'test_city',
             'country'      => 'US',
             'label'        => 'test_label',
@@ -120,8 +108,7 @@ class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
         $lead
             ->setName('test_name')
             ->addPhone(new LeadPhone('test_phone'))
-            ->addEmail(new LeadEmail('test_email'))
-        ;
+            ->addEmail(new LeadEmail('test_email'));
         $opportunity = new Opportunity();
         $contact = new Contact();
         $contact->addPhone(new ContactPhone('test_phone'));
@@ -129,8 +116,7 @@ class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
         $opportunity
             ->setName('test_name')
             ->setContact($contact)
-            ->setLead($lead)
-        ;
+            ->setLead($lead);
 
         foreach ($opportunityFields as $fieldName => $value) {
             $accessor->setValue($lead, $fieldName, $value);
@@ -150,6 +136,6 @@ class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        return [ $lead, $opportunity ];
+        return [$lead, $opportunity];
     }
 }
