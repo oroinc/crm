@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Model;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMInvalidArgumentException;

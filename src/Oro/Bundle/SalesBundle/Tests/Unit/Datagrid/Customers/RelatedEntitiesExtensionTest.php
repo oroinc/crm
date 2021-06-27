@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Unit\Datagrid\Extension\Customers;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Datagrid\Customers;
 
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;

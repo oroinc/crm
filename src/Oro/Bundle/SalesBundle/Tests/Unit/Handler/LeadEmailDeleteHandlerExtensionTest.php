@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Handler;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\EntityBundle\Handler\EntityDeleteAccessDeniedExceptionFactory;

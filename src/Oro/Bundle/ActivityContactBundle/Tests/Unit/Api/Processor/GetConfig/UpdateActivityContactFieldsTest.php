@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ActivityContactBundle\Bundle\Tests\Unit\Api\Processor\GetConfig;
+namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Api\Processor\GetConfig;
 
 use Oro\Bundle\ActivityContactBundle\Api\Processor\GetConfig\UpdateActivityContactFields;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;

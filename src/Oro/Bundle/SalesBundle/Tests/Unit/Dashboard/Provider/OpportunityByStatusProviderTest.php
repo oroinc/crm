@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Dashboard\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\AbstractQuery;

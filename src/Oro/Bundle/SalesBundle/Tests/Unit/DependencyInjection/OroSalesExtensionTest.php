@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Unit\DependencyInjection;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\DependencyInjection;
 
 use Oro\Bundle\SalesBundle\DependencyInjection\OroSalesExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\DependencyInjection\ExtensionTestCase;

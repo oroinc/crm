@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;

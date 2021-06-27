@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ActivityContactBundle\Bundle\Tests\Unit\DependencyInjection;
+namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\DependencyInjection;
 
 use Oro\Bundle\ActivityContactBundle\DependencyInjection\OroActivityContactExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
