@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ReportBundle\Tests\Functional;
+namespace Oro\Bundle\CaseBundle\Tests\Functional\Entity\Manager;
 
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
 use Oro\Bundle\CaseBundle\Entity\CasePriority;

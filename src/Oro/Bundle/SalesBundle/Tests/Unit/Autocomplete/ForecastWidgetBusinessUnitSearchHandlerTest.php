@@ -2,28 +2,35 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Autocomplete;
 
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
+use Oro\Bundle\OrganizationBundle\Provider\BusinessUnitAclProvider;
 use Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler;
+use Oro\Bundle\SearchBundle\Engine\Indexer;
 use Oro\Bundle\SearchBundle\Provider\SearchMappingProvider;
 use Oro\Bundle\SearchBundle\Query\Result;
 
 class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    const TEST_ID_FIELD = 'id';
-    const TEST_ENTITY_NAME = 'OroOrganizationBundle:BusinessUnit';
-    const TEST_ENTITY_ALIAS = 'business_alias';
+    private const TEST_ID_FIELD = 'id';
+    private const TEST_ENTITY_NAME = 'OroOrganizationBundle:BusinessUnit';
+    private const TEST_ENTITY_ALIAS = 'business_alias';
 
     /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $businessAclProvider;
+    private $businessAclProvider;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $handler;
+    private $handler;
 
     protected function setUp(): void
     {
-        $this->businessAclProvider = $this
-            ->getMockBuilder('Oro\Bundle\OrganizationBundle\Provider\BusinessUnitAclProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->businessAclProvider = $this->createMock(BusinessUnitAclProvider::class);
 
         $this->handler = new ForecastWidgetBusinessUnitSearchHandler(
             self::TEST_ENTITY_NAME,
@@ -49,79 +56,66 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
 
         $searchResult->expects($this->once())
             ->method('getElements')
-            ->will($this->returnValue($actualElements));
+            ->willReturn($actualElements);
 
-        $this->businessAclProvider
-            ->expects($this->exactly(1))
+        $this->businessAclProvider->expects($this->once())
             ->method('getBusinessUnitIds')
-            ->will($this->returnValue($expectedIds));
+            ->willReturn($expectedIds);
 
-        $indexer = $this->getMockBuilder('Oro\Bundle\SearchBundle\Engine\Indexer')
-            ->setMethods(['query', 'select', 'simpleSearch'])
-            ->disableOriginalConstructor()->getMock();
+        $indexer = $this->createMock(Indexer::class);
 
         $indexer->expects($this->once())
             ->method('simpleSearch')
-            ->will($this->returnValue($searchResult));
+            ->willReturn($searchResult);
 
-        $expr = $this->getMockBuilder('Doctrine\ORM\Query\Expr')
-            ->setMethods(['in'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $expr = $this->createMock(Expr::class);
 
-        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->setMethods(['getQuery', 'getResult', 'where', 'expr', 'setParameter'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $queryBuilder
-            ->expects($this->exactly(1))
+        $query = $this->createMock(AbstractQuery::class);
+        $queryBuilder = $this->createMock(QueryBuilder::class);
+        $queryBuilder->expects($this->once())
             ->method('expr')
-            ->will($this->returnValue($expr));
-
-        $queryBuilder->expects($this->any())
-            ->method('getQuery')
-            ->will($this->returnValue($queryBuilder));
-
-        $queryBuilder->expects($this->any())
-            ->method('getResult')
-            ->will($this->returnValue([]));
+            ->willReturn($expr);
         $queryBuilder->expects($this->any())
             ->method('setParameter')
             ->with('entityIds', $expectedIds)
             ->willReturnSelf();
+        $queryBuilder->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($query);
+        $query->expects($this->any())
+            ->method('getResult')
+            ->willReturn([]);
 
-        $entityRepository = $this
-            ->getMockBuilder('Doctrine\ORM\EntityRepository')
-            ->setMethods(['createQueryBuilder'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityRepository = $this->createMock(EntityRepository::class);
 
         $entityRepository->expects($this->any())
             ->method('createQueryBuilder')
-            ->will($this->returnValue($queryBuilder));
+            ->willReturn($queryBuilder);
 
-        $metadata = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()->getMock();
-        $metadata->expects($this->once())->method('getSingleIdentifierFieldName')
-            ->will($this->returnValue(self::TEST_ID_FIELD));
+        $metadata = $this->createMock(ClassMetadata::class);
+        $metadata->expects($this->once())
+            ->method('getSingleIdentifierFieldName')
+            ->willReturn(self::TEST_ID_FIELD);
 
-        $metadataFactory = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataFactory')
-            ->disableOriginalConstructor()->getMock();
+        $metadataFactory = $this->createMock(ClassMetadataFactory::class);
         $metadataFactory->expects($this->once())
-            ->method('getMetadataFor')->with(self::TEST_ENTITY_NAME)
-            ->will($this->returnValue($metadata));
+            ->method('getMetadataFor')
+            ->with(self::TEST_ENTITY_NAME)
+            ->willReturn($metadata);
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()->getMock();
-        $em->expects($this->once())->method('getRepository')
-            ->will($this->returnValue($entityRepository));
-        $em->expects($this->once())->method('getMetadataFactory')
-            ->will($this->returnValue($metadataFactory));
+        $em = $this->createMock(EntityManager::class);
+        $em->expects($this->once())
+            ->method('getRepository')
+            ->willReturn($entityRepository);
+        $em->expects($this->once())
+            ->method('getMetadataFactory')
+            ->willReturn($metadataFactory);
 
-        $managerRegistry = $this->createMock('Doctrine\Persistence\ManagerRegistry');
-        $managerRegistry->expects($this->once())->method('getManagerForClass')->with(self::TEST_ENTITY_NAME)
-            ->will($this->returnValue($em));
+        $managerRegistry = $this->createMock(ManagerRegistry::class);
+        $managerRegistry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with(self::TEST_ENTITY_NAME)
+            ->willReturn($em);
 
         $searchMappingProvider = $this->createMock(SearchMappingProvider::class);
         $searchMappingProvider->expects($this->once())
@@ -133,8 +127,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
         $this->handler->initDoctrinePropertiesByManagerRegistry($managerRegistry);
 
         //the main filter check
-        $expr
-            ->expects($this->once())
+        $expr->expects($this->once())
             ->method('in')
             ->with('e.'.self::TEST_ID_FIELD, ':entityIds');
 

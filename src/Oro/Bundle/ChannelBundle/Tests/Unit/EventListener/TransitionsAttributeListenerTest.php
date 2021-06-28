@@ -9,18 +9,14 @@ use Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type\TestForm;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType;
 use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
+use Oro\Component\ConfigExpression\ContextAccessor;
 use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\Forms;
 
 class TransitionsAttributeListenerTest extends \PHPUnit\Framework\TestCase
 {
-    const EXPECTED_CHANNEL_ID = 7;
-
     /** @var TransitionsAttributeListener */
-    protected $listener;
-
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $contextAccessor;
+    private $listener;
 
     protected function setUp(): void
     {
@@ -31,10 +27,6 @@ class TransitionsAttributeListenerTest extends \PHPUnit\Framework\TestCase
             'oro_entity_create_or_select_inline' => new TestForm('oro_entity_create_or_select_inline'),
             'oro_jqueryselect2_hidden' => new TestForm('oro_jqueryselect2_hidden')
         ];
-        $this->contextAccessor = $this
-            ->getMockBuilder('Oro\Component\ConfigExpression\ContextAccessor')
-            ->setMethods(['getValue'])
-            ->getMock();
 
         $factory = Forms::createFormFactoryBuilder()
             ->addExtensions(
@@ -44,7 +36,10 @@ class TransitionsAttributeListenerTest extends \PHPUnit\Framework\TestCase
             )
             ->getFormFactory();
 
-        $this->listener = new TransitionsAttributeListener($factory, $this->contextAccessor);
+        $this->listener = new TransitionsAttributeListener(
+            $factory,
+            $this->createMock(ContextAccessor::class)
+        );
     }
 
     public function testWrongFormType()

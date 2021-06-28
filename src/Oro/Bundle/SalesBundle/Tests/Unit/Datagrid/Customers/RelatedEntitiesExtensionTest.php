@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Unit\Datagrid\Extension\Customers;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Datagrid\Customers;
 
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
@@ -19,18 +19,14 @@ use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var RelatedEntitiesExtension */
-    protected $extension;
+    private $extension;
 
     /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-    protected $configProvider;
+    private $configProvider;
 
     protected function setUp(): void
     {
-        $this->configProvider = $this
-            ->getMockBuilder(ConfigProvider::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isCustomerClass'])
-            ->getMock();
+        $this->configProvider = $this->createMock(ConfigProvider::class);
 
         $this->extension = new RelatedEntitiesExtension(
             $this->configProvider,
@@ -40,13 +36,8 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider testIsApplicableDataProvider
-     *
-     * @param array     $config
-     * @param array     $parameters
-     * @param bool      $result
-     * @param bool|null $enabledConfig
      */
-    public function testIsApplicable(array $config, array $parameters, $result, $enabledConfig = null)
+    public function testIsApplicable(array $config, array $parameters, bool $result, bool $enabledConfig = null)
     {
         $this->extension->setParameters(new ParameterBag($parameters));
         $this->prepareConfigProvider($parameters, $enabledConfig);
@@ -56,7 +47,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testIsApplicableDataProvider()
+    public function testIsApplicableDataProvider(): array
     {
         $class = TestEntity::class;
         $relatedClass = Opportunity::class;
@@ -108,16 +99,13 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testVisitDatasource()
     {
-        $customerClass   = TestEntity::class;
-        $customerField   = ExtendHelper::buildAssociationName(
-            $customerClass,
-            CustomerScope::ASSOCIATION_KIND
-        );
+        $customerClass = TestEntity::class;
+        $customerField = ExtendHelper::buildAssociationName($customerClass, CustomerScope::ASSOCIATION_KIND);
         $customerId = 1;
         $customerIdParam = sprintf(':customerIdParam_%s', $customerField);
         $qb = $this->prepareQueryBuilder(Opportunity::class, $customerField, $customerId, $customerIdParam, 'customer');
-        $datasource      = $this->getDatasource($qb);
-        $config          = DatagridConfiguration::create([]);
+        $datasource = $this->getDatasource($qb);
+        $config = DatagridConfiguration::create([]);
 
         $this->extension->setParameters(
             new ParameterBag(
@@ -136,46 +124,32 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
         $this->expectException(DatasourceException::class);
         $this->expectExceptionMessage("Couldn't find Oro\Bundle\SalesBundle\Entity\Opportunity alias in QueryBuilder.");
 
-        $qb            = $this->prepareQueryBuilder(TestEntity::class);
-        $datasource    = $this->getDatasource($qb);
-        $config        = DatagridConfiguration::create([]);
+        $qb = $this->prepareQueryBuilder(TestEntity::class);
+        $datasource = $this->getDatasource($qb);
+        $config = DatagridConfiguration::create([]);
         $this->extension->setParameters(
             new ParameterBag(['customer_class' => TestEntity::class])
         );
         $this->extension->visitDatasource($config, $datasource);
     }
 
-    /**
-     * @param bool|null $enabledConfig
-     * @param array     $parameters
-     */
-    protected function prepareConfigProvider(array $parameters, $enabledConfig = null)
+    private function prepareConfigProvider(array $parameters, bool $enabledConfig = null)
     {
         if ($enabledConfig !== null) {
-            $this->configProvider
-                ->expects($this->once())
+            $this->configProvider->expects($this->once())
                 ->method('isCustomerClass')
                 ->with($parameters['customer_class'])
                 ->willReturn($enabledConfig);
         }
     }
 
-    /**
-     * @param string      $opportunityClass
-     * @param string      $customerField
-     * @param int|null    $customerId
-     * @param string|null $customerIdParam
-     * @param string|null $alias
-     *
-     * @return QueryBuilder|\PHPUnit\Framework\MockObject\MockObject
-     */
-    public function prepareQueryBuilder(
-        $opportunityClass,
-        $customerField = null,
-        $customerId = null,
-        $customerIdParam = null,
-        $alias = null
-    ) {
+    private function prepareQueryBuilder(
+        string $opportunityClass,
+        string $customerField = null,
+        int $customerId = null,
+        string $customerIdParam = null,
+        string $alias = null
+    ): QueryBuilder {
         $qb = $this->createMock(QueryBuilder::class);
         $qb->expects($this->never())
             ->method('getDQLPart');
@@ -203,7 +177,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
             $qb->expects($this->once())
                 ->method('andWhere')
                 ->with(sprintf('%s.%s = %s', $alias, $customerField, $customerIdParam))
-                ->will($this->returnSelf());
+                ->willReturnSelf();
             $qb->expects($this->once())
                 ->method('setParameter')
                 ->with($customerIdParam, $customerId);
@@ -212,12 +186,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
         return $qb;
     }
 
-    /**
-     * @param QueryBuilder|\PHPUnit\Framework\MockObject\MockObject $qb
-     *
-     * @return OrmDatasource|\PHPUnit\Framework\MockObject\MockObject
-     */
-    public function getDatasource($qb)
+    private function getDatasource(QueryBuilder $qb): OrmDatasource
     {
         $datasource = $this->createMock(OrmDatasource::class);
         $datasource->expects($this->once())

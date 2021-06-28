@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\CaseBundle\Tests\Functional;
+namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
 use Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseMailboxSettingsData;
