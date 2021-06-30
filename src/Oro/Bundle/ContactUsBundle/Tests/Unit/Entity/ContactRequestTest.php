@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Form;
+namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 

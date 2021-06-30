@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Unit\Formatter;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Handler;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ContactBundle\Entity\Contact;
