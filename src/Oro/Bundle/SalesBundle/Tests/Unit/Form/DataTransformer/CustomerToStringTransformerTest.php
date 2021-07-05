@@ -12,24 +12,20 @@ use Symfony\Component\Form\DataTransformerInterface;
 class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerToStringTransformer */
-    protected $transformer;
+    private $transformer;
 
     /** @var DataTransformerInterface|\PHPUnit\Framework\MockObject\MockObject */
-    protected $dataTransformer;
+    private $dataTransformer;
 
     /** @var AccountCustomerManager|\PHPUnit\Framework\MockObject\MockObject */
-    protected $accountCustomerManager;
+    private $accountCustomerManager;
 
     protected function setUp(): void
     {
-        $this->dataTransformer = $this
-            ->getMockBuilder('Symfony\Component\Form\DataTransformerInterface')
-            ->getMock();
-
-        $this->accountCustomerManager = $this
-            ->getMockBuilder(AccountCustomerManager::class)
+        $this->dataTransformer = $this->createMock(DataTransformerInterface::class);
+        $this->accountCustomerManager = $this->getMockBuilder(AccountCustomerManager::class)
             ->disableOriginalConstructor()
-            ->setMethodsExcept(['createCustomer'])
+            ->onlyMethods(['getAccountCustomerByTarget'])
             ->getMock();
 
         $this->transformer = new CustomerToStringTransformer(
@@ -40,11 +36,8 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider reverseTransformProvider
-     *
-     * @param string   $value
-     * @param Customer $expectedValue
      */
-    public function testReverseTransform($value, Customer $expectedValue)
+    public function testReverseTransform(string $value, Customer $expectedValue)
     {
         $decoded = json_decode($value, true);
         if (empty($decoded['value'])) {
@@ -61,19 +54,16 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
         $expectedAccount = $expectedValue->getAccount();
         $this->accountCustomerManager->expects($this->any())
             ->method('getAccountCustomerByTarget')
-            ->will($this->returnCallback(function () use ($expectedAccount) {
+            ->willReturnCallback(function () use ($expectedAccount) {
                 return (new Customer())->setTarget($expectedAccount);
-            }));
+            });
         $this->assertEquals(
             $expectedValue,
             $this->transformer->reverseTransform($value)
         );
     }
 
-    /**
-     * @return array
-     */
-    public function reverseTransformProvider()
+    public function reverseTransformProvider(): array
     {
         $existingAccount = new Account();
         ReflectionUtil::setId($existingAccount, 1);
@@ -101,7 +91,7 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
         $this->dataTransformer->expects($this->any())
             ->method('transform')
             ->with($account)
-            ->will($this->returnValue('transformedValue'));
+            ->willReturn('transformedValue');
 
         $this->assertEquals(
             'transformedValue',

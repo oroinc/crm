@@ -7,6 +7,7 @@ use Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
+use Oro\Bundle\ConfigBundle\Tests\Functional\Traits\ConfigManagerAwareTestTrait;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Transport\ConnectionInterface;
 use Oro\Component\MessageQueue\Transport\Message;
@@ -18,6 +19,8 @@ use Symfony\Component\Yaml\Yaml;
  */
 class AggregateLifetimeAverageProcessorTest extends WebTestCase
 {
+    use ConfigManagerAwareTestTrait;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -39,7 +42,7 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
      */
     public function testValuesAggregation($systemTimezone)
     {
-        $cm = $this->getContainer()->get('oro_config.global');
+        $cm = self::getConfigManager('global');
         $cm->set('oro_locale.timezone', $systemTimezone);
         $cm->flush();
 

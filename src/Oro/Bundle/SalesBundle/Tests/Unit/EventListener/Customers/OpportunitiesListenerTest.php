@@ -5,10 +5,11 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\EventListener\Customers;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Tests\Unit\ORM\Fixtures\TestEntity;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener;
-use Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider as CustomerConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -16,48 +17,29 @@ use Twig\Environment;
 class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OpportunitiesListener */
-    protected $listener;
+    private $listener;
 
-    /** @var AccountConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-    protected $provider;
+    /** @var CustomerConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
+    private $provider;
 
     /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
-    protected $translator;
+    private $translator;
 
     /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
-    protected $doctrineHelper;
+    private $doctrineHelper;
 
-    /** @var \Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-    protected $configProvider;
-
-    /** @var FeatureChecker|\PHPUnit\Framework\MockObject\MockObject */
-    protected $featureChecker;
+    /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
+    private $configProvider;
 
     protected function setUp(): void
     {
-        $this->provider       = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider')
-            ->disableOriginalConstructor()
-            ->setMethods(['isCustomerClass'])
-            ->getMock();
-        $this->doctrineHelper = $this
-            ->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
-            ->disableOriginalConstructor()
-            ->setMethods(['getSingleEntityIdentifier'])
-            ->getMock();
+        $this->provider = $this->createMock(CustomerConfigProvider::class);
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $this->translator = $this->createMock(TranslatorInterface::class);
+        $this->configProvider = $this->createMock(ConfigProvider::class);
 
-        $this->translator     = $this->createMock(TranslatorInterface::class);
-
-        $this->configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->featureChecker = $this->getMockBuilder('Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->featureChecker
-            ->expects($this->any())
+        $featureChecker = $this->createMock(FeatureChecker::class);
+        $featureChecker->expects($this->any())
             ->method('isFeatureEnabled')
             ->with('sales_opportunity')
             ->willReturn(true);
@@ -67,21 +49,19 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
             $this->translator,
             $this->doctrineHelper,
             $this->configProvider,
-            $this->featureChecker
+            $featureChecker
         );
     }
 
     public function testAddOpportunities()
     {
-        $id                 = 5;
-        $entity             = new TestEntity($id);
-        $customerClass      = TestEntity::class;
-        $opportunitiesData  = 'Opportunities List';
+        $id = 5;
+        $entity = new TestEntity($id);
+        $customerClass = TestEntity::class;
+        $opportunitiesData = 'Opportunities List';
         $opportunitiesTitle = 'Opportunities Title';
 
-        $env = $this->getMockBuilder(Environment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $env = $this->createMock(Environment::class);
 
         $env->expects($this->once())
             ->method('render')
@@ -97,8 +77,7 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($opportunitiesData);
 
-        $this->doctrineHelper
-            ->expects($this->once())
+        $this->doctrineHelper->expects($this->once())
             ->method('getSingleEntityIdentifier')
             ->with($entity)
             ->willReturn($id);
@@ -137,16 +116,11 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider testAddOpportunitiesNotCustomerDataProvider
-     *
-     * @param object|null $entity
-     * @param string|null $isCustomerClass
      */
-    public function testAddOpportunitiesNotCustomer($entity = null, $isCustomerClass = null)
+    public function testAddOpportunitiesNotCustomer(object $entity = null, bool $isCustomerClass = null)
     {
-        $env   = $this->getMockBuilder(Environment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $data  = ['dataBlocks' => ['subblocks' => ['title' => 'some title', 'data' => 'some data']]];
+        $env = $this->createMock(Environment::class);
+        $data = ['dataBlocks' => ['subblocks' => ['title' => 'some title', 'data' => 'some data']]];
         $event = new BeforeViewRenderEvent($env, $data, $entity);
 
         $this->prepareConfigProvider($entity, $isCustomerClass);
@@ -157,22 +131,17 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @param object $entity
-     * @param null   $isCustomerClass
-     */
-    protected function prepareConfigProvider($entity, $isCustomerClass = null)
+    private function prepareConfigProvider(?object $entity, bool $isCustomerClass = null)
     {
         if (null !== $isCustomerClass) {
-            $this->provider
-                ->expects($this->once())
+            $this->provider->expects($this->once())
                 ->method('isCustomerClass')
                 ->with($entity)
                 ->willReturn($isCustomerClass);
         }
     }
 
-    public function testAddOpportunitiesNotCustomerDataProvider()
+    public function testAddOpportunitiesNotCustomerDataProvider(): array
     {
         return [
             'no entity'          => [],

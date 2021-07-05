@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tests\Functional;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;

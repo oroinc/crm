@@ -117,7 +117,7 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         $user->setBirthday($birthday);
         $user->setOwner($this->getBusinessUnit('Acme, General'));
         $user->addBusinessUnit($this->getBusinessUnit('Acme, General'));
-        $user->addRole($role);
+        $user->addUserRole($role);
         $user->setOrganization($this->organization);
         $user->addOrganization($this->organization);
 

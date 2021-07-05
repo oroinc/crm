@@ -2,63 +2,54 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Validator;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraint;
 use Oro\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraintValidator;
-use Symfony\Component\Validator\Context\ExecutionContext;
-use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class ChannelCustomerIdentityConstraintValidatorTest extends \PHPUnit\Framework\TestCase
+class ChannelCustomerIdentityConstraintValidatorTest extends ConstraintValidatorTestCase
 {
+    protected function createValidator()
+    {
+        return new ChannelCustomerIdentityConstraintValidator();
+    }
+
     public function testValidateException()
     {
-        $this->expectException(\Symfony\Component\Validator\Exception\UnexpectedTypeException::class);
-        $constraint = $this->createMock('Symfony\Component\Validator\Constraint');
-        $validator  = new ChannelCustomerIdentityConstraintValidator();
-        $validator->validate(false, $constraint);
+        $this->expectException(UnexpectedTypeException::class);
+
+        $constraint = $this->createMock(Constraint::class);
+        $this->validator->validate(false, $constraint);
     }
 
     /**
      * @dataProvider validItemsDataProvider
-     *
-     * @param array   $entities
-     * @param string  $customerIdentity
-     * @param boolean $isValid
      */
-    public function testValidateValid(array $entities, $customerIdentity, $isValid)
+    public function testValidateValid(array $entities, string $customerIdentity, bool $isValid)
     {
-        $channel = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
-            ->disableOriginalConstructor()->getMock();
+        $channel = $this->createMock(Channel::class);
         $channel->expects($this->once())
             ->method('getEntities')
-            ->will($this->returnValue($entities));
+            ->willReturn($entities);
         $channel->expects($this->once())
             ->method('getCustomerIdentity')
-            ->will($this->returnValue($customerIdentity));
-
-        $context = $this->createMock(ExecutionContext::class);
-
-        if ($isValid) {
-            $context->expects($this->never())->method('buildViolation');
-        } else {
-            $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
-            $context->expects($this->once())
-                ->method('buildViolation')
-                ->willReturn($builder);
-            $builder->expects($this->once())
-                ->method('atPath')
-                ->willReturnSelf();
-            $builder->expects($this->once())
-                ->method('addViolation');
-        }
+            ->willReturn($customerIdentity);
 
         $constraint = new ChannelCustomerIdentityConstraint();
-        $validator  = new ChannelCustomerIdentityConstraintValidator();
+        $this->validator->validate($channel, $constraint);
 
-        $validator->initialize($context);
-        $validator->validate($channel, $constraint);
+        if ($isValid) {
+            $this->assertNoViolation();
+        } else {
+            $this->buildViolation('oro.channel.form.customer_identity_selected_not_correctly.label')
+                ->atPath('property.path.customerIdentity')
+                ->assertRaised();
+        }
     }
 
-    public function validItemsDataProvider()
+    public function validItemsDataProvider(): array
     {
         $entities = [
             'Oro\Bundle\AcmeBundle\Entity\Test1',

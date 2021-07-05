@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Dashboard;
 
+use Oro\Bundle\ConfigBundle\Tests\Functional\Traits\ConfigManagerAwareTestTrait;
 use Oro\Bundle\DashboardBundle\Tests\Functional\AbstractWidgetTestCase;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadForecastWidgetFixtures;
@@ -11,6 +12,8 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadForecastWidgetFixtures;
  */
 class ForecastWidgetTest extends AbstractWidgetTestCase
 {
+    use ConfigManagerAwareTestTrait;
+
     private $originalTimezone;
 
     private $globalScopeManager;
@@ -26,7 +29,7 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
             LoadForecastWidgetFixtures::class
         ]);
 
-        $this->globalScopeManager = $this->client->getContainer()->get('oro_config.global');
+        $this->globalScopeManager = self::getConfigManager('global');
         $this->originalTimezone = $this->globalScopeManager->get('oro_locale.timezone');
     }
 
