@@ -7,29 +7,21 @@ use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformation;
 use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformationValidator;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class HasContactInformationValidatorTest extends \PHPUnit\Framework\TestCase
+class HasContactInformationValidatorTest extends ConstraintValidatorTestCase
 {
-    /** @var ExecutionContextInterface */
-    protected $context;
-
-    /** @var HasContactInformationValidator */
-    protected $validator;
-
-    protected function setUp(): void
+    protected function createValidator()
     {
-        $translator = $translator = $this->createMock('Symfony\Contracts\Translation\TranslatorInterface');
-        $translator
-            ->expects($this->any())
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->expects($this->any())
             ->method('trans')
-            ->will($this->returnCallback(function ($id) {
+            ->willReturnCallback(function ($id) {
                 return $id;
-            }));
+            });
 
-        $this->context = $this->createMock(ExecutionContextInterface::class);
-        $this->validator = new HasContactInformationValidator($translator);
-        $this->validator->initialize($this->context);
+        return new HasContactInformationValidator($translator);
     }
 
     /**
@@ -37,13 +29,12 @@ class HasContactInformationValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidValues($value)
     {
-        $this->context->expects($this->never())
-            ->method('addViolation');
-
         $this->validator->validate($value, new HasContactInformation());
+
+        $this->assertNoViolation();
     }
 
-    public function validValuesProvider()
+    public function validValuesProvider(): array
     {
         return [
             [
@@ -68,27 +59,15 @@ class HasContactInformationValidatorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider invalidValuesProvider
-     */
-    public function testInvalidValues($value)
+    public function testInvalidValue()
     {
-        $this->context->expects($this->once())
-            ->method('addViolation')
-            ->with(
-                'oro.contact.validators.contact.has_information'
-            );
+        $value = new Contact();
 
-        $this->validator->validate($value, new HasContactInformation());
-    }
+        $constraint = new HasContactInformation();
+        $this->validator->validate($value, $constraint);
 
-    public function invalidValuesProvider()
-    {
-        return [
-            [
-                new Contact(),
-            ],
-        ];
+        $this->buildViolation('oro.contact.validators.contact.has_information')
+            ->assertRaised();
     }
 
     public function testInvalidArgument()
