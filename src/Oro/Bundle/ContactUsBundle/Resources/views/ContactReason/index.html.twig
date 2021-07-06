@@ -1,10 +1,10 @@
-{% extends 'OroUIBundle:actions:index.html.twig' %}
-{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% extends '@OroUI/actions/index.html.twig' %}
+{% import '@OroUI/macros.html.twig' as UI %}
 {% set gridName  = 'orcrm-contact-reasons-grid' %}
 {% set pageTitle = 'oro.contactus.contactreason.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if is_granted('oro_contactus_reason_create') %}
         <div class="btn-group">

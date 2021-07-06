@@ -1,4 +1,4 @@
-{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% extends '@OroUI/actions/view.html.twig' %}
 
 {% set hasGrantedNameView = is_granted('VIEW', entity, 'name') %}
 
@@ -8,7 +8,7 @@
 %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if is_granted('EDIT', entity) %}
         {{ UI.editButton({
@@ -29,7 +29,7 @@
 {% endblock navButtons %}
 
 {% block pageHeader %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% set breadcrumbs = {
         'entity':      entity,
@@ -53,7 +53,7 @@
 {% endblock stats %}
 
 {% block breadcrumbs %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {{ parent() }}
     {% if entity.status and is_granted('VIEW', entity, 'status') %}

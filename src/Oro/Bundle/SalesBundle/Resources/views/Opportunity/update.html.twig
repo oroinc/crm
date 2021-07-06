@@ -1,4 +1,4 @@
-{% extends 'OroUIBundle:actions:update.html.twig' %}
+{% extends '@OroUI/actions/update.html.twig' %}
 {% set name = 'N/A' %}
 {% if entity.name %}
     {% set name = is_granted('VIEW', entity, 'name')
@@ -27,7 +27,7 @@
 {% endblock %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if form.vars.value.id and is_granted('DELETE', form.vars.value) %}
         {{ UI.deleteButton({
@@ -60,7 +60,7 @@
 {% endblock %}
 
 {% block pageHeader %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if form.vars.value.id %}
         {% set name = 'N/A' %}
@@ -79,7 +79,7 @@
         {{ parent() }}
     {% else %}
         {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.sales.opportunity.entity_label'|trans}) %}
-        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+        {% include '@OroUI/page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
 
@@ -93,7 +93,7 @@
 {% endblock stats %}
 
 {% block breadcrumbs %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {{ parent() }}
     {% if entity.status %}

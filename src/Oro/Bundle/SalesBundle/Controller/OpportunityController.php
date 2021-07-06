@@ -73,7 +73,7 @@ class OpportunityController extends AbstractController
 
     /**
      * @Route("/create", name="oro_sales_opportunity_create")
-     * @Template("OroSalesBundle:Opportunity:update.html.twig")
+     * @Template("@OroSales/Opportunity/update.html.twig")
      * @Acl(
      *      id="oro_sales_opportunity_create",
      *      type="entity",
@@ -124,7 +124,7 @@ class OpportunityController extends AbstractController
      * Create opportunity form with data channel
      *
      * @Route("/create/{channelIds}", name="oro_sales_opportunity_data_channel_aware_create")
-     * @Template("OroSalesBundle:Opportunity:update.html.twig")
+     * @Template("@OroSales/Opportunity/update.html.twig")
      * @AclAncestor("oro_sales_opportunity_create")
      *
      * @ParamConverter(
@@ -147,7 +147,7 @@ class OpportunityController extends AbstractController
      * Create opportunity form with customer association set
      *
      * @Route("/create/{targetClass}/{targetId}", name="oro_sales_opportunity_customer_aware_create")
-     * @Template("OroSalesBundle:Opportunity:update.html.twig")
+     * @Template("@OroSales/Opportunity/update.html.twig")
      * @AclAncestor("oro_sales_opportunity_create")
      * @param $targetClass
      * @param $targetId

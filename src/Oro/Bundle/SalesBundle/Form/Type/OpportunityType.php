@@ -90,8 +90,8 @@ class OpportunityType extends AbstractType
                         'allowCreateNew'          => true,
                         'renderedPropertyName'    => 'fullName',
                         'placeholder'             => 'oro.contact.form.choose_contact',
-                        'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
-                        'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
+                        'result_template_twig'    => '@OroForm/Autocomplete/fullName/result.html.twig',
+                        'selection_template_twig' => '@OroForm/Autocomplete/fullName/selection.html.twig'
                     ]
                 ]
             )

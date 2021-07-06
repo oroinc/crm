@@ -11,7 +11,7 @@ dashboards:
         my_contacts_activity:
             label:       oro.dashboard.my_contacts_activity.title
             route:       oro_dashboard_widget
-            route_parameters: { bundle: OroContactBundle, name: myContactsActivity }
+            route_parameters: { bundle: OroContact, name: myContactsActivity }
             acl:         oro_contact_view
             description: oro.dashboard.my_contacts_activity.description
             icon:        bundles/orocontact/img/recently_accessed_contacts.png

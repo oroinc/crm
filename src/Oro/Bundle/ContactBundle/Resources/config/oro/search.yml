@@ -7,7 +7,7 @@ search:
             name: oro_contact_view
             parameters:
                 id: id
-        search_template: OroContactBundle:Contact:searchResult.html.twig
+        search_template: '@OroContact/Contact/searchResult.html.twig'
         fields:
             -
                 name:                   namePrefix

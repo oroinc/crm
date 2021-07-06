@@ -1,6 +1,6 @@
 {% macro renderCollectionWithPrimaryElement(collection, isEmail, entity) %}
-    {% import 'OroUIBundle::macros.html.twig' as ui %}
-    {% import 'OroEmailBundle::macros.html.twig' as email %}
+    {% import '@OroUI/macros.html.twig' as ui %}
+    {% import '@OroEmail/macros.html.twig' as email %}
 
     {% set primaryElement = null %}
     {% set elements = [] %}
@@ -30,7 +30,7 @@
 {% endmacro %}
 
 {% macro render_customer_info(entity) %}
-    {% import 'OroUIBundle::macros.html.twig' as ui %}
+    {% import '@OroUI/macros.html.twig' as ui %}
     {% import _self as sales %}
 
     {% set customer = entity.customerAssociation and entity.customerAssociation.customerTarget
@@ -53,7 +53,7 @@
 {% endmacro %}
 
 {%- macro entity_view(entity) -%}
-    {%- import 'OroUIBundle::macros.html.twig' as ui -%}
+    {%- import '@OroUI/macros.html.twig' as ui -%}
 
     {%- set entityName = entity ? entity|oro_format_name : '' -%}
     {%- if (entity and is_granted('VIEW', entity)) -%}

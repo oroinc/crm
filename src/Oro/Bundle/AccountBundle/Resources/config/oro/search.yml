@@ -7,7 +7,7 @@ search:
             name: oro_account_view
             parameters:
                 id: id
-        search_template: OroAccountBundle:Account:searchResult.html.twig
+        search_template: '@OroAccount/Account/searchResult.html.twig'
         fields:
             -
                 name: name

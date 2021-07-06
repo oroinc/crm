@@ -1,4 +1,4 @@
-{% include 'OroSalesBundle:Dashboard:forecastOfOpportunitiesSimpleSubwidget.html.twig' %}
+{% include '@OroSales/Dashboard/forecastOfOpportunitiesSimpleSubwidget.html.twig' %}
 {% if item.value.deviation is defined %}
 <div class="deviation">
     <span class="deviation {% if item.value.isPositive is defined %}{% if item.value.isPositive %}positive{% else %}negative{% endif %}{% endif %}">

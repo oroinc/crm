@@ -52,7 +52,7 @@ class CommentController extends AbstractController
      *      requirements={"id"="\d+"}
      * )
      * @AclAncestor("oro_case_comment_view")
-     * @Template("OroCaseBundle:Comment:comments.html.twig")
+     * @Template("@OroCase/Comment/comments.html.twig")
      */
     public function commentsWidgetAction(CaseEntity $case)
     {
@@ -69,7 +69,7 @@ class CommentController extends AbstractController
      * )
      * @ParamConverter("case", options={"id"="caseId"})
      * @AclAncestor("oro_case_comment_create")
-     * @Template("OroCaseBundle:Comment:update.html.twig")
+     * @Template("@OroCase/Comment/update.html.twig")
      * @param Request $request
      * @param CaseEntity $case
      * @return array|RedirectResponse

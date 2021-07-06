@@ -1,5 +1,5 @@
-{% import 'OroUIBundle::macros.html.twig' as UI %}
-{% import 'OroAddressBundle::macros.html.twig' as address %}
+{% import '@OroUI/macros.html.twig' as UI %}
+{% import '@OroAddress/macros.html.twig' as address %}
 
 {% set activeTab = app.request.get('_activeTab')|default(null) %}
 {% set uniqueSuffix = '_customer_' ~ customer.id ~ '_channel_' ~ channel.id %}

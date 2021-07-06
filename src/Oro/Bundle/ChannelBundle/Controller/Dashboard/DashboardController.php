@@ -36,7 +36,7 @@ class DashboardController extends AbstractController
      *      name="oro_channel_dashboard_average_lifetime_sales_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroChannelBundle:Dashboard:averageLifetimeSales.html.twig")
+     * @Template("@OroChannel/Dashboard/averageLifetimeSales.html.twig")
      * @param Request $request
      * @param string $widget
      * @return array

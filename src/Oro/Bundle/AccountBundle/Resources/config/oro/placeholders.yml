@@ -11,7 +11,7 @@ placeholders:
 
     items:
         accounts_launchpad:
-            template: OroAccountBundle:Dashboard:accountsLaunchpad.html.twig
+            template: '@@OroAccount/Dashboard/accountsLaunchpad.html.twig'
         account_lifetime_value:
-            template: OroAccountBundle:Account:lifetimeValue.html.twig
+            template: '@@OroAccount/Account/lifetimeValue.html.twig'
             applicable: '@oro_ui.placeholder.filter->isInstanceOf($entity$, Oro\Bundle\AccountBundle\Entity\Account)'

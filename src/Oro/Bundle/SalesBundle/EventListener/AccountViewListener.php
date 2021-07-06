@@ -9,6 +9,9 @@ use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeListRenderEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Listener adds account information
+ */
 class AccountViewListener
 {
     /** @var DoctrineHelper */
@@ -69,7 +72,7 @@ class AccountViewListener
             $account = $customerAssociation->getAccount();
 
             $template = $event->getEnvironment()->render(
-                'OroSalesBundle:Account:account_view.html.twig',
+                '@OroSales/Account/account_view.html.twig',
                 ['account' => $account]
             );
             $event->getScrollData()->addSubBlockData(0, 0, $template);
