@@ -39,7 +39,7 @@ class ContactAddressController extends AbstractController
      *      name="oro_contact_address_create",
      *      requirements={"contactId"="\d+"}
      * )
-     * @Template("OroContactBundle:ContactAddress:update.html.twig")
+     * @Template("@OroContact/ContactAddress/update.html.twig")
      * @AclAncestor("oro_contact_create")
      * @ParamConverter("contact", options={"id" = "contactId"})
      * @param Request $request

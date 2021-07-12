@@ -1,4 +1,4 @@
-{% extends 'OroUIBundle:actions:update.html.twig' %}
+{% extends '@OroUI/actions/update.html.twig' %}
 {% set name = entity.name|default('N/A'|trans) %}
 {% oro_title_set({params : {"%lead.name%": name} }) %}
 
@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {{ UI.cancelButton(path('oro_sales_lead_view', { 'id': entity.lead.id })) }}
     {% set html = UI.saveAndCloseButton({
@@ -41,7 +41,7 @@
         '%name%': name,
         '%entityName%': 'oro.sales.opportunity.entity_label'|trans
     }) %}
-    {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+    {% include '@OroUI/page_title_block.html.twig' with { title: title } %}
 {% endblock pageHeader %}
 
 {% block content_data %}

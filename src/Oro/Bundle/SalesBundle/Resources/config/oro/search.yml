@@ -6,7 +6,7 @@ search:
             name:                       oro_sales_lead_view
             parameters:
                 id:                     id
-        search_template:                OroSalesBundle:Lead:searchResult.html.twig
+        search_template:                '@OroSales/Lead/searchResult.html.twig'
         fields:
             -
                 name:                   name
@@ -68,7 +68,7 @@ search:
             name:                       oro_sales_opportunity_view
             parameters:
                 id:                     id
-        search_template:                OroSalesBundle:Opportunity:searchResult.html.twig
+        search_template:                '@OroSales/Opportunity/searchResult.html.twig'
         fields:
             -
                 name:                   name
@@ -131,7 +131,7 @@ search:
             name:                       oro_sales_salesfunnel_view
             parameters:
                 id:                     id
-        search_template:                OroSalesBundle:SalesFunnel:searchResult.html.twig
+        search_template:                '@OroSales/SalesFunnel/searchResult.html.twig'
         fields:
             -
                 name:                   lead
@@ -185,7 +185,7 @@ search:
             name:                       oro_sales_b2bcustomer_view
             parameters:
                 id:                     id
-        search_template:                OroSalesBundle:B2bCustomer:searchResult.html.twig
+        search_template:                '@OroSales/B2bCustomer/searchResult.html.twig'
         fields:
             -
                 name:                   name

@@ -43,7 +43,7 @@ class DashboardController extends AbstractController
      *      name="oro_sales_dashboard_opportunities_by_lead_source_chart",
      *      requirements={"widget"="[\w\-]+"}
      * )
-     * @Template("OroSalesBundle:Dashboard:opportunitiesByLeadSource.html.twig")
+     * @Template("@OroSales/Dashboard/opportunitiesByLeadSource.html.twig")
      * @param Request $request
      * @param mixed $widget
      * @return array
@@ -91,7 +91,7 @@ class DashboardController extends AbstractController
      *      name="oro_sales_dashboard_opportunity_by_state_chart",
      *      requirements={"widget"="[\w\-]+"}
      * )
-     * @Template("OroSalesBundle:Dashboard:opportunityByStatus.html.twig")
+     * @Template("@OroSales/Dashboard/opportunityByStatus.html.twig")
      * @param Request $request
      * @param mixed $widget
      * @return array
@@ -136,7 +136,7 @@ class DashboardController extends AbstractController
      *      name="oro_sales_dashboard_sales_flow_b2b_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroSalesBundle:Dashboard:salesFlowChart.html.twig")
+     * @Template("@OroSales/Dashboard/salesFlowChart.html.twig")
      * @param Request $request
      * @param mixed $widget
      * @return array

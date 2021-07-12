@@ -4,6 +4,9 @@ namespace Oro\Bundle\SalesBundle\Form\EventListener;
 
 use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
 
+/**
+ * Listener adds customer association account field.
+ */
 class CustomerAssociationAccountFieldListener
 {
     /**
@@ -16,7 +19,7 @@ class CustomerAssociationAccountFieldListener
         $form = $event->getForm();
 
         $accountField = $environment->render(
-            "OroSalesBundle:Customer:accountField.html.twig",
+            "@OroSales/Customer/accountField.html.twig",
             ['form'  => $form]
         );
         // set account field as first, in general block, but current listener has higher priority than owner field,

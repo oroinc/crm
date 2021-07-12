@@ -53,7 +53,7 @@
         params - set of params required for render(e.g. label etc..)
 #}
 {% macro renderChannelProperty(entity, params = {}) %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% set label = params.label is defined
         ? params.label

@@ -1,5 +1,5 @@
-{% extends 'OroUIBundle:actions:update.html.twig' %}
-{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
+{% extends '@OroUI/actions/update.html.twig' %}
+{% form_theme form with ['@OroAddress/Include/fields.html.twig', '@OroForm/Form/fields.html.twig'] %}
 
 {% set salesFunnelHint = '' %}
 {% if entity %}
@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if form.vars.value.id and is_granted('DELETE', form.vars.value) %}
         {{ UI.deleteButton({
@@ -55,7 +55,7 @@
         } %}
         {{ parent() }}
     {% else %}
-        {% include 'OroUIBundle::page_title_block.html.twig' with { title: 'oro.sales.salesfunnel.new_entity'|trans } %}
+        {% include '@OroUI/page_title_block.html.twig' with { title: 'oro.sales.salesfunnel.new_entity'|trans } %}
     {% endif %}
 {% endblock pageHeader %}
 

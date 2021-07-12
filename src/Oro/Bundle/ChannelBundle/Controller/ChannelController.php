@@ -47,7 +47,7 @@ class ChannelController extends AbstractController
      *      permission="CREATE",
      *      class="OroChannelBundle:Channel"
      * )
-     * @Template("OroChannelBundle:Channel:update.html.twig")
+     * @Template("@OroChannel/Channel/update.html.twig")
      */
     public function createAction()
     {

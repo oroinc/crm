@@ -6,7 +6,7 @@ search:
             name:                       oro_case_view
             parameters:
                 id:                     id
-        search_template:                OroCaseBundle:Case:searchResult.html.twig
+        search_template:                '@OroCase/Case/searchResult.html.twig'
         fields:
             -
                 name:                   subject
@@ -31,4 +31,4 @@ search:
 
     Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings:
         alias:           oro_case_mailbox_process_settings
-        search_template: OroCaseBundle:CaseMailboxProcessSettings:searchResult.html.twig
+        search_template: '@OroCase/CaseMailboxProcessSettings/searchResult.html.twig'

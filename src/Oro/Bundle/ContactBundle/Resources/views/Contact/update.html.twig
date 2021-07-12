@@ -1,7 +1,7 @@
-{% extends 'OroUIBundle:actions:update.html.twig' %}
-{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+{% extends '@OroUI/actions/update.html.twig' %}
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
 
-{% form_theme form with ['OroContactBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
+{% form_theme form with ['@OroContact/Include/fields.html.twig', '@OroForm/Form/fields.html.twig'] %}
 {% set fullname = entity|oro_format_name|default('oro.entity.item'|trans({'%id%': entity.id})) %}
 {% oro_title_set({ params : {"%contact.name%": fullname} }) %}
 
@@ -9,7 +9,7 @@
 {% set formAction = form.vars.value.id ? path('oro_contact_update', { 'id': form.vars.value.id }) : path('oro_contact_create')  %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if form.vars.value.id and is_granted('DELETE', form.vars.value) %}
         {{ UI.deleteButton({
@@ -54,12 +54,12 @@
         {{ parent() }}
     {% else %}
         {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.contact.entity_label'|trans}) %}
-        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+        {% include '@OroUI/page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
 
 {% block stats %}
-    {% include 'OroContactBundle:Contact:headerStats.html.twig' with {'entity': entity} %}
+    {% include '@OroContact/Contact/headerStats.html.twig' with {'entity': entity} %}
 {% endblock stats %}
 
 {% block content_data %}

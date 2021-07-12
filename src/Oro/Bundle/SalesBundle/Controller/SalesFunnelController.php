@@ -67,7 +67,7 @@ class SalesFunnelController extends AbstractController
 
     /**
      * @Route("/create", name="oro_sales_salesfunnel_create")
-     * @Template("OroSalesBundle:SalesFunnel:update.html.twig")
+     * @Template("@OroSales/SalesFunnel/update.html.twig")
      * @Acl(
      *      id="oro_sales_salesfunnel_create",
      *      type="entity",

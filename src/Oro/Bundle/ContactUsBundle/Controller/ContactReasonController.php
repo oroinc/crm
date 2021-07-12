@@ -44,7 +44,7 @@ class ContactReasonController extends AbstractController
      * @return array|RedirectResponse
      *
      * @Route("/create", name="oro_contactus_reason_create")
-     * @Template("OroContactUsBundle:ContactReason:update.html.twig")
+     * @Template("@OroContactUs/ContactReason/update.html.twig")
      * @Acl(
      *      id="oro_contactus_reason_create",
      *      type="entity",

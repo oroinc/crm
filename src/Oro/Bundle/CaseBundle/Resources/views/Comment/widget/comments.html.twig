@@ -1,5 +1,5 @@
-{% extends 'OroNoteBundle:Note/widget:notes.html.twig' %}
-{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% extends '@OroNote/Note/widget/notes.html.twig' %}
+{% import '@OroUI/macros.html.twig' as UI %}
 
 {% set containerExtraClass = 'comments' %}
 
@@ -37,6 +37,6 @@
          data-page-component-module="oronote/js/app/components/notes-component"
          data-page-component-options="{{ options|json_encode }}"></div>
 
-    {% include 'OroCaseBundle:Comment:js/list.html.twig' with {'id': 'template-comment-list'} %}
-    {% include 'OroCaseBundle:Comment:js/view.html.twig' with {'id': 'template-comment-item'} %}
+    {% include '@OroCase/Comment/js/list.html.twig' with {'id': 'template-comment-list'} %}
+    {% include '@OroCase/Comment/js/view.html.twig' with {'id': 'template-comment-item'} %}
 {% endblock %}

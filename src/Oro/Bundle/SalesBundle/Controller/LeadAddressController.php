@@ -40,7 +40,7 @@ class LeadAddressController extends AbstractController
      *      name="oro_sales_lead_address_create",
      *      requirements={"leadId"="\d+"}
      * )
-     * @Template("OroSalesBundle:LeadAddress:update.html.twig")
+     * @Template("@OroSales/LeadAddress/update.html.twig")
      * @AclAncestor("oro_sales_lead_update")
      * @ParamConverter("lead", options={"id" = "leadId"})
      * @param Request $request

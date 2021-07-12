@@ -1,6 +1,6 @@
-{% extends 'OroUIBundle:actions:index.html.twig' %}
+{% extends '@OroUI/actions/index.html.twig' %}
 
-{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import '@OroUI/macros.html.twig' as UI %}
 
 {% set reportGroupName = 'oro.reportcrm.menu.' ~ params.reportGroupName ~ '_report_tab.label' %}
 {% oro_title_set({params : {'%reportName%': pageTitle|title, '%reportGroup%': reportGroupName|trans } }) %}

@@ -1,5 +1,5 @@
-{% extends 'OroUIBundle:actions:view.html.twig' %}
-{% import 'OroChannelBundle::macros.html.twig' as channelMacro %}
+{% extends '@OroUI/actions/view.html.twig' %}
+{% import '@OroChannel/macros.html.twig' as channelMacro %}
 
 {% oro_title_set({params : {"%channel.name%": entity.name } }) %}
 
@@ -15,7 +15,7 @@
 {% endblock pageHeader %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if is_granted('EDIT', entity) and oro_channel_type_metadata()[entity.channelType] is defined %}
         {{ UI.editButton({

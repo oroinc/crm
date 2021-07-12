@@ -1,5 +1,5 @@
-{% extends 'OroUIBundle:actions:update.html.twig' %}
-{% import 'OroChannelBundle::macros.html.twig' as channelMacro %}
+{% extends '@OroUI/actions/update.html.twig' %}
+{% import '@OroChannel/macros.html.twig' as channelMacro %}
 
 {% set entity = form.vars.value %}
 {% set formAction = entity.id ? path('oro_channel_update', { id: entity.id }) : path('oro_channel_create') %}
@@ -19,12 +19,12 @@
         {{ parent() }}
     {% else %}
         {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.channel.entity_label'|trans}) %}
-        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title }%}
+        {% include '@OroUI/page_title_block.html.twig' with { title: title }%}
     {% endif %}
 {% endblock pageHeader %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if entity.id and is_granted('DELETE', entity) %}
         {{ UI.deleteButton({

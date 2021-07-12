@@ -11,7 +11,7 @@ dashboards:
         my_accounts_activity:
             label:       oro.dashboard.my_accounts_activity.title
             route:       oro_dashboard_widget
-            route_parameters: { bundle: OroAccountBundle, name: myAccountsActivity }
+            route_parameters: { bundle: OroAccount, name: myAccountsActivity }
             acl:         oro_account_view
             description: oro.dashboard.my_accounts_activity.description
             icon:        bundles/oroaccount/img/recent_accessed_accounts.png

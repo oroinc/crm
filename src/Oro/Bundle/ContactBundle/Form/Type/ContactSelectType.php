@@ -5,6 +5,9 @@ use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Form type for Contact select.
+ */
 class ContactSelectType extends AbstractType
 {
     /**
@@ -18,8 +21,8 @@ class ContactSelectType extends AbstractType
                 'create_form_route'  => 'oro_contact_create',
                 'configs'            => [
                     'placeholder'             => 'oro.contact.form.choose_contact',
-                    'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
-                    'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
+                    'result_template_twig'    => '@OroForm/Autocomplete/fullName/result.html.twig',
+                    'selection_template_twig' => '@OroForm/Autocomplete/fullName/selection.html.twig'
                 ],
             ]
         );

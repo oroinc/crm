@@ -1,11 +1,11 @@
-{% import 'OroUIBundle::macros.html.twig' as ui %}
-{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
-{% import 'OroUserBundle::macros.html.twig' as U %}
+{% import '@OroUI/macros.html.twig' as ui %}
+{% import '@OroEntityConfig/macros.html.twig' as entityConfig %}
+{% import '@OroUser/macros.html.twig' as U %}
 {% import _self as contactInfo %}
 
 {% macro renderCollectionWithPrimaryElement(collection, isEmail, entity) %}
-    {% import 'OroUIBundle::macros.html.twig' as ui %}
-    {% import 'OroEmailBundle::macros.html.twig' as email %}
+    {% import '@OroUI/macros.html.twig' as ui %}
+    {% import '@OroEmail/macros.html.twig' as email %}
 
     {% set primaryElement = null %}
     {% set elements = [] %}

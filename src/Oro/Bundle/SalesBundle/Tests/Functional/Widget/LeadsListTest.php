@@ -139,7 +139,7 @@ class LeadsListTest extends BaseStatistics
                 'oro_dashboard_widget',
                 [
                     'widget' => 'leads_list',
-                    'bundle' => 'OroSalesBundle',
+                    'bundle' => 'OroSales',
                     'name' => 'leadsList',
                     '_widgetId' => $this->getWidget()->getId()
                 ]

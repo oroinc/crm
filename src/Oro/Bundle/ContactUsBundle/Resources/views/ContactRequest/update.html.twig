@@ -1,4 +1,4 @@
-{% extends 'OroUIBundle:actions:update.html.twig' %}
+{% extends '@OroUI/actions/update.html.twig' %}
 
 {% set formAction = form.vars.value.id ? path('oro_contactus_request_update', { 'id': form.vars.value.id }) : path('oro_contactus_request_create') %}
 {% set fullname = form.vars.value|oro_format_name|default('N/A'|trans) %}
@@ -18,7 +18,7 @@
 } %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if form.vars.value.id and is_granted('oro_contactus_request_delete') %}
         {{ UI.deleteButton({
@@ -61,7 +61,7 @@
         {{ parent() }}
     {% else %}
         {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.contactus.contactrequest.entity_label'|trans}) %}
-        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+        {% include '@OroUI/page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
 

@@ -1,10 +1,10 @@
-{% extends 'OroUIBundle:actions:view.html.twig' %}
-{% import 'OroUIBundle::macros.html.twig' as macros %}
+{% extends '@OroUI/actions/view.html.twig' %}
+{% import '@OroUI/macros.html.twig' as macros %}
 
 {% oro_title_set({params : {"%b2bcustomer.name%": entity.name} }) %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% import '@OroUI/macros.html.twig' as UI %}
 
     {% if is_granted('EDIT', entity) %}
         {{ UI.editButton({

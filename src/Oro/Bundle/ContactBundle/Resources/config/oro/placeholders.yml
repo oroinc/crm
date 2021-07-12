@@ -7,14 +7,14 @@ placeholders:
 
     items:
         oro_add_contact_button:
-            template:   OroContactBundle:Contact:addContactButton.html.twig
+            template:   '@@OroContact/Contact/addContactButton.html.twig'
             applicable: '@oro_ui.placeholder.filter->isInstanceOf($entity$, Oro\Bundle\AccountBundle\Entity\Account)'
             acl:        oro_contact_create
 
         oro_add_contact_link:
-            template:   OroContactBundle:Contact:addContactLink.html.twig
+            template:   '@@OroContact/Contact/addContactLink.html.twig'
             applicable: '@oro_ui.placeholder.filter->isInstanceOf($entity$, Oro\Bundle\AccountBundle\Entity\Account)'
             acl:        oro_contact_create
 
         contacts_launchpad:
-            template: OroContactBundle:Dashboard:contactsLaunchpad.html.twig
+            template: '@@OroContact/Dashboard/contactsLaunchpad.html.twig'

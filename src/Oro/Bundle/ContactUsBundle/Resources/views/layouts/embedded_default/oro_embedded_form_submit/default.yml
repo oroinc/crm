@@ -1,7 +1,7 @@
 layout:
     actions:
         - '@setBlockTheme':
-            themes: 'OroContactUsBundle:layouts:embedded_default/oro_embedded_form_submit/form.html.twig'
+            themes: '@OroContactUs/layouts/embedded_default/oro_embedded_form_submit/form.html.twig'
         - '@setOption':
             id:          embedded_form
             optionName:  preferred_fields
