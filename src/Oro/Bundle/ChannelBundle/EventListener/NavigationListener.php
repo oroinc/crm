@@ -17,19 +17,12 @@ class NavigationListener
     /** @var StateProvider */
     private $state;
 
-    /**
-     * @param SettingsProvider $settings
-     * @param StateProvider    $state
-     */
     public function __construct(SettingsProvider $settings, StateProvider $state)
     {
         $this->settings = $settings;
         $this->state = $state;
     }
 
-    /**
-     * @param ConfigureMenuEvent $event
-     */
     public function onNavigationConfigure(ConfigureMenuEvent $event)
     {
         foreach ($this->settings->getEntities() as $setting) {

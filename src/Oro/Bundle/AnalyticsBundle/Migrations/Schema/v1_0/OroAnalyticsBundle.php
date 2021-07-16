@@ -19,8 +19,6 @@ class OroAnalyticsBundle implements Migration
 
     /**
      * Create oro_analytics_rfm_category table
-     *
-     * @param Schema $schema
      */
     protected function createRFMMetricsCategoryTable(Schema $schema)
     {

@@ -20,8 +20,6 @@ class CreateB2bCustomerPhone implements Migration
     }
     /**
      * Create oro_lead_phone table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmB2bCustomerPhoneTable(Schema $schema)
     {
@@ -35,11 +33,9 @@ class CreateB2bCustomerPhone implements Migration
         $table->addIndex(['phone', 'is_primary'], 'primary_b2bcustomer_phone_idx', []);
         $table->addIndex(['phone'], 'b2bcustomer_phone_idx');
     }
-    
+
     /**
      * Add oro_b2bcustomer_phone foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmB2bCustomerPhoneForeignKeys(Schema $schema)
     {

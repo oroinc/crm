@@ -14,9 +14,6 @@ class ProcessChannelStateProcessor implements MessageProcessorInterface, TopicSu
      */
     private $stateProvider;
 
-    /**
-     * @param StateProvider $stateProvider
-     */
     public function __construct(StateProvider $stateProvider)
     {
         $this->stateProvider = $stateProvider;
@@ -28,7 +25,7 @@ class ProcessChannelStateProcessor implements MessageProcessorInterface, TopicSu
     public function process(MessageInterface $message, SessionInterface $session)
     {
         $this->stateProvider->processChannelChange();
-        
+
         return self::ACK;
     }
 

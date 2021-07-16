@@ -35,8 +35,6 @@ class CreateLeadEmail implements Migration, OrderedMigrationInterface
 
     /**
      * Create oro_sales_lead_email table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmSalesLeadEmailTable(Schema $schema)
     {
@@ -52,8 +50,6 @@ class CreateLeadEmail implements Migration, OrderedMigrationInterface
 
     /**
      * Add oro_sales_lead_email foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmSalesLeadEmailForeignKeys(Schema $schema)
     {

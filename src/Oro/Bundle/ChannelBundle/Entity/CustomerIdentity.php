@@ -127,9 +127,7 @@ class CustomerIdentity extends ExtendCustomerIdentity implements ChannelAwareInt
     {
         return $this->name;
     }
-    /**
-     * @param Account $account
-     */
+
     public function setAccount(Account $account)
     {
         $this->account = $account;
@@ -143,9 +141,6 @@ class CustomerIdentity extends ExtendCustomerIdentity implements ChannelAwareInt
         return $this->account;
     }
 
-    /**
-     * @param Contact $contact
-     */
     public function setContact(Contact $contact)
     {
         $this->contact = $contact;
@@ -159,9 +154,6 @@ class CustomerIdentity extends ExtendCustomerIdentity implements ChannelAwareInt
         return $this->contact;
     }
 
-    /**
-     * @param \DateTime $createdAt
-     */
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
@@ -175,9 +167,6 @@ class CustomerIdentity extends ExtendCustomerIdentity implements ChannelAwareInt
         return $this->createdAt;
     }
 
-    /**
-     * @param User $owner
-     */
     public function setOwner(User $owner)
     {
         $this->owner = $owner;
@@ -191,9 +180,6 @@ class CustomerIdentity extends ExtendCustomerIdentity implements ChannelAwareInt
         return $this->owner;
     }
 
-    /**
-     * @param \DateTime $updatedAt
-     */
     public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;

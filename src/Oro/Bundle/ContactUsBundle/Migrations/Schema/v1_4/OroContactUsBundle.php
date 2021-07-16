@@ -21,8 +21,6 @@ class OroContactUsBundle implements Migration
      * Prohibits to enable any activity to ContactRequest entity
      *
      * This is temporary solution till workflows cannot use system wide actions
-     *
-     * @param Schema $schema
      */
     public static function disableActivityAssociations(Schema $schema)
     {

@@ -122,8 +122,6 @@ class ChannelControllerTest extends WebTestCase
 
     /**
      * @depends testUpdateChannel
-     *
-     * @param $channel
      */
     public function testDeleteChannel($channel)
     {

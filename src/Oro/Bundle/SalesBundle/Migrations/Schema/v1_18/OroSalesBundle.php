@@ -19,8 +19,6 @@ class OroSalesBundle implements Migration
 
     /**
      * Create oro_email_mailbox_processor table
-     *
-     * @param Schema $schema
      */
     public static function addOroEmailMailboxProcessorColumns(Schema $schema)
     {
@@ -35,8 +33,6 @@ class OroSalesBundle implements Migration
 
     /**
      * Add oro_email_mailbox_processor foreign keys.
-     *
-     * @param Schema $schema
      */
     public static function addOroEmailMailboxProcessorForeignKeys(Schema $schema)
     {

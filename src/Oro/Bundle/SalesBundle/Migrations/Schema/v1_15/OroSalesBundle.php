@@ -31,9 +31,6 @@ class OroSalesBundle implements Migration, ActivityExtensionAwareInterface
 
     /**
      * Enables Email activity for Lead and Opportunity entities
-     *
-     * @param Schema            $schema
-     * @param ActivityExtension $activityExtension
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {

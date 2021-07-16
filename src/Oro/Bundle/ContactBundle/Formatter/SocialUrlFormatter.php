@@ -11,9 +11,6 @@ class SocialUrlFormatter
      */
     protected $socialUrlFormat = array();
 
-    /**
-     * @param array $socialUrlFormat
-     */
     public function __construct(array $socialUrlFormat)
     {
         $this->socialUrlFormat = $socialUrlFormat;

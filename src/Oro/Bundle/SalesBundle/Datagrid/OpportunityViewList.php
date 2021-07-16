@@ -44,7 +44,7 @@ class OpportunityViewList extends AbstractViewsList
                 'closeDate' => 1
             ],
             'columns'       => []
-    
+
         ], [
             'name'         => 'opportunity.recently_closed',
             'label'         => 'oro.sales.opportunity.datagrid.views.recently_closed',

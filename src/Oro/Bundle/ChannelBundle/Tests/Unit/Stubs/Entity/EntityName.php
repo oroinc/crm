@@ -56,9 +56,6 @@ class EntityName
         return $this->name;
     }
 
-    /**
-     * @param Channel $channel
-     */
     public function setChannel(Channel $channel)
     {
         $this->channel = $channel;

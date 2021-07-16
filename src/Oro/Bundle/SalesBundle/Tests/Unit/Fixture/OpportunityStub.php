@@ -58,9 +58,6 @@ class OpportunityStub extends Opportunity
         $this->dataChannel = $dataChannel;
     }
 
-    /**
-     * @param AbstractEnumValue $status
-     */
     public function setStatus(AbstractEnumValue $status)
     {
         $this->status = $status;

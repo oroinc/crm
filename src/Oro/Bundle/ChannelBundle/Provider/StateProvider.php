@@ -27,12 +27,6 @@ class StateProvider
     /** @var TokenAccessorInterface */
     protected $tokenAccessor;
 
-    /**
-     * @param SettingsProvider       $settingsProvider
-     * @param Cache                  $cache
-     * @param ManagerRegistry        $registry
-     * @param TokenAccessorInterface $tokenAccessor
-     */
     public function __construct(
         SettingsProvider $settingsProvider,
         Cache $cache,
@@ -108,8 +102,6 @@ class StateProvider
 
     /**
      * Clear state cache for given organization
-     *
-     * @param $organizationId
      */
     public function clearOrganizationCache($organizationId)
     {
@@ -178,8 +170,6 @@ class StateProvider
 
     /**
      * Persist data to cache
-     *
-     * @param array $enabledEntities
      */
     protected function persistToCache(array $enabledEntities)
     {

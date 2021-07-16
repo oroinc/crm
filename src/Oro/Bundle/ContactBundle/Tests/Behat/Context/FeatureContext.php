@@ -163,8 +163,6 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware, Ke
      * Example: Given I copy contact fixture "charlie-sheen.jpg" to import upload dir
      *
      * @Given /^I copy contact fixture "(?P<filename>(?:[^"]|\\")*)" to import upload dir$/
-     *
-     * @param string $filename
      */
     public function copyContactFixtureFileToImportFilesDir(string $filename): void
     {

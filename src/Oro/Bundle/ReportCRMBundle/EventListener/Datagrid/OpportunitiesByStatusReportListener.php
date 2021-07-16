@@ -41,9 +41,6 @@ class OpportunitiesByStatusReportListener
 
     /**
      * OpportunitiesByStatusReportListener constructor.
-     *
-     * @param DateFilterModifier $dateFilterModifier
-     * @param DateFilterUtility $dateFilterUtility
      */
     public function __construct(
         DateFilterModifier $dateFilterModifier,
@@ -55,8 +52,6 @@ class OpportunitiesByStatusReportListener
 
     /**
      * event: oro_datagrid.datagrid.build.before.oro_reportcrm-opportunities-by_status
-     *
-     * @param BuildBefore $event
      */
     public function onBuildBefore(BuildBefore $event)
     {
@@ -70,7 +65,6 @@ class OpportunitiesByStatusReportListener
      *
      * event: oro_datagrid.datagrid.build.after.oro_reportcrm-opportunities-by_status
      *
-     * @param BuildAfter $event
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function onBuildAfter(BuildAfter $event)

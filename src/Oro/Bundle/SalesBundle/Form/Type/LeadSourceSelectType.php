@@ -17,9 +17,6 @@ class LeadSourceSelectType extends AbstractType
     /** @var EnumValueProvider */
     protected $enumValueProvider;
 
-    /**
-     * @param EnumValueProvider $enumValueProvider
-     */
     public function __construct(EnumValueProvider $enumValueProvider)
     {
         $this->enumValueProvider = $enumValueProvider;

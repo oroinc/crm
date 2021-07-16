@@ -161,9 +161,6 @@ class AbstractContactPaginationTestCase extends WebTestCase
         );
     }
 
-    /**
-     * @param Crawler $crawler
-     */
     protected function checkPaginationLinks(Crawler $crawler)
     {
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FIRST_ENTITY_NAME);

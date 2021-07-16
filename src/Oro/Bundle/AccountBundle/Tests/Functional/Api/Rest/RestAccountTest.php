@@ -75,7 +75,6 @@ class RestAccountTest extends WebTestCase
     }
 
     /**
-     * @param array $request
      * @depends testCreate
      * @depends testGet
      */
@@ -120,7 +119,6 @@ class RestAccountTest extends WebTestCase
     }
 
     /**
-     * @param array $request
      * @depends testCreate
      * @depends testList
      */

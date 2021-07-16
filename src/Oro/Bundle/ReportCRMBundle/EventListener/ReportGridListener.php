@@ -22,9 +22,6 @@ class ReportGridListener
     /** @var DatagridStateProviderInterface */
     private $filtersStateProvider;
 
-    /**
-     * @param DatagridStateProviderInterface $filtersStateProvider
-     */
     public function __construct(DatagridStateProviderInterface $filtersStateProvider)
     {
         $this->filtersStateProvider = $filtersStateProvider;
@@ -34,8 +31,6 @@ class ReportGridListener
      * Need to change data name depends to filter value
      *
      * Event: oro_datagrid.datagrid.build.before.oro_reportcrm-opportunities-won_by_period
-     *
-     * @param BuildBefore $event
      */
     public function onBuildBefore(BuildBefore $event)
     {

@@ -29,8 +29,6 @@ class OroAccountBundle implements Migration
 
     /**
      * Adds organization_id into account
-     *
-     * @param Schema $schema
      */
     public static function addOrganization(Schema $schema)
     {

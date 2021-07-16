@@ -96,9 +96,6 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
         }
     }
 
-    /**
-     * @param ObjectManager $om
-     */
     protected function loadEmailsDemo(ObjectManager $om)
     {
         $contacts = $om->getRepository('OroContactBundle:Contact')->findAll();

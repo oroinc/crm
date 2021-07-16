@@ -8,9 +8,6 @@ use Oro\Bundle\FormBundle\Entity\PrimaryItem;
 
 class ContactImportHelper
 {
-    /**
-     * @param Contact $entity
-     */
     public function updateScalars(Contact $entity)
     {
         // update gender
@@ -31,8 +28,6 @@ class ContactImportHelper
 
     /**
      * There can be only one primary entity
-     *
-     * @param Contact $entity
      */
     public function updatePrimaryEntities(Contact $entity)
     {

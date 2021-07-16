@@ -28,10 +28,7 @@ class DropFields implements Migration, OrderedMigrationInterface
         $queries->addQuery(new UpdateExtendedFieldQuery());
     }
     // @codingStandardsIgnoreStart
-    /**
-     * @param Schema   $schema
-     * @param QueryBag $queries
-     */
+
     protected function modifyOrocrmLeadTable(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_sales_lead');
@@ -54,10 +51,6 @@ DQL
         }
     }
 
-    /**
-     * @param Schema   $schema
-     * @param QueryBag $queries
-     */
     protected function modifyOrocrmOpportunityTable(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_sales_opportunity');
@@ -80,10 +73,6 @@ DQL
         }
     }
 
-    /**
-     * @param Schema   $schema
-     * @param QueryBag $queries
-     */
     protected function modifyOrocrmAccountTable(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_account');

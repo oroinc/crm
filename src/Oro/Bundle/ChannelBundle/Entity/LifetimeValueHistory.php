@@ -111,9 +111,6 @@ class LifetimeValueHistory implements ChannelAwareInterface
         return $this->dataChannel;
     }
 
-    /**
-     * @param Account $account
-     */
     public function setAccount(Account $account)
     {
         $this->account = $account;
@@ -143,9 +140,6 @@ class LifetimeValueHistory implements ChannelAwareInterface
         return $this->amount;
     }
 
-    /**
-     * @param \DateTime $createdAt
-     */
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;

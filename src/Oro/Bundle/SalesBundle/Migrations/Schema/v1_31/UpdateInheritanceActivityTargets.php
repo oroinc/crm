@@ -56,9 +56,6 @@ class UpdateInheritanceActivityTargets implements
         );
     }
 
-    /**
-     * @param  QueryBag $queries
-     */
     protected function removeOldInheritanceActivityTargets(QueryBag $queries)
     {
         $inheritanceTargets = $this

@@ -27,12 +27,6 @@ class AccountHandler
      */
     protected $manager;
 
-    /**
-     *
-     * @param FormInterface $form
-     * @param RequestStack  $requestStack
-     * @param ObjectManager $manager
-     */
     public function __construct(FormInterface $form, RequestStack $requestStack, ObjectManager $manager)
     {
         $this->form    = $form;
@@ -67,8 +61,6 @@ class AccountHandler
 
     /**
      * "Success" form handler
-     *
-     * @param Account $entity
      */
     protected function onSuccess(Account $entity)
     {

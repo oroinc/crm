@@ -8,8 +8,6 @@ class DefaultProbabilityListener
 {
     /**
      * Merge non-configured default probabilities with those defined in parent
-     *
-     * @param ConfigGetEvent $event
      */
     public function loadConfig(ConfigGetEvent $event)
     {

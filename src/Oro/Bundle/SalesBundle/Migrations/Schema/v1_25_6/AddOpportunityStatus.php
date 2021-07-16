@@ -10,7 +10,6 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class AddOpportunityStatus implements Migration
 {
-
     /**
      * {@inheritdoc}
      */
@@ -19,9 +18,6 @@ class AddOpportunityStatus implements Migration
         self::updateOpportunityStatuses($queries);
     }
 
-    /**
-     * @param QueryBag $queries
-     */
     public static function updateOpportunityStatuses(QueryBag $queries)
     {
         $query = 'UPDATE oro_enum_opportunity_status SET name = :name WHERE id = :id';

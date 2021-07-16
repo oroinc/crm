@@ -29,10 +29,6 @@ class CustomerVirtualRelationProvider implements VirtualRelationProviderInterfac
      */
     protected $sourceClass;
 
-    /**
-     * @param AssociationManager $associationManager
-     * @param ConfigProvider      $configProvider
-     */
     public function __construct(AssociationManager $associationManager, ConfigProvider $configProvider)
     {
         $this->associationManager = $associationManager;

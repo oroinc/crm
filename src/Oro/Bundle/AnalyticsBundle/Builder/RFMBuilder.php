@@ -71,10 +71,6 @@ class RFMBuilder implements AnalyticsBuilderInterface
         $this->processBatch($channel, $values);
     }
 
-    /**
-     * @param Channel $channel
-     * @param array $values
-     */
     protected function processBatch(Channel $channel, array $values)
     {
         $toUpdate = [];
@@ -100,8 +96,6 @@ class RFMBuilder implements AnalyticsBuilderInterface
     }
 
     /**
-     * @param Channel $channel
-     * @param array $values
      * @throws \Doctrine\DBAL\ConnectionException
      * @throws \Exception
      */

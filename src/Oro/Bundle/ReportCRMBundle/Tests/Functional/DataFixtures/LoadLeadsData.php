@@ -59,7 +59,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var AbstractEnumValue[] */
     protected $sources;
 
-
     /**
      * {@inheritDoc}
      */
@@ -138,9 +137,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         }
     }
 
-    /**
-     * @param Lead $lead
-     */
     protected function loadSalesFlows(Lead $lead)
     {
         $leadWorkflowItem = $this->workflowManager->startWorkflow(

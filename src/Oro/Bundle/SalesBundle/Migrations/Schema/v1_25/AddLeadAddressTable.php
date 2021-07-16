@@ -26,11 +26,9 @@ class AddLeadAddressTable implements Migration, OrderedMigrationInterface
         $this->addMigrationQueries($queries);
         self::createLeadAddressTable($schema);
     }
-    
+
     /**
      * Create oro_sales_lead_address table
-     *
-     * @param Schema $schema
      */
     public static function createLeadAddressTable(Schema $schema)
     {
@@ -81,8 +79,6 @@ class AddLeadAddressTable implements Migration, OrderedMigrationInterface
 
     /**
      * Migrate addresses to the new table. Mark address as primary
-     *
-     * @param QueryBag $queries
      */
     protected function addMigrationQueries(QueryBag $queries)
     {

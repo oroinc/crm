@@ -20,9 +20,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
     /** @var SettingsProvider */
     private $settingsProvider;
 
-    /**
-     * @param SettingsProvider $settingsProvider
-     */
     public function __construct(SettingsProvider $settingsProvider)
     {
         $this->settingsProvider = $settingsProvider;
@@ -41,9 +38,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function preSet(FormEvent $event)
     {
         /** @var Channel $data */
@@ -85,9 +79,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function postSet(FormEvent $event)
     {
         /** @var Channel $data */
@@ -106,9 +97,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function preSubmit(FormEvent $event)
     {
         $data = $event->getData();
@@ -116,9 +104,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $this->buildDatasourceField($event->getForm(), $channelType);
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function postSubmit(FormEvent $event)
     {
         /** @var Channel $data */
@@ -190,10 +175,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             : [];
     }
 
-    /**
-     * @param Channel $channel
-     * @param array   $entitiesToAdd
-     */
     private function addEntitiesToChannel(Channel $channel, array $entitiesToAdd)
     {
         $entities = $channel->getEntities();

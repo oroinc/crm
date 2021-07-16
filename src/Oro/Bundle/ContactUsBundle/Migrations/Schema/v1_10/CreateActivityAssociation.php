@@ -59,9 +59,6 @@ class CreateActivityAssociation implements
         self::addActivityListAssociationTable($schema, $this->activityListExtension);
     }
 
-    /**
-     * @param Schema $schema
-     */
     public static function enableActivityAssociations(Schema $schema)
     {
         $options = new OroOptions();
@@ -70,19 +67,11 @@ class CreateActivityAssociation implements
         $schema->getTable('orocrm_contactus_request')->addOption(OroOptions::KEY, $options);
     }
 
-    /**
-     * @param Schema            $schema
-     * @param ActivityExtension $activityExtension
-     */
     public static function addEmailAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
         $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contactus_request');
     }
 
-    /**
-     * @param Schema            $schema
-     * @param ActivityExtension $activityExtension
-     */
     public static function addCallAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
         $activityExtension->addActivityAssociation($schema, 'oro_call', 'orocrm_contactus_request');
@@ -90,9 +79,6 @@ class CreateActivityAssociation implements
 
     /**
      * Manually create activitylist association table for further filling.
-     *
-     * @param Schema                $schema
-     * @param ActivityListExtension $activityListExtension
      */
     public static function addActivityListAssociationTable(
         Schema $schema,

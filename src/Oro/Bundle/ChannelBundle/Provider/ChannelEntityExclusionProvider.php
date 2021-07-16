@@ -13,9 +13,6 @@ class ChannelEntityExclusionProvider extends AbstractExclusionProvider
     /** @var SettingsProvider */
     protected $settingsProvider;
 
-    /**
-     * @param SettingsProvider $settingsProvider
-     */
     public function __construct(SettingsProvider $settingsProvider)
     {
         $this->settingsProvider = $settingsProvider;

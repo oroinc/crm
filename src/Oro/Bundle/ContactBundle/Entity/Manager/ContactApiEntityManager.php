@@ -85,11 +85,6 @@ class ContactApiEntityManager extends ApiEntityManager
         return $config;
     }
 
-    /**
-     * @param array $result
-     *
-     * @return array
-     */
     protected function postSerializeContact(array $result): array
     {
         // an 'email' field is added only for backward compatibility with previous API

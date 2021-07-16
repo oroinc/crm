@@ -14,9 +14,6 @@ class LoadLeadSourceData extends AbstractFixture
         'Demand Generation' => true
     ];
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         $className = ExtendHelper::buildEnumValueClassName('lead_source');

@@ -110,9 +110,6 @@ class OroAccountBundleInstaller implements
 
     /**
      * Create oro_account table
-     *
-     * @param Schema   $schema
-     * @param QueryBag $queries
      */
     protected function createOrocrmAccountTable(Schema $schema, QueryBag $queries)
     {
@@ -149,8 +146,6 @@ class OroAccountBundleInstaller implements
 
     /**
      * Create oro_account_to_contact table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmAccountToContactTable(Schema $schema)
     {
@@ -164,8 +159,6 @@ class OroAccountBundleInstaller implements
 
     /**
      * Add oro_account foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmAccountForeignKeys(Schema $schema)
     {
@@ -192,8 +185,6 @@ class OroAccountBundleInstaller implements
 
     /**
      * Add oro_account_to_contact foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmAccountToContactForeignKeys(Schema $schema)
     {

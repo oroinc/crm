@@ -19,9 +19,6 @@ class LoadLeadSourceData extends AbstractFixture
         'Partner'         => false
     ];
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         $className = ExtendHelper::buildEnumValueClassName('lead_source');

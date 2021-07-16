@@ -162,8 +162,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_sales_opportunity table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmSalesOpportunityTable(Schema $schema)
     {
@@ -229,8 +227,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_sales_lead_status table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmSalesLeadStatusTable(Schema $schema)
     {
@@ -243,8 +239,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_sales_funnel table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmSalesFunnelTable(Schema $schema)
     {
@@ -265,8 +259,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_sales_opport_status table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmSalesOpportStatusTable(Schema $schema)
     {
@@ -279,8 +271,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_sales_opport_close_rsn table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmSalesOpportCloseRsnTable(Schema $schema)
     {
@@ -293,8 +283,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_sales_lead table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmSalesLeadTable(Schema $schema)
     {
@@ -352,8 +340,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_sales_b2bcustomer table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmSalesB2bCustomerTable(Schema $schema)
     {
@@ -436,8 +422,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_lead_phone table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmLeadPhoneTable(Schema $schema)
     {
@@ -454,8 +438,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_sales_lead_email table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmSalesLeadEmailTable(Schema $schema)
     {
@@ -471,8 +453,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_b2bcustomer_phone table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmB2bCustomerPhoneTable(Schema $schema)
     {
@@ -489,8 +469,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_b2bcustomer_email table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmB2bCustomerEmailTable(Schema $schema)
     {
@@ -506,8 +484,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add oro_sales_opportunity foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmSalesOpportunityForeignKeys(Schema $schema)
     {
@@ -546,8 +522,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add oro_sales_funnel foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmSalesFunnelForeignKeys(Schema $schema)
     {
@@ -574,8 +548,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add oro_sales_lead foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmSalesLeadForeignKeys(Schema $schema)
     {
@@ -608,8 +580,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add oro_sales_b2bcustomer foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmSalesB2bCustomerForeignKeys(Schema $schema)
     {
@@ -654,9 +624,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add opportunity status Enum field and initialize default enum values
-     *
-     * @param Schema $schema
-     * @param QueryBag $queries
      */
     protected function addOpportunityStatusField(Schema $schema, QueryBag $queries)
     {
@@ -679,8 +646,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Create oro_email_mailbox_processor table
-     *
-     * @param Schema $schema
      */
     public static function addOroEmailMailboxProcessorColumns(Schema $schema)
     {
@@ -695,8 +660,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add oro_email_mailbox_processor foreign keys.
-     *
-     * @param Schema $schema
      */
     public static function addOroEmailMailboxProcessorForeignKeys(Schema $schema)
     {
@@ -717,8 +680,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add oro_b2bcustomer_phone foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmB2bCustomerPhoneForeignKeys(Schema $schema)
     {
@@ -733,8 +694,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add oro_b2bcustomer_email foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmB2bCustomerEmailForeignKeys(Schema $schema)
     {
@@ -749,8 +708,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add oro_lead_phone foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmLeadPhoneForeignKeys(Schema $schema)
     {
@@ -765,8 +722,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add oro_sales_lead_email foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmSalesLeadEmailForeignKeys(Schema $schema)
     {
@@ -781,8 +736,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add orocrm_sales_b2bcustomer index on field name
-     *
-     * @param Schema $schema
      */
     protected function addB2bCustomerNameIndex(Schema $schema)
     {
@@ -792,8 +745,6 @@ class OroSalesBundleInstaller implements
 
     /**
      * Add opportunity 'opportunities_by_status_idx' index, used to speedup 'Opportunity By Status' widget
-     *
-     * @param Schema $schema
      */
     protected function addOpportunitiesByStatusIndex(Schema $schema)
     {

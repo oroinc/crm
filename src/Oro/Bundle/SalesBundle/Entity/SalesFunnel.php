@@ -225,9 +225,6 @@ class SalesFunnel extends ExtendSalesFunnel implements
         return $this;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getStartDate(): ?\DateTime
     {
         return $this->startDate;

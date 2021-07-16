@@ -10,8 +10,6 @@ class LoadGroupData extends AbstractFixture
 {
     /**
      * Load sample groups
-     *
-     * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {

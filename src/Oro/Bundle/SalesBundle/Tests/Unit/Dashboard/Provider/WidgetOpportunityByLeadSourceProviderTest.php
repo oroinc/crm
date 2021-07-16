@@ -15,8 +15,6 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
 {
     /**
      * @dataProvider opportunitiesBySourceDataProvider
-     *
-     * @param array $inputData
      */
     public function testSortByValue(array $inputData)
     {
@@ -31,8 +29,6 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
 
     /**
      * @dataProvider opportunitiesBySourceDataProvider
-     *
-     * @param array $inputData
      */
     public function testCreateOthersCategoryWithExcludedSources(array $inputData)
     {
@@ -46,8 +42,6 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
 
     /**
      * @dataProvider opportunitiesBySourceDataProvider
-     *
-     * @param array $inputData
      */
     public function testAddSmallSourceValuesOverLimitToOthersCategory(array $inputData)
     {
@@ -77,8 +71,6 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
 
     /**
      * @dataProvider opportunitiesBySourceDataProvider
-     *
-     * @param array $inputData
      */
     public function testCreateUnclassifiedCategoryWithEmptySources(array $inputData)
     {
@@ -92,8 +84,6 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
 
     /**
      * @dataProvider opportunitiesBySourceDataProvider
-     *
-     * @param array $inputData
      */
     public function testFilterOutZeroSources(array $inputData)
     {

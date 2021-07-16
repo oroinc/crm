@@ -24,11 +24,6 @@ class ContactRequestHandler
     /** @var ManagerRegistry */
     protected $registry;
 
-    /**
-     * @param FormInterface $form
-     * @param RequestStack $requestStack
-     * @param ManagerRegistry $registry
-     */
     public function __construct(FormInterface $form, RequestStack $requestStack, ManagerRegistry $registry)
     {
         $this->form = $form;

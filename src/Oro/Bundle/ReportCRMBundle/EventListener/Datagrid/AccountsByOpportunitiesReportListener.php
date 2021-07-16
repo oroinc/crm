@@ -25,17 +25,11 @@ class AccountsByOpportunitiesReportListener
      */
     protected $enumProvider;
 
-    /**
-     * @param EnumValueProvider $enumProvider
-     */
     public function __construct(EnumValueProvider $enumProvider)
     {
         $this->enumProvider = $enumProvider;
     }
 
-    /**
-     * @param BuildBefore $event
-     */
     public function onBuildBefore(BuildBefore $event)
     {
         $enumValues = $this->enumProvider->getEnumChoicesByCode(Opportunity::INTERNAL_STATUS_CODE);

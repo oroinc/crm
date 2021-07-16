@@ -66,7 +66,7 @@ class TestCustomer1 extends ExtendTestCustomer1 implements TestFrameworkEntityIn
     public function setName($name)
     {
         $this->name = $name;
-        
+
         return $this;
     }
 }

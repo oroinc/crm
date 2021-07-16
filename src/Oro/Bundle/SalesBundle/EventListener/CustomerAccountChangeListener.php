@@ -18,8 +18,6 @@ class CustomerAccountChangeListener
 
     /**
      * Stores B2bCustomers with changed Account
-     *
-     * @param OnFlushEventArgs $args
      */
     public function onFlush(OnFlushEventArgs $args)
     {
@@ -31,8 +29,6 @@ class CustomerAccountChangeListener
 
     /**
      * Syncs Accounts of B2bCustomers and SalesCustomers
-     *
-     * @param PostFlushEventArgs $args
      */
     public function postFlush(PostFlushEventArgs $args)
     {

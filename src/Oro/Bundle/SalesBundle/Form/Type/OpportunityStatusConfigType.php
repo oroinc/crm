@@ -47,11 +47,6 @@ class OpportunityStatusConfigType extends AbstractType
     /** @var EventSubscriberInterface */
     protected $enumEventSubscriber;
 
-    /**
-     * @param EntityConfigManager $entityConfigManager
-     * @param ConfigManager $configManager
-     * @param EventSubscriberInterface $enumEventSubscriber
-     */
     public function __construct(
         EntityConfigManager $entityConfigManager,
         ConfigManager $configManager,
@@ -106,8 +101,6 @@ class OpportunityStatusConfigType extends AbstractType
     /**
      * Pre set data event handler
      * Populate probability fields from the System Config (scoped)
-     *
-     * @param FormEvent $event
      */
     public function onPreSetData(FormEvent $event)
     {
@@ -130,8 +123,6 @@ class OpportunityStatusConfigType extends AbstractType
     /**
      * Submit event handler
      * Store the opportunity-probability map into the System Config (scoped)
-     *
-     * @param FormEvent $event
      */
     public function onSubmit(FormEvent $event)
     {

@@ -31,8 +31,6 @@ class CreateLeadPhone implements Migration, OrderedMigrationInterface
 
     /**
      * Create oro_lead_phone table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmLeadPhoneTable(Schema $schema)
     {
@@ -49,8 +47,6 @@ class CreateLeadPhone implements Migration, OrderedMigrationInterface
 
     /**
      * Add oro_lead_phone foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmLeadPhoneForeignKeys(Schema $schema)
     {

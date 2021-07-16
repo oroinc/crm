@@ -25,9 +25,6 @@ class LoadForecastWidgetFixtures extends AbstractFixture
         $this->createOpportunity($manager);
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
     private function addWidget(ObjectManager $manager)
     {
         $dashboard = new Dashboard();
@@ -48,9 +45,6 @@ class LoadForecastWidgetFixtures extends AbstractFixture
         $manager->flush();
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
     private function createOpportunity(ObjectManager $manager)
     {
         $today = new \DateTime('now', new \DateTimeZone('UTC'));
