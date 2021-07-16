@@ -120,11 +120,6 @@ class OpportunityRepository extends EntityRepository
         return $qb;
     }
 
-    /**
-     * @param QueryBuilder $qb
-     * @param \DateTime|null $start
-     * @param \DateTime|null $end
-     */
     protected function setCreationPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
         if ($start) {
@@ -136,11 +131,6 @@ class OpportunityRepository extends EntityRepository
         }
     }
 
-    /**
-     * @param QueryBuilder $qb
-     * @param \DateTime|null $start
-     * @param \DateTime|null $end
-     */
     protected function setClosedPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
         if ($start) {

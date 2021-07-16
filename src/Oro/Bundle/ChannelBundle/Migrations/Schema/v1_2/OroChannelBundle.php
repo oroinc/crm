@@ -19,8 +19,6 @@ class OroChannelBundle implements Migration
 
     /**
      * Create oro_channel_ltime_avg_aggr table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmChannelLtimeAvgAggrTable(Schema $schema)
     {
@@ -38,8 +36,6 @@ class OroChannelBundle implements Migration
 
     /**
      * Add oro_channel_ltime_avg_aggr foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmChannelLtimeAvgAggrForeignKeys(Schema $schema)
     {

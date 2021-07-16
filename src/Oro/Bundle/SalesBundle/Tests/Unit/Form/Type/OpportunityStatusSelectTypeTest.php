@@ -12,8 +12,6 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider probabilitiesDataProvider
-     *
-     * @param array $probabilities
      */
     public function testViewShouldHaveProbabilitiesDataAttributes(array $probabilities)
     {

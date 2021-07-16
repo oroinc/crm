@@ -29,9 +29,6 @@ class AddFields implements Migration, OrderedMigrationInterface
         $queries->addPostQuery(new MigrateAccountRelations());
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function modifyOrocrmSalesLeadTable(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_lead');
@@ -56,9 +53,6 @@ class AddFields implements Migration, OrderedMigrationInterface
         );
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function modifyOrocrmSalesOpportunityTable(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_opportunity');
@@ -83,9 +77,6 @@ class AddFields implements Migration, OrderedMigrationInterface
         );
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function modifyOrocrmSalesSalesFunnelTable(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_funnel');

@@ -16,9 +16,6 @@ class ChannelIntegrationConstraintValidator extends ConstraintValidator
     /** @var SettingsProvider */
     protected $provider;
 
-    /**
-     * @param SettingsProvider $provider
-     */
     public function __construct(SettingsProvider $provider)
     {
         $this->provider = $provider;
@@ -36,9 +33,6 @@ class ChannelIntegrationConstraintValidator extends ConstraintValidator
         $this->validateIntegration($value);
     }
 
-    /**
-     * @param Channel $channel
-     */
     private function validateIntegration(Channel $channel)
     {
         $channelType = $channel->getChannelType();

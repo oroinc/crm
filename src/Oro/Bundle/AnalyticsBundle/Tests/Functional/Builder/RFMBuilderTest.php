@@ -31,10 +31,6 @@ class RFMBuilderTest extends WebTestCase
 
     /**
      * @dataProvider buildDataProvider
-     *
-     * @param $channelReference
-     * @param array $ids
-     * @param array $expectedData
      */
     public function testBuild($channelReference, array $expectedData, array $ids = [])
     {
@@ -68,10 +64,6 @@ class RFMBuilderTest extends WebTestCase
         ];
     }
 
-    /**
-     * @param Channel $channel
-     * @param array $expectedData
-     */
     protected function assertAnalyticBuild(Channel $channel, array $expectedData)
     {
         $expectedData = array_combine(array_map(function ($item) {

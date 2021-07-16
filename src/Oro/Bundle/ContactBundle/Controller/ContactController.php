@@ -114,7 +114,6 @@ class ContactController extends AbstractController
      *      permission="EDIT",
      *      class="OroContactBundle:Contact"
      * )
-     * @param Contact $entity
      */
     public function updateAction(Contact $entity)
     {
@@ -139,9 +138,6 @@ class ContactController extends AbstractController
         ];
     }
 
-    /**
-     * @return ApiEntityManager
-     */
     protected function getManager(): ApiEntityManager
     {
         return $this->get(ApiEntityManager::class);

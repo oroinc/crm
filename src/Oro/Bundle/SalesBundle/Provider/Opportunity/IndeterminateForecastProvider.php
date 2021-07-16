@@ -38,14 +38,6 @@ class IndeterminateForecastProvider
     /** @var array */
     protected $data = [];
 
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param AclHelper $aclHelper
-     * @param WidgetProviderFilterManager $widgetProviderFilter
-     * @param FilterProcessor $filterProcessor
-     * @param NumberFormatter $numberFormatter
-     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
-     */
     public function __construct(
         ManagerRegistry $doctrine,
         AclHelper $aclHelper,

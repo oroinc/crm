@@ -156,7 +156,7 @@ class LeadController extends AbstractController
         if (!$this->get(LeadActionsAccessProvider::class)->isDisqualifyAllowed($lead)) {
             throw new AccessDeniedException();
         }
-        
+
         if ($this->get(ChangeLeadStatus::class)->disqualify($lead)) {
             $this->get('session')->getFlashBag()->add(
                 'success',

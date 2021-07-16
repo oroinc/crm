@@ -17,10 +17,6 @@ class ConfigProvider
     /** @var ConfigCache */
     private $cache;
 
-    /**
-     * @param ConfigManager $configManager
-     * @param ConfigCache   $cache
-     */
     public function __construct(ConfigManager $configManager, ConfigCache $cache)
     {
         $this->configManager = $configManager;

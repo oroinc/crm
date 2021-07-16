@@ -40,49 +40,31 @@ class CustomerSearchHandler extends ContextSearchHandler
     /** @var string */
     protected $query;
 
-    /**
-     * @param CustomerIconProviderInterface $customerIconProvider
-     */
     public function setCustomerIconProvider(CustomerIconProviderInterface $customerIconProvider)
     {
         $this->customerIconProvider = $customerIconProvider;
     }
 
-    /**
-     * @param ConfigProvider $customerConfigProvider
-     */
     public function setCustomerConfigProvider(ConfigProvider $customerConfigProvider)
     {
         $this->customerConfigProvider = $customerConfigProvider;
     }
 
-    /**
-     * @param DoctrineHelper $doctrineHelper
-     */
     public function setDoctrineHelper(DoctrineHelper $doctrineHelper)
     {
         $this->doctrineHelper = $doctrineHelper;
     }
 
-    /**
-     * @param EntityRoutingHelper $routingHelper
-     */
     public function setRoutingHelper(EntityRoutingHelper $routingHelper)
     {
         $this->routingHelper  = $routingHelper;
     }
 
-    /**
-     * @param AccountCustomerManager $accountCustomerManager
-     */
     public function setAccountCustomerManager(AccountCustomerManager $accountCustomerManager)
     {
         $this->accountCustomerManager = $accountCustomerManager;
     }
 
-    /**
-     * @param ChainAccountAutocompleteProvider $chainAccountAutocompleteProvider
-     */
     public function setChainAccountAutocompleteProvider(
         ChainAccountAutocompleteProvider $chainAccountAutocompleteProvider
     ) {
@@ -328,10 +310,6 @@ class CustomerSearchHandler extends ContextSearchHandler
         ]);
     }
 
-    /**
-     * @param $text
-     * @param $data
-     */
     protected function detectMatch($text, $data)
     {
         if ($this->isMatch($text, $this->query)) {

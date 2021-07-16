@@ -16,10 +16,6 @@ class CustomerToStringTransformer implements DataTransformerInterface
     /** @var AccountCustomerManager */
     protected $accountCustomerManager;
 
-    /**
-     * @param DataTransformerInterface $entityToStringTransformer
-     * @param AccountCustomerManager   $manager
-     */
     public function __construct(DataTransformerInterface $entityToStringTransformer, AccountCustomerManager $manager)
     {
         $this->entityToStringTransformer = $entityToStringTransformer;

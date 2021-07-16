@@ -16,10 +16,6 @@ class TimezoneChangeListener
      */
     protected $calculateAnalyticsScheduler;
 
-    /**
-     * @param RFMMetricStateManager $metricStateManager
-     * @param CalculateAnalyticsScheduler $calculateAnalyticsScheduler
-     */
     public function __construct(
         RFMMetricStateManager $metricStateManager,
         CalculateAnalyticsScheduler $calculateAnalyticsScheduler
@@ -28,9 +24,6 @@ class TimezoneChangeListener
         $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
     }
 
-    /**
-     * @param ConfigUpdateEvent $event
-     */
     public function onConfigUpdate(ConfigUpdateEvent $event)
     {
         if (!$event->isChanged('oro_locale.timezone')) {

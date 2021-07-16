@@ -16,9 +16,6 @@ class OroContactUsBundle implements Migration
         $this->modifycOrocrmContactusRequestTable($schema);
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function modifycOrocrmContactusRequestTable(Schema $schema)
     {
         $table = $schema->getTable('orocrm_contactus_request');

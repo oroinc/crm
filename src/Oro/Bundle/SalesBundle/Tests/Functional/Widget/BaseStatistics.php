@@ -24,10 +24,6 @@ abstract class BaseStatistics extends WebTestCase
         $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting configure widget dialog window!');
     }
 
-    /**
-     * @param string $modifyStr
-     * @return \DateTime
-     */
     protected function createDateTime(string $modifyStr): \DateTime
     {
         $date = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -38,9 +34,6 @@ abstract class BaseStatistics extends WebTestCase
 
     /**
      * Create fields of 'ItemsView' component
-     *
-     * @param array $data
-     * @param string $formName
      */
     protected function createMetricsElements(array &$data, string $formName): void
     {
@@ -55,10 +48,6 @@ abstract class BaseStatistics extends WebTestCase
 
     /**
      * Create and set fields of 'WidgetConfigDateRangeFilter' component
-     *
-     * @param array $formData
-     * @param string $formName
-     * @param array $data
      */
     protected function createAndSetDateRangeFormElements(array &$formData, string $formName, array $data = []): void
     {
@@ -76,11 +65,6 @@ abstract class BaseStatistics extends WebTestCase
         $formData[$formName]['dateRange']['part'] = 'value';
     }
 
-    /**
-     * @param array $data
-     * @param string $formName
-     * @param array $advancedFilters
-     */
     protected function setAdvancedFilters(array &$data, string $formName, array $advancedFilters): void
     {
         if ($advancedFilters) {
@@ -91,11 +75,6 @@ abstract class BaseStatistics extends WebTestCase
         }
     }
 
-    /**
-     * @param array $data
-     * @param string $formName
-     * @param bool $comparePrevious
-     */
     protected function setComparePrevious(array &$data, string $formName, bool $comparePrevious): void
     {
         if ($comparePrevious) {
@@ -105,28 +84,15 @@ abstract class BaseStatistics extends WebTestCase
         }
     }
 
-    /**
-     * @param string $label
-     *
-     * @return string
-     */
     protected function getMetricValueByLabel(string $label): string
     {
         return sprintf('//*[text() = "%s"]/following-sibling::h3[@class="value"]', $label);
     }
-    
-    /**
-     * @param string $label
-     *
-     * @return string
-     */
+
     protected function getMetricPreviousIntervalValueByLabel(string $label): string
     {
         return sprintf('//*[text() = "%s"]/following-sibling::div[@class="deviation"][position()=1]/span', $label);
     }
 
-    /**
-     * @return Widget
-     */
     abstract protected function getWidget(): Widget;
 }

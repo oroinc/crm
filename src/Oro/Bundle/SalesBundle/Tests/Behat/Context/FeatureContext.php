@@ -227,8 +227,6 @@ class FeatureContext extends OroFeatureContext implements
      * Press entity add button from plus dropdown
      * Example: Then I add new Business Customer for Account field
      *
-     * @param $entityButtonName
-     * @param $fieldName
      * @Then /^I add new (?P<entityName>[\w\s]+) for (?P<fieldName>[\w\s]+) field$/
      */
     public function iAddNewEntityForField($entityButtonName, $fieldName)

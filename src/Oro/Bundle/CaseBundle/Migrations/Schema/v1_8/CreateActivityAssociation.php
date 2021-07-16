@@ -23,8 +23,6 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
 
     /**
      * Enable activities
-     *
-     * @param Schema $schema
      */
     protected function addActivityAssociations(Schema $schema)
     {

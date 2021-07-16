@@ -17,9 +17,6 @@ class SettingsProvider
     /** @var ChannelConfigurationProvider */
     private $configProvider;
 
-    /**
-     * @param ChannelConfigurationProvider $configProvider
-     */
     public function __construct(ChannelConfigurationProvider $configProvider)
     {
         $this->configProvider = $configProvider;
@@ -47,10 +44,6 @@ class SettingsProvider
 
     /**
      * Checks if the given entity is related to any channel.
-     *
-     * @param string $entityClass
-     *
-     * @return bool
      */
     public function isChannelEntity(string $entityClass): bool
     {
@@ -61,10 +54,6 @@ class SettingsProvider
 
     /**
      * Checks if the given entity is related to any customer.
-     *
-     * @param string $entityClass
-     *
-     * @return bool
      */
     public function isCustomerEntity(string $entityClass): bool
     {
@@ -73,10 +62,6 @@ class SettingsProvider
 
     /**
      * Checks if the given entity dependents on any business entity.
-     *
-     * @param string $entityClass
-     *
-     * @return bool
      */
     public function isDependentOnChannelEntity(string $entityClass): bool
     {
@@ -87,10 +72,6 @@ class SettingsProvider
 
     /**
      * Gets dependencies for the given entity.
-     *
-     * @param string $entityClass
-     *
-     * @return array
      */
     public function getDependentEntities(string $entityClass): array
     {
@@ -121,8 +102,6 @@ class SettingsProvider
     /**
      * Gets channel types that could be used in channel type selector.
      * The returned channel types are sorted by priority.
-     *
-     * @return array
      */
     public function getChannelTypeChoiceList(): array
     {
@@ -149,8 +128,6 @@ class SettingsProvider
     /**
      * Gets not system channel types that could be used in channel type selector.
      * The returned channel types are sorted by priority.
-     *
-     * @return array
      */
     public function getNonSystemChannelTypeChoiceList(): array
     {
@@ -182,10 +159,6 @@ class SettingsProvider
 
     /**
      * Checks whether the given channel is a system channel or not.
-     *
-     * @param string $channelType
-     *
-     * @return bool
      */
     public function isSystemChannel(string $channelType): bool
     {
@@ -213,10 +186,6 @@ class SettingsProvider
 
     /**
      * Gets CustomerIdentity definition from config.
-     *
-     * @param string $type
-     *
-     * @return string|null
      */
     public function getCustomerIdentityFromConfig(string $type): ?string
     {
@@ -227,10 +196,6 @@ class SettingsProvider
 
     /**
      * Gets predefined entity list for given channel type.
-     *
-     * @param string $type
-     *
-     * @return array
      */
     public function getEntitiesByChannelType(string $type): array
     {
@@ -239,9 +204,6 @@ class SettingsProvider
         return $channelTypes[$type]['entities'] ?? [];
     }
 
-    /**
-     * @return array
-     */
     public function getLifetimeValueSettings(): array
     {
         $result = [];

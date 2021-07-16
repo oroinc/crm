@@ -75,7 +75,6 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn('theTimeZone')
         ;
 
-
         $repositoryMock = $this->createLifetimeValueAverageAggregationRepositoryMock();
         $repositoryMock
             ->expects($this->never())

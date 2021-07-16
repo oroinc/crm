@@ -70,9 +70,6 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $resolver->setDefaults(['validation_groups' => $this->getValidationGroups()]);
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function manageCategories(FormEvent $event)
     {
         /** @var Channel $channel */
@@ -116,9 +113,6 @@ class ChannelTypeExtension extends AbstractTypeExtension
         }
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function handleState(FormEvent $event)
     {
         /** @var Channel $channel */
@@ -154,9 +148,6 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $event->setData($channel);
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function loadCategories(FormEvent $event)
     {
         /** @var Channel $channel */
@@ -190,10 +181,6 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $this->addRFMTypes($form, $categories);
     }
 
-    /**
-     * @param FormInterface $form
-     * @param array $categories
-     */
     protected function addRFMTypes(FormInterface $form, array $categories)
     {
         foreach (RFMMetricCategory::$types as $type) {

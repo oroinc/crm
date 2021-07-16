@@ -28,8 +28,6 @@ class UpdateTaskAccessLevels extends AbstractUpdatePermissions implements Depend
 
     /**
      * Load ACL for security roles
-     *
-     * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {

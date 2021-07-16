@@ -60,9 +60,6 @@ class RFMCategoryListener
         $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
     }
 
-    /**
-     * @param OnFlushEventArgs $args
-     */
     public function onFlush(OnFlushEventArgs $args)
     {
         $uow = $args->getEntityManager()->getUnitOfWork();
@@ -80,9 +77,6 @@ class RFMCategoryListener
         }
     }
 
-    /**
-     * @param ChannelSaveEvent $event
-     */
     public function onChannelSucceedSave(ChannelSaveEvent $event)
     {
         foreach ($this->channelsToDrop as $channel) {

@@ -62,7 +62,6 @@ class LoadB2bCustomerEmailData extends AbstractFixture implements DependentFixtu
         $this->setReference('B2bCustomerEmail_Single_' . $this->b2bCustomerEmailData[0]['email'], $customerEmail);
         $manager->persist($customerEmail);
 
-
         $manager->flush();
     }
 }

@@ -17,9 +17,6 @@ class IntegrationTypeExtension extends AbstractTypeExtension
     /** @var SettingsProvider */
     protected $settingsProvider;
 
-    /**
-     * @param SettingsProvider $settingsProvider
-     */
     public function __construct(SettingsProvider $settingsProvider)
     {
         $this->settingsProvider = $settingsProvider;

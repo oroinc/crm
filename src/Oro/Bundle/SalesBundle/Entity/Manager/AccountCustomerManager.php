@@ -25,11 +25,6 @@ class AccountCustomerManager
     /** @var AccountProviderInterface */
     protected $accountProvider;
 
-    /**
-     * @param DoctrineHelper           $doctrineHelper
-     * @param ConfigProvider           $provider
-     * @param AccountProviderInterface $accountProvider
-     */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         ConfigProvider $provider,

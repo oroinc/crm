@@ -32,13 +32,6 @@ class OpportunityByStatusProvider
     /** @var  CurrencyQueryBuilderTransformerInterface */
     protected $qbTransformer;
 
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param AclHelper $aclHelper
-     * @param WidgetProviderFilterManager $widgetProviderFilter
-     * @param DateFilterProcessor $processor
-     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
-     */
     public function __construct(
         ManagerRegistry $doctrine,
         AclHelper $aclHelper,

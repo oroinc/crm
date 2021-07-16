@@ -20,9 +20,6 @@ class EntityStateProvider
         $this->namespace = $namespace;
     }
 
-    /**
-     * @param StateProvider $stateProvider
-     */
     public function setStateProvider(StateProvider $stateProvider)
     {
         $this->stateProvider = $stateProvider;

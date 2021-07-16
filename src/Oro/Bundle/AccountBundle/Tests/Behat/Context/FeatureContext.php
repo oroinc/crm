@@ -62,7 +62,6 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
         self::fail(sprintf('Can\'t find contact with "%s" name', $name));
     }
 
-
     /**
      * @Then /^(?:|I )select ([\w\s]*) contact as default$/
      */

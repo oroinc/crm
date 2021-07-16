@@ -15,9 +15,6 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
      */
     protected $contactImportHelper;
 
-    /**
-     * @param ContactImportHelper $contactImportHelper
-     */
     public function setContactImportHelper(ContactImportHelper $contactImportHelper)
     {
         $this->contactImportHelper = $contactImportHelper;

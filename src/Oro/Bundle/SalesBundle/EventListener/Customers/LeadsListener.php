@@ -31,12 +31,6 @@ class LeadsListener
     /** @var  FeatureChecker */
     protected $featureChecker;
 
-    /**
-     * @param CustomerConfigProvider $customerConfigProvider
-     * @param TranslatorInterface $translator
-     * @param DoctrineHelper $helper
-     * @param FeatureChecker $featureChecker
-     */
     public function __construct(
         CustomerConfigProvider $customerConfigProvider,
         TranslatorInterface $translator,
@@ -51,8 +45,6 @@ class LeadsListener
 
     /**
      * Adds block with leads grid on the B2bCustomer view
-     *
-     * @param BeforeViewRenderEvent $event
      */
     public function addLeads(BeforeViewRenderEvent $event)
     {

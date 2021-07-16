@@ -20,8 +20,6 @@ class OroChannelBundle implements Migration
 
     /**
      * Create oro_channel_lifetime_hist table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmChannelLifetimeHistTable(Schema $schema)
     {
@@ -45,8 +43,6 @@ class OroChannelBundle implements Migration
 
     /**
      * Add oro_channel_lifetime_hist foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmChannelLifetimeHistForeignKeys(Schema $schema)
     {
@@ -67,9 +63,6 @@ class OroChannelBundle implements Migration
         );
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function addChannelIndexes(Schema $schema)
     {
         $table = $schema->getTable('orocrm_channel');

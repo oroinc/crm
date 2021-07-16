@@ -13,9 +13,6 @@ class CalculateAnalyticsScheduler
      */
     private $messageProducer;
 
-    /**
-     * @param MessageProducerInterface $messageProducer
-     */
     public function __construct(MessageProducerInterface $messageProducer)
     {
         $this->messageProducer = $messageProducer;

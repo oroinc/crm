@@ -38,9 +38,6 @@ class AddOpportunityStatus implements
         return 1;
     }
 
-    /**
-     * @param ExtendExtension $extendExtension
-     */
     public function setExtendExtension(ExtendExtension $extendExtension)
     {
         $this->extendExtension = $extendExtension;
@@ -80,11 +77,6 @@ class AddOpportunityStatus implements
         self::addEnumValues($queries, $statuses);
     }
 
-    /**
-     * @param Schema $schema
-     * @param ExtendExtension $extendExtension
-     * @param array $immutableCodes
-     */
     public static function addStatusField(Schema $schema, ExtendExtension $extendExtension, array $immutableCodes)
     {
         $enumTable = $extendExtension->addEnumField(

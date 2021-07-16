@@ -16,19 +16,12 @@ class TransitionsAttributeListener
     /** @var ContextAccessor */
     protected $contextAccessor;
 
-    /**
-     * @param FormFactoryInterface $formFactory
-     * @param ContextAccessor $contextAccessor
-     */
     public function __construct(FormFactoryInterface $formFactory, ContextAccessor $contextAccessor)
     {
         $this->formFactory = $formFactory;
         $this->contextAccessor = $contextAccessor;
     }
 
-    /**
-     * @param TransitionsAttributeEvent $event
-     */
     public function beforeAddAttribute(TransitionsAttributeEvent $event)
     {
         $attributeOptions = $event->getAttributeOptions();

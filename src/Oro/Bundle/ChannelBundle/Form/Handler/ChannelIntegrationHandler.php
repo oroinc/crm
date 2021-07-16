@@ -24,10 +24,6 @@ class ChannelIntegrationHandler
     /** @var array */
     protected $options = ['disable_customer_datasource_types' => false];
 
-    /**
-     * @param RequestStack         $requestStack
-     * @param FormFactoryInterface $factory
-     */
     public function __construct(RequestStack $requestStack, FormFactoryInterface $factory)
     {
         $this->requestStack = $requestStack;

@@ -18,9 +18,6 @@ class FillContactTestMultiEnum extends AbstractFixture
         'Chester Benington' => false
     ];
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         $className = ExtendHelper::buildEnumValueClassName(self::CONTACT_FIELD_TEST_ENUM_CODE);

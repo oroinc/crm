@@ -186,9 +186,6 @@ abstract class AbstractContactRequest implements
         return $this->comment;
     }
 
-    /**
-     * @param \DateTime $createdAt
-     */
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
@@ -202,9 +199,6 @@ abstract class AbstractContactRequest implements
         return $this->createdAt;
     }
 
-    /**
-     * @param \DateTime $updatedAt
-     */
     public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;

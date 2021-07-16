@@ -21,9 +21,6 @@ class ChannelCustomerIdentityConstraintValidator extends ConstraintValidator
         $this->validateCustomerIdentity($value);
     }
 
-    /**
-     * @param Channel $channel
-     */
     protected function validateCustomerIdentity(Channel $channel)
     {
         $errorLabel = 'oro.channel.form.customer_identity_selected_not_correctly.label';

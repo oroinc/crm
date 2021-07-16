@@ -20,9 +20,6 @@ class LoadLeadSourceData extends AbstractFixture implements OrderedFixtureInterf
         'Partner'         => false
     ];
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         $className = ExtendHelper::buildEnumValueClassName('lead_source');

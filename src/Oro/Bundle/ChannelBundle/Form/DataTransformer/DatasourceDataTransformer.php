@@ -14,9 +14,6 @@ class DatasourceDataTransformer implements DataTransformerInterface
     /** @var FormFactoryInterface */
     protected $formFactory;
 
-    /**
-     * @param FormFactoryInterface $formFactory
-     */
     public function __construct(FormFactoryInterface $formFactory)
     {
         $this->formFactory = $formFactory;

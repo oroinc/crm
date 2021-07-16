@@ -25,12 +25,6 @@ class LeadHandler
     /** @var RequestChannelProvider */
     protected $requestChannelProvider;
 
-    /**
-     * @param FormInterface          $form
-     * @param RequestStack           $requestStack
-     * @param ObjectManager          $manager
-     * @param RequestChannelProvider $requestChannelProvider
-     */
     public function __construct(
         FormInterface $form,
         RequestStack $requestStack,
@@ -70,8 +64,6 @@ class LeadHandler
 
     /**
      * "Success" form handler
-     *
-     * @param Lead $entity
      */
     protected function onSuccess(Lead $entity)
     {

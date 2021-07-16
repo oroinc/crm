@@ -29,10 +29,6 @@ class InheritanceActivityTargets implements Migration, ActivityListExtensionAwar
         self::addInheritanceTargets($schema, $this->activityListExtension);
     }
 
-    /**
-     * @param Schema $schema
-     * @param ActivityListExtension $activityListExtension
-     */
     public static function addInheritanceTargets(Schema $schema, ActivityListExtension $activityListExtension)
     {
         $activityListExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_contact', ['accounts']);

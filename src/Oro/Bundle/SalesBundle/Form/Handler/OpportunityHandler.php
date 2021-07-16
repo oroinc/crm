@@ -30,13 +30,6 @@ class OpportunityHandler
     /** @var LoggerInterface  */
     protected $logger;
 
-    /**
-     * @param FormInterface $form
-     * @param RequestStack $requestStack
-     * @param ObjectManager $manager
-     * @param RequestChannelProvider $requestChannelProvider
-     * @param LoggerInterface $logger
-     */
     public function __construct(
         FormInterface $form,
         RequestStack $requestStack,
@@ -79,9 +72,6 @@ class OpportunityHandler
         return false;
     }
 
-    /**
-     * @param Opportunity $entity
-     */
     protected function onSuccess(Opportunity $entity)
     {
         $this->manager->persist($entity);

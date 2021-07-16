@@ -60,8 +60,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
     /**
      * Create oro_channel table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmChannelTable(Schema $schema)
     {
@@ -86,8 +84,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
     /**
      * Create oro_channel_cust_identity table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmChannelCustIdentityTable(Schema $schema)
     {
@@ -109,8 +105,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
     /**
      * Create oro_channel_entity_name table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmChannelEntityNameTable(Schema $schema)
     {
@@ -124,8 +118,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
     /**
      * Create oro_channel_lifetime_hist table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmChannelLifetimeHistTable(Schema $schema)
     {
@@ -145,8 +137,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
     /**
      * Create oro_channel_ltime_avg_aggr table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmChannelLtimeAvgAggrTable(Schema $schema)
     {
@@ -164,8 +154,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
     /**
      * Add oro_channel foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmChannelForeignKeys(Schema $schema)
     {
@@ -188,8 +176,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
     /**
      * Add oro_channel_cust_identity foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmChannelCustIdentityForeignKeys(Schema $schema)
     {
@@ -226,8 +212,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
     /**
      * Add oro_channel_entity_name foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmChannelEntityNameForeignKeys(Schema $schema)
     {
@@ -243,8 +227,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
     /**
      * Add oro_channel_lifetime_hist foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmChannelLifetimeHistForeignKeys(Schema $schema)
     {
@@ -267,8 +249,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
     /**
      * Add oro_channel_ltime_avg_aggr foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmChannelLtimeAvgAggrForeignKeys(Schema $schema)
     {
@@ -282,9 +262,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
         );
     }
 
-    /**
-     * @param $schema
-     */
     public function addExtendedFields($schema)
     {
         $this->extendExtension->addManyToOneRelation(

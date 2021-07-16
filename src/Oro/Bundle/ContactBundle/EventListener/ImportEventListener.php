@@ -18,17 +18,11 @@ class ImportEventListener
      */
     private $listenerManager;
 
-    /**
-     * @param OptionalListenerManager $listenerManager
-     */
     public function __construct(OptionalListenerManager $listenerManager)
     {
         $this->listenerManager = $listenerManager;
     }
 
-    /**
-     * @param JobExecutionEvent $jobExecutionEvent
-     */
     public function onBeforeJobExecution(JobExecutionEvent $jobExecutionEvent)
     {
         if ($this->isSupportedJob($jobExecutionEvent->getJobExecution())) {
@@ -38,9 +32,6 @@ class ImportEventListener
         $this->listenerManager->disableListener('oro_email.listener.entity_listener');
     }
 
-    /**
-     * @param JobExecutionEvent $jobExecutionEvent
-     */
     public function onAfterJobExecution(JobExecutionEvent $jobExecutionEvent)
     {
         if ($this->isSupportedJob($jobExecutionEvent->getJobExecution())) {

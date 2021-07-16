@@ -14,7 +14,7 @@ class SetNullableLastName implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_contact');
-        
+
         $lastNameColumn = $table->getColumn('last_name');
         $lastNameColumn->setNotnull(false);
 

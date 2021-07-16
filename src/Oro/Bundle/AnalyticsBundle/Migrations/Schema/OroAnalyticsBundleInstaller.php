@@ -30,8 +30,6 @@ class OroAnalyticsBundleInstaller implements Installation
 
     /**
      * Create oro_analytics_rfm_category table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmAnalyticsRfmCategoryTable(Schema $schema)
     {
@@ -50,8 +48,6 @@ class OroAnalyticsBundleInstaller implements Installation
 
     /**
      * Add oro_analytics_rfm_category foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmAnalyticsRfmCategoryForeignKeys(Schema $schema)
     {

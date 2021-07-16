@@ -94,7 +94,6 @@ class ContactRequestHandlerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-
     public function testProcessValidData()
     {
         $this->form->expects($this->once())->method('setData')

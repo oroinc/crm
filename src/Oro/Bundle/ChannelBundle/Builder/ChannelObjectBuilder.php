@@ -46,11 +46,6 @@ class ChannelObjectBuilder
     /** @var \DateTime */
     protected $createdAt;
 
-    /**
-     * @param EntityManager    $em
-     * @param SettingsProvider $settingsProvider
-     * @param Channel          $channel
-     */
     public function __construct(EntityManager $em, SettingsProvider $settingsProvider, Channel $channel)
     {
         $this->em               = $em;
@@ -170,9 +165,6 @@ class ChannelObjectBuilder
         return $this;
     }
 
-    /**
-     * @param \DateTime $createdAt
-     */
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;

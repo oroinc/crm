@@ -163,9 +163,6 @@ class ContactRequest extends ExtendContactRequest
         return $this->feedback;
     }
 
-    /**
-     * @param Lead $lead
-     */
     public function setLead(Lead $lead)
     {
         $this->lead = $lead;
@@ -179,9 +176,6 @@ class ContactRequest extends ExtendContactRequest
         return $this->lead;
     }
 
-    /**
-     * @param Opportunity $opportunity
-     */
     public function setOpportunity(Opportunity $opportunity)
     {
         $this->opportunity = $opportunity;
@@ -203,9 +197,6 @@ class ContactRequest extends ExtendContactRequest
         return $this->owner;
     }
 
-    /**
-     * @param Organization $organization
-     */
     public function setOwner(Organization $organization)
     {
         $this->owner = $organization;

@@ -24,12 +24,6 @@ class OpportunityListener
     /** @var ImportStrategyHelper */
     protected $importStrategyHelper;
 
-    /**
-     * @param OpportunityRelationsBuilder $relationsBuilder
-     * @param CurrencyProviderInterface   $currencyProvider
-     * @param TranslatorInterface         $translator
-     * @param ImportStrategyHelper        $importStrategyHelper
-     */
     public function __construct(
         OpportunityRelationsBuilder $relationsBuilder,
         CurrencyProviderInterface $currencyProvider,
@@ -42,9 +36,6 @@ class OpportunityListener
         $this->importStrategyHelper = $importStrategyHelper;
     }
 
-    /**
-     * @param StrategyEvent $event
-     */
     public function onProcessBefore(StrategyEvent $event)
     {
         /** @var Opportunity $entity */
@@ -60,9 +51,6 @@ class OpportunityListener
         $this->validateCurrencies($entity, $event);
     }
 
-    /**
-     * @param StrategyEvent $event
-     */
     public function onProcessAfter(StrategyEvent $event)
     {
         $entity = $event->getEntity();

@@ -10,7 +10,6 @@ use Oro\Bundle\TestFrameworkBundle\Behat\Element\Form;
 class OpportunityProbabilitiesConfigForm extends Form
 {
     /**
-     * @param TableNode $table
      * @throws ElementNotFoundException
      */
     public function fill(TableNode $table)

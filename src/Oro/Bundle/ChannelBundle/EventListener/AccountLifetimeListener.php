@@ -31,9 +31,6 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
     /** @var array|null */
     private $customerTargetFields;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -50,9 +47,6 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
         ];
     }
 
-    /**
-     * @param OnFlushEventArgs $args
-     */
     public function onFlush(OnFlushEventArgs $args)
     {
         $em = $args->getEntityManager();
@@ -84,9 +78,6 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
         }
     }
 
-    /**
-     * @param PostFlushEventArgs $args
-     */
     public function postFlush(PostFlushEventArgs $args)
     {
         if (!$this->accounts) {
@@ -116,9 +107,6 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
         $lifetimeRepository->massStatusUpdate($historyUpdates);
     }
 
-    /**
-     * @param OnClearEventArgs $event
-     */
     public function onClear(OnClearEventArgs $event)
     {
         $this->customerTargetFields = null;
@@ -143,8 +131,6 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
     }
 
     /**
-     * @param Opportunity $entity
-     * @param UnitOfWork  $uow
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function scheduleOpportunityAccount(Opportunity $entity, UnitOfWork $uow)
@@ -178,10 +164,6 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
         }
     }
 
-    /**
-     * @param Customer   $entity
-     * @param UnitOfWork $uow
-     */
     private function scheduleCustomerAccounts(Customer $entity, UnitOfWork $uow)
     {
         $changeSet = $uow->getEntityChangeSet($entity);
@@ -199,10 +181,6 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
         }
     }
 
-    /**
-     * @param Account    $account
-     * @param UnitOfWork $uow
-     */
     private function scheduleAccount(Account $account, UnitOfWork $uow)
     {
         if ($uow->isScheduledForDelete($account)) {

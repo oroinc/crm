@@ -30,11 +30,6 @@ class SalesFunnelEntityNameProviderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getNameDataProvider
-     *
-     * @param $format
-     * @param $locale
-     * @param $entity
-     * @param $expected
      */
     public function testGetName($format, $locale, $entity, $expected)
     {
@@ -44,12 +39,6 @@ class SalesFunnelEntityNameProviderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getNameDQLDataProvider
-     *
-     * @param $format
-     * @param $locale
-     * @param $className
-     * @param $alias
-     * @param $expected
      */
     public function testGetNameDQL($format, $locale, $className, $alias, $expected)
     {
