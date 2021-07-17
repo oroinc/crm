@@ -53,12 +53,6 @@ class UpdateFormTypeForRemainingFields implements Migration, ContainerAwareInter
         );
     }
 
-    /**
-     * @param string $table
-     * @param string $field
-     * @param string $formType
-     * @param string $replaceFormType
-     */
     private function updateFieldFormType(string $table, string $field, string $formType, string $replaceFormType)
     {
         /** @var ExtendOptionsManager $extendOptionsManager */

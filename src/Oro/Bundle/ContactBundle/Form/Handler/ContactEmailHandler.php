@@ -27,12 +27,6 @@ class ContactEmailHandler
     /** @var AuthorizationCheckerInterface */
     protected $authorizationChecker;
 
-    /**
-     * @param FormInterface $form
-     * @param RequestStack $requestStack
-     * @param EntityManagerInterface $manager
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(
         FormInterface $form,
         RequestStack $requestStack,
@@ -89,10 +83,6 @@ class ContactEmailHandler
         return false;
     }
 
-    /**
-     * @param ContactEmail $entity
-     * @param Contact $contact
-     */
     protected function onSuccess(ContactEmail $entity, Contact $contact)
     {
         $entity->setOwner($contact);

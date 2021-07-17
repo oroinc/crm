@@ -38,8 +38,6 @@ class LoadGroupData extends AbstractFixture implements ContainerAwareInterface, 
 
     /**
      * Load sample groups
-     *
-     * @param \Doctrine\Persistence\ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {

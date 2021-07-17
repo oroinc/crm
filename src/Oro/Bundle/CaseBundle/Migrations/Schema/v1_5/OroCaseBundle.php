@@ -19,8 +19,6 @@ class OroCaseBundle implements Migration
 
     /**
      * Adds required columns to oro_email_mailbox_process table.
-     *
-     * @param Schema $schema
      */
     public static function addOroEmailMailboxProcessSettingsColumns(Schema $schema)
     {
@@ -39,8 +37,6 @@ class OroCaseBundle implements Migration
 
     /**
      * Adds foreign keys to new columns in oro_email_mailbox_process table.
-     *
-     * @param Schema $schema
      */
     public static function addOroEmailMailboxProcessSettingsForeignKeys(Schema $schema)
     {

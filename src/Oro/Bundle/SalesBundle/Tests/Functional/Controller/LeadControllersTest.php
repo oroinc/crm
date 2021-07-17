@@ -89,12 +89,8 @@ class LeadControllersTest extends AbstractDatagridTestCase
         return $name;
     }
 
-
     /**
      * @dataProvider updateWithInvalidWebsiteDataProvider
-     *
-     * @param string $name
-     * @param string $website
      *
      * @depends      testCreate
      */
@@ -126,9 +122,6 @@ class LeadControllersTest extends AbstractDatagridTestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public function updateWithInvalidWebsiteDataProvider(): array
     {
         return [

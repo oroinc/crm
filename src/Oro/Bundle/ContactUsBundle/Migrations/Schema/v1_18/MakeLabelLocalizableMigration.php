@@ -27,9 +27,6 @@ class MakeLabelLocalizableMigration implements Migration
         $queries->addPostQuery('ALTER TABLE orocrm_contactus_contact_rsn DROP label');
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function createOrocrmContactReasonTitlesTable(Schema $schema)
     {
         $table = $schema->createTable('orocrm_contactus_contact_rsn_t');

@@ -17,9 +17,6 @@ class TaggingEntityName implements Migration
         self::updateTaggingEntityName($queries);
     }
 
-    /**
-     * @param QueryBag $queries
-     */
     public static function updateTaggingEntityName(QueryBag $queries)
     {
         $queries->addQuery(new UpdateTableFieldQuery(

@@ -22,12 +22,6 @@ class AverageLifetimeWidgetProvider
     /** @var DateFilterProcessor */
     protected $dateFilterProcessor;
 
-    /**
-     * @param ManagerRegistry     $registry
-     * @param LocaleSettings      $localeSettings
-     * @param AclHelper           $aclHelper
-     * @param DateFilterProcessor $filterProcessor
-     */
     public function __construct(
         ManagerRegistry $registry,
         LocaleSettings $localeSettings,

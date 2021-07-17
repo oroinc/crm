@@ -31,9 +31,6 @@ class OroCaseBundle implements Migration, ActivityExtensionAwareInterface
 
     /**
      * Enables Email activity for Case entity
-     *
-     * @param Schema            $schema
-     * @param ActivityExtension $activityExtension
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {

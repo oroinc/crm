@@ -9,8 +9,6 @@ interface CustomerExtensionAwareInterface
 {
     /**
      * Sets the LeadExtension
-     *
-     * @param CustomerExtension $leadExtension
      */
     public function setCustomerExtension(CustomerExtension $leadExtension);
 }

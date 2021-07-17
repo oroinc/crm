@@ -53,17 +53,6 @@ class CustomerType extends AbstractType
     /** @var MultiGridProvider */
     protected $multiGridProvider;
 
-    /**
-     * @param DataTransformerInterface      $transformer
-     * @param ConfigProvider                $customerConfigProvider
-     * @param EntityAliasResolver           $entityAliasResolver
-     * @param CustomerIconProviderInterface $customerIconProvider
-     * @param TranslatorInterface           $translator
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param ManagerInterface              $gridManager
-     * @param EntityNameResolver            $entityNameResolver
-     * @param MultiGridProvider             $multiGridProvider
-     */
     public function __construct(
         DataTransformerInterface $transformer,
         ConfigProvider $customerConfigProvider,

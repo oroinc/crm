@@ -27,7 +27,6 @@ class RemoveBuisnessCustomerRelation implements Migration, OrderedMigrationInter
     }
 
     /**
-     * @param Schema $schema
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function removeFromLeadTable(Schema $schema)
@@ -39,7 +38,6 @@ class RemoveBuisnessCustomerRelation implements Migration, OrderedMigrationInter
     }
 
     /**
-     * @param Schema $schema
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function removeFromOpportunityTable(Schema $schema)

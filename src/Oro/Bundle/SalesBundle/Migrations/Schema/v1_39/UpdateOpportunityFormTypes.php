@@ -36,12 +36,6 @@ class UpdateOpportunityFormTypes implements Migration
         $queries->addQuery($this->getFieldUpdateQuery('closeRevenueValue', OroMoneyType::class, 'oro_money'));
     }
 
-    /**
-     * @param string $column
-     * @param string $formType
-     * @param string $replaceValue
-     * @return UpdateEntityConfigFieldValueQuery
-     */
     private function getFieldUpdateQuery(
         string $column,
         string $formType,

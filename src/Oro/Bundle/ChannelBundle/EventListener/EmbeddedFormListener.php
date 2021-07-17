@@ -12,9 +12,6 @@ class EmbeddedFormListener
     /** @var RequestStack */
     protected $requestStack;
 
-    /**
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
@@ -22,8 +19,6 @@ class EmbeddedFormListener
 
     /**
      * Add owner field to forms
-     *
-     * @param BeforeFormRenderEvent $event
      */
     public function addDataChannelField(BeforeFormRenderEvent $event)
     {
@@ -53,9 +48,6 @@ class EmbeddedFormListener
         }
     }
 
-    /**
-     * @param EmbeddedFormSubmitBeforeEvent $event
-     */
     public function onEmbeddedFormSubmit(EmbeddedFormSubmitBeforeEvent $event)
     {
         /** @var ChannelAwareInterface $form */

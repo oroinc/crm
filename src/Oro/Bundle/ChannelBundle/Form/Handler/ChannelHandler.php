@@ -30,12 +30,6 @@ class ChannelHandler
     /** @var EventDispatcherInterface */
     protected $dispatcher;
 
-    /**
-     * @param RequestStack $requestStack
-     * @param FormInterface $form
-     * @param ManagerRegistry $registry
-     * @param EventDispatcherInterface $dispatcher
-     */
     public function __construct(
         RequestStack $requestStack,
         FormInterface $form,
@@ -72,9 +66,6 @@ class ChannelHandler
         return false;
     }
 
-    /**
-     * @param Channel $channel
-     */
     protected function handleRequestChannelType(Channel &$channel)
     {
         if ($channel->getChannelType()) {
@@ -93,8 +84,6 @@ class ChannelHandler
 
     /**
      * Saves entity and dispatches needed events
-     *
-     * @param Channel $entity
      */
     protected function doSave(Channel $entity)
     {

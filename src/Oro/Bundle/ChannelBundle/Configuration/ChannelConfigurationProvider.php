@@ -27,11 +27,6 @@ class ChannelConfigurationProvider extends PhpArrayConfigProvider
     /** @var ResolverInterface */
     private $resolver;
 
-    /**
-     * @param string            $cacheFile
-     * @param bool              $debug
-     * @param ResolverInterface $resolver
-     */
     public function __construct(string $cacheFile, bool $debug, ResolverInterface $resolver)
     {
         parent::__construct($cacheFile, $debug);
@@ -110,11 +105,6 @@ class ChannelConfigurationProvider extends PhpArrayConfigProvider
         ));
     }
 
-    /**
-     * @param array $config
-     *
-     * @return array
-     */
     private function resolveConfig(array $config): array
     {
         $resolvedConfig = $this->resolver->resolve($config);
@@ -131,11 +121,6 @@ class ChannelConfigurationProvider extends PhpArrayConfigProvider
         return $resolvedConfig;
     }
 
-    /**
-     * @param array $config
-     *
-     * @return array
-     */
     private function buildEntities(array $config): array
     {
         $entities = [];
@@ -148,11 +133,6 @@ class ChannelConfigurationProvider extends PhpArrayConfigProvider
         return $entities;
     }
 
-    /**
-     * @param array $entities
-     *
-     * @return array
-     */
     private function buildDependentEntitiesMap(array $entities): array
     {
         $map = [];

@@ -12,17 +12,11 @@ class WidgetExcludedStatusListener
     /** @var WidgetConfigs */
     protected $widgetConfigs;
 
-    /**
-     * @param WidgetConfigs $widgetConfigs
-     */
     public function __construct(WidgetConfigs $widgetConfigs)
     {
         $this->widgetConfigs = $widgetConfigs;
     }
 
-    /**
-     * @param OrmResultBefore $event
-     */
     public function onResultBefore(OrmResultBefore $event)
     {
         $widgetOptions = $this->widgetConfigs->getWidgetOptions();

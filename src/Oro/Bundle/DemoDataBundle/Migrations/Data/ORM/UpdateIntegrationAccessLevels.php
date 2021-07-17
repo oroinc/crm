@@ -23,9 +23,6 @@ class UpdateIntegrationAccessLevels extends AbstractUpdatePermissions implements
         return [LoadRolesData::class];
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         if (!$this->container->hasParameter('installed') || !$this->container->getParameter('installed')) {

@@ -25,12 +25,6 @@ class B2bCustomerHandler
     /** @var RequestChannelProvider */
     protected $requestChannelProvider;
 
-    /**
-     * @param FormInterface          $form
-     * @param RequestStack           $requestStack
-     * @param ObjectManager          $manager
-     * @param RequestChannelProvider $requestChannelProvider
-     */
     public function __construct(
         FormInterface $form,
         RequestStack $requestStack,
@@ -71,8 +65,6 @@ class B2bCustomerHandler
 
     /**
      * "Success" form handler
-     *
-     * @param B2bCustomer $entity
      */
     protected function onSuccess(B2bCustomer $entity)
     {

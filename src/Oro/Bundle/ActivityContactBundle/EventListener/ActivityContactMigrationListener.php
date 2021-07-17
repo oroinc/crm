@@ -15,10 +15,6 @@ class ActivityContactMigrationListener
     /** @var ActivityContactProvider */
     protected $activityContactProvider;
 
-    /**
-     * @param EntityMetadataHelper    $metadataHelper
-     * @param ActivityContactProvider $activityContactProvider
-     */
     public function __construct(EntityMetadataHelper $metadataHelper, ActivityContactProvider $activityContactProvider)
     {
         $this->metadataHelper          = $metadataHelper;
@@ -27,8 +23,6 @@ class ActivityContactMigrationListener
 
     /**
      * POST UP event handler
-     *
-     * @param PostMigrationEvent $event
      */
     public function onPostUp(PostMigrationEvent $event)
     {

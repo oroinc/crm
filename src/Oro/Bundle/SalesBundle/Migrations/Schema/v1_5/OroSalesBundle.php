@@ -25,8 +25,6 @@ class OroSalesBundle implements Migration, ActivityExtensionAwareInterface
 
     /**
      * Enable notes for Lead and Opportunity entities
-     *
-     * @param Schema $schema
      */
     protected function addNoteAssociations(Schema $schema)
     {
@@ -36,8 +34,6 @@ class OroSalesBundle implements Migration, ActivityExtensionAwareInterface
 
     /**
      * Sets the ActivityExtension
-     *
-     * @param ActivityExtension $activityExtension
      */
     public function setActivityExtension(ActivityExtension $activityExtension)
     {

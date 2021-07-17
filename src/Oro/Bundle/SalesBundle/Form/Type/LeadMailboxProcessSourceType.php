@@ -15,8 +15,6 @@ class LeadMailboxProcessSourceType extends AbstractType
 
     /**
      * LeadMailboxProcessSourceType constructor.
-     *
-     * @param EnumValueProvider $enumValueProvider
      */
     public function __construct(EnumValueProvider $enumValueProvider)
     {

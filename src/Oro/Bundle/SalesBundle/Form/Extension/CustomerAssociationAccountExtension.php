@@ -26,10 +26,6 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
     /** @var ContainerInterface */
     private $container;
 
-    /**
-     * @param DoctrineHelper     $doctrineHelper
-     * @param ContainerInterface $container
-     */
     public function __construct(DoctrineHelper $doctrineHelper, ContainerInterface $container)
     {
         $this->doctrineHelper = $doctrineHelper;
@@ -120,9 +116,6 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
         return $target !== null && !$this->doctrineHelper->isNewEntity($target);
     }
 
-    /**
-     * @param FormEvent $event
-     */
     private function setAccountForCustomer(FormEvent $event)
     {
         $target  = $event->getData();
@@ -166,17 +159,11 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
         return ['Symfony\Component\Form\Extension\Core\Type\FormType'];
     }
 
-    /**
-     * @return ConfigProvider
-     */
     private function getConfigProvider(): ConfigProvider
     {
         return $this->container->get('oro_sales.customer.config_provider');
     }
 
-    /**
-     * @return AccountCustomerManager
-     */
     private function getManager(): AccountCustomerManager
     {
         return $this->container->get('oro_sales.manager.account_customer');

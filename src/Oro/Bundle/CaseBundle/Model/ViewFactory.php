@@ -35,13 +35,6 @@ class ViewFactory
     /** @var AttachmentManager */
     protected $attachmentManager;
 
-    /**
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param RouterInterface               $router
-     * @param EntityNameResolver            $entityNameResolver
-     * @param DateTimeFormatterInterface    $dateTimeFormatter
-     * @param AttachmentManager             $attachmentManager
-     */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         RouterInterface $router,

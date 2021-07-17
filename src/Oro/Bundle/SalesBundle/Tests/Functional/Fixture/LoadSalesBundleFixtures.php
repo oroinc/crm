@@ -162,7 +162,6 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead3->addEmail($email);
         $lead3->setOrganization($this->organization);
 
-
         $this->em->persist($lead);
         $this->em->persist($lead2);
         $this->em->persist($lead3);

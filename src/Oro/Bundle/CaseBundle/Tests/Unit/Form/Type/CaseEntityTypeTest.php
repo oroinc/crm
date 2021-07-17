@@ -17,8 +17,6 @@ class CaseEntityTypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $widgets
-     *
      * @dataProvider formTypeProvider
      */
     public function testBuildForm(array $widgets)

@@ -17,9 +17,6 @@ class LoadOpportunityCloseReasonData extends AbstractFixture
         'cancelled' => 'Cancelled',
     );
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         foreach ($this->data as $methodName => $methodLabel) {

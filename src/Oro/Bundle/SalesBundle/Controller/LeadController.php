@@ -149,7 +149,7 @@ class LeadController extends AbstractController
         if (!$this->get('oro_sales.provider.lead_actions_access')->isDisqualifyAllowed($lead)) {
             throw new AccessDeniedException();
         }
-        
+
         if ($this->get('oro_sales.model.change_lead_status')->disqualify($lead)) {
             $this->get('session')->getFlashBag()->add(
                 'success',

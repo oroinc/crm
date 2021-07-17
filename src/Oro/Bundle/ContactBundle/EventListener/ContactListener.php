@@ -15,37 +15,22 @@ class ContactListener
     /** @var TokenStorageInterface */
     protected $tokenStorage;
 
-    /**
-     * @param TokenStorageInterface $tokenStorage
-     */
     public function __construct(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
     }
 
-    /**
-     * @param Contact            $entity
-     * @param LifecycleEventArgs $args
-     */
     public function prePersist(Contact $entity, LifecycleEventArgs $args)
     {
         $this->setCreatedProperties($entity, $args->getEntityManager());
         $this->setUpdatedProperties($entity, $args->getEntityManager());
     }
 
-    /**
-     * @param Contact            $entity
-     * @param PreUpdateEventArgs $args
-     */
     public function preUpdate(Contact $entity, PreUpdateEventArgs $args)
     {
         $this->setUpdatedProperties($entity, $args->getEntityManager(), true);
     }
 
-    /**
-     * @param Contact $contact
-     * @param EntityManager $entityManager
-     */
     protected function setCreatedProperties(Contact $contact, EntityManager $entityManager)
     {
         if (!$contact->getCreatedAt()) {

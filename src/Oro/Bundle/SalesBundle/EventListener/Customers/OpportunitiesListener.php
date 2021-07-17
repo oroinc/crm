@@ -31,13 +31,6 @@ class OpportunitiesListener
     /** @var  FeatureChecker */
     protected $featureChecker;
 
-    /**
-     * @param CustomerConfigProvider $customerConfigProvider
-     * @param TranslatorInterface    $translator
-     * @param DoctrineHelper         $helper
-     * @param ConfigProvider         $configProvider
-     * @param FeatureChecker         $featureChecker
-     */
     public function __construct(
         CustomerConfigProvider $customerConfigProvider,
         TranslatorInterface $translator,
@@ -55,8 +48,6 @@ class OpportunitiesListener
     /**
      * Adds block with associated opportunities grid of viewing entity
      * if this entity has "customer" association enabled.
-     *
-     * @param BeforeViewRenderEvent $event
      */
     public function addOpportunities(BeforeViewRenderEvent $event)
     {

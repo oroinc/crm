@@ -29,10 +29,6 @@ class OpportunityListener
     /** @var DefaultCurrencyProviderInterface */
     protected $currencyProvider;
 
-    /**
-     * @param RateConverterInterface $rateConverter
-     * @param DefaultCurrencyProviderInterface $currencyProvider
-     */
     public function __construct(
         RateConverterInterface $rateConverter,
         DefaultCurrencyProviderInterface $currencyProvider
@@ -41,9 +37,6 @@ class OpportunityListener
         $this->currencyProvider = $currencyProvider;
     }
 
-    /**
-     * @param OnFlushEventArgs $event
-     */
     public function onFlush(OnFlushEventArgs $event)
     {
         $em         = $event->getEntityManager();

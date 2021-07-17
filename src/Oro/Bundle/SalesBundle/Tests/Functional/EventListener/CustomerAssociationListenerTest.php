@@ -99,9 +99,6 @@ class CustomerAssociationListenerTest extends WebTestCase
         $em->persist($testCustomerTarget2);
     }
 
-    /**
-     * @param EntityManager $em
-     */
     protected function loadEntities(EntityManager $em)
     {
         $name = 'test_%s_%s';

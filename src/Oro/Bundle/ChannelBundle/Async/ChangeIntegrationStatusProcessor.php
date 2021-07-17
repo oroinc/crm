@@ -25,10 +25,6 @@ class ChangeIntegrationStatusProcessor implements MessageProcessorInterface, Top
      */
     private $logger;
 
-    /**
-     * @param ManagerRegistry $registry
-     * @param LoggerInterface $logger
-     */
     public function __construct(ManagerRegistry $registry, LoggerInterface $logger)
     {
         $this->registry = $registry;

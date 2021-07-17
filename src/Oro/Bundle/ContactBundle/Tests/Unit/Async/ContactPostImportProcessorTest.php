@@ -138,9 +138,6 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(ContactPostImportProcessor::REJECT, $this->processor->process($message, $session));
     }
 
-    /**
-     * @return array
-     */
     public function unsupportedJobNameDataProvider(): array
     {
         return [

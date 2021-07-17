@@ -62,9 +62,6 @@ class LeadsListTest extends BaseStatistics
         $this->assertResults($expectedResults);
     }
 
-    /**
-     * @return array
-     */
     public function widgetDataProvider(): array
     {
         return [
@@ -109,9 +106,6 @@ class LeadsListTest extends BaseStatistics
         return $this->getReference('widget_leads_list');
     }
 
-    /**
-     * @param array $expectedResults
-     */
     private function assertResults(array $expectedResults)
     {
         $response = $this->client->getResponse();

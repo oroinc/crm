@@ -12,9 +12,5 @@ interface AnalyticsBuilderInterface
      */
     public function supports(Channel $channel);
 
-    /**
-     * @param Channel $entity
-     * @param array $ids
-     */
     public function build(Channel $entity, array $ids = []);
 }

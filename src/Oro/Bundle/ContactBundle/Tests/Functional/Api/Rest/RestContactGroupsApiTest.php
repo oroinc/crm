@@ -63,9 +63,6 @@ class RestContactGroupsApiTest extends WebTestCase
     }
 
     /**
-     * @param $group
-     * @param $request
-     *
      * @depends testGetContactGroup
      * @depends testCreateContactGroup
      */
@@ -91,8 +88,6 @@ class RestContactGroupsApiTest extends WebTestCase
     }
 
     /**
-     * @param $group
-     *
      * @depends testGetContactGroup
      */
     public function testDeleteContact($group)

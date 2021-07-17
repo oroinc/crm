@@ -18,10 +18,6 @@ class B2bCustomerPhoneDeleteHandlerExtension extends AbstractEntityDeleteHandler
     /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param TranslatorInterface           $translator
-     */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         TranslatorInterface $translator

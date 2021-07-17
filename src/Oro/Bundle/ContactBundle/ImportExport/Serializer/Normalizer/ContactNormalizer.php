@@ -34,9 +34,6 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
      */
     protected $serializer;
 
-    /**
-     * @param SocialUrlFormatter $socialUrlFormatter
-     */
     public function setSocialUrlFormatter(SocialUrlFormatter $socialUrlFormatter)
     {
         $this->socialUrlFormatter = $socialUrlFormatter;

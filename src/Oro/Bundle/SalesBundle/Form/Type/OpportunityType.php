@@ -42,12 +42,6 @@ class OpportunityType extends AbstractType
     /** @var OpportunityRelationsBuilder */
     protected $relationsBuilder;
 
-    /**
-     * @param ProbabilityProvider         $probabilityProvider
-     * @param EnumValueProvider           $enumValueProvider
-     * @param EnumTypeHelper              $typeHelper
-     * @param OpportunityRelationsBuilder $relationsBuilder
-     */
     public function __construct(
         ProbabilityProvider $probabilityProvider,
         EnumValueProvider $enumValueProvider,
@@ -171,8 +165,6 @@ class OpportunityType extends AbstractType
 
     /**
      * Set new opportunities default probability based on default enum status value
-     *
-     * @param FormEvent $event
      */
     public function onFormPreSetData(FormEvent $event)
     {
@@ -232,9 +224,6 @@ class OpportunityType extends AbstractType
         return self::NAME;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     */
     protected function addListeners(FormBuilderInterface $builder)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onFormPreSetData']);

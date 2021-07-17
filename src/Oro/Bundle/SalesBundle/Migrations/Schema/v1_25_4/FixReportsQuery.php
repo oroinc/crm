@@ -163,8 +163,6 @@ SQL;
      * you'll get exception that alias is already defined
      *
      * Also there is no point in having duplicated stuff
-     *
-     * @param array $def
      */
     protected function removeDuplicates(array &$def)
     {

@@ -23,9 +23,6 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider preSetDataProvider
-     *
-     * @param $enumOptionId
-     * @param $shouldBeDisabled
      */
     public function testPreSetData($enumOptionId, $shouldBeDisabled)
     {

@@ -29,11 +29,6 @@ class ContactHandler
      */
     protected $manager;
 
-    /**
-     * @param FormInterface $form
-     * @param RequestStack $requestStack
-     * @param EntityManagerInterface $manager
-     */
     public function __construct(FormInterface $form, RequestStack $requestStack, EntityManagerInterface $manager)
     {
         $this->form    = $form;
@@ -70,10 +65,6 @@ class ContactHandler
 
     /**
      * "Success" form handler
-     *
-     * @param Contact $entity
-     * @param array $appendAccounts
-     * @param array $removeAccounts
      */
     protected function onSuccess(Contact $entity, array $appendAccounts, array $removeAccounts)
     {
@@ -89,8 +80,6 @@ class ContactHandler
     /**
      * Set updated at to current DateTime when related entities updated
      * TODO: consider refactoring of this feature to make it applicable to all entities
-     *
-     * @param Contact $entity
      */
     protected function setUpdatedAt(Contact $entity)
     {

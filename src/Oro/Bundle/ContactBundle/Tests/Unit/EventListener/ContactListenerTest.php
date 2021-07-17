@@ -125,7 +125,6 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-
         $entityManager = $this->getEntityManagerMock($reloadUser, $newUser);
         $entityManager->expects($this->any())
             ->method('getUnitOfWork')
@@ -231,7 +230,6 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(array('getUnitOfWork', 'find'))
             ->disableOriginalConstructor()
             ->getMock();
-
 
         if ($reloadUser) {
             $result->expects($this->once())->method('find')

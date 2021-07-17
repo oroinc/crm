@@ -14,7 +14,7 @@ class B2bAccountProvider implements AccountProviderInterface
         if ($targetCustomer instanceof B2bCustomer && $targetCustomer->getAccount()) {
             return $targetCustomer->getAccount();
         }
-        
+
         return null;
     }
 }

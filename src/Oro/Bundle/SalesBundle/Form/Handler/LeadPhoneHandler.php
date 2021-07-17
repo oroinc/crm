@@ -28,12 +28,6 @@ class LeadPhoneHandler
     /** @var AuthorizationCheckerInterface */
     protected $authorizationChecker;
 
-    /**
-     * @param FormFactory $form
-     * @param RequestStack $requestStack
-     * @param EntityManagerInterface $manager
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(
         FormFactory $form,
         RequestStack $requestStack,
@@ -91,10 +85,6 @@ class LeadPhoneHandler
         return false;
     }
 
-    /**
-     * @param LeadPhone $entity
-     * @param Lead $lead
-     */
     protected function onSuccess(LeadPhone $entity, Lead $lead)
     {
         $entity->setOwner($lead);

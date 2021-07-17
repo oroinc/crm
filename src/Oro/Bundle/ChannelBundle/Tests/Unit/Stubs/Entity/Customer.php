@@ -60,9 +60,6 @@ class Customer implements ChannelAwareInterface
         return $this->id;
     }
 
-    /**
-     * @param Account $account
-     */
     public function setAccount(Account $account)
     {
         $this->account = $account;

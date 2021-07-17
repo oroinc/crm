@@ -73,9 +73,6 @@ class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $shortenedFields
-     * @param array $originalData
-     * @param array $expectedData
      * @dataProvider onPrepareEntityMapDataProvider
      */
     public function testOnPrepareEntityMap(array $shortenedFields, array $originalData, array $expectedData)

@@ -68,10 +68,6 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
         ]
     ];
 
-    /**
-     * @param EntityFieldProvider $entityFieldProvider
-     * @param ChangeLeadStatus $changeLeadStatus
-     */
     public function __construct(EntityFieldProvider $entityFieldProvider, ChangeLeadStatus $changeLeadStatus)
     {
         $this->accessor = PropertyAccess::createPropertyAccessor();
@@ -222,10 +218,6 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
         return $saveResult;
     }
 
-    /**
-     * @param Lead        $lead
-     * @param Opportunity $opportunity
-     */
     protected function setContactAndAccountToLeadFromOpportunity(Lead $lead, Opportunity $opportunity)
     {
         $lead->setContact($opportunity->getContact());

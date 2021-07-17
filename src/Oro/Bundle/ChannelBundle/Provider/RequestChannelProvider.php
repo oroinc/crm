@@ -16,10 +16,6 @@ class RequestChannelProvider
     /** @var RequestStack */
     protected $requestStack;
 
-    /**
-     * @param RequestStack      $requestStack
-     * @param ManagerRegistry   $registry
-     */
     public function __construct(RequestStack $requestStack, ManagerRegistry $registry)
     {
         $this->registry = $registry;

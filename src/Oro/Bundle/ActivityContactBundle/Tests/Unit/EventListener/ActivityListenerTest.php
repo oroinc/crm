@@ -70,10 +70,6 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $direction
-     * @param bool $extend
-     * @param int|null $expected
-     *
      * @dataProvider onRemoveActivityDataProvider
      */
     public function testOnRemoveActivity(string $direction, bool $extend, ?int $expected): void

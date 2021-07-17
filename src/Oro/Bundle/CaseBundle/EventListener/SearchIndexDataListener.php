@@ -26,25 +26,16 @@ class SearchIndexDataListener
      */
     protected $shortenedFields = [];
 
-    /**
-     * @param ObjectMapper $mapper
-     */
     public function __construct(ObjectMapper $mapper)
     {
         $this->mapper = $mapper;
     }
 
-    /**
-     * @param array $shortenedFields
-     */
     public function setShortenedFields(array $shortenedFields)
     {
         $this->shortenedFields = $shortenedFields;
     }
 
-    /**
-     * @param PrepareEntityMapEvent $event
-     */
     public function onPrepareEntityMap(PrepareEntityMapEvent $event)
     {
         if ($event->getClassName() !== CaseEntity::class) {

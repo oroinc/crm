@@ -18,11 +18,9 @@ class CreateB2bCustomerEmail implements Migration
         /** Foreign keys generation **/
         $this->addOrocrmB2bCustomerEmailForeignKeys($schema);
     }
-    
+
     /**
      * Create oro_b2bcustomer_email table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmB2bCustomerEmailTable(Schema $schema)
     {
@@ -38,8 +36,6 @@ class CreateB2bCustomerEmail implements Migration
 
     /**
      * Add oro_b2bcustomer_email foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmB2bCustomerEmailForeignKeys(Schema $schema)
     {

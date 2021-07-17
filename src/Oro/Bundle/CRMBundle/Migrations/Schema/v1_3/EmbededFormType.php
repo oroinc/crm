@@ -17,9 +17,6 @@ class EmbededFormType implements Migration
         self::updateEmbededFormType($queries);
     }
 
-    /**
-     * @param QueryBag $queries
-     */
     public static function updateEmbededFormType(QueryBag $queries)
     {
         $queries->addQuery(new UpdateTableFieldQuery(

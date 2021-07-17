@@ -19,9 +19,6 @@ class EntityActivityContactDataProvider
     /** @var PropertyAccessor */
     protected $propertyAccessor;
 
-    /**
-     * @param ConfigManager $configManager
-     */
     public function __construct(ConfigManager $configManager)
     {
         $this->extendProvider   = $configManager->getProvider('extend');

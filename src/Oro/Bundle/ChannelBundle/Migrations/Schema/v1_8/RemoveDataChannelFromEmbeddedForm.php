@@ -17,9 +17,6 @@ class RemoveDataChannelFromEmbeddedForm implements Migration
         $this->disableChannelField($queries);
     }
 
-    /**
-     * @param QueryBag $queries
-     */
     protected function disableChannelField(QueryBag $queries)
     {
         $queries->addPostQuery(new UpdateEntityConfigFieldValueQuery(

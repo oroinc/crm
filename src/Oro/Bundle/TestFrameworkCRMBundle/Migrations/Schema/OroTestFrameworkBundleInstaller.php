@@ -55,9 +55,6 @@ class OroTestFrameworkBundleInstaller implements
         $this->addTestEnumFieldToContact($schema);
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function addTestCustomerTargetTables(Schema $schema)
     {
         $table = $schema->createTable('test_customer1');
@@ -71,18 +68,12 @@ class OroTestFrameworkBundleInstaller implements
         $table->setPrimaryKey(['id']);
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function addCustomerAssociations(Schema $schema)
     {
         $this->customerExtension->addCustomerAssociation($schema, 'test_customer1');
         $this->customerExtension->addCustomerAssociation($schema, 'test_customer2');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function addTestEnumFieldToContact(Schema $schema)
     {
         $contactTable = $schema->getTable('orocrm_contact');

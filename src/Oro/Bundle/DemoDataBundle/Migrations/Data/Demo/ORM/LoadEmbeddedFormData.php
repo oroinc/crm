@@ -87,9 +87,6 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
         $om->flush();
     }
 
-    /**
-     * @param ObjectManager $om
-     */
     protected function persistDemoEmbeddedForm(
         ObjectManager $om
     ) {
@@ -104,9 +101,6 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
         $om->persist($embeddedForm);
     }
 
-    /**
-     * @param ObjectManager $om
-     */
     protected function persistDemoContactUsForm(ObjectManager $om)
     {
         $contactReasons = $om->getRepository(ContactReason::class)->findAllExistingWithTitles();

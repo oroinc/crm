@@ -63,7 +63,6 @@ class ActivityContactProvider
         return null;
     }
 
-
     /**
      * Gets the list of supported activity classes.
      *

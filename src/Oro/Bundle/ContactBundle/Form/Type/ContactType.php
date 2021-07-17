@@ -49,10 +49,6 @@ class ContactType extends AbstractType
         );
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     protected function buildPlainFields(FormBuilderInterface $builder, array $options)
     {
         // basic plain fields
@@ -98,8 +94,6 @@ class ContactType extends AbstractType
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function buildRelationFields(FormBuilderInterface $builder, array $options)
@@ -227,11 +221,6 @@ class ContactType extends AbstractType
         );
     }
 
-    /**
-     * @param FormView $view
-     * @param FormInterface $form
-     * @param array $options
-     */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         /** @var Contact $contact */

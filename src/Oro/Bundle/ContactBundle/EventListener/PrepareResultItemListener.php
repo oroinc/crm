@@ -19,8 +19,6 @@ class PrepareResultItemListener
 
     /**
      * PrepareResultItemListener constructor.
-     * @param ContactNameFormatter $nameFormatter
-     * @param DoctrineHelper $doctrineHelper
      */
     public function __construct(ContactNameFormatter $nameFormatter, DoctrineHelper $doctrineHelper)
     {
@@ -28,9 +26,6 @@ class PrepareResultItemListener
         $this->doctrineHelper = $doctrineHelper;
     }
 
-    /**
-     * @param PrepareResultItemEvent $event
-     */
     public function prepareEmailItemDataEvent(PrepareResultItemEvent $event)
     {
         if (trim($event->getResultItem()->getRecordTitle()) ||
@@ -46,7 +41,6 @@ class PrepareResultItemListener
             ->doctrineHelper
             ->getEntityRepository($resultItem->getEntityName())
             ->find($resultItem->getId());
-
 
         $resultItem->setRecordTitle($this->nameFormatter->format($entity));
     }

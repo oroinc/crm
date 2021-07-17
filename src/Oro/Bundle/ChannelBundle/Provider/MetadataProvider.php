@@ -25,12 +25,6 @@ class MetadataProvider implements MetadataProviderInterface
     /** @var ConfigManager */
     protected $configManager;
 
-    /**
-     * @param SettingsProvider $settings
-     * @param EntityProvider   $entityProvider
-     * @param ConfigManager    $configManager
-     * @param RouterInterface  $router
-     */
     public function __construct(
         SettingsProvider $settings,
         EntityProvider $entityProvider,
