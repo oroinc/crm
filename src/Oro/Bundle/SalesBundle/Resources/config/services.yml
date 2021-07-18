@@ -97,11 +97,11 @@ services:
     oro_sales.event_listener.b2bcustomer_lifetime:
         class: Oro\Bundle\SalesBundle\EventListener\B2bCustomerLifetimeListener
         arguments:
-            - '@oro_currency.converter.rate.link'
-            - '@oro_currency.query.currency_transformer'
+            - '@Psr\Container\ContainerInterface'
         tags:
-        - { name: doctrine.event_listener, event: onFlush }
-        - { name: doctrine.event_listener, event: postFlush }
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postFlush }
+            - { name: container.service_subscriber, id: oro_currency.query.currency_transformer }
 
     oro_sales.event_listener.default_probability:
         class: Oro\Bundle\SalesBundle\EventListener\DefaultProbabilityListener
