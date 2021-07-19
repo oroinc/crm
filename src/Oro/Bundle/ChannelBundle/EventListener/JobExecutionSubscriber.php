@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
-use Akeneo\Bundle\BatchBundle\Event\EventInterface;
-use Akeneo\Bundle\BatchBundle\Event\JobExecutionEvent;
+use Oro\Bundle\BatchBundle\Event\EventInterface;
+use Oro\Bundle\BatchBundle\Event\JobExecutionEvent;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Authentication\Token\ConsoleToken;

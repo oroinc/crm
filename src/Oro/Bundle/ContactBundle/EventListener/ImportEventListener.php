@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ContactBundle\EventListener;
 
-use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
-use Akeneo\Bundle\BatchBundle\Event\JobExecutionEvent;
+use Oro\Bundle\BatchBundle\Entity\JobExecution;
+use Oro\Bundle\BatchBundle\Event\JobExecutionEvent;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
 

@@ -371,7 +371,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $event->setEnd(clone $day);
         $day->setTime(10, 0, 0);
         $event->setStart(clone $day);
-        $event->setAllDay(true);
+        $event->setAllDay(false);
         $recurrence = clone $baseRecurrence;
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_WEEKLY);
         $recurrence->setInterval(1)
