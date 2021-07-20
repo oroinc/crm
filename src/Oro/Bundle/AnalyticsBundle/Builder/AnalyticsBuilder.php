@@ -20,10 +20,6 @@ class AnalyticsBuilder
         $this->builders = $builders;
     }
 
-    /**
-     * @param Channel $channel
-     * @param array $ids
-     */
     public function build(Channel $channel, array $ids = [])
     {
         foreach ($this->builders as $builder) {

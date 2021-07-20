@@ -34,9 +34,6 @@ class PrepareResultItemListenerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider prepareEmailItemDataEventProvider
-     * @param PrepareResultItemEvent $event
-     * @param PrepareResultItemEvent $expectedEvent
-     * @param DoctrineHelper $doctrineHelper
      */
     public function testPrepareEmailItemDataEvent(
         PrepareResultItemEvent $event,
@@ -134,7 +131,6 @@ class PrepareResultItemListenerTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-
 
     /**
      * @param object $entity

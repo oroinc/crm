@@ -39,9 +39,6 @@ class OroCalendarCRMBridgeBundleInstaller implements
         $this->addCalendarActivityAssociations($schema);
     }
 
-    /**
-     * @param Schema $schema
-     */
     private function addCalendarActivityAssociations(Schema $schema)
     {
         $associationTables = [

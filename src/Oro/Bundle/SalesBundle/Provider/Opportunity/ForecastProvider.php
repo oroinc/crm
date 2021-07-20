@@ -60,15 +60,6 @@ class ForecastProvider
         'budgetAmount' => ['old' => 'oldFloat',      'new' => 'newFloat'   ],
     ];
 
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param AclHelper $aclHelper
-     * @param WidgetProviderFilterManager $widgetProviderFilter
-     * @param EnumValueProvider $enumProvider
-     * @param FilterProcessor $filterProcessor
-     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
-     * @param OwnerHelper $ownerHelper
-     */
     public function __construct(
         ManagerRegistry $doctrine,
         AclHelper $aclHelper,
@@ -388,10 +379,6 @@ HAVING
         return $this->aclHelper->apply($queryBuilder);
     }
 
-    /**
-     * @param QueryBuilder    $queryBuilder
-     * @param WidgetOptionBag $widgetOptions
-     */
     protected function applyQueryFilter(QueryBuilder $queryBuilder, WidgetOptionBag $widgetOptions)
     {
         $queryFilter = $widgetOptions->get('queryFilter', []);

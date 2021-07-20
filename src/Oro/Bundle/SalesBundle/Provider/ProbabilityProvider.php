@@ -14,9 +14,6 @@ class ProbabilityProvider
     /** @var ConfigManager */
     protected $configManager;
 
-    /**
-     * @param ConfigManager $configManager
-     */
     public function __construct(ConfigManager $configManager)
     {
         $this->configManager = $configManager;

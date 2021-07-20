@@ -44,9 +44,6 @@ class ChannelDoctrineListener
     /** @var bool */
     protected $isInProgress = false;
 
-    /**
-     * @param SettingsProvider $settingsProvider
-     */
     public function __construct(
         SettingsProvider $settingsProvider
     ) {
@@ -56,9 +53,6 @@ class ChannelDoctrineListener
         }
     }
 
-    /**
-     * @param OnFlushEventArgs $args
-     */
     public function onFlush(OnFlushEventArgs $args)
     {
         $this->initializeFromEventArgs($args);
@@ -75,9 +69,6 @@ class ChannelDoctrineListener
         }
     }
 
-    /**
-     * @param PostFlushEventArgs $args
-     */
     public function postFlush(PostFlushEventArgs $args)
     {
         if ($this->isInProgress) {
@@ -150,9 +141,6 @@ class ChannelDoctrineListener
         return iterator_to_array($this->getChangedTrackedEntitiesGenerator());
     }
 
-    /**
-     * @return \Generator
-     */
     private function getChangedTrackedEntitiesGenerator(): \Generator
     {
         yield from $this->getCustomerIdentitiesEntities($this->uow->getScheduledEntityInsertions());

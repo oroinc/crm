@@ -96,9 +96,6 @@ class OpportunityStatisticsProvider extends B2bBigNumberProvider
         return $this->processDataQueryBuilder($queryBuilder, $widgetOptions)->getSingleScalarResult();
     }
 
-    /**
-     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
-     */
     public function setCurrencyQBTransformer(CurrencyQueryBuilderTransformerInterface $qbTransformer)
     {
         $this->qbTransformer = $qbTransformer;

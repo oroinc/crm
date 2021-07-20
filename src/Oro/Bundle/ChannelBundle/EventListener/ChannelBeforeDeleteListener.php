@@ -11,17 +11,11 @@ class ChannelBeforeDeleteListener
     /** @var DeleteManager  */
     protected $manager;
 
-    /**
-     * @param DeleteManager $manager
-     */
     public function __construct(DeleteManager $manager)
     {
         $this->manager = $manager;
     }
 
-    /**
-     * @param ChannelBeforeDeleteEvent $event
-     */
     public function onChannelBeforeDelete(ChannelBeforeDeleteEvent $event)
     {
         /** @var Channel $channel */

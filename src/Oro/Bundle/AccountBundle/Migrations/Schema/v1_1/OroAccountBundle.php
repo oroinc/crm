@@ -25,8 +25,6 @@ class OroAccountBundle implements Migration, ActivityExtensionAwareInterface
 
     /**
      * Enable notes for Account entity
-     *
-     * @param Schema        $schema
      */
     protected function addNoteAssociations(Schema $schema)
     {

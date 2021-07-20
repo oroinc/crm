@@ -19,9 +19,6 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
         $this->createChannelsForIntegrations($settingsProvider);
     }
 
-    /**
-     * @param SettingsProvider $settingsProvider
-     */
     protected function createChannelsForIntegrations(SettingsProvider $settingsProvider)
     {
         // create channels for integrations
@@ -49,9 +46,6 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
         }
     }
 
-    /**
-     * @param Channel $channel
-     */
     protected function saveChannel(Channel $channel)
     {
         $this->em->persist($channel);

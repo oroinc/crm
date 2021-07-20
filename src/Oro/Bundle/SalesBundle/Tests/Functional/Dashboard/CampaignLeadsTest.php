@@ -33,7 +33,6 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
     /**
      * @depends      testGetWidgetConfigureDialog
      * @dataProvider widgetProvider
-     * @param $requestData
      */
     public function testDateRangeBetweenFilter($requestData)
     {

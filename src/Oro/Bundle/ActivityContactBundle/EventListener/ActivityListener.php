@@ -38,11 +38,6 @@ class ActivityListener
     /** @var ConfigManager */
     protected $configManager;
 
-    /**
-     * @param ActivityContactProvider $activityContactProvider
-     * @param DoctrineHelper          $doctrineHelper
-     * @param ConfigManager           $configManager
-     */
     public function __construct(
         ActivityContactProvider $activityContactProvider,
         DoctrineHelper $doctrineHelper,
@@ -55,8 +50,6 @@ class ActivityListener
 
     /**
      * Recalculate activity contacts on add new activity to the target
-     *
-     * @param ActivityEvent $event
      */
     public function onAddActivity(ActivityEvent $event)
     {
@@ -108,9 +101,6 @@ class ActivityListener
         }
     }
 
-    /**
-     * @param ActivityEvent $event
-     */
     public function onRemoveActivity(ActivityEvent $event)
     {
         $activity = $event->getActivity();
@@ -146,8 +136,6 @@ class ActivityListener
 
     /**
      * Collect activities changes
-     *
-     * @param OnFlushEventArgs $args
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -234,7 +222,6 @@ class ActivityListener
     /**
      * Save collected changes
      *
-     * @param PostFlushEventArgs $args
      * @throws \Exception
      */
     public function postFlush(PostFlushEventArgs $args)
@@ -258,10 +245,6 @@ class ActivityListener
         }
     }
 
-    /**
-     * @param EntityManager $em
-     * @param PropertyAccessorInterface $accessor
-     */
     protected function processDeletedEntities(EntityManager $em, PropertyAccessorInterface $accessor)
     {
         foreach ($this->deletedEntities as $activityData) {
@@ -306,10 +289,6 @@ class ActivityListener
         $this->deletedEntities = [];
     }
 
-    /**
-     * @param EntityManager $em
-     * @param PropertyAccessorInterface $accessor
-     */
     protected function processUpdatedEntities(EntityManager $em, PropertyAccessorInterface $accessor)
     {
         foreach ($this->updatedEntities as $activityData) {

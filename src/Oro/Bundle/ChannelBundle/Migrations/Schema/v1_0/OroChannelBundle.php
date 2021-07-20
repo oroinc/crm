@@ -43,8 +43,6 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Create oro_channel table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmChannelTable(Schema $schema)
     {
@@ -65,8 +63,6 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Create oro_channel_entity_name table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmChannelEntityNameTable(Schema $schema)
     {
@@ -80,8 +76,6 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Create oro_channel_cust_identity table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmChannelCustIdentityTable(Schema $schema)
     {
@@ -103,8 +97,6 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Add oro_channel foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmChannelForeignKeys(Schema $schema)
     {
@@ -127,8 +119,6 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Add oro_channel_entity_name foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmChannelEntityNameForeignKeys(Schema $schema)
     {
@@ -144,8 +134,6 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Add oro_channel_cust_identity foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmChannelCustIdentityForeignKeys(Schema $schema)
     {
@@ -176,9 +164,6 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
         );
     }
 
-    /**
-     * @param $schema
-     */
     public function addExtendedFields($schema)
     {
         $this->extendExtension->addManyToOneRelation(

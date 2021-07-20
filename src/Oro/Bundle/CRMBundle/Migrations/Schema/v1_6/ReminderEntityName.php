@@ -17,9 +17,6 @@ class ReminderEntityName implements Migration
         self::updateRelatedEntityClassName($queries);
     }
 
-    /**
-     * @param QueryBag $queries
-     */
     public static function updateRelatedEntityClassName(QueryBag $queries)
     {
         $queries->addQuery(new UpdateTableFieldQuery(

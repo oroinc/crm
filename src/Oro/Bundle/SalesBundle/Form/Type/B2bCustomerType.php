@@ -21,9 +21,6 @@ class B2bCustomerType extends AbstractType
     /** @var PropertyAccessor */
     private $propertyAccessor;
 
-    /**
-     * @param PropertyAccessor $propertyAccessor
-     */
     public function __construct(PropertyAccessor $propertyAccessor)
     {
         $this->propertyAccessor = $propertyAccessor;

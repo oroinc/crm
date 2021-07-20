@@ -99,9 +99,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->organization = $this->getReference('default_organization');
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function loadSources(ObjectManager $manager)
     {
         $className = ExtendHelper::buildEnumValueClassName('lead_source');

@@ -39,9 +39,6 @@ class OroTaskCRMBundleInstaller implements
         $this->addTaskActivityRelations($schema);
     }
 
-    /**
-     * @param Schema $schema
-     */
     private function addTaskActivityRelations(Schema $schema)
     {
         $targetTables = [

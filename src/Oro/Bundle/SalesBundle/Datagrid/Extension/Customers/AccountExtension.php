@@ -36,10 +36,6 @@ class AccountExtension extends AbstractExtension
 
     protected $entityClassName;
 
-    /**
-     * @param ConfigProvider      $customerConfigProvider
-     * @param EntityClassResolver $entityClassResolver
-     */
     public function __construct(
         ConfigProvider $customerConfigProvider,
         EntityClassResolver $entityClassResolver

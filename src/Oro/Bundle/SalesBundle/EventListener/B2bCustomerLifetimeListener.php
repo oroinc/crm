@@ -46,7 +46,6 @@ class B2bCustomerLifetimeListener
 
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @param OnFlushEventArgs $args
      */
     public function onFlush(OnFlushEventArgs $args)
     {
@@ -101,9 +100,6 @@ class B2bCustomerLifetimeListener
         }
     }
 
-    /**
-     * @param PostFlushEventArgs $args
-     */
     public function postFlush(PostFlushEventArgs $args)
     {
         if ($this->isInProgress || empty($this->queued)) {
@@ -138,9 +134,6 @@ class B2bCustomerLifetimeListener
         $this->queued = [];
     }
 
-    /**
-     * @param B2bCustomer $b2bCustomer
-     */
     protected function scheduleUpdate(B2bCustomer $b2bCustomer)
     {
         if ($this->uow->isScheduledForDelete($b2bCustomer)) {

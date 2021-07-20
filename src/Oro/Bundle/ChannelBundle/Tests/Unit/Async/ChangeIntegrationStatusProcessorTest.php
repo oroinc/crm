@@ -90,7 +90,6 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
         ;
 
-
         $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'theChannelId']));
 

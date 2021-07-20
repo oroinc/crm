@@ -13,10 +13,6 @@ class FindCustomerAssociation extends AbstractAction
     /** @var AccountCustomerManager */
     protected $manager;
 
-    /**
-     * @param ContextAccessor        $contextAccessor
-     * @param AccountCustomerManager $manager
-     */
     public function __construct(ContextAccessor $contextAccessor, AccountCustomerManager $manager)
     {
         $this->manager = $manager;

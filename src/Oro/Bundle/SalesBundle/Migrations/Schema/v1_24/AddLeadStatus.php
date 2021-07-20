@@ -38,9 +38,6 @@ class AddLeadStatus implements
         return 1;
     }
 
-    /**
-     * @param ExtendExtension $extendExtension
-     */
     public function setExtendExtension(ExtendExtension $extendExtension)
     {
         $this->extendExtension = $extendExtension;
@@ -65,11 +62,6 @@ class AddLeadStatus implements
         self::addStatusField($schema, $this->extendExtension, $queries);
     }
 
-    /**
-     * @param Schema $schema
-     * @param ExtendExtension $extendExtension
-     * @param QueryBag $queries
-     */
     public static function addStatusField(Schema $schema, ExtendExtension $extendExtension, QueryBag $queries)
     {
         $enumTable = $extendExtension->addEnumField(
@@ -104,7 +96,7 @@ class AddLeadStatus implements
             'qualified' => 'Qualified',
             'canceled'  => 'Disqualified'
         ];
-        
+
         $i = 1;
         foreach ($statuses as $key => $value) {
             $dropFieldsQuery = new ParametrizedSqlMigrationQuery();

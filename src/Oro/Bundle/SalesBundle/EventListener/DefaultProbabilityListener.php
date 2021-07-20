@@ -16,20 +16,12 @@ class DefaultProbabilityListener
     /** @var RestrictionManager $restrictionManager */
     protected $restrictionManager;
 
-    /**
-     * @param ConfigManager      $configManager
-     * @param RestrictionManager $restrictionManager
-     */
     public function __construct(ConfigManager $configManager, RestrictionManager $restrictionManager)
     {
         $this->configManager = $configManager;
         $this->restrictionManager = $restrictionManager;
     }
 
-    /**
-     * @param Opportunity        $entity
-     * @param PreUpdateEventArgs $args
-     */
     public function preUpdate(Opportunity $entity, PreUpdateEventArgs $args)
     {
         if (null === $entity->getStatus()) {
@@ -97,9 +89,6 @@ class DefaultProbabilityListener
         return null;
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
     protected function recomputeChangeSet(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();

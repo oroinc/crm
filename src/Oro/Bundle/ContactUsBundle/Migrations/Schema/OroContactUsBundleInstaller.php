@@ -46,12 +46,11 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
         $this->createOrocrmContactReasonTitlesTable($schema);
         $this->createOrocrmContactusReqEmailsTable($schema);
         $this->createOrocrmContactusRequestTable($schema);
-        
 
         /** Foreign keys generation **/
         $this->addOrocrmContactusReqEmailsForeignKeys($schema);
         $this->addOrocrmContactusRequestForeignKeys($schema);
-        
+
         OroContactUsBundle::addOwner($schema);
 
         CreateActivityAssociation::addEmailAssociations($schema, $this->activityExtension);
@@ -59,8 +58,6 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
 
     /**
      * Create oro_contactus_contact_rsn table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactusContactRsnTable(Schema $schema)
     {
@@ -72,8 +69,6 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
 
     /**
      * Create oro_contactus_req_emails table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactusReqEmailsTable(Schema $schema)
     {
@@ -87,8 +82,6 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
 
     /**
      * Create oro_contactus_request table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactusRequestTable(Schema $schema)
     {
@@ -114,12 +107,8 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
         $table->addIndex(['created_at', 'id'], 'request_create_idx', []);
     }
 
-    
-
     /**
      * Add oro_contactus_req_emails foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmContactusReqEmailsForeignKeys(Schema $schema)
     {
@@ -140,8 +129,6 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
 
     /**
      * Add oro_contactus_request foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmContactusRequestForeignKeys(Schema $schema)
     {
@@ -166,9 +153,6 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
         );
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function createOrocrmContactReasonTitlesTable(Schema $schema)
     {
         $table = $schema->createTable('orocrm_contactus_contact_rsn_t');

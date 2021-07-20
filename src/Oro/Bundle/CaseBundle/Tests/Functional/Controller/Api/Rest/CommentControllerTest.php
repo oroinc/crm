@@ -135,7 +135,6 @@ class CommentControllerTest extends WebTestCase
 
     /**
      * @depends testGet
-     * @param array $originalComment
      */
     public function testPut(array $originalComment)
     {
@@ -203,10 +202,6 @@ class CommentControllerTest extends WebTestCase
         $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 
-    /**
-     * @param array $expected
-     * @param array $actual
-     */
     protected function assertCommentDataEquals(array $expected, array $actual)
     {
         $this->assertArrayHasKey('id', $actual);

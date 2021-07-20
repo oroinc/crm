@@ -29,10 +29,6 @@ class OroContactBundle implements Migration, AttachmentExtensionAwareInterface
         self::addPhotoToContact($schema, $this->attachmentExtension);
     }
 
-    /**
-     * @param Schema              $schema
-     * @param AttachmentExtension $attachmentExtension
-     */
     public static function addPhotoToContact(Schema $schema, AttachmentExtension $attachmentExtension)
     {
         $attachmentExtension->addImageRelation(

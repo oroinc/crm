@@ -35,12 +35,6 @@ class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, T
      */
     private $logger;
 
-    /**
-     * @param DoctrineHelper $doctrineHelper
-     * @param AnalyticsBuilder $analyticsBuilder
-     * @param JobRunner $jobRunner
-     * @param LoggerInterface $logger
-     */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         AnalyticsBuilder $analyticsBuilder,

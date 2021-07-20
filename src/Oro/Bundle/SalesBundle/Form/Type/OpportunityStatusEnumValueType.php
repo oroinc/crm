@@ -34,8 +34,6 @@ class OpportunityStatusEnumValueType extends AbstractType
      * PRE_SET_DATA event handler
      * Add probability fields for each status
      * We do it in the listener to disable fields dynamically
-     *
-     * @param FormEvent $event
      */
     public function preSetData(FormEvent $event)
     {

@@ -31,11 +31,6 @@ class HandleCustomerAssociation implements ProcessorInterface
     /** @var bool */
     private $isRelationOptional;
 
-    /**
-     * @param AccountCustomerManager $accountCustomerManager
-     * @param FieldAclHelper         $fieldAclHelper
-     * @param bool                   $isRelationOptional
-     */
     public function __construct(
         AccountCustomerManager $accountCustomerManager,
         FieldAclHelper $fieldAclHelper,
@@ -69,9 +64,6 @@ class HandleCustomerAssociation implements ProcessorInterface
         }
     }
 
-    /**
-     * @param FormInterface $form
-     */
     private function handleAccountRelationship(FormInterface $form): void
     {
         $accountField = $form->get(self::ACCOUNT_FIELD_NAME);
@@ -80,9 +72,6 @@ class HandleCustomerAssociation implements ProcessorInterface
         }
     }
 
-    /**
-     * @param FormInterface $form
-     */
     private function handleCustomerRelationship(FormInterface $form): void
     {
         $customerField = $form->get(self::CUSTOMER_FIELD_NAME);
@@ -91,9 +80,6 @@ class HandleCustomerAssociation implements ProcessorInterface
         }
     }
 
-    /**
-     * @param FormInterface $form
-     */
     private function handlePrimaryForm(FormInterface $form): void
     {
         $accountField = $form->get(self::ACCOUNT_FIELD_NAME);
@@ -121,30 +107,16 @@ class HandleCustomerAssociation implements ProcessorInterface
         }
     }
 
-    /**
-     * @param object $ownerEntity
-     *
-     * @return Customer|null
-     */
     private function getCustomerAssociation(object $ownerEntity): ?Customer
     {
         return $ownerEntity->getCustomerAssociation();
     }
 
-    /**
-     * @param object        $ownerEntity
-     * @param Customer|null $customerAssociation
-     */
     private function setCustomerAssociation(object $ownerEntity, Customer $customerAssociation = null): void
     {
         $ownerEntity->setCustomerAssociation($customerAssociation);
     }
 
-    /**
-     * @param object        $ownerEntity
-     * @param Account|null  $account
-     * @param FormInterface $accountField
-     */
     private function setCustomerAssociationForAccount(
         object $ownerEntity,
         ?Account $account,
@@ -168,11 +140,6 @@ class HandleCustomerAssociation implements ProcessorInterface
         }
     }
 
-    /**
-     * @param object        $ownerEntity
-     * @param object|null   $customer
-     * @param FormInterface $customerField
-     */
     private function setCustomerAssociationForCustomer(
         object $ownerEntity,
         ?object $customer,
@@ -191,31 +158,16 @@ class HandleCustomerAssociation implements ProcessorInterface
         }
     }
 
-    /**
-     * @param object $customer
-     *
-     * @return Customer|null
-     */
     private function findCustomerAssociationForCustomer(object $customer): ?Customer
     {
         return $this->accountCustomerManager->getAccountCustomerByTarget($customer, false);
     }
 
-    /**
-     * @param Account $account
-     *
-     * @return Customer
-     */
     private function createCustomerAssociationForAccount(Account $account): Customer
     {
         return AccountCustomerManager::createCustomer($account);
     }
 
-    /**
-     * @param object $customer
-     *
-     * @return Customer
-     */
     private function createCustomerAssociationForCustomer(object $customer): Customer
     {
         return AccountCustomerManager::createCustomer(
@@ -224,12 +176,6 @@ class HandleCustomerAssociation implements ProcessorInterface
         );
     }
 
-    /**
-     * @param Customer $existingCustomerAssociation
-     * @param Account  $account
-     *
-     * @return bool
-     */
     private function isCustomerAssociationForAccountEquals(
         Customer $existingCustomerAssociation,
         Account $account
@@ -244,9 +190,6 @@ class HandleCustomerAssociation implements ProcessorInterface
     }
 
     /**
-     * @param FormInterface $form
-     * @param Account|null  $submittedAccount
-     * @param object|null   $submittedCustomer
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function changeCustomerAssociation(
@@ -286,11 +229,6 @@ class HandleCustomerAssociation implements ProcessorInterface
         }
     }
 
-    /**
-     * @param object $entity
-     *
-     * @return bool
-     */
     private function isCustomerAssociationModificationGranted(object $entity): bool
     {
         if (!$this->fieldAclHelper->isFieldAclEnabled(ClassUtils::getClass($entity))) {

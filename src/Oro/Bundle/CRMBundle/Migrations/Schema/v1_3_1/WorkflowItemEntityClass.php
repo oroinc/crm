@@ -17,9 +17,6 @@ class WorkflowItemEntityClass implements Migration
         self::updateWorkflowItemEntityClass($queries);
     }
 
-    /**
-     * @param QueryBag $queries
-     */
     public static function updateWorkflowItemEntityClass(QueryBag $queries)
     {
         $queries->addQuery(new UpdateTableFieldQuery(

@@ -15,9 +15,6 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
  */
 class CustomerAccountCountQueryOptimizationListener
 {
-    /**
-     * @param CountQueryOptimizationEvent $event
-     */
     public function onOptimize(CountQueryOptimizationEvent $event): void
     {
         $context = $event->getContext();

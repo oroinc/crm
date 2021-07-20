@@ -30,10 +30,6 @@ class LeadActionsAccessProvider
      */
     protected $isSalesFunnelWfEnabled;
 
-    /**
-     * @param WorkflowRegistry    $workflowRegistry
-     * @param FeatureChecker      $featureChecker
-     */
     public function __construct(WorkflowRegistry $workflowRegistry, FeatureChecker $featureChecker)
     {
         $this->workflowRegistry = $workflowRegistry;

@@ -27,8 +27,6 @@ class OpportunityProbabilityTypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider enumOptionsDataProvider
-     *
-     * @param array $enumOptions
      */
     public function testBuildForm(array $enumOptions)
     {

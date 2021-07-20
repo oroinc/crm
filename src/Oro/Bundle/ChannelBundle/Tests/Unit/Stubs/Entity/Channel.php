@@ -75,9 +75,6 @@ class Channel
         return $this->name;
     }
 
-    /**
-     * @param array $entities
-     */
     public function setEntities(array $entities)
     {
         $this->entities = new ArrayCollection($entities);
@@ -91,9 +88,6 @@ class Channel
         return $this->entities;
     }
 
-    /**
-     * @param Integration $dataSource
-     */
     public function setDataSource(Integration $dataSource)
     {
         $this->dataSource = $dataSource;

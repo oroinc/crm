@@ -19,10 +19,6 @@ class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExt
     /** @var  ActivityContactProvider */
     protected $activityContactProvider;
 
-    /**
-     * @param ConfigManager           $configManager
-     * @param ActivityContactProvider $activityContactProvider
-     */
     public function __construct(ConfigManager $configManager, ActivityContactProvider $activityContactProvider)
     {
         $this->configManager           = $configManager;

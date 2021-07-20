@@ -42,9 +42,6 @@ class OroSalesBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Generate table oro_sales_lead
-     *
-     * @param Schema          $schema
-     * @param ExtendExtension $extendExtension
      */
     public static function orocrmSalesLeadTable(Schema $schema, ExtendExtension $extendExtension)
     {
@@ -87,8 +84,6 @@ class OroSalesBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Generate table oro_sales_lead_status
-     *
-     * @param Schema $schema
      */
     public static function orocrmSalesLeadStatusTable(Schema $schema)
     {
@@ -103,8 +98,6 @@ class OroSalesBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Generate table oro_sales_lead_status
-     *
-     * @param Schema $schema
      */
     public static function orocrmSalesOpportunityTable(Schema $schema)
     {
@@ -177,8 +170,6 @@ class OroSalesBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Generate table oro_sales_funnel
-     *
-     * @param Schema $schema
      */
     public static function orocrmSalesFunnelTable(Schema $schema)
     {
@@ -205,8 +196,6 @@ class OroSalesBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Generate foreign keys for table oro_sales_lead
-     *
-     * @param Schema $schema
      */
     public static function orocrmSalesLeadForeignKeys(Schema $schema)
     {
@@ -324,8 +313,6 @@ class OroSalesBundle implements Migration, ExtendExtensionAwareInterface
 
     /**
      * Generate foreign keys for table oro_sales_funnel
-     *
-     * @param Schema $schema
      */
     public static function orocrmSalesFunnelForeignKeys(Schema $schema)
     {

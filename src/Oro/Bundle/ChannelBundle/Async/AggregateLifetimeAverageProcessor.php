@@ -29,11 +29,6 @@ class AggregateLifetimeAverageProcessor implements MessageProcessorInterface, To
      */
     private $jobRunner;
 
-    /**
-     * @param ManagerRegistry $registry
-     * @param LocaleSettings $localeSettings
-     * @param JobRunner $jobRunner
-     */
     public function __construct(ManagerRegistry $registry, LocaleSettings $localeSettings, JobRunner $jobRunner)
     {
         $this->registry = $registry;

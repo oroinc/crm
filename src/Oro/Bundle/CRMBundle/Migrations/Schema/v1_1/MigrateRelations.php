@@ -19,9 +19,6 @@ class MigrateRelations implements Migration
 
     /**
      * Change name OroCRM to Oro for workflows tables
-     *
-     * @param Schema   $schema
-     * @param QueryBag $queries
      */
     public static function updateWorkFlow(Schema $schema, QueryBag $queries)
     {

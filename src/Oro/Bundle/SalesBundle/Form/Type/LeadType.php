@@ -25,8 +25,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class LeadType extends AbstractType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -132,9 +130,6 @@ class LeadType extends AbstractType
             ->add('linkedIn', TextType::class, array('required' => false, 'label' => 'oro.sales.lead.linked_in.label'));
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(

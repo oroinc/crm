@@ -35,9 +35,6 @@ class LeadToOpportunityType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function onPreSetData(FormEvent $event)
     {
         $form = $event->getForm();

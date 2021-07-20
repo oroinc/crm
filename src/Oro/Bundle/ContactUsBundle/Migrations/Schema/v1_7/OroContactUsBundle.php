@@ -20,8 +20,6 @@ class OroContactUsBundle implements Migration
 
     /**
      * Adds owner_id field
-     *
-     * @param Schema $schema
      */
     public static function addOwner(Schema $schema)
     {
@@ -40,8 +38,6 @@ class OroContactUsBundle implements Migration
 
     /**
      * Set ownership type for Contact Request entity to Organization
-     *
-     * @param QueryBag $queries
      */
     public function setOwnership(QueryBag $queries)
     {

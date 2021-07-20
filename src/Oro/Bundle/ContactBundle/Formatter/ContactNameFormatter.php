@@ -10,9 +10,6 @@ class ContactNameFormatter
     /** @var NameFormatter */
     protected $nameFormatter;
 
-    /**
-     * @param NameFormatter $nameFormatter
-     */
     public function __construct(NameFormatter $nameFormatter)
     {
         $this->nameFormatter = $nameFormatter;

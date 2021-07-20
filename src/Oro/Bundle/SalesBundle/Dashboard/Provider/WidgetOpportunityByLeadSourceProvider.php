@@ -33,14 +33,6 @@ class WidgetOpportunityByLeadSourceProvider
     /** @var CurrencyQueryBuilderTransformerInterface  */
     protected $qbTransformer;
 
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param AclHelper $aclHelper
-     * @param DateFilterProcessor $dateFilterProcessor
-     * @param TranslatorInterface $translator
-     * @param EnumExtension $enumValueTranslator
-     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
-     */
     public function __construct(
         ManagerRegistry $doctrine,
         AclHelper $aclHelper,

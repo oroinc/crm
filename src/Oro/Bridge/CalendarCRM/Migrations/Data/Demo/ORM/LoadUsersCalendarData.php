@@ -327,9 +327,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         return false;
     }
 
-    /**
-     * @param User $user
-     */
     protected function setSecurityContext(User $user)
     {
         $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);

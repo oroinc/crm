@@ -22,10 +22,6 @@ class ContactReasonSearchHandler implements SearchHandlerInterface
     /** @var array */
     private $displayFields = ['defaultTitle'];
 
-    /**
-     * @param DoctrineHelper $doctrineHelper
-     * @param PropertyAccessor $propertyAccessor
-     */
     public function __construct(DoctrineHelper $doctrineHelper, PropertyAccessor $propertyAccessor)
     {
         $this->doctrineHelper = $doctrineHelper;
@@ -42,7 +38,6 @@ class ContactReasonSearchHandler implements SearchHandlerInterface
         $condition = $queryBuilder->expr()->isNull('titles.localization');
         $queryBuilder->innerJoin('contact_reason.titles', 'titles', Join::WITH, $condition);
         $queryBuilder->where($queryBuilder->expr()->isNull('contact_reason.deletedAt'));
-
 
         if ($query) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('titles.string', ':title'));

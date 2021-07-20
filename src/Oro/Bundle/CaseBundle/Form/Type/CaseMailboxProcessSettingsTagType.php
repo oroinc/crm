@@ -15,10 +15,6 @@ class CaseMailboxProcessSettingsTagType extends AbstractType
     /** @var EventSubscriberInterface */
     protected $newTagSubscriber;
 
-    /**
-     * @param EventSubscriberInterface $oldTagSubscriber
-     * @param EventSubscriberInterface $newTagSubscriber
-     */
     public function __construct(EventSubscriberInterface $oldTagSubscriber, EventSubscriberInterface $newTagSubscriber)
     {
         $this->oldTagSubscriber = $oldTagSubscriber;

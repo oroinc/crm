@@ -24,9 +24,6 @@ class OroCaseBundle implements Migration
         $this->createCaseForeignKeys($schema);
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function createCaseTable(Schema $schema)
     {
         $table = $schema->createTable('orocrm_case');
@@ -55,9 +52,6 @@ class OroCaseBundle implements Migration
         $table->addIndex(array('priority_name'), 'IDX_AB3BAC1E965BD3DF', array());
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function createCaseSourceTable(Schema $schema)
     {
         $table = $schema->createTable('orocrm_case_source');
@@ -68,8 +62,6 @@ class OroCaseBundle implements Migration
 
     /**
      * Generate table orocrm_case_source_trans
-     *
-     * @param Schema $schema
      */
     public static function createCaseSourceTranslationTable(Schema $schema)
     {
@@ -90,9 +82,6 @@ class OroCaseBundle implements Migration
         /** End of generate table orocrm_case_source_trans **/
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function createCaseStatusTable(Schema $schema)
     {
         $table = $schema->createTable('orocrm_case_status');
@@ -104,8 +93,6 @@ class OroCaseBundle implements Migration
 
     /**
      * Generate table orocrm_case_status_trans
-     *
-     * @param Schema $schema
      */
     public static function createCaseStatusTranslationTable(Schema $schema)
     {
@@ -126,9 +113,6 @@ class OroCaseBundle implements Migration
         /** End of generate table orocrm_case_status_trans **/
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function createCasePriorityTable(Schema $schema)
     {
         $table = $schema->createTable('orocrm_case_priority');
@@ -140,8 +124,6 @@ class OroCaseBundle implements Migration
 
     /**
      * Generate table orocrm_case_priority_trans
-     *
-     * @param Schema $schema
      */
     public static function createCasePriorityTranslationTable(Schema $schema)
     {
@@ -162,9 +144,6 @@ class OroCaseBundle implements Migration
         /** End of generate table orocrm_case_priority_trans **/
     }
 
-    /**
-     * @param Schema $schema
-     */
     protected function createCaseForeignKeys(Schema $schema)
     {
         $table = $schema->getTable('orocrm_case');

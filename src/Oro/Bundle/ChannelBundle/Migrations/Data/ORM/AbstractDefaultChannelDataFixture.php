@@ -112,9 +112,6 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
         return $lifetimeFields;
     }
 
-    /**
-     * @param Channel $channel
-     */
     protected function updateLifetimeForAccounts(Channel $channel)
     {
         $lifetimeFields = $this->getLifetimeFieldsMap();

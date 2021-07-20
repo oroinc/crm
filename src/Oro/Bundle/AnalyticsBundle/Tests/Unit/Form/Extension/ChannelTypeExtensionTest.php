@@ -150,8 +150,6 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $categories
-     *
      * @dataProvider preSetDataProvider
      */
     public function testPreSetData(array $categories)

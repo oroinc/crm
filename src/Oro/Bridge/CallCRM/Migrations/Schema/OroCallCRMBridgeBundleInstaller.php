@@ -39,9 +39,6 @@ class OroCallCRMBridgeBundleInstaller implements
         $this->addCallActivityRelations($schema);
     }
 
-    /**
-     * @param Schema $schema
-     */
     private function addCallActivityRelations(Schema $schema)
     {
         $associationTables = [

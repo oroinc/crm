@@ -17,10 +17,6 @@ class ActivityContactMigration implements Migration
     /** @var ActivityContactProvider */
     protected $activityContactProvider;
 
-    /**
-     * @param EntityMetadataHelper    $metadataHelper
-     * @param ActivityContactProvider $activityContactProvider
-     */
     public function __construct(EntityMetadataHelper $metadataHelper, ActivityContactProvider $activityContactProvider)
     {
         $this->metadataHelper          = $metadataHelper;

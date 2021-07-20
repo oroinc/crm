@@ -22,9 +22,6 @@ class ChannelSelectType extends AbstractType
      */
     protected $channelsProvider;
 
-    /**
-     * @param ChannelsByEntitiesProvider $channelsProvider
-     */
     public function __construct(ChannelsByEntitiesProvider $channelsProvider)
     {
         $this->channelsProvider = $channelsProvider;

@@ -222,7 +222,7 @@ class Lead extends ExtendLead implements
      * )
      */
     protected $jobTitle;
-    
+
     /**
      * @var Collection
      *
