@@ -33,9 +33,6 @@ class OpportunityProbabilitiesConfigRaw
     /** @var bool */
     private $isRemovable;
 
-    /**
-     * @param NodeElement $row
-     */
     public function __construct(NodeElement $row)
     {
         $this->label = $row->find('css', 'input[data-name="field__label"]');

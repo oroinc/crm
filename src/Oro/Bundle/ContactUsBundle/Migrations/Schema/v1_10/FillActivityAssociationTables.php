@@ -97,9 +97,6 @@ class FillActivityAssociationTables implements
         $schema->dropTable('orocrm_contactus_request_calls');
     }
 
-    /**
-     * @param QueryBag $queries
-     */
     protected function fillActivityTables(QueryBag $queries)
     {
         $queries->addPreQuery(
@@ -109,9 +106,6 @@ class FillActivityAssociationTables implements
         );
     }
 
-    /**
-     * @param QueryBag $queries
-     */
     protected function fillActivityListTables(QueryBag $queries)
     {
         // Fill activitylists tables

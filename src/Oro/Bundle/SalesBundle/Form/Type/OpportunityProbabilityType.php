@@ -27,10 +27,6 @@ class OpportunityProbabilityType extends AbstractType
     /** @var array */
     private $enumStatuses;
 
-    /**
-     * @param EnumTypeHelper $typeHelper
-     * @param Registry $registry
-     */
     public function __construct(EnumTypeHelper $typeHelper, Registry $registry)
     {
         $enumCode = $typeHelper->getEnumCode(Opportunity::class, 'status');

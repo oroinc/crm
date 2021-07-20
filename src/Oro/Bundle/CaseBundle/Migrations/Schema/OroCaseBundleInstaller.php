@@ -89,8 +89,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Create orocrm_case table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmCaseTable(Schema $schema)
     {
@@ -124,8 +122,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Create orocrm_case_source table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmCaseSourceTable(Schema $schema)
     {
@@ -137,8 +133,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Create orocrm_case_source_trans table
-     *
-     * @param Schema $schema
      */
     public static function createOrocrmCaseSourceTranslationTable(Schema $schema)
     {
@@ -159,8 +153,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Create orocrm_case_status table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmCaseStatusTable(Schema $schema)
     {
@@ -173,8 +165,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Create orocrm_case_status_trans table
-     *
-     * @param Schema $schema
      */
     public static function createOrocrmCaseStatusTranslationTable(Schema $schema)
     {
@@ -195,8 +185,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Create orocrm_case_priority table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmCasePriorityTable(Schema $schema)
     {
@@ -209,8 +197,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Create orocrm_case_priority_trans table
-     *
-     * @param Schema $schema
      */
     public static function createOrocrmCasePriorityTranslationTable(Schema $schema)
     {
@@ -231,8 +217,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Create orocrm_case_comment table
-     *
-     * @param Schema $schema
      */
     public static function createOrocrmCaseCommentTranslationTable(Schema $schema)
     {
@@ -257,8 +241,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Add orocrm_case foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmCaseForeignKeys(Schema $schema)
     {
@@ -315,8 +297,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Add orocrm_case_comment foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmCaseCommentForeignKeys(Schema $schema)
     {
@@ -361,8 +341,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Adds required columns to oro_email_mailbox_process table.
-     *
-     * @param Schema $schema
      */
     public static function addOroEmailMailboxProcessSettingsColumns(Schema $schema)
     {
@@ -381,8 +359,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Adds foreign keys to new columns in oro_email_mailbox_process table.
-     *
-     * @param Schema $schema
      */
     public static function addOroEmailMailboxProcessSettingsForeignKeys(Schema $schema)
     {
@@ -415,8 +391,6 @@ class OroCaseBundleInstaller implements
 
     /**
      * Enables Email activity for Case entity
-     *
-     * @param Schema $schema
      */
     protected function addActivityAssociations(Schema $schema)
     {

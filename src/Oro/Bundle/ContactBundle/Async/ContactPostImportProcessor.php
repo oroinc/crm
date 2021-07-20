@@ -33,11 +33,6 @@ class ContactPostImportProcessor implements MessageProcessorInterface
      */
     private $logger;
 
-    /**
-     * @param ContactEmailAddressHandler $contactEmailAddressHandler
-     * @param DoctrineHelper $doctrineHelper
-     * @param LoggerInterface $logger
-     */
     public function __construct(
         ContactEmailAddressHandler $contactEmailAddressHandler,
         DoctrineHelper $doctrineHelper,
@@ -87,9 +82,6 @@ class ContactPostImportProcessor implements MessageProcessorInterface
         return self::ACK;
     }
 
-    /**
-     * @return JobRepository
-     */
     private function getJobRepository(): JobRepository
     {
         return $this->doctrineHelper->getEntityRepository(Job::class);

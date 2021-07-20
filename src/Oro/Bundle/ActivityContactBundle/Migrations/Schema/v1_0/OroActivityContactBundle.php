@@ -19,8 +19,6 @@ class OroActivityContactBundle implements Migration
     }
 
     /**
-     * @param Schema $schema
-     * @param QueryBag $queries
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public static function removeUserACFields(Schema $schema, QueryBag $queries)

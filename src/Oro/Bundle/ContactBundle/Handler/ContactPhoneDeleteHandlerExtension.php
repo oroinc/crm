@@ -18,10 +18,6 @@ class ContactPhoneDeleteHandlerExtension extends AbstractEntityDeleteHandlerExte
     /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param TranslatorInterface           $translator
-     */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         TranslatorInterface $translator

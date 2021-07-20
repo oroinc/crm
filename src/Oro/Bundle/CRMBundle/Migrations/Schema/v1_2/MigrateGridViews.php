@@ -17,9 +17,6 @@ class MigrateGridViews implements Migration
         self::updateGridViews($queries);
     }
 
-    /**
-     * @param QueryBag $queries
-     */
     public static function updateGridViews(QueryBag $queries)
     {
         $queries->addQuery(

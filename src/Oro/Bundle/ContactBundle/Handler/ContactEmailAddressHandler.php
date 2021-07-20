@@ -35,11 +35,6 @@ class ContactEmailAddressHandler
      */
     private $registry;
 
-    /**
-     * @param InsertFromSelectQueryExecutor $insertFromSelectQueryExecutor
-     * @param EmailAddressManager $emailAddressManager
-     * @param ManagerRegistry $registry
-     */
     public function __construct(
         InsertFromSelectQueryExecutor $insertFromSelectQueryExecutor,
         EmailAddressManager $emailAddressManager,
@@ -114,9 +109,6 @@ class ContactEmailAddressHandler
         }
     }
 
-    /**
-     * @return array
-     */
     private function getNonExistingEmailAssociationIds(): array
     {
         $contactAssociationFieldName = $this->getContactAssociationFieldName();
@@ -188,9 +180,6 @@ class ContactEmailAddressHandler
         return $this->registry->getManagerForClass(ContactEmail::class);
     }
 
-    /**
-     * @return string
-     */
     private function getCurrentTimestampString(): string
     {
         $dateFormat = $this->getEntityManager()

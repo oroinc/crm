@@ -39,10 +39,6 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
     }
 
     /**
-     * @param LoggerInterface $logger
-     * @param $dryRun
-     * @param $def
-     * @param $row
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function updateReport(LoggerInterface $logger, $dryRun, $def, $row)
@@ -52,10 +48,6 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
     }
 
     /**
-     * @param LoggerInterface $logger
-     * @param $dryRun
-     * @param $def
-     * @param $row
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function updateSegment(LoggerInterface $logger, $dryRun, $def, $row)
@@ -64,10 +56,6 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
         $this->executeQuery($logger, $dryRun, $def, $row, $query);
     }
 
-    /**
-     * @param LoggerInterface $logger
-     * @param $dryRun
-     */
     protected function migrateReport(LoggerInterface $logger, $dryRun)
     {
         $sql = 'SELECT r.id, r.definition, r.entity FROM oro_report r';
@@ -84,10 +72,6 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
         }
     }
 
-    /**
-     * @param LoggerInterface $logger
-     * @param $dryRun
-     */
     protected function migrateSegment(LoggerInterface $logger, $dryRun)
     {
         $sql = 'SELECT s.id, s.definition, s.entity FROM oro_segment s';
@@ -104,15 +88,6 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
         }
     }
 
-    /**
-     * @param LoggerInterface $logger
-     * @param $dryRun
-     * @param $def
-     * @param $row
-     * @param $className
-     * @param $oldField
-     * @param $newField
-     */
     protected function fixSegmentDefs(LoggerInterface $logger, $dryRun, $def, $row, $className, $oldField, $newField)
     {
         if (isset($def['columns'])) {
@@ -134,15 +109,6 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
         }
     }
 
-    /**
-     * @param LoggerInterface $logger
-     * @param $dryRun
-     * @param $def
-     * @param $row
-     * @param $className
-     * @param $oldField
-     * @param $newField
-     */
     protected function fixReportDefs(LoggerInterface $logger, $dryRun, $def, $row, $className, $oldField, $newField)
     {
         if (isset($def['columns'])) {
@@ -170,11 +136,6 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
     }
 
     /**
-     * @param LoggerInterface $logger
-     * @param $dryRun
-     * @param $def
-     * @param $row
-     * @param $query
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function executeQuery(LoggerInterface $logger, $dryRun, $def, $row, $query)

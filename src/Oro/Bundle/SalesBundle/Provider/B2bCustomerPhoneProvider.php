@@ -63,7 +63,7 @@ class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProvi
                 $result = $this->rootProvider->getPhoneNumbers($contact);
             }
         }
-        
+
         return $result;
     }
 }

@@ -176,7 +176,6 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
     }
 
     /**
-     * @param array $returnValue
      * @depends testUpdate
      */
     public function testDelete(array $returnValue)

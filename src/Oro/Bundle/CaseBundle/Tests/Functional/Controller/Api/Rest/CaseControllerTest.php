@@ -211,10 +211,6 @@ class CaseControllerTest extends WebTestCase
         $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 
-    /**
-     * @param array $expected
-     * @param array $actual
-     */
     protected function assertCaseDataEquals(array $expected, array $actual)
     {
         $this->assertArrayHasKey('id', $actual);

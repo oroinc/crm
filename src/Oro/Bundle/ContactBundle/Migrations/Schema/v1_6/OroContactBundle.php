@@ -70,9 +70,6 @@ class OroContactBundle implements
 
     /**
      * Enables Email activity for Contact entity
-     *
-     * @param Schema            $schema
-     * @param ActivityExtension $activityExtension
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {

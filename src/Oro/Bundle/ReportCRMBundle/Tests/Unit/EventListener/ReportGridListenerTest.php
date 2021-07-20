@@ -13,10 +13,6 @@ class ReportGridListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider onBuildBeforeDataProvider
-     *
-     * @param array $datagridConfigArray
-     * @param array $filtersState
-     * @param array $expectedDatagridConfigArray
      */
     public function testOnBuildBefore(
         array $datagridConfigArray,
@@ -40,9 +36,6 @@ class ReportGridListenerTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expectedDatagridConfigArray, $event->getDatagrid()->getConfig()->toArray());
     }
 
-    /**
-     * @return array
-     */
     public function onBuildBeforeDataProvider(): array
     {
         return [

@@ -26,11 +26,6 @@ class RelevantOpportunitiesListener
     /** @var DisplaySettingsConfigProvider */
     protected $opportunityDisplayConfigProvider;
 
-    /**
-     * @param TranslatorInterface           $translator
-     * @param RequestStack                  $requestStack
-     * @param DisplaySettingsConfigProvider $opportunityDisplayConfigProvider
-     */
     public function __construct(
         TranslatorInterface $translator,
         RequestStack $requestStack,
@@ -43,8 +38,6 @@ class RelevantOpportunitiesListener
 
     /**
      * Adds block with relevant opportunities grid on the Opportunity view
-     *
-     * @param BeforeViewRenderEvent $event
      */
     public function addRelevantOpportunities(BeforeViewRenderEvent $event)
     {

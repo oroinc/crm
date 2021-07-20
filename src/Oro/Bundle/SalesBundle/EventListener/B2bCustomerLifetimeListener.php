@@ -3,79 +3,64 @@
 namespace Oro\Bundle\SalesBundle\EventListener;
 
 use Doctrine\Common\Util\ClassUtils;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
-use Oro\Bundle\CurrencyBundle\Converter\RateConverterInterface;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
-use Oro\Component\DependencyInjection\ServiceLink;
+use Psr\Container\ContainerInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-class B2bCustomerLifetimeListener
+/**
+ * Calculates and keeps actual B2B customer lifetime value.
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
+class B2bCustomerLifetimeListener implements ServiceSubscriberInterface
 {
-    /** @var UnitOfWork */
-    protected $uow;
-
-    /** @var EntityManager */
-    protected $em;
-
+    private ContainerInterface $container;
+    private ?CurrencyQueryBuilderTransformerInterface $qbTransformer = null;
     /** @var B2bCustomer[] */
-    protected $queued = [];
+    private array $queued = [];
+    private bool $isInProgress = false;
 
-    /** @var bool */
-    protected $isInProgress = false;
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
-    /** @var RateConverterInterface */
-    protected $rateConverter;
-
-    /** @var CurrencyQueryBuilderTransformerInterface */
-    protected $qbTransformer;
-
-    public function __construct(
-        ServiceLink $rateConverterLink,
-        CurrencyQueryBuilderTransformerInterface $qbTransformer
-    ) {
-        $this->rateConverter = $rateConverterLink->getService();
-        $this->qbTransformer = $qbTransformer;
+    /**
+     * {@inheritDoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return [
+            'oro_currency.query.currency_transformer' => CurrencyQueryBuilderTransformerInterface::class
+        ];
     }
 
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @param OnFlushEventArgs $args
      */
-    public function onFlush(OnFlushEventArgs $args)
+    public function onFlush(OnFlushEventArgs $args): void
     {
-        $this->initializeFromEventArgs($args);
+        $uow = $args->getEntityManager()->getUnitOfWork();
 
-        $entities = array_merge(
-            $this->uow->getScheduledEntityInsertions(),
-            $this->uow->getScheduledEntityDeletions(),
-            $this->uow->getScheduledEntityUpdates()
-        );
-
-        /** @var Opportunity[] $entities */
-        $entities = array_filter(
-            $entities,
-            function ($entity) {
-                return 'Oro\\Bundle\\SalesBundle\\Entity\\Opportunity' === ClassUtils::getClass($entity);
-            }
-        );
-
+        $entities = $this->getChangedOpportunityEntities($uow);
+        /** @var Opportunity $entity */
         foreach ($entities as $entity) {
             $b2bCustomer = null;
             if (!$entity->getId() && $this->isValuable($entity)) {
                 // handle creation
-                $b2bCustomer       = $entity->getCustomerAssociation()->getTarget();
-            } elseif ($this->uow->isScheduledForDelete($entity) && $this->isValuable($entity)) {
-                $b2bCustomer       = $entity->getCustomerAssociation()->getTarget();
-            } elseif ($this->uow->isScheduledForUpdate($entity)) {
+                $b2bCustomer = $entity->getCustomerAssociation()->getTarget();
+            } elseif ($uow->isScheduledForDelete($entity) && $this->isValuable($entity)) {
+                $b2bCustomer = $entity->getCustomerAssociation()->getTarget();
+            } elseif ($uow->isScheduledForUpdate($entity)) {
                 // handle update
-                $changeSet = $this->uow->getEntityChangeSet($entity);
+                $changeSet = $uow->getEntityChangeSet($entity);
                 if ($this->isChangeSetValuable($changeSet)) {
                     $takeZeroRevenue = isset($changeSet['closeRevenueValue']);
                     if ($this->hasChangedB2bCustomer($changeSet)
@@ -85,7 +70,7 @@ class B2bCustomerLifetimeListener
                         $customer = $changeSet['customerAssociation'][0];
                         $oldCustomer = $customer->getTarget();
                         /** @var B2bCustomer $oldCustomer */
-                        $this->scheduleUpdate($oldCustomer);
+                        $this->scheduleUpdate($oldCustomer, $uow);
                     }
                     if ($this->isValuable($entity, $takeZeroRevenue)
                         || ($this->isOldStatusValuable($entity, $changeSet) && $this->hasB2bCustomerTarget($entity))
@@ -96,22 +81,19 @@ class B2bCustomerLifetimeListener
             }
             if (null !== $b2bCustomer) {
                 /** @var B2bCustomer $b2bCustomer */
-                $this->scheduleUpdate($b2bCustomer);
+                $this->scheduleUpdate($b2bCustomer, $uow);
             }
         }
     }
 
-    /**
-     * @param PostFlushEventArgs $args
-     */
-    public function postFlush(PostFlushEventArgs $args)
+    public function postFlush(PostFlushEventArgs $args): void
     {
         if ($this->isInProgress || empty($this->queued)) {
             return;
         }
 
-        $this->initializeFromEventArgs($args);
-        $repo = $this->em->getRepository('OroSalesBundle:B2bCustomer');
+        $em = $args->getEntityManager();
+        $repo = $em->getRepository(B2bCustomer::class);
 
         $flushRequired = false;
         foreach ($this->queued as $b2bCustomer) {
@@ -120,7 +102,8 @@ class B2bCustomerLifetimeListener
                 continue;
             }
 
-            $newLifetimeValue = $repo->calculateLifetimeValue($b2bCustomer, $this->qbTransformer);
+            $newLifetimeValue = $repo->calculateLifetimeValue($b2bCustomer, $this->getQbTransformer());
+            /** @noinspection TypeUnsafeComparisonInspection */
             if ($newLifetimeValue != $b2bCustomer->getLifetime()) {
                 $b2bCustomer->setLifetime($newLifetimeValue);
                 $flushRequired = true;
@@ -129,34 +112,45 @@ class B2bCustomerLifetimeListener
 
         if ($flushRequired) {
             $this->isInProgress = true;
-
-            $this->em->flush($this->queued);
-
-            $this->isInProgress = false;
+            try {
+                $em->flush($this->queued);
+            } finally {
+                $this->isInProgress = false;
+            }
         }
 
         $this->queued = [];
     }
 
-    /**
-     * @param B2bCustomer $b2bCustomer
-     */
-    protected function scheduleUpdate(B2bCustomer $b2bCustomer)
+    private function getChangedOpportunityEntities(UnitOfWork $uow): \Generator
     {
-        if ($this->uow->isScheduledForDelete($b2bCustomer)) {
+        foreach ($uow->getScheduledEntityInsertions() as $entity) {
+            if (Opportunity::class === ClassUtils::getClass($entity)) {
+                yield $entity;
+            }
+        }
+        foreach ($uow->getScheduledEntityUpdates() as $entity) {
+            if (Opportunity::class === ClassUtils::getClass($entity)) {
+                yield $entity;
+            }
+        }
+        foreach ($uow->getScheduledEntityDeletions() as $entity) {
+            if (Opportunity::class === ClassUtils::getClass($entity)) {
+                yield $entity;
+            }
+        }
+    }
+
+    private function scheduleUpdate(B2bCustomer $b2bCustomer, UnitOfWork $uow): void
+    {
+        if ($uow->isScheduledForDelete($b2bCustomer)) {
             return;
         }
 
         $this->queued[$b2bCustomer->getId()] = $b2bCustomer;
     }
 
-    /**
-     * @param Opportunity $opportunity
-     * @param bool        $takeZeroRevenue
-     *
-     * @return bool
-     */
-    protected function isValuable(Opportunity $opportunity, $takeZeroRevenue = false)
+    private function isValuable(Opportunity $opportunity, bool $takeZeroRevenue = false): bool
     {
         return
             $this->hasB2bCustomerTarget($opportunity)
@@ -165,12 +159,7 @@ class B2bCustomerLifetimeListener
             && ($takeZeroRevenue || $opportunity->getCloseRevenueValue() > 0);
     }
 
-    /**
-     * @param array $changeSet
-     *
-     * @return bool
-     */
-    protected function isChangeSetValuable(array $changeSet)
+    private function isChangeSetValuable(array $changeSet): bool
     {
         $fieldsUpdated = array_intersect(
             ['customerAssociation', 'status', 'closeRevenueValue', 'closeRevenueCurrency', 'baseCloseRevenueValue'],
@@ -186,71 +175,57 @@ class B2bCustomerLifetimeListener
             );
 
             // if status was changed, check whether it had/has needed value
-            return in_array(B2bCustomerRepository::VALUABLE_STATUS, $statusChangeSet, true);
+            return \in_array(B2bCustomerRepository::VALUABLE_STATUS, $statusChangeSet, true);
         }
 
         return (bool)$fieldsUpdated;
     }
 
-    /**
-     * @param Opportunity $opportunity
-     * @param array       $changeSet
-     *
-     * @return bool|string
-     */
-    protected function getOldStatus(Opportunity $opportunity, array $changeSet)
+    private function getOldStatus(Opportunity $opportunity, array $changeSet): ?string
     {
-        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
+        if (isset($changeSet['status'])
+            && ClassUtils::getClass($changeSet['status'][0]) === ExtendHelper::buildEnumValueClassName(
+                Opportunity::INTERNAL_STATUS_CODE
+            )
+        ) {
+            return $changeSet['status'][0]->getId();
+        }
 
-        return isset($changeSet['status']) && ClassUtils::getClass($changeSet['status'][0]) === $enumClass
-            ? $changeSet['status'][0]->getId()
-            : ($opportunity->getStatus() ? $opportunity->getStatus()->getId() : false);
+        return $opportunity->getStatus()
+            ? $opportunity->getStatus()->getId()
+            : false;
     }
 
-    /**
-     * @param PostFlushEventArgs|OnFlushEventArgs $args
-     */
-    protected function initializeFromEventArgs($args)
+    private function hasB2bCustomerTarget(Opportunity $entity): bool
     {
-        $this->em  = $args->getEntityManager();
-        $this->uow = $this->em->getUnitOfWork();
+        return
+            $entity->getCustomerAssociation()
+            && $entity->getCustomerAssociation()->getTarget() instanceof B2bCustomer;
     }
 
-    /**
-     * @param Opportunity $entity
-     *
-     * @return bool
-     */
-    protected function hasB2bCustomerTarget(Opportunity $entity)
-    {
-        return $entity->getCustomerAssociation()
-               && $entity->getCustomerAssociation()->getTarget() instanceof B2bCustomer;
-    }
-
-    /**
-     * @param array $changeSet
-     *
-     * @return bool
-     */
-    protected function hasChangedB2bCustomer(array $changeSet)
+    private function hasChangedB2bCustomer(array $changeSet): bool
     {
         if (empty($changeSet['customerAssociation']) || !$changeSet['customerAssociation'][0]) {
             return false;
         }
+
         /** @var Customer $customer */
         $customer = $changeSet['customerAssociation'][0];
 
         return $customer->getTarget() instanceof B2bCustomer;
     }
 
-    /**
-     * @param Opportunity $entity
-     * @param array       $changeSet
-     *
-     * @return bool
-     */
-    protected function isOldStatusValuable(Opportunity $entity, array $changeSet)
+    private function isOldStatusValuable(Opportunity $entity, array $changeSet): bool
     {
         return B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet);
+    }
+
+    private function getQbTransformer(): CurrencyQueryBuilderTransformerInterface
+    {
+        if (null === $this->qbTransformer) {
+            $this->qbTransformer = $this->container->get('oro_currency.query.currency_transformer');
+        }
+
+        return $this->qbTransformer;
     }
 }

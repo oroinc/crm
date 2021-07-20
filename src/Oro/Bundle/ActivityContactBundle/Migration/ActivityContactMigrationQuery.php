@@ -37,11 +37,6 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
     /** @var ActivityContactProvider */
     protected $activityContactProvider;
 
-    /**
-     * @param Schema                  $schema
-     * @param EntityMetadataHelper    $metadataHelper
-     * @param ActivityContactProvider $activityContactProvider
-     */
     public function __construct(
         Schema $schema,
         EntityMetadataHelper $metadataHelper,

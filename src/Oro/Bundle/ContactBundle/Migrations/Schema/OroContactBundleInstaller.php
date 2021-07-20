@@ -90,8 +90,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Create oro_contact table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactTable(Schema $schema)
     {
@@ -137,8 +135,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Create oro_contact_address table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactAddressTable(Schema $schema)
     {
@@ -170,8 +166,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Create oro_contact_adr_to_adr_type table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactAdrToAdrTypeTable(Schema $schema)
     {
@@ -185,8 +179,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Create oro_contact_email table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactEmailTable(Schema $schema)
     {
@@ -202,8 +194,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Create oro_contact_group table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactGroupTable(Schema $schema)
     {
@@ -218,8 +208,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Create oro_contact_method table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactMethodTable(Schema $schema)
     {
@@ -232,8 +220,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Create oro_contact_phone table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactPhoneTable(Schema $schema)
     {
@@ -250,8 +236,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Create oro_contact_source table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactSourceTable(Schema $schema)
     {
@@ -264,8 +248,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Create oro_contact_to_contact_grp table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmContactToContactGrpTable(Schema $schema)
     {
@@ -279,8 +261,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Add oro_contact foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmContactForeignKeys(Schema $schema)
     {
@@ -331,8 +311,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Add oro_contact_address foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmContactAddressForeignKeys(Schema $schema)
     {
@@ -359,8 +337,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Add oro_contact_adr_to_adr_type foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmContactAdrToAdrTypeForeignKeys(Schema $schema)
     {
@@ -381,8 +357,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Add oro_contact_email foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmContactEmailForeignKeys(Schema $schema)
     {
@@ -397,8 +371,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Add oro_contact_group foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmContactGroupForeignKeys(Schema $schema)
     {
@@ -413,8 +385,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Add oro_contact_phone foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmContactPhoneForeignKeys(Schema $schema)
     {
@@ -429,8 +399,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Add oro_contact_to_contact_grp foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmContactToContactGrpForeignKeys(Schema $schema)
     {
@@ -451,8 +419,6 @@ class OroContactBundleInstaller implements
 
     /**
      * Generate foreign keys for table oro_email_address
-     *
-     * @param Schema $schema
      */
     public static function oroEmailAddressForeignKeys(Schema $schema)
     {

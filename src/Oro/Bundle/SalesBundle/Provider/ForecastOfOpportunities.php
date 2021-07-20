@@ -38,14 +38,6 @@ class ForecastOfOpportunities
     /** @var array */
     protected $moments = [];
 
-    /**
-     * @param NumberFormatter $numberFormatter
-     * @param DateTimeFormatterInterface $dateTimeFormatter
-     * @param TranslatorInterface $translator
-     * @param DateHelper $dateHelper
-     * @param ForecastProvider $provider
-     * @param FilterDateRangeConverter $filterDateRangeConverter
-     */
     public function __construct(
         NumberFormatter $numberFormatter,
         DateTimeFormatterInterface $dateTimeFormatter,

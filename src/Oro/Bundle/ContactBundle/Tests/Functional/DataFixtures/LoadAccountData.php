@@ -27,8 +27,6 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
 
     /**
      * Load Accounts
-     *
-     * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {

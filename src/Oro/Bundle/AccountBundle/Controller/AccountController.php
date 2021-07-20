@@ -98,9 +98,6 @@ class AccountController extends AbstractController
         ];
     }
 
-    /**
-     * @return ApiEntityManager
-     */
     protected function getManager(): ApiEntityManager
     {
         return $this->get(ApiEntityManager::class);

@@ -51,7 +51,6 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
         $this->handler = new AccountHandler($this->form, $requestStack, $this->manager);
     }
 
-
     public function testProcessUnsupportedRequest()
     {
         $this->form->expects($this->once())

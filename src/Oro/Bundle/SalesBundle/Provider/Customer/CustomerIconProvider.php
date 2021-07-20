@@ -11,9 +11,6 @@ class CustomerIconProvider implements CustomerIconProviderInterface
     /** @var EntityConfigProvider */
     protected $configProvider;
 
-    /**
-     * @param EntityConfigProvider $configProvider
-     */
     public function __construct(EntityConfigProvider $configProvider)
     {
         $this->configProvider = $configProvider;

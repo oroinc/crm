@@ -84,13 +84,6 @@ class LeadStatisticsTest extends BaseStatistics
 
     /**
      * @dataProvider widgetProvider
-     *
-     * @param string $owners
-     * @param array $dateRange
-     * @param bool $comparePrevious
-     * @param array $advancedFilters
-     * @param array $result
-     * @param array $previousResult
      */
     public function testCustomConfiguration(
         string $owners,
@@ -120,8 +113,6 @@ class LeadStatisticsTest extends BaseStatistics
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     *
-     * @return array
      */
     public function widgetProvider(): array
     {
@@ -255,10 +246,6 @@ class LeadStatisticsTest extends BaseStatistics
         return $this->getReference('widget_lead_statistics');
     }
 
-    /**
-     * @param array $result
-     * @param array $previousResult
-     */
     protected function inspectResult(array $result, array $previousResult): void
     {
         $response = $this->client->getResponse();

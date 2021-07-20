@@ -37,9 +37,6 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
 
     /**
      * {@inheritdoc}
-     * @param SearchIndexer $searchIndexer
-     * @param EventDispatcherInterface $dispatcher
-     * @param SettingsProvider $settings
      */
     public function __construct(
         $class,

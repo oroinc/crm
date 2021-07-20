@@ -189,7 +189,6 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
     {
         $this->request->setMethod('GET');
 
-
         $expectedEntity = clone $entity;
         $expectedEntity->setChannelType($expectedType);
 

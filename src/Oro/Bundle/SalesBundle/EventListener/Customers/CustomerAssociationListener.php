@@ -32,11 +32,6 @@ class CustomerAssociationListener
     /** @var AccountCustomerManager */
     protected $manager;
 
-    /**
-     * @param AccountCustomerManager $manager
-     * @param ConfigProvider         $customerConfigProvider
-     * @param DoctrineHelper         $helper
-     */
     public function __construct(
         AccountCustomerManager $manager,
         ConfigProvider $customerConfigProvider,
@@ -49,8 +44,6 @@ class CustomerAssociationListener
 
     /**
      * Collect created customer targets
-     *
-     * @param OnFlushEventArgs $args
      */
     public function onFlush(OnFlushEventArgs $args)
     {
@@ -65,8 +58,6 @@ class CustomerAssociationListener
     /**
      * Check for required existence of related customer associations for collected created targets
      * and creates missing
-     *
-     * @param PostFlushEventArgs $args
      */
     public function postFlush(PostFlushEventArgs $args)
     {

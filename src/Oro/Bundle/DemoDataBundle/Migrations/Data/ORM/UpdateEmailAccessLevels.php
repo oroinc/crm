@@ -23,9 +23,6 @@ class UpdateEmailAccessLevels extends AbstractUpdatePermissions implements Depen
         return [LoadRolesData::class];
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         $aclManager = $this->getAclManager();

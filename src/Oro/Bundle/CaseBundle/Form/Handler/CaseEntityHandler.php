@@ -17,12 +17,6 @@ class CaseEntityHandler extends ApiFormHandler
      */
     protected $dispatcher;
 
-    /**
-     * @param FormInterface $form
-     * @param RequestStack $requestStack
-     * @param ObjectManager $manager
-     * @param EventDispatcherInterface $dispatcher
-     */
     public function __construct(
         FormInterface $form,
         RequestStack $requestStack,

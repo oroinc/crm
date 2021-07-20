@@ -9,9 +9,6 @@ use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
  */
 class CustomerAssociationAccountFieldListener
 {
-    /**
-     * @param BeforeFormRenderEvent $event
-     */
     public function addAccountField(BeforeFormRenderEvent $event)
     {
         $environment = $event->getTwigEnvironment();

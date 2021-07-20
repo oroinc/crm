@@ -27,9 +27,6 @@ class CustomerAssignmentVirtualRelationProvider implements VirtualRelationProvid
      */
     protected $sourceClass;
 
-    /**
-     * @param string $sourceClass
-     */
     public function __construct(string $sourceClass)
     {
         $this->sourceClass = $sourceClass;

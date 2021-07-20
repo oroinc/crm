@@ -111,8 +111,6 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
     }
 
     /**
-     * @param ObjectManager $om
-     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */

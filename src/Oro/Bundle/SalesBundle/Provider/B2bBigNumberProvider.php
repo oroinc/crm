@@ -24,12 +24,6 @@ abstract class B2bBigNumberProvider
     /** @var BigNumberDateHelper */
     protected $dateHelper;
 
-    /**
-     * @param ManagerRegistry             $doctrine
-     * @param AclHelper                   $aclHelper
-     * @param WidgetProviderFilterManager $widgetProviderFilter
-     * @param BigNumberDateHelper         $dateHelper
-     */
     public function __construct(
         ManagerRegistry $doctrine,
         AclHelper $aclHelper,

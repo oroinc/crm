@@ -65,9 +65,6 @@ class LeadToOpportunityHandler extends OpportunityHandler
         return $handler->update($opportunity, $this->form, $saveMessage, $this);
     }
 
-    /**
-     * @param Opportunity $entity
-     */
     protected function onSuccess(Opportunity $entity)
     {
         $this->manager->persist($entity);

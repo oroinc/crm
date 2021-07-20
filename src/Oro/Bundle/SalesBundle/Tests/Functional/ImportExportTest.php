@@ -139,9 +139,6 @@ class ImportExportTest extends AbstractImportExportTestCase
         return $dataDir . DIRECTORY_SEPARATOR . $fileName;
     }
 
-    /**
-     * @return ImportExportConfiguration
-     */
     private function getExportImportConfiguration(): ImportExportConfiguration
     {
         return new ImportExportConfiguration([

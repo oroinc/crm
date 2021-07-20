@@ -91,11 +91,6 @@ class RemoveMailChimpBundleAndAbandonedCartBundleConfigs implements Migration
         }
     }
 
-    /**
-     * @param Schema $schema
-     * @param string $tableName
-     * @param array $columns
-     */
     private function dropColumns(Schema $schema, string $tableName, array $columns): void
     {
         if (!$schema->hasTable($tableName)) {
@@ -110,11 +105,6 @@ class RemoveMailChimpBundleAndAbandonedCartBundleConfigs implements Migration
         }
     }
 
-    /**
-     * @param Schema $schema
-     * @param string $tableName
-     * @param array $foreignKeys
-     */
     private function dropForeignKeys(Schema $schema, string $tableName, array $foreignKeys): void
     {
         if (!$schema->hasTable($tableName)) {
@@ -129,11 +119,6 @@ class RemoveMailChimpBundleAndAbandonedCartBundleConfigs implements Migration
         }
     }
 
-    /**
-     * @param Schema $schema
-     * @param string $tableName
-     * @param array $indexes
-     */
     private function dropIndexes(Schema $schema, string $tableName, array $indexes): void
     {
         if (!$schema->hasTable($tableName)) {

@@ -39,8 +39,6 @@ class CustomerAccountChangeListenerTest extends WebTestCase
 
     /**
      * @depends testSyncOnCreateCustomer
-     *
-     * @param array $customers
      */
     public function testChangeCustomerAccount(array $customers)
     {

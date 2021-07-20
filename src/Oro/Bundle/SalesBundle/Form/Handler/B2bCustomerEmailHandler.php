@@ -27,12 +27,6 @@ class B2bCustomerEmailHandler
     /** @var AuthorizationCheckerInterface */
     protected $authorizationChecker;
 
-    /**
-     * @param FormInterface $form
-     * @param RequestStack $requestStack
-     * @param EntityManagerInterface $manager
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(
         FormInterface $form,
         RequestStack $requestStack,
@@ -90,10 +84,6 @@ class B2bCustomerEmailHandler
         return false;
     }
 
-    /**
-     * @param B2bCustomerEmail $entity
-     * @param B2bCustomer $customer
-     */
     protected function onSuccess(B2bCustomerEmail $entity, B2bCustomer $customer)
     {
         $entity->setOwner($customer);

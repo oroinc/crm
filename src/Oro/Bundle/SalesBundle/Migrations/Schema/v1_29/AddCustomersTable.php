@@ -37,9 +37,6 @@ class AddCustomersTable implements Migration
         );
     }
 
-    /**
-     * @param Schema $schema
-     */
     public static function addCustomersTable(Schema $schema)
     {
         $table = $schema->createTable('orocrm_sales_customer');
@@ -48,9 +45,6 @@ class AddCustomersTable implements Migration
         $table->setPrimaryKey(['id']);
     }
 
-    /**
-     * @param Schema $schema
-     */
     public static function addCustomersTableForeignKeys(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_customer');

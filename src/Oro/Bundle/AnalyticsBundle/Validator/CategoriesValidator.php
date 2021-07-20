@@ -120,9 +120,6 @@ class CategoriesValidator extends ConstraintValidator
      *
      * For increasing collection values must be in ascending order.
      * For decreasing collection value must be in descending order.
-     *
-     * @param PersistentCollection $value
-     * @param CategoriesConstraint $constraint
      */
     protected function validateOrder(PersistentCollection $value, CategoriesConstraint $constraint)
     {

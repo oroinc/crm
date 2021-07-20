@@ -18,10 +18,6 @@ class ChangeLeadStatus
     /** @var ValidatorInterface */
     protected $validator;
 
-    /**
-     * @param EntityManager      $manager
-     * @param ValidatorInterface $validator
-     */
     public function __construct(EntityManager $manager, ValidatorInterface $validator)
     {
         $this->manager   = $manager;
@@ -73,9 +69,6 @@ class ChangeLeadStatus
         return true;
     }
 
-    /**
-     * @param Lead $entity
-     */
     protected function save(Lead $entity)
     {
         $this->manager->persist($entity);

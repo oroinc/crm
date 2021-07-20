@@ -50,9 +50,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
         ];
     }
 
-    /**
-     * @param ContainerInterface|null $container
-     */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
@@ -65,9 +62,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
         $this->userManager = $this->container->get('oro_user.manager');
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         $organization = $this->getReference('default_organization');

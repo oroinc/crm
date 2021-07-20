@@ -33,8 +33,6 @@ class OroSalesBundle implements Migration, OrderedMigrationInterface
 
     /**
      * Create oro_sales_b2bcustomer table
-     *
-     * @param Schema $schema
      */
     protected function createOrocrmSalesB2bCustomerTable(Schema $schema)
     {
@@ -116,8 +114,6 @@ class OroSalesBundle implements Migration, OrderedMigrationInterface
 
     /**
      * Add oro_sales_b2bcustomer foreign keys.
-     *
-     * @param Schema $schema
      */
     protected function addOrocrmSalesB2bCustomerForeignKeys(Schema $schema)
     {

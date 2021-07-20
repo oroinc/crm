@@ -21,19 +21,12 @@ class UpdateIntegrationConnectorsListener
     /** @var ManagerRegistry */
     protected $registry;
 
-    /**
-     * @param SettingsProvider  $settingsProvider
-     * @param ManagerRegistry $registry
-     */
     public function __construct(SettingsProvider $settingsProvider, ManagerRegistry $registry)
     {
         $this->settingsProvider = $settingsProvider;
         $this->registry         = $registry;
     }
 
-    /**
-     * @param ChannelSaveEvent $event
-     */
     public function onChannelSave(ChannelSaveEvent $event)
     {
         /** @var Channel $channel */

@@ -133,10 +133,6 @@ class ContactEmailAddressHandlerTest extends WebTestCase
         return $detachedEmailAddress;
     }
 
-    /**
-     * @param EmailAddress $emailAddress
-     * @return EmailRecipient
-     */
     private function createEmailRecipient(EmailAddress $emailAddress): EmailRecipient
     {
         $emailRecipient = new EmailRecipient();
@@ -147,10 +143,6 @@ class ContactEmailAddressHandlerTest extends WebTestCase
         return $emailRecipient;
     }
 
-    /**
-     * @param EmailAddress $emailAddress
-     * @return Email
-     */
     private function createEmail(EmailAddress $emailAddress): Email
     {
         $now = new \DateTime('now', new \DateTimeZone('UTC'));

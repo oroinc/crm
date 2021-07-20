@@ -9,9 +9,6 @@ class ContactRequestCallbackValidator
 {
     /**
      * Validates contact method
-     *
-     * @param ContactRequest            $object
-     * @param ExecutionContextInterface $context
      */
     public static function validate(ContactRequest $object, ExecutionContextInterface $context)
     {

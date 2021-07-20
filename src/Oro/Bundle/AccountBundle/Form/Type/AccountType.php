@@ -28,11 +28,6 @@ class AccountType extends AbstractType
     /** @var AuthorizationCheckerInterface */
     protected $authorizationChecker;
 
-    /**
-     * @param RouterInterface               $router
-     * @param EntityNameResolver            $entityNameResolver
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(
         RouterInterface $router,
         EntityNameResolver $entityNameResolver,

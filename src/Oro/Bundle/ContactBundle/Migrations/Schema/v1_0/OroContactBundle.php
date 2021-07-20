@@ -38,8 +38,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate table oro_contact
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactTable(Schema $schema)
     {
@@ -84,8 +82,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate table oro_contact_address
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactAddressTable(Schema $schema)
     {
@@ -137,8 +133,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate table oro_contact_email
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactEmailTable(Schema $schema)
     {
@@ -156,8 +150,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate table oro_contact_group
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactGroupTable(Schema $schema)
     {
@@ -174,8 +166,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate table oro_contact_method
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactMethodTable(Schema $schema)
     {
@@ -190,8 +180,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate table oro_contact_phone
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactPhoneTable(Schema $schema)
     {
@@ -209,8 +197,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate table oro_contact_source
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactSourceTable(Schema $schema)
     {
@@ -243,8 +229,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate foreign keys for table oro_contact
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactForeignKeys(Schema $schema)
     {
@@ -297,8 +281,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate foreign keys for table oro_contact_address
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactAddressForeignKeys(Schema $schema)
     {
@@ -352,8 +334,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate foreign keys for table oro_contact_email
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactEmailForeignKeys(Schema $schema)
     {
@@ -370,8 +350,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate foreign keys for table oro_contact_group
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactGroupForeignKeys(Schema $schema)
     {
@@ -388,8 +366,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate foreign keys for table oro_contact_phone
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactPhoneForeignKeys(Schema $schema)
     {
@@ -431,8 +407,6 @@ class OroContactBundle implements Migration
 
     /**
      * Generate foreign keys for table oro_email_address
-     *
-     * @param Schema $schema
      */
     public static function oroEmailAddressForeignKeys(Schema $schema)
     {

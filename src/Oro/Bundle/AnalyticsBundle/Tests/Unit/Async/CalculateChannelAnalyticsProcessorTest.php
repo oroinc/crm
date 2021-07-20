@@ -130,7 +130,6 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             ->with('Channel not found: theChannelId')
         ;
 
-
         $processor = new CalculateChannelAnalyticsProcessor(
             $doctrineHelperStub,
             $analyticsBuilderMock,
@@ -166,7 +165,6 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('build')
         ;
 
-
         $message = new Message();
         $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
 
@@ -176,7 +174,6 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('error')
             ->with('Channel not active: theChannelId')
         ;
-
 
         $processor = new CalculateChannelAnalyticsProcessor(
             $doctrineHelperStub,

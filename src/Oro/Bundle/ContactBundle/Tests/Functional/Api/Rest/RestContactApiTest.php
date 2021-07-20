@@ -274,8 +274,6 @@ class RestContactApiTest extends WebTestCase
     }
 
     /**
-     * @param $contact
-     *
      * @depends testGetContact
      */
     public function testDeleteContact($contact)
@@ -289,9 +287,6 @@ class RestContactApiTest extends WebTestCase
         $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 
-    /**
-     * @param array $actualAddresses
-     */
     protected function assertAddresses(array $actualAddresses)
     {
         $this->assertCount(1, $actualAddresses);

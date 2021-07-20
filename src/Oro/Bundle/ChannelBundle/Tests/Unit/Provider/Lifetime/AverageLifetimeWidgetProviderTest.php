@@ -52,11 +52,6 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider chartDataProvider
-     *
-     * @param array $channelsData
-     * @param array $averageData
-     * @param array $expectedResult
-     * @param array $dates
      */
     public function testGetChartData(array $channelsData, array $averageData, array $expectedResult, array $dates)
     {

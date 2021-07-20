@@ -24,17 +24,11 @@ class ContactAddStrategy extends AbstractImportStrategy
      */
     protected $tokenStorage;
 
-    /**
-     * @param ContactImportHelper $contactImportHelper
-     */
     public function setContactImportHelper(ContactImportHelper $contactImportHelper)
     {
         $this->contactImportHelper = $contactImportHelper;
     }
 
-    /**
-     * @param TokenStorageInterface $tokenStorage
-     */
     public function setTokenStorage(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
@@ -71,9 +65,6 @@ class ContactAddStrategy extends AbstractImportStrategy
         return $entity;
     }
 
-    /**
-     * @param Contact $entity
-     */
     protected function processSingleRelations(Contact $entity)
     {
         // update source
@@ -110,9 +101,6 @@ class ContactAddStrategy extends AbstractImportStrategy
         }
     }
 
-    /**
-     * @param Contact $entity
-     */
     protected function processMultipleRelations(Contact $entity)
     {
         // update groups
@@ -156,9 +144,6 @@ class ContactAddStrategy extends AbstractImportStrategy
         return $entity;
     }
 
-    /**
-     * @param Contact $entity
-     */
     protected function processSecurityRelations(Contact $entity)
     {
         // update owner

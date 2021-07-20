@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
-use Akeneo\Bundle\BatchBundle\Event\EventInterface;
-use Akeneo\Bundle\BatchBundle\Event\JobExecutionEvent;
+use Oro\Bundle\BatchBundle\Event\EventInterface;
+use Oro\Bundle\BatchBundle\Event\JobExecutionEvent;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Authentication\Token\ConsoleToken;
@@ -23,10 +23,6 @@ class JobExecutionSubscriber implements EventSubscriberInterface
     /** @var TokenStorageInterface */
     private $tokenStorage;
 
-    /**
-     * @param DoctrineHelper        $doctrineHelper
-     * @param TokenStorageInterface $tokenStorage
-     */
     public function __construct(DoctrineHelper $doctrineHelper, TokenStorageInterface $tokenStorage)
     {
         $this->doctrineHelper = $doctrineHelper;
@@ -43,9 +39,6 @@ class JobExecutionSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param JobExecutionEvent $event
-     */
     public function beforeJobExecution(JobExecutionEvent $event)
     {
         $config = $event->getJobExecution()->getJobInstance()->getRawConfiguration();
@@ -64,10 +57,6 @@ class JobExecutionSubscriber implements EventSubscriberInterface
         }
     }
 
-
-    /**
-     * @param Channel $channel
-     */
     private function updateToken(Channel $channel)
     {
         $token = $this->tokenStorage->getToken();

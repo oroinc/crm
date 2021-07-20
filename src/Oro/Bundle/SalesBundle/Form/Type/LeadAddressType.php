@@ -38,7 +38,7 @@ class LeadAddressType extends AbstractType
             ]
         );
     }
-    
+
     /**
      * {@inheritdoc}
      */

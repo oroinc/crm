@@ -29,7 +29,6 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
 
     /**
      * @dataProvider widgetProvider
-     * @param $requestData
      */
     public function testDateRangeAllTypeFilter($requestData)
     {

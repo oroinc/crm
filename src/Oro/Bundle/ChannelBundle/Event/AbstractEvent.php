@@ -10,9 +10,6 @@ class AbstractEvent extends Event
     /** @var Channel */
     protected $channel;
 
-    /**
-     * @param Channel $channel
-     */
     public function __construct(Channel $channel)
     {
         $this->channel = $channel;

@@ -18,10 +18,6 @@ class BuilderFactory
     /** @var SettingsProvider */
     private $settingsProvider;
 
-    /**
-     * @param ManagerRegistry  $registry
-     * @param SettingsProvider $settingsProvider
-     */
     public function __construct(ManagerRegistry $registry, SettingsProvider $settingsProvider)
     {
         $this->registry = $registry;

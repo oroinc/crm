@@ -10,9 +10,6 @@ class DefaultProvider implements AccountProviderInterface
     /** @var EntityNameResolver */
     protected $nameResolver;
 
-    /**
-     * @param EntityNameResolver $resolver
-     */
     public function __construct(EntityNameResolver $resolver)
     {
         $this->nameResolver = $resolver;

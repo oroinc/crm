@@ -41,8 +41,6 @@ class OroContactUsBundle implements Migration
 
     /**
      * Generate table oro_contactus_request
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactusRequestTable(Schema $schema)
     {
@@ -77,8 +75,6 @@ class OroContactUsBundle implements Migration
 
     /**
      * Generate table oro_contactus_request_calls
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactusRequestCallsTable(Schema $schema)
     {
@@ -161,8 +157,6 @@ class OroContactUsBundle implements Migration
 
     /**
      * Generate foreign keys for table oro_contactus_request_calls
-     *
-     * @param Schema $schema
      */
     public static function orocrmContactusRequestCallsForeignKeys(Schema $schema)
     {

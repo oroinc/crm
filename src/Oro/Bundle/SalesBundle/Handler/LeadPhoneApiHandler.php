@@ -18,10 +18,6 @@ class LeadPhoneApiHandler extends AbstractEntityApiHandler
     /** @var AuthorizationCheckerInterface */
     protected $authorizationChecker;
 
-    /**
-     * @param ManagerRegistry               $doctrine
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(ManagerRegistry $doctrine, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->doctrine = $doctrine;

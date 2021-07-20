@@ -18,10 +18,6 @@ class B2bCustomerPhoneApiHandler extends AbstractEntityApiHandler
     /** @var AuthorizationCheckerInterface */
     protected $authorizationChecker;
 
-    /**
-     * @param EntityManager                 $entityManager
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(EntityManager $entityManager, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->entityManager = $entityManager;

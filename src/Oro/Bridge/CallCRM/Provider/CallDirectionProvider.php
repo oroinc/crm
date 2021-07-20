@@ -18,9 +18,6 @@ class CallDirectionProvider implements DirectionProviderInterface
     /** @var ActivityManager */
     protected $activityManager;
 
-    /**
-     * @param ActivityManager $activityManager
-     */
     public function __construct(ActivityManager $activityManager)
     {
         $this->activityManager = $activityManager;

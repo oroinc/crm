@@ -11,17 +11,11 @@ class MailboxSavedListener
     /** @var TagManager */
     private $tagManager;
 
-    /**
-     * @param TagManager $tagManager
-     */
     public function __construct(TagManager $tagManager)
     {
         $this->tagManager = $tagManager;
     }
 
-    /**
-     * @param MailboxSaved $event
-     */
     public function onMailboxSave(MailboxSaved $event)
     {
         $mailbox = $event->getMailbox();

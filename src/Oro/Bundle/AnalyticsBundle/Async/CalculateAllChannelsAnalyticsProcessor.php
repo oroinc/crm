@@ -23,10 +23,6 @@ class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterfac
      */
     private $calculateAnalyticsScheduler;
 
-    /**
-     * @param DoctrineHelper $doctrineHelper
-     * @param CalculateAnalyticsScheduler $calculateAnalyticsScheduler
-     */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         CalculateAnalyticsScheduler $calculateAnalyticsScheduler

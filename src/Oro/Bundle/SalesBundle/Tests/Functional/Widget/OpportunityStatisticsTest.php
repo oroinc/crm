@@ -108,13 +108,6 @@ class OpportunityStatisticsTest extends BaseStatistics
 
     /**
      * @dataProvider widgetProvider
-     *
-     * @param string $owners
-     * @param array $dateRange
-     * @param bool $comparePrevious
-     * @param array $advancedFilters
-     * @param array $result
-     * @param array $previousResult
      */
     public function testCustomConfiguration(
         string $owners,
@@ -144,8 +137,6 @@ class OpportunityStatisticsTest extends BaseStatistics
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     *
-     * @return array
      */
     public function widgetProvider(): array
     {
@@ -314,10 +305,6 @@ class OpportunityStatisticsTest extends BaseStatistics
         return $this->getReference('widget_opportunity_statistics');
     }
 
-    /**
-     * @param array $result
-     * @param array $previousResult
-     */
     protected function inspectResult(array $result, array $previousResult): void
     {
         $response = $this->client->getResponse();

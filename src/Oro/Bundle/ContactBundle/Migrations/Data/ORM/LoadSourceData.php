@@ -18,9 +18,6 @@ class LoadSourceData extends AbstractFixture
         'other'   => 'Other Source',
     );
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         foreach ($this->data as $sourceName => $sourceLabel) {

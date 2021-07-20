@@ -71,12 +71,12 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setFirstName('Jerry');
                 $entity->setLastName('Coleman');
                 $entity->setNameSuffix('Jr.');
-                
+
                 $statusName = 'New';
                 $className = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
                 $id = ExtendHelper::buildEnumValueId($statusName);
                 $entity->setStatus(new $className($id, $statusName));
-                
+
                 $entity->setJobTitle('Manager');
                 $entity->addPhone(new LeadPhone('585-255-1127'));
                 $entity->addPhone(new LeadPhone('978-242-1314'));
