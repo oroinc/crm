@@ -61,9 +61,4 @@ class MetadataExtensionTest extends \PHPUnit\Framework\TestCase
             self::callTwigFunction($this->extension, 'oro_channel_type_metadata', [])
         );
     }
-
-    public function testGetName()
-    {
-        $this->assertEquals($this->extension->getName(), 'oro_channel_metadata');
-    }
 }

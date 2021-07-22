@@ -15,8 +15,6 @@ use Twig\TwigFunction;
  */
 class MetadataExtension extends AbstractExtension implements ServiceSubscriberInterface
 {
-    const EXTENSION_NAME = 'oro_channel_metadata';
-
     /** @var ContainerInterface */
     protected $container;
 
@@ -58,14 +56,6 @@ class MetadataExtension extends AbstractExtension implements ServiceSubscriberIn
     public function getChannelTypeMetadata()
     {
         return array_flip($this->getMetadataProvider()->getChannelTypeMetadata());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return self::EXTENSION_NAME;
     }
 
     /**

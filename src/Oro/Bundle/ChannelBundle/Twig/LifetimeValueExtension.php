@@ -16,8 +16,6 @@ use Twig\TwigFunction;
  */
 class LifetimeValueExtension extends AbstractExtension implements ServiceSubscriberInterface
 {
-    const EXTENSION_NAME = 'oro_channel_lifetime_value';
-
     /** @var ContainerInterface */
     protected $container;
 
@@ -53,14 +51,6 @@ class LifetimeValueExtension extends AbstractExtension implements ServiceSubscri
     public function getLifetimeValue(Account $account, Channel $channel = null)
     {
         return $this->getAmountProvider()->getAccountLifeTimeValue($account, $channel);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return self::EXTENSION_NAME;
     }
 
     /**
