@@ -33,14 +33,6 @@ class ContactExtension extends AbstractExtension implements ServiceSubscriberInt
     /**
      * {@inheritdoc}
      */
-    public function getName()
-    {
-        return 'oro_contact_social_url';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions()
     {
         return [

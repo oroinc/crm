@@ -259,8 +259,8 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    oro_channel.twig.metadata_extension:
-        class: Oro\Bundle\ChannelBundle\Twig\MetadataExtension
+    oro_channel.twig.channel_extension:
+        class: Oro\Bundle\ChannelBundle\Twig\ChannelExtension
         public: false
         arguments:
             - "@oro_platform.twig.service_locator"
@@ -278,14 +278,6 @@ services:
         class: Oro\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
         tags:
             - { name: form.type_extension, alias: embedded_form, extended_type: Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormType }
-
-    oro_channel.twig.lifetime_value_extension:
-        class: Oro\Bundle\ChannelBundle\Twig\LifetimeValueExtension
-        public: false
-        arguments:
-            - '@oro_platform.twig.service_locator'
-        tags:
-            - { name: twig.extension }
 
     oro_channel.validators.channel_integration_validator:
         class: Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
