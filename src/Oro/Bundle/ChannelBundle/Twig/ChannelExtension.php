@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\Twig;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
 use Oro\Bundle\ChannelBundle\Provider\MetadataProviderInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -12,25 +15,17 @@ use Twig\TwigFunction;
  * Provides Twig functions to retrieve channel metadata associated with an entity:
  *   - oro_channel_entities_metadata
  *   - oro_channel_type_metadata
+ *
+ * Provides a Twig function for the per-channel account lifetime value:
+ *   - oro_channel_account_lifetime
  */
-class MetadataExtension extends AbstractExtension implements ServiceSubscriberInterface
+class ChannelExtension extends AbstractExtension implements ServiceSubscriberInterface
 {
-    const EXTENSION_NAME = 'oro_channel_metadata';
-
-    /** @var ContainerInterface */
-    protected $container;
+    private ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-    }
-
-    /**
-     * @return MetadataProviderInterface
-     */
-    protected function getMetadataProvider()
-    {
-        return $this->container->get('oro_channel.provider.metadata_provider');
     }
 
     /**
@@ -40,7 +35,8 @@ class MetadataExtension extends AbstractExtension implements ServiceSubscriberIn
     {
         return [
             new TwigFunction('oro_channel_entities_metadata', [$this, 'getEntitiesMetadata']),
-            new TwigFunction('oro_channel_type_metadata', [$this, 'getChannelTypeMetadata'])
+            new TwigFunction('oro_channel_type_metadata', [$this, 'getChannelTypeMetadata']),
+            new TwigFunction('oro_channel_account_lifetime', [$this, 'getLifetimeValue'])
         ];
     }
 
@@ -61,11 +57,14 @@ class MetadataExtension extends AbstractExtension implements ServiceSubscriberIn
     }
 
     /**
-     * {@inheritdoc}
+     * @param Account      $account
+     * @param Channel|null $channel
+     *
+     * @return float
      */
-    public function getName()
+    public function getLifetimeValue(Account $account, Channel $channel = null)
     {
-        return self::EXTENSION_NAME;
+        return $this->getAmountProvider()->getAccountLifeTimeValue($account, $channel);
     }
 
     /**
@@ -75,6 +74,17 @@ class MetadataExtension extends AbstractExtension implements ServiceSubscriberIn
     {
         return [
             'oro_channel.provider.metadata_provider' => MetadataProviderInterface::class,
+            'oro_channel.provider.lifetime.amount_provider' => AmountProvider::class,
         ];
+    }
+
+    private function getMetadataProvider(): MetadataProviderInterface
+    {
+        return $this->container->get('oro_channel.provider.metadata_provider');
+    }
+
+    private function getAmountProvider(): AmountProvider
+    {
+        return $this->container->get('oro_channel.provider.lifetime.amount_provider');
     }
 }
