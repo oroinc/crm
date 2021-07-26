@@ -52,8 +52,8 @@ class ChannelLimitationExtension extends AbstractExtension
         $path = $config->offsetGetByPath(self::CHANNEL_RELATION_OPTION_PATH);
         /** @var QueryBuilder $queryBuilder */
         $queryBuilder = $datasource->getQueryBuilder();
-        if (strpos($path, '.') !== false) {
-            list($mainEntity, $relationName) = explode('.', $path);
+        if (str_contains($path, '.')) {
+            [$mainEntity, $relationName] = explode('.', $path);
             $mainEntity   = $this->ensureJoined($queryBuilder, $mainEntity);
             $relationName = $this->ensureJoined($queryBuilder, $relationName, $mainEntity);
         } else {

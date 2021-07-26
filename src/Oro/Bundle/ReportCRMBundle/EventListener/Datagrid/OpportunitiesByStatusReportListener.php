@@ -90,10 +90,11 @@ class OpportunitiesByStatusReportListener
             $fieldName = $config[FilterUtility::DATA_NAME_KEY];
             $filterType = $config['type'];
             // get date and datetime filters only
-            if (in_array($filterType, ['date', 'datetime']) && array_key_exists($key, $filters)
-                && strpos($fieldName, '.') !== false
+            if (\array_key_exists($key, $filters)
+                && \in_array($filterType, ['date', 'datetime'])
+                && str_contains($fieldName, '.')
             ) {
-                list($alias, $field) = explode('.', $fieldName);
+                [$alias, $field] = explode('.', $fieldName);
                 // build a join clause
                 $dateCondition = $this->buildDateCondition($filters[$key], $fieldName, $filterType, $queryBuilder);
                 if ($dateCondition) {

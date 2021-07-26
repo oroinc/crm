@@ -2,8 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Behat\Context;
 
-use Behat\Symfony2Extension\Context\KernelAwareContext;
-use Behat\Symfony2Extension\Context\KernelDictionary;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridRow;
@@ -17,10 +16,16 @@ use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
 
 class SalesContext extends OroFeatureContext implements
     FixtureLoaderAwareInterface,
-    OroPageObjectAware,
-    KernelAwareContext
+    OroPageObjectAware
 {
-    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
+    use FixtureLoaderDictionary, PageObjectDictionary;
+
+    private ManagerRegistry $managerRegistry;
+
+    public function __construct(ManagerRegistry $managerRegistry)
+    {
+        $this->managerRegistry = $managerRegistry;
+    }
 
     /**
      * @Given /^two users (charlie) and (samantha) exists in the system$/
@@ -90,7 +95,7 @@ class SalesContext extends OroFeatureContext implements
 
         $form->saveAndClose();
 
-        $repository = $this->getContainer()->get('doctrine')->getRepository(Channel::class);
+        $repository = $this->managerRegistry->getRepository(Channel::class);
 
         $this->fixtureLoader->addReference('first_channel', $repository->findOneBy([]));
     }

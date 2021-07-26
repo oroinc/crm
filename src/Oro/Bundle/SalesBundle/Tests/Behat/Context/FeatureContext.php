@@ -3,8 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Tests\Behat\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Behat\Symfony2Extension\Context\KernelAwareContext;
-use Behat\Symfony2Extension\Context\KernelDictionary;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ConfigBundle\Tests\Behat\Element\SidebarConfigMenu;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
@@ -22,10 +20,16 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 class FeatureContext extends OroFeatureContext implements
     FixtureLoaderAwareInterface,
-    OroPageObjectAware,
-    KernelAwareContext
+    OroPageObjectAware
 {
-    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
+    use FixtureLoaderDictionary, PageObjectDictionary;
+
+    private DoctrineHelper $doctrineHelper;
+
+    public function __construct(DoctrineHelper $doctrineHelper)
+    {
+        $this->doctrineHelper = $doctrineHelper;
+    }
 
     /**
      * This is change the current page context
@@ -119,13 +123,12 @@ class FeatureContext extends OroFeatureContext implements
      */
     private function getCustomers($channelName, $username)
     {
-        /** @var DoctrineHelper $doctrine */
-        $doctrine = $this->getContainer()->get('oro_entity.doctrine_helper');
-        $customerRepository = $doctrine->getEntityManagerForClass(B2bCustomer::class)
+        $customerRepository = $this->doctrineHelper->getEntityManagerForClass(B2bCustomer::class)
             ->getRepository(B2bCustomer::class);
-        $channelRepository = $doctrine->getEntityManagerForClass(Channel::class)->getRepository(Channel::class);
+        $channelRepository = $this->doctrineHelper->getEntityManagerForClass(Channel::class)
+            ->getRepository(Channel::class);
 
-        $user = $doctrine->getEntityManagerForClass(User::class)->getRepository(User::class)
+        $user = $this->doctrineHelper->getEntityManagerForClass(User::class)->getRepository(User::class)
             ->findOneBy(['username' => $username]);
         $channel = $channelRepository->findOneBy(['name' => $channelName]);
 

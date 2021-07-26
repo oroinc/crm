@@ -2,8 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Behat\Context;
 
-use Behat\Symfony2Extension\Context\KernelAwareContext;
-use Behat\Symfony2Extension\Context\KernelDictionary;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 
 /**
@@ -12,9 +11,14 @@ use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
  * - "Manage Salesfunnel Feature"
  * - "Manage Lead Feature"
  */
-class SalesFeatureToggleContext extends OroFeatureContext implements KernelAwareContext
+class SalesFeatureToggleContext extends OroFeatureContext
 {
-    use KernelDictionary;
+    private ConfigManager $configManager;
+
+    public function __construct(ConfigManager $configManager)
+    {
+        $this->configManager = $configManager;
+    }
 
     /**
      * @When /^(?:|I )enable Opportunity feature$/
@@ -71,8 +75,7 @@ class SalesFeatureToggleContext extends OroFeatureContext implements KernelAware
      */
     protected function setFeatureState($state, $section, $name)
     {
-        $configManager = $this->getContainer()->get('oro_config.global');
-        $configManager->set(sprintf('%s.%s', $section, $name), $state ? 1 : 0);
-        $configManager->flush();
+        $this->configManager->set(sprintf('%s.%s', $section, $name), $state ? 1 : 0);
+        $this->configManager->flush();
     }
 }
