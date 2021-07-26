@@ -4,13 +4,13 @@ oro_behat_extension:
       contexts:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
-        - OroDataGridBundle::GridContext
-        - OroActivityListBundle::ActivityContext
-        - OroFormBundle::FormContext
-        - OroSecurityBundle::ACLContext
-        - OroCalendarBundle::FeatureContext
-        - OroSearchBundle::SearchContext
-        - OroUIBundle::ContextSelectorContext
+        - Oro\Bundle\DataGridBundle\Tests\Behat\Context\GridContext
+        - Oro\Bundle\ActivityListBundle\Tests\Behat\Context\ActivityContext
+        - Oro\Bundle\FormBundle\Tests\Behat\Context\FormContext
+        - Oro\Bundle\SecurityBundle\Tests\Behat\Context\ACLContext
+        - Oro\Bundle\CalendarBundle\Tests\Behat\Context\FeatureContext
+        - Oro\Bundle\SearchBundle\Tests\Behat\Context\SearchContext
+        - Oro\Bundle\UIBundle\Tests\Behat\Context\ContextSelectorContext
       paths:
         - '@OroCRMBundle/Tests/Behat/Features'
 

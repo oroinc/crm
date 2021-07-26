@@ -4,8 +4,6 @@ namespace Oro\Bundle\ContactBundle\Tests\Behat\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
-use Behat\Symfony2Extension\Context\KernelAwareContext;
-use Behat\Symfony2Extension\Context\KernelDictionary;
 use Doctrine\Inflector\Rules\English\InflectorFactory;
 use Oro\Bundle\GaufretteBundle\FileManager;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
@@ -15,10 +13,16 @@ use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
 /**
  * Behat feature content for Contact bundle.
  */
-class FeatureContext extends OroFeatureContext implements OroPageObjectAware, KernelAwareContext
+class FeatureContext extends OroFeatureContext implements OroPageObjectAware
 {
     use PageObjectDictionary;
-    use KernelDictionary;
+
+    private FileManager $fileManager;
+
+    public function __construct(FileManager $fileManager)
+    {
+        $this->fileManager = $fileManager;
+    }
 
     /**
      * Assert that value of given field is a primary.
@@ -169,8 +173,6 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware, Ke
         $filename = $this->fixStepArgument($filename);
         $imagePath = sprintf('%s/../Features/Fixtures/%s', __DIR__, $filename);
 
-        /** @var FileManager $fileManager */
-        $fileManager = $this->getContainer()->get('oro_attachment.importexport.file_manager.import_files');
-        $fileManager->writeFileToStorage($imagePath, $filename);
+        $this->fileManager->writeFileToStorage($imagePath, $filename);
     }
 }

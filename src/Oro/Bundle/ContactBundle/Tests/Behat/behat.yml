@@ -73,24 +73,22 @@ oro_behat_extension:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
         - Oro\Bundle\AccountBundle\Tests\Behat\Context\FeatureContext
-        - OroQueryDesignerBundle::QueryDesignerContext
-        - OroFormBundle::FormContext
-        - OroDataGridBundle::GridContext
-        - OroSecurityBundle::ACLContext
-        - OroAddressBundle::AddressContext
-        - OroImportExportBundle::ImportExportContext:
-            - '@oro_entity.entity_alias_resolver'
-            - '@oro_importexport.processor.registry'
-        - OroEmailBundle::EmailContext
-        - OroContactBundle::FeatureContext
-        - OroActivityListBundle::ActivityContext
-        - OroUIBundle::ContextSelectorContext
-        - OroConfigBundle::FeatureContext
-        - OroNavigationBundle::FeatureContext
-        - OroLocaleBundle::LocalizationContext
-        - OroNavigationBundle::TabContext
-        - OroAttachmentBundle::AttachmentImageContext
-        - OroFilterBundle::FilterContext
-        - OroMarketingListBundle::MarketingListContext
+        - Oro\Bundle\QueryDesignerBundle\Tests\Behat\Context\QueryDesignerContext
+        - Oro\Bundle\FormBundle\Tests\Behat\Context\FormContext
+        - Oro\Bundle\DataGridBundle\Tests\Behat\Context\GridContext
+        - Oro\Bundle\SecurityBundle\Tests\Behat\Context\ACLContext
+        - Oro\Bundle\AddressBundle\Tests\Behat\Context\AddressContext
+        - Oro\Bundle\ImportExportBundle\Tests\Behat\Context\ImportExportContext
+        - Oro\Bundle\EmailBundle\Tests\Behat\Context\EmailContext
+        - Oro\Bundle\ContactBundle\Tests\Behat\Context\FeatureContext
+        - Oro\Bundle\ActivityListBundle\Tests\Behat\Context\ActivityContext
+        - Oro\Bundle\UIBundle\Tests\Behat\Context\ContextSelectorContext
+        - Oro\Bundle\ConfigBundle\Tests\Behat\Context\FeatureContext
+        - Oro\Bundle\NavigationBundle\Tests\Behat\Context\FeatureContext
+        - Oro\Bundle\LocaleBundle\Tests\Behat\Context\LocalizationContext
+        - Oro\Bundle\NavigationBundle\Tests\Behat\Context\TabContext
+        - Oro\Bundle\AttachmentBundle\Tests\Behat\Context\AttachmentImageContext
+        - Oro\Bundle\FilterBundle\Tests\Behat\Context\FilterContext
+        - Oro\Bundle\MarketingListBundle\Tests\Behat\Context\MarketingListContext
       paths:
         - '@OroContactBundle/Tests/Behat/Features'
