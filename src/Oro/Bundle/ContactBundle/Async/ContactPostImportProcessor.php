@@ -59,7 +59,7 @@ class ContactPostImportProcessor implements MessageProcessorInterface
         $rootImportJob = $this->getJobRepository()->findJobById((int)$messageBody['rootImportJobId']);
         if ($rootImportJob) {
             $importJobData = explode(':', $rootImportJob->getName());
-            if (empty($importJobData[2]) || strpos($importJobData[2], 'oro_contact') === false) {
+            if (empty($importJobData[2]) || !str_contains($importJobData[2], 'oro_contact')) {
                 return self::REJECT;
             }
         } else {

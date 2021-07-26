@@ -53,7 +53,7 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
 
         /** @var NodeElement $box */
         foreach ($contactBoxes as $box) {
-            if (false !== strpos($box->getText(), $name)) {
+            if (str_contains($box->getText(), $name)) {
                 self::assertMatchesRegularExpression('/Default Contact/i', $box->getText());
                 return;
             }
@@ -68,7 +68,7 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
     public function selectContactAsDefault($name)
     {
         foreach ($this->getFormContacts() as $contact) {
-            if (false !== strpos($contact->getText(), $name)) {
+            if (str_contains($contact->getText(), $name)) {
                 $contact->find('css', 'input[type="radio"]')->click();
 
                 return;
@@ -84,7 +84,7 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
     public function deleteContact($name)
     {
         foreach ($this->getFormContacts() as $contact) {
-            if (false !== strpos($contact->getText(), $name)) {
+            if (str_contains($contact->getText(), $name)) {
                 $contact->find('css', 'span.fa-close')->click();
 
                 return;
