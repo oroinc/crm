@@ -3,11 +3,11 @@ oro_behat_extension:
     OroReportCRMBundle:
       contexts:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
-        - OroFormBundle::FormContext
-        - OroDataGridBundle::GridContext
-        - OroReportCRMBundle::FeatureContext
-        - OroQueryDesignerBundle::QueryDesignerContext
-        - OroFilterBundle::FilterContext
+        - Oro\Bundle\FormBundle\Tests\Behat\Context\FormContext
+        - Oro\Bundle\DataGridBundle\Tests\Behat\Context\GridContext
+        - Oro\Bundle\ReportCRMBundle\Tests\Behat\Context\FeatureContext
+        - Oro\Bundle\QueryDesignerBundle\Tests\Behat\Context\QueryDesignerContext
+        - Oro\Bundle\FilterBundle\Tests\Behat\Context\FilterContext
       paths:
         - '@OroReportCRMBundle/Tests/Behat/Features'
 

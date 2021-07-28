@@ -5,6 +5,9 @@ namespace Oro\Bundle\ChannelBundle\Datagrid;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * Defines configuration schema for {@see ChannelLimitationExtension}.
+ */
 class ChannelLimitationExtensionConfiguration implements ConfigurationInterface
 {
     /**
@@ -21,8 +24,7 @@ class ChannelLimitationExtensionConfiguration implements ConfigurationInterface
                     ->validate()
                         ->ifTrue(
                             function ($value) {
-                                $hasDot = strpos((string)$value, '.') !== false;
-                                return $hasDot && substr_count((string)$value, '.') !== 1;
+                                return str_contains((string)$value, '.') && substr_count((string)$value, '.') !== 1;
                             }
                         )
                         ->thenInvalid('Must contains relative path with single nesting')

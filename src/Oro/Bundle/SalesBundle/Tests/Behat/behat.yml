@@ -311,23 +311,21 @@ oro_behat_extension:
       contexts:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
-        - OroDataGridBundle::GridContext
-        - OroActivityListBundle::ActivityContext
-        - OroFormBundle::FormContext
-        - OroSecurityBundle::ACLContext
-        - OroImportExportBundle::ImportExportContext:
-          - '@oro_entity.entity_alias_resolver'
-          - '@oro_importexport.processor.registry'
-        - OroAddressBundle::AddressContext
-        - OroSalesBundle::SalesContext
-        - OroSalesBundle::FeatureContext
-        - OroNavigationBundle::FeatureContext
-        - OroNavigationBundle::PinbarContext
-        - OroNavigationBundle::ScrollspyContext
-        - OroSalesBundle::SalesFeatureToggleContext
-        - OroConfigBundle::FeatureContext
-        - OroQueryDesignerBundle::QueryDesignerContext
-        - OroLocaleBundle::LocalizationContext
-        - OroEmailBundle::EmailContext
+        - Oro\Bundle\DataGridBundle\Tests\Behat\Context\GridContext
+        - Oro\Bundle\ActivityListBundle\Tests\Behat\Context\ActivityContext
+        - Oro\Bundle\FormBundle\Tests\Behat\Context\FormContext
+        - Oro\Bundle\SecurityBundle\Tests\Behat\Context\ACLContext
+        - Oro\Bundle\ImportExportBundle\Tests\Behat\Context\ImportExportContext
+        - Oro\Bundle\AddressBundle\Tests\Behat\Context\AddressContext
+        - Oro\Bundle\SalesBundle\Tests\Behat\Context\SalesContext
+        - Oro\Bundle\SalesBundle\Tests\Behat\Context\FeatureContext
+        - Oro\Bundle\NavigationBundle\Tests\Behat\Context\FeatureContext
+        - Oro\Bundle\NavigationBundle\Tests\Behat\Context\PinbarContext
+        - Oro\Bundle\NavigationBundle\Tests\Behat\Context\ScrollspyContext
+        - Oro\Bundle\SalesBundle\Tests\Behat\Context\SalesFeatureToggleContext
+        - Oro\Bundle\ConfigBundle\Tests\Behat\Context\FeatureContext
+        - Oro\Bundle\QueryDesignerBundle\Tests\Behat\Context\QueryDesignerContext
+        - Oro\Bundle\LocaleBundle\Tests\Behat\Context\LocalizationContext
+        - Oro\Bundle\EmailBundle\Tests\Behat\Context\EmailContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'

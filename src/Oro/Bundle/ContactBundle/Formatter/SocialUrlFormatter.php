@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\Formatter;
 
+/**
+ * Formats social URLs.
+ */
 class SocialUrlFormatter
 {
     const PARAM = '%username%';
@@ -28,7 +31,7 @@ class SocialUrlFormatter
             throw new \InvalidArgumentException(sprintf('Unknown social network type "%s"', $socialType));
         }
 
-        if (strpos($username, 'http://') === 0 || strpos($username, 'https://') === 0) {
+        if (str_starts_with($username, 'http://') || str_starts_with($username, 'https://')) {
             return $username;
         }
 
@@ -47,7 +50,7 @@ class SocialUrlFormatter
             throw new \InvalidArgumentException(sprintf('Unknown social network type "%s"', $socialType));
         }
 
-        if (strpos($socialLink, 'http://') === 0 || strpos($socialLink, 'https://') === 0) {
+        if (str_starts_with($socialLink, 'http://') || str_starts_with($socialLink, 'https://')) {
             $format   = $this->socialUrlFormat[$socialType];
             $tokens   = explode(self::PARAM, $format);
             foreach ($tokens as $token) {
