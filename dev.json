@@ -80,7 +80,7 @@
     "prefer-stable": true,
     "extra": {
         "symfony": {
-            "require": "4.4.*"
+            "require": ">4.4,<5.4"
         },
         "branch-alias": {
             "dev-master": "5.0-dev"
