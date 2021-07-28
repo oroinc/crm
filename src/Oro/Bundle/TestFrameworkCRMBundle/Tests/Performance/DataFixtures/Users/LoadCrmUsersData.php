@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\DataFixtures;
+namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\Performance\DataFixtures\Users;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;

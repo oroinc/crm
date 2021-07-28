@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Dashboard\Provider;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
