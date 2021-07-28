@@ -3,8 +3,10 @@
 namespace Oro\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normalizer;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
 use Oro\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use Oro\Bundle\ContactBundle\Model\Social;
+use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Tests\Unit\Strategy\Stub\ImportEntity;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -28,12 +30,12 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->socialUrlFormatter = $this
-            ->getMockBuilder('Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter')
+            ->getMockBuilder(SocialUrlFormatter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->fieldHelper = $this
-            ->getMockBuilder('Oro\Bundle\EntityBundle\Helper\FieldHelper')
+            ->getMockBuilder(FieldHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -125,7 +127,7 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
         /** @var ImportEntity $result */
         $this->normalizer->denormalize(
             [Social::TWITTER => $data],
-            'Oro\Bundle\ImportExportBundle\Tests\Unit\Strategy\Stub\ImportEntity'
+            ImportEntity::class
         );
     }
 
@@ -164,8 +166,8 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
     public function denormalizationProvider()
     {
         return [
-            'empty'   => [null, null, 'false'],
-            'array'   => [[], null, 'false'],
+            'empty'   => [null, '', 'false'],
+            'array'   => [[], '', 'false'],
             'type'    => [null, ContactNormalizer::CONTACT_TYPE, 'false'],
             'support' => [[], ContactNormalizer::CONTACT_TYPE, 'true']
         ];
