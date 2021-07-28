@@ -12,17 +12,14 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ContactNormalizer extends ConfigurableEntityNormalizer
 {
-    const CONTACT_TYPE = 'Oro\Bundle\ContactBundle\Entity\Contact';
+    const CONTACT_TYPE = Contact::class;
 
-    /**
-     * @var array
-     */
-    protected static $socialFields = array(
-        Social::TWITTER     => 'twitter',
-        Social::FACEBOOK    => 'facebook',
+    protected static array $socialFields = [
+        Social::TWITTER => 'twitter',
+        Social::FACEBOOK => 'facebook',
         Social::GOOGLE_PLUS => 'googlePlus',
-        Social::LINKED_IN   => 'linkedIn',
-    );
+        Social::LINKED_IN => 'linkedIn',
+    ];
 
     /**
      * @var SocialUrlFormatter
@@ -42,7 +39,7 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalize($object, string $format = null, array $context = [])
     {
         $result = parent::normalize($object, $format, $context);
 
@@ -61,7 +58,7 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         foreach (static::$socialFields as $socialType => $fieldName) {
             if (!empty($data[$fieldName])) {
@@ -72,13 +69,13 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
             }
         }
 
-        return parent::denormalize($data, $class, $format, $context);
+        return parent::denormalize($data, $type, $format, $context);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null, array $context = array())
+    public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
         return $data instanceof Contact;
     }
@@ -86,8 +83,8 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null, array $context = array())
+    public function supportsDenormalization($data, string $type, string $format = null, array $context = []): bool
     {
-        return is_array($data) && $type == static::CONTACT_TYPE;
+        return is_array($data) && $type === static::CONTACT_TYPE;
     }
 }
