@@ -56,11 +56,10 @@ class CommentControllerTest extends WebTestCase
 
     public function testCreate()
     {
-        $this->client->request(
+        $this->client->jsonRequest(
             'POST',
             $this->getUrl('oro_case_api_post_comment', ['id' => self::$caseId]),
             ['comment' => $this->commentPostData],
-            [],
             $this->generateWsseAuthHeader()
         );
 
@@ -77,10 +76,9 @@ class CommentControllerTest extends WebTestCase
      */
     public function testCget()
     {
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_case_api_get_comments', ['id' => self::$caseId]),
-            [],
             [],
             $this->generateWsseAuthHeader()
         );
@@ -109,10 +107,9 @@ class CommentControllerTest extends WebTestCase
      */
     public function testGet($id)
     {
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_case_api_get_comment', ['id' => $id]),
-            [],
             [],
             $this->generateWsseAuthHeader()
         );
@@ -146,18 +143,17 @@ class CommentControllerTest extends WebTestCase
             'contact' => self::$contactId
         ];
 
-        $this->client->request(
+        $this->client->jsonRequest(
             'PUT',
             $this->getUrl('oro_case_api_put_comment', ['id' => $id]),
             ['comment' => $putData],
-            [],
             $this->generateWsseAuthHeader()
         );
 
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_case_api_get_comment', ['id' => $id])
         );
@@ -179,10 +175,9 @@ class CommentControllerTest extends WebTestCase
      */
     public function testDelete($id)
     {
-        $this->client->request(
+        $this->client->jsonRequest(
             'DELETE',
             $this->getUrl('oro_case_api_delete_comment', ['id' => $id]),
-            [],
             [],
             $this->generateWsseAuthHeader()
         );
@@ -190,10 +185,9 @@ class CommentControllerTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_case_api_get_comment', ['id' => $id]),
-            [],
             [],
             $this->generateWsseAuthHeader()
         );

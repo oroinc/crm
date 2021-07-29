@@ -62,7 +62,7 @@ class RestContactApiTest extends WebTestCase
                 ],
             ]
         ];
-        $this->client->request('POST', $this->getUrl('oro_api_post_contact'), $request);
+        $this->client->jsonRequest('POST', $this->getUrl('oro_api_post_contact'), $request);
 
         $contact = $this->getJsonResponseContent($this->client->getResponse(), 201);
 
@@ -82,7 +82,7 @@ class RestContactApiTest extends WebTestCase
      */
     public function testGetContact($request)
     {
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_api_get_contact', ['id' => $request['id']])
         );
@@ -136,7 +136,7 @@ class RestContactApiTest extends WebTestCase
     public function testContactsFiltering(array $requestData)
     {
         $baseUrl = $this->getUrl('oro_api_get_contacts');
-        $this->client->request('GET', $baseUrl . '?createdAt>2010-10-10T09:09:09+02:00&page=1');
+        $this->client->jsonRequest('GET', $baseUrl . '?createdAt>2010-10-10T09:09:09+02:00&page=1');
 
         $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
@@ -147,39 +147,39 @@ class RestContactApiTest extends WebTestCase
         $this->assertEquals($requestData['contact']['firstName'], $entity['firstName']);
         $this->assertEquals($requestData['contact']['lastName'], $entity['lastName']);
 
-        $this->client->request('GET', $baseUrl . '?createdAt>2050-10-10T09:09:09+02:00&limit=20');
+        $this->client->jsonRequest('GET', $baseUrl . '?createdAt>2050-10-10T09:09:09+02:00&limit=20');
 
         $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
         $this->assertEmpty($entities);
 
-        $this->client->request('GET', $baseUrl . '?ownerId=' . $requestData['contact']['owner']);
+        $this->client->jsonRequest('GET', $baseUrl . '?ownerId=' . $requestData['contact']['owner']);
         $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $this->client->request('GET', $baseUrl . '?ownerId<>' . $requestData['contact']['owner']);
+        $this->client->jsonRequest('GET', $baseUrl . '?ownerId<>' . $requestData['contact']['owner']);
         $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $this->client->request('GET', $baseUrl . '?ownerUsername=' . self::USER_NAME);
+        $this->client->jsonRequest('GET', $baseUrl . '?ownerUsername=' . self::USER_NAME);
         $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $this->client->request('GET', $baseUrl . '?ownerUsername<>' . self::USER_NAME);
+        $this->client->jsonRequest('GET', $baseUrl . '?ownerUsername<>' . self::USER_NAME);
         $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $this->client->request('GET', $baseUrl . '?assigneeId=' . $requestData['contact']['assignedTo']);
+        $this->client->jsonRequest('GET', $baseUrl . '?assigneeId=' . $requestData['contact']['assignedTo']);
         $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $this->client->request('GET', $baseUrl . '?assigneeId<>' . $requestData['contact']['assignedTo']);
+        $this->client->jsonRequest('GET', $baseUrl . '?assigneeId<>' . $requestData['contact']['assignedTo']);
         $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $this->client->request('GET', $baseUrl . '?assigneeUsername=' . self::USER_NAME);
+        $this->client->jsonRequest('GET', $baseUrl . '?assigneeUsername=' . self::USER_NAME);
         $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $this->client->request('GET', $baseUrl . '?assigneeUsername<>' . self::USER_NAME);
+        $this->client->jsonRequest('GET', $baseUrl . '?assigneeUsername<>' . self::USER_NAME);
         $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $this->client->request('GET', $baseUrl . '?phone=' . $requestData['contact']['phones'][0]['phone']);
+        $this->client->jsonRequest('GET', $baseUrl . '?phone=' . $requestData['contact']['phones'][0]['phone']);
         $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $this->client->request('GET', $baseUrl . '?phone<>' .$requestData['contact']['phones'][0]['phone']);
+        $this->client->jsonRequest('GET', $baseUrl . '?phone<>' .$requestData['contact']['phones'][0]['phone']);
         $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
     }
 
@@ -194,7 +194,7 @@ class RestContactApiTest extends WebTestCase
                 'createdAt' => '2014-03-04T20:00:00.123+01:00'
             ]
         ];
-        $this->client->request('POST', $this->getUrl('oro_api_post_contact'), $request);
+        $this->client->jsonRequest('POST', $this->getUrl('oro_api_post_contact'), $request);
 
         $this->getEntityManager()->clear();
         $responseContent = $this->getJsonResponseContent($this->client->getResponse(), 201);
@@ -220,7 +220,7 @@ class RestContactApiTest extends WebTestCase
                 'createdAt' => '2014-03-04T20:00:00.123Z'
             ]
         ];
-        $this->client->request('POST', $this->getUrl('oro_api_post_contact'), $request);
+        $this->client->jsonRequest('POST', $this->getUrl('oro_api_post_contact'), $request);
 
         $this->getEntityManager()->clear();
         $responseContent = $this->getJsonResponseContent($this->client->getResponse(), 201);
@@ -254,11 +254,11 @@ class RestContactApiTest extends WebTestCase
         $request['contact']['accounts']                = [$account->getId()];
         $request['contact']['reportsTo']               = $contact['id'];
 
-        $this->client->request('PUT', $this->getUrl('oro_api_put_contact', ['id' => $contact['id']]), $request);
+        $this->client->jsonRequest('PUT', $this->getUrl('oro_api_put_contact', ['id' => $contact['id']]), $request);
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
-        $this->client->request('GET', $this->getUrl('oro_api_get_contact', ['id' => $contact['id']]));
+        $this->client->jsonRequest('GET', $this->getUrl('oro_api_get_contact', ['id' => $contact['id']]));
 
         $contact = $this->getJsonResponseContent($this->client->getResponse(), 200);
         $this->assertEquals($request['contact']['firstName'], $contact['firstName'], 'Contact was not updated');
@@ -278,11 +278,11 @@ class RestContactApiTest extends WebTestCase
      */
     public function testDeleteContact($contact)
     {
-        $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact', ['id' => $contact['id']]));
+        $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact', ['id' => $contact['id']]));
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
-        $this->client->request('GET', $this->getUrl('oro_api_get_contact', ['id' => $contact['id']]));
+        $this->client->jsonRequest('GET', $this->getUrl('oro_api_get_contact', ['id' => $contact['id']]));
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 404);
     }

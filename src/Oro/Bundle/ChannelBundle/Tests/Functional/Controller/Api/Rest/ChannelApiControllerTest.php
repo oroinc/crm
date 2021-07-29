@@ -19,7 +19,7 @@ class ChannelApiControllerTest extends WebTestCase
     public function testCget()
     {
         $url = $this->getUrl('oro_api_get_channels');
-        $this->client->request('GET', $url);
+        $this->client->jsonRequest('GET', $url);
 
         $channels = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
@@ -39,14 +39,14 @@ class ChannelApiControllerTest extends WebTestCase
     {
         //fetch active channels
         $url = $this->getUrl('oro_api_get_channels', ['active' => 'false']);
-        $this->client->request('GET', $url);
+        $this->client->jsonRequest('GET', $url);
 
         $channels = $this->getJsonResponseContent($this->client->getResponse(), 200);
         $this->assertInactiveChannels($channels);
 
         //fetch inactive channels
         $url = $this->getUrl('oro_api_get_channels', ['active' => 'true']);
-        $this->client->request('GET', $url);
+        $this->client->jsonRequest('GET', $url);
 
         $channels = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
@@ -85,7 +85,7 @@ class ChannelApiControllerTest extends WebTestCase
             'oro_api_get_channels',
             ['entity' => 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity']
         );
-        $this->client->request('GET', $url);
+        $this->client->jsonRequest('GET', $url);
 
         $channels = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
