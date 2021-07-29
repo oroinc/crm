@@ -16,7 +16,7 @@ class RestContactAddressApiTest extends WebTestCase
     {
         $contactId = $this->getReference('Contact_Brenda')->getId();
 
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_api_get_contact_addresses', ['contactId' => $contactId])
         );

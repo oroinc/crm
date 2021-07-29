@@ -52,7 +52,7 @@ class CaseControllerTest extends WebTestCase
             'case' => $this->casePostData
         ];
 
-        $this->client->request(
+        $this->client->jsonRequest(
             'POST',
             $this->getUrl('oro_case_api_post_case'),
             $request
@@ -68,10 +68,9 @@ class CaseControllerTest extends WebTestCase
      */
     public function testCget()
     {
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_case_api_get_cases'),
-            [],
             [],
             $this->generateWsseAuthHeader()
         );
@@ -105,10 +104,9 @@ class CaseControllerTest extends WebTestCase
      */
     public function testGet($id)
     {
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_case_api_get_case', ['id' => $id]),
-            [],
             [],
             $this->generateWsseAuthHeader()
         );
@@ -155,18 +153,17 @@ class CaseControllerTest extends WebTestCase
             'assignedTo' => self::$adminUserId,
         ];
 
-        $this->client->request(
+        $this->client->jsonRequest(
             'PUT',
             $this->getUrl('oro_case_api_put_case', ['id' => $id]),
             ['case' => $putData],
-            [],
             $this->generateWsseAuthHeader()
         );
 
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_case_api_get_case', ['id' => $id])
         );
@@ -191,19 +188,17 @@ class CaseControllerTest extends WebTestCase
      */
     public function testDelete($id)
     {
-        $this->client->request(
+        $this->client->jsonRequest(
             'DELETE',
             $this->getUrl('oro_case_api_delete_case', ['id' => $id]),
-            [],
             [],
             $this->generateWsseAuthHeader()
         );
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_case_api_get_case', ['id' => $id]),
-            [],
             [],
             $this->generateWsseAuthHeader()
         );

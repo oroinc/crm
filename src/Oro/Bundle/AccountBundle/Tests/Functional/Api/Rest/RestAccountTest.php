@@ -25,7 +25,7 @@ class RestAccountTest extends WebTestCase
             )
         );
 
-        $this->client->request(
+        $this->client->jsonRequest(
             'POST',
             $this->getUrl('oro_api_post_account'),
             $request
@@ -45,7 +45,7 @@ class RestAccountTest extends WebTestCase
      */
     public function testGet(array $request)
     {
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_api_get_accounts')
         );
@@ -63,7 +63,7 @@ class RestAccountTest extends WebTestCase
         $this->assertNotEmpty($result);
         $this->assertEquals($request['account']['name'], reset($result)['name']);
 
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_api_get_account', array('id' => $request['id']))
         );
@@ -81,7 +81,7 @@ class RestAccountTest extends WebTestCase
     public function testUpdate(array $request)
     {
         $request['account']['name'] .= "_Updated";
-        $this->client->request(
+        $this->client->jsonRequest(
             'PUT',
             $this->getUrl('oro_api_put_account', array('id' => $request['id'])),
             $request
@@ -90,7 +90,7 @@ class RestAccountTest extends WebTestCase
 
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_api_get_account', array('id' => $request['id']))
         );
@@ -109,7 +109,7 @@ class RestAccountTest extends WebTestCase
      */
     public function testList($request)
     {
-        $this->client->request(
+        $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_api_get_accounts')
         );
@@ -124,13 +124,13 @@ class RestAccountTest extends WebTestCase
      */
     public function testDelete(array $request)
     {
-        $this->client->request(
+        $this->client->jsonRequest(
             'DELETE',
             $this->getUrl('oro_api_delete_account', array('id' => $request['id']))
         );
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
-        $this->client->request('GET', $this->getUrl('oro_api_get_account', array('id' => $request['id'])));
+        $this->client->jsonRequest('GET', $this->getUrl('oro_api_get_account', array('id' => $request['id'])));
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
