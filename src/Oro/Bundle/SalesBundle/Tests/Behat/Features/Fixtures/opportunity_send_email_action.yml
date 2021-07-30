@@ -57,6 +57,13 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
     organization: '@organization'
     owner: '@admin'
 
+  opportunity-with-account-name:
+    name: 'opportunity with account name'
+    customerAssociation: '@customer-1'
+    contact: '@contact-wo-name'
+    organization: '@organization'
+    owner: '@admin'
+
   opportunity-w-contact-no-email:
     name: 'opportunity w contact no email'
     customerAssociation: '@customer-1'
