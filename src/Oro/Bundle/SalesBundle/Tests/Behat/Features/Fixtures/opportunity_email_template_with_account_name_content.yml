@@ -1,0 +1,9 @@
+Oro\Bundle\EmailBundle\Entity\EmailTemplate:
+    email_template:
+        organization: '@organization'
+        is_system: 0
+        name: 'opportunity_email_template'
+        entity_name: 'Oro\\Bundle\\SalesBundle\\Entity\\Opportunity'
+        type: 'html'
+        subject: 'Subject'
+        content: 'AccountName: {{ entity.customerAssociation.account.name }}'
