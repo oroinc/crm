@@ -708,3 +708,9 @@ services:
         arguments: ['lead_status']
         tags:
             - { name: oro_dashboard.value.converter, form_type: Oro\Bundle\SalesBundle\Form\Type\LeadStatusSelectType }
+
+    oro_sales.emailtemplate.variable_provider.entity:
+        class: Oro\Bundle\SalesBundle\Provider\EntityVariablesProvider
+        public: false
+        tags:
+            - { name: oro_email.emailtemplate.variable_provider, scope: entity }
