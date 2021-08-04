@@ -6,7 +6,7 @@ define(function(require) {
 
     const Select2SalesCustomerComponent = Select2AutocompleteComponent.extend({
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function Select2SalesCustomerComponent(options) {
             Select2SalesCustomerComponent.__super__.constructor.call(this, options);

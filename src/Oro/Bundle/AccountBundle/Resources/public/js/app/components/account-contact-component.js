@@ -6,7 +6,7 @@ define(function(require) {
 
     const AccountContactComponent = MultipleEntityComponent.extend({
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function AccountContactComponent(options) {
             AccountContactComponent.__super__.constructor.call(this, options);

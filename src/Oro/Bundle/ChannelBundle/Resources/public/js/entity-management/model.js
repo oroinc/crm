@@ -14,7 +14,7 @@ define(['backbone'], function(Backbone) {
         },
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function EntityManagementModel(attrs, options) {
             EntityManagementModel.__super__.constructor.call(this, attrs, options);
