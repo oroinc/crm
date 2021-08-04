@@ -6,14 +6,14 @@ define(function(require) {
 
     const OpportunityStatusSelectView = BaseView.extend({
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         constructor: function OpportunityStatusSelectView(options) {
             OpportunityStatusSelectView.__super__.constructor.call(this, options);
         },
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         initialize: function(options) {
             OpportunityStatusSelectView.__super__.initialize.call(this, options);
