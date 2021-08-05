@@ -2,8 +2,7 @@
 
 namespace Oro\Bundle\CaseBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Routing\ClassResourceInterface;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
@@ -14,25 +13,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API CRUD controller for Case entity.
- *
- * @Rest\RouteResource("case")
- * @Rest\NamePrefix("oro_case_api_")
+ * REST API CRUD controller for Case entity.
  *
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
-class CaseController extends RestController implements ClassResourceInterface
+class CaseController extends RestController
 {
     /**
      * REST GET list
      *
-     * @Rest\QueryParam(
+     * @QueryParam(
      *     name="page",
      *     requirements="\d+",
      *     nullable=true,
      *     description="Page number, starting from 1. Defaults to 1."
      * )
-     * @Rest\QueryParam(
+     * @QueryParam(
      *     name="limit",
      *     requirements="\d+",
      *     nullable=true,
@@ -59,8 +55,6 @@ class CaseController extends RestController implements ClassResourceInterface
      *
      * @param int $id
      *
-     * @Rest\Get(requirements={"id"="\d+"})
-     *
      * @ApiDoc(
      *     description="Get CaseEntity item",
      *     resource=true
@@ -77,8 +71,6 @@ class CaseController extends RestController implements ClassResourceInterface
      * REST PUT
      *
      * @param int $id CaseEntity item id
-     *
-     * @Rest\Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *     description="Update CaseEntity",
@@ -110,8 +102,6 @@ class CaseController extends RestController implements ClassResourceInterface
      * REST DELETE
      *
      * @param int $id
-     *
-     * @Rest\Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *     description="Delete CaseEntity",

@@ -2,10 +2,6 @@
 
 namespace Oro\Bundle\ContactUsBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -13,19 +9,14 @@ use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Provides get API action to find the Customer entity.
- *
- * @RouteResource("contactrequest")
- * @NamePrefix("oro_api_")
+ * REST API controller to get the ContactRequest entity.
  */
-class ContactRequestController extends RestController implements ClassResourceInterface
+class ContactRequestController extends RestController
 {
     /**
      * REST GET item
      *
      * @param int $id
-     *
-     * @Get(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact request item",

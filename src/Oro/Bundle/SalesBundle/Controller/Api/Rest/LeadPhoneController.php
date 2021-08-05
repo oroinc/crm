@@ -2,10 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
@@ -13,25 +9,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API CRUD controller for LeadPhone entity.
- *
- * @RouteResource("phone")
- * @NamePrefix("oro_api_")
+ * REST API CRUD controller for LeadPhone entity.
  */
-class LeadPhoneController extends RestController implements ClassResourceInterface
+class LeadPhoneController extends RestController
 {
     /**
      * Create entity LeadPhone
-     * oro_api_post_lead_phone
      *
      * @return Response
      *
      * @ApiDoc(
      *      description="Create entity Lead phone",
-     *      resource=true,
-     *      requirements = {
-     *          {"name"="id", "dataType"="integer"},
-     *      }
+     *      resource=true
      * )
      */
     public function postAction()
@@ -41,11 +30,8 @@ class LeadPhoneController extends RestController implements ClassResourceInterfa
 
     /**
      * Delete entity LeadPhone
-     * oro_api_delete_lead_phone
      *
      * @param int $id
-     *
-     * @Rest\Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete LeadPhone"

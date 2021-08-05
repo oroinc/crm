@@ -2,10 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestGetController;
@@ -14,17 +11,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Provides cget API action to find the Customer entities.
- *
- * @RouteResource("search_customer")
- * @NamePrefix("oro_api_")
+ * REST API controller to find the Customer entities.
  */
 class CustomerSearchController extends RestGetController
 {
     /**
      * Search customers.
-     *
-     * @Get("/customers/search")
      *
      * @QueryParam(
      *      name="page",

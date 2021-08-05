@@ -2,10 +2,6 @@
 
 namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
@@ -15,20 +11,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API CRUD controller for ContactAddress entity.
- *
- * @RouteResource("address")
- * @NamePrefix("oro_api_")
+ * REST API CRUD controller for ContactAddress entity.
  */
-class ContactAddressController extends RestController implements ClassResourceInterface
+class ContactAddressController extends RestController
 {
     /**
      * REST GET address
      *
      * @param int $contactId
      * @param int $addressId
-     *
-     * @Rest\Get(requirements={"contactId"="\d+", "addressId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact address",
@@ -88,8 +79,6 @@ class ContactAddressController extends RestController implements ClassResourceIn
     /**
      * REST DELETE address
      *
-     * @Rest\Delete(requirements={"contactId"="\d+", "addressId"="\d+"})
-     *
      * @ApiDoc(
      *      description="Delete address items",
      *      resource=true
@@ -122,8 +111,6 @@ class ContactAddressController extends RestController implements ClassResourceIn
      * @param int $contactId
      * @param string $typeName
      *
-     * @Rest\Get(requirements={"contactId"="\d+"})
-
      * @ApiDoc(
      *      description="Get contact address by type",
      *      resource=true
@@ -151,8 +138,6 @@ class ContactAddressController extends RestController implements ClassResourceIn
      * REST GET primary address
      *
      * @param int $contactId
-     *
-     * @Rest\Get(requirements={"contactId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get contact primary address",

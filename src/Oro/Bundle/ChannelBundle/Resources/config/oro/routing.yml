@@ -3,12 +3,63 @@ oro_channel_bundle:
     type:     annotation
     prefix:   /channel
 
-oro_channel_bundle_api:
-    resource: "@OroChannelBundle/Resources/config/oro/routing_api.yml"
-    type:     rest
-    prefix:   api/rest/{version}/
-    requirements:
-        version:  latest|v1
-        _format:  json
+
+#
+# OLD REST API ROUTES
+#
+
+oro_api_get_channels:
+    path: '/api/rest/{version}/channels.{_format}'
+    methods: [GET]
     defaults:
+        _controller: 'Oro\Bundle\ChannelBundle\Controller\Api\Rest\ChannelController::cgetAction'
+        _format: json
         version: latest
+    requirements:
+        _format: json
+        version: latest|v1
+
+oro_api_delete_channel:
+    path: '/api/rest/{version}/channels/{id}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\ChannelBundle\Controller\Api\Rest\ChannelController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json
+        version: latest|v1
+
+oro_api_options_channels:
+    path: '/api/rest/{version}/channels.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\ChannelBundle\Controller\Api\Rest\ChannelController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json
+        version: latest|v1
+
+oro_api_get_search_customers:
+    path: '/api/rest/{version}/customers/search.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ChannelBundle\Controller\Api\Rest\CustomerSearchController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json
+        version: latest|v1
+
+oro_api_options_search_customers:
+    path: '/api/rest/{version}/search/customers.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\ChannelBundle\Controller\Api\Rest\CustomerSearchController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json
+        version: latest|v1

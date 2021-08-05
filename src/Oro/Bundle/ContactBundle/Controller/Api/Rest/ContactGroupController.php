@@ -2,13 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations\Delete;
-use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -20,12 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API CRUD controller for ContactGroup entity.
- *
- * @RouteResource("contactgroup")
- * @NamePrefix("oro_api_")
+ * REST API CRUD controller for ContactGroup entity.
  */
-class ContactGroupController extends RestController implements ClassResourceInterface
+class ContactGroupController extends RestController
 {
     /**
      * REST GET list
@@ -62,8 +53,6 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *
      * @param int $id
      *
-     * @Get(requirements={"id"="\d+"})
-     *
      * @ApiDoc(
      *      description="Get contact item",
      *      resource=true
@@ -80,8 +69,6 @@ class ContactGroupController extends RestController implements ClassResourceInte
      * REST PUT
      *
      * @param int $id
-     *
-     * @Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Update contact group",
@@ -113,8 +100,6 @@ class ContactGroupController extends RestController implements ClassResourceInte
      * REST DELETE
      *
      * @param int $id
-     *
-     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete Contact Group",

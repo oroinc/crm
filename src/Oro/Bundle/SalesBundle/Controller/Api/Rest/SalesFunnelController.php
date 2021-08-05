@@ -2,11 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -18,12 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API CRUD controller for SalesFunnel entity.
- *
- * @RouteResource("salesfunnel")
- * @NamePrefix("oro_api_")
+ * REST API CRUD controller for SalesFunnel entity.
  */
-class SalesFunnelController extends RestController implements ClassResourceInterface
+class SalesFunnelController extends RestController
 {
     /**
      * REST GET list
@@ -61,8 +54,6 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      *
      * @param int $id
      *
-     * @Rest\Get(requirements={"id"="\d+"})
-     *
      * @ApiDoc(
      *      description="Get opportunity",
      *      resource=true
@@ -79,8 +70,6 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      * REST PUT
      *
      * @param int $id
-     *
-     * @Rest\Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Update sales funnel",
@@ -112,8 +101,6 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      * REST DELETE
      *
      * @param int $id
-     *
-     * @Rest\Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete sales funnel",

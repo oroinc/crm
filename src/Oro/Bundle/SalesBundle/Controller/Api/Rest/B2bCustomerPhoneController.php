@@ -2,11 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations\Delete;
-use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -16,17 +11,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API CRUD controller for B2bCustomerPhone entity.
- *
- * @RouteResource("b2bcustomer_phone")
- * @NamePrefix("oro_api_")
+ * REST API CRUD controller for B2bCustomerPhone entity.
  */
-class B2bCustomerPhoneController extends RestController implements ClassResourceInterface
+class B2bCustomerPhoneController extends RestController
 {
     /**
      * REST GET list
-     *
-     * @Get(requirements={"customerId"="\d+"})
      *
      * @ApiDoc(
      *      description="Get all phones items",
@@ -60,8 +50,6 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
      *
      * @param int $customerId
      *
-     * @Get(requirements={"customerId"="\d+"})
-     *
      * @ApiDoc(
      *      description="Get customer primary phone",
      *      resource=true
@@ -87,16 +75,12 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
 
     /**
      * Create entity B2bCustomerPhone
-     * oro_api_post_b2bcustomer_phone
      *
      * @return Response
      *
      * @ApiDoc(
      *      description="Create entity",
-     *      resource=true,
-     *      requirements = {
-     *          {"name"="id", "dataType"="integer"},
-     *      }
+     *      resource=true
      * )
      */
     public function postAction()
@@ -108,11 +92,8 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
 
     /**
      * Delete entity B2bCustomerPhone
-     * oro_api_delete_b2bcustomer_phone
      *
      * @param int $id
-     *
-     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete B2bCustomerPhone"
