@@ -13,6 +13,9 @@ use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
+/**
+ * Creates an Opportunity from the specified Lead.
+ */
 class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
 {
     /** @var PropertyAccessor */
@@ -81,14 +84,11 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
      */
     protected function prepareEntityFields()
     {
-        $rawFields = $this->entityFieldProvider->getFields(
-            'OroSalesBundle:Lead',
-            true,
-            true,
-            false,
-            false,
-            true,
-            true
+        $rawFields = $this->entityFieldProvider->getEntityFields(
+            Lead::class,
+            EntityFieldProvider::OPTION_WITH_RELATIONS
+            | EntityFieldProvider::OPTION_WITH_VIRTUAL_FIELDS
+            | EntityFieldProvider::OPTION_APPLY_EXCLUSIONS
         );
         $fields = [];
         foreach ($rawFields as $field) {

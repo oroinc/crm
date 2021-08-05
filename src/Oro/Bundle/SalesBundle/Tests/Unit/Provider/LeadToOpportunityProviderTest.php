@@ -19,36 +19,35 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var LeadToOpportunityProvider */
-    private $provider;
+    private LeadToOpportunityProvider|\PHPUnit\Framework\MockObject\MockObject $provider;
 
     protected function setUp(): void
     {
         $entityFieldProvider = $this->createMock(EntityFieldProvider::class);
         $changeLeadStatus = $this->createMock(ChangeLeadStatus::class);
 
-        $entityFieldProvider->expects($this->any())
-            ->method('getFields')
+        $entityFieldProvider->expects(self::any())
+            ->method('getEntityFields')
             ->willReturn([]);
 
         $this->provider = $this->getMockBuilder(LeadToOpportunityProvider::class)
             ->setConstructorArgs([$entityFieldProvider, $changeLeadStatus])
             ->onlyMethods(['createOpportunity'])
             ->getMock();
-        $this->provider->expects($this->any())
+        $this->provider->expects(self::any())
             ->method('createOpportunity')
             ->willReturnCallback(function () {
                 return new Opportunity();
             });
     }
 
-    public function testPrepareOpportunityForFormWithContact()
+    public function testPrepareOpportunityForFormWithContact(): void
     {
         $lead = $this->createMock(Lead::class);
-        $lead->expects($this->once())
+        $lead->expects(self::once())
             ->method('getContact')
             ->willReturn(new Contact());
-        $lead->expects($this->once())
+        $lead->expects(self::once())
             ->method('getName')
             ->willReturn('testName');
 
@@ -58,10 +57,10 @@ class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider leadProvider
      */
-    public function testPrepareOpportunityForFormWithoutContact(Lead $lead, Opportunity $expectedOpportunity)
+    public function testPrepareOpportunityForFormWithoutContact(Lead $lead, Opportunity $expectedOpportunity): void
     {
         $preparedOpportunity = $this->provider->prepareOpportunityForForm($lead, true);
-        $this->assertEquals($preparedOpportunity, $expectedOpportunity);
+        self::assertEquals($preparedOpportunity, $expectedOpportunity);
     }
 
     public function leadProvider(): array
