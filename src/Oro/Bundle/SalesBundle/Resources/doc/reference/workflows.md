@@ -18,8 +18,6 @@ there are no step forms.
 relationship history with these leads.
 * CRM Leads should be qualified as a potential customer before they are “promoted” to a CRM Contact and/or
 CRM Opportunity.
-* CRM Leads are NOT synchronized with the Outlook CRM Client, therefore they will NOT be listed as Outlook Contacts.
-Leads can only be managed via CRM.
 
 Examples:
 * Web visitors who had submitted a website questionnaire, and additional follow-up is needed.
