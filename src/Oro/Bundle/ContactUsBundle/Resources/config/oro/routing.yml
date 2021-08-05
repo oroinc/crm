@@ -3,17 +3,40 @@ oro_contactus:
     type:     annotation
     prefix:   /contact-us
 
-oro_contactus_api:
-    resource:     "@OroContactUsBundle/Resources/config/oro/routing_api.yml"
-    type:         rest
-    prefix:       api/rest/{version}
-    requirements:
-        version:  latest|v1
-        _format:  json
-    defaults:
-        version:  latest
-
 oro_contact_reason:
     resource: "@OroContactUsBundle/Controller/ContactReasonController.php"
     type:     annotation
     prefix:   /contact-reason
+
+
+#
+# DEPRECATED OLD REST API ROUTES
+#
+
+oro_api_options_contactrequests:
+    path: '/api/rest/{version}/contactrequests.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\ContactUsBundle\Controller\Api\Rest\ContactRequestController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json
+        version: latest|v1
+
+
+#
+# OLD REST API ROUTES
+#
+
+oro_api_get_contactrequest:
+    path: '/api/rest/{version}/contactrequests/{id}.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ContactUsBundle\Controller\Api\Rest\ContactRequestController::getAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json
+        version: latest|v1

@@ -2,13 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations\Delete;
-use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
 use Oro\Bundle\ContactBundle\Entity\Contact;
@@ -25,14 +19,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API CRUD controller for Contact entity.
- *
- * @RouteResource("contact")
- * @NamePrefix("oro_api_")
+ * REST API CRUD controller for Contact entity.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class ContactController extends RestController implements ClassResourceInterface
+class ContactController extends RestController
 {
     /**
      * REST GET list
@@ -132,8 +123,6 @@ class ContactController extends RestController implements ClassResourceInterface
      *
      * @param int $id
      *
-     * @Get(requirements={"id"="\d+"})
-     *
      * @ApiDoc(
      *      description="Get contact item",
      *      resource=true
@@ -150,8 +139,6 @@ class ContactController extends RestController implements ClassResourceInterface
      * REST PUT
      *
      * @param int $id Contact item id
-     *
-     * @Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Update contact",
@@ -183,8 +170,6 @@ class ContactController extends RestController implements ClassResourceInterface
      * REST DELETE
      *
      * @param int $id
-     *
-     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete Contact",

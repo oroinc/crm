@@ -3,10 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
-use FOS\RestBundle\Controller\Annotations\Delete;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
 use Oro\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
@@ -22,10 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- * API CRUD controller for Channel entity.
- *
- * @RouteResource("channel")
- * @NamePrefix("oro_api_")
+ * REST API CRUD controller for Channel entity.
  */
 class ChannelController extends RestController
 {
@@ -100,8 +94,6 @@ class ChannelController extends RestController
      *
      * @param int $id
      *
-     * @Delete(requirements={"id"="\d+"})
-     *
      * @ApiDoc(
      *      description="Delete Channel",
      *      resource=true
@@ -136,7 +128,7 @@ class ChannelController extends RestController
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function getForm()
     {
@@ -144,7 +136,7 @@ class ChannelController extends RestController
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function getManager()
     {
@@ -152,7 +144,7 @@ class ChannelController extends RestController
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function getFormHandler()
     {

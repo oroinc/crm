@@ -2,8 +2,7 @@
 
 namespace Oro\Bundle\CaseBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Routing\ClassResourceInterface;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -12,21 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API CRUD controller for Comment entity.
- *
- * @Rest\RouteResource("case/comment")
- * @Rest\NamePrefix("oro_case_api_")
+ * REST API CRUD controller for Comment entity.
  */
-class CommentController extends RestController implements ClassResourceInterface
+class CommentController extends RestController
 {
     /**
      * REST GET list
      *
-     * @Rest\Get(
-     *      "/case/{id}/comments",
-     *      requirements={"id"="\d+"}
-     * )
-     * @Rest\QueryParam(
+     * @QueryParam(
      *     name="order",
      *     requirements="ASC|DESC",
      *     nullable=true,
@@ -59,8 +51,6 @@ class CommentController extends RestController implements ClassResourceInterface
      *
      * @param int $id
      *
-     * @Rest\Get(requirements={"id"="\d+"})
-     *
      * @ApiDoc(
      *     description="Get CaseComment item",
      *     resource=true
@@ -78,8 +68,6 @@ class CommentController extends RestController implements ClassResourceInterface
      *
      * @param int $id CaseComment item id
      *
-     * @Rest\Put(requirements={"id"="\d+"})
-     *
      * @ApiDoc(
      *     description="Update CaseComment",
      *     resource=true
@@ -94,11 +82,6 @@ class CommentController extends RestController implements ClassResourceInterface
 
     /**
      * Create new case
-
-     * @Rest\Post(
-     *      "/case/{id}/comment",
-     *      requirements={"id"="\d+"}
-     * )
      * @ApiDoc(
      *     description="Create new CaseComment",
      *     resource=true
@@ -114,8 +97,6 @@ class CommentController extends RestController implements ClassResourceInterface
      * REST DELETE
      *
      * @param int $id
-     *
-     * @Rest\Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *     description="Delete CaseComment",

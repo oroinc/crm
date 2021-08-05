@@ -7,16 +7,11 @@ oro_sales_dashboard:
     type:         annotation
     prefix:       /dashboard
 
-oro_sales_bundle_api:
-    resource: "@OroSalesBundle/Resources/config/oro/routing_api.yml"
-    type: rest
-    prefix: api/rest/{version}
-    requirements:
-        version:  latest|v1
-    defaults:
-        version:  latest
 
-# deprecated API route
+#
+# DEPRECATED OLD REST API ROUTES
+#
+
 oro_api_post_salesfunnel_deprecated:
     path:            /api/rest/{version}/salesfunnel.{_format}
     methods:         [POST]
@@ -49,3 +44,492 @@ oro_api_post_opportunity_deprecated:
     requirements:
         _format:     json|html
         version:     latest|v1
+
+
+#
+# OLD REST API ROUTES
+#
+
+oro_api_get_opportunities:
+    path: '/api/rest/{version}/opportunities.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\OpportunityController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_opportunity:
+    path: '/api/rest/{version}/opportunities/{id}.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\OpportunityController::getAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_put_opportunity:
+    path: '/api/rest/{version}/opportunities/{id}.{_format}'
+    methods: [PUT]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\OpportunityController::putAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_opportunity:
+    path: '/api/rest/{version}/opportunities.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\OpportunityController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_opportunity:
+    path: '/api/rest/{version}/opportunities/{id}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\OpportunityController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_opportunities:
+    path: '/api/rest/{version}/opportunities.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\OpportunityController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_leads:
+    path: '/api/rest/{version}/leads.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_lead:
+    path: '/api/rest/{version}/leads/{id}.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadController::getAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_put_lead:
+    path: '/api/rest/{version}/leads/{id}.{_format}'
+    methods: [PUT]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadController::putAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_lead:
+    path: '/api/rest/{version}/leads.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_lead:
+    path: '/api/rest/{version}/leads/{id}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_leads:
+    path: '/api/rest/{version}/leads.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_lead_addresses:
+    path: '/api/rest/{version}/leads/{leadId}/addresses.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadAddressController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        leadId: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_lead_address_primary:
+    path: '/api/rest/{version}/leads/{leadId}/address/primary.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadAddressController::getPrimaryAction'
+        _format: json
+        version: latest
+    requirements:
+        leadId: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_lead_address:
+    path: '/api/rest/{version}/leads/{leadId}/addresses/{addressId}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadAddressController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        leadId: \d+
+        addressId: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_lead_addresses:
+    path: '/api/rest/{version}/lead/addresses.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadAddressController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_salesfunnels:
+    path: '/api/rest/{version}/salesfunnels.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\SalesFunnelController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_salesfunnel:
+    path: '/api/rest/{version}/salesfunnels/{id}.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\SalesFunnelController::getAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_put_salesfunnel:
+    path: '/api/rest/{version}/salesfunnels/{id}.{_format}'
+    methods: [PUT]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\SalesFunnelController::putAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_salesfunnel:
+    path: '/api/rest/{version}/salesfunnels.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\SalesFunnelController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_salesfunnel:
+    path: '/api/rest/{version}/salesfunnels/{id}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\SalesFunnelController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_salesfunnels:
+    path: '/api/rest/{version}/salesfunnels.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\SalesFunnelController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_b2bcustomers:
+    path: '/api/rest/{version}/b2bcustomers.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_b2bcustomer:
+    path: '/api/rest/{version}/b2bcustomers/{id}.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerController::getAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_put_b2bcustomer:
+    path: '/api/rest/{version}/b2bcustomers/{id}.{_format}'
+    methods: [PUT]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerController::putAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_b2bcustomer:
+    path: '/api/rest/{version}/b2bcustomers.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_b2bcustomer:
+    path: '/api/rest/{version}/b2bcustomers/{id}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_b2bcustomers:
+    path: '/api/rest/{version}/b2bcustomers.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_lead_phone:
+    path: '/api/rest/{version}/leads/phones.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadPhoneController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_lead_phone:
+    path: '/api/rest/{version}/leads/{id}/phone.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadPhoneController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_lead_phones:
+    path: '/api/rest/{version}/lead/phones.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadPhoneController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_leademail:
+    path: '/api/rest/{version}/leademails.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadEmailController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_leademail:
+    path: '/api/rest/{version}/leademails/{id}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadEmailController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_leademails:
+    path: '/api/rest/{version}/leademails.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadEmailController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_b2bcustomer_email:
+    path: '/api/rest/{version}/b2bcustomers/emails.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerEmailController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_b2bcustomer_email:
+    path: '/api/rest/{version}/b2bcustomers/{id}/email.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerEmailController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_b2bcustomer_emails:
+    path: '/api/rest/{version}/b2bcustomer/emails.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerEmailController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_b2bcustomer_phones:
+    path: '/api/rest/{version}/b2bcustomers/{customerId}/phones.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerPhoneController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        customerId: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_b2bcustomer_phone_primary:
+    path: '/api/rest/{version}/b2bcustomers/{customerId}/phone/primary.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerPhoneController::getPrimaryAction'
+        _format: json
+        version: latest
+    requirements:
+        customerId: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_b2bcustomer_phone:
+    path: '/api/rest/{version}/b2bcustomers/phones.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerPhoneController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_b2bcustomer_phone:
+    path: '/api/rest/{version}/b2bcustomers/{id}/phone.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerPhoneController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_b2bcustomer_phones:
+    path: '/api/rest/{version}/b2bcustomer/phones.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\B2bCustomerPhoneController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1

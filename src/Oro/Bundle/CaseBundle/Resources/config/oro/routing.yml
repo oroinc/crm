@@ -3,14 +3,10 @@ oro_case_bundle:
     type:     annotation
     prefix:   /case
 
-oro_case_bundle_api:
-    resource: "@OroCaseBundle/Resources/config/oro/routing_api.yml"
-    type: rest
-    prefix: api/rest/{version}
-    requirements:
-        version:  latest|v1
-    defaults:
-        version:  latest
+
+#
+# DEPRECATED OLD REST API ROUTES
+#
 
 oro_case_api_post_case_deprecated:
     path:            /api/rest/{version}/case.{_format}
@@ -22,3 +18,148 @@ oro_case_api_post_case_deprecated:
     requirements:
         _format:     json|html
         version:     latest|v1
+
+
+#
+# OLD REST API ROUTES
+#
+
+oro_case_api_get_cases:
+    path: '/api/rest/{version}/cases.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CaseController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_case_api_get_case:
+    path: '/api/rest/{version}/cases/{id}.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CaseController::getAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_case_api_put_case:
+    path: '/api/rest/{version}/cases/{id}.{_format}'
+    methods: [PUT]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CaseController::putAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_case_api_post_case:
+    path: '/api/rest/{version}/cases.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CaseController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_case_api_delete_case:
+    path: '/api/rest/{version}/cases/{id}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CaseController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_case_api_options_cases:
+    path: '/api/rest/{version}/cases.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CaseController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_case_api_get_comments:
+    path: '/api/rest/{version}/case/{id}/comments.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CommentController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_case_api_get_comment:
+    path: '/api/rest/{version}/case/comments/{id}.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CommentController::getAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_case_api_put_comment:
+    path: '/api/rest/{version}/case/comments/{id}.{_format}'
+    methods: [PUT]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CommentController::putAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_case_api_post_comment:
+    path: '/api/rest/{version}/case/{id}/comment.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CommentController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_case_api_delete_comment:
+    path: '/api/rest/{version}/case/comments/{id}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CommentController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_case_api_options_comments:
+    path: '/api/rest/{version}/case/comments.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CommentController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1

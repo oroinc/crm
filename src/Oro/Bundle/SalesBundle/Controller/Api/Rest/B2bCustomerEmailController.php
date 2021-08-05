@@ -2,10 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations\Delete;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
@@ -13,25 +9,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API CRUD controller for B2bCustomerEmail entity.
- *
- * @RouteResource("b2bcustomer_email")
- * @NamePrefix("oro_api_")
+ * REST API CRUD controller for B2bCustomerEmail entity.
  */
-class B2bCustomerEmailController extends RestController implements ClassResourceInterface
+class B2bCustomerEmailController extends RestController
 {
     /**
      * Create entity B2bCustomerEmail
-     * oro_api_post_b2bcustomer_email
      *
      * @return Response
      *
      * @ApiDoc(
      *      description="Create entity",
-     *      resource=true,
-     *      requirements = {
-     *          {"name"="id", "dataType"="integer"},
-     *      }
+     *      resource=true
      * )
      */
     public function postAction()
@@ -43,11 +32,8 @@ class B2bCustomerEmailController extends RestController implements ClassResource
 
     /**
      * Delete entity B2bCustomerEmail
-     * oro_api_delete_b2bcustomer_email
      *
      * @param int $id
-     *
-     * @Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete B2bCustomerEmail"

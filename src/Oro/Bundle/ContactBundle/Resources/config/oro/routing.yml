@@ -3,16 +3,11 @@ oro_contact_bundle:
     type:         annotation
     prefix:       /contact
 
-oro_contact_bundle_api:
-    resource: "@OroContactBundle/Resources/config/oro/routing_api.yml"
-    type: rest
-    prefix:       api/rest/{version}
-    requirements:
-        version:  latest|v1
-    defaults:
-        version:  latest
 
-# deprecated API routes
+#
+# DEPRECATED OLD REST API ROUTES
+#
+
 oro_api_post_contact_deprecated:
     path:            /api/rest/{version}/contact.{_format}
     methods:         [POST]
@@ -34,3 +29,309 @@ oro_api_post_contactgroup_deprecated:
     requirements:
         _format:     json|html
         version:     latest|v1
+
+
+#
+# OLD REST API ROUTES
+#
+
+oro_api_get_contacts:
+    path: '/api/rest/{version}/contacts.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_contact:
+    path: '/api/rest/{version}/contacts/{id}.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactController::getAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_put_contact:
+    path: '/api/rest/{version}/contacts/{id}.{_format}'
+    methods: [PUT]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactController::putAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_contact:
+    path: '/api/rest/{version}/contacts.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_contact:
+    path: '/api/rest/{version}/contacts/{id}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_contacts:
+    path: '/api/rest/{version}/contacts.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_contactgroups:
+    path: '/api/rest/{version}/contactgroups.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactGroupController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_contactgroup:
+    path: '/api/rest/{version}/contactgroups/{id}.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactGroupController::getAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_put_contactgroup:
+    path: '/api/rest/{version}/contactgroups/{id}.{_format}'
+    methods: [PUT]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactGroupController::putAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_contactgroup:
+    path: '/api/rest/{version}/contactgroups.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactGroupController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_contactgroup:
+    path: '/api/rest/{version}/contactgroups/{id}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactGroupController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_contactgroups:
+    path: '/api/rest/{version}/contactgroups.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactGroupController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_contact_address:
+    path: '/api/rest/{version}/contacts/{contactId}/addresses/{addressId}.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactAddressController::getAction'
+        _format: json
+        version: latest
+    requirements:
+        contactId: \d+
+        addressId: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_contact_addresses:
+    path: '/api/rest/{version}/contacts/{contactId}/addresses.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactAddressController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_contact_address:
+    path: '/api/rest/{version}/contacts/{contactId}/addresses/{addressId}.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactAddressController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        contactId: \d+
+        addressId: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_contact_address_by_type:
+    path: '/api/rest/{version}/contacts/{contactId}/addresses/{typeName}/by/type.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactAddressController::getByTypeAction'
+        _format: json
+        version: latest
+    requirements:
+        contactId: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_contact_address_primary:
+    path: '/api/rest/{version}/contacts/{contactId}/address/primary.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactAddressController::getPrimaryAction'
+        _format: json
+        version: latest
+    requirements:
+        contactId: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_contact_addresses:
+    path: '/api/rest/{version}/contact/addresses.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactAddressController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_contact_phones:
+    path: '/api/rest/{version}/contacts/{contactId}/phones.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactPhoneController::cgetAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_get_contact_phone_primary:
+    path: '/api/rest/{version}/contacts/{contactId}/phone/primary.{_format}'
+    methods: [GET]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactPhoneController::getPrimaryAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_contact_phone:
+    path: '/api/rest/{version}/contacts/phones.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactPhoneController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_contact_phone:
+    path: '/api/rest/{version}/contacts/{id}/phone.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactPhoneController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_contact_phones:
+    path: '/api/rest/{version}/contact/phones.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactPhoneController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_post_contact_email:
+    path: '/api/rest/{version}/contacts/emails.{_format}'
+    methods: [POST]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactEmailController::postAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1
+
+oro_api_delete_contact_email:
+    path: '/api/rest/{version}/contacts/{id}/email.{_format}'
+    methods: [DELETE]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactEmailController::deleteAction'
+        _format: json
+        version: latest
+    requirements:
+        id: \d+
+        _format: json|html
+        version: latest|v1
+
+oro_api_options_contact_emails:
+    path: '/api/rest/{version}/contact/emails.{_format}'
+    methods: [OPTIONS]
+    defaults:
+        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactEmailController::optionsAction'
+        _format: json
+        version: latest
+    requirements:
+        _format: json|html
+        version: latest|v1

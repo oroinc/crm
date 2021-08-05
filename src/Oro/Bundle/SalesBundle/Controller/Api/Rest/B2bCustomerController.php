@@ -2,13 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations\Delete;
-use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
@@ -19,12 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API CRUD controller for B2BCustomer entity.
- *
- * @RouteResource("b2bcustomer")
- * @NamePrefix("oro_api_")
+ * REST API CRUD controller for B2BCustomer entity.
  */
-class B2bCustomerController extends RestController implements ClassResourceInterface
+class B2bCustomerController extends RestController
 {
     /**
      * Get B2B customers.
@@ -61,8 +52,6 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      *
      * @param int $id
      *
-     * @Get(requirements={"id"="\d+"})
-     *
      * @ApiDoc(
      *      description="Get business customer",
      *      resource=true
@@ -79,8 +68,6 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      * Update B2B customer.
      *
      * @param int $id
-     *
-     * @Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Update business customer",
@@ -113,8 +100,6 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      *
      * @param int $id
      *
-     * @Delete(requirements={"id"="\d+"})
-     *
      * @ApiDoc(
      *      description="Delete business customer",
      *      resource=true
@@ -143,7 +128,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function getForm()
     {
@@ -151,7 +136,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function getFormHandler()
     {

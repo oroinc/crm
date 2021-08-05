@@ -2,11 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -19,12 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API CRUD controller for Opportunity entity.
- *
- * @RouteResource("opportunity")
- * @NamePrefix("oro_api_")
+ * REST API CRUD controller for Opportunity entity.
  */
-class OpportunityController extends RestController implements ClassResourceInterface
+class OpportunityController extends RestController
 {
     /**
      * REST GET list
@@ -78,8 +71,6 @@ class OpportunityController extends RestController implements ClassResourceInter
      *
      * @param int $id
      *
-     * @Rest\Get(requirements={"id"="\d+"})
-     *
      * @ApiDoc(
      *      description="Get opportunity",
      *      resource=true
@@ -96,8 +87,6 @@ class OpportunityController extends RestController implements ClassResourceInter
      * REST PUT
      *
      * @param int $id
-     *
-     * @Rest\Put(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Update opportunity",
@@ -129,8 +118,6 @@ class OpportunityController extends RestController implements ClassResourceInter
      * REST DELETE
      *
      * @param int $id
-     *
-     * @Rest\Delete(requirements={"id"="\d+"})
      *
      * @ApiDoc(
      *      description="Delete opportunity",
