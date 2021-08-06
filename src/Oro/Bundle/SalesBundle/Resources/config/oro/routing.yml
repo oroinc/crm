@@ -13,37 +13,37 @@ oro_sales_dashboard:
 #
 
 oro_api_post_salesfunnel_deprecated:
-    path:            /api/rest/{version}/salesfunnel.{_format}
-    methods:         [POST]
+    path: '/api/rest/{version}/salesfunnel.{_format}'
+    methods: [POST]
     defaults:
-        _controller: Oro\Bundle\SalesBundle\Controller\Api\Rest\SalesFunnelController::postAction
-        _format:     json
-        version:     latest
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\SalesFunnelController::postAction'
+        _format: json
+        version: latest
     requirements:
-        _format:     json|html
-        version:     latest|v1
+        _format: json|html
+        version: latest|v1
 
 oro_api_post_lead_deprecated:
-    path:            /api/rest/{version}/lead.{_format}
-    methods:         [POST]
+    path: '/api/rest/{version}/lead.{_format}'
+    methods: [POST]
     defaults:
-        _controller: Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadController::postAction
-        _format:     json
-        version:     latest
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadController::postAction'
+        _format: json
+        version: latest
     requirements:
-        _format:     json|html
-        version:     latest|v1
+        _format: json|html
+        version: latest|v1
 
 oro_api_post_opportunity_deprecated:
-    path:            /api/rest/{version}/opportunity.{_format}
-    methods:         [POST]
+    path: '/api/rest/{version}/opportunity.{_format}'
+    methods: [POST]
     defaults:
-        _controller: Oro\Bundle\SalesBundle\Controller\Api\Rest\OpportunityController::postAction
-        _format:     json
-        version:     latest
+        _controller: 'Oro\Bundle\SalesBundle\Controller\Api\Rest\OpportunityController::postAction'
+        _format: json
+        version: latest
     requirements:
-        _format:     json|html
-        version:     latest|v1
+        _format: json|html
+        version: latest|v1
 
 
 #

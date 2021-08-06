@@ -9,15 +9,15 @@ oro_case_bundle:
 #
 
 oro_case_api_post_case_deprecated:
-    path:            /api/rest/{version}/case.{_format}
-    methods:         [POST]
+    path: '/api/rest/{version}/case.{_format}'
+    methods: [POST]
     defaults:
-        _controller: Oro\Bundle\CaseBundle\Controller\Api\Rest\CaseController::postAction
-        _format:     json
-        version:     latest
+        _controller: 'Oro\Bundle\CaseBundle\Controller\Api\Rest\CaseController::postAction'
+        _format: json
+        version: latest
     requirements:
-        _format:     json|html
-        version:     latest|v1
+        _format: json|html
+        version: latest|v1
 
 
 #
