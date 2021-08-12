@@ -4,13 +4,19 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
 use Knp\Menu\MenuFactory;
 use Knp\Menu\MenuItem;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\EventListener\NavigationListener;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Component\Testing\Unit\EntityTrait;
 
 class NavigationListenerTest extends \PHPUnit\Framework\TestCase
 {
+    use EntityTrait;
+
     /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $settings;
 
@@ -117,5 +123,20 @@ class NavigationListenerTest extends \PHPUnit\Framework\TestCase
                 false
             ]
         ];
+    }
+
+    public function testOnChannelSave()
+    {
+        /** @var Organization $org */
+        $org =  $this->getEntity(Organization::class, ['id' => 2]);
+        $channel = new Channel();
+        $channel->setOwner($org);
+        $event = new ChannelSaveEvent($channel);
+
+        $this->state->expects($this->once())
+            ->method('clearOrganizationCache')
+            ->with(2);
+
+        $this->listener->onChannelSave($event);
     }
 }

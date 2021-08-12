@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
+use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
@@ -49,6 +50,13 @@ class NavigationListener
                     }
                 }
             }
+        }
+    }
+
+    public function onChannelSave(ChannelSaveEvent $event)
+    {
+        if ($event->getChannel() && $event->getChannel()->getOwner()) {
+            $this->state->clearOrganizationCache($event->getChannel()->getOwner()->getId());
         }
     }
 }
