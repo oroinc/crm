@@ -187,6 +187,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
             - { name: kernel.event_listener, event: oro_menu.configure.shortcuts, method: onNavigationConfigure }
+            - { name: kernel.event_listener, event: oro_channel.channel.save_succeed, method: onChannelSave }
 
     oro_channel.state_cache:
           parent: oro.cache.abstract
