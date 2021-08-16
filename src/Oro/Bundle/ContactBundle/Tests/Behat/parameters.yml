@@ -1,5 +1,0 @@
-services:
-    Oro\Bundle\ContactBundle\Tests\Behat\Context\FeatureContext:
-        public: true
-        arguments:
-            - '@oro_attachment.importexport.file_manager.import_files'
