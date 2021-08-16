@@ -17,13 +17,6 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
 {
     use PageObjectDictionary;
 
-    private FileManager $fileManager;
-
-    public function __construct(FileManager $fileManager)
-    {
-        $this->fileManager = $fileManager;
-    }
-
     /**
      * Assert that value of given field is a primary.
      * In frontend primary value is marked as bold.
@@ -173,6 +166,8 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
         $filename = $this->fixStepArgument($filename);
         $imagePath = sprintf('%s/../Features/Fixtures/%s', __DIR__, $filename);
 
-        $this->fileManager->writeFileToStorage($imagePath, $filename);
+        /** @var FileManager $fileManager */
+        $fileManager = $this->getAppContainer()->get('oro_attachment.importexport.file_manager.import_files');
+        $fileManager->writeFileToStorage($imagePath, $filename);
     }
 }

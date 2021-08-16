@@ -24,13 +24,6 @@ class FeatureContext extends OroFeatureContext implements
 {
     use FixtureLoaderDictionary, PageObjectDictionary;
 
-    private DoctrineHelper $doctrineHelper;
-
-    public function __construct(DoctrineHelper $doctrineHelper)
-    {
-        $this->doctrineHelper = $doctrineHelper;
-    }
-
     /**
      * This is change the current page context
      * Go to 'Customers/ Business Customers' and assert row with given content
@@ -123,12 +116,13 @@ class FeatureContext extends OroFeatureContext implements
      */
     private function getCustomers($channelName, $username)
     {
-        $customerRepository = $this->doctrineHelper->getEntityManagerForClass(B2bCustomer::class)
+        /** @var DoctrineHelper $doctrine */
+        $doctrine = $this->getAppContainer()->get('oro_entity.doctrine_helper');
+        $customerRepository = $doctrine->getEntityManagerForClass(B2bCustomer::class)
             ->getRepository(B2bCustomer::class);
-        $channelRepository = $this->doctrineHelper->getEntityManagerForClass(Channel::class)
-            ->getRepository(Channel::class);
+        $channelRepository = $doctrine->getEntityManagerForClass(Channel::class)->getRepository(Channel::class);
 
-        $user = $this->doctrineHelper->getEntityManagerForClass(User::class)->getRepository(User::class)
+        $user = $doctrine->getEntityManagerForClass(User::class)->getRepository(User::class)
             ->findOneBy(['username' => $username]);
         $channel = $channelRepository->findOneBy(['name' => $channelName]);
 
