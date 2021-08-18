@@ -2,45 +2,35 @@
 
 namespace Oro\Bundle\ContactBundle\EventListener;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 
+/**
+ * Fills a title for found Contact entity when the title is empty.
+ */
 class PrepareResultItemListener
 {
-    /** @var ContactNameFormatter */
-    protected $nameFormatter;
+    private ContactNameFormatter $nameFormatter;
+    private ManagerRegistry $doctrine;
 
-    /**
-     * @var DoctrineHelper
-     */
-    protected $doctrineHelper;
-
-    /**
-     * PrepareResultItemListener constructor.
-     */
-    public function __construct(ContactNameFormatter $nameFormatter, DoctrineHelper $doctrineHelper)
+    public function __construct(ContactNameFormatter $nameFormatter, ManagerRegistry $doctrine)
     {
         $this->nameFormatter = $nameFormatter;
-        $this->doctrineHelper = $doctrineHelper;
+        $this->doctrine = $doctrine;
     }
 
-    public function prepareEmailItemDataEvent(PrepareResultItemEvent $event)
+    public function prepareResultItem(PrepareResultItemEvent $event): void
     {
-        if (trim($event->getResultItem()->getRecordTitle()) ||
-            $event->getResultItem()->getEntityName() !== 'Oro\Bundle\ContactBundle\Entity\Contact'
-        ) {
+        $resultItem = $event->getResultItem();
+        if ($resultItem->getEntityName() !== Contact::class || trim($resultItem->getRecordTitle())) {
             return;
         }
 
-        $resultItem = $event->getResultItem();
-
         /** @var Contact $entity */
-        $entity = $this
-            ->doctrineHelper
-            ->getEntityRepository($resultItem->getEntityName())
-            ->find($resultItem->getId());
+        $entity = $this->doctrine->getManagerForClass(Contact::class)
+            ->find(Contact::class, $resultItem->getId());
 
         $resultItem->setRecordTitle($this->nameFormatter->format($entity));
     }

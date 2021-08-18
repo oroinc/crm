@@ -2,158 +2,108 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\EventListener;
 
-use Doctrine\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\EventListener\PrepareResultItemListener;
 use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\SearchBundle\Query\Result\Item;
 
 class PrepareResultItemListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ContactNameFormatter */
-    protected $nameFormatter;
+    /** @var ContactNameFormatter|\PHPUnit\Framework\MockObject\MockObject */
+    private $nameFormatter;
 
-    /**
-     * {@inheritdoc}
-     */
+    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
+    private $doctrine;
+
+    /** @var PrepareResultItemListener */
+    private $listener;
+
     protected function setUp(): void
     {
-        $this->nameFormatter = $this->getMockBuilder('Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->nameFormatter = $this->createMock(ContactNameFormatter::class);
+        $this->doctrine = $this->createMock(ManagerRegistry::class);
 
-        $this->nameFormatter->expects($this->any())
+        $this->listener = new PrepareResultItemListener($this->nameFormatter, $this->doctrine);
+    }
+
+    public function testPrepareResultItemWithoutTitle()
+    {
+        $item = new Item(Contact::class, 1);
+        $entity = (new Contact())->setFirstName('first');
+        $expectedTitle = 'first';
+
+        $em = $this->createMock(EntityManagerInterface::class);
+        $em->expects($this->once())
+            ->method('find')
+            ->with(Contact::class, $item->getId())
+            ->willReturn($entity);
+
+        $this->doctrine->expects($this->once())
+            ->method('getManagerForClass')
+            ->with(Contact::class)
+            ->willReturn($em);
+
+        $this->nameFormatter->expects($this->once())
             ->method('format')
-            ->will($this->returnCallback(function (Contact $contact) {
+            ->willReturnCallback(function (Contact $contact) {
                 return trim(implode(' ', [$contact->getFirstName(), $contact->getLastName()]));
-            }));
+            });
+
+        $event = new PrepareResultItemEvent($item);
+        $this->listener->prepareResultItem($event);
+
+        $this->assertSame($expectedTitle, $event->getResultItem()->getRecordTitle());
+    }
+
+    public function testPrepareResultItemWithTitle()
+    {
+        $item = new Item(Contact::class, 1, 'preset title');
+        $expectedTitle = $item->getRecordTitle();
+
+        $this->doctrine->expects($this->never())
+            ->method('getManagerForClass');
+
+        $this->nameFormatter->expects($this->never())
+            ->method('format');
+
+        $event = new PrepareResultItemEvent($item);
+        $this->listener->prepareResultItem($event);
+
+        $this->assertSame($expectedTitle, $event->getResultItem()->getRecordTitle());
     }
 
     /**
-     * @dataProvider prepareEmailItemDataEventProvider
+     * @dataProvider prepareResultItemForNotSupportedEntityDataProvider
      */
-    public function testPrepareEmailItemDataEvent(
-        PrepareResultItemEvent $event,
-        PrepareResultItemEvent $expectedEvent,
-        DoctrineHelper $doctrineHelper
-    ) {
-        $listener = new PrepareResultItemListener($this->nameFormatter, $doctrineHelper);
-        $listener->prepareEmailItemDataEvent($event);
+    public function testPrepareResultItemForNotSupportedEntity(Item $item)
+    {
+        $expectedTitle = $item->getRecordTitle();
 
-        $this->assertEquals($expectedEvent, $event);
+        $this->doctrine->expects($this->never())
+            ->method('getManagerForClass');
+
+        $this->nameFormatter->expects($this->never())
+            ->method('format');
+
+        $event = new PrepareResultItemEvent($item);
+        $this->listener->prepareResultItem($event);
+
+        $this->assertSame($expectedTitle, $event->getResultItem()->getRecordTitle());
     }
 
-    /**
-     * @return array
-     */
-    public function prepareEmailItemDataEventProvider()
+    public function prepareResultItemForNotSupportedEntityDataProvider(): array
     {
         return [
-            'event with contact without title' => [
-                new PrepareResultItemEvent(
-                    new Item(
-                        'Oro\Bundle\ContactBundle\Entity\Contact',
-                        1
-                    )
-                ),
-                new PrepareResultItemEvent(
-                    new Item(
-                        'Oro\Bundle\ContactBundle\Entity\Contact',
-                        1,
-                        'first'
-                    )
-                ),
-                $this->getDoctrineHelper(
-                    (new Contact())
-                        ->setFirstName('first')
-                ),
+            'without title' => [
+                new Item(ContactPhone::class, 1)
             ],
-            'event with contact with title' => [
-                new PrepareResultItemEvent(
-                    new Item(
-                        'Oro\Bundle\ContactBundle\Entity\Contact',
-                        1,
-                        'preset title'
-                    )
-                ),
-                new PrepareResultItemEvent(
-                    new Item(
-                        'Oro\Bundle\ContactBundle\Entity\Contact',
-                        1,
-                        'preset title'
-                    )
-                ),
-                $this->getDoctrineHelper(
-                    (new Contact())
-                        ->setFirstName('first')
-                ),
-            ],
-            'event without contact without title' => [
-                new PrepareResultItemEvent(
-                    new Item(
-                        'Oro\Bundle\ContactBundle\Entity\ContactPhone',
-                        1
-                    )
-                ),
-                new PrepareResultItemEvent(
-                    new Item(
-                        'Oro\Bundle\ContactBundle\Entity\ContactPhone',
-                        1
-                    )
-                ),
-                $this->getDoctrineHelper(
-                    (new ContactPhone())
-                        ->setPhone('53582379475')
-                ),
-            ],
-            'event without contact with title' => [
-                new PrepareResultItemEvent(
-                    new Item(
-                        'Oro\Bundle\ContactBundle\Entity\ContactPhone',
-                        1,
-                        'preset title'
-                    )
-                ),
-                new PrepareResultItemEvent(
-                    new Item(
-                        'Oro\Bundle\ContactBundle\Entity\ContactPhone',
-                        1,
-                        'preset title'
-                    )
-                ),
-                $this->getDoctrineHelper(
-                    (new ContactPhone())
-                        ->setPhone('53582379475')
-                ),
-            ],
+            'with title'    => [
+                new Item(ContactPhone::class, 1, 'preset title')
+            ]
         ];
-    }
-
-    /**
-     * @param object $entity
-     *
-     * @return DoctrineHelper
-     */
-    protected function getDoctrineHelper($entity)
-    {
-        $repository = $this->createMock(ObjectRepository::class);
-        $repository
-            ->expects($this->any())
-            ->method('find')
-            ->will($this->returnValue($entity));
-
-        /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject $doctrineHelper */
-        $doctrineHelper = $this->getMockBuilder(DoctrineHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $doctrineHelper->expects($this->any())
-            ->method('getEntityRepository')
-            ->will($this->returnValue($repository));
-
-        return $doctrineHelper;
     }
 }
