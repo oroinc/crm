@@ -287,9 +287,9 @@ services:
         class: Oro\Bundle\ContactBundle\EventListener\PrepareResultItemListener
         arguments:
             - '@oro_contact.formatter.contact_entity_name'
-            - '@oro_entity.doctrine_helper'
+            - '@doctrine'
         tags:
-            - { name: kernel.event_listener, event: oro_search.prepare_result_item, method: prepareEmailItemDataEvent }
+            - { name: kernel.event_listener, event: oro_search.prepare_result_item, method: prepareResultItem }
 
     oro_contact.formatter.contact_entity_name:
         class: Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter
