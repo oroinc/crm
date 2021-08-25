@@ -6,14 +6,16 @@ use Oro\Bundle\ChannelBundle\Acl\Voter\ChannelVoter;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Component\Testing\Unit\TestContainerBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class ChannelVoterTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper */
+    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $doctrineHelper;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|SettingsProvider */
+    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $settingsProvider;
 
     /** @var ChannelVoter */
@@ -24,14 +26,17 @@ class ChannelVoterTest extends \PHPUnit\Framework\TestCase
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->settingsProvider = $this->createMock(SettingsProvider::class);
 
-        $this->voter = new ChannelVoter($this->doctrineHelper);
-        $this->voter->setSettingsProvider($this->settingsProvider);
+        $container = TestContainerBuilder::create()
+            ->add('oro_channel.provider.settings_provider', $this->settingsProvider)
+            ->getContainer($this);
+
+        $this->voter = new ChannelVoter($this->doctrineHelper, $container);
     }
 
     /**
      * @dataProvider attributesDataProvider
      */
-    public function testVote($object, $attributes, $isSystemChannel, $expected)
+    public function testVote(Channel $object, array $attributes, bool $isSystemChannel, int $expected)
     {
         $this->voter->setClassName(Channel::class);
 
@@ -51,31 +56,25 @@ class ChannelVoterTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function attributesDataProvider()
+    public function attributesDataProvider(): array
     {
         return [
             // channel system
-            [$this->getChannel(), ['VIEW'], false, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), ['CREATE'], false, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), ['EDIT'], false, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), ['DELETE'], false, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), ['ASSIGN'], false, ChannelVoter::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['VIEW'], false, VoterInterface::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['CREATE'], false, VoterInterface::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['EDIT'], false, VoterInterface::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['DELETE'], false, VoterInterface::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['ASSIGN'], false, VoterInterface::ACCESS_ABSTAIN],
             // channel non system
-            [$this->getChannel(), ['VIEW'], true, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), ['CREATE'], true, ChannelVoter::ACCESS_DENIED],
-            [$this->getChannel(), ['EDIT'], true, ChannelVoter::ACCESS_ABSTAIN],
-            [$this->getChannel(), ['DELETE'], true, ChannelVoter::ACCESS_DENIED],
-            [$this->getChannel(), ['ASSIGN'], true, ChannelVoter::ACCESS_ABSTAIN]
+            [$this->getChannel(), ['VIEW'], true, VoterInterface::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['CREATE'], true, VoterInterface::ACCESS_DENIED],
+            [$this->getChannel(), ['EDIT'], true, VoterInterface::ACCESS_ABSTAIN],
+            [$this->getChannel(), ['DELETE'], true, VoterInterface::ACCESS_DENIED],
+            [$this->getChannel(), ['ASSIGN'], true, VoterInterface::ACCESS_ABSTAIN]
         ];
     }
 
-    /**
-     * @return Channel
-     */
-    private function getChannel()
+    private function getChannel(): Channel
     {
         $channel = new Channel();
         $channel->setChannelType('test_channel');

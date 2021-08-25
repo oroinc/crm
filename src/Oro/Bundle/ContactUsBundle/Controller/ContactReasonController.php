@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\ContactUsBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactReasonType;
 use Oro\Bundle\FormBundle\Model\UpdateHandler;
@@ -108,9 +107,7 @@ class ContactReasonController extends AbstractController
      */
     public function deleteAction(ContactReason $contactReason)
     {
-        /** @var EntityManager $em */
-        $em = $this->get('doctrine.orm.entity_manager');
-
+        $em = $this->get('doctrine')->getManagerForClass(ContactReason::class);
         $em->remove($contactReason);
         $em->flush();
 
@@ -127,7 +124,6 @@ class ContactReasonController extends AbstractController
             [
                 TranslatorInterface::class,
                 UpdateHandler::class,
-                'doctrine.orm.entity_manager' => EntityManager::class,
             ]
         );
     }

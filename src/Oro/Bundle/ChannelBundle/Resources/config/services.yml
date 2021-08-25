@@ -351,12 +351,13 @@ services:
     oro_channel.security.acl.voter.channel:
         class: Oro\Bundle\ChannelBundle\Acl\Voter\ChannelVoter
         arguments:
-            - "@oro_entity.doctrine_helper"
+            - '@oro_entity.doctrine_helper'
+            - '@Psr\Container\ContainerInterface'
         calls:
             - [setClassName, ['Oro\Bundle\ChannelBundle\Entity\Channel']]
-            - [setSettingsProvider,  ['@oro_channel.provider.settings_provider']]
         tags:
             - { name: security.voter, priority: 500 }
+            - { name: container.service_subscriber, id: oro_channel.provider.settings_provider }
 
     oro_channel.account_lifetime_listener:
         class: Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeListener
