@@ -5,7 +5,9 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\ImportExport\Helper;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Component\TestUtils\ORM\OrmTestCase;
 
 class ChannelHelperTest extends OrmTestCase
@@ -23,19 +25,18 @@ class ChannelHelperTest extends OrmTestCase
     protected function setUp(): void
     {
         $this->em = $this->getTestEntityManager();
-
-        $config         = $this->em->getConfiguration();
-        $metadataDriver = new AnnotationDriver(
+        $this->em->getConfiguration()->setMetadataDriverImpl(new AnnotationDriver(
             new AnnotationReader(),
             'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
-        );
-        $config->setMetadataDriverImpl($metadataDriver);
-        $config->setEntityNamespaces(['OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
+        ));
+        $this->em->getConfiguration()->setEntityNamespaces([
+            'OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
+        ]);
 
-        $registry = $this->createMock('Doctrine\Persistence\ManagerRegistry');
+        $registry = $this->createMock(ManagerRegistry::class);
         $registry->expects($this->any())
             ->method('getManager')
-            ->will($this->returnValue($this->em));
+            ->willReturn($this->em);
 
         $this->helper = new ChannelHelper($registry);
     }
@@ -54,9 +55,9 @@ class ChannelHelperTest extends OrmTestCase
      */
     public function testGetChannel($integrationId, $expected, $optional = false)
     {
-        $integration = $this->createMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
+        $integration = $this->createMock(Channel::class);
         $integration->expects($this->any())
-            ->method('getId')->will($this->returnValue($integrationId));
+            ->method('getId')->willReturn($integrationId);
 
         if (false === $expected) {
             $this->expectException(\LogicException::class);
@@ -67,14 +68,12 @@ class ChannelHelperTest extends OrmTestCase
         $existingChannelId     = self::TEST_CHANNEL_ID;
         $this->getDriverConnectionMock($this->em)->expects($this->atLeastOnce())
             ->method('query')
-            ->will(
-                $this->returnCallback(
-                    function () use ($integrationId, $expected, $existingIntegrationId, $existingChannelId) {
-                        return $this->createFetchStatementMock(
-                            [['id_0' => $existingChannelId, 'id_1' => $existingIntegrationId]]
-                        );
-                    }
-                )
+            ->willReturnCallback(
+                function () use ($integrationId, $expected, $existingIntegrationId, $existingChannelId) {
+                    return $this->createFetchStatementMock(
+                        [['id_0' => $existingChannelId, 'id_1' => $existingIntegrationId]]
+                    );
+                }
             );
 
         $result1 = $this->helper->getChannel($integration, $optional);

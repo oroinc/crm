@@ -5,6 +5,9 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\Persistence\ManagerRegistry;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
 use Oro\Component\TestUtils\ORM\OrmTestCase;
 
@@ -19,20 +22,18 @@ class AmountProviderTest extends OrmTestCase
     protected function setUp(): void
     {
         $this->em = $this->getTestEntityManager();
-
-        $metadataDriver = new AnnotationDriver(
+        $this->em->getConfiguration()->setMetadataDriverImpl(new AnnotationDriver(
             new AnnotationReader(),
             'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
-        );
+        ));
+        $this->em->getConfiguration()->setEntityNamespaces([
+            'OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
+        ]);
 
-        $config = $this->em->getConfiguration();
-        $config->setMetadataDriverImpl($metadataDriver);
-        $config->setEntityNamespaces(['OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
-
-        $registry = $this->createMock('Doctrine\Persistence\ManagerRegistry');
+        $registry = $this->createMock(ManagerRegistry::class);
         $registry->expects($this->any())
             ->method('getManagerForClass')
-            ->will($this->returnValue($this->em));
+            ->willReturn($this->em);
 
         $this->provider = new AmountProvider($registry);
     }
@@ -56,9 +57,9 @@ class AmountProviderTest extends OrmTestCase
             ->expects($this->once())
             ->method('prepare')
             ->with($expectedSQL)
-            ->will($this->returnValue($smt));
+            ->willReturn($smt);
 
-        $account = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $account = $this->createMock(Account::class);
         $this->assertSame($result, $this->provider->getAccountLifeTimeValue($account, $channel));
     }
 
@@ -67,7 +68,7 @@ class AmountProviderTest extends OrmTestCase
      */
     public function lifetimeValueProvider()
     {
-        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock(Channel::class);
 
         return [
             'get account summary lifetime'    => [
