@@ -4,6 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Oro\Bundle\FormBundle\Form\Type\Select2EntityType;
@@ -21,32 +22,30 @@ class ChannelSelectTypeTest extends OrmTestCase
     /** @var FormFactory */
     protected $factory;
 
-    /**
-     * @var ChannelsByEntitiesProvider|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var ChannelsByEntitiesProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $channelsProvider;
 
     protected function setUp(): void
     {
-        $registry = $this->createMock('Doctrine\Persistence\ManagerRegistry');
-        $metadataDriver = new AnnotationDriver(
+        $registry = $this->createMock(ManagerRegistry::class);
+
+        $em = $this->getTestEntityManager();
+        $em->getConfiguration()->setMetadataDriverImpl(new AnnotationDriver(
             new AnnotationReader(),
             'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
-        );
-
-        $em     = $this->getTestEntityManager();
-        $config = $em->getConfiguration();
-        $config->setMetadataDriverImpl($metadataDriver);
-        $config->setEntityNamespaces(['OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
+        ));
+        $em->getConfiguration()->setEntityNamespaces([
+            'OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
+        ]);
 
         $registry->expects($this->any())
             ->method('getManagerForClass')
-            ->will($this->returnValue($em));
+            ->willReturn($em);
 
         $entityType = new EntityType($registry);
 
         $channelsProvider = $this
-            ->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider')
+            ->getMockBuilder(ChannelsByEntitiesProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
