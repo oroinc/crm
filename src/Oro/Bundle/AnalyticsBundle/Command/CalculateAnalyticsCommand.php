@@ -75,7 +75,7 @@ class CalculateAnalyticsCommand extends Command implements CronCommandInterface
             if (Channel::STATUS_ACTIVE != $channel->getStatus()) {
                 $output->writeln(sprintf('Channel not active: %s', $channelId));
 
-                return;
+                return 1;
             }
 
             // check if the channel's customer supports analytics.
@@ -84,7 +84,7 @@ class CalculateAnalyticsCommand extends Command implements CronCommandInterface
                     sprintf('Channel is not supposed to calculate analytics: %s', $channelId)
                 );
 
-                return;
+                return 1;
             }
 
             $this->calculateAnalyticsScheduler->scheduleForChannel($channelId, $customerIds);
@@ -95,5 +95,7 @@ class CalculateAnalyticsCommand extends Command implements CronCommandInterface
         }
 
         $output->writeln('Completed');
+
+        return 0;
     }
 }

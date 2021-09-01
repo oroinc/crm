@@ -57,7 +57,7 @@ abstract class RecalculateLifetimeCommand extends Command
         if (false === $channelSettings) {
             $output->writeln(sprintf('The "%s" channel does not exist.', $this->getChannelType()));
 
-            return;
+            return 1;
         }
 
         if (true === $input->getOption('force')) {
@@ -69,6 +69,8 @@ abstract class RecalculateLifetimeCommand extends Command
                 . 're-calculated lifetime values into the database.'
             );
         }
+
+        return 0;
     }
 
     abstract protected function getChannelType(): string;
