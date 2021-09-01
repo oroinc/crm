@@ -93,5 +93,7 @@ HELP
         );
 
         $output->writeln('<info>Completed!</info>');
+
+        return 0;
     }
 }

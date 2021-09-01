@@ -687,7 +687,7 @@ services:
         calls:
             - [setSourceClass, [ Oro\Bundle\SalesBundle\Entity\Lead ]]
         tags:
-            - { name: oro_entity.virtual_relation_provider, priority: 150 }
+            - { name: oro_entity.virtual_relation_provider, priority: -150 }
 
     oro_sales.virtual_relation_provider.customer.opportunity:
         class: Oro\Bundle\SalesBundle\Provider\CustomerVirtualRelationProvider
@@ -697,14 +697,14 @@ services:
         calls:
             - [setSourceClass, [ Oro\Bundle\SalesBundle\Entity\Opportunity ]]
         tags:
-            - { name: oro_entity.virtual_relation_provider, priority: 150 }
+            - { name: oro_entity.virtual_relation_provider, priority: -150 }
 
     oro_sales.virtual_relation_provider.b2bcustomer:
         class: Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity\B2bCustomer'
         tags:
-            - { name: oro_entity.virtual_relation_provider, priority: 150 }
+            - { name: oro_entity.virtual_relation_provider, priority: -150 }
 
     oro_sales.widget_config_value.widget_opportunity_status.converter:
         parent: oro_dashboard.widget_config_value.widget_enum_select.converter

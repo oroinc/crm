@@ -78,7 +78,7 @@ class ActivityContactRecalculateCommand extends Command
     {
         $logger = new OutputLogger($output);
 
-        $this->recalculate($logger);
+        return $this->recalculate($logger);
     }
 
     /**
