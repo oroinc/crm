@@ -8,12 +8,16 @@
 
     {% if is_granted('EDIT', entity) %}
         {% if (isDisqualifyAllowed)  %}
-            {{ UI.button({
-                'path':  path('oro_sales_lead_disqualify', {'id': entity.id}),
-                'aCss':  'btn btn-danger action-button',
+            {{ UI.ajaxButton({
+                'dataUrl':  path('oro_sales_lead_disqualify', {'id': entity.id}),
+                'aCss':  'btn btn-danger action-button no-hash',
                 'iCss':  'fa-ban',
+                'dataMethod': 'POST',
                 'label': 'oro.sales.lead.disqualify'|trans,
                 'title': 'oro.sales.lead.disqualify'|trans,
+                'dataRedirect': path('oro_sales_lead_view', {'id': entity.id}),
+                'successMessage': 'oro.sales.controller.lead.saved.message'|trans,
+                'errorMessage': 'oro.sales.lead.status.change_error_message'|trans
             }) }}
         {% endif %}
         {% if (isConvertToOpportunityAllowed)  %}

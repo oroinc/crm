@@ -7,9 +7,12 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -136,7 +139,8 @@ class LeadController extends AbstractController
     /**
      * Change status for lead
      *
-     * @Route("/disqualify/{id}", name="oro_sales_lead_disqualify", requirements={"id"="\d+"})
+     * @CsrfProtection
+     * @Route("/disqualify/{id}", name="oro_sales_lead_disqualify", requirements={"id"="\d+"}, methods={"POST"})
      * @Acl(
      *      id="oro_sales_lead_disqualify",
      *      type="entity",
@@ -150,19 +154,16 @@ class LeadController extends AbstractController
             throw new AccessDeniedException();
         }
 
-        if ($this->get('oro_sales.model.change_lead_status')->disqualify($lead)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                $this->get('translator')->trans('oro.sales.controller.lead.saved.message')
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                $this->get('translator')->trans('oro.sales.lead.status.change_error_message')
-            );
+        if (!$this->get('oro_sales.model.change_lead_status')->disqualify($lead)) {
+            return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->redirectToRoute('oro_sales_lead_view', ['id' => $lead->getId()]);
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            $this->get('translator')->trans('oro.sales.controller.lead.saved.message')
+        );
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
