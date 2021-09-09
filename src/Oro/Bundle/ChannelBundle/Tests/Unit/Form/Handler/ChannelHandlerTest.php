@@ -10,8 +10,11 @@ use Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
 use Oro\Component\Testing\Unit\Form\Type\Stub\FormStub;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormConfigInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -54,7 +57,7 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
         $this->handler = new ChannelHandler($requestStack, $this->form, $this->registry, $this->dispatcher);
     }
 
-    public function testProcessUnsupportedRequest()
+    public function testProcessUnsupportedRequest(): void
     {
         $this->form->expects($this->once())->method('setData')
             ->with($this->entity);
@@ -67,10 +70,8 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider supportedMethods
-     *
-     * @param string $method
      */
-    public function testProcessSupportedRequest($method)
+    public function testProcessSupportedRequest(string $method): void
     {
         $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod($method);
@@ -84,15 +85,12 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->handler->process($this->entity));
     }
 
-    /**
-     * @return array
-     */
-    public function supportedMethods()
+    public function supportedMethods(): array
     {
         return [['POST', 'PUT']];
     }
 
-    public function testProcessValidData()
+    public function testProcessValidData(): void
     {
         $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod('POST');
@@ -100,15 +98,15 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->once())->method('setData')->with($this->entity);
         $this->form->expects($this->once())->method('submit')->with(self::FORM_DATA);
         $this->form->expects($this->once())->method('isValid')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $this->registry->expects($this->any())->method('getManager')->will($this->returnValue($this->em));
+        $this->registry->expects($this->any())->method('getManager')->willReturn($this->em);
         $this->em->expects($this->once())->method('persist')->with($this->entity);
         $this->em->expects($this->once())->method('flush');
 
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with(
-                $this->isInstanceOf('Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent'),
+                $this->isInstanceOf(ChannelSaveEvent::class),
                 $this->equalTo(ChannelSaveEvent::EVENT_NAME)
             );
 
@@ -120,42 +118,39 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
      *
      * @param bool $isUpdateMode
      */
-    public function testGetFormView($isUpdateMode)
+    public function testGetFormView(bool $isUpdateMode): void
     {
         $this->request->query->set(ChannelHandler::UPDATE_MARKER, $isUpdateMode);
 
         $form = $this->form;
         if ($isUpdateMode) {
-            $form        = $this->createMock('Symfony\Component\Form\Test\FormInterface');
-            $formConfig  = $this->createMock('Symfony\Component\Form\FormConfigInterface');
-            $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
-            $formType    = $this->createMock('Symfony\Component\Form\ResolvedFormTypeInterface');
+            $form        = $this->createMock(FormInterface::class);
+            $formConfig  = $this->createMock(FormConfigInterface::class);
+            $formFactory = $this->createMock(FormFactoryInterface::class);
+            $formType    = $this->createMock(ResolvedFormTypeInterface::class);
 
             $formConfig->expects($this->once())->method('getFormFactory')
-                ->will($this->returnValue($formFactory));
+                ->willReturn($formFactory);
             $formConfig->expects($this->once())->method('getType')
-                ->will($this->returnValue($formType));
+                ->willReturn($formType);
             $formType->expects($this->any())->method('getInnerType')
-                ->will($this->returnValue(new FormStub('type' . self::TEST_NAME)));
+                ->willReturn(new FormStub('type' . self::TEST_NAME));
             $this->form->expects($this->once())->method('getName')
-                ->will($this->returnValue('form' . self::TEST_NAME));
+                ->willReturn('form' . self::TEST_NAME);
             $this->form->expects($this->once())->method('getConfig')
-                ->will($this->returnValue($formConfig));
+                ->willReturn($formConfig);
 
             $formFactory->expects($this->once())->method('createNamed')
-                ->will($this->returnValue($form));
+                ->willReturn($form);
         }
 
         $form->expects($this->once())->method('createView')
-            ->will($this->returnValue($this->getFormView()));
+            ->willReturn($this->getFormView());
 
-        $this->assertInstanceOf('Symfony\Component\Form\FormView', $this->handler->getFormView());
+        $this->assertInstanceOf(FormView::class, $this->handler->getFormView());
     }
 
-    /**
-     * @return array
-     */
-    public function formViewDataProvider()
+    public function formViewDataProvider(): array
     {
         return [
             'update mode, should recreate form'       => ['$isUpdateMode' => true],
@@ -163,10 +158,7 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return FormView
-     */
-    protected function getFormView()
+    protected function getFormView(): FormView
     {
         $rootView       = new FormView();
         $connectorsView = new FormView($rootView);
@@ -185,7 +177,7 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider handleRequestDataProvider
      */
-    public function testHandleRequestChannelType(Channel $entity, $requestValue, $expectedType)
+    public function testHandleRequestChannelType(Channel $entity, $requestValue, $expectedType): void
     {
         $this->request->setMethod('GET');
 
@@ -205,10 +197,7 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
         $this->handler->process($entity);
     }
 
-    /**
-     * @return array
-     */
-    public function handleRequestDataProvider()
+    public function handleRequestDataProvider(): array
     {
         $channel = new Channel();
         $channel->setChannelType('existing_type');

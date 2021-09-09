@@ -15,35 +15,17 @@ class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const FORM_DATA = ['field' => 'value'];
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|FormInterface
-     */
-    protected $form;
+    private \PHPUnit\Framework\MockObject\MockObject|FormInterface $form;
 
-    /**
-     * @var Request
-     */
-    protected $request;
+    private Request $request;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ObjectManager
-     */
-    protected $manager;
+    private \PHPUnit\Framework\MockObject\MockObject|ObjectManager $manager;
 
-    /**
-     * @var B2bCustomerHandler
-     */
-    protected $handler;
+    private B2bCustomerHandler $handler;
 
-    /**
-     * @var B2bCustomer
-     */
-    protected $entity;
+    private B2bCustomer $entity;
 
-    /**
-     * @var RequestChannelProvider|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $requestChannelProvider;
+    private RequestChannelProvider|\PHPUnit\Framework\MockObject\MockObject $requestChannelProvider;
 
     protected function setUp(): void
     {
@@ -63,7 +45,7 @@ class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testProcessUnsupportedRequest()
+    public function testProcessUnsupportedRequest(): void
     {
         $this->requestChannelProvider->expects($this->once())
             ->method('setDataChannel')
@@ -76,15 +58,13 @@ class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->never())
             ->method('submit');
 
-        $this->assertFalse($this->handler->process($this->entity));
+        self::assertFalse($this->handler->process($this->entity));
     }
 
     /**
      * @dataProvider supportedMethods
-     *
-     * @param string $method
      */
-    public function testProcessSupportedRequest($method)
+    public function testProcessSupportedRequest(string $method): void
     {
         $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod($method);
@@ -94,12 +74,12 @@ class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->once())->method('submit')
             ->with(self::FORM_DATA);
         $this->form->expects($this->once())->method('isValid')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $this->assertTrue($this->handler->process($this->entity));
+        self::assertTrue($this->handler->process($this->entity));
     }
 
-    public function supportedMethods()
+    public function supportedMethods(): array
     {
         return [
             ['POST'],

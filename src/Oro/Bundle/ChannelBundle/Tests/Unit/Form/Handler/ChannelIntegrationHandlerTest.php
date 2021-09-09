@@ -6,9 +6,11 @@ use Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
 use Oro\Component\Testing\Unit\Form\Type\Stub\FormStub;
+use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -16,29 +18,24 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_NAME = 'name';
 
-    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
-    protected $form;
+    private FormInterface|\PHPUnit\Framework\MockObject\MockObject $form;
 
-    /** @var Request */
-    protected $request;
+    private Request $request;
 
-    /** @var Integration */
-    protected $entity;
+    private Integration $entity;
 
-    /** @var ChannelIntegrationHandler */
-    protected $handler;
+    private ChannelIntegrationHandler $handler;
 
-    /** @var FormFactoryInterface */
-    protected $formBuilder;
+    private FormFactoryInterface $formBuilder;
 
     protected function setUp(): void
     {
-        $this->form        = $this->createMock('Symfony\Component\Form\Test\FormInterface');
-        $this->formBuilder = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
+        $this->form        = $this->createMock(FormInterface::class);
+        $this->formBuilder = $this->createMock(FormFactoryInterface::class);
         $this->formBuilder
             ->expects($this->any())
             ->method('createNamed')
-            ->will($this->returnValue($this->form));
+            ->willReturn($this->form);
 
         $this->request = Request::create('');
         $requestStack = new RequestStack();
@@ -52,7 +49,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
         unset($this->handler, $this->request, $this->form, $this->entity);
     }
 
-    public function testProcessUnsupportedRequest()
+    public function testProcessUnsupportedRequest(): void
     {
         $this->form->expects($this->once())->method('setData')
             ->with($this->entity);
@@ -61,7 +58,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->handler->process($this->entity));
     }
 
-    public function testGetRequestHandling()
+    public function testGetRequestHandling(): void
     {
         $data = ['name' => self::TEST_NAME];
         $this->request->setMethod('GET');
@@ -81,7 +78,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
      * @param bool $isFormValid
      * @param bool $expectedResult
      */
-    public function testPostRequestHandling($updateMarker, $isFormValid, $expectedResult)
+    public function testPostRequestHandling($updateMarker, $isFormValid, $expectedResult): void
     {
         $this->request->setMethod('POST');
         $this->request->query->set(IntegrationChannelHandler::UPDATE_MARKER, $updateMarker);
@@ -89,18 +86,15 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->once())->method('handleRequest')
             ->with($this->equalTo($this->request));
         $this->form->expects($this->any())->method('isSubmitted')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->form->expects($this->any())->method('isValid')
-            ->will($this->returnValue($isFormValid));
+            ->willReturn($isFormValid);
 
         $this->assertSame($updateMarker, $this->request->get(IntegrationChannelHandler::UPDATE_MARKER));
         $this->assertSame($expectedResult, $this->handler->process($this->entity));
     }
 
-    /**
-     * @return array
-     */
-    public function dataProvider()
+    public function dataProvider(): array
     {
         return [
             'form is invalid'                           => [
@@ -123,14 +117,13 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider submittedDataProvider
-     *
-     * @param string $requestType
-     * @param array  $requestData
-     * @param array  $expectedResult
-     * @param null   $expectedException
      */
-    public function testGetFormSubmittedData($requestType, $requestData, $expectedResult, $expectedException = null)
-    {
+    public function testGetFormSubmittedData(
+        string $requestType,
+        array $requestData,
+        array $expectedResult,
+        string $expectedException = null
+    ): void {
         $this->request->setMethod($requestType);
         foreach ($requestData as $key => $value) {
             $this->request->request->set($key, $value);
@@ -140,15 +133,12 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->form->expects($this->any())->method('getName')
-            ->will($this->returnValue(self::TEST_NAME));
+            ->willReturn(self::TEST_NAME);
 
         $this->assertSame($expectedResult, $this->handler->getFormSubmittedData());
     }
 
-    /**
-     * @return array
-     */
-    public function submittedDataProvider()
+    public function submittedDataProvider(): array
     {
         return [
             'bad request, should throw exception' => [
@@ -167,45 +157,40 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider formViewDataProvider
-     *
-     * @param bool $isUpdateMode
      */
-    public function testGetFormView($isUpdateMode)
+    public function testGetFormView(bool $isUpdateMode): void
     {
         $this->request->query->set(IntegrationChannelHandler::UPDATE_MARKER, $isUpdateMode);
 
         $form = $this->form;
         if ($isUpdateMode) {
-            $form        = $this->createMock('Symfony\Component\Form\Test\FormInterface');
-            $formConfig  = $this->createMock('Symfony\Component\Form\FormConfigInterface');
-            $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
-            $formType    = $this->createMock('Symfony\Component\Form\ResolvedFormTypeInterface');
+            $form        = $this->createMock(FormInterface::class);
+            $formConfig  = $this->createMock(FormConfigInterface::class);
+            $formFactory = $this->createMock(FormFactoryInterface::class);
+            $formType    = $this->createMock(ResolvedFormTypeInterface::class);
 
             $formConfig->expects($this->once())->method('getFormFactory')
-                ->will($this->returnValue($formFactory));
+                ->willReturn($formFactory);
             $formConfig->expects($this->once())->method('getType')
-                ->will($this->returnValue($formType));
+                ->willReturn($formType);
             $formType->expects($this->once())->method('getInnerType')
-                ->will($this->returnValue(new FormStub('type' . self::TEST_NAME)));
+                ->willReturn(new FormStub('type' . self::TEST_NAME));
             $this->form->expects($this->once())->method('getName')
-                ->will($this->returnValue('form' . self::TEST_NAME));
+                ->willReturn('form' . self::TEST_NAME);
             $this->form->expects($this->once())->method('getConfig')
-                ->will($this->returnValue($formConfig));
+                ->willReturn($formConfig);
 
             $formFactory->expects($this->once())->method('createNamed')
-                ->will($this->returnValue($form));
+                ->willReturn($form);
         }
 
         $form->expects($this->once())->method('createView')
-            ->will($this->returnValue($this->getFormView()));
+            ->willReturn($this->getFormView());
 
-        $this->assertInstanceOf('Symfony\Component\Form\FormView', $this->handler->getFormView());
+        $this->assertInstanceOf(FormView::class, $this->handler->getFormView());
     }
 
-    /**
-     * @return array
-     */
-    public function formViewDataProvider()
+    public function formViewDataProvider(): array
     {
         return [
             'update mode, should recreate form'       => ['$isUpdateMode' => true],
@@ -213,10 +198,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return FormView
-     */
-    protected function getFormView()
+    protected function getFormView(): FormView
     {
         $rootView       = new FormView();
         $connectorsView = new FormView($rootView);
