@@ -19,7 +19,7 @@ Feature: Contact call activity
     And fill "Log Call Form" with:
       | Subject             | Proposed Charlie to star in new film |
       | Additional comments | Charlie was in a good mood           |
-      | Call date & time    | 2017-08-24 11:00:00                  |
+      | Call date & time    | <DateTime:2017-08-24 11:00:00>       |
       | Phone number        | (310) 475-0859                       |
       | Duration            | 00:05:30                             |
     When I click "Log call"
@@ -31,8 +31,6 @@ Feature: Contact call activity
     Then I should see call with:
       | Subject             | Proposed Charlie to star in new film |
       | Additional comments | Charlie was in a good mood           |
-  #    @todo Uncomment when bug will resolved. BAP-12124.
-  #    | Call date & time    | Aug 24, 2017, 11:00 AM               |
       | Call date & time    | Aug 24, 2017                         |
       | Call date & time    | 11:00 AM                             |
       | Phone number        | (310) 475-0859                       |
@@ -46,8 +44,6 @@ Feature: Contact call activity
     And I should see call with:
       | Subject             | Proposed Charlie to star in new film |
       | Additional comments | Charlie was in a good mood           |
-  #    @todo Uncomment when bug will resolved. BAP-12124.
-  #    | Call date & time    | Aug 24, 2017, 11:00 AM               |
       | Call date & time    | Aug 24, 2017                         |
       | Call date & time    | 11:00 AM                             |
       | Phone number        | (310) 475-0859                       |
@@ -61,7 +57,7 @@ Feature: Contact call activity
       | Owner               | Theresa                         |
       | Subject             | Offered Charlie a drink with me |
       | Additional comments | Charlie was in a bad mood       |
-      | Call date & time    | 2017-09-01 21:30:00             |
+      | Call date & time    | <DateTime:2017-09-01 21:30:00>  |
       | Phone number        | (323) 879-6520                  |
       | Duration            | 00:03:25                        |
     When I click "Update call"
@@ -70,8 +66,6 @@ Feature: Contact call activity
     And I should see call with:
       | Subject             | Offered Charlie a drink with me |
       | Additional comments | Charlie was in a bad mood       |
-  #    @todo Uncomment when bug will resolved. BAP-12124.
-  #    | Call date & time    | Sep 1, 2017, 9:30 PM                 |
       | Call date & time    | Sep 1, 2017                     |
       | Call date & time    | 9:30 PM                         |
       | Phone number        | (323) 879-6520                  |

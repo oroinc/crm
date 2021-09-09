@@ -107,21 +107,35 @@
     {% set id = 'opportunity-profile' %}
 
     {% set formFields = [] %}
-    {% if form.owner is defined %}
+    {% if is_granted('EDIT', entity, 'owner') and form.owner is defined %}
         {% set formFields = formFields|merge([form_row(form.owner, {attr: {class: 'control-group-justified'}})]) %}
     {% endif %}
+    {% if is_granted('EDIT', entity, 'name') %}
+        {% set formFields = formFields|merge([form_row(form.name, {attr: {autofocus: true}})]) %}
+    {% endif %}
+    {% set formFieldsNames = [
+        'customerAssociation',
+        'contact',
+        'status',
+        'probability',
+        'budgetAmount',
+        'closeDate',
+        'closeRevenue',
+        'closeReason'
+    ] %}
+    {% for formFieldName in formFieldsNames %}
+        {% if is_granted('EDIT', entity, formFieldName) %}
+            {% set formFields = formFields|merge([form_row(attribute(form, formFieldName))]) %}
+        {% endif %}
+    {% endfor %}
 
-    {% set formFields = formFields|merge([
-        form_row(form.name, {attr: {autofocus: true}}),
-        form_row(form.customerAssociation),
-        form_row(form.contact),
-        form_row(form.status),
-        form_row(form.probability),
-        form_row(form.budgetAmount),
-        form_row(form.closeDate),
-        form_row(form.closeRevenue),
-        form_row(form.closeReason)
-    ]) %}
+    {% set subBlockData = [] %}
+    {% set subBlockFieldsNames = ['customerNeed', 'proposedSolution', 'notes'] %}
+    {% for subBlockFieldName in subBlockFieldsNames %}
+        {% if is_granted('EDIT', entity, subBlockFieldName) %}
+            {% set subBlockData = subBlockData|merge([form_row(attribute(form, subBlockFieldName))]) %}
+        {% endif %}
+    {% endfor %}
 
     {% set dataBlocks = [{
         'title': 'General'|trans,
@@ -131,12 +145,7 @@
                 'data': formFields
             },
             {
-                'data':
-                    [
-                        form_row(form.customerNeed),
-                        form_row(form.proposedSolution),
-                        form_row(form.notes)
-                    ]
+                'data': subBlockData
             }
         ]
     }] %}

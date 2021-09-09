@@ -51,7 +51,7 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
         $this->handler = new AccountHandler($this->form, $requestStack, $this->manager);
     }
 
-    public function testProcessUnsupportedRequest()
+    public function testProcessUnsupportedRequest(): void
     {
         $this->form->expects($this->once())
             ->method('setData')
@@ -65,10 +65,8 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider supportedMethods
-     *
-     * @param string $method
      */
-    public function testProcessSupportedRequest($method)
+    public function testProcessSupportedRequest(string $method): void
     {
         $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod($method);
@@ -84,15 +82,15 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->handler->process($this->entity));
     }
 
-    public function supportedMethods()
+    public function supportedMethods(): array
     {
-        return array(
-            array('POST'),
-            array('PUT')
-        );
+        return [
+            ['POST'],
+            ['PUT'],
+        ];
     }
 
-    public function testProcessValidData()
+    public function testProcessValidData(): void
     {
         $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod('POST');
@@ -119,7 +117,7 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->handler->process($this->entity));
     }
 
-    public function testProcessWithoutContactViewPermission()
+    public function testProcessWithoutContactViewPermission(): void
     {
         $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod('POST');

@@ -79,14 +79,17 @@
 {% block content_data %}
     {% set id = 'account-profile' %}
 
+    {% set subBlockData = [] %}
+    {% if is_granted('EDIT', entity, 'name') %}
+        {% set subBlockData = subBlockData|merge([form_row(form.name)]) %}
+    {% endif %}
+
     {% set dataBlocks = [{
         'title': 'General'|trans,
         'subblocks': [
             {
                 'title': 'Basic Information'|trans,
-                'data': [
-                    form_row(form.name)
-                ]
+                'data': subBlockData
             }
         ]
     }] %}

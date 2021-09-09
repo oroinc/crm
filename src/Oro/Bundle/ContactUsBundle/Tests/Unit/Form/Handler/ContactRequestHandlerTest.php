@@ -15,20 +15,15 @@ class ContactRequestHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const FORM_DATA = ['field' => 'value'];
 
-    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
-    protected $form;
+    private FormInterface|\PHPUnit\Framework\MockObject\MockObject $form;
 
-    /** @var Request */
-    protected $request;
+    private Request $request;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager */
-    protected $em;
+    private \PHPUnit\Framework\MockObject\MockObject|EntityManager $em;
 
-    /** @var ContactRequestHandler */
-    protected $handler;
+    private ContactRequestHandler $handler;
 
-    /** @var ContactRequest */
-    protected $entity;
+    private ContactRequest $entity;
 
     protected function setUp(): void
     {
@@ -53,7 +48,7 @@ class ContactRequestHandlerTest extends \PHPUnit\Framework\TestCase
         unset($this->form, $this->request, $this->em, $this->handler, $this->entity);
     }
 
-    public function testProcessUnsupportedRequest()
+    public function testProcessUnsupportedRequest(): void
     {
         $this->form->expects($this->once())->method('setData')
             ->with($this->entity);
@@ -61,15 +56,13 @@ class ContactRequestHandlerTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->never())
             ->method('submit');
 
-        $this->assertFalse($this->handler->process($this->entity));
+        self::assertFalse($this->handler->process($this->entity));
     }
 
     /**
      * @dataProvider supportedMethods
-     *
-     * @param string $method
      */
-    public function testProcessSupportedRequest($method)
+    public function testProcessSupportedRequest(string $method): void
     {
         $this->form->expects($this->once())->method('setData')
             ->with($this->entity);
@@ -80,13 +73,10 @@ class ContactRequestHandlerTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->once())->method('submit')
             ->with(self::FORM_DATA);
 
-        $this->assertFalse($this->handler->process($this->entity));
+        self::assertFalse($this->handler->process($this->entity));
     }
 
-    /**
-     * @return array
-     */
-    public function supportedMethods()
+    public function supportedMethods(): array
     {
         return [
             ['POST'],
@@ -94,7 +84,7 @@ class ContactRequestHandlerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testProcessValidData()
+    public function testProcessValidData(): void
     {
         $this->form->expects($this->once())->method('setData')
             ->with($this->entity);
@@ -106,13 +96,13 @@ class ContactRequestHandlerTest extends \PHPUnit\Framework\TestCase
             ->with(self::FORM_DATA);
 
         $this->form->expects($this->once())->method('isValid')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->em->expects($this->once())->method('persist')
             ->with($this->entity);
 
         $this->em->expects($this->once())->method('flush');
 
-        $this->assertTrue($this->handler->process($this->entity));
+        self::assertTrue($this->handler->process($this->entity));
     }
 }

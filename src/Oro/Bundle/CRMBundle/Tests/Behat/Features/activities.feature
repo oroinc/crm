@@ -115,7 +115,7 @@ Feature: Activities
     And fill "Log Call Form" with:
       | Subject             | Call to Someone                           |
       | Additional comments | Offered $40 discount on her next purchase |
-      | Call date & time    | 2016-10-31 08:00:00                       |
+      | Call date & time    | <DateTime:2016-10-31 08:00:00>            |
       | Phone number        | 0501468825                                |
       | Direction           | Outgoing                                  |
       | Duration            | 60s                                       |
@@ -134,7 +134,7 @@ Feature: Activities
     And fill "Log Call Form" with:
       | Subject             | Call for lead                             |
       | Additional comments | Offered $50 discount on her next purchase |
-      | Call date & time    | 2016-11-21 08:00:00                       |
+      | Call date & time    | <DateTime:2016-11-21 08:00:00>            |
       | Phone number        | 0503505566                                |
       | Direction           | Incoming                                  |
       | Duration            | 30s                                       |
@@ -201,14 +201,14 @@ Feature: Activities
     Given go to Activities/ Calendar Events
     And click "Create Calendar event"
     When I fill "Event Form" with:
-      | Title         | All day no repeat Event |
-      | Start         | 2017-01-24 12:00 AM     |
-      | End           | 2020-02-26 12:00 AM     |
-      | All-Day Event | true                    |
-      | Repeat        | false                   |
-      | Description   | testfull desc           |
-      | Guests        | John Doe                |
-      | Color         | Cornflower Blue         |
+      | Title         | All day no repeat Event        |
+      | Start         | <DateTime:2017-01-24 12:00 AM> |
+      | End           | <DateTime:2020-02-26 12:00 AM> |
+      | All-Day Event | true                           |
+      | Repeat        | false                          |
+      | Description   | testfull desc                  |
+      | Guests        | John Doe                       |
+      | Color         | Cornflower Blue                |
     And set Reminders with:
       | Method        | Interval unit | Interval number |
       | Email         | days          | 1               |
@@ -233,14 +233,14 @@ Feature: Activities
     When click "More actions"
     And click "Add Event"
     And I fill "Event Form" with:
-      | Title         | New event           |
-      | Start         | 2018-05-24 12:00 AM |
-      | End           | 2019-05-26 12:00 AM |
-      | All-Day Event | true                |
-      | Repeat        | false               |
-      | Description   | testfull desc       |
-      | Guests        | John Doe            |
-      | Color         | Cornflower Blue     |
+      | Title         | New event                      |
+      | Start         | <DateTime:2018-05-24 12:00 AM> |
+      | End           | <DateTime:2019-05-26 12:00 AM> |
+      | All-Day Event | true                           |
+      | Repeat        | false                          |
+      | Description   | testfull desc                  |
+      | Guests        | John Doe                       |
+      | Color         | Cornflower Blue                |
     And set Reminders with:
       | Method        | Interval unit | Interval number |
       | Email         | days          | 1               |
