@@ -21,5 +21,6 @@ class OroCaseExtension extends Extension
         $loader->load('services.yml');
         $loader->load('form.yml');
         $loader->load('controllers.yml');
+        $loader->load('controllers_api.yml');
     }
 }

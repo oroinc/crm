@@ -3,7 +3,11 @@ services:
         public: true
 
     Oro\Bundle\ContactUsBundle\Controller\ContactRequestController:
-        tags: ['controller.service_arguments']
+        calls:
+            - ['setContainer', ['@Psr\Container\ContainerInterface']]
+        tags:
+            - { name: container.service_subscriber }
+            - { name: controller.service_arguments }
 
     Oro\Bundle\ContactUsBundle\Controller\ContactReasonController:
         calls:

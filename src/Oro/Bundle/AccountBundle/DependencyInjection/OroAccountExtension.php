@@ -25,6 +25,7 @@ class OroAccountExtension extends Extension implements PrependExtensionInterface
         $loader->load('services.yml');
         $loader->load('importexport.yml');
         $loader->load('controllers.yml');
+        $loader->load('controllers_api.yml');
     }
 
     public function getAlias()
