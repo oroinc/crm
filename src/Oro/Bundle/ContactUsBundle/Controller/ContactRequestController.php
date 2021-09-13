@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\ContactUsBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestEditType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
@@ -113,8 +112,7 @@ class ContactRequestController extends AbstractController
      */
     public function deleteAction(ContactRequest $contactRequest): JsonResponse
     {
-        /** @var EntityManager $em */
-        $em = $this->get('doctrine.orm.entity_manager');
+        $em = $this->get('doctrine')->getManagerForClass(ContactRequest::class);
 
         $em->remove($contactRequest);
         $em->flush();
