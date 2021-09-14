@@ -2,29 +2,22 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Unit\DependencyInjection;
 
+use Oro\Bundle\CaseBundle\Controller\Api\Rest\CaseController;
+use Oro\Bundle\CaseBundle\Controller\Api\Rest\CommentController;
 use Oro\Bundle\CaseBundle\DependencyInjection\OroCaseExtension;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Oro\Bundle\TestFrameworkBundle\Test\DependencyInjection\ExtensionTestCase;
 
-class OroCaseExtensionTest extends \PHPUnit\Framework\TestCase
+class OroCaseExtensionTest extends ExtensionTestCase
 {
-    /**
-     * @var OroCaseExtension
-     */
-    private $extension;
-
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
-
-    protected function setUp(): void
+    public function testLoad(): void
     {
-        $this->container = new ContainerBuilder();
-        $this->extension = new OroCaseExtension();
-    }
+        $this->loadExtension(new OroCaseExtension());
 
-    public function testLoad()
-    {
-        $this->extension->load(array(), $this->container);
+        $expectedDefinitions = [
+            CaseController::class,
+            CommentController::class,
+        ];
+
+        $this->assertDefinitionsLoaded($expectedDefinitions);
     }
 }

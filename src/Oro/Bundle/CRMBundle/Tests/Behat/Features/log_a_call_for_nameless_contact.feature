@@ -15,7 +15,7 @@ Feature: Log a call for nameless contact
     And fill "Log Call Form" with:
       | Subject             | Very important call           |
       | Additional comments | Propose something interesting |
-      | Call date & time    | 2017-08-24 11:00              |
+      | Call date & time    | <DateTime:2017-08-24 11:00>   |
       | Duration            | 00:05:30                      |
     When I click "Log call"
     Then I should see "Call saved" flash message
