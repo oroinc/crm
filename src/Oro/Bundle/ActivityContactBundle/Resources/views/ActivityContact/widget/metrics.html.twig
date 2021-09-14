@@ -5,7 +5,7 @@
 <div id="activity-count-{{ entityClassName ~ '-' ~ entity.id }}" class="activity-contact-info-title">
     {{ metrics.last_contacted_time(data, entity) }}
 </div>
-<script type="text/javascript">
+<script>
     loadModules(['jquery', 'routing', 'oroui/js/mediator'], function ($, routing, mediator) {
         $(function () {
             var reloadStatistics = function () {
