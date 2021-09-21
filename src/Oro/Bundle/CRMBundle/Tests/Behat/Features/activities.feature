@@ -224,8 +224,8 @@ Feature: Activities
     And should see "Context SomeCompany"
     And go to Activities/ Calendar Events
     And should see following grid:
-      | Title                   | Calendar | Start                  | End                    | Recurrent | Recurrence | Invitation status |
-      | All day no repeat Event | John Doe | Jan 24, 2017, 12:00 AM | Feb 26, 2020, 11:59 PM | No        | N/A        | Not responded     |
+      | Title                   | Calendar | Start                  | End                    | Recurrent | Recurrence |
+      | All day no repeat Event | John Doe | Jan 24, 2017, 12:00 AM | Feb 26, 2020, 11:59 PM | No        | N/A        |
 
   Scenario: Add an event for Another Record
     Given go to Sales/ Leads
@@ -293,7 +293,7 @@ Feature: Activities
     And go to Activities/ Calendar Events
     And I sort grid by "Title"
     And should see following grid:
-      | Title                   | Calendar | Recurrent | Recurrence                                | Invitation status |
-      | All day no repeat Event | John Doe | No        | N/A                                       | Not responded     |
-      | New event               | John Doe | No        | N/A                                       | Not responded     |
-      | Stand-Up                | John Doe | Yes       | Daily every 1 day, end after 1 occurrence | Not responded     |
+      | Title                   | Calendar | Recurrent | Recurrence                                |
+      | All day no repeat Event | John Doe | No        | N/A                                       |
+      | New event               | John Doe | No        | N/A                                       |
+      | Stand-Up                | John Doe | Yes       | Daily every 1 day, end after 1 occurrence |
