@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -155,7 +156,7 @@ class LeadController extends AbstractController
      *      class="OroSalesBundle:Lead"
      * )
      */
-    public function disqualifyAction(Lead $lead)
+    public function disqualifyAction(Lead $lead, Request $request)
     {
         if (!$this->get(LeadActionsAccessProvider::class)->isDisqualifyAllowed($lead)) {
             throw new AccessDeniedException();
@@ -165,7 +166,7 @@ class LeadController extends AbstractController
             return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
         }
 
-        $this->get('session')->getFlashBag()->add(
+        $request->getSession()->getFlashBag()->add(
             'success',
             $this->get(TranslatorInterface::class)->trans('oro.sales.controller.lead.saved.message')
         );
@@ -183,19 +184,18 @@ class LeadController extends AbstractController
      * )
      * @Template()
      */
-    public function convertToOpportunityAction(Lead $lead)
+    public function convertToOpportunityAction(Lead $lead, Request $request)
     {
         if (!$this->get(LeadActionsAccessProvider::class)->isConvertToOpportunityAllowed($lead)) {
             throw new AccessDeniedException('Lead couldn\'t be converted to opportunity!');
         }
 
-        $session = $this->get('session');
         return $this->get(LeadToOpportunityHandler::class)->create(
             $lead,
             $this->get(UpdateHandler::class),
             $this->get(TranslatorInterface::class)->trans('oro.sales.controller.opportunity.saved.message'),
-            function () use ($session) {
-                $session->getFlashBag()->add(
+            function () use ($request) {
+                $request->getSession()->getFlashBag()->add(
                     'error',
                     $this->get(TranslatorInterface::class)->trans('oro.sales.lead.convert.error')
                 );

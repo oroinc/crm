@@ -11,6 +11,7 @@ use Oro\Component\MessageQueue\Client\MessageProducer;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -49,9 +50,9 @@ class ChannelController extends AbstractController
      * )
      * @Template("@OroChannel/Channel/update.html.twig")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
-        return $this->update(new Channel());
+        return $this->update(new Channel(), $request);
     }
 
     /**
@@ -64,22 +65,23 @@ class ChannelController extends AbstractController
      * )
      * @Template()
      */
-    public function updateAction(Channel $channel)
+    public function updateAction(Channel $channel, Request $request)
     {
-        return $this->update($channel);
+        return $this->update($channel, $request);
     }
 
     /**
      * @param Channel $channel
+     * @param Request $request
      *
      * @return array
      */
-    protected function update(Channel $channel)
+    protected function update(Channel $channel, Request $request)
     {
         $handler = $this->get(ChannelHandler::class);
 
         if ($handler->process($channel)) {
-            $this->get('session')->getFlashBag()->add(
+            $request->getSession()->getFlashBag()->add(
                 'success',
                 $this->get(TranslatorInterface::class)->trans('oro.channel.controller.message.saved')
             );

@@ -33,9 +33,9 @@ class ReportController extends AbstractController
     {
         $gridName  = implode('-', ['oro_reportcrm', $reportGroupName, $reportName]);
         $gridConfig = $this->get(Manager::class)->getConfigurationForGrid($gridName);
-        $pageTitle = $gridConfig['pageTitle'];
+        $pageTitle = (string) ($gridConfig['pageTitle'] ?? '');
 
-        $requiredFeatures = isset($gridConfig['requiredFeatures']) ? $gridConfig['requiredFeatures'] : [];
+        $requiredFeatures = $gridConfig['requiredFeatures'] ?? [];
         $featureChecker = $this->getFeatureChecker();
         foreach ($requiredFeatures as $requiredFeature) {
             if (!$featureChecker->isFeatureEnabled($requiredFeature)) {
