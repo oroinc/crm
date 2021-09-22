@@ -12,6 +12,7 @@ use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -73,11 +74,11 @@ class CaseController extends AbstractController
      * @AclAncestor("oro_case_create")
      * @Template("@OroCase/Case/update.html.twig")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $case = $this->get(CaseEntityManager::class)->createCase();
 
-        return $this->update($case);
+        return $this->update($case, $request);
     }
 
     /**
@@ -85,19 +86,20 @@ class CaseController extends AbstractController
      * @Template
      * @AclAncestor("oro_case_update")
      */
-    public function updateAction(CaseEntity $case)
+    public function updateAction(CaseEntity $case, Request $request)
     {
-        return $this->update($case);
+        return $this->update($case, $request);
     }
 
     /**
      * @param CaseEntity $case
+     * @param Request $request
      * @return array
      */
-    protected function update(CaseEntity $case)
+    protected function update(CaseEntity $case, Request $request)
     {
         if ($this->get(CaseEntityHandler::class)->process($case)) {
-            $this->get('session')->getFlashBag()->add(
+            $request->getSession()->getFlashBag()->add(
                 'success',
                 $this->get(TranslatorInterface::class)->trans('oro.case.message.saved')
             );
