@@ -10,6 +10,7 @@ use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -75,11 +76,11 @@ class SalesFunnelController extends AbstractController
      *      class="OroSalesBundle:SalesFunnel"
      * )
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $entity = new SalesFunnel();
 
-        return $this->update($entity);
+        return $this->update($entity, $request);
     }
 
     /**
@@ -92,19 +93,20 @@ class SalesFunnelController extends AbstractController
      *      class="OroSalesBundle:SalesFunnel"
      * )
      */
-    public function updateAction(SalesFunnel $entity)
+    public function updateAction(SalesFunnel $entity, Request $request)
     {
-        return $this->update($entity);
+        return $this->update($entity, $request);
     }
 
     /**
      * @param  SalesFunnel $entity
+     * @param  Request $request
      * @return array
      */
-    protected function update(SalesFunnel $entity)
+    protected function update(SalesFunnel $entity, Request $request)
     {
         if ($this->get(SalesFunnelHandler::class)->process($entity)) {
-            $this->get('session')->getFlashBag()->add(
+            $request->getSession()->getFlashBag()->add(
                 'success',
                 $this->get(TranslatorInterface::class)->trans('oro.sales.controller.sales_funnel.saved.message')
             );

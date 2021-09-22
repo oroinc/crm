@@ -108,7 +108,7 @@ class AccountControllerTest extends WebTestCase
         static::assertHtmlResponseStatusCodeEquals($result, 200);
         static::assertStringContainsString('Account_name_update - Accounts - Customers', $crawler->html());
         static::assertStringContainsString(
-            \trim(static::$container->get('twig')->render($template, ['customers' => $customers])),
+            \trim(static::getContainer()->get('twig')->render($template, ['customers' => $customers])),
             $crawler->html()
         );
     }

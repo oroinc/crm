@@ -144,13 +144,13 @@ class CustomerType extends AbstractType
         $resolver->setDefaults(
             [
                 'configs' => function (Options $options, $value) {
+                    $accountLabel = (string) $this->customerConfigProvider->getLabel(Account::class);
+
                     return [
                         'component'               => 'sales-customer',
                         'renderedPropertyName'    => 'text',
                         'newAccountIcon'          => $this->customerIconProvider->getIcon(new Account()),
-                        'accountLabel'            => $this->translator->trans(
-                            $this->customerConfigProvider->getLabel(Account::class)
-                        ),
+                        'accountLabel'            => $this->translator->trans($accountLabel),
                         'allowClear'              => true,
                         'placeholder'             => 'oro.sales.form.choose_account',
                         'separator'               => ';',
