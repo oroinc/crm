@@ -4139,16 +4139,16 @@
         },
         {
             "name": "laminas/laminas-mail",
-            "version": "2.15.0",
+            "version": "2.15.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-mail.git",
-                "reference": "d219bfdc2677cbf89de9d1c622185f1c5f1f6fbe"
+                "reference": "70c3476913c74e9befd782ab665ad1b9ebac556e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mail/zipball/d219bfdc2677cbf89de9d1c622185f1c5f1f6fbe",
-                "reference": "d219bfdc2677cbf89de9d1c622185f1c5f1f6fbe",
+                "url": "https://api.github.com/repos/laminas/laminas-mail/zipball/70c3476913c74e9befd782ab665ad1b9ebac556e",
+                "reference": "70c3476913c74e9befd782ab665ad1b9ebac556e",
                 "shasum": ""
             },
             "require": {
@@ -4172,6 +4172,7 @@
                 "laminas/laminas-servicemanager": "^3.7",
                 "phpunit/phpunit": "^9.5.5",
                 "psalm/plugin-phpunit": "^0.15.1",
+                "symfony/process": "^5.3.7",
                 "vimeo/psalm": "^4.7"
             },
             "suggest": {
@@ -4214,7 +4215,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-09-21T14:32:08+00:00"
+            "time": "2021-09-23T07:33:57+00:00"
         },
         {
             "name": "laminas/laminas-mime",
