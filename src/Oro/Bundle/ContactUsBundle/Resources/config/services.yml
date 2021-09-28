@@ -58,3 +58,9 @@ services:
             - '@property_accessor'
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: contact_reasons, acl_resource: oro_contactus_reason_view }
+
+    oro_contact_us.emailtemplate.variable_provider.entity:
+        class: Oro\Bundle\ContactUsBundle\Provider\ContactReasonVariablesProvider
+        public: false
+        tags:
+            - { name: oro_email.emailtemplate.variable_provider, scope: entity }
