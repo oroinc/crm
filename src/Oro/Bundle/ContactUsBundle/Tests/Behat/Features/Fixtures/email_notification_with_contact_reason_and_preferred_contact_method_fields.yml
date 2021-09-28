@@ -1,0 +1,9 @@
+Oro\Bundle\EmailBundle\Entity\EmailTemplate:
+    email_template:
+        organization: '@organization'
+        is_system: 0
+        name: 'contact_request_create_notification_with_special_fields'
+        entity_name: 'Oro\Bundle\ContactUsBundle\Entity\ContactRequest'
+        type: 'html'
+        subject: 'New contact request from {{ entity.firstName }} {{ entity.lastName }}'
+        content: 'Contact reason: {{ entity.contactReason }} - Preferred contact method: {{ entity.preferredContactMethod }}'
