@@ -5,6 +5,7 @@ namespace Oro\Bridge\CallCRM\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData;
+use Oro\Bundle\DistributionBundle\Handler\ApplicationState;
 use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractUpdatePermissions;
 use Symfony\Component\Yaml\Yaml;
 
@@ -23,7 +24,7 @@ class UpdateCallAccessLevels extends AbstractUpdatePermissions implements Depend
 
     public function load(ObjectManager $manager)
     {
-        if ($this->container->hasParameter('installed') && $this->container->getParameter('installed')) {
+        if ($this->container->get(ApplicationState::class)->isInstalled()) {
             return;
         }
 
