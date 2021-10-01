@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\DistributionBundle\Handler\ApplicationState;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -23,7 +24,7 @@ class UpdateReportsWithVirtualRelations extends AbstractFixture implements Conta
      */
     public function load(ObjectManager $manager)
     {
-        if ($this->container->hasParameter('installed') && $this->container->getParameter('installed')) {
+        if ($this->container->get(ApplicationState::class)->isInstalled()) {
             try {
                 /** @var Connection $connection */
                 $connection = $this->container->get('doctrine.dbal.default_connection');

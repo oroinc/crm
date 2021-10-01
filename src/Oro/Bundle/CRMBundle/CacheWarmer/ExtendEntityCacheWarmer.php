@@ -5,6 +5,7 @@ namespace Oro\Bundle\CRMBundle\CacheWarmer;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\CRMBundle\Migration\CleanupMagentoOneConnectorEntities;
+use Oro\Bundle\DistributionBundle\Handler\ApplicationState;
 use Oro\Bundle\EntityBundle\Tools\SafeDatabaseChecker;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
@@ -18,16 +19,16 @@ class ExtendEntityCacheWarmer implements CacheWarmerInterface
 
     private LoggerInterface $logger;
 
-    private bool $applicationInstalled;
+    private ApplicationState $applicationState;
 
     public function __construct(
         ManagerRegistry $managerRegistry,
         LoggerInterface $logger,
-        ?bool $applicationInstalled
+        ApplicationState $applicationState
     ) {
         $this->managerRegistry = $managerRegistry;
         $this->logger = $logger;
-        $this->applicationInstalled = (bool)$applicationInstalled;
+        $this->applicationState = $applicationState;
     }
 
     public function isOptional()
@@ -41,7 +42,7 @@ class ExtendEntityCacheWarmer implements CacheWarmerInterface
             return;
         }
 
-        if (!$this->applicationInstalled) {
+        if (!$this->applicationState->isInstalled()) {
             return;
         }
 
