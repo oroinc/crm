@@ -10,6 +10,7 @@ use Oro\Bundle\CRMBundle\Migrations\Schema\v1_3\TaggingEntityName;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_3_1\WorkflowItemEntityClass;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_4\NotificationEntityName;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_6\ReminderEntityName;
+use Oro\Bundle\DistributionBundle\Handler\ApplicationState;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -32,7 +33,7 @@ class OroCRMBundleInstaller implements Installation, ContainerAwareInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        if ($this->container->hasParameter('installed') && $this->container->getParameter('installed')) {
+        if ($this->container->get(ApplicationState::class)->isInstalled()) {
             MigrateRelations::updateWorkFlow($schema, $queries);
             MigrateGridViews::updateGridViews($queries);
             EmbededFormType::updateEmbededFormType($queries);
