@@ -6,6 +6,6 @@ services:
         arguments:
             - '@doctrine'
             - '@logger'
-            - '%installed%'
+            - '@oro_distribution.handler.application_status'
         tags:
             - { name: oro_entity_extend.warmer }
