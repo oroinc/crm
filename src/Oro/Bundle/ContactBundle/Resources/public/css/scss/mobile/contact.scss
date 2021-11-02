@@ -28,7 +28,7 @@
 
 @media screen and (min-width: $medium-devices-media-breakpoint) {
     .contact-box {
-        width: calc(#{($contact-box-mobile-width / 2)} - #{$content-padding-small});
+        width: calc(50% - #{$content-padding-medium});
     }
 }
 
