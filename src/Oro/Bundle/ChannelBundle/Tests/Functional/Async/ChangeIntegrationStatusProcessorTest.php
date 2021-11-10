@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Async;
 
 use Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor;
@@ -14,10 +15,10 @@ class ChangeIntegrationStatusProcessorTest extends WebTestCase
         $this->initClient();
     }
 
-    public function testCouldBeGetFromContainerAsService()
+    public function testCouldBeGetFromContainerAsService(): void
     {
-        $processor = $this->getContainer()->get('oro_channel.async.change_integration_status_processor');
+        $processor = self::getContainer()->get('oro_channel.async.change_integration_status_processor');
 
-        $this->assertInstanceOf(ChangeIntegrationStatusProcessor::class, $processor);
+        self::assertInstanceOf(ChangeIntegrationStatusProcessor::class, $processor);
     }
 }

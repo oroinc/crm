@@ -4,6 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Async;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Utils\EditModeUtils;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
@@ -11,43 +12,48 @@ use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
-class ChangeIntegrationStatusProcessor implements MessageProcessorInterface, TopicSubscriberInterface
+/**
+ * Changes channel data source.
+ * Clears channels cache.
+ */
+class ChangeIntegrationStatusProcessor implements
+    MessageProcessorInterface,
+    TopicSubscriberInterface,
+    LoggerAwareInterface
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private $registry;
+    use LoggerAwareTrait;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private ManagerRegistry $registry;
 
-    public function __construct(ManagerRegistry $registry, LoggerInterface $logger)
+    private StateProvider $stateProvider;
+
+    public function __construct(ManagerRegistry $registry, StateProvider $stateProvider)
     {
         $this->registry = $registry;
-        $this->logger = $logger;
+        $this->stateProvider = $stateProvider;
+        $this->logger = new NullLogger();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function process(MessageInterface $message, SessionInterface $session)
+    public function process(MessageInterface $message, SessionInterface $session): string
     {
         $body = array_replace(['channelId' => null], JSON::decode($message->getBody()));
-        if (! $body['channelId']) {
+        if (!$body['channelId']) {
             $this->logger->critical('The message invalid. It must have channelId set');
 
             return self::REJECT;
         }
 
-        $em = $this->registry->getManager();
+        $entityManager = $this->registry->getManagerForClass(Channel::class);
 
-        /** @var Channel $channel */
-        $channel = $em->find(Channel::class, $body['channelId']);
-        if (! $channel) {
+        $channel = $entityManager->find(Channel::class, $body['channelId']);
+        if (!$channel) {
             $this->logger->critical(sprintf('Channel not found: %s', $body['channelId']));
 
             return self::REJECT;
@@ -56,21 +62,21 @@ class ChangeIntegrationStatusProcessor implements MessageProcessorInterface, Top
         $dataSource = $channel->getDataSource();
         if ($dataSource instanceof Integration) {
             if (Channel::STATUS_ACTIVE === $channel->getStatus()) {
-                $enabled = null !== $dataSource->getPreviouslyEnabled() ?
-                    $dataSource->getPreviouslyEnabled() :
-                    true;
+                $dataSource->setEnabled($dataSource->getPreviouslyEnabled() ?? true);
 
-                $dataSource->setEnabled($enabled);
                 EditModeUtils::attemptChangeEditMode($dataSource, Integration::EDIT_MODE_RESTRICTED);
             } else {
                 $dataSource->setPreviouslyEnabled($dataSource->isEnabled());
                 $dataSource->setEnabled(false);
+
                 EditModeUtils::attemptChangeEditMode($dataSource, Integration::EDIT_MODE_DISALLOW);
             }
 
-            $em->persist($dataSource);
-            $em->flush();
+            $entityManager->persist($dataSource);
+            $entityManager->flush();
         }
+
+        $this->stateProvider->processChannelChange();
 
         return self::ACK;
     }
@@ -78,7 +84,7 @@ class ChangeIntegrationStatusProcessor implements MessageProcessorInterface, Top
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedTopics()
+    public static function getSubscribedTopics(): array
     {
         return [Topics::CHANNEL_STATUS_CHANGED];
     }

@@ -5,90 +5,112 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\EventListener;
 use Oro\Bundle\BatchBundle\Entity\JobExecution;
 use Oro\Bundle\BatchBundle\Event\JobExecutionEvent;
 use Oro\Bundle\BatchBundle\Item\ExecutionContext;
+use Oro\Bundle\ContactBundle\Async\Topics;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\EventListener\ImportEventListener;
+use Oro\Bundle\ContactBundle\ImportExport\Configuration\ContactImportExportConfigurationProvider;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportEventListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var OptionalListenerManager|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $listenerManager;
+    private OptionalListenerManager|\PHPUnit\Framework\MockObject\MockObject $optionalListenerManager;
 
-    /**
-     * @var ImportEventListener
-     */
-    private $listener;
+    private MessageProducerInterface|\PHPUnit\Framework\MockObject\MockObject $messageProducer;
+
+    private ImportEventListener $listener;
 
     protected function setUp(): void
     {
-        $this->listenerManager = $this->createMock(OptionalListenerManager::class);
+        $this->messageProducer = $this->createMock(MessageProducerInterface::class);
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator
+            ->expects(self::any())
+            ->method('trans')
+            ->willReturn(static fn (string $key) => $key . '.translated');
+
+        $contactImportExportConfigurationProvider = new ContactImportExportConfigurationProvider($translator);
+        $this->optionalListenerManager = $this->createMock(OptionalListenerManager::class);
+
         $this->listener = new ImportEventListener(
-            $this->listenerManager
+            $this->optionalListenerManager,
+            $contactImportExportConfigurationProvider,
+            $this->messageProducer
         );
     }
 
-    public function testOnBeforeJobExecutionNotSupported()
+    public function testOnBeforeJobExecutionNotSupportedEntityClass(): void
     {
         $entityClass = \stdClass::class;
-        $event = $this->getEvent($entityClass);
-        $this->listenerManager->expects($this->never())
-            ->method($this->anything());
+        $event = $this->getEvent($entityClass, 'oro_contact.add_or_replace');
+        $this->optionalListenerManager->expects(self::never())
+            ->method(self::anything());
 
         $this->listener->onBeforeJobExecution($event);
     }
 
-    public function testOnBeforeJobExecutionSupported()
+    public function testOnBeforeJobExecutionNotSupportedProcessorAliasClass(): void
     {
         $entityClass = Contact::class;
-        $event = $this->getEvent($entityClass);
-        $this->listenerManager->expects($this->once())
+        $event = $this->getEvent($entityClass, 'invalid.processor.alias');
+        $this->optionalListenerManager->expects(self::never())
+            ->method(self::anything());
+
+        $this->listener->onBeforeJobExecution($event);
+    }
+
+    public function testOnBeforeJobExecutionSupported(): void
+    {
+        $event = $this->getEvent(Contact::class, 'oro_contact.add_or_replace');
+        $this->optionalListenerManager->expects(self::once())
             ->method('disableListener')
             ->with('oro_email.listener.entity_listener');
 
         $this->listener->onBeforeJobExecution($event);
     }
 
-    public function testOnAfterJobExecutionNotSupported()
+    public function testOnAfterJobExecutionNotSupportedEntityClass(): void
     {
-        $entityClass = \stdClass::class;
-        $event = $this->getEvent($entityClass);
-        $this->listenerManager->expects($this->never())
-            ->method($this->anything());
+        $event = $this->getEvent(\stdClass::class, 'oro_contact.add_or_replace');
+        $this->optionalListenerManager->expects(self::never())
+            ->method(self::anything());
 
         $this->listener->onAfterJobExecution($event);
     }
 
-    public function testOnAfterJobExecutionSupported()
+    public function testOnAfterJobExecutionNotSupportedProcessorAlias(): void
     {
-        $entityClass = Contact::class;
-        $event = $this->getEvent($entityClass);
-        $this->listenerManager->expects($this->once())
+        $event = $this->getEvent(Contact::class, 'invalid.processor.alias');
+        $this->optionalListenerManager->expects(self::never())
+            ->method(self::anything());
+
+        $this->listener->onAfterJobExecution($event);
+    }
+
+    public function testOnAfterJobExecutionSupported(): void
+    {
+        $event = $this->getEvent(Contact::class, 'oro_contact.add_or_replace');
+        $this->optionalListenerManager->expects(self::once())
             ->method('enableListener')
             ->with('oro_email.listener.entity_listener');
 
+        $this->messageProducer
+            ->expects(self::once())
+            ->method('send')
+            ->with(Topics::ACTUALIZE_CONTACT_EMAIL_ASSOCIATIONS, []);
+
         $this->listener->onAfterJobExecution($event);
     }
 
-    /**
-     * @param string $entityClass
-     * @return JobExecutionEvent
-     */
-    private function getEvent($entityClass): JobExecutionEvent
+    private function getEvent(string $entityClass, string $processorAlias): JobExecutionEvent
     {
-        /** @var ExecutionContext|\PHPUnit\Framework\MockObject\MockObject $context */
-        $context = $this->createMock(ExecutionContext::class);
-        $context->expects($this->any())
-            ->method('get')
-            ->with('entityName')
-            ->willReturn($entityClass);
+        $context = new ExecutionContext();
+        $context->put('entityName', $entityClass);
+        $context->put('processorAlias', $processorAlias);
 
-        /** @var JobExecution|\PHPUnit\Framework\MockObject\MockObject $jobExecution */
-        $jobExecution = $this->createMock(JobExecution::class);
-        $jobExecution->expects($this->any())
-            ->method('getExecutionContext')
-            ->willReturn($context);
+        $jobExecution = new JobExecution();
+        $jobExecution->setExecutionContext($context);
 
         return new JobExecutionEvent($jobExecution);
     }

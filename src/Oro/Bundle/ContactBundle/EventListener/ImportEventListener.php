@@ -4,8 +4,11 @@ namespace Oro\Bundle\ContactBundle\EventListener;
 
 use Oro\Bundle\BatchBundle\Entity\JobExecution;
 use Oro\Bundle\BatchBundle\Event\JobExecutionEvent;
-use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\BatchBundle\Job\BatchStatus;
+use Oro\Bundle\ContactBundle\Async\Topics;
+use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationProviderInterface;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 
 /**
  * Disable Email EntityListener to prevent creation of EmailAddress entities per each contact during import
@@ -13,40 +16,50 @@ use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
  */
 class ImportEventListener
 {
-    /**
-     * @var OptionalListenerManager
-     */
-    private $listenerManager;
+    private OptionalListenerManager $optionalListenerManager;
 
-    public function __construct(OptionalListenerManager $listenerManager)
-    {
-        $this->listenerManager = $listenerManager;
+    private ImportExportConfigurationProviderInterface $contactImportExportConfigurationProvider;
+
+    private MessageProducerInterface $messageProducer;
+
+    public function __construct(
+        OptionalListenerManager $optionalListenerManager,
+        ImportExportConfigurationProviderInterface $contactImportExportConfigurationProvider,
+        MessageProducerInterface $messageProducer
+    ) {
+        $this->optionalListenerManager = $optionalListenerManager;
+        $this->contactImportExportConfigurationProvider = $contactImportExportConfigurationProvider;
+        $this->messageProducer = $messageProducer;
     }
 
-    public function onBeforeJobExecution(JobExecutionEvent $jobExecutionEvent)
+    public function onBeforeJobExecution(JobExecutionEvent $jobExecutionEvent): void
     {
-        if ($this->isSupportedJob($jobExecutionEvent->getJobExecution())) {
+        if (!$this->isSupportedJob($jobExecutionEvent->getJobExecution())) {
             return;
         }
 
-        $this->listenerManager->disableListener('oro_email.listener.entity_listener');
+        $this->optionalListenerManager->disableListener('oro_email.listener.entity_listener');
     }
 
-    public function onAfterJobExecution(JobExecutionEvent $jobExecutionEvent)
+    public function onAfterJobExecution(JobExecutionEvent $jobExecutionEvent): void
     {
-        if ($this->isSupportedJob($jobExecutionEvent->getJobExecution())) {
+        $jobExecution = $jobExecutionEvent->getJobExecution();
+        if (!$this->isSupportedJob($jobExecution)
+            && $jobExecution->getStatus()->getValue() !== BatchStatus::COMPLETED) {
             return;
         }
 
-        $this->listenerManager->enableListener('oro_email.listener.entity_listener');
+        $this->optionalListenerManager->enableListener('oro_email.listener.entity_listener');
+
+        $this->messageProducer->send(Topics::ACTUALIZE_CONTACT_EMAIL_ASSOCIATIONS, []);
     }
 
-    /**
-     * @param JobExecution $jobExecution
-     * @return bool
-     */
-    protected function isSupportedJob($jobExecution): bool
+    private function isSupportedJob(JobExecution $jobExecution): bool
     {
-        return $jobExecution->getExecutionContext()->get('entityName') !== Contact::class;
+        $config = $this->contactImportExportConfigurationProvider->get();
+        $executionContext = $jobExecution->getExecutionContext();
+
+        return $config->getEntityClass() === $executionContext->get('entityName')
+            && $config->getImportProcessorAlias() === $executionContext->get('processorAlias');
     }
 }
