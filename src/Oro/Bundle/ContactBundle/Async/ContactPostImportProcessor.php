@@ -4,75 +4,42 @@ namespace Oro\Bundle\ContactBundle\Async;
 
 use Doctrine\DBAL\Exception\RetryableException;
 use Oro\Bundle\ContactBundle\Handler\ContactEmailAddressHandler;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\MessageQueueBundle\Entity\Job;
-use Oro\Bundle\MessageQueueBundle\Entity\Repository\JobRepository;
+use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
 /**
  * Perform actions after contacts import finished.
  * Actualize EmailAddress records - add new emails and remove not existing
  */
-class ContactPostImportProcessor implements MessageProcessorInterface
+class ContactPostImportProcessor implements MessageProcessorInterface, TopicSubscriberInterface, LoggerAwareInterface
 {
-    /**
-     * @var ContactEmailAddressHandler
-     */
-    private $contactEmailAddressHandler;
+    use LoggerAwareTrait;
 
-    /**
-     * @var DoctrineHelper
-     */
-    private $doctrineHelper;
+    private ContactEmailAddressHandler $contactEmailAddressHandler;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    public function __construct(
-        ContactEmailAddressHandler $contactEmailAddressHandler,
-        DoctrineHelper $doctrineHelper,
-        LoggerInterface $logger
-    ) {
+    public function __construct(ContactEmailAddressHandler $contactEmailAddressHandler)
+    {
         $this->contactEmailAddressHandler = $contactEmailAddressHandler;
-        $this->doctrineHelper = $doctrineHelper;
-        $this->logger = $logger;
+        $this->logger = new NullLogger();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function process(MessageInterface $message, SessionInterface $session)
+    public function process(MessageInterface $message, SessionInterface $session): string
     {
-        $messageBody = json_decode($message->getBody(), JSON_OBJECT_AS_ARRAY);
-
-        // Skip non import jobs. For example import validate
-        if (empty($messageBody['process']) || $messageBody['process'] !== 'import') {
-            return self::REJECT;
-        }
-
-        // Skip non contact import jobs
-        $rootImportJob = $this->getJobRepository()->findJobById((int)$messageBody['rootImportJobId']);
-        if ($rootImportJob) {
-            $importJobData = explode(':', $rootImportJob->getName());
-            if (empty($importJobData[2]) || !str_contains($importJobData[2], 'oro_contact')) {
-                return self::REJECT;
-            }
-        } else {
-            return self::REJECT;
-        }
-
         try {
             $this->contactEmailAddressHandler->actualizeContactEmailAssociations();
         } catch (RetryableException $e) {
             $this->logger->error(
                 'Deadlock occurred during actualization of contact emails',
                 [
-                    'exception' => $e
+                    'exception' => $e,
                 ]
             );
 
@@ -82,8 +49,8 @@ class ContactPostImportProcessor implements MessageProcessorInterface
         return self::ACK;
     }
 
-    private function getJobRepository(): JobRepository
+    public static function getSubscribedTopics(): array
     {
-        return $this->doctrineHelper->getEntityRepository(Job::class);
+        return [Topics::ACTUALIZE_CONTACT_EMAIL_ASSOCIATIONS];
     }
 }

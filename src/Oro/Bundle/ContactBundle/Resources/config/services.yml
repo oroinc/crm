@@ -173,6 +173,8 @@ services:
         class: Oro\Bundle\ContactBundle\EventListener\ImportEventListener
         arguments:
             - '@oro_platform.optional_listeners.manager'
+            - '@oro_contact.importexport.configuration_provider.contact'
+            - '@oro_message_queue.client.message_producer'
         tags:
             - { name: kernel.event_listener, event: akeneo_batch.before_job_execution, method: onBeforeJobExecution }
             - { name: kernel.event_listener, event: akeneo_batch.after_job_execution, method: onAfterJobExecution }
@@ -181,10 +183,10 @@ services:
         class: Oro\Bundle\ContactBundle\Async\ContactPostImportProcessor
         arguments:
             - '@oro_contact.handler.contact_email_address_handler'
-            - '@oro_entity.doctrine_helper'
-            - '@monolog.logger'
+        calls:
+            - [setLogger, ['@logger']]
         tags:
-            - { name: 'oro_message_queue.client.message_processor', topicName: 'oro.importexport.send_import_notification' }
+            - { name: 'oro_message_queue.client.message_processor' }
 
     oro_contact.social_url_formatter:
         class: Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter
