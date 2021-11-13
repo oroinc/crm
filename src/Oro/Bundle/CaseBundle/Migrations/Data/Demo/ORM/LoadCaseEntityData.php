@@ -12,6 +12,9 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
+/**
+ * Loads new Case entities.
+ */
 class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
     use ContainerAwareTrait;
@@ -213,14 +216,17 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         $count = $this->getEntityCount($entityName);
 
         if ($count) {
-            return $this->entityManager->createQueryBuilder()
+            $qb = $this->entityManager->createQueryBuilder()
                 ->select('e')
                 ->from($entityName, 'e')
                 ->setFirstResult(rand(0, $count - 1))
                 ->setMaxResults(1)
-                ->orderBy('e.' . $this->entityManager->getClassMetadata($entityName)->getSingleIdentifierFieldName())
-                ->getQuery()
-                ->getSingleResult();
+                ->orderBy('e.' . $this->entityManager->getClassMetadata($entityName)->getSingleIdentifierFieldName());
+            if ('OroUserBundle:User' === $entityName) {
+                $qb->where('e.organization = :organization')->setParameter('organization', $this->organization);
+            }
+
+            return $qb->getQuery()->getSingleResult();
         }
 
         return null;
@@ -233,11 +239,14 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     protected function getEntityCount($entityName)
     {
         if (!isset($this->entitiesCount[$entityName])) {
-            $this->entitiesCount[$entityName] = (int)$this->entityManager->createQueryBuilder()
+            $qb = $this->entityManager->createQueryBuilder()
                 ->select('COUNT(e)')
-                ->from($entityName, 'e')
-                ->getQuery()
-                ->getSingleScalarResult();
+                ->from($entityName, 'e');
+            if ('OroUserBundle:User' === $entityName) {
+                $qb->where('e.organization = :organization')->setParameter('organization', $this->organization);
+            }
+
+            $this->entitiesCount[$entityName] = (int)$qb->getQuery()->getSingleScalarResult();
         }
 
         return $this->entitiesCount[$entityName];

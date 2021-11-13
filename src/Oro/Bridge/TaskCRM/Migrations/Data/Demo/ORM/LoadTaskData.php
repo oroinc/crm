@@ -122,7 +122,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
         if (empty($priorities)) {
             return;
         }
-        $users = $om->getRepository('OroUserBundle:User')->findAll();
+        $users = $om->getRepository('OroUserBundle:User')->findBy(['organization' => $organization]);
         if (empty($users)) {
             return;
         }
