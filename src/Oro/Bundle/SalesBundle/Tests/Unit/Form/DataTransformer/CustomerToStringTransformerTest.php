@@ -11,14 +11,14 @@ use Symfony\Component\Form\DataTransformerInterface;
 
 class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var CustomerToStringTransformer */
-    private $transformer;
-
     /** @var DataTransformerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $dataTransformer;
 
     /** @var AccountCustomerManager|\PHPUnit\Framework\MockObject\MockObject */
     private $accountCustomerManager;
+
+    /** @var CustomerToStringTransformer */
+    private $transformer;
 
     protected function setUp(): void
     {

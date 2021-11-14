@@ -8,26 +8,22 @@ use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\Test\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var SingleChannelModeExtension
-     */
-    protected $extension;
+    /** @var SingleChannelModeExtension */
+    private $extension;
 
-    /**
-     * @var ChannelsByEntitiesProvider|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $channelsProvider;
+    /** @var ChannelsByEntitiesProvider|\PHPUnit\Framework\MockObject\MockObject */
+    private $channelsProvider;
 
     protected function setUp(): void
     {
-        $this->channelsProvider = $this
-            ->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->channelsProvider = $this->createMock(ChannelsByEntitiesProvider::class);
 
         $this->extension = new SingleChannelModeExtension($this->channelsProvider);
     }
@@ -45,9 +41,8 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildForm(array $entities, array $channels, callable $callback = null)
     {
-        $builder = $this->createMock('Symfony\Component\Form\Test\FormBuilderInterface');
-        $this->channelsProvider
-            ->expects($this->once())
+        $builder = $this->createMock(FormBuilderInterface::class);
+        $this->channelsProvider->expects($this->once())
             ->method('getChannelsByEntities')
             ->with($entities)
             ->willReturn($channels);
@@ -71,13 +66,12 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
     {
         $view = new FormView();
 
-        $form = $this->createMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock(FormInterface::class);
         $options = ['entities' => $entities, 'single_channel_mode' => true];
 
         $view->vars['attr']['readonly'] = false;
 
-        $this->channelsProvider
-            ->expects($this->once())
+        $this->channelsProvider->expects($this->once())
             ->method('getChannelsByEntities')
             ->with($entities)
             ->willReturn($channels);
@@ -91,7 +85,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testConfigureOptions()
     {
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
+        $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with(['single_channel_mode' => true]);
@@ -99,10 +93,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->configureOptions($resolver);
     }
 
-    /**
-     * @return array
-     */
-    public function testBuildFormDataProvider()
+    public function testBuildFormDataProvider(): array
     {
         $channel = new Channel();
 
@@ -121,10 +112,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function testBuildViewDataProvider()
+    public function testBuildViewDataProvider(): array
     {
         return [
             'one channel' => [

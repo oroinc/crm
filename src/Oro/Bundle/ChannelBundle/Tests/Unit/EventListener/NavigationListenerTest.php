@@ -46,7 +46,7 @@ class NavigationListenerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($entities);
         $this->state->expects(self::once())
             ->method('isEntityEnabled')
-            ->will(self::returnValue($isEnabled));
+            ->willReturn($isEnabled);
 
         $menu = new MenuItem('test_menu', $factory);
         $salesTab = new MenuItem('sales_tab', $factory);
@@ -65,10 +65,7 @@ class NavigationListenerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function navigationConfigureDataProvider()
+    public function navigationConfigureDataProvider(): array
     {
         return [
             'child is shown'                               => [

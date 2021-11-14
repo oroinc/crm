@@ -15,18 +15,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportEventListenerTest extends \PHPUnit\Framework\TestCase
 {
-    private OptionalListenerManager|\PHPUnit\Framework\MockObject\MockObject $optionalListenerManager;
+    /** @var OptionalListenerManager|\PHPUnit\Framework\MockObject\MockObject */
+    private $optionalListenerManager;
 
-    private MessageProducerInterface|\PHPUnit\Framework\MockObject\MockObject $messageProducer;
+    /** @var MessageProducerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $messageProducer;
 
-    private ImportEventListener $listener;
+    /** @var ImportEventListener */
+    private $listener;
 
     protected function setUp(): void
     {
         $this->messageProducer = $this->createMock(MessageProducerInterface::class);
         $translator = $this->createMock(TranslatorInterface::class);
-        $translator
-            ->expects(self::any())
+        $translator->expects(self::any())
             ->method('trans')
             ->willReturn(static fn (string $key) => $key . '.translated');
 
@@ -95,8 +97,7 @@ class ImportEventListenerTest extends \PHPUnit\Framework\TestCase
             ->method('enableListener')
             ->with('oro_email.listener.entity_listener');
 
-        $this->messageProducer
-            ->expects(self::once())
+        $this->messageProducer->expects(self::once())
             ->method('send')
             ->with(Topics::ACTUALIZE_CONTACT_EMAIL_ASSOCIATIONS, []);
 

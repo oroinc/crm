@@ -9,11 +9,11 @@ use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 
 class AccountEntityNameProviderTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var EntityNameProvider|\PHPUnit\Framework\MockObject\MockObject */
+    private $defaultEntityNameProvider;
+
     /** @var AccountEntityNameProvider */
     private $provider;
-
-    /** @var EntityNameProvider */
-    private $defaultEntityNameProvider;
 
     protected function setUp(): void
     {

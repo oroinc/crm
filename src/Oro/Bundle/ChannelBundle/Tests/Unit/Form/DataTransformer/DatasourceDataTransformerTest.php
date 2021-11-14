@@ -5,8 +5,10 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\DataTransformer;
 use Oro\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\Test\FormInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
@@ -15,20 +17,15 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
     private const TEST_NAME = 'testName';
 
     /** @var FormFactoryInterface|\PHPUnit\Framework\MockObject\MockObject */
-    protected $formFactory;
+    private $formFactory;
 
     /** @var DatasourceDataTransformer */
-    protected $transformer;
+    private $transformer;
 
     protected function setUp(): void
     {
-        $this->formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
+        $this->formFactory = $this->createMock(FormFactoryInterface::class);
         $this->transformer = new DatasourceDataTransformer($this->formFactory);
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->transformer, $this->formFactory);
     }
 
     /**
@@ -42,7 +39,7 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedResult, $this->transformer->transform($data));
     }
 
-    public function transformDataProvider()
+    public function transformDataProvider(): array
     {
         $integration = new Integration();
         $integration->setType(self::TEST_TYPE);
@@ -99,14 +96,11 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
             'identifier' => null
         ]);
 
-        static::assertSame(self::TEST_NAME, $result->getName());
-        static::assertSame(self::TEST_TYPE, $result->getType());
+        self::assertSame(self::TEST_NAME, $result->getName());
+        self::assertSame(self::TEST_TYPE, $result->getType());
     }
 
-    /**
-     * @return array
-     */
-    public function reverseTransformDataProvider()
+    public function reverseTransformDataProvider(): array
     {
         $integration = new Integration();
 
@@ -119,13 +113,13 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
                 '$data'              => new \stdClass(),
                 '$expectedResult'    => null,
                 '$expectedSubmit'    => false,
-                '$expectedException' => 'Symfony\Component\Form\Exception\UnexpectedTypeException'
+                '$expectedException' => UnexpectedTypeException::class
             ],
             'should thor exception if invalid data submitted' => [
                 '$data'              => ['data' => new \stdClass(), 'identifier' => null],
                 '$expectedResult'    => null,
                 '$expectedSubmit'    => true,
-                '$expectedException' => '\LogicException'
+                '$expectedException' => \LogicException::class
             ],
             'should bind on data that comes form setData'     => [
                 '$data'           => [
@@ -148,47 +142,42 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
     private function initializeMocks($expectedSubmit, $expectedException = null)
     {
         if ($expectedSubmit) {
-            $formMock = $this->createMock('Symfony\Component\Form\Test\FormInterface');
+            $formMock = $this->createMock(FormInterface::class);
 
             $data = null;
             $this->formFactory->expects($this->once())
                 ->method('create')
                 ->with(
-                    $this->equalTo(ChannelType::class),
-                    $this->isInstanceOf('Oro\Bundle\IntegrationBundle\Entity\Channel'),
-                    $this->equalTo(['csrf_protection' => false, 'disable_customer_datasource_types' => false])
+                    ChannelType::class,
+                    $this->isInstanceOf(Integration::class),
+                    ['csrf_protection' => false, 'disable_customer_datasource_types' => false]
                 )
-                ->will(
-                    $this->returnCallback(
-                        function ($type, $formData) use (&$data, $formMock) {
-                            // capture form data
-                            $data = $formData;
+                ->willReturnCallback(function ($type, $formData) use (&$data, $formMock) {
+                    // capture form data
+                    $data = $formData;
 
-                            return $formMock;
-                        }
-                    )
-                );
+                    return $formMock;
+                });
 
-            $formMock->expects($this->once())->method('submit')
-                ->will(
-                    $this->returnCallback(
-                        function ($submitted) use (&$data) {
-                            // emulate submit
-                            $accessor = PropertyAccess::createPropertyAccessor();
+            $formMock->expects($this->once())
+                ->method('submit')
+                ->willReturnCallback(function ($submitted) use (&$data) {
+                    // emulate submit
+                    $accessor = PropertyAccess::createPropertyAccessor();
 
-                            foreach ($submitted as $key => $value) {
-                                $accessor->setValue($data, $key, $value);
-                            }
-                        }
-                    )
-                );
-            $invalid = null != $expectedException;
-            $formMock->expects($this->once())->method('isValid')
-                ->will($this->returnValue(!$invalid));
+                    foreach ($submitted as $key => $value) {
+                        $accessor->setValue($data, $key, $value);
+                    }
+                });
+            $invalid = null !== $expectedException;
+            $formMock->expects($this->once())
+                ->method('isValid')
+                ->willReturn(!$invalid);
 
             if ($invalid) {
-                $formMock->expects($this->once())->method('getErrors')
-                    ->will($this->returnValue([new FormError('message')]));
+                $formMock->expects($this->once())
+                    ->method('getErrors')
+                    ->willReturn([new FormError('message')]);
             }
         } else {
             $this->formFactory->expects($this->never())

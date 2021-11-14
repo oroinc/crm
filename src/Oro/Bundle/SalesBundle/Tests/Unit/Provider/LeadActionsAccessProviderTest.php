@@ -133,7 +133,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
         return $lead;
     }
 
-    private function makeWorkFlowsDisabled()
+    private function makeWorkFlowsDisabled(): void
     {
         $this->workflowRegistry->expects($this->exactly(2))
             ->method('getActiveWorkflowsByEntityClass')
@@ -143,7 +143,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
             ]);
     }
 
-    public function makeLeadWfEnabled()
+    public function makeLeadWfEnabled(): void
     {
         $this->workflowRegistry->expects($this->once())
             ->method('getActiveWorkflowsByEntityClass')
@@ -151,7 +151,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(new ArrayCollection([1]));
     }
 
-    public function makeLeadWfDisabledAndSalesFunnelWfEnabled()
+    public function makeLeadWfDisabledAndSalesFunnelWfEnabled(): void
     {
         $this->workflowRegistry->expects($this->exactly(2))
             ->method('getActiveWorkflowsByEntityClass')

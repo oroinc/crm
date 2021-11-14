@@ -6,10 +6,8 @@ use Oro\Bundle\CaseBundle\Entity\CaseSource;
 
 class CaseSourceTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var CaseSource
-     */
-    protected $caseSource;
+    /** @var CaseSource */
+    private $caseSource;
 
     protected function setUp(): void
     {

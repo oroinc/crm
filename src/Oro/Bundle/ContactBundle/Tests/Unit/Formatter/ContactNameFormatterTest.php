@@ -10,32 +10,24 @@ use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 
 class ContactNameFormatterTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var NameFormatter */
-    protected $nameFormatter;
-
-    protected function setUp(): void
-    {
-        $this->nameFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\NameFormatter')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->nameFormatter->expects($this->any())
-            ->method('format')
-            ->will($this->returnCallback(function (Contact $contact) {
-                return trim(implode(' ', [$contact->getFirstName(), $contact->getLastName()]));
-            }));
-    }
-
     /**
      * @dataProvider formatDataProvider
      */
-    public function testFormat(Contact $contact, $expectedResult)
+    public function testFormat(Contact $contact, string $expectedResult)
     {
-        $contactNameFormatter = new ContactNameFormatter($this->nameFormatter);
+        $nameFormatter = $this->createMock(NameFormatter::class);
+        $nameFormatter->expects($this->once())
+            ->method('format')
+            ->willReturnCallback(function (Contact $contact) {
+                return trim(implode(' ', [$contact->getFirstName(), $contact->getLastName()]));
+            });
+
+        $contactNameFormatter = new ContactNameFormatter($nameFormatter);
+
         $this->assertEquals($expectedResult, $contactNameFormatter->format($contact));
     }
 
-    public function formatDataProvider()
+    public function formatDataProvider(): array
     {
         return [
             'contact with all contact info' => [

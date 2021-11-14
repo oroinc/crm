@@ -14,18 +14,12 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
 {
     /** @var EmbeddedFormTypeExtension */
-    protected $extension;
+    private $extension;
 
     protected function setUp(): void
     {
         $this->extension = new EmbeddedFormTypeExtension();
         parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->extension);
-        parent::tearDown();
     }
 
     /**

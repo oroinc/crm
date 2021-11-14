@@ -9,7 +9,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class AccountPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var PhoneProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $rootProvider;
 
     /** @var AccountPhoneProvider */
@@ -18,6 +18,7 @@ class AccountPhoneProviderTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->rootProvider = $this->createMock(PhoneProviderInterface::class);
+
         $this->provider = new AccountPhoneProvider();
         $this->provider->setRootProvider($this->rootProvider);
     }

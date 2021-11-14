@@ -7,14 +7,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContactSelectTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ContactSelectType
-     */
-    protected $type;
+    /** @var ContactSelectType */
+    private $type;
 
-    /**
-     * Setup test env
-     */
     protected function setUp(): void
     {
         $this->type = new ContactSelectType();
@@ -22,8 +17,7 @@ class ContactSelectTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testConfigureOptions()
     {
-        /** @var OptionsResolver $resolver */
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
+        $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with($this->isType('array'));

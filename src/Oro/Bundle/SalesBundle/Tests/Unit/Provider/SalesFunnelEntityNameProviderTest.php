@@ -6,50 +6,41 @@ use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SalesBundle\Provider\SalesFunnelEntityNameProvider;
-use Oro\Component\DependencyInjection\ServiceLink;
 
 class SalesFunnelEntityNameProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var SalesFunnelEntityNameProvider */
-    protected $provider;
-
-    /** @var ServiceLink */
-    protected $nameFormatterLink;
-
-    /** @var ServiceLink */
-    protected $dqlNameFormatterLink;
+    private $provider;
 
     protected function setUp(): void
     {
-        $this->nameFormatterLink = $this->createMock(ServiceLink::class);
-
-        $this->dqlNameFormatterLink = $this->createMock(ServiceLink::class);
-
-        $this->provider = new SalesFunnelEntityNameProvider($this->nameFormatterLink, $this->dqlNameFormatterLink);
+        $this->provider = new SalesFunnelEntityNameProvider();
     }
 
     /**
      * @dataProvider getNameDataProvider
      */
-    public function testGetName($format, $locale, $entity, $expected)
+    public function testGetName(string $format, ?string $locale, object $entity, string|false $expected)
     {
         $result = $this->provider->getName($format, $locale, $entity);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
      * @dataProvider getNameDQLDataProvider
      */
-    public function testGetNameDQL($format, $locale, $className, $alias, $expected)
-    {
+    public function testGetNameDQL(
+        string $format,
+        ?string $locale,
+        string $className,
+        string $alias,
+        string|false $expected
+    ) {
         $result = $this->provider->getNameDQL($format, $locale, $className, $alias);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
-    /**
-     * @return array
-     */
-    public function getNameDataProvider()
+    public function getNameDataProvider(): array
     {
         return [
             'test unsupported class' => [
@@ -73,10 +64,7 @@ class SalesFunnelEntityNameProviderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getNameDQLDataProvider()
+    public function getNameDQLDataProvider(): array
     {
         return [
             'test unsupported class Name' => [
@@ -103,10 +91,7 @@ class SalesFunnelEntityNameProviderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return SalesFunnel
-     */
-    protected function getEntity()
+    private function getEntity(): SalesFunnel
     {
         $lead = new Lead();
         $lead->setName('Contact');

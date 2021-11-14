@@ -13,15 +13,16 @@ class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var ChangeLeadStatus */
-    private $model;
-
     /** @var LeadStub */
     private $lead;
+
+    /** @var ChangeLeadStatus */
+    private $model;
 
     protected function setUp(): void
     {
         $this->entityManager = $this->createMock(EntityManager::class);
+        $this->lead = new LeadStub();
 
         $this->entityManager->expects($this->once())
             ->method('getReference')
@@ -34,7 +35,6 @@ class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
             ->method('validate')
             ->willReturn($this->createMock(\Countable::class));
 
-        $this->lead = new LeadStub();
         $this->model = new ChangeLeadStatus($this->entityManager, $validator);
     }
 

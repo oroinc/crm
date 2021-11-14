@@ -17,13 +17,10 @@ use Symfony\Component\Form\Forms;
 class ChannelSelectTypeTest extends OrmTestCase
 {
     /** @var ChannelSelectType */
-    protected $type;
+    private $type;
 
     /** @var FormFactory */
-    protected $factory;
-
-    /** @var ChannelsByEntitiesProvider|\PHPUnit\Framework\MockObject\MockObject */
-    protected $channelsProvider;
+    private $factory;
 
     protected function setUp(): void
     {
@@ -44,10 +41,7 @@ class ChannelSelectTypeTest extends OrmTestCase
 
         $entityType = new EntityType($registry);
 
-        $channelsProvider = $this
-            ->getMockBuilder(ChannelsByEntitiesProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $channelsProvider = $this->createMock(ChannelsByEntitiesProvider::class);
 
         $this->type = new ChannelSelectType($channelsProvider);
 
@@ -64,11 +58,6 @@ class ChannelSelectTypeTest extends OrmTestCase
                 ]
             )
             ->getFormFactory();
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->type, $this->factory);
     }
 
     public function testGetParent()

@@ -2,16 +2,16 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\AddressBundle\Form\EventListener\FixAddressesPrimarySubscriber;
 use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Oro\Bundle\SalesBundle\Form\Type\LeadAddressType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\FormBuilder;
 
 class LeadAddressTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var LeadAddressType
-     */
-    protected $type;
+    /** @var LeadAddressType */
+    private $type;
 
     protected function setUp(): void
     {
@@ -20,19 +20,14 @@ class LeadAddressTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testBuildForm()
     {
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $builder = $this->createMock(FormBuilder::class);
         $builder->expects($this->once())
-                ->method('addEventSubscriber')
-                ->with(
-                    $this->isInstanceOf('Oro\Bundle\AddressBundle\Form\EventListener\FixAddressesPrimarySubscriber')
-                );
+            ->method('addEventSubscriber')
+            ->with($this->isInstanceOf(FixAddressesPrimarySubscriber::class));
         $builder->expects($this->once())
-                ->method('add')
-                ->with('primary', CheckboxType::class)
-                ->will($this->returnSelf());
+            ->method('add')
+            ->with('primary', CheckboxType::class)
+            ->willReturnSelf();
 
         $this->type->buildForm($builder, ['single_form' => true]);
     }

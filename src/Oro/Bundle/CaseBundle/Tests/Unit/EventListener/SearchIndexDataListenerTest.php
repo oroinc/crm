@@ -17,38 +17,32 @@ class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
     use SearchMappingTypeCastingHandlersTestTrait;
 
     /** @var ObjectMapper|\PHPUnit\Framework\MockObject\MockObject */
-    protected $mapper;
+    private $mapper;
 
     /** @var SearchIndexDataListener */
-    protected $listener;
+    private $listener;
 
     protected function setUp(): void
     {
-        /** @var HtmlTagHelper|\PHPUnit\Framework\MockObject\MockObject $htmlTagHelper */
         $htmlTagHelper = $this->createMock(HtmlTagHelper::class);
         $htmlTagHelper->expects($this->any())
             ->method('stripTags')
-            ->willReturnCallback(
-                function ($value) {
-                    return trim(strip_tags($value));
-                }
-            );
+            ->willReturnCallback(function ($value) {
+                return trim(strip_tags($value));
+            });
         $htmlTagHelper->expects($this->any())
             ->method('stripLongWords')
-            ->willReturnCallback(
-                function ($value) {
-                    $words = preg_split('/\s+/', $value);
+            ->willReturnCallback(function ($value) {
+                $words = preg_split('/\s+/', $value);
+                $words = array_filter(
+                    $words,
+                    function ($item) {
+                        return \strlen($item) <= HtmlTagHelper::MAX_STRING_LENGTH;
+                    }
+                );
 
-                    $words = array_filter(
-                        $words,
-                        function ($item) {
-                            return \strlen($item) <= HtmlTagHelper::MAX_STRING_LENGTH;
-                        }
-                    );
-
-                    return implode(' ', $words);
-                }
-            );
+                return implode(' ', $words);
+            });
 
         $this->mapper = new ObjectMapper(
             $this->createMock(SearchMappingProvider::class),
@@ -85,10 +79,7 @@ class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedData, $event->getData());
     }
 
-    /**
-     * @return array
-     */
-    public function onPrepareEntityMapDataProvider()
+    public function onPrepareEntityMapDataProvider(): array
     {
         return [
             'nothing to change' => [

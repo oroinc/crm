@@ -9,6 +9,7 @@ use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Handler\ContactPhoneDeleteHandlerExtension;
 use Oro\Bundle\EntityBundle\Handler\EntityDeleteAccessDeniedExceptionFactory;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContactPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
@@ -67,7 +68,7 @@ class ContactPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testAssertDeleteGrantedWhenAccessDenied()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
 
         $contactPhone = new ContactPhone();
@@ -86,7 +87,7 @@ class ContactPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testAssertDeleteGrantedWhenPrimaryPhoneIsDeletedAndThereIsOtherPhones()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
 
         $contactPhone = new ContactPhone();
@@ -150,7 +151,7 @@ class ContactPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testAssertDeleteGrantedWhenLastPhoneIsDeletedAndContactDoesNotHaveOtherIdentification()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
 
         $contactPhone = new ContactPhone();

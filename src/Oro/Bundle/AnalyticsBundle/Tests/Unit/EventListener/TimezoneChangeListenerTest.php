@@ -9,35 +9,21 @@ use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 
 class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|RFMMetricStateManager
-     */
-    protected $manager;
+    /** @var RFMMetricStateManager|\PHPUnit\Framework\MockObject\MockObject */
+    private $manager;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|CalculateAnalyticsScheduler
-     */
-    protected $scheduler;
+    /** @var CalculateAnalyticsScheduler|\PHPUnit\Framework\MockObject\MockObject */
+    private $scheduler;
 
-    /**
-     * @var TimezoneChangeListener
-     */
-    protected $listener;
+    /** @var TimezoneChangeListener */
+    private $listener;
 
     protected function setUp(): void
     {
-        $this->manager = $this->getMockBuilder('Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->scheduler = $this->createCalculateAnalyticsSchedulerMock();
+        $this->manager = $this->createMock(RFMMetricStateManager::class);
+        $this->scheduler = $this->createMock(CalculateAnalyticsScheduler::class);
 
         $this->listener = new TimezoneChangeListener($this->manager, $this->scheduler);
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->listener, $this->registry);
     }
 
     public function testWasNotChanged()
@@ -48,30 +34,24 @@ class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
         $this->scheduler->expects($this->never())
             ->method('scheduleForAllChannels');
 
-        /** @var \PHPUnit\Framework\MockObject\MockObject|ConfigUpdateEvent $event */
-        $event = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createMock(ConfigUpdateEvent::class);
 
         $event->expects($this->once())
             ->method('isChanged')
             ->with('oro_locale.timezone')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->listener->onConfigUpdate($event);
     }
 
     public function testSuccessChange()
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|ConfigUpdateEvent $event */
-        $event = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createMock(ConfigUpdateEvent::class);
 
         $event->expects($this->once())
             ->method('isChanged')
             ->with('oro_locale.timezone')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->manager->expects($this->once())
             ->method('resetMetrics');
@@ -83,13 +63,5 @@ class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
             ->method('resetMetrics');
 
         $this->listener->onConfigUpdate($event);
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|CalculateAnalyticsScheduler
-     */
-    private function createCalculateAnalyticsSchedulerMock()
-    {
-        return $this->createMock(CalculateAnalyticsScheduler::class);
     }
 }

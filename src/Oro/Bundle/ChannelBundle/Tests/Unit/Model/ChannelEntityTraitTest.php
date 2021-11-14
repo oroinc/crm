@@ -13,11 +13,11 @@ class ChannelEntityTraitTest extends \PHPUnit\Framework\TestCase
             use ChannelEntityTrait;
         };
 
-        static::assertNull($stub->getDataChannel());
+        self::assertNull($stub->getDataChannel());
 
         $channel = $this->createMock(Channel::class);
         $stub->setDataChannel($channel);
 
-        static::assertSame($channel, $stub->getDataChannel());
+        self::assertSame($channel, $stub->getDataChannel());
     }
 }

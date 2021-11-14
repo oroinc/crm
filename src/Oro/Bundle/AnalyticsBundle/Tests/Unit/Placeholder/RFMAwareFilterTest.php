@@ -2,23 +2,20 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Placeholder;
 
+use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Placeholder\RFMAwareFilter;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class RFMAwareFilterTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var string
-     */
-    protected $interface = 'Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface';
+    private const INTERFACE = AnalyticsAwareInterface::class;
 
-    /**
-     * @var RFMAwareFilter
-     */
-    protected $filter;
+    /** @var RFMAwareFilter */
+    private $filter;
 
     protected function setUp(): void
     {
-        $this->filter = new RFMAwareFilter($this->interface);
+        $this->filter = new RFMAwareFilter(self::INTERFACE);
     }
 
     /**
@@ -31,24 +28,17 @@ class RFMAwareFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->filter->isApplicable($entity));
     }
 
-    /**
-     * @return array
-     */
-    public function applicableDataProvider()
+    public function applicableDataProvider(): array
     {
-        $channelInvalid = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $channelInvalid = $this->createMock(Channel::class);
         $channelInvalid->expects($this->any())
             ->method('getCustomerIdentity')
-            ->will($this->returnValue(new \stdClass()));
-        $channelValid = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerIdentity = $this->createMock($this->interface);
+            ->willReturn(new \stdClass());
+        $channelValid = $this->createMock(Channel::class);
+        $customerIdentity = $this->createMock(self::INTERFACE);
         $channelValid->expects($this->any())
             ->method('getCustomerIdentity')
-            ->will($this->returnValue($customerIdentity));
+            ->willReturn($customerIdentity);
 
         return [
             'not a channel' => [
@@ -76,36 +66,27 @@ class RFMAwareFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->filter->isViewApplicable($entity));
     }
 
-    /**
-     * @return array
-     */
-    public function applicableForViewDataProvider()
+    public function applicableForViewDataProvider(): array
     {
-        $channelInvalid = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $channelInvalid = $this->createMock(Channel::class);
         $channelInvalid->expects($this->any())
             ->method('getCustomerIdentity')
-            ->will($this->returnValue(new \stdClass()));
+            ->willReturn(new \stdClass());
 
-        $channelValidDisabledRFM = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerIdentity = $this->createMock($this->interface);
+        $channelValidDisabledRFM = $this->createMock(Channel::class);
+        $customerIdentity = $this->createMock(self::INTERFACE);
         $channelValidDisabledRFM->expects($this->any())
             ->method('getCustomerIdentity')
-            ->will($this->returnValue($customerIdentity));
+            ->willReturn($customerIdentity);
 
-        $channelValidEnabledRFM = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerIdentity = $this->createMock($this->interface);
+        $channelValidEnabledRFM = $this->createMock(Channel::class);
+        $customerIdentity = $this->createMock(self::INTERFACE);
         $channelValidEnabledRFM->expects($this->any())
             ->method('getCustomerIdentity')
-            ->will($this->returnValue($customerIdentity));
+            ->willReturn($customerIdentity);
         $channelValidEnabledRFM->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue(['rfm_enabled' => true]));
+            ->willReturn(['rfm_enabled' => true]);
 
         return [
             'not a channel' => [

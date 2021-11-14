@@ -8,10 +8,8 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 class GroupTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var Group
-     */
-    protected $group;
+    /** @var Group */
+    private $group;
 
     protected function setUp(): void
     {
@@ -48,8 +46,8 @@ class GroupTest extends \PHPUnit\Framework\TestCase
 
     public function testOrganization()
     {
-        $entity         = new Group();
-        $organization   = new Organization();
+        $entity = new Group();
+        $organization = new Organization();
 
         $this->assertNull($entity->getOrganization());
         $entity->setOrganization($organization);

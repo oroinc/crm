@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class ContactRequestTest extends \PHPUnit\Framework\TestCase
 {
@@ -13,24 +16,20 @@ class ContactRequestTest extends \PHPUnit\Framework\TestCase
 
     public function testSettersAndGetters()
     {
-        $firstName              = uniqid('firstName');
-        $lastName               = uniqid('lastName');
-        $fullName               = sprintf('%s %s', $firstName, $lastName);
-        $email                  = uniqid('@');
-        $comment                = uniqid('comment');
-        $organizationName       = uniqid('organizationName');
+        $firstName = uniqid('firstName');
+        $lastName = uniqid('lastName');
+        $fullName = sprintf('%s %s', $firstName, $lastName);
+        $email = uniqid('@');
+        $comment = uniqid('comment');
+        $organizationName = uniqid('organizationName');
         $preferredContactMethod = uniqid('preferredContactMethod');
-        $feedback               = uniqid('feedback');
-        $phone                  = uniqid('123123');
-        $createdAt              = new \DateTime();
-        $updatedAt              = new \DateTime();
-        $lead                   = $this->createMock('Oro\Bundle\SalesBundle\Entity\Lead');
-        $opportunity            = $this->createMock('Oro\Bundle\SalesBundle\Entity\Opportunity');
-        $contactReason          = $this->createMock(
-            'Oro\Bundle\ContactUsBundle\Entity\ContactReason',
-            [],
-            [uniqid('label')]
-        );
+        $feedback = uniqid('feedback');
+        $phone = uniqid('123123');
+        $createdAt = new \DateTime();
+        $updatedAt = new \DateTime();
+        $lead = $this->createMock(Lead::class);
+        $opportunity = $this->createMock(Opportunity::class);
+        $contactReason = $this->createMock(ContactReason::class);
 
         $request = new ContactRequest();
         $request->setComment($comment);

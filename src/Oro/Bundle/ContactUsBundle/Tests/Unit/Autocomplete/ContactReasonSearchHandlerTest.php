@@ -12,25 +12,33 @@ use Oro\Bundle\ContactUsBundle\Autocomplete\ContactReasonSearchHandler;
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\ContactUsBundle\Tests\Unit\Stub\ContactReasonStub;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Component\Testing\Unit\EntityTrait;
+use Oro\Component\Testing\ReflectionUtil;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ContactReasonSearchHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    use EntityTrait;
-
     /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $doctrineHelper;
 
     /** @var ContactReasonSearchHandler */
     private $searchHandler;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
-        $this->searchHandler = new ContactReasonSearchHandler($this->doctrineHelper, $this->getPropertyAccessor());
+
+        $this->searchHandler = new ContactReasonSearchHandler(
+            $this->doctrineHelper,
+            PropertyAccess::createPropertyAccessor()
+        );
+    }
+
+    private function getContactReason(int $id, string $defaultTitle): ContactReasonStub
+    {
+        $contactReason = new ContactReasonStub($defaultTitle);
+        ReflectionUtil::setId($contactReason, $id);
+
+        return $contactReason;
     }
 
     public function testSearchWithoutQuery()
@@ -39,8 +47,8 @@ class ContactReasonSearchHandlerTest extends \PHPUnit\Framework\TestCase
         $query->expects($this->once())
             ->method('getResult')
             ->willReturn([
-                $this->getEntity(ContactReasonStub::class, ['id' => 2], ['Title #2']),
-                $this->getEntity(ContactReasonStub::class, ['id' => 3], ['Title #3'])
+                $this->getContactReason(2, 'Title #2'),
+                $this->getContactReason(3, 'Title #3')
             ]);
         $queryBuilder = $this->createMock(QueryBuilder::class);
         $queryBuilder->expects($this->any())
@@ -80,8 +88,8 @@ class ContactReasonSearchHandlerTest extends \PHPUnit\Framework\TestCase
         $query->expects($this->once())
             ->method('getResult')
             ->willReturn([
-                $this->getEntity(ContactReasonStub::class, ['id' => 2], ['Title #2']),
-                $this->getEntity(ContactReasonStub::class, ['id' => 3], ['Title #3'])
+                $this->getContactReason(2, 'Title #2'),
+                $this->getContactReason(3, 'Title #3')
             ]);
         $queryBuilder = $this->createMock(QueryBuilder::class);
         $queryBuilder->expects($this->any())
@@ -129,7 +137,7 @@ class ContactReasonSearchHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testConvertItem()
     {
-        $entity = $this->getEntity(ContactReasonStub::class, ['id' => 2], ['Title']);
+        $entity = $this->getContactReason(2, 'Title');
 
         $this->assertEquals(['id' => 2, 'defaultTitle' => 'Title'], $this->searchHandler->convertItem($entity));
     }

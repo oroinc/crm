@@ -12,26 +12,23 @@ use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
 
 class CustomerVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $associationManager;
-
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $configProvider;
+    /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
+    private $configProvider;
 
     /** @var CustomerVirtualRelationProvider */
-    protected $provider;
+    private $provider;
 
     protected function setUp(): void
     {
-        $this->associationManager = $this->createMock(AssociationManager::class);
         $this->configProvider = $this->createMock(ConfigProvider::class);
 
-        $this->provider = new CustomerVirtualRelationProvider($this->associationManager, $this->configProvider);
-        $this->provider->setSourceClass(LeadStub::class);
-
-        $this->associationManager->expects($this->any())
+        $associationManager = $this->createMock(AssociationManager::class);
+        $associationManager->expects($this->any())
             ->method('getAssociationTargets')
             ->willReturn([CustomerStub::class => 'target_field']);
+
+        $this->provider = new CustomerVirtualRelationProvider($associationManager, $this->configProvider);
+        $this->provider->setSourceClass(LeadStub::class);
     }
 
     public function testIsVirtualRelationWithNotSupportedClass()

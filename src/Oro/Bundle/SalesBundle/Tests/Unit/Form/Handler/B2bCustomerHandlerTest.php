@@ -13,30 +13,37 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    const FORM_DATA = ['field' => 'value'];
+    private const FORM_DATA = ['field' => 'value'];
 
-    private \PHPUnit\Framework\MockObject\MockObject|FormInterface $form;
+    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $form;
 
-    private Request $request;
+    /** @var Request */
+    private $request;
 
-    private \PHPUnit\Framework\MockObject\MockObject|ObjectManager $manager;
+    /** @var ObjectManager|\PHPUnit\Framework\MockObject\MockObject */
+    private $manager;
 
-    private B2bCustomerHandler $handler;
+    /** @var RequestChannelProvider|\PHPUnit\Framework\MockObject\MockObject */
+    private $requestChannelProvider;
 
-    private B2bCustomer $entity;
+    /** @var B2bCustomer */
+    private $entity;
 
-    private RequestChannelProvider|\PHPUnit\Framework\MockObject\MockObject $requestChannelProvider;
+    /** @var B2bCustomerHandler */
+    private $handler;
 
     protected function setUp(): void
     {
         $this->form = $this->createMock(Form::class);
         $this->request = new Request();
-        $requestStack = new RequestStack();
-        $requestStack->push($this->request);
         $this->manager = $this->createMock(ObjectManager::class);
         $this->requestChannelProvider = $this->createMock(RequestChannelProvider::class);
+        $this->entity = new B2bCustomer();
 
-        $this->entity  = new B2bCustomer();
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+
         $this->handler = new B2bCustomerHandler(
             $this->form,
             $requestStack,
@@ -69,11 +76,14 @@ class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
         $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod($method);
 
-        $this->form->expects($this->any())->method('setData')
+        $this->form->expects($this->any())
+            ->method('setData')
             ->with($this->entity);
-        $this->form->expects($this->once())->method('submit')
+        $this->form->expects($this->once())
+            ->method('submit')
             ->with(self::FORM_DATA);
-        $this->form->expects($this->once())->method('isValid')
+        $this->form->expects($this->once())
+            ->method('isValid')
             ->willReturn(true);
 
         self::assertTrue($this->handler->process($this->entity));

@@ -12,14 +12,10 @@ use Oro\Bundle\TagBundle\Entity\TagManager;
 
 class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var TagManager|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var TagManager|\PHPUnit\Framework\MockObject\MockObject */
     private $tagManager;
 
-    /**
-     * @var MailboxSavedListener
-     */
+    /** @var MailboxSavedListener */
     private $listener;
 
     protected function setUp(): void
@@ -37,29 +33,31 @@ class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
 
         $settings = $this->createCaseMailboxProcessSettingsMock();
 
-        $mailbox->method('getProcessSettings')
+        $mailbox->expects(self::once())
+            ->method('getProcessSettings')
             ->willReturn($settings);
 
-        $event->method('getMailbox')
+        $event->expects(self::once())
+            ->method('getMailbox')
             ->willReturn($mailbox);
 
         $organization = $this->createOrganizationMock();
 
-        $mailbox->method('getOrganization')
+        $mailbox->expects(self::once())
+            ->method('getOrganization')
             ->willReturn($organization);
 
         $tags = $this->createCollectionMock();
 
-        $settings->method('getTags')
+        $settings->expects(self::once())
+            ->method('getTags')
             ->willReturn($tags);
 
-        $this->tagManager
-            ->expects(static::once())
+        $this->tagManager->expects(self::once())
             ->method('setTags')
             ->with($settings, $tags);
 
-        $this->tagManager
-            ->expects(static::once())
+        $this->tagManager->expects(self::once())
             ->method('saveTagging')
             ->with($settings, true, $organization);
 
@@ -72,14 +70,15 @@ class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
 
         $mailbox = $this->createMailboxMock();
 
-        $mailbox->method('getProcessSettings')
+        $mailbox->expects(self::once())
+            ->method('getProcessSettings')
             ->willReturn(new \stdClass());
 
-        $event->method('getMailbox')
+        $event->expects(self::once())
+            ->method('getMailbox')
             ->willReturn($mailbox);
 
-        $this->tagManager
-            ->expects(static::never())
+        $this->tagManager->expects(self::never())
             ->method('saveTagging');
 
         $this->listener->onMailboxSave($event);

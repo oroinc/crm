@@ -12,22 +12,18 @@ use Oro\Component\TestUtils\ORM\OrmTestCase;
 class RefreshChannelCacheListenerTest extends OrmTestCase
 {
     /** @var StateProvider|\PHPUnit\Framework\MockObject\MockObject */
-    protected $stateProvider;
+    private $stateProvider;
 
     /** @var RefreshChannelCacheListener */
-    protected $refreshChannelCacheListener;
+    private $refreshChannelCacheListener;
 
     /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
-    protected $em;
+    private $em;
 
     protected function setUp(): void
     {
-        $this->stateProvider = $this
-            ->getMockBuilder(StateProvider::class)
-            ->disableOriginalConstructor()->getMock();
-
-        $this->em = $this->getMockBuilder(EntityManager::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->stateProvider = $this->createMock(StateProvider::class);
+        $this->em = $this->createMock(EntityManager::class);
 
         $this->refreshChannelCacheListener = new RefreshChannelCacheListener($this->stateProvider);
     }

@@ -3,22 +3,21 @@
 namespace Oro\Bridge\CallCRM\Tests\Unit\Provider;
 
 use Oro\Bridge\CallCRM\Provider\CallDirectionProvider;
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\CallBundle\Entity\Call;
 use Oro\Bundle\CallBundle\Entity\CallDirection;
 
 class CallDirectionProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var CallDirectionProvider */
-    protected $provider;
+    /** @var ActivityManager|\PHPUnit\Framework\MockObject\MockObject */
+    private $activityManager;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $activityManager;
+    /** @var CallDirectionProvider */
+    private $provider;
 
     protected function setUp(): void
     {
-        $this->activityManager = $this->getMockBuilder('Oro\Bundle\ActivityBundle\Manager\ActivityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->activityManager = $this->createMock(ActivityManager::class);
 
         $this->provider = new CallDirectionProvider($this->activityManager);
     }
@@ -28,7 +27,7 @@ class CallDirectionProviderTest extends \PHPUnit\Framework\TestCase
         $directionName = 'incoming';
 
         $direction = new CallDirection($directionName);
-        $call      = new Call();
+        $call = new Call();
         $call->setDirection($direction);
         $this->assertEquals($directionName, $this->provider->getDirection($call, new \stdClass()));
     }

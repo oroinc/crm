@@ -2,21 +2,23 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
+use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 use Oro\Bundle\SalesBundle\Provider\B2bCustomerPhoneProvider;
 
 class B2bCustomerPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $rootProvider;
+    /** @var PhoneProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $rootProvider;
 
     /** @var B2bCustomerPhoneProvider */
-    protected $provider;
+    private $provider;
 
     protected function setUp(): void
     {
-        $this->rootProvider = $this->createMock('Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface');
+        $this->rootProvider = $this->createMock(PhoneProviderInterface::class);
+
         $this->provider = new B2bCustomerPhoneProvider();
         $this->provider->setRootProvider($this->rootProvider);
     }

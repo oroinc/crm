@@ -10,7 +10,7 @@ class RemoveCustomerAssociationQueryTest extends \PHPUnit\Framework\TestCase
     public function testInitialized()
     {
         $query = new RemoveCustomerAssociationQuery('Some\Entity', 'some_table', true);
-        static::assertEquals(
+        self::assertEquals(
             'Remove association relation from Oro\Bundle\SalesBundle\Entity\Customer entity to Some\Entity '
             . '(association kind: customer, relation type: manyToOne, drop relation column/table: yes, '
             . 'source table: orocrm_sales_customer, target table: some_table).',

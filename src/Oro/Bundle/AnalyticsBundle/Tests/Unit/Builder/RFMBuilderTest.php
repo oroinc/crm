@@ -9,7 +9,7 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 class RFMBuilderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper */
+    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $doctrineHelper;
 
     /** @var RFMBuilder */
@@ -23,32 +23,23 @@ class RFMBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param mixed $entity
-     * @param bool $expected
-     *
      * @dataProvider supportsDataProvider
      */
-    public function testSupports($entity, $expected)
+    public function testSupports(Channel $entity, bool $expected)
     {
-        $this->assertEquals(
-            $expected,
-            $this->builder->supports($entity)
-        );
+        $this->assertSame($expected, $this->builder->supports($entity));
     }
 
-    /**
-     * @return array
-     */
-    public function supportsDataProvider()
+    public function supportsDataProvider(): array
     {
-        $mock = $this->createMock(Channel::class);
-        $mock->expects($this->once())
+        $channel = $this->createMock(Channel::class);
+        $channel->expects($this->once())
             ->method('getCustomerIdentity')
             ->willReturn(new RFMAwareStub());
 
         return [
             [new Channel(), false],
-            [$mock, true],
+            [$channel, true],
         ];
     }
 }

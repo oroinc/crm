@@ -6,10 +6,8 @@ use Oro\Bundle\CaseBundle\Entity\CasePriority;
 
 class CasePriorityTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var CasePriority
-     */
-    protected $casePriority;
+    /** @var CasePriority */
+    private $casePriority;
 
     protected function setUp(): void
     {

@@ -9,6 +9,7 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class SalesFunnelTest extends \PHPUnit\Framework\TestCase
 {
@@ -19,34 +20,27 @@ class SalesFunnelTest extends \PHPUnit\Framework\TestCase
     {
         $obj = new SalesFunnel();
 
-        call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
-        $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
+        call_user_func([$obj, 'set' . ucfirst($property)], $value);
+        $this->assertEquals($expected, call_user_func_array([$obj, 'get' . ucfirst($property)], []));
     }
 
-    public function getSetDataProvider()
+    public function getSetDataProvider(): array
     {
-        $now          = new \DateTime('now');
+        $now = new \DateTime('now');
         $organization = new Organization();
-        $lead         = $this->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Lead')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $opportunity  = $this->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Opportunity')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $user         = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $channel      = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $lead = $this->createMock(Lead::class);
+        $opportunity = $this->createMock(Opportunity::class);
+        $user = $this->createMock(User::class);
 
-        return array(
-            'startDate'    => array('startDate', $now, $now),
-            'lead'         => array('lead', $lead, $lead),
-            'opportunity'  => array('opportunity', $opportunity, $opportunity),
-            'owner'        => array('owner', $user, $user),
-            'createdAt'    => array('createdAt', $now, $now),
-            'updatedAt'    => array('updatedAt', $now, $now),
-            'organization' => array('organization', $organization, $organization)
-        );
+        return [
+            'startDate'    => ['startDate', $now, $now],
+            'lead'         => ['lead', $lead, $lead],
+            'opportunity'  => ['opportunity', $opportunity, $opportunity],
+            'owner'        => ['owner', $user, $user],
+            'createdAt'    => ['createdAt', $now, $now],
+            'updatedAt'    => ['updatedAt', $now, $now],
+            'organization' => ['organization', $organization, $organization]
+        ];
     }
 
     public function testBeforeSave()
@@ -56,7 +50,7 @@ class SalesFunnelTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($obj->getUpdatedAt());
         $obj->beforeSave();
 
-        $this->assertInstanceOf('\DateTime', $obj->getCreatedAt());
+        $this->assertInstanceOf(\DateTime::class, $obj->getCreatedAt());
         $this->assertNull($obj->getUpdatedAt());
     }
 
@@ -67,7 +61,7 @@ class SalesFunnelTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($obj->getUpdatedAt());
         $obj->beforeUpdate();
 
-        $this->assertInstanceOf('\DateTime', $obj->getUpdatedAt());
+        $this->assertInstanceOf(\DateTime::class, $obj->getUpdatedAt());
         $this->assertNull($obj->getCreatedAt());
     }
 

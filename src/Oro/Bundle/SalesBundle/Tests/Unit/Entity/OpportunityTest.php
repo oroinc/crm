@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityTest extends \PHPUnit\Framework\TestCase
@@ -13,31 +15,30 @@ class OpportunityTest extends \PHPUnit\Framework\TestCase
     {
         $obj = new Opportunity();
 
-        call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
-        $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
+        call_user_func([$obj, 'set' . ucfirst($property)], $value);
+        $this->assertEquals($expected, call_user_func_array([$obj, 'get' . ucfirst($property)], []));
     }
 
-    public function getSetDataProvider()
+    public function getSetDataProvider(): array
     {
-        $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
-        return array(
-            'organization' => array('organization', $organization, $organization)
-        );
+        $organization = $this->createMock(Organization::class);
+
+        return [
+            'organization' => ['organization', $organization, $organization]
+        ];
     }
 
     public function testGetEmail()
     {
         $opportunity = new Opportunity();
-        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contact = $this->createMock(Contact::class);
 
         $this->assertNull($opportunity->getEmail());
 
         $opportunity->setContact($contact);
         $contact->expects($this->once())
             ->method('getEmail')
-            ->will($this->returnValue('email@example.com'));
+            ->willReturn('email@example.com');
         $this->assertEquals('email@example.com', $opportunity->getEmail());
     }
 }

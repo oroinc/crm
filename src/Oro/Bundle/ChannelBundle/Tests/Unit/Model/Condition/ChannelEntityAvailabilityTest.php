@@ -2,19 +2,24 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Model\Condition;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability;
+use Oro\Bundle\ChannelBundle\Provider\StateProvider;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Component\ConfigExpression\ContextAccessor;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ChannelEntityAvailability */
-    protected $condition;
+    private $condition;
 
     protected function setUp(): void
     {
-        $stateProvider   = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\StateProvider')
-            ->disableOriginalConstructor()->getMock();
+        $stateProvider = $this->createMock(StateProvider::class);
+
         $this->condition = new ChannelEntityAvailability($stateProvider);
         $this->condition->setContextAccessor(new ContextAccessor());
     }
@@ -27,33 +32,24 @@ class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
      */
     public function testEvaluate(array $options, $expectedResult)
     {
-        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
-        $channel
-            ->expects($this->once())
+        $channel = $this->createMock(Channel::class);
+        $channel->expects($this->once())
             ->method('getEntities')
-            ->willReturn(
-                [
-                    'Oro\Bundle\SalesBundle\Entity\Lead',
-                    'Oro\Bundle\SalesBundle\Entity\Opportunity'
-                ]
-            );
+            ->willReturn([Lead::class, Opportunity::class]);
 
         $this->condition->initialize($options);
         $this->assertEquals($expectedResult, $this->condition->evaluate(['channel' => $channel]));
     }
 
-    /**
-     * @return array
-     */
-    public function evaluateProvider()
+    public function evaluateProvider(): array
     {
         return [
             'full occurrence'     => [
                 'options'        => [
                     new PropertyPath('[channel]'),
                     [
-                        'Oro\Bundle\SalesBundle\Entity\Lead',
-                        'Oro\Bundle\SalesBundle\Entity\Opportunity'
+                        Lead::class,
+                        Opportunity::class
                     ]
                 ],
                 'expectedResult' => true
@@ -62,8 +58,8 @@ class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
                 'options'        => [
                     new PropertyPath('[channel]'),
                     [
-                        'Oro\Bundle\SalesBundle\Entity\Opportunity',
-                        'Oro\Bundle\SalesBundle\Entity\SalesFunnel'
+                        Opportunity::class,
+                        SalesFunnel::class
                     ]
                 ],
                 'expectedResult' => false
@@ -76,6 +72,6 @@ class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Oro\Component\ConfigExpression\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid options count: 0');
 
-        $this->condition->initialize(array());
+        $this->condition->initialize([]);
     }
 }

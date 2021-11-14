@@ -8,6 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Handler\LeadEmailDeleteHandlerExtension;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
@@ -64,7 +65,7 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testAssertDeleteGrantedWhenAccessDenied()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
 
         $leadEmail = new LeadEmail();
@@ -83,7 +84,7 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
 
         $leadEmail = new LeadEmail();

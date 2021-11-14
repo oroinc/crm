@@ -3,33 +3,32 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider;
 
 class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
 {
-    const CLASS_NAME = 'Oro\Bundle\SalesBundle\Entity\B2bCustomer';
+    private const CLASS_NAME = B2bCustomer::class;
 
-    /** @var CustomerAssignmentVirtualRelationProvider */
-    protected $provider;
-
-    /** @var array */
-    protected $config = [
+    private array $config = [
         CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_RELATION_NAME => [
             'label' => 'oro.sales.opportunity.entity_label',
             'relation_type' => 'oneToMany',
-            'related_entity_name' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
+            'related_entity_name' => Opportunity::class,
             'target_join_alias' => CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_TARGET_ALIAS,
             'query' =>[
                 'join' => [
                     'left' => [
                         [
-                            'join' => 'Oro\Bundle\SalesBundle\Entity\Customer',
+                            'join' => Customer::class,
                             'alias' => 'virtualOpportunity_c',
                             'conditionType' => 'WITH',
                             'condition' => 'entity = virtualOpportunity_c.b2b_customer_188b774c'
                         ],
                         [
-                            'join' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
+                            'join' => Opportunity::class,
                             'alias' => 'virtualOpportunity',
                             'conditionType' => 'WITH',
                             'condition' => 'virtualOpportunity_c = virtualOpportunity.customerAssociation'
@@ -41,19 +40,19 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
         CustomerAssignmentVirtualRelationProvider::LEAD_RELATION_NAME => [
             'label' => 'oro.sales.lead.entity_label',
             'relation_type' => 'oneToMany',
-            'related_entity_name' => 'Oro\Bundle\SalesBundle\Entity\Lead',
+            'related_entity_name' => Lead::class,
             'target_join_alias' => CustomerAssignmentVirtualRelationProvider::LEAD_TARGET_ALIAS,
             'query' =>[
                 'join' => [
                     'left' => [
                         [
-                            'join' => 'Oro\Bundle\SalesBundle\Entity\Customer',
+                            'join' => Customer::class,
                             'alias' => 'virtualLead_c',
                             'conditionType' => 'WITH',
                             'condition' => 'entity = virtualLead_c.b2b_customer_188b774c'
                         ],
                         [
-                            'join' => 'Oro\Bundle\SalesBundle\Entity\Lead',
+                            'join' => Lead::class,
                             'alias' => 'virtualLead',
                             'conditionType' => 'WITH',
                             'condition' => 'virtualLead_c = virtualLead.customerAssociation'
@@ -64,6 +63,9 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
         ]
     ];
 
+    /** @var CustomerAssignmentVirtualRelationProvider */
+    private $provider;
+
     protected function setUp(): void
     {
         $this->provider = new CustomerAssignmentVirtualRelationProvider(self::CLASS_NAME);
@@ -71,20 +73,13 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
 
     /**
      * @dataProvider isVirtualRelationDataProvider
-     *
-     * @param string $class
-     * @param string $field
-     * @param bool $expected
      */
-    public function testIsVirtualRelation($class, $field, $expected)
+    public function testIsVirtualRelation(string $class, string $field, bool $expected)
     {
         $this->assertEquals($expected, $this->provider->isVirtualRelation($class, $field));
     }
 
-    /**
-     * @return array
-     */
-    public function isVirtualRelationDataProvider()
+    public function isVirtualRelationDataProvider(): array
     {
         return [
             'not supported class with Opportunity field' => [
@@ -117,19 +112,13 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
 
     /**
      * @dataProvider getVirtualRelationsDataProvider
-     *
-     * @param string $className
-     * @param array $expected
      */
-    public function testGetVirtualRelations($className, array $expected)
+    public function testGetVirtualRelations(string $className, array $expected)
     {
         $this->assertEquals($expected, $this->provider->getVirtualRelations($className));
     }
 
-    /**
-     * @return array
-     */
-    public function getVirtualRelationsDataProvider()
+    public function getVirtualRelationsDataProvider(): array
     {
         return [
             'not supported class' => [
@@ -145,20 +134,13 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
 
     /**
      * @dataProvider getVirtualRelationQueryDataProvider
-     *
-     * @param string $class
-     * @param string $field
-     * @param array $expected
      */
-    public function testGetVirtualRelationQuery($class, $field, array $expected)
+    public function testGetVirtualRelationQuery(string $class, string $field, array $expected)
     {
         $this->assertEquals($expected, $this->provider->getVirtualRelationQuery($class, $field));
     }
 
-    /**
-     * @return array
-     */
-    public function getVirtualRelationQueryDataProvider()
+    public function getVirtualRelationQueryDataProvider(): array
     {
         return [
             'not supported class with Opportunity field' => [
@@ -192,20 +174,13 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
 
     /**
      * @dataProvider getTargetJoinAliasDataProvider
-     *
-     * @param string $class
-     * @param string $field
-     * @param string $expected
      */
-    public function testGetTargetJoinAlias($class, $field, $expected)
+    public function testGetTargetJoinAlias(string $class, string $field, string $expected)
     {
         $this->assertEquals($expected, $this->provider->getTargetJoinAlias($class, $field));
     }
 
-    /**
-     * @return array
-     */
-    public function getTargetJoinAliasDataProvider()
+    public function getTargetJoinAliasDataProvider(): array
     {
         return [
             'not supported class with Opportunity field' => [

@@ -37,7 +37,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $others = array_pop($data);
 
         $this->assertEquals(37, $others['value']);
-        static::assertStringContainsString('others', $others['source']);
+        self::assertStringContainsString('others', $others['source']);
     }
 
     /**
@@ -66,7 +66,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $others = array_pop($data);
 
         $this->assertEquals(11, $others['value']);
-        static::assertStringContainsString('others', $others['source']);
+        self::assertStringContainsString('others', $others['source']);
     }
 
     /**
@@ -79,7 +79,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $unclassified = array_shift($data);
 
         $this->assertEquals(27, $unclassified['value']);
-        static::assertStringContainsString('unclassified', $unclassified['source']);
+        self::assertStringContainsString('unclassified', $unclassified['source']);
     }
 
     /**
@@ -115,39 +115,20 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
     private function getProvider(array $data)
     {
         $doctrine = $this->getDoctrineMock($data);
+        $aclHelper = $this->createMock(AclHelper::class);
+        $processor = $this->createMock(DateFilterProcessor::class);
 
-        /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject $aclHelper */
-        $aclHelper = $this->getMockBuilder(AclHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        /** @var DateFilterProcessor|\PHPUnit\Framework\MockObject\MockObject $processor */
-        $processor = $this->getMockBuilder(DateFilterProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject $translator */
-        $translator = $this->getMockBuilder(TranslatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $translator = $this->createMock(TranslatorInterface::class);
         $translator->expects($this->any())
             ->method('trans')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
-        /** @var EnumExtension|\PHPUnit\Framework\MockObject\MockObject $enumTranslator */
-        $enumTranslator = $this->getMockBuilder(EnumExtension::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $enumTranslator = $this->createMock(EnumExtension::class);
         $enumTranslator->expects($this->any())
             ->method('transEnum')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
-        /** @var CurrencyQueryBuilderTransformerInterface|\PHPUnit\Framework\MockObject\MockObject $qbTransformer */
-        $qbTransformer = $this->getMockBuilder(CurrencyQueryBuilderTransformerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $qbTransformer = $this->createMock(CurrencyQueryBuilderTransformerInterface::class);
 
         return new WidgetOpportunityByLeadSourceProvider(
             $doctrine,
@@ -165,21 +146,15 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
      */
     private function getDoctrineMock(array $data)
     {
-        $repo = $this->getMockBuilder(OpportunityRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $repo = $this->createMock(OpportunityRepository::class);
         $repo->expects($this->any())
             ->method('getOpportunitiesCountGroupByLeadSource')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
-        $doctrine = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $doctrine = $this->createMock(Registry::class);
         $doctrine->expects($this->any())
             ->method('getRepository')
-            ->will($this->returnValue($repo));
+            ->willReturn($repo);
 
         return $doctrine;
     }

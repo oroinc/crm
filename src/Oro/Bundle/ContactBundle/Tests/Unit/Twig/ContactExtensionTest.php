@@ -11,17 +11,15 @@ class ContactExtensionTest extends \PHPUnit\Framework\TestCase
 {
     use TwigExtensionTestCaseTrait;
 
-    /** @var ContactExtension */
-    protected $extension;
+    /** @var SocialUrlFormatter|\PHPUnit\Framework\MockObject\MockObject */
+    private $urlFormatter;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $urlFormatter;
+    /** @var ContactExtension */
+    private $extension;
 
     protected function setUp(): void
     {
-        $this->urlFormatter = $this->getMockBuilder(SocialUrlFormatter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->urlFormatter = $this->createMock(SocialUrlFormatter::class);
 
         $container = self::getContainerBuilder()
             ->add('oro_contact.social_url_formatter', $this->urlFormatter)
@@ -31,24 +29,17 @@ class ContactExtensionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $expectedUrl
-     * @param string $socialType
-     * @param string $username
      * @dataProvider socialUrlDataProvider
      */
-    public function testGetSocialUrl($expectedUrl, $socialType, $username)
+    public function testGetSocialUrl(string $expectedUrl, ?string $socialType, ?string $username)
     {
         if ($socialType && $username) {
             $this->urlFormatter->expects($this->once())
                 ->method('getSocialUrl')
                 ->with($socialType, $username)
-                ->will(
-                    $this->returnCallback(
-                        function ($socialType, $username) {
-                            return 'http://' . $socialType . '/' . $username;
-                        }
-                    )
-                );
+                ->willReturnCallback(function ($socialType, $username) {
+                    return 'http://' . $socialType . '/' . $username;
+                });
         } else {
             $this->urlFormatter->expects($this->never())
                 ->method('getSocialUrl');
@@ -60,27 +51,24 @@ class ContactExtensionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function socialUrlDataProvider()
+    public function socialUrlDataProvider(): array
     {
-        return array(
-            'no type' => array(
+        return [
+            'no type' => [
                 'expectedUrl' => '#',
                 'socialType'  => null,
                 'username'    => 'me',
-            ),
-            'no username' => array(
+            ],
+            'no username' => [
                 'expectedUrl' => '#',
                 'socialType'  => Social::TWITTER,
                 'username'    => null,
-            ),
-            'valid data' => array(
+            ],
+            'valid data' => [
                 'expectedUrl' => 'http://' . Social::TWITTER . '/me',
                 'socialType'  => Social::TWITTER,
                 'username'    => 'me',
-            ),
-        );
+            ],
+        ];
     }
 }

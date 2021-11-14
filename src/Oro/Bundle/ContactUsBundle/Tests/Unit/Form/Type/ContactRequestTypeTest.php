@@ -8,21 +8,17 @@ use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class ContactRequestTypeTest extends TypeTestCase
 {
     /** @var ContactRequestType */
-    protected $formType;
+    private $formType;
 
     protected function setUp(): void
     {
         $this->formType = new ContactRequestType();
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->formType);
     }
 
     public function testHasName()
@@ -32,7 +28,7 @@ class ContactRequestTypeTest extends TypeTestCase
 
     public function testImplementEmbeddedFormInterface()
     {
-        $this->assertTrue($this->formType instanceof EmbeddedFormInterface);
+        $this->assertInstanceOf(EmbeddedFormInterface::class, $this->formType);
 
         $this->assertNotEmpty($this->formType->getDefaultCss());
         $this->assertIsString($this->formType->getDefaultCss());
@@ -43,21 +39,16 @@ class ContactRequestTypeTest extends TypeTestCase
 
     public function testBuildForm()
     {
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()->getMock();
+        $builder = $this->createMock(FormBuilder::class);
 
         $fields = [];
         $builder->expects($this->exactly(7))
             ->method('add')
-            ->will(
-                $this->returnCallback(
-                    function ($fieldName, $fieldType) use (&$fields) {
-                        $fields[$fieldName] = $fieldType;
+            ->willReturnCallback(function ($fieldName, $fieldType) use (&$fields) {
+                $fields[$fieldName] = $fieldType;
 
-                        return new \PHPUnit\Framework\MockObject\Stub\ReturnSelf();
-                    }
-                )
-            );
+                return new \PHPUnit\Framework\MockObject\Stub\ReturnSelf();
+            });
 
         $this->formType->buildForm($builder, ['dataChannelField' => true]);
 

@@ -7,7 +7,8 @@ use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 
 class ContactPhoneTest extends \PHPUnit\Framework\TestCase
 {
-    protected $phone;
+    /** @var ContactPhone */
+    private $phone;
 
     protected function setUp(): void
     {

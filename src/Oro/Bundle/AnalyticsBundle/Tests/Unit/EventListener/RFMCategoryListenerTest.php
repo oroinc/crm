@@ -4,6 +4,7 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener;
 use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
@@ -13,72 +14,54 @@ use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
 class RFMCategoryListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|RFMMetricStateManager
-     */
-    protected $manager;
+    /** @var RFMMetricStateManager|\PHPUnit\Framework\MockObject\MockObject */
+    private $manager;
 
-    /**
-     * @var RFMCategoryListener
-     */
-    protected $listener;
+    /** @var CalculateAnalyticsScheduler */
+    private $scheduler;
 
-    /**
-     * @var CalculateAnalyticsScheduler
-     */
-    protected $scheduler;
+    /** @var RFMCategoryListener */
+    private $listener;
 
     protected function setUp(): void
     {
-        $this->manager = $this->getMockBuilder('Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->scheduler = $this->createCalculateAnalyticsSchedulerMock();
+        $this->manager = $this->createMock(RFMMetricStateManager::class);
+        $this->scheduler = $this->createMock(CalculateAnalyticsScheduler::class);
 
         $this->listener = new RFMCategoryListener(
             $this->manager,
             $this->scheduler,
-            'Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory',
-            'Oro\Bundle\ChannelBundle\Entity\Channel'
+            RFMMetricCategory::class,
+            Channel::class
         );
     }
 
     /**
-     * @param array $updateEntities
-     * @param array $insertEntities
-     * @param array $deleteEntities
-     * @param int $expectedResetMetrics
-     * @param int $expectedScheduleRecalculation
-     *
      * @dataProvider entitiesDataProvider
      */
     public function testEvents(
         array $updateEntities,
         array $insertEntities,
         array $deleteEntities,
-        $expectedResetMetrics = 0,
-        $expectedScheduleRecalculation = 0
+        int $expectedResetMetrics = 0,
+        int $expectedScheduleRecalculation = 0
     ) {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager $em */
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
-        $uow = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')->disableOriginalConstructor()->getMock();
+        $em = $this->createMock(EntityManager::class);
+        $uow = $this->createMock(UnitOfWork::class);
 
         $em->expects($this->once())
             ->method('getUnitOfWork')
-            ->will($this->returnValue($uow));
+            ->willReturn($uow);
 
         $uow->expects($this->once())
             ->method('getScheduledEntityInsertions')
-            ->will($this->returnValue($updateEntities));
-
+            ->willReturn($updateEntities);
         $uow->expects($this->once())
             ->method('getScheduledEntityUpdates')
-            ->will($this->returnValue($insertEntities));
-
+            ->willReturn($insertEntities);
         $uow->expects($this->once())
             ->method('getScheduledEntityDeletions')
-            ->will($this->returnValue($deleteEntities));
+            ->willReturn($deleteEntities);
 
         $this->manager->expects($this->exactly($expectedResetMetrics))
             ->method('resetMetrics');
@@ -95,12 +78,9 @@ class RFMCategoryListenerTest extends \PHPUnit\Framework\TestCase
         $this->listener->onChannelSucceedSave($event);
     }
 
-    /**
-     * @return array
-     */
-    public function entitiesDataProvider()
+    public function entitiesDataProvider(): array
     {
-        $channel = $this->getChannel();
+        $channel = $this->getChannel(1);
         $droppedChannel = $this->getChannel(1, ['rfm_require_drop' => true]);
         $category = $this->getCategory($channel);
 
@@ -138,47 +118,24 @@ class RFMCategoryListenerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @param int $channelId
-     * @param array $data
-     *
-     * @return Channel
-     */
-    protected function getChannel($channelId = 1, array $data = [])
+    private function getChannel(int $channelId, array $data = []): Channel
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|Channel $channel */
-        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
-
+        $channel = $this->createMock(Channel::class);
         $channel->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($channelId));
-
+            ->willReturn($channelId);
         $channel->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
         return $channel;
     }
 
-    /**
-     * @param Channel $channel
-     *
-     * @return RFMMetricCategory
-     */
-    protected function getCategory($channel)
+    private function getCategory(Channel $channel): RFMMetricCategory
     {
         $category = new RFMMetricCategory();
-
         $category->setChannel($channel);
 
         return $category;
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|CalculateAnalyticsScheduler
-     */
-    private function createCalculateAnalyticsSchedulerMock()
-    {
-        return $this->createMock(CalculateAnalyticsScheduler::class);
     }
 }

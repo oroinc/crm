@@ -3,41 +3,41 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider\Customer;
 
 use Oro\Bundle\EntityConfigBundle\Config\Config;
+use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
 use Oro\Bundle\EntityConfigBundle\Entity\ConfigModelIndexValue;
 use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProvider;
 use Oro\Bundle\UIBundle\Model\Image;
 
 class CustomerIconProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerIconProvider */
-    protected $customerIconProvider;
+    private $customerIconProvider;
 
     protected function setUp(): void
     {
         $entityConfigs = [
-            'Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel' => [
+            EntityConfigModel::class     => [
                 'icon' => 'fa-class',
             ],
-            'Oro\Bundle\EntityConfigBundle\Entity\ConfigModelIndexValue' => [],
+            ConfigModelIndexValue::class => [],
         ];
 
-        $configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configProvider = $this->createMock(ConfigProvider::class);
         $configProvider->expects($this->any())
             ->method('hasConfig')
-            ->will($this->returnCallback(function ($className) use ($entityConfigs) {
+            ->willReturnCallback(function ($className) use ($entityConfigs) {
                 return isset($entityConfigs[$className]);
-            }));
+            });
         $configProvider->expects($this->any())
             ->method('getConfig')
-            ->will($this->returnCallback(function ($className) use ($entityConfigs) {
+            ->willReturnCallback(function ($className) use ($entityConfigs) {
                 return new Config(
-                    $this->createMock('Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface'),
+                    $this->createMock(ConfigIdInterface::class),
                     $entityConfigs[$className]
                 );
-            }));
+            });
 
         $this->customerIconProvider = new CustomerIconProvider($configProvider);
     }
@@ -45,7 +45,7 @@ class CustomerIconProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getIconProvider
      */
-    public function testGetIcon($entity, $expectedImage)
+    public function testGetIcon(object $entity, ?Image $expectedImage)
     {
         $this->assertEquals(
             $expectedImage,
@@ -53,7 +53,7 @@ class CustomerIconProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function getIconProvider()
+    public function getIconProvider(): array
     {
         return [
             'entity with icon config' => [

@@ -16,9 +16,6 @@ use Twig\Environment;
 
 class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var OpportunitiesListener */
-    private $listener;
-
     /** @var CustomerConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $provider;
 
@@ -30,6 +27,9 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
 
     /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $configProvider;
+
+    /** @var OpportunitiesListener */
+    private $listener;
 
     protected function setUp(): void
     {
@@ -94,7 +94,7 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
             ->with($customerClass)
             ->willReturn($config);
 
-        $data  = [
+        $data = [
             'dataBlocks' => [
                 'subblocks' => ['title' => 'some title', 'data' => 'some data']
             ]
@@ -131,7 +131,7 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    private function prepareConfigProvider(?object $entity, bool $isCustomerClass = null)
+    private function prepareConfigProvider(?object $entity, bool $isCustomerClass = null): void
     {
         if (null !== $isCustomerClass) {
             $this->provider->expects($this->once())

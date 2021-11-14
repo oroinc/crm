@@ -5,49 +5,34 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class ChannelsByEntitiesProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ChannelsByEntitiesProvider
-     */
-    protected $provider;
+    /** @var ChannelsByEntitiesProvider */
+    private $provider;
 
-    /**
-     * @var ChannelRepository|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $repo;
+    /** @var ChannelRepository|\PHPUnit\Framework\MockObject\MockObject */
+    private $repo;
 
-    /**
-     * @var AclHelper|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $aclHelper;
+    /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
+    private $aclHelper;
 
     protected function setUp(): void
     {
-        $doctrineHelper = $this
-            ->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->repo = $this->createMock(ChannelRepository::class);
+        $this->aclHelper = $this->createMock(AclHelper::class);
 
-        $this->repo = $this
-            ->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $doctrineHelper
-            ->expects($this->once())
+        $doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $doctrineHelper->expects($this->once())
             ->method('getEntityRepositoryForClass')
             ->with('OroChannelBundle:Channel')
             ->willReturn($this->repo);
 
-        $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->aclHelper->expects($this->any())
             ->method('apply')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->provider = new ChannelsByEntitiesProvider($doctrineHelper, $this->aclHelper);
     }
@@ -84,8 +69,7 @@ class ChannelsByEntitiesProviderTest extends \PHPUnit\Framework\TestCase
                 true
             ],
         ];
-        $this->repo
-            ->expects($this->any())
+        $this->repo->expects($this->any())
             ->method('getChannelsByEntities')
             ->with()
             ->willReturnMap([
@@ -95,9 +79,7 @@ class ChannelsByEntitiesProviderTest extends \PHPUnit\Framework\TestCase
 
             ]);
         foreach ($data as $item) {
-            $result     = $item[0];
-            $entities   = $item[1];
-            $status     = $item[2];
+            [$result, $entities,  $status] = $item;
             $this->assertSame($result, $this->provider->getChannelsByEntities($entities, $status));
         }
     }

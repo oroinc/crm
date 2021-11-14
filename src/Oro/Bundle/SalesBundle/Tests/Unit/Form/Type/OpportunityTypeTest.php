@@ -72,10 +72,7 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0.7, $opportunity->getProbability());
     }
 
-    /**
-     * @return array
-     */
-    protected function getDefaultProbabilities()
+    private function getDefaultProbabilities(): array
     {
         return [
             'identification_alignment' => 0.3,
@@ -88,17 +85,9 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @param AbstractEnumValue[] $defaultStatuses
-     *
-     * @return OpportunityType
-     */
-    protected function getFormType(array $defaultStatuses = [])
+    private function getFormType(array $defaultStatuses = []): OpportunityType
     {
-        /** @var ConfigManager|\PHPUnit\Framework\MockObject\MockObject $configManager */
-        $configManager = $this->getMockBuilder(ConfigManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configManager = $this->createMock(ConfigManager::class);
 
         $configManager->expects($this->any())
             ->method('get')
@@ -110,101 +99,46 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
             return $this->getOpportunityStatus($id);
         }, $defaultStatuses);
 
-        $doctrineHelper = $this->getDoctrineHelperMock($defaultStatuses);
-        /** @var EnumTranslationCache|\PHPUnit\Framework\MockObject\MockObject $cache */
-        $cache = $this->createMock(EnumTranslationCache::class);
-        $enumProvider = new EnumValueProvider($doctrineHelper, $cache);
-        $helper = $this->getEnumTypeHelperMock();
+        $repo = $this->createMock(EnumValueRepository::class);
+        $repo->expects($this->any())
+            ->method('getDefaultValues')
+            ->willReturn($defaultStatuses);
+
+        $doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $doctrineHelper->expects($this->any())
+            ->method('getEntityRepository')
+            ->willReturn($repo);
+
+        $enumTypeHelper = $this->createMock(EnumTypeHelper::class);
+        $enumTypeHelper->expects($this->any())
+            ->method('getEnumCode')
+            ->willReturn('opportunity_status');
 
         return new OpportunityType(
             $probabilityProvider,
-            $enumProvider,
-            $helper,
+            new EnumValueProvider($doctrineHelper, $this->createMock(EnumTranslationCache::class)),
+            $enumTypeHelper,
             new OpportunityRelationsBuilder()
         );
     }
 
-    /**
-     * @param AbstractEnumValue[] $defaultValues
-     *
-     * @return DoctrineHelper
-     */
-    protected function getDoctrineHelperMock(array $defaultValues)
+    private function getFormEvent(OpportunityStub $opportunity): FormEvent
     {
-        $repo = $this->getMockBuilder(EnumValueRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $repo->expects($this->any())
-            ->method('getDefaultValues')
-            ->willReturn($defaultValues);
-
-        $doctrine = $this->getMockBuilder(DoctrineHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $doctrine->expects($this->any())
-            ->method('getEntityRepository')
-            ->willReturn($repo);
-
-        /** @var DoctrineHelper $doctrine */
-        return $doctrine;
+        return new FormEvent($this->createMock(FormInterface::class), $opportunity);
     }
 
-    /**
-     * @return EnumTypeHelper
-     */
-    protected function getEnumTypeHelperMock()
-    {
-        $helper = $this->getMockBuilder(EnumTypeHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $helper->expects($this->any())
-            ->method('getEnumCode')
-            ->willReturn('opportunity_status');
-
-        /** @var EnumTypeHelper $helper */
-        return $helper;
-    }
-
-    /**
-     * @param mixed $data
-     *
-     * @return FormEvent
-     */
-    protected function getFormEvent($data = null)
-    {
-        $form = $this->createMock(FormInterface::class);
-
-        return new FormEvent($form, $data);
-    }
-
-    /**
-     * @param string $id
-     *
-     * @return AbstractEnumValue
-     */
-    protected function getOpportunityStatus($id)
+    private function getOpportunityStatus(string $id): AbstractEnumValue
     {
         return new TestEnumValue($id, $id);
     }
 
-    /**
-     * @param string|null $statusId
-     * @param float|null $probability
-     *
-     * @return OpportunityStub
-     */
-    protected function getOpportunity($statusId = null, $probability = null)
+    private function getOpportunity(string $statusId = null, float $probability = null): OpportunityStub
     {
         $opportunity = new OpportunityStub();
-
-        if ($statusId) {
+        if (null !== $statusId) {
             $opportunity->setStatus($this->getOpportunityStatus($statusId));
         }
-
-        if ($probability) {
+        if (null !== $probability) {
             $opportunity->setProbability($probability);
         }
 

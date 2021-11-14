@@ -40,9 +40,6 @@ class EntityVariablesProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->variableProvider->getVariableDefinitions());
     }
 
-    /**
-     * @inheridoc
-     */
     public function testGetVariableProcessors(): void
     {
         $this->assertEmpty($this->variableProvider->getVariableProcessors('acme'));

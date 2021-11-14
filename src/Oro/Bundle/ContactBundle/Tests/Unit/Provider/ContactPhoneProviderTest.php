@@ -9,7 +9,7 @@ use Oro\Bundle\ContactBundle\Provider\ContactPhoneProvider;
 class ContactPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ContactPhoneProvider */
-    protected $provider;
+    private $provider;
 
     protected function setUp(): void
     {

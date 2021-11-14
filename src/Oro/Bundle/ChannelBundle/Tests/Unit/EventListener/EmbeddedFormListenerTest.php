@@ -2,8 +2,13 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\EventListener\EmbeddedFormListener;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\EmbeddedFormStub;
 use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
+use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
@@ -11,27 +16,32 @@ use Twig\Environment;
 class EmbeddedFormListenerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Request */
-    protected $request;
+    private $request;
+
+    /** @var RequestStack */
+    private $requestStack;
+
+    /** @var EmbeddedFormListener */
+    private $listener;
 
     protected function setUp(): void
     {
         $this->request = new Request([], [], ['_route' => 'oro_embedded_form_']);
+        $this->requestStack = new RequestStack();
+
+        $this->listener = new EmbeddedFormListener($this->requestStack);
     }
 
     public function testAddDataChannelField()
     {
-        $env = $this->getMockBuilder(Environment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $env = $this->createMock(Environment::class);
         $newField = "<input>";
 
         $env->expects($this->once())
             ->method('render')
-            ->will($this->returnValue($newField));
+            ->willReturn($newField);
 
-        $formView = $this->getMockBuilder('Symfony\Component\Form\FormView')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formView = $this->createMock(FormView::class);
         $currentFormData = 'someHTML';
         $formData = [
             'dataBlocks' => [
@@ -43,73 +53,62 @@ class EmbeddedFormListenerTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $event = $this->getMockBuilder('Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createMock(BeforeFormRenderEvent::class);
         $event->expects($this->once())
             ->method('getTwigEnvironment')
-            ->will($this->returnValue($env));
+            ->willReturn($env);
         $event->expects($this->once())
             ->method('getFormData')
-            ->will($this->returnValue($formData));
+            ->willReturn($formData);
         $event->expects($this->once())
             ->method('getForm')
-            ->will($this->returnValue($formView));
+            ->willReturn($formView);
 
         array_unshift($formData['dataBlocks'][0]['subblocks'][0]['data'], $newField);
         $event->expects($this->once())
             ->method('setFormData')
             ->with($formData);
 
-        $requestStack = new RequestStack();
-        $requestStack->push($this->request);
-        $listener = new EmbeddedFormListener($requestStack);
-        $listener->addDataChannelField($event);
+        $this->requestStack->push($this->request);
+
+        $this->listener->addDataChannelField($event);
     }
 
     public function testAddDataChannelFieldNoRequest()
     {
-        $requestStack = new RequestStack();
-        $listener = new EmbeddedFormListener($requestStack);
-        $event = $this->getMockBuilder('Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createMock(BeforeFormRenderEvent::class);
         $event->expects($this->never())
             ->method($this->anything());
-        $listener->addDataChannelField($event);
+        $this->listener->addDataChannelField($event);
     }
 
     public function testOnEmbeddedFormSubmit()
     {
-        $formEntity = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\EmbeddedFormStub')
-            ->disableOriginalConstructor()->getMock();
+        $formEntity = $this->createMock(EmbeddedFormStub::class);
         $formEntity->expects($this->never())
             ->method('getDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent([], $formEntity);
 
-        $requestStack = new RequestStack();
-        $requestStack->push($this->request);
-        $listener = new EmbeddedFormListener($requestStack);
-        $listener->onEmbeddedFormSubmit($event);
+        $this->requestStack->push($this->request);
+
+        $this->listener->onEmbeddedFormSubmit($event);
     }
 
     public function testOnEmbeddedFormSubmitWithDataChannel()
     {
-        $formEntity = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\EmbeddedFormStub')
-            ->disableOriginalConstructor()->getMock();
+        $formEntity = $this->createMock(EmbeddedFormStub::class);
 
-        $dataChannel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $dataChannel = $this->createMock(Channel::class);
         $formEntity->expects($this->once())
             ->method('getDataChannel')
-            ->will($this->returnValue($dataChannel));
-        $data = $this->createMock('Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface');
+            ->willReturn($dataChannel);
+        $data = $this->createMock(ChannelAwareInterface::class);
         $data->expects($this->once())
             ->method('setDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent($data, $formEntity);
 
-        $requestStack = new RequestStack();
-        $requestStack->push($this->request);
-        $listener = new EmbeddedFormListener($requestStack);
-        $listener->onEmbeddedFormSubmit($event);
+        $this->requestStack->push($this->request);
+
+        $this->listener->onEmbeddedFormSubmit($event);
     }
 }

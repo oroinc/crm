@@ -9,15 +9,17 @@ use Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityProbabilitySubs
 
 class OpportunityProbabilitySubscriberTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var OpportunityProbabilitySubscriber */
-    protected $subscriber;
     /** @var Opportunity */
-    protected $opportunity;
+    private $opportunity;
+
+    /** @var OpportunityProbabilitySubscriber */
+    private $subscriber;
 
     protected function setUp(): void
     {
-        $this->subscriber  = new OpportunityProbabilitySubscriber();
         $this->opportunity = new Opportunity();
+
+        $this->subscriber = new OpportunityProbabilitySubscriber();
     }
 
     public function testBeforeNormalize()

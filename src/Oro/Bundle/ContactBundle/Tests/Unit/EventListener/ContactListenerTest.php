@@ -35,7 +35,9 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
         $user = $mockUser ? new User() : null;
         $this->mockSecurityContext($mockToken, $mockUser, $user);
 
-        $em = $this->getEntityManager();
+        $em = $this->createMock(EntityManager::class);
+        $em->expects($this->never())
+            ->method('find');
 
         if ($mockUser) {
             $uow = $this->createMock(UnitOfWork::class);
@@ -69,9 +71,9 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
             ->setCreatedAt($createdAt)
             ->setCreatedBy($createdBy);
 
-        $this->mockSecurityContext();
-
-        $em = $this->getEntityManager();
+        $em = $this->createMock(EntityManager::class);
+        $em->expects($this->never())
+            ->method('find');
 
         $args = new LifecycleEventArgs($entity, $em);
 
@@ -107,8 +109,17 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
 
         $unitOfWork = $this->createMock(UnitOfWork::class);
 
-        $entityManager = $this->getEntityManager($reloadUser, $newUser);
-        $entityManager->expects($this->any())
+        $em = $this->createMock(EntityManager::class);
+        if ($reloadUser) {
+            $em->expects($this->once())
+                ->method('find')
+                ->with('OroUserBundle:User')
+                ->willReturn($newUser);
+        } else {
+            $em->expects($this->never())
+                ->method('find');
+        }
+        $em->expects($this->any())
             ->method('getUnitOfWork')
             ->willReturn($unitOfWork);
 
@@ -126,7 +137,7 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
             );
 
         $changeSet = [];
-        $args = new PreUpdateEventArgs($entity, $entityManager, $changeSet);
+        $args = new PreUpdateEventArgs($entity, $em, $changeSet);
 
         $this->contactListener->preUpdate($entity, $args);
 
@@ -194,26 +205,6 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
         $this->contactListener->preUpdate($contact, $args);
         $this->assertGreaterThanOrEqual($firstUpdatedAt, $contact->getUpdatedAt());
         $this->assertNull($contact->getUpdatedBy());
-    }
-
-    /**
-     * @return EntityManager|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private function getEntityManager(?bool $reloadUser = false, object $newUser = null)
-    {
-        $result = $this->createMock(EntityManager::class);
-
-        if ($reloadUser) {
-            $result->expects($this->once())
-                ->method('find')
-                ->with('OroUserBundle:User')
-                ->willReturn($newUser);
-        } else {
-            $result->expects($this->never())
-                ->method('find');
-        }
-
-        return $result;
     }
 
     private function mockSecurityContext(bool $mockToken = false, bool  $mockUser = false, User $user = null): void

@@ -12,9 +12,6 @@ class ContactReasonSelectTypeTest extends TypeTestCase
     /** @var ContactReasonSelectType */
     private $formType;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
         $this->formType = new ContactReasonSelectType();
@@ -36,21 +33,19 @@ class ContactReasonSelectTypeTest extends TypeTestCase
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with($this->isType('array'))
-            ->willReturnCallback(
-                function (array $options) {
-                    $this->assertArrayHasKey('autocomplete_alias', $options);
-                    $this->assertArrayHasKey('create_form_route', $options);
-                    $this->assertArrayHasKey('configs', $options);
-                    $this->assertEquals('contact_reasons', $options['autocomplete_alias']);
-                    $this->assertEquals('oro_contactus_reason_create', $options['create_form_route']);
-                    $this->assertEquals(
-                        [
-                            'placeholder' => 'oro.contactus.form.choose_contact_reason'
-                        ],
-                        $options['configs']
-                    );
-                }
-            );
+            ->willReturnCallback(function (array $options) {
+                $this->assertArrayHasKey('autocomplete_alias', $options);
+                $this->assertArrayHasKey('create_form_route', $options);
+                $this->assertArrayHasKey('configs', $options);
+                $this->assertEquals('contact_reasons', $options['autocomplete_alias']);
+                $this->assertEquals('oro_contactus_reason_create', $options['create_form_route']);
+                $this->assertEquals(
+                    [
+                        'placeholder' => 'oro.contactus.form.choose_contact_reason'
+                    ],
+                    $options['configs']
+                );
+            });
 
         $this->formType->configureOptions($resolver);
     }

@@ -37,10 +37,7 @@ class ContactRequestCallbackValidatorTest extends \PHPUnit\Framework\TestCase
         ContactRequestCallbackValidator::validate($request, $context);
     }
 
-    /**
-     * @return array
-     */
-    public function validationDataProvider()
+    public function validationDataProvider(): array
     {
         return [
             'phone only required'                 => [

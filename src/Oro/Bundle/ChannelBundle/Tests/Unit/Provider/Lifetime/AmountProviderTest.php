@@ -14,10 +14,10 @@ use Oro\Component\TestUtils\ORM\OrmTestCase;
 class AmountProviderTest extends OrmTestCase
 {
     /** @var EntityManager */
-    protected $em;
+    private $em;
 
     /** @var AmountProvider */
-    protected $provider;
+    private $provider;
 
     protected function setUp(): void
     {
@@ -38,11 +38,6 @@ class AmountProviderTest extends OrmTestCase
         $this->provider = new AmountProvider($registry);
     }
 
-    protected function tearDown(): void
-    {
-        unset($this->provider, $this->registry);
-    }
-
     /**
      * @dataProvider lifetimeValueProvider
      *
@@ -53,8 +48,7 @@ class AmountProviderTest extends OrmTestCase
     public function testGetAccountLifetime($expectedSQL, $result, $channel = null)
     {
         $smt = $this->createFetchStatementMock([['sclr_0' => $result]]);
-        $this->getDriverConnectionMock($this->em)
-            ->expects($this->once())
+        $this->getDriverConnectionMock($this->em)->expects($this->once())
             ->method('prepare')
             ->with($expectedSQL)
             ->willReturn($smt);
@@ -63,10 +57,7 @@ class AmountProviderTest extends OrmTestCase
         $this->assertSame($result, $this->provider->getAccountLifeTimeValue($account, $channel));
     }
 
-    /**
-     * @return array
-     */
-    public function lifetimeValueProvider()
+    public function lifetimeValueProvider(): array
     {
         $channel = $this->createMock(Channel::class);
 

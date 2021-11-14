@@ -12,13 +12,13 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 class UpdateIntegrationConnectorsListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject|ManagerRegistry */
+    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
     private $registry;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|SettingsProvider */
+    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $settingProvider;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|ChannelSaveEvent */
+    /** @var ChannelSaveEvent|\PHPUnit\Framework\MockObject\MockObject */
     private $event;
 
     /** @var Channel */
@@ -27,8 +27,11 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit\Framework\TestCas
     /** @var Integration */
     private $integration;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager */
+    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
     private $em;
+
+    /** @var UpdateIntegrationConnectorsListener */
+    private $listener;
 
     protected function setUp(): void
     {
@@ -40,17 +43,18 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit\Framework\TestCas
         $this->integration = new Integration();
 
         $this->entity->setDataSource($this->integration);
+
+        $this->listener = new UpdateIntegrationConnectorsListener(
+            $this->settingProvider,
+            $this->registry
+        );
     }
 
     public function testOnChannelSave()
     {
         $this->prepareEvent();
 
-        $channelSaveSucceedListener = new UpdateIntegrationConnectorsListener(
-            $this->settingProvider,
-            $this->registry
-        );
-        $channelSaveSucceedListener->onChannelSave($this->event);
+        $this->listener->onChannelSave($this->event);
 
         $this->assertEquals(
             ['TestConnector1', 'TestConnector2'],

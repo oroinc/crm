@@ -20,10 +20,7 @@ class SocialUrlFormatterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($link, $formatter->getSocialUrl(Social::TWITTER, $username));
     }
 
-    /**
-     * @return array
-     */
-    public function urlProvider()
+    public function urlProvider(): array
     {
         return [
             [
@@ -60,10 +57,7 @@ class SocialUrlFormatterTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function usernameProvider()
+    public function usernameProvider(): array
     {
         return [
             [
@@ -94,7 +88,7 @@ class SocialUrlFormatterTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown social network type "type"');
 
-        $formatter = new SocialUrlFormatter(array());
+        $formatter = new SocialUrlFormatter([]);
         $formatter->getSocialUrl('type', 'me');
     }
 
@@ -103,7 +97,7 @@ class SocialUrlFormatterTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown social network type "type"');
 
-        $formatter = new SocialUrlFormatter(array());
+        $formatter = new SocialUrlFormatter([]);
         $formatter->getSocialUsername('type', 'me');
     }
 }

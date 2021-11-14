@@ -2,32 +2,27 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Oro\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
 {
-    const TEST_ENTITY_NAME = 'TestBundle\Entity\Test';
-    const TEST_ASSOC_NAME  = 'relation';
-    const TEST_FIELD_NAME  = 'field';
+    private const TEST_ENTITY_NAME = 'TestBundle\Entity\Test';
+    private const TEST_ASSOC_NAME = 'relation';
+    private const TEST_FIELD_NAME = 'field';
 
     /** @var ChannelEntityExclusionProvider */
-    protected $exclusionProvider;
+    private $exclusionProvider;
 
     /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
-    protected $settingsProvider;
+    private $settingsProvider;
 
     protected function setUp(): void
     {
-        $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
-            ->disableOriginalConstructor()->getMock();
+        $this->settingsProvider = $this->createMock(SettingsProvider::class);
 
         $this->exclusionProvider = new ChannelEntityExclusionProvider($this->settingsProvider);
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->exclusionProvider, $this->settingsProvider);
     }
 
     /**
@@ -39,16 +34,16 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
     public function testIsEntityExcluded($expected, $isChannelEntity)
     {
         $this->settingsProvider->expects($this->any())
-            ->method('isChannelEntity')->with($this->equalTo(self::TEST_ENTITY_NAME))
-            ->will($this->returnValue($isChannelEntity));
+            ->method('isChannelEntity')
+            ->with(self::TEST_ENTITY_NAME)
+            ->willReturn($isChannelEntity);
 
         $this->assertSame($expected, $this->exclusionProvider->isIgnoredEntity(self::TEST_ENTITY_NAME));
     }
 
     public function testIsRelationExcluded()
     {
-        $classMetadataMock = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()->getMock();
+        $classMetadataMock = $this->createMock(ClassMetadata::class);
 
         $this->assertFalse(
             $this->exclusionProvider->isIgnoredRelation($classMetadataMock, self::TEST_ASSOC_NAME),
@@ -58,8 +53,7 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testIsFieldExcluded()
     {
-        $classMetadataMock = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()->getMock();
+        $classMetadataMock = $this->createMock(ClassMetadata::class);
 
         $this->assertFalse(
             $this->exclusionProvider->isIgnoredField($classMetadataMock, self::TEST_FIELD_NAME),
@@ -67,10 +61,7 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function exclusionProvider()
+    public function exclusionProvider(): array
     {
         return [
             'not related to channel entity given, should be skipped'                          => [true, false, null],

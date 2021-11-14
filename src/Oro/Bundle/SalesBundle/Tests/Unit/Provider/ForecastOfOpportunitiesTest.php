@@ -10,76 +10,49 @@ use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
+use Oro\Bundle\TranslationBundle\Translation\Translator;
 use Oro\Component\Testing\ReflectionUtil;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ForecastOfOpportunities */
-    protected $provider;
-
     /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
-    protected $translator;
-
-    /** @var NumberFormatter|\PHPUnit\Framework\MockObject\MockObject */
-    protected $numberFormatter;
-
-    /** @var DateTimeFormatterInterface|\PHPUnit\Framework\MockObject\MockObject */
-    protected $dateTimeFormatter;
+    private $translator;
 
     /** @var ForecastProvider|\PHPUnit\Framework\MockObject\MockObject */
-    protected $forecastProvider;
+    private $forecastProvider;
 
     /** @var DateHelper|\PHPUnit\Framework\MockObject\MockObject */
-    protected $dateHelper;
+    private $dateHelper;
 
     /** @var FilterDateRangeConverter|\PHPUnit\Framework\MockObject\MockObject */
-    protected $filterDateRangeConverter;
+    private $filterDateRangeConverter;
+
+    /** @var ForecastOfOpportunities */
+    private $provider;
 
     protected function setUp(): void
     {
-        $this->translator = $this->getMockBuilder('Oro\Bundle\TranslationBundle\Translation\Translator')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->translator = $this->createMock(Translator::class);
+        $this->dateHelper = $this->createMock(DateHelper::class);
+        $this->forecastProvider = $this->createMock(ForecastProvider::class);
+        $this->filterDateRangeConverter = $this->createMock(FilterDateRangeConverter::class);
 
-        $this->numberFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\NumberFormatter')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->numberFormatter
-            ->expects($this->any())
+        $numberFormatter = $this->createMock(NumberFormatter::class);
+        $numberFormatter->expects($this->any())
             ->method($this->anything())
             ->withAnyParameters()
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
-        $this->dateTimeFormatter = $this
-            ->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->dateTimeFormatter
-            ->expects($this->any())
+        $dateTimeFormatter = $this->createMock(DateTimeFormatterInterface::class);
+        $dateTimeFormatter->expects($this->any())
             ->method($this->anything())
             ->withAnyParameters()
-            ->will($this->returnArgument(0));
-
-        $this->dateHelper = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Helper\DateHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->forecastProvider = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->filterDateRangeConverter = $this
-            ->getMockBuilder('Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->willReturnArgument(0);
 
         $this->provider = new ForecastOfOpportunities(
-            $this->numberFormatter,
-            $this->dateTimeFormatter,
+            $numberFormatter,
+            $dateTimeFormatter,
             $this->translator,
             $this->dateHelper,
             $this->forecastProvider,
@@ -87,21 +60,9 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown(): void
-    {
-        unset(
-            $this->numberFormatter,
-            $this->dateTimeFormatter,
-            $this->translator,
-            $this->dateHelper,
-            $this->widgetProviderFilter,
-            $this->provider
-        );
-    }
-
     public function testForecastOfOpportunitiesValues()
     {
-        $options       = [
+        $options = [
             'dateRange' => ['start' => null, 'end' => null]
         ];
         $widgetOptions = new WidgetOptionBag($options);
@@ -109,7 +70,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
         $this->forecastProvider->expects($this->exactly(3))
             ->method('getForecastData')
             ->with($widgetOptions, null, null)
-            ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
+            ->willReturn(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]);
 
         $result = $this->provider
             ->getForecastOfOpportunitiesValues($widgetOptions, 'inProgressCount', 'integer', false);
@@ -130,7 +91,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
         $start->setDate(2016, 6, 1)->setTime(0, 0, 0);
         $end = clone $start;
         $end->setDate(2016, 7, 1);
-        $diff      = $start->diff($end);
+        $diff = $start->diff($end);
         $prevStart = clone $start;
         $prevStart->sub($diff);
         $prevEnd = clone $end;
@@ -138,7 +99,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
         $prevStart->setTime(0, 0, 0);
         $prevEnd->setTime(23, 59, 59);
 
-        $dateRange     = [
+        $dateRange = [
             'start' => $start,
             'end' => $end,
             'prev_start' => $prevStart,
@@ -159,8 +120,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
 
             return ['inProgressCount' => 2, 'budgetAmount' => 200, 'weightedForecast' => 50];
         };
-        $this->dateHelper
-            ->expects($this->once())
+        $this->dateHelper->expects($this->once())
             ->method('getCurrentDateTime')
             ->willReturn(new \DateTime());
 
@@ -174,12 +134,12 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
                 $this->logicalOr($end, $prevEnd),
                 $this->logicalOr(null, $prevMoment)
             )
-            ->will($this->returnCallback($forecastDataCallback));
+            ->willReturnCallback($forecastDataCallback);
 
         $this->filterDateRangeConverter->expects($this->any())
             ->method('getViewValue')
             ->with(['start' => $prevStart, 'end' => $prevEnd, 'type' => AbstractDateFilterType::TYPE_BETWEEN])
-            ->will($this->returnValue('prev range'));
+            ->willReturn('prev range');
 
         $result = $this->provider
             ->getForecastOfOpportunitiesValues($widgetOptions, 'inProgressCount', 'integer', false);

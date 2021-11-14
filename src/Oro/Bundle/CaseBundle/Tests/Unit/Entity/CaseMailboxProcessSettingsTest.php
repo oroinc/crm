@@ -20,7 +20,7 @@ class CaseMailboxProcessSettingsTest extends \PHPUnit\Framework\TestCase
     {
         $entity = new CaseMailboxProcessSettings();
 
-        static::assertInstanceOf(ArrayCollection::class, $entity->getTags());
+        self::assertInstanceOf(ArrayCollection::class, $entity->getTags());
 
         $this->assertPropertyAccessors(
             $entity,

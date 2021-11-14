@@ -12,15 +12,15 @@ use Oro\Component\TestUtils\ORM\OrmTestCase;
 
 class ChannelHelperTest extends OrmTestCase
 {
-    const TEST_INTEGRATION_ID_WITH_CHANNEL    = 1;
-    const TEST_INTEGRATION_ID_WITHOUT_CHANNEL = 2;
-    const TEST_CHANNEL_ID                     = 2;
+    private const TEST_INTEGRATION_ID_WITH_CHANNEL = 1;
+    private const TEST_INTEGRATION_ID_WITHOUT_CHANNEL = 2;
+    private const TEST_CHANNEL_ID = 2;
 
     /** @var ChannelHelper */
-    protected $helper;
+    private $helper;
 
     /** @var EntityManager */
-    protected $em;
+    private $em;
 
     protected function setUp(): void
     {
@@ -39,11 +39,6 @@ class ChannelHelperTest extends OrmTestCase
             ->willReturn($this->em);
 
         $this->helper = new ChannelHelper($registry);
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->em, $this->helper);
     }
 
     /**
@@ -68,13 +63,11 @@ class ChannelHelperTest extends OrmTestCase
         $existingChannelId     = self::TEST_CHANNEL_ID;
         $this->getDriverConnectionMock($this->em)->expects($this->atLeastOnce())
             ->method('query')
-            ->willReturnCallback(
-                function () use ($integrationId, $expected, $existingIntegrationId, $existingChannelId) {
-                    return $this->createFetchStatementMock(
-                        [['id_0' => $existingChannelId, 'id_1' => $existingIntegrationId]]
-                    );
-                }
-            );
+            ->willReturnCallback(function () use ($existingIntegrationId, $existingChannelId) {
+                return $this->createFetchStatementMock(
+                    [['id_0' => $existingChannelId, 'id_1' => $existingIntegrationId]]
+                );
+            });
 
         $result1 = $this->helper->getChannel($integration, $optional);
         $result2 = $this->helper->getChannel($integration, $optional);
@@ -82,10 +75,7 @@ class ChannelHelperTest extends OrmTestCase
         $this->assertSame($result1, $result2, 'Ensure query executed once');
     }
 
-    /**
-     * @return array
-     */
-    public function getChannelDataProvider()
+    public function getChannelDataProvider(): array
     {
         return [
             'should return channel'                              => [

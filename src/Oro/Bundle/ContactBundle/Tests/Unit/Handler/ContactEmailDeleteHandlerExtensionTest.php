@@ -9,6 +9,7 @@ use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Handler\ContactEmailDeleteHandlerExtension;
 use Oro\Bundle\EntityBundle\Handler\EntityDeleteAccessDeniedExceptionFactory;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
@@ -67,7 +68,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testAssertDeleteGrantedWhenAccessDenied()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
 
         $contactEmail = new ContactEmail();
@@ -86,7 +87,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
 
         $contactEmail = new ContactEmail();
@@ -150,7 +151,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testAssertDeleteGrantedWhenLastEmailIsDeletedAndContactDoesNotHaveOtherIdentification()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
 
         $contactEmail = new ContactEmail();

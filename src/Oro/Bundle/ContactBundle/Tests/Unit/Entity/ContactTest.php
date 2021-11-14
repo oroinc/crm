@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Country;
@@ -10,6 +11,10 @@ use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\ContactBundle\Entity\Method;
+use Oro\Bundle\ContactBundle\Entity\Source;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -20,18 +25,18 @@ class ContactTest extends \PHPUnit\Framework\TestCase
     public function testGetGroupLabels()
     {
         $entity = new Contact();
-        $this->assertEquals(array(), $entity->getGroupLabels());
+        $this->assertEquals([], $entity->getGroupLabels());
 
         $groupOne = new Group('Group One');
         $entity->addGroup($groupOne);
-        $this->assertEquals(array('Group One'), $entity->getGroupLabels());
+        $this->assertEquals(['Group One'], $entity->getGroupLabels());
 
         $groupTwo = new Group('Group Two');
         $entity->addGroup($groupTwo);
-        $this->assertEquals(array('Group One', 'Group Two'), $entity->getGroupLabels());
+        $this->assertEquals(['Group One', 'Group Two'], $entity->getGroupLabels());
 
         $entity->removeGroup($groupOne);
-        $this->assertEquals(array('Group Two'), $entity->getGroupLabels());
+        $this->assertEquals(['Group Two'], $entity->getGroupLabels());
     }
 
     public function testGetGroupLabelsAsString()
@@ -82,33 +87,33 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $emailOne = new ContactEmail('email-one@example.com');
         $emailTwo = new ContactEmail('email-two@example.com');
         $emailThree = new ContactEmail('email-three@example.com');
-        $emails = array($emailOne, $emailTwo);
+        $emails = [$emailOne, $emailTwo];
 
         $contact = new Contact();
         $this->assertSame($contact, $contact->resetEmails($emails));
         $actual = $contact->getEmails();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
         $this->assertEquals($emails, $actual->toArray());
 
         $this->assertSame($contact, $contact->addEmail($emailTwo));
         $actual = $contact->getEmails();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
         $this->assertEquals($emails, $actual->toArray());
 
         $this->assertSame($contact, $contact->addEmail($emailThree));
         $actual = $contact->getEmails();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals(array($emailOne, $emailTwo, $emailThree), $actual->toArray());
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
+        $this->assertEquals([$emailOne, $emailTwo, $emailThree], $actual->toArray());
 
         $this->assertSame($contact, $contact->removeEmail($emailOne));
         $actual = $contact->getEmails();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals(array(1 => $emailTwo, 2 => $emailThree), $actual->toArray());
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
+        $this->assertEquals([1 => $emailTwo, 2 => $emailThree], $actual->toArray());
 
         $this->assertSame($contact, $contact->removeEmail($emailOne));
         $actual = $contact->getEmails();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals(array(1 => $emailTwo, 2 => $emailThree), $actual->toArray());
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
+        $this->assertEquals([1 => $emailTwo, 2 => $emailThree], $actual->toArray());
     }
 
     public function testGetPrimaryEmail()
@@ -175,33 +180,33 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $phoneOne = new ContactPhone('06001122334455');
         $phoneTwo = new ContactPhone('07001122334455');
         $phoneThree = new ContactPhone('08001122334455');
-        $phones = array($phoneOne, $phoneTwo);
+        $phones = [$phoneOne, $phoneTwo];
 
         $contact = new Contact();
         $this->assertSame($contact, $contact->resetPhones($phones));
         $actual = $contact->getPhones();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
         $this->assertEquals($phones, $actual->toArray());
 
         $this->assertSame($contact, $contact->addPhone($phoneTwo));
         $actual = $contact->getPhones();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
         $this->assertEquals($phones, $actual->toArray());
 
         $this->assertSame($contact, $contact->addPhone($phoneThree));
         $actual = $contact->getPhones();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals(array($phoneOne, $phoneTwo, $phoneThree), $actual->toArray());
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
+        $this->assertEquals([$phoneOne, $phoneTwo, $phoneThree], $actual->toArray());
 
         $this->assertSame($contact, $contact->removePhone($phoneOne));
         $actual = $contact->getPhones();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals(array(1 => $phoneTwo, 2 => $phoneThree), $actual->toArray());
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
+        $this->assertEquals([1 => $phoneTwo, 2 => $phoneThree], $actual->toArray());
 
         $this->assertSame($contact, $contact->removePhone($phoneOne));
         $actual = $contact->getPhones();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals(array(1 => $phoneTwo, 2 => $phoneThree), $actual->toArray());
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
+        $this->assertEquals([1 => $phoneTwo, 2 => $phoneThree], $actual->toArray());
     }
 
     public function testGetPrimaryPhone()
@@ -271,33 +276,33 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $addressTwo->setCountry(new Country('UK'));
         $addressThree = new ContactAddress();
         $addressThree->setCountry(new Country('RU'));
-        $addresses = array($addressOne, $addressTwo);
+        $addresses = [$addressOne, $addressTwo];
 
         $contact = new Contact();
         $this->assertSame($contact, $contact->resetAddresses($addresses));
         $actual = $contact->getAddresses();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
         $this->assertEquals($addresses, $actual->toArray());
 
         $this->assertSame($contact, $contact->addAddress($addressTwo));
         $actual = $contact->getAddresses();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
         $this->assertEquals($addresses, $actual->toArray());
 
         $this->assertSame($contact, $contact->addAddress($addressThree));
         $actual = $contact->getAddresses();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals(array($addressOne, $addressTwo, $addressThree), $actual->toArray());
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
+        $this->assertEquals([$addressOne, $addressTwo, $addressThree], $actual->toArray());
 
         $this->assertSame($contact, $contact->removeAddress($addressOne));
         $actual = $contact->getAddresses();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals(array(1 => $addressTwo, 2 => $addressThree), $actual->toArray());
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
+        $this->assertEquals([1 => $addressTwo, 2 => $addressThree], $actual->toArray());
 
         $this->assertSame($contact, $contact->removeAddress($addressOne));
         $actual = $contact->getAddresses();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals(array(1 => $addressTwo, 2 => $addressThree), $actual->toArray());
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
+        $this->assertEquals([1 => $addressTwo, 2 => $addressThree], $actual->toArray());
     }
 
     public function testGetPrimaryAddress()
@@ -400,8 +405,8 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $contact->setLastName('Last');
         $contact->setNameSuffix('Sn.');
 
-        $this->getFirstNameTest($contact);
-        $this->toStringTest($contact);
+        $this->assertEquals('First', $contact->getFirstName());
+        $this->assertEquals('Mr. First Middle Last Sn.', (string)$contact);
     }
 
     public function testToStringsPartial()
@@ -414,30 +419,14 @@ class ContactTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Oro\Bundle\ContactBundle\Entity\Contact $contact
-     */
-    protected function getFirstNameTest($contact)
-    {
-        $this->assertEquals('First', $contact->getFirstName());
-    }
-
-    /**
-     * @param \Oro\Bundle\ContactBundle\Entity\Contact $contact
-     */
-    protected function toStringTest($contact)
-    {
-        $this->assertEquals('Mr. First Middle Last Sn.', $contact->__toString());
-    }
-
-    /**
      * @dataProvider flatPropertiesDataProvider
      */
     public function testGetSet($property, $value, $expected)
     {
         $obj = new Contact();
 
-        call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
-        $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
+        call_user_func([$obj, 'set' . ucfirst($property)], $value);
+        $this->assertEquals($expected, call_user_func_array([$obj, 'get' . ucfirst($property)], []));
     }
 
     public function testSetAddressType()
@@ -457,42 +446,42 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($addressTwo->hasTypeWithName('shipping'));
     }
 
-    public function flatPropertiesDataProvider()
+    public function flatPropertiesDataProvider(): array
     {
         $now = new \DateTime('now');
-        $user = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User');
-        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Source');
-        $source = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Source');
-        $method = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Method');
-        $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $user = $this->createMock(User::class);
+        $contact = $this->createMock(Source::class);
+        $source = $this->createMock(Source::class);
+        $method = $this->createMock(Method::class);
+        $organization = $this->createMock(Organization::class);
 
-        return array(
-            'namePrefix' => array('namePrefix', 'test', 'test'),
-            'firstName' => array('firstName', 'test', 'test'),
-            'middleName' => array('middleName', 'test', 'test'),
-            'lastName' => array('lastName', 'test', 'test'),
-            'nameSuffix' => array('nameSuffix', 'test', 'test'),
-            'gender' => array('gender', 'male', 'male'),
-            'assignedTo' => array('assignedTo', $user, $user),
-            'birthday' => array('birthday', $now, $now),
-            'description' => array('description', 'test', 'test'),
-            'source' => array('source', $source, $source),
-            'method' => array('method', $method, $method),
-            'owner' => array('owner', $user, $user),
-            'reportsTo' => array('reportsTo', $contact, $contact),
-            'jobTitle' => array('jobTitle', 'test', 'test'),
-            'fax' => array('fax', 'test', 'test'),
-            'skype' => array('skype', 'test', 'test'),
-            'facebook' => array('facebook', 'test', 'test'),
-            'linkedIn' => array('linkedIn', 'test', 'test'),
-            'googlePlus' => array('googlePlus', 'test', 'test'),
-            'twitter' => array('twitter', 'test', 'test'),
-            'createdAt' => array('createdAt', $now, $now),
-            'updatedAt' => array('updatedAt', $now, $now),
-            'createdBy' => array('createdBy', $user, $user),
-            'updatedBy' => array('updatedBy', $user, $user),
-            'organization' => array('organization', $organization, $organization),
-        );
+        return [
+            'namePrefix' => ['namePrefix', 'test', 'test'],
+            'firstName' => ['firstName', 'test', 'test'],
+            'middleName' => ['middleName', 'test', 'test'],
+            'lastName' => ['lastName', 'test', 'test'],
+            'nameSuffix' => ['nameSuffix', 'test', 'test'],
+            'gender' => ['gender', 'male', 'male'],
+            'assignedTo' => ['assignedTo', $user, $user],
+            'birthday' => ['birthday', $now, $now],
+            'description' => ['description', 'test', 'test'],
+            'source' => ['source', $source, $source],
+            'method' => ['method', $method, $method],
+            'owner' => ['owner', $user, $user],
+            'reportsTo' => ['reportsTo', $contact, $contact],
+            'jobTitle' => ['jobTitle', 'test', 'test'],
+            'fax' => ['fax', 'test', 'test'],
+            'skype' => ['skype', 'test', 'test'],
+            'facebook' => ['facebook', 'test', 'test'],
+            'linkedIn' => ['linkedIn', 'test', 'test'],
+            'googlePlus' => ['googlePlus', 'test', 'test'],
+            'twitter' => ['twitter', 'test', 'test'],
+            'createdAt' => ['createdAt', $now, $now],
+            'updatedAt' => ['updatedAt', $now, $now],
+            'createdBy' => ['createdBy', $user, $user],
+            'updatedBy' => ['updatedBy', $user, $user],
+            'organization' => ['organization', $organization, $organization],
+        ];
     }
 
     public function testHasAccounts()

@@ -22,10 +22,10 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
     private const TEST_ENTITY_NAME = 'OroOrganizationBundle:BusinessUnit';
     private const TEST_ENTITY_ALIAS = 'business_alias';
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var BusinessUnitAclProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $businessAclProvider;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var ForecastWidgetBusinessUnitSearchHandler */
     private $handler;
 
     protected function setUp(): void

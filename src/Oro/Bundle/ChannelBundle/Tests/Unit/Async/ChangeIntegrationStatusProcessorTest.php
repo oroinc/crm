@@ -25,37 +25,39 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
     use ClassExtensionTrait;
     use LoggerAwareTraitTestTrait;
 
-    private StateProvider|\PHPUnit\Framework\MockObject\MockObject $stateProvider;
+    /** @var StateProvider|\PHPUnit\Framework\MockObject\MockObject */
+    private $stateProvider;
 
-    private ChangeIntegrationStatusProcessor $processor;
+    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
+    private $entityManager;
 
-    private EntityManager|\PHPUnit\Framework\MockObject\MockObject $entityManager;
+    /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $session;
 
-    private Channel $channel;
+    /** @var Channel */
+    private $channel;
 
-    private SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session;
+    /** @var ChangeIntegrationStatusProcessor */
+    private $processor;
 
     protected function setUp(): void
     {
-        $managerRegistry = $this->createMock(ManagerRegistry::class);
+        $this->stateProvider = $this->createMock(StateProvider::class);
         $this->entityManager = $this->createMock(EntityManager::class);
-        $managerRegistry
-            ->expects(self::any())
+        $this->session = $this->createMock(SessionInterface::class);
+        $this->channel = new Channel();
+
+        $doctrine = $this->createMock(ManagerRegistry::class);
+        $doctrine->expects(self::any())
             ->method('getManagerForClass')
             ->with(Channel::class)
             ->willReturn($this->entityManager);
 
-        $this->channel = new Channel();
-        $this->entityManager
-            ->expects(self::any())
+        $this->entityManager->expects(self::any())
             ->method('find')
             ->willReturnMap([[Channel::class, 'aChannelId', null, null, $this->channel]]);
 
-        $this->session = $this->createMock(SessionInterface::class);
-
-        $this->stateProvider = $this->createMock(StateProvider::class);
-
-        $this->processor = new ChangeIntegrationStatusProcessor($managerRegistry, $this->stateProvider);
+        $this->processor = new ChangeIntegrationStatusProcessor($doctrine, $this->stateProvider);
         $this->setUpLoggerMock($this->processor);
     }
 
@@ -80,8 +82,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
         $message = new Message();
         $message->setBody('[]');
 
-        $this->loggerMock
-            ->expects(self::once())
+        $this->loggerMock->expects(self::once())
             ->method('critical')
             ->with('The message invalid. It must have channelId set');
 
@@ -106,8 +107,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
         $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'missingChannelId']));
 
-        $this->loggerMock
-            ->expects(self::once())
+        $this->loggerMock->expects(self::once())
             ->method('critical')
             ->with('Channel not found: missingChannelId');
 
@@ -121,8 +121,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
         $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
 
-        $this->stateProvider
-            ->expects(self::once())
+        $this->stateProvider->expects(self::once())
             ->method('processChannelChange');
 
         $status = $this->processor->process($message, $this->session);
@@ -136,19 +135,16 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->channel->setDataSource($integration);
 
-        $this->entityManager
-            ->expects(self::once())
+        $this->entityManager->expects(self::once())
             ->method('persist')
             ->with(self::identicalTo($integration));
-        $this->entityManager
-            ->expects(self::once())
+        $this->entityManager->expects(self::once())
             ->method('flush');
 
         $message = new Message();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
 
-        $this->stateProvider
-            ->expects(self::once())
+        $this->stateProvider->expects(self::once())
             ->method('processChannelChange');
 
         $status = $this->processor->process($message, $this->session);
@@ -166,8 +162,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
         $this->channel->setStatus(true);
         $this->channel->setDataSource($integration);
 
-        $this->stateProvider
-            ->expects(self::once())
+        $this->stateProvider->expects(self::once())
             ->method('processChannelChange');
 
         $message = new Message();
@@ -191,8 +186,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
         $this->channel->setStatus(true);
         $this->channel->setDataSource($integration);
 
-        $this->stateProvider
-            ->expects(self::once())
+        $this->stateProvider->expects(self::once())
             ->method('processChannelChange');
 
         $message = new Message();
@@ -216,8 +210,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
         $this->channel->setStatus(false);
         $this->channel->setDataSource($integration);
 
-        $this->stateProvider
-            ->expects(self::once())
+        $this->stateProvider->expects(self::once())
             ->method('processChannelChange');
 
         $message = new Message();
@@ -241,8 +234,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
         $this->channel->setStatus(false);
         $this->channel->setDataSource($integration);
 
-        $this->stateProvider
-            ->expects(self::once())
+        $this->stateProvider->expects(self::once())
             ->method('processChannelChange');
 
         $message = new Message();
@@ -265,8 +257,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
         $this->channel->setStatus(false);
         $this->channel->setDataSource($integration);
 
-        $this->stateProvider
-            ->expects(self::once())
+        $this->stateProvider->expects(self::once())
             ->method('processChannelChange');
 
         $message = new Message();

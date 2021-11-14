@@ -42,21 +42,10 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
     /** @var B2bCustomerType */
     private $formType;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
         $this->formType = new B2bCustomerType(new PropertyAccessor());
         parent::setUp();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function tearDown(): void
-    {
-        $this->formType = null;
     }
 
     /**
@@ -136,12 +125,8 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
 
     /**
      * @dataProvider submitDataProvider
-     *
-     * @param B2bCustomer $existingData
-     * @param array       $submittedData
-     * @param B2bCustomer $expectedData
      */
-    public function testSubmit($existingData, $submittedData, $expectedData)
+    public function testSubmit(B2bCustomer $existingData, array $submittedData, B2bCustomer $expectedData)
     {
         $form = $this->factory->create(B2bCustomerType::class, $existingData);
         $this->assertEquals($existingData, $form->getData());
@@ -153,10 +138,7 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
         $this->assertEquals($expectedData, $form->getData());
     }
 
-    /**
-     * @return array
-     */
-    public function submitDataProvider()
+    public function submitDataProvider(): array
     {
         $baseEmail = $this->getEntity(B2bCustomerEmail::class, ['email' => 'test@email.com']);
         $basePhone = $this->getEntity(B2bCustomerPhone::class, ['phone' => '12345678']);

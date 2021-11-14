@@ -14,15 +14,17 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use LoggerAwareTraitTestTrait;
 
-    private ContactEmailAddressHandler|\PHPUnit\Framework\MockObject\MockObject $contactEmailAddressHandler;
+    /** @var ContactEmailAddressHandler|\PHPUnit\Framework\MockObject\MockObject */
+    private $contactEmailAddressHandler;
 
-    private ContactPostImportProcessor $processor;
+    /** @var ContactPostImportProcessor */
+    private $processor;
 
     protected function setUp(): void
     {
         $this->contactEmailAddressHandler = $this->createMock(ContactEmailAddressHandler::class);
-        $this->processor = new ContactPostImportProcessor($this->contactEmailAddressHandler);
 
+        $this->processor = new ContactPostImportProcessor($this->contactEmailAddressHandler);
         $this->setUpLoggerMock($this->processor);
     }
 

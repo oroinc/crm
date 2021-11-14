@@ -16,8 +16,8 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit\Framework\TestCase
     public function testViewShouldHaveProbabilitiesDataAttributes(array $probabilities)
     {
         $type = $this->getFormType();
-        $formView = $this->getFormView();
-        $form = $this->getFormMock();
+        $formView = new FormView();
+        $form = $this->createMock(FormInterface::class);
 
         $type->buildView($formView, $form, ['probabilities' => $probabilities]);
 
@@ -30,7 +30,7 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit\Framework\TestCase
     public function testShouldHaveProbabilitiesAsDefaultOption()
     {
         $type = $this->getFormType(['won' => 1.0, 'lost' => 0.0]);
-        $resolver = $this->getOptionsResolver();
+        $resolver = new OptionsResolver();
 
         $type->configureOptions($resolver);
         $options = $resolver->resolve();
@@ -38,7 +38,7 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['probabilities' => ['won' => 100.0, 'lost' => 0.0]], $options);
     }
 
-    public function probabilitiesDataProvider()
+    public function probabilitiesDataProvider(): array
     {
         return [
             [
@@ -50,7 +50,7 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit\Framework\TestCase
     public function testShouldFilterNullProbabilities()
     {
         $type = $this->getFormType(['won' => 1.0, 'lost' => 0.0, 'empty' => null]);
-        $resolver = $this->getOptionsResolver();
+        $resolver = new OptionsResolver();
 
         $type->configureOptions($resolver);
         $options = $resolver->resolve();
@@ -58,47 +58,13 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['probabilities' => ['won' => 100.0, 'lost' => 0.0]], $options);
     }
 
-    /**
-     * @param array $probabilities
-     *
-     * @return OpportunityStatusSelectType
-     */
-    private function getFormType(array $probabilities = array())
+    private function getFormType(array $probabilities = []): OpportunityStatusSelectType
     {
-        $configManager = $this->getMockBuilder(ConfigManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $configManager = $this->createMock(ConfigManager::class);
         $configManager->expects($this->any())
             ->method('get')
             ->willReturn($probabilities);
 
-        $type = new OpportunityStatusSelectType($configManager);
-
-        return $type;
-    }
-
-    /**
-     * @return FormView
-     */
-    private function getFormView()
-    {
-        return new FormView();
-    }
-
-    /**
-     * @return FormInterface
-     */
-    private function getFormMock()
-    {
-        return $this->createMock(FormInterface::class);
-    }
-
-    /**
-     * @return OptionsResolver
-     */
-    private function getOptionsResolver()
-    {
-        return new OptionsResolver();
+        return new OpportunityStatusSelectType($configManager);
     }
 }

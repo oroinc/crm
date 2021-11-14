@@ -16,45 +16,45 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    const TEST_NAME = 'name';
+    private const TEST_NAME = 'name';
 
-    private FormInterface|\PHPUnit\Framework\MockObject\MockObject $form;
+    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $form;
 
-    private Request $request;
+    /** @var Request */
+    private $request;
 
-    private Integration $entity;
+    /** @var Integration */
+    private $entity;
 
-    private ChannelIntegrationHandler $handler;
-
-    private FormFactoryInterface $formBuilder;
+    /** @var ChannelIntegrationHandler */
+    private $handler;
 
     protected function setUp(): void
     {
-        $this->form        = $this->createMock(FormInterface::class);
-        $this->formBuilder = $this->createMock(FormFactoryInterface::class);
-        $this->formBuilder
-            ->expects($this->any())
+        $this->form = $this->createMock(FormInterface::class);
+        $this->request = Request::create('');
+        $this->entity = new Integration();
+
+        $formBuilder = $this->createMock(FormFactoryInterface::class);
+        $formBuilder->expects($this->any())
             ->method('createNamed')
             ->willReturn($this->form);
 
-        $this->request = Request::create('');
         $requestStack = new RequestStack();
         $requestStack->push($this->request);
-        $this->entity  = new Integration();
-        $this->handler = new ChannelIntegrationHandler($requestStack, $this->formBuilder);
-    }
 
-    protected function tearDown(): void
-    {
-        unset($this->handler, $this->request, $this->form, $this->entity);
+        $this->handler = new ChannelIntegrationHandler($requestStack, $formBuilder);
     }
 
     public function testProcessUnsupportedRequest(): void
     {
-        $this->form->expects($this->once())->method('setData')
+        $this->form->expects($this->once())
+            ->method('setData')
             ->with($this->entity);
 
-        $this->form->expects($this->never())->method('handleRequest');
+        $this->form->expects($this->never())
+            ->method('handleRequest');
         $this->assertFalse($this->handler->process($this->entity));
     }
 
@@ -64,8 +64,9 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
         $this->request->setMethod('GET');
         $this->request->query->set(ChannelIntegrationHandler::DATA_PARAM_NAME, $data);
 
-        $this->form->expects($this->once())->method('submit')
-            ->with($this->equalTo($data));
+        $this->form->expects($this->once())
+            ->method('submit')
+            ->with($data);
 
         $this->assertFalse($this->handler->process($this->entity), 'Should not perform after submit actions');
         $this->assertTrue($this->request->get(IntegrationChannelHandler::UPDATE_MARKER), 'Should  set update marker');
@@ -73,21 +74,20 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider dataProvider
-     *
-     * @param bool $updateMarker
-     * @param bool $isFormValid
-     * @param bool $expectedResult
      */
-    public function testPostRequestHandling($updateMarker, $isFormValid, $expectedResult): void
+    public function testPostRequestHandling(bool $updateMarker, bool $isFormValid, bool $expectedResult): void
     {
         $this->request->setMethod('POST');
         $this->request->query->set(IntegrationChannelHandler::UPDATE_MARKER, $updateMarker);
 
-        $this->form->expects($this->once())->method('handleRequest')
-            ->with($this->equalTo($this->request));
-        $this->form->expects($this->any())->method('isSubmitted')
+        $this->form->expects($this->once())
+            ->method('handleRequest')
+            ->with($this->identicalTo($this->request));
+        $this->form->expects($this->any())
+            ->method('isSubmitted')
             ->willReturn(true);
-        $this->form->expects($this->any())->method('isValid')
+        $this->form->expects($this->any())
+            ->method('isValid')
             ->willReturn($isFormValid);
 
         $this->assertSame($updateMarker, $this->request->get(IntegrationChannelHandler::UPDATE_MARKER));
@@ -132,7 +132,8 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
             $this->expectException($expectedException);
         }
 
-        $this->form->expects($this->any())->method('getName')
+        $this->form->expects($this->any())
+            ->method('getName')
             ->willReturn(self::TEST_NAME);
 
         $this->assertSame($expectedResult, $this->handler->getFormSubmittedData());
@@ -145,7 +146,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
                 '$requestType'       => 'GET',
                 '$requestData'       => [],
                 '$expectedResult'    => [],
-                '$expectedException' => '\LogicException'
+                '$expectedException' => \LogicException::class
             ],
             'valid request'                       => [
                 '$requestType'    => 'POST',
@@ -164,27 +165,34 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
 
         $form = $this->form;
         if ($isUpdateMode) {
-            $form        = $this->createMock(FormInterface::class);
-            $formConfig  = $this->createMock(FormConfigInterface::class);
+            $form = $this->createMock(FormInterface::class);
+            $formConfig = $this->createMock(FormConfigInterface::class);
             $formFactory = $this->createMock(FormFactoryInterface::class);
-            $formType    = $this->createMock(ResolvedFormTypeInterface::class);
+            $formType = $this->createMock(ResolvedFormTypeInterface::class);
 
-            $formConfig->expects($this->once())->method('getFormFactory')
+            $formConfig->expects($this->once())
+                ->method('getFormFactory')
                 ->willReturn($formFactory);
-            $formConfig->expects($this->once())->method('getType')
+            $formConfig->expects($this->once())
+                ->method('getType')
                 ->willReturn($formType);
-            $formType->expects($this->once())->method('getInnerType')
+            $formType->expects($this->once())
+                ->method('getInnerType')
                 ->willReturn(new FormStub('type' . self::TEST_NAME));
-            $this->form->expects($this->once())->method('getName')
+            $this->form->expects($this->once())
+                ->method('getName')
                 ->willReturn('form' . self::TEST_NAME);
-            $this->form->expects($this->once())->method('getConfig')
+            $this->form->expects($this->once())
+                ->method('getConfig')
                 ->willReturn($formConfig);
 
-            $formFactory->expects($this->once())->method('createNamed')
+            $formFactory->expects($this->once())
+                ->method('createNamed')
                 ->willReturn($form);
         }
 
-        $form->expects($this->once())->method('createView')
+        $form->expects($this->once())
+            ->method('createView')
             ->willReturn($this->getFormView());
 
         $this->assertInstanceOf(FormView::class, $this->handler->getFormView());
@@ -198,14 +206,14 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    protected function getFormView(): FormView
+    private function getFormView(): FormView
     {
-        $rootView       = new FormView();
+        $rootView = new FormView();
         $connectorsView = new FormView($rootView);
-        $typeView       = new FormView($rootView);
+        $typeView = new FormView($rootView);
 
         $rootView->children['connectors'] = $connectorsView;
-        $rootView->children['type']       = $typeView;
+        $rootView->children['type'] = $typeView;
 
         return $rootView;
     }

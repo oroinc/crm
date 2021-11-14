@@ -6,10 +6,8 @@ use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 
 class CaseStatusTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var CaseStatus
-     */
-    protected $caseStatus;
+    /** @var CaseStatus */
+    private $caseStatus;
 
     protected function setUp(): void
     {

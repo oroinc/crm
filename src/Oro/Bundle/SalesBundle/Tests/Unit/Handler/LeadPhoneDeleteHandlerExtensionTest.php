@@ -8,6 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 use Oro\Bundle\SalesBundle\Handler\LeadPhoneDeleteHandlerExtension;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LeadPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
@@ -64,7 +65,7 @@ class LeadPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testAssertDeleteGrantedWhenAccessDenied()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
 
         $leadPhone = new LeadPhone();
@@ -83,7 +84,7 @@ class LeadPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testAssertDeleteGrantedWhenPrimaryPhoneIsDeletedAndThereIsOtherPhones()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
 
         $leadPhone = new LeadPhone();

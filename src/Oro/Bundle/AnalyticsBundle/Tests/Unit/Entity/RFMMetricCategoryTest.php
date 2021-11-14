@@ -3,14 +3,14 @@
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class RFMMetricCategoryTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var RFMMetricCategory
-     */
-    protected $entity;
+    /** @var RFMMetricCategory */
+    private $entity;
 
     protected function setUp(): void
     {
@@ -32,16 +32,11 @@ class RFMMetricCategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $propertyAccessor->getValue($this->entity, $property));
     }
 
-    /**
-     * @return array
-     */
-    public function settersAndGettersDataProvider()
+    public function settersAndGettersDataProvider(): array
     {
         return [
-                ['channel', $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel'),
-                    $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel')],
-                ['owner', $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization'),
-                    $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization')],
+                ['channel', $this->createMock(Channel::class), $this->createMock(Channel::class)],
+                ['owner', $this->createMock(Organization::class), $this->createMock(Organization::class)],
                 ['category_type', RFMMetricCategory::TYPE_RECENCY, RFMMetricCategory::TYPE_RECENCY],
                 ['category_index', 1, 1],
                 ['minValue', 123, 123],

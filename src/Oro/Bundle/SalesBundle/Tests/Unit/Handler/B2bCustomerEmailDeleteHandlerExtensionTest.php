@@ -8,6 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Handler\B2bCustomerEmailDeleteHandlerExtension;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
@@ -64,7 +65,7 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
 
     public function testAssertDeleteGrantedWhenAccessDenied()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
 
         $customerEmail = new B2bCustomerEmail();
@@ -83,7 +84,7 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
 
     public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
 
         $customerEmail = new B2bCustomerEmail();
