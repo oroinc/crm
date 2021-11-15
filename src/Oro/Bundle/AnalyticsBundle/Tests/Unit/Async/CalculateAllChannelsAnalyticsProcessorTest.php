@@ -7,7 +7,6 @@ use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
-use Oro\Component\MessageQueue\Test\JobRunner;
 use Oro\Component\Testing\ClassExtensionTrait;
 
 class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
@@ -35,25 +34,8 @@ class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit\Framework\Test
     public function testCouldBeConstructedWithExpectedArguments()
     {
         new CalculateAllChannelsAnalyticsProcessor(
-            $this->createDoctrineHelperMock(),
-            $this->createCalculateAnalyticsSchedulerMock(),
-            new JobRunner()
+            $this->createMock(DoctrineHelper::class),
+            $this->createMock(CalculateAnalyticsScheduler::class)
         );
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|CalculateAnalyticsScheduler
-     */
-    private function createCalculateAnalyticsSchedulerMock()
-    {
-        return $this->createMock(CalculateAnalyticsScheduler::class);
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
-     */
-    private function createDoctrineHelperMock()
-    {
-        return $this->createMock(DoctrineHelper::class);
     }
 }

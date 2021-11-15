@@ -80,7 +80,7 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit\Framework\TestCase
         $configManager = $this->createMock(ConfigManager::class);
         $configManager->expects($this->once())
             ->method('set')
-            ->with($this->anything(), $this->equalTo($expectedData));
+            ->with($this->anything(), $expectedData);
 
         $formType = new OpportunityStatusConfigType(
             $this->getEntityConfigManager(),
@@ -159,7 +159,7 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit\Framework\TestCase
 
         $translator->expects($this->any())
             ->method('trans')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         return new EnumFieldConfigSubscriber(
             $this->getEntityConfigManager(),

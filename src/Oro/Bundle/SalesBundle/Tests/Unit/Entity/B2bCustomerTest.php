@@ -2,29 +2,30 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class B2bCustomerTest extends \PHPUnit\Framework\TestCase
 {
-    const TEST_ID = 12;
-    const TEST_NAME = 'test name';
+    private const TEST_NAME = 'test name';
 
     /** @var B2bCustomer */
-    protected $entity;
+    private $entity;
 
     protected function setUp(): void
     {
         $this->entity = new B2bCustomer();
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->entity);
     }
 
     /**
@@ -33,25 +34,22 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
     public function testGetSet($property, $value, $expected = null)
     {
         if (null !== $value) {
-            call_user_func_array([$this->entity, 'set' . ucfirst($property)], [$value]);
+            call_user_func([$this->entity, 'set' . ucfirst($property)], $value);
         }
         $this->assertSame($expected, call_user_func([$this->entity, 'get' . ucfirst($property)]));
     }
 
-    /**
-     * @return array
-     */
-    public function getSetDataProvider()
+    public function getSetDataProvider(): array
     {
-        $name         = uniqid('name');
-        $address      = $this->createMock('Oro\Bundle\AddressBundle\Entity\Address');
-        $account      = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $contact      = $this->createMock('Oro\Bundle\ContactBundle\Entity\Contact');
-        $channel      = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
-        $owner        = $this->createMock('Oro\Bundle\UserBundle\Entity\User');
-        $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
-        $date         = new \DateTime();
-        $lifetime     = 12.22;
+        $name = 'some name';
+        $address = $this->createMock(Address::class);
+        $account = $this->createMock(Account::class);
+        $contact = $this->createMock(Contact::class);
+        $channel = $this->createMock(Channel::class);
+        $owner = $this->createMock(User::class);
+        $organization = $this->createMock(Organization::class);
+        $date = new \DateTime();
+        $lifetime = 12.22;
 
         return [
             'id'              => ['id', null, null],
@@ -105,7 +103,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $customer->resetPhones($customerPhones);
 
         $actual = $customer->getPhones();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
         $this->assertEquals($customerPhones, $actual->toArray());
         $customer->addPhone($secondPhone);
 
@@ -115,10 +113,10 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
 
     public function testAddNewPhone()
     {
-        $customer       = new B2bCustomer();
-        $firstPhone     = new B2bCustomerPhone('06001122334455');
-        $secondPhone    = new B2bCustomerPhone('07001122334455');
-        $thirdPhone     = new B2bCustomerPhone('08001122334455');
+        $customer = new B2bCustomer();
+        $firstPhone = new B2bCustomerPhone('06001122334455');
+        $secondPhone = new B2bCustomerPhone('07001122334455');
+        $thirdPhone = new B2bCustomerPhone('08001122334455');
         $customerPhones = [$firstPhone, $secondPhone];
 
         $customer->resetPhones($customerPhones);
@@ -129,9 +127,9 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
 
     public function testRemoveExistingPhone()
     {
-        $customer       = new B2bCustomer();
-        $firstPhone     = new B2bCustomerPhone('06001122334455');
-        $secondPhone    = new B2bCustomerPhone('07001122334455');
+        $customer = new B2bCustomer();
+        $firstPhone = new B2bCustomerPhone('06001122334455');
+        $secondPhone = new B2bCustomerPhone('07001122334455');
         $customerPhones = [$firstPhone, $secondPhone];
 
         $customer->resetPhones($customerPhones);
@@ -142,10 +140,10 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
 
     public function testRemoveNonExistingPhone()
     {
-        $customer       = new B2bCustomer();
-        $firstPhone     = new B2bCustomerPhone('06001122334455');
-        $secondPhone    = new B2bCustomerPhone('07001122334455');
-        $thirdPhone     = new B2bCustomerPhone('08001122334455');
+        $customer = new B2bCustomer();
+        $firstPhone = new B2bCustomerPhone('06001122334455');
+        $secondPhone = new B2bCustomerPhone('07001122334455');
+        $thirdPhone = new B2bCustomerPhone('08001122334455');
         $customerPhones = [$firstPhone, $secondPhone];
 
         $customer->resetPhones($customerPhones);
@@ -180,7 +178,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $customer->resetEmails($customerEmails);
 
         $actual = $customer->getEmails();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
         $this->assertEquals($customerEmails, $actual->toArray());
         $customer->addEmail($secondEmail);
 
@@ -190,10 +188,10 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
 
     public function testAddNewEmail()
     {
-        $customer       = new B2bCustomer();
+        $customer = new B2bCustomer();
         $firstEmail = new B2bCustomerEmail('email-one@example.com');
         $secondEmail = new B2bCustomerEmail('email-two@example.com');
-        $thirdEmail     = new B2bCustomerEmail('email-three@example.com');
+        $thirdEmail = new B2bCustomerEmail('email-three@example.com');
         $customerEmails = [$firstEmail, $secondEmail];
 
         $customer->resetEmails($customerEmails);
@@ -204,9 +202,9 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
 
     public function testRemoveExistingEmail()
     {
-        $customer       = new B2bCustomer();
-        $firstEmail     = new B2bCustomerEmail('email-one@example.com');
-        $secondEmail    = new B2bCustomerEmail('email-two@example.com');
+        $customer = new B2bCustomer();
+        $firstEmail = new B2bCustomerEmail('email-one@example.com');
+        $secondEmail = new B2bCustomerEmail('email-two@example.com');
         $customerEmails = [$firstEmail, $secondEmail];
 
         $customer->resetEmails($customerEmails);
@@ -217,10 +215,10 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
 
     public function testRemoveNonExistingEmail()
     {
-        $customer       = new B2bCustomer();
-        $firstEmail     = new B2bCustomerEmail('email-one@example.com');
-        $secondEmail    = new B2bCustomerEmail('email-two@example.com');
-        $thirdEmail     = new B2bCustomerEmail('email-three@example.com');
+        $customer = new B2bCustomer();
+        $firstEmail = new B2bCustomerEmail('email-one@example.com');
+        $secondEmail = new B2bCustomerEmail('email-two@example.com');
+        $thirdEmail = new B2bCustomerEmail('email-three@example.com');
         $customerEmails = [$firstEmail, $secondEmail];
 
         $customer->resetEmails($customerEmails);

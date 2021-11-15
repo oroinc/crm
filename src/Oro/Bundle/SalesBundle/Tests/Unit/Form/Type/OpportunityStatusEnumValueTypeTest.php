@@ -11,21 +11,26 @@ use Symfony\Component\Validator\Constraints\Range;
 
 class OpportunityStatusEnumValueTypeTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var OpportunityStatusEnumValueType */
+    private $type;
+
+    protected function setUp(): void
+    {
+        $this->type = new OpportunityStatusEnumValueType();
+    }
+
     public function testBuildForm()
     {
         $builder = $this->createMock(FormBuilderInterface::class);
 
-        $type = $this->getFormType();
-        $type->buildForm($builder, ['allow_multiple_selection' => false]);
+        $this->type->buildForm($builder, ['allow_multiple_selection' => false]);
     }
 
     /**
      * @dataProvider preSetDataProvider
      */
-    public function testPreSetData($enumOptionId, $shouldBeDisabled)
+    public function testPreSetData(string $enumOptionId, bool $shouldBeDisabled)
     {
-        $type = $this->getFormType();
-
         $form = $this->createMock(FormInterface::class);
         $attr = [];
 
@@ -46,20 +51,15 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit\Framework\TestCase
             );
         $formEvent = new FormEvent($form, ['id' => $enumOptionId]);
 
-        $type->preSetData($formEvent);
+        $this->type->preSetData($formEvent);
     }
 
-    public function preSetDataProvider()
+    public function preSetDataProvider(): array
     {
         return [
             'default' => ['test', false],
             'win should be disabled' => ['won', true],
             'lost should be disabled' => ['lost', true],
         ];
-    }
-
-    protected function getFormType()
-    {
-        return new OpportunityStatusEnumValueType();
     }
 }

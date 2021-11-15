@@ -13,10 +13,8 @@ use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateManager;
 
 class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ContactAddressFixture
-     */
-    protected $fixture;
+    /** @var ContactAddressFixture */
+    private $fixture;
 
     protected function setUp(): void
     {
@@ -25,7 +23,7 @@ class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEntityClass()
     {
-        $this->assertEquals('Oro\Bundle\ContactBundle\Entity\ContactAddress', $this->fixture->getEntityClass());
+        $this->assertEquals(ContactAddress::class, $this->fixture->getEntityClass());
     }
 
     public function testCreateEntity()
@@ -36,16 +34,14 @@ class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $key
-     * @param array $types
      * @dataProvider fillEntityDataProvider
      */
-    public function testFillEntityData($key, array $types)
+    public function testFillEntityData(string $key, array $types)
     {
         $this->fixture->setTemplateManager($this->getTemplateManager());
 
         $address = new ContactAddress();
-        list($firstName, $lastName) = explode(' ', $key, 2);
+        [$firstName, $lastName] = explode(' ', $key, 2);
 
         $this->fixture->fillEntityData($key, $address);
         $this->assertEquals($firstName, $address->getFirstName());
@@ -53,25 +49,22 @@ class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($types, $address->getTypeNames());
     }
 
-    /**
-     * @return array
-     */
-    public function fillEntityDataProvider()
+    public function fillEntityDataProvider(): array
     {
-        return array(
-            'Jerry Coleman' => array(
+        return [
+            'Jerry Coleman' => [
                 'key' => 'Jerry Coleman',
-                'types' => array(AddressType::TYPE_BILLING, AddressType::TYPE_SHIPPING)
-            ),
-            'John Smith' => array(
+                'types' => [AddressType::TYPE_BILLING, AddressType::TYPE_SHIPPING]
+            ],
+            'John Smith' => [
                 'key' => 'John Smith',
-                'types' => array(AddressType::TYPE_BILLING)
-            ),
-            'John Doo' => array(
+                'types' => [AddressType::TYPE_BILLING]
+            ],
+            'John Doo' => [
                 'key' => 'John Doo',
-                'types' => array(AddressType::TYPE_SHIPPING)
-            ),
-        );
+                'types' => [AddressType::TYPE_SHIPPING]
+            ],
+        ];
     }
 
     public function testGetData()
@@ -83,19 +76,15 @@ class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
 
         /** @var ContactAddress $address */
         $address = $data->current();
-        $this->assertInstanceOf('Oro\Bundle\ContactBundle\Entity\ContactAddress', $address);
+        $this->assertInstanceOf(ContactAddress::class, $address);
         $this->assertEquals('Jerry', $address->getFirstName());
         $this->assertEquals('Coleman', $address->getLastName());
-        $this->assertEquals(array(AddressType::TYPE_BILLING, AddressType::TYPE_SHIPPING), $address->getTypeNames());
+        $this->assertEquals([AddressType::TYPE_BILLING, AddressType::TYPE_SHIPPING], $address->getTypeNames());
     }
 
-    /**
-     * @return TemplateManager
-     */
-    protected function getTemplateManager()
+    private function getTemplateManager(): TemplateManager
     {
-        $entityRegistry = new TemplateEntityRegistry();
-        $templateManager = new TemplateManager($entityRegistry);
+        $templateManager = new TemplateManager(new TemplateEntityRegistry());
         $templateManager->addEntityRepository(new CountryFixture());
         $templateManager->addEntityRepository(new RegionFixture());
         $templateManager->addEntityRepository(new AddressTypeFixture());

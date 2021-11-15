@@ -19,10 +19,7 @@ class AnalyticsBuilderTest extends \PHPUnit\Framework\TestCase
         $builder->build($entity);
     }
 
-    /**
-     * @return array
-     */
-    public function buildDataProvider()
+    public function buildDataProvider(): array
     {
         return [
             [[$this->getNotSupportedBuilder()]],
@@ -40,16 +37,12 @@ class AnalyticsBuilderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @param bool $supported
-     * @return AnalyticsBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private function getSupportedBuilder($supported = true)
+    private function getSupportedBuilder(bool $supported = true): AnalyticsBuilderInterface
     {
         $supportedBuilder = $this->createMock(AnalyticsBuilderInterface::class);
         $supportedBuilder->expects($this->any())
             ->method('supports')
-            ->will($this->returnValue($supported));
+            ->willReturn($supported);
         if ($supported) {
             $supportedBuilder->expects($this->once())
                 ->method('build');
@@ -58,10 +51,7 @@ class AnalyticsBuilderTest extends \PHPUnit\Framework\TestCase
         return $supportedBuilder;
     }
 
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|AnalyticsBuilderInterface
-     */
-    private function getNotSupportedBuilder()
+    private function getNotSupportedBuilder(): AnalyticsBuilderInterface
     {
         return $this->getSupportedBuilder(false);
     }

@@ -9,46 +9,36 @@ use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\AccountProviderInterface;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
-use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub as Customer;
 use Oro\Bundle\SalesBundle\Tests\Unit\Stub\AccountCustomerManager;
 
 class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AccountCustomerManager */
-    protected $manager;
+    private $manager;
 
     /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
-    protected $doctrineHelper;
+    private $doctrineHelper;
 
     /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-    protected $configProvider;
+    private $configProvider;
 
     /** @var AccountProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
-    protected $accountProvider;
+    private $accountProvider;
 
     /** @var CustomerRepository|\PHPUnit\Framework\MockObject\MockObject */
-    protected $customerRepo;
+    private $customerRepo;
 
     protected function setUp(): void
     {
-        $this->customerRepo   = $this
-            ->getMockBuilder(CustomerRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->doctrineHelper = $this
-            ->getMockBuilder(DoctrineHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->doctrineHelper
-            ->expects($this->any())
+        $this->customerRepo = $this->createMock(CustomerRepository::class);
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $this->configProvider = $this->createMock(ConfigProvider::class);
+        $this->accountProvider = $this->getMockForAbstractClass(AccountProviderInterface::class);
+
+        $this->doctrineHelper->expects($this->any())
             ->method('getEntityRepository')
             ->willReturn($this->customerRepo);
-        $this->configProvider = $this
-            ->getMockBuilder(ConfigProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->accountProvider = $this->getMockForAbstractClass(AccountProviderInterface::class);
 
         $this->manager = new AccountCustomerManager(
             $this->doctrineHelper,
@@ -60,7 +50,7 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
     public function testGetCustomerTargetField()
     {
         $targetClassName = 'TestClass';
-        $expected        = ExtendHelper::buildAssociationName(
+        $expected = ExtendHelper::buildAssociationName(
             $targetClassName,
             CustomerScope::ASSOCIATION_KIND
         );
@@ -69,7 +59,7 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateCustomerFromAccount()
     {
-        $account  = (new Account())->setName('test');
+        $account = (new Account())->setName('test');
         $customer = $this->manager->createCustomer($account);
         $this->assertEquals($account, $customer->getAccount());
     }
@@ -77,8 +67,7 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
     public function testGetAccountCustomerByTargetIfTargetIsAccount()
     {
         $target = (new Account())->setName('test');
-        $this->configProvider
-            ->expects($this->once())
+        $this->configProvider->expects($this->once())
             ->method('getCustomerClasses')
             ->willReturn(['TestClass']);
 
@@ -88,20 +77,17 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testGetOrCreateAccountCustomerByExistedTarget()
     {
-        $target          = new CustomerStub();
-        $targetField     = AccountCustomerManager::getCustomerTargetField(CustomerStub::class);
+        $target = new Customer();
+        $targetField = AccountCustomerManager::getCustomerTargetField(Customer::class);
         $existedCustomer = new Customer();
-        $this->configProvider
-            ->expects($this->once())
+        $this->configProvider->expects($this->once())
             ->method('getCustomerClasses')
-            ->willReturn([CustomerStub::class]);
-        $this->doctrineHelper
-            ->expects($this->once())
+            ->willReturn([Customer::class]);
+        $this->doctrineHelper->expects($this->once())
             ->method('getSingleEntityIdentifier')
             ->with($target)
             ->willReturn(1);
-        $this->customerRepo
-            ->expects($this->once())
+        $this->customerRepo->expects($this->once())
             ->method('findOneBy')
             ->with([$targetField => 1])
             ->willReturn($existedCustomer);

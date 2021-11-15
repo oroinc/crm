@@ -16,10 +16,10 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
     public static $allChoices = ['type 1' => 'type 1', 'type 2' => 'type 2'];
 
     /** @var IntegrationTypeExtension */
-    protected $extension;
+    private $extension;
 
     /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
-    protected $settingsProvider;
+    private $settingsProvider;
 
     /**
      * @dataProvider buildFormProvider
@@ -32,31 +32,24 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
     {
         $this->settingsProvider->expects($this->any())
             ->method('getSourceIntegrationTypes')
-            ->will($this->returnValue($configValue));
+            ->willReturn($configValue);
         $form = $this->factory->create(ChannelType::class);
         $form->setData($data);
         $typeView = $form->get('type')->createView();
         $this->assertEquals($expectedChoices, $typeView->vars['choices']);
     }
 
-    /**
-     * @return array
-     */
-    public function buildFormProvider()
+    public function buildFormProvider(): array
     {
-        $entity = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(Integration::class);
         $entity->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
-        $entityUpdate = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityUpdate = $this->createMock(Integration::class);
         $entityUpdate->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         return [
             'data is null' => [
@@ -84,19 +77,17 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
-        $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
-            ->disableOriginalConstructor()->getMock();
+        $this->settingsProvider = $this->createMock(SettingsProvider::class);
+
         $this->extension = new IntegrationTypeExtension($this->settingsProvider);
+
         parent::setUp();
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     protected function getExtensions()
     {

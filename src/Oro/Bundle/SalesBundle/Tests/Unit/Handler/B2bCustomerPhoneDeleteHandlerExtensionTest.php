@@ -8,6 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 use Oro\Bundle\SalesBundle\Handler\B2bCustomerPhoneDeleteHandlerExtension;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class B2bCustomerPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
@@ -64,7 +65,7 @@ class B2bCustomerPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
 
     public function testAssertDeleteGrantedWhenAccessDenied()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
 
         $customerPhone = new B2bCustomerPhone();
@@ -83,7 +84,7 @@ class B2bCustomerPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
 
     public function testAssertDeleteGrantedWhenPrimaryPhoneIsDeletedAndThereIsOtherPhones()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
 
         $customerPhone = new B2bCustomerPhone();

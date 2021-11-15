@@ -4,59 +4,58 @@ namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\Rules\English\InflectorFactory;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\EmailBundle\Entity\EmailRecipient;
 use Oro\Bundle\EmailBundle\Tests\Unit\Entity\TestFixtures\EmailAddress;
 use Oro\Bundle\EmailBundle\Tests\Unit\Fixtures\Entity\TestEmailHolder;
+use Oro\Bundle\EmailBundle\Tools\EmailHolderHelper;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\EntityConfigBundle\Config\Config;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 
 class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
 {
-    const FROM_EMAIL = 'from@example.com';
-    const TO_EMAIL = 'to@example.com';
-    const COLUMN_NAME = 'test_column';
+    private const FROM_EMAIL = 'from@example.com';
+    private const TO_EMAIL = 'to@example.com';
+    private const COLUMN_NAME = 'test_column';
 
-    /** @var EmailDirectionProvider */
-    protected $provider;
+    private EmailDirectionProvider $provider;
     private Inflector $inflector;
 
     protected function setUp(): void
     {
-        $fieldConfigurationMock = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $fieldConfigurationMock->method('get')
+        $fieldConfiguration = $this->createMock(Config::class);
+        $fieldConfiguration->expects(self::any())
+            ->method('get')
             ->with('contact_information')
-            ->will($this->returnValue(DirectionProviderInterface::CONTACT_INFORMATION_SCOPE_EMAIL));
+            ->willReturn(DirectionProviderInterface::CONTACT_INFORMATION_SCOPE_EMAIL);
 
-        $configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configProvider->method('hasConfig')
+        $configProvider = $this->createMock(ConfigProvider::class);
+        $configProvider->expects(self::any())
+            ->method('hasConfig')
             ->withAnyParameters()
-            ->will($this->returnValue(true));
-        $configProvider->method('getConfig')
+            ->willReturn(true);
+        $configProvider->expects(self::any())
+            ->method('getConfig')
             ->withAnyParameters()
-            ->will($this->returnValue($fieldConfigurationMock));
+            ->willReturn($fieldConfiguration);
 
-        $metadataMock = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $metadataMock->method('getColumnNames')
+        $metadata = $this->createMock(ClassMetadata::class);
+        $metadata->expects(self::any())
+            ->method('getColumnNames')
             ->withAnyParameters()
-            ->will($this->returnValue(array(self::COLUMN_NAME)));
+            ->willReturn([self::COLUMN_NAME]);
 
-        $doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $doctrineHelper->method('getEntityMetadata')
+        $doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $doctrineHelper->expects(self::any())
+            ->method('getEntityMetadata')
             ->withAnyParameters()
-            ->will($this->returnValue($metadataMock));
+            ->willReturn($metadata);
 
-        $emailHolderHelper = $this->getMockBuilder('Oro\Bundle\EmailBundle\Tools\EmailHolderHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $emailHolderHelper = $this->createMock(EmailHolderHelper::class);
 
         $this->inflector = (new InflectorFactory())->build();
         $this->provider = new EmailDirectionProvider(
@@ -89,14 +88,15 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testOutgoingDirectionForCustomEntity()
     {
-        $getMethodName = "get" . $this->inflector->classify(self::COLUMN_NAME);
+        $getMethodName = 'get' . $this->inflector->classify(self::COLUMN_NAME);
         $target = $this->getMockBuilder(\ArrayObject::class)
             ->addMethods([$getMethodName])
             ->getMock();
-        $target->method($getMethodName)
-            ->will($this->returnValue(self::FROM_EMAIL));
+        $target->expects(self::once())
+            ->method($getMethodName)
+            ->willReturn(self::FROM_EMAIL);
 
-        $email   = new Email();
+        $email = new Email();
 
         $emailAddress = new EmailAddress();
         $emailAddress->setEmail(self::FROM_EMAIL);
@@ -110,14 +110,15 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testIncomingDirectionForCustomEntity()
     {
-        $getMethodName = "get" . $this->inflector->classify(self::COLUMN_NAME);
+        $getMethodName = 'get' . $this->inflector->classify(self::COLUMN_NAME);
         $target = $this->getMockBuilder(\ArrayObject::class)
             ->addMethods([$getMethodName])
             ->getMock();
-        $target->method($getMethodName)
-            ->will($this->returnValue(self::TO_EMAIL));
+        $target->expects(self::atLeastOnce())
+            ->method($getMethodName)
+            ->willReturn(self::TO_EMAIL);
 
-        $email   = new Email();
+        $email = new Email();
 
         $toEmailAddress = new EmailAddress();
         $toEmailAddress->setEmail(self::TO_EMAIL);
@@ -137,14 +138,15 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testUnknownDirectionForCustomEntity()
     {
-        $getMethodName = "get" . $this->inflector->classify(self::COLUMN_NAME);
+        $getMethodName = 'get' . $this->inflector->classify(self::COLUMN_NAME);
         $target = $this->getMockBuilder(\ArrayObject::class)
             ->addMethods([$getMethodName])
             ->getMock();
-        $target->method($getMethodName)
-            ->will($this->returnValue('test' . self::TO_EMAIL));
+        $target->expects(self::atLeastOnce())
+            ->method($getMethodName)
+            ->willReturn('test' . self::TO_EMAIL);
 
-        $email   = new Email();
+        $email = new Email();
 
         $toEmailAddress = new EmailAddress();
         $toEmailAddress->setEmail(self::TO_EMAIL);

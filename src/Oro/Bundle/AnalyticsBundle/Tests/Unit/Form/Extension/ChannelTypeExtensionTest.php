@@ -4,86 +4,78 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Form\Extension;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\PersistentCollection;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension;
 use Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
-use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\Testing\ReflectionUtil;
 use Oro\Component\TestUtils\ORM\Mocks\UnitOfWork;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormInterface;
 
 class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ChannelTypeExtension
-     */
-    protected $extension;
+    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
+    private $doctrineHelper;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
-     */
-    protected $doctrineHelper;
+    /** @var ChannelTypeExtension */
+    private $extension;
 
     protected function setUp(): void
     {
-        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
 
         $this->extension = new ChannelTypeExtension(
             $this->doctrineHelper,
-            'Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface',
-            'Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory'
+            RFMAwareInterface::class,
+            RFMMetricCategory::class
         );
     }
 
     public function testBuildForm()
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|FormBuilderInterface $builder */
-        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock(FormBuilderInterface::class);
 
-        $builder->expects($this->atLeastOnce())->method('addEventListener');
+        $builder->expects($this->atLeastOnce())
+            ->method('addEventListener');
 
         $this->extension->buildForm($builder, []);
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\MockObject $channel
-     * @param int $expectedPersist
-     * @param int $expectedRemove
-     *
      * @dataProvider postSubmitDataProvider
      */
-    public function testPostSubmit($channel, $expectedPersist = null, $expectedRemove = null)
+    public function testPostSubmit(?Channel $channel, int $expectedPersist = null, int $expectedRemove = null)
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|FormEvent $event */
-        $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')->disableOriginalConstructor()->getMock();
+        $event = $this->createMock(FormEvent::class);
 
         $event->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue($channel));
+            ->willReturn($channel);
 
-        $form = $this->createMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock(FormInterface::class);
         $event->expects($this->any())
             ->method('getForm')
-            ->will($this->returnValue($form));
+            ->willReturn($form);
 
-        $childForm = $this->createMock('Symfony\Component\Form\FormInterface');
+        $childForm = $this->createMock(FormInterface::class);
         $form->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($childForm));
+            ->willReturn($childForm);
 
         $form->expects($this->any())
             ->method('has')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager $em */
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
+        $em = $this->createMock(EntityManager::class);
 
         $removeEntity = new RFMMetricCategory();
         $collection = $this->getCollection([$removeEntity, new RFMMetricCategory()]);
@@ -93,58 +85,54 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
 
         $childForm->expects($this->any())
             ->method('getData')
-            ->will($this->onConsecutiveCalls(true, $collection, $this->getCollection(), $this->getCollection()));
+            ->willReturnOnConsecutiveCalls(true, $collection, $this->getCollection(), $this->getCollection());
 
         $this->doctrineHelper->expects($this->any())
             ->method('getEntityManager')
-            ->will($this->returnValue($em));
+            ->willReturn($em);
 
         if ($expectedPersist) {
-            $em->expects($this->once())->method('persist')->with($this->equalTo($insertEntity));
+            $em->expects($this->once())
+                ->method('persist')
+                ->with($this->identicalTo($insertEntity));
         }
 
         if ($expectedRemove) {
-            $em->expects($this->once())->method('remove')->with($this->equalTo($removeEntity));
+            $em->expects($this->once())
+                ->method('remove')
+                ->with($this->identicalTo($removeEntity));
         }
 
         $this->extension->manageCategories($event);
     }
 
-    /**
-     * @return array
-     */
-    public function postSubmitDataProvider()
+    public function postSubmitDataProvider(): array
     {
         return [
             'empty channel' => [
                 null
             ],
             'empty customer identity' => [
-                $this->getChannelMock()
+                $this->getChannel()
             ],
             'identity class without stats' => [
-                $this->getChannelMock('\stdClass')
+                $this->getChannel(\stdClass::class)
             ],
             'supported identity' => [
-                $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                $this->getChannel(RFMAwareStub::class),
                 1,
                 1
             ],
         ];
     }
 
-    /**
-     * @param string $identityClass
-     * @return \PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getChannelMock($identityClass = null)
+    private function getChannel(string $identityClass = null): Channel
     {
-        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
-
+        $channel = $this->createMock(Channel::class);
         if ($identityClass) {
             $channel->expects($this->any())
                 ->method('getCustomerIdentity')
-                ->will($this->returnValue($identityClass));
+                ->willReturn($identityClass);
         }
 
         return $channel;
@@ -155,91 +143,82 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
      */
     public function testPreSetData(array $categories)
     {
-        $channel = $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub');
+        $channel = $this->getChannel(RFMAwareStub::class);
 
-        /** @var \PHPUnit\Framework\MockObject\MockObject|FormEvent $event */
-        $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')->disableOriginalConstructor()->getMock();
+        $event = $this->createMock(FormEvent::class);
 
         $event->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue($channel));
+            ->willReturn($channel);
 
-        $repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')->disableOriginalConstructor()->getMock();
+        $repository = $this->createMock(EntityRepository::class);
 
         $this->doctrineHelper->expects($this->once())
             ->method('getEntityRepository')
-            ->will($this->returnValue($repository));
+            ->willReturn($repository);
 
         $repository->expects($this->once())
             ->method('findBy')
             ->with($this->isType('array'))
-            ->will($this->returnValue($categories));
+            ->willReturn($categories);
 
-        $form = $this->createMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock(FormInterface::class);
         $event->expects($this->any())
             ->method('getForm')
-            ->will($this->returnValue($form));
+            ->willReturn($form);
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
-        $metadata = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $em = $this->createMock(EntityManager::class);
+        $metadata = $this->createMock(ClassMetadata::class);
 
-        $this->doctrineHelper->expects($this->exactly(sizeof(RFMMetricCategory::$types)))
+        $this->doctrineHelper->expects($this->exactly(count(RFMMetricCategory::$types)))
             ->method('getEntityManager')
-            ->will($this->returnValue($em));
+            ->willReturn($em);
 
-        $this->doctrineHelper->expects($this->exactly(sizeof(RFMMetricCategory::$types)))
+        $this->doctrineHelper->expects($this->exactly(count(RFMMetricCategory::$types)))
             ->method('getEntityMetadata')
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         if ($categories) {
             $form->expects($this->exactly(4))
                 ->method('add')
                 ->withConsecutive(
                     [
-                        $this->equalTo('rfm_enabled'),
+                        'rfm_enabled',
                         $this->isType('string'),
                         $this->isType('array')
                     ],
                     [
-                        $this->equalTo('recency'),
-                        $this->equalTo(RFMCategorySettingsType::class),
-                        $this->callback(
-                            function ($options) {
-                                $this->assertEquals(
-                                    $this->getCollection([$this->getCategory(RFMMetricCategory::TYPE_RECENCY)]),
-                                    $options['data']
-                                );
+                        'recency',
+                        RFMCategorySettingsType::class,
+                        $this->callback(function ($options) {
+                            $this->assertEquals(
+                                $this->getCollection([$this->getCategory(RFMMetricCategory::TYPE_RECENCY)]),
+                                $options['data']
+                            );
 
-                                return true;
-                            }
-                        ),
+                            return true;
+                        }),
                     ],
                     [
-                        $this->equalTo('frequency'),
-                        $this->equalTo(RFMCategorySettingsType::class),
-                        $this->callback(
-                            function ($options) {
-                                $this->assertEquals(
-                                    $this->getCollection([1 => $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY)]),
-                                    $options['data']
-                                );
+                        'frequency',
+                        RFMCategorySettingsType::class,
+                        $this->callback(function ($options) {
+                            $this->assertEquals(
+                                $this->getCollection([1 => $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY)]),
+                                $options['data']
+                            );
 
-                                return true;
-                            }
-                        ),
+                            return true;
+                        }),
                     ],
                     [
-                        $this->equalTo('monetary'),
-                        $this->equalTo(RFMCategorySettingsType::class),
-                        $this->callback(
-                            function ($options) {
-                                $this->assertEquals($this->getCollection([]), $options['data']);
+                        'monetary',
+                        RFMCategorySettingsType::class,
+                        $this->callback(function ($options) {
+                            $this->assertEquals($this->getCollection([]), $options['data']);
 
-                                return true;
-                            }
-                        ),
+                            return true;
+                        }),
                     ]
                 );
         }
@@ -247,10 +226,7 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->loadCategories($event);
     }
 
-    /**
-     * @return array
-     */
-    public function preSetDataProvider()
+    public function preSetDataProvider(): array
     {
         return [
             'empty' => [[]],
@@ -264,94 +240,84 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\MockObject $channel
-     * @param bool $hasStateForm
-     * @param bool $isEnabled
-     * @param array $actualData
-     * @param array $expectedData
-     *
      * @dataProvider stateDataProvider
      */
     public function testHandleState(
-        $channel,
-        $hasStateForm,
-        $isEnabled = null,
-        $actualData = null,
-        $expectedData = null
+        Channel|\PHPUnit\Framework\MockObject\MockObject $channel,
+        bool $hasStateForm,
+        bool $isEnabled = null,
+        array $actualData = null,
+        array $expectedData = null
     ) {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|FormEvent $event */
-        $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')->disableOriginalConstructor()->getMock();
-
+        $event = $this->createMock(FormEvent::class);
         $event->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue($channel));
+            ->willReturn($channel);
 
-        $form = $this->createMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock(FormInterface::class);
         $form->expects($this->any())
             ->method('has')
-            ->will($this->returnValue($hasStateForm));
+            ->willReturn($hasStateForm);
         $event->expects($this->any())
             ->method('getForm')
-            ->will($this->returnValue($form));
+            ->willReturn($form);
 
-        $stateForm = $this->createMock('Symfony\Component\Form\FormInterface');
+        $stateForm = $this->createMock(FormInterface::class);
         $form->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($stateForm));
+            ->willReturn($stateForm);
         $stateForm->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($isEnabled));
+            ->willReturn($isEnabled);
 
         if ($actualData) {
             $channel->expects($this->any())
                 ->method('getData')
-                ->will($this->returnValue($actualData));
+                ->willReturn($actualData);
         }
 
         if ($expectedData) {
             $channel->expects($this->any())
                 ->method('setData')
-                ->will($this->returnValue($expectedData));
+                ->willReturn($expectedData);
         } else {
-            $channel->expects($this->never())->method('setData');
+            $channel->expects($this->never())
+                ->method('setData');
         }
 
         $this->extension->handleState($event);
     }
 
-    /**
-     * @return array
-     */
-    public function stateDataProvider()
+    public function stateDataProvider(): array
     {
         return [
-            'empty customer identity' => [$this->getChannelMock(), false],
+            'empty customer identity' => [$this->getChannel(), false],
             'has not state form' => [
-                $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                $this->getChannel(RFMAwareStub::class),
                 false,
             ],
             'empty data' => [
-                'channel' => $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                'channel' => $this->getChannel(RFMAwareStub::class),
                 'hasStateForm' => true,
                 'isEnabled' => false,
                 'actualData' => [],
                 'expectedData' => ['rfm_enabled' => false],
             ],
             'data was not changed' => [
-                'channel' => $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                'channel' => $this->getChannel(RFMAwareStub::class),
                 'hasStateForm' => true,
                 'isEnabled' => false,
                 'actualData' => ['rfm_enabled' => false],
             ],
             'enable' => [
-                'channel' => $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                'channel' => $this->getChannel(RFMAwareStub::class),
                 'hasStateForm' => true,
                 'isEnabled' => true,
                 'actualData' => ['rfm_enabled' => false],
                 'expectedData' => ['rfm_enabled' => true],
             ],
             'disable' => [
-                'channel' => $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                'channel' => $this->getChannel(RFMAwareStub::class),
                 'hasStateForm' => true,
                 'isEnabled' => false,
                 'actualData' => ['rfm_enabled' => true],
@@ -360,51 +326,23 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @param string $type
-     *
-     * @return CategoriesConstraint
-     */
-    protected function getConstraint($type)
-    {
-        $constraint = new CategoriesConstraint();
-        $constraint->setType($type);
-
-        return $constraint;
-    }
-
-    /**
-     * @param array $items
-     *
-     * @return PersistentCollection
-     */
-    protected function getCollection(array $items = [])
+    private function getCollection(array $items = []): PersistentCollection
     {
         $uow = new UnitOfWork();
-        /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager $em */
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
+        $em = $this->createMock(EntityManager::class);
         $em->expects($this->any())
             ->method('getUnitOfWork')
             ->willReturn($uow);
 
-        /** @var \PHPUnit\Framework\MockObject\MockObject|ClassMetadata $metadata */
-        $metadata = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $metadata = $this->createMock(ClassMetadata::class);
 
         $collection = new PersistentCollection($em, $metadata, new ArrayCollection($items));
-
         $collection->takeSnapshot();
 
         return $collection;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return RFMMetricCategory
-     */
-    protected function getCategory($type)
+    private function getCategory(string $type): RFMMetricCategory
     {
         $category = new RFMMetricCategory();
         $category->setCategoryType($type);
@@ -418,23 +356,20 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param bool $feature
-     * @param array $expected
-     *
      * @dataProvider validationGroupsDataProvider
      */
-    public function testSetDefaults($feature, array $expected)
+    public function testSetDefaults(bool $feature, array $expected)
     {
-        $form = $this->createMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock(FormInterface::class);
         $form->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($form));
+            ->willReturn($form);
         $form->expects($this->any())
             ->method('has')
-            ->will($this->returnValue($feature));
+            ->willReturn($feature);
         $form->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($feature));
+            ->willReturn($feature);
 
         /** @var callable $result */
         $result = ReflectionUtil::callMethod($this->extension, 'getValidationGroups', []);
@@ -442,10 +377,7 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $result($form));
     }
 
-    /**
-     * @return array
-     */
-    public function validationGroupsDataProvider()
+    public function validationGroupsDataProvider(): array
     {
         return [
             'validate' => [

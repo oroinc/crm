@@ -9,7 +9,7 @@ use Oro\Bundle\SalesBundle\Provider\LeadMailboxProcessProvider;
 class LeadMailboxProcessProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var LeadMailboxProcessProvider */
-    protected $provider;
+    private $provider;
 
     protected function setUp(): void
     {

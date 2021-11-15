@@ -49,10 +49,10 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
     public function testCouldBeConstructedWithExpectedArguments()
     {
         new CalculateChannelAnalyticsProcessor(
-            $this->createDoctrineHelperStub(),
-            $this->createAnalyticsBuilder(),
+            $this->getDoctrineHelper(),
+            $this->createMock(AnalyticsBuilder::class),
             new JobRunner(),
-            $this->createLoggerMock()
+            $this->createMock(LoggerInterface::class)
         );
     }
 
@@ -61,21 +61,18 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         $message = new Message();
         $message->setBody('[]');
 
-        $logger = $this->createLoggerMock();
-        $logger
-            ->expects($this->once())
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())
             ->method('critical')
-            ->with('The message invalid. It must have channel_id set')
-        ;
+            ->with('The message invalid. It must have channel_id set');
 
         $processor = new CalculateChannelAnalyticsProcessor(
-            $this->createDoctrineHelperStub(),
-            $this->createAnalyticsBuilder(),
+            $this->getDoctrineHelper(),
+            $this->createMock(AnalyticsBuilder::class),
             new JobRunner(),
             $logger
         );
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, new $session);
 
@@ -88,56 +85,48 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The malformed json given.');
 
         $processor = new CalculateChannelAnalyticsProcessor(
-            $this->createDoctrineHelperStub(),
-            $this->createAnalyticsBuilder(),
+            $this->getDoctrineHelper(),
+            $this->createMock(AnalyticsBuilder::class),
             new JobRunner(),
-            $this->createLoggerMock()
+            $this->createMock(LoggerInterface::class)
         );
 
         $message = new Message();
         $message->setBody('[}');
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $processor->process($message, $session);
     }
 
     public function testShouldRejectMessageIfChannelNotExist()
     {
-        $entityManagerMock = $this->createEntityManagerStub();
-        $entityManagerMock
-            ->expects($this->once())
+        $entityManager = $this->getEntityManager();
+        $entityManager->expects($this->once())
             ->method('find')
             ->with(Channel::class, 'theChannelId')
             ->willReturn(null);
-        ;
 
-        $doctrineHelperStub = $this->createDoctrineHelperStub($entityManagerMock);
+        $doctrineHelper = $this->getDoctrineHelper($entityManager);
 
-        $analyticsBuilderMock = $this->createAnalyticsBuilder();
-        $analyticsBuilderMock
-            ->expects(self::never())
-            ->method('build')
-        ;
+        $analyticsBuilder = $this->createMock(AnalyticsBuilder::class);
+        $analyticsBuilder->expects(self::never())
+            ->method('build');
 
         $message = new Message();
         $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
 
-        $logger = $this->createLoggerMock();
-        $logger
-            ->expects($this->once())
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())
             ->method('error')
-            ->with('Channel not found: theChannelId')
-        ;
+            ->with('Channel not found: theChannelId');
 
         $processor = new CalculateChannelAnalyticsProcessor(
-            $doctrineHelperStub,
-            $analyticsBuilderMock,
+            $doctrineHelper,
+            $analyticsBuilder,
             new JobRunner(),
             $logger
         );
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
@@ -149,40 +138,33 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         $channel = new Channel();
         $channel->setStatus(Channel::STATUS_INACTIVE);
 
-        $entityManagerMock = $this->createEntityManagerStub();
-        $entityManagerMock
-            ->expects($this->once())
+        $entityManager = $this->getEntityManager();
+        $entityManager->expects($this->once())
             ->method('find')
             ->with(Channel::class, 'theChannelId')
             ->willReturn($channel);
-        ;
 
-        $doctrineHelperStub = $this->createDoctrineHelperStub($entityManagerMock);
+        $doctrineHelper = $this->getDoctrineHelper($entityManager);
 
-        $analyticsBuilderMock = $this->createAnalyticsBuilder();
-        $analyticsBuilderMock
-            ->expects(self::never())
-            ->method('build')
-        ;
+        $analyticsBuilder = $this->createMock(AnalyticsBuilder::class);
+        $analyticsBuilder->expects(self::never())
+            ->method('build');
 
         $message = new Message();
         $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
 
-        $logger = $this->createLoggerMock();
-        $logger
-            ->expects($this->once())
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())
             ->method('error')
-            ->with('Channel not active: theChannelId')
-        ;
+            ->with('Channel not active: theChannelId');
 
         $processor = new CalculateChannelAnalyticsProcessor(
-            $doctrineHelperStub,
-            $analyticsBuilderMock,
+            $doctrineHelper,
+            $analyticsBuilder,
             new JobRunner(),
             $logger
         );
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
@@ -195,40 +177,33 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         $channel->setStatus(Channel::STATUS_ACTIVE);
         $channel->setCustomerIdentity(\stdClass::class);
 
-        $entityManagerMock = $this->createEntityManagerStub();
-        $entityManagerMock
-            ->expects($this->once())
+        $entityManager = $this->getEntityManager();
+        $entityManager->expects($this->once())
             ->method('find')
             ->with(Channel::class, 'theChannelId')
             ->willReturn($channel);
-        ;
 
-        $doctrineHelperStub = $this->createDoctrineHelperStub($entityManagerMock);
+        $doctrineHelper = $this->getDoctrineHelper($entityManager);
 
-        $analyticsBuilderMock = $this->createAnalyticsBuilder();
-        $analyticsBuilderMock
-            ->expects(self::never())
-            ->method('build')
-        ;
+        $analyticsBuilder = $this->createMock(AnalyticsBuilder::class);
+        $analyticsBuilder->expects(self::never())
+            ->method('build');
 
         $message = new Message();
         $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
 
-        $logger = $this->createLoggerMock();
-        $logger
-            ->expects($this->once())
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())
             ->method('error')
-            ->with('Channel is not supposed to calculate analytics: theChannelId')
-        ;
+            ->with('Channel is not supposed to calculate analytics: theChannelId');
 
         $processor = new CalculateChannelAnalyticsProcessor(
-            $doctrineHelperStub,
-            $analyticsBuilderMock,
+            $doctrineHelper,
+            $analyticsBuilder,
             new JobRunner(),
             $logger
         );
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
@@ -238,40 +213,35 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
     public function testShouldBuildAnalyticsForGivenChannelIfChannelCustomerIdentityInstanceOfAnalyticsAwareInterface()
     {
         //guard
-        self::assertClassImplements(AnalyticsAwareInterface::class, CustomerAwareStub::class);
+        $this->assertClassImplements(AnalyticsAwareInterface::class, CustomerAwareStub::class);
 
         $channel = new Channel();
         $channel->setStatus(Channel::STATUS_ACTIVE);
         $channel->setCustomerIdentity(CustomerAwareStub::class);
 
-        $entityManagerMock = $this->createEntityManagerStub();
-        $entityManagerMock
-            ->expects($this->once())
+        $entityManager = $this->getEntityManager();
+        $entityManager->expects($this->once())
             ->method('find')
             ->with(Channel::class, 'theChannelId')
             ->willReturn($channel);
-        ;
 
-        $doctrineHelperStub = $this->createDoctrineHelperStub($entityManagerMock);
+        $doctrineHelper = $this->getDoctrineHelper($entityManager);
 
-        $analyticsBuilderMock = $this->createAnalyticsBuilder();
-        $analyticsBuilderMock
-            ->expects(self::once())
+        $analyticsBuilder = $this->createMock(AnalyticsBuilder::class);
+        $analyticsBuilder->expects(self::once())
             ->method('build')
-            ->with(self::identicalTo($channel), [])
-        ;
+            ->with(self::identicalTo($channel), []);
 
         $processor = new CalculateChannelAnalyticsProcessor(
-            $doctrineHelperStub,
-            $analyticsBuilderMock,
+            $doctrineHelper,
+            $analyticsBuilder,
             new JobRunner(),
-            $this->createLoggerMock()
+            $this->createMock(LoggerInterface::class)
         );
 
         $message = new Message();
         $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
@@ -281,34 +251,30 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
     public function testShouldPassCustomerIdsToBuildMethod()
     {
         //guard
-        self::assertClassImplements(AnalyticsAwareInterface::class, CustomerAwareStub::class);
+        $this->assertClassImplements(AnalyticsAwareInterface::class, CustomerAwareStub::class);
 
         $channel = new Channel();
         $channel->setStatus(Channel::STATUS_ACTIVE);
         $channel->setCustomerIdentity(CustomerAwareStub::class);
 
-        $entityManagerMock = $this->createEntityManagerStub();
-        $entityManagerMock
-            ->expects($this->once())
+        $entityManager = $this->getEntityManager();
+        $entityManager->expects($this->once())
             ->method('find')
             ->with(Channel::class, 'theChannelId')
             ->willReturn($channel);
-        ;
 
-        $doctrineHelperStub = $this->createDoctrineHelperStub($entityManagerMock);
+        $doctrineHelper = $this->getDoctrineHelper($entityManager);
 
-        $analyticsBuilderMock = $this->createAnalyticsBuilder();
-        $analyticsBuilderMock
-            ->expects(self::once())
+        $analyticsBuilder = $this->createMock(AnalyticsBuilder::class);
+        $analyticsBuilder->expects(self::once())
             ->method('build')
-            ->with(self::identicalTo($channel), ['theCustomerFooId', 'theCustomerBarId'])
-        ;
+            ->with(self::identicalTo($channel), ['theCustomerFooId', 'theCustomerBarId']);
 
         $processor = new CalculateChannelAnalyticsProcessor(
-            $doctrineHelperStub,
-            $analyticsBuilderMock,
+            $doctrineHelper,
+            $analyticsBuilder,
             new JobRunner(),
-            $this->createLoggerMock()
+            $this->createMock(LoggerInterface::class)
         );
 
         $message = new Message();
@@ -317,7 +283,6 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             'customer_ids' => ['theCustomerFooId', 'theCustomerBarId'],
         ]));
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
@@ -327,29 +292,27 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
     public function testShouldRunCalculateAnalyticsAsUniqueJob()
     {
         //guard
-        self::assertClassImplements(AnalyticsAwareInterface::class, CustomerAwareStub::class);
+        $this->assertClassImplements(AnalyticsAwareInterface::class, CustomerAwareStub::class);
 
         $channel = new Channel();
         $channel->setStatus(Channel::STATUS_ACTIVE);
         $channel->setCustomerIdentity(CustomerAwareStub::class);
 
-        $entityManagerMock = $this->createEntityManagerStub();
-        $entityManagerMock
-            ->expects($this->once())
+        $entityManager = $this->getEntityManager();
+        $entityManager->expects($this->once())
             ->method('find')
             ->with(Channel::class, 'theChannelId')
             ->willReturn($channel);
-        ;
 
-        $doctrineHelperStub = $this->createDoctrineHelperStub($entityManagerMock);
+        $doctrineHelper = $this->getDoctrineHelper($entityManager);
 
         $jobRunner = new JobRunner();
 
         $processor = new CalculateChannelAnalyticsProcessor(
-            $doctrineHelperStub,
-            $this->createAnalyticsBuilder(),
+            $doctrineHelper,
+            $this->createMock(AnalyticsBuilder::class),
             $jobRunner,
-            $this->createLoggerMock()
+            $this->createMock(LoggerInterface::class)
         );
 
         $message = new Message();
@@ -359,7 +322,6 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             'customer_ids' => ['theCustomerFooId', 'theCustomerBarId'],
         ]));
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $processor->process($message, $session);
 
@@ -370,58 +332,30 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|EntityManagerInterface
+     * @return EntityManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    private function createEntityManagerStub()
+    private function getEntityManager()
     {
-        $configuration = new Configuration();
-
-        $connectionMock = $this->createMock(Connection::class);
-        $connectionMock
-            ->expects($this->any())
+        $connection = $this->createMock(Connection::class);
+        $connection->expects($this->any())
             ->method('getConfiguration')
-            ->willReturn($configuration)
-        ;
+            ->willReturn(new Configuration());
 
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $entityManagerMock
-            ->expects($this->any())
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects($this->any())
             ->method('getConnection')
-            ->willReturn($connectionMock)
-        ;
+            ->willReturn($connection);
 
-        return $entityManagerMock;
+        return $entityManager;
     }
 
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|AnalyticsBuilder
-     */
-    private function createAnalyticsBuilder()
+    private function getDoctrineHelper(EntityManagerInterface $entityManager = null): DoctrineHelper
     {
-        return $this->createMock(AnalyticsBuilder::class);
-    }
-
-    /**
-     * @param \PHPUnit\Framework\MockObject\MockObject|EntityManagerInterface $entityManager
-     * @return \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper
-     */
-    private function createDoctrineHelperStub($entityManager = null)
-    {
-        $helperMock = $this->createMock(DoctrineHelper::class);
-        $helperMock
-            ->expects($this->any())
+        $doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $doctrineHelper->expects($this->any())
             ->method('getEntityManager')
-            ->willReturn($entityManager)
-        ;
+            ->willReturn($entityManager);
 
-        return $helperMock;
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject | LoggerInterface
-     */
-    private function createLoggerMock()
-    {
-        return $this->createMock(LoggerInterface::class);
+        return $doctrineHelper;
     }
 }

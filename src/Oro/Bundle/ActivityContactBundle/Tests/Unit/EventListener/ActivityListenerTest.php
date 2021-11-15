@@ -19,54 +19,45 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ActivityListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ActivityListener */
-    protected $listener;
+    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
+    private $doctrineHelper;
 
-    /** @var ActivityContactProvider */
-    protected $provider;
+    /** @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $config;
 
     /** @var TestTarget */
-    protected $testTarget;
+    private $testTarget;
 
     /** @var \DateTime */
-    protected $testDate;
+    private $testDate;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $doctrineHelper;
-
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $configManager;
-
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $configProvider;
-
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $config;
+    /** @var ActivityListener */
+    private $listener;
 
     protected function setUp(): void
     {
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $this->config = $this->createMock(ConfigInterface::class);
+
         $providers = TestContainerBuilder::create()
             ->add(TestActivity::class, new TestDirectionProvider())
             ->getContainer($this);
 
-        $this->provider = new ActivityContactProvider(
-            [TestActivity::class],
-            $providers
-        );
-
-        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
-        $this->configManager = $this->createMock(ConfigManager::class);
-        $this->configProvider = $this->createMock(ConfigProvider::class);
-        $this->config = $this->createMock(ConfigInterface::class);
-
-        $this->configManager->expects($this->any())
-            ->method('getProvider')
-            ->will($this->returnValue($this->configProvider));
-        $this->configProvider->expects($this->any())
+        $configProvider = $this->createMock(ConfigProvider::class);
+        $configProvider->expects($this->any())
             ->method('getConfig')
             ->willReturn($this->config);
 
-        $this->listener = new ActivityListener($this->provider, $this->doctrineHelper, $this->configManager);
+        $configManager = $this->createMock(ConfigManager::class);
+        $configManager->expects($this->any())
+            ->method('getProvider')
+            ->willReturn($configProvider);
+
+        $this->listener = new ActivityListener(
+            new ActivityContactProvider([TestActivity::class], $providers),
+            $this->doctrineHelper,
+            $configManager
+        );
     }
 
     /**
@@ -77,8 +68,7 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
         $target = new TestTarget();
         $activity = new TestActivity($direction, new \DateTime());
 
-        $this->config
-            ->expects($this->any())
+        $this->config->expects($this->any())
             ->method('is')
             ->with('is_extend')
             ->willReturn($extend);
@@ -112,18 +102,16 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider onAddActivityProvider
-     * @param object $object
-     * @param string $expectedDirection
      */
-    public function testOnAddActivity($object, $expectedDirection)
+    public function testOnAddActivity(object $object, string $expectedDirection)
     {
         $this->testTarget = new TestTarget();
-        $event            = new ActivityEvent($object, $this->testTarget);
+        $event = new ActivityEvent($object, $this->testTarget);
 
         $this->config->expects($this->once())
             ->method('is')
             ->with('is_extend')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->listener->onAddActivity($event);
 
@@ -134,11 +122,11 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals(1, $accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT_IN));
                 $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT_OUT));
                 $this->assertInstanceOf(
-                    '\DateTime',
+                    \DateTime::class,
                     $accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE)
                 );
                 $this->assertInstanceOf(
-                    '\DateTime',
+                    \DateTime::class,
                     $accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE_IN)
                 );
                 $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE_OUT));
@@ -148,11 +136,11 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals(1, $accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT_OUT));
                 $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT_IN));
                 $this->assertInstanceOf(
-                    '\DateTime',
+                    \DateTime::class,
                     $accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE)
                 );
                 $this->assertInstanceOf(
-                    '\DateTime',
+                    \DateTime::class,
                     $accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE_OUT)
                 );
                 $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE_IN));
@@ -178,13 +166,13 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
         $this->config->expects($this->once())
             ->method('is')
             ->with('is_extend')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->listener->onAddActivity($event);
         $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT));
     }
 
-    public function onAddActivityProvider()
+    public function onAddActivityProvider(): array
     {
         $this->testDate = new \DateTime();
 

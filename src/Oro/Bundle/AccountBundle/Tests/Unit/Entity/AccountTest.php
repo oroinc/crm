@@ -27,14 +27,14 @@ class AccountTest extends \PHPUnit\Framework\TestCase
     {
         $entity = new Account();
         $entity->beforeSave();
-        $this->assertInstanceOf('\DateTime', $entity->getCreatedAt());
+        $this->assertInstanceOf(\DateTime::class, $entity->getCreatedAt());
     }
 
     public function testDoPreUpdate()
     {
         $entity = new Account();
         $entity->doPreUpdate();
-        $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
+        $this->assertInstanceOf(\DateTime::class, $entity->getUpdatedAt());
     }
 
     public function testAddContact()
@@ -83,16 +83,14 @@ class AccountTest extends \PHPUnit\Framework\TestCase
     public function testGetEmail()
     {
         $account = new Account();
-        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contact = $this->createMock(Contact::class);
 
         $this->assertNull($account->getEmail());
 
         $account->setDefaultContact($contact);
         $contact->expects($this->once())
             ->method('getEmail')
-            ->will($this->returnValue('email@example.com'));
+            ->willReturn('email@example.com');
         $this->assertEquals('email@example.com', $account->getEmail());
     }
 

@@ -7,7 +7,8 @@ use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 
 class ContactEmailTest extends \PHPUnit\Framework\TestCase
 {
-    protected $email;
+    /** @var ContactEmail */
+    private $email;
 
     protected function setUp(): void
     {

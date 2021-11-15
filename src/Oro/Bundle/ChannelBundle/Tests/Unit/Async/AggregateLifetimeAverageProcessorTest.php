@@ -41,8 +41,8 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
     public function testCouldBeConstructedWithDoctrineAndLocaleSettingsAsArguments()
     {
         new AggregateLifetimeAverageProcessor(
-            $this->createRegistryStub(),
-            $this->createLocaleSettingsMock(),
+            $this->getDoctrine(),
+            $this->createMock(LocaleSettings::class),
             new JobRunner()
         );
     }
@@ -53,43 +53,34 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The malformed json given.');
 
         $processor = new AggregateLifetimeAverageProcessor(
-            $this->createRegistryStub(),
-            $this->createLocaleSettingsMock(),
+            $this->getDoctrine(),
+            $this->createMock(LocaleSettings::class),
             new JobRunner()
         );
 
         $message = new Message();
         $message->setBody('[}');
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $processor->process($message, $session);
     }
 
     public function testShouldDoAggregateAndWithoutForceByDefault()
     {
-        $localeSettings = $this->createLocaleSettingsMock();
-        $localeSettings
-            ->expects($this->once())
+        $localeSettings = $this->createMock(LocaleSettings::class);
+        $localeSettings->expects($this->once())
             ->method('getTimeZone')
-            ->willReturn('theTimeZone')
-        ;
+            ->willReturn('theTimeZone');
 
-        $repositoryMock = $this->createLifetimeValueAverageAggregationRepositoryMock();
-        $repositoryMock
-            ->expects($this->never())
-            ->method('clearTableData')
-        ;
-        $repositoryMock
-            ->expects($this->once())
+        $repository = $this->createMock(LifetimeValueAverageAggregationRepository::class);
+        $repository->expects($this->never())
+            ->method('clearTableData');
+        $repository->expects($this->once())
             ->method('aggregate')
-            ->with('theTimeZone', false)
-        ;
-
-        $registryStub = $this->createRegistryStub($repositoryMock);
+            ->with('theTimeZone', false);
 
         $processor = new AggregateLifetimeAverageProcessor(
-            $registryStub,
+            $this->getDoctrine($repository),
             $localeSettings,
             new JobRunner()
         );
@@ -97,7 +88,6 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
         $message = new Message();
         $message->setBody(JSON::encode([]));
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
@@ -106,29 +96,21 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldClearTableBeforeAggregateIfForceTrue()
     {
-        $localeSettings = $this->createLocaleSettingsMock();
-        $localeSettings
-            ->expects($this->once())
+        $localeSettings = $this->createMock(LocaleSettings::class);
+        $localeSettings->expects($this->once())
             ->method('getTimeZone')
-            ->willReturn('theTimeZone')
-        ;
+            ->willReturn('theTimeZone');
 
-        $repositoryMock = $this->createLifetimeValueAverageAggregationRepositoryMock();
-        $repositoryMock
-            ->expects($this->once())
+        $repository = $this->createMock(LifetimeValueAverageAggregationRepository::class);
+        $repository->expects($this->once())
             ->method('clearTableData')
-            ->with(false)
-        ;
-        $repositoryMock
-            ->expects($this->once())
+            ->with(false);
+        $repository->expects($this->once())
             ->method('aggregate')
-            ->with('theTimeZone', true)
-        ;
-
-        $registryStub = $this->createRegistryStub($repositoryMock);
+            ->with('theTimeZone', true);
 
         $processor = new AggregateLifetimeAverageProcessor(
-            $registryStub,
+            $this->getDoctrine($repository),
             $localeSettings,
             new JobRunner()
         );
@@ -138,7 +120,6 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
             'force' => true
         ]));
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
@@ -147,29 +128,21 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldTruncateTableBeforeAggregateIfForceTrue()
     {
-        $localeSettings = $this->createLocaleSettingsMock();
-        $localeSettings
-            ->expects($this->once())
+        $localeSettings = $this->createMock(LocaleSettings::class);
+        $localeSettings->expects($this->once())
             ->method('getTimeZone')
-            ->willReturn('theTimeZone')
-        ;
+            ->willReturn('theTimeZone');
 
-        $repositoryMock = $this->createLifetimeValueAverageAggregationRepositoryMock();
-        $repositoryMock
-            ->expects($this->once())
+        $repository = $this->createMock(LifetimeValueAverageAggregationRepository::class);
+        $repository->expects($this->once())
             ->method('clearTableData')
-            ->with(true)
-        ;
-        $repositoryMock
-            ->expects($this->once())
+            ->with(true);
+        $repository->expects($this->once())
             ->method('aggregate')
-            ->with('theTimeZone', true)
-        ;
-
-        $registryStub = $this->createRegistryStub($repositoryMock);
+            ->with('theTimeZone', true);
 
         $processor = new AggregateLifetimeAverageProcessor(
-            $registryStub,
+            $this->getDoctrine($repository),
             $localeSettings,
             new JobRunner()
         );
@@ -180,7 +153,6 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
             'use_truncate' => false,
         ]));
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
@@ -189,31 +161,23 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldRunAggregateLifetimeAverageAsUniqueJob()
     {
-        $localeSettings = $this->createLocaleSettingsMock();
-        $localeSettings
-            ->expects($this->once())
+        $localeSettings = $this->createMock(LocaleSettings::class);
+        $localeSettings->expects($this->once())
             ->method('getTimeZone')
-            ->willReturn('theTimeZone')
-        ;
+            ->willReturn('theTimeZone');
 
-        $repositoryMock = $this->createLifetimeValueAverageAggregationRepositoryMock();
-        $repositoryMock
-            ->expects($this->once())
+        $repository = $this->createMock(LifetimeValueAverageAggregationRepository::class);
+        $repository->expects($this->once())
             ->method('clearTableData')
-            ->with(true)
-        ;
-        $repositoryMock
-            ->expects($this->once())
+            ->with(true);
+        $repository->expects($this->once())
             ->method('aggregate')
-            ->with('theTimeZone', true)
-        ;
-
-        $registryStub = $this->createRegistryStub($repositoryMock);
+            ->with('theTimeZone', true);
 
         $jobRunner = new JobRunner();
 
         $processor = new AggregateLifetimeAverageProcessor(
-            $registryStub,
+            $this->getDoctrine($repository),
             $localeSettings,
             $jobRunner
         );
@@ -225,7 +189,6 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
             'use_truncate' => false,
         ]));
 
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
         $processor->process($message, $session);
 
@@ -235,35 +198,13 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('theMessageId', $uniqueJobs[0]['ownerId']);
     }
 
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|LocaleSettings
-     */
-    private function createLocaleSettingsMock()
+    private function getDoctrine(ObjectRepository $repository = null): ManagerRegistry
     {
-        return $this->createMock(LocaleSettings::class);
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|LifetimeValueAverageAggregationRepository
-     */
-    private function createLifetimeValueAverageAggregationRepositoryMock()
-    {
-        return $this->createMock(LifetimeValueAverageAggregationRepository::class);
-    }
-
-    /**
-     * @param ObjectRepository $entityRepository
-     * @return \PHPUnit\Framework\MockObject\MockObject|ManagerRegistry
-     */
-    private function createRegistryStub($entityRepository = null)
-    {
-        $registryMock = $this->createMock(ManagerRegistry::class);
-        $registryMock
-            ->expects($this->any())
+        $registry = $this->createMock(ManagerRegistry::class);
+        $registry->expects($this->any())
             ->method('getRepository')
-            ->willReturn($entityRepository)
-        ;
+            ->willReturn($repository);
 
-        return $registryMock;
+        return $registry;
     }
 }

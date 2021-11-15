@@ -3,6 +3,9 @@
 namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\Testing\ReflectionUtil;
 
 /**
@@ -10,10 +13,8 @@ use Oro\Component\Testing\ReflectionUtil;
  */
 class CaseCommentTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var CaseComment
-     */
-    protected $comment;
+    /** @var CaseComment */
+    private $comment;
 
     protected function setUp(): void
     {
@@ -51,9 +52,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull($this->comment->getContact());
 
-        $value = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $value = $this->createMock(Contact::class);
 
         $this->assertEquals($this->comment, $this->comment->setContact($value));
         $this->assertEquals($value, $this->comment->getContact());
@@ -63,9 +62,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull($this->comment->getCase());
 
-        $value = $this->getMockBuilder('Oro\Bundle\CaseBundle\Entity\CaseEntity')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $value = $this->createMock(CaseEntity::class);
 
         $this->assertEquals($this->comment, $this->comment->setCase($value));
         $this->assertEquals($value, $this->comment->getCase());
@@ -75,9 +72,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull($this->comment->getUpdatedBy());
 
-        $value = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $value = $this->createMock(User::class);
 
         $this->assertEquals($this->comment, $this->comment->setUpdatedBy($value));
         $this->assertEquals($value, $this->comment->getUpdatedBy());
@@ -87,9 +82,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull($this->comment->getOwner());
 
-        $value = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $value = $this->createMock(User::class);
 
         $this->assertEquals($this->comment, $this->comment->setOwner($value));
         $this->assertEquals($value, $this->comment->getOwner());

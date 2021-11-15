@@ -5,13 +5,12 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\ImportExport\Configuration;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\ImportExport\Configuration\LeadImportExportConfigurationProvider;
-use PHPUnit\Framework\TestCase;
 
-class LeadImportExportConfigurationProviderTest extends TestCase
+class LeadImportExportConfigurationProviderTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet()
     {
-        static::assertEquals(
+        self::assertEquals(
             new ImportExportConfiguration([
                 ImportExportConfiguration::FIELD_ENTITY_CLASS => Lead::class,
                 ImportExportConfiguration::FIELD_EXPORT_PROCESSOR_ALIAS => 'oro_sales_lead',

@@ -17,9 +17,7 @@ class HasContactInformationValidatorTest extends ConstraintValidatorTestCase
         $translator = $this->createMock(TranslatorInterface::class);
         $translator->expects($this->any())
             ->method('trans')
-            ->willReturnCallback(function ($id) {
-                return $id;
-            });
+            ->willReturnArgument(0);
 
         return new HasContactInformationValidator($translator);
     }
@@ -27,7 +25,7 @@ class HasContactInformationValidatorTest extends ConstraintValidatorTestCase
     /**
      * @dataProvider validValuesProvider
      */
-    public function testValidValues($value)
+    public function testValidValues(?Contact $value)
     {
         $this->validator->validate($value, new HasContactInformation());
 

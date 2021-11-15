@@ -8,7 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 class B2bCustomerEmailTest extends \PHPUnit\Framework\TestCase
 {
     /** @var B2bCustomerEmail */
-    protected $email;
+    private $email;
 
     protected function setUp(): void
     {

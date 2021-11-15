@@ -8,7 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 class B2bCustomerPhoneTest extends \PHPUnit\Framework\TestCase
 {
     /** @var B2bCustomerPhone */
-    protected $phone;
+    private $phone;
 
     protected function setUp(): void
     {

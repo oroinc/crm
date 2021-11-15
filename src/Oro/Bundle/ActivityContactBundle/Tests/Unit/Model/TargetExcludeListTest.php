@@ -11,10 +11,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 class TargetExcludeListTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @return array
-     */
-    public function isExcludedDataProvider()
+    public function isExcludedDataProvider(): array
     {
         return [
             [User::class, true],

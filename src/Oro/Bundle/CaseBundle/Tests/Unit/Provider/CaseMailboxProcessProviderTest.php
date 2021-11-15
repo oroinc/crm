@@ -9,7 +9,7 @@ use Oro\Bundle\CaseBundle\Provider\CaseMailboxProcessProvider;
 class CaseMailboxProcessProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CaseMailboxProcessProvider */
-    protected $provider;
+    private $provider;
 
     protected function setUp(): void
     {

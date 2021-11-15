@@ -19,7 +19,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
 {
-    private LeadToOpportunityProvider|\PHPUnit\Framework\MockObject\MockObject $provider;
+    /** @var LeadToOpportunityProvider|\PHPUnit\Framework\MockObject\MockObject */
+    private $provider;
 
     protected function setUp(): void
     {

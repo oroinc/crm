@@ -4,17 +4,15 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\ContactBundle\Form\Type\ContactApiType;
 use Oro\Bundle\ContactBundle\Form\Type\ContactType;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContactApiTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ContactApiType
-     */
-    protected $type;
+    /** @var ContactApiType */
+    private $type;
 
-    /**
-     * Setup test env
-     */
     protected function setUp(): void
     {
         $this->type = new ContactApiType();
@@ -22,27 +20,20 @@ class ContactApiTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testBuildForm()
     {
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $builder = $this->createMock(FormBuilder::class);
         $builder->expects($this->once())
             ->method('addEventSubscriber')
-            ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
+            ->with($this->isInstanceOf(EventSubscriberInterface::class));
 
-        $this->type->buildForm($builder, array());
+        $this->type->buildForm($builder, []);
     }
 
     public function testConfigureOptions()
     {
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
+        $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())
             ->method('setDefaults')
-            ->with(
-                array(
-                    'csrf_protection' => false,
-                )
-            );
+            ->with(['csrf_protection' => false]);
         $this->type->configureOptions($resolver);
     }
 

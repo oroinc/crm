@@ -4,17 +4,13 @@ namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
 use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AccountSelectTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var AccountSelectType
-     */
+    /** @var AccountSelectType */
     private $type;
 
-    /**
-     * Set up test environment
-     */
     protected function setUp(): void
     {
         $this->type = new AccountSelectType();
@@ -32,9 +28,8 @@ class AccountSelectTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testConfigureOptions()
     {
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
-        $resolver
-            ->expects($this->once())
+        $resolver = $this->createMock(OptionsResolver::class);
+        $resolver->expects($this->once())
             ->method('setDefaults')
             ->with($this->isType('array'));
         $this->type->configureOptions($resolver);

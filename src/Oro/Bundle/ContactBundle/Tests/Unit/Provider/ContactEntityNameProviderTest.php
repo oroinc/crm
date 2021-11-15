@@ -11,78 +11,69 @@ use Oro\Component\DependencyInjection\ServiceLink;
 
 class ContactEntityNameProviderTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var ContactNameFormatter|\PHPUnit\Framework\MockObject\MockObject */
+    private $contactNameFormatter;
+
+    /** @var DQLNameFormatter|\PHPUnit\Framework\MockObject\MockObject */
+    private $dqlNameFormatter;
+
     /** @var ContactEntityNameProvider */
-    protected $provider;
-
-    /** @var ServiceLink */
-    protected $nameFormatterLink;
-
-    /** @var ServiceLink */
-    protected $dqlNameFormatterLink;
-
-    /** @var ContactNameFormatter */
-    protected $contactNameFormatter;
-
-    /** @var DQLNameFormatter */
-    protected $dqlNameFormatter;
+    private $provider;
 
     protected function setUp(): void
     {
-        $this->contactNameFormatter = $this
-            ->getMockBuilder('Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter')
-            ->disableOriginalConstructor()->getMock();
+        $this->contactNameFormatter = $this->createMock(ContactNameFormatter::class);
+        $this->dqlNameFormatter = $this->createMock(DQLNameFormatter::class);
 
-        $this->dqlNameFormatter = $this
-            ->getMockBuilder('Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter')
-            ->disableOriginalConstructor()->getMock();
+        $nameFormatterLink = $this->createMock(ServiceLink::class);
+        $nameFormatterLink->expects($this->any())
+            ->method('getService')
+            ->willReturn($this->contactNameFormatter);
 
-        $this->nameFormatterLink = $this->createMock(ServiceLink::class);
+        $dqlNameFormatterLink = $this->createMock(ServiceLink::class);
+        $dqlNameFormatterLink->expects($this->any())
+            ->method('getService')
+            ->willReturn($this->dqlNameFormatter);
 
-        $this->dqlNameFormatterLink = $this->createMock(ServiceLink::class);
-
-        $this->provider = new ContactEntityNameProvider($this->nameFormatterLink, $this->dqlNameFormatterLink);
+        $this->provider = new ContactEntityNameProvider($nameFormatterLink, $dqlNameFormatterLink);
     }
 
     /**
      * @dataProvider getNameDataProvider
      */
-    public function testGetName($format, $locale, $entity, $expected)
+    public function testGetName(string $format, ?string $locale, object $entity, string|false $expected)
     {
         if ($expected) {
-            $this->contactNameFormatter->expects($this->once())->method('format')
+            $this->contactNameFormatter->expects($this->once())
+                ->method('format')
                 ->willReturn('Contact');
-
-            $this->nameFormatterLink->expects($this->once())
-                ->method('getService')
-                ->willReturn($this->contactNameFormatter);
         }
 
         $result = $this->provider->getName($format, $locale, $entity);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
      * @dataProvider getNameDQLDataProvider
      */
-    public function testGetNameDQL($format, $locale, $className, $alias, $expected)
-    {
+    public function testGetNameDQL(
+        string $format,
+        ?string $locale,
+        string $className,
+        string $alias,
+        string|false $expected
+    ) {
         if ($expected) {
-            $this->dqlNameFormatter->expects($this->once())->method('getFormattedNameDQL')
+            $this->dqlNameFormatter->expects($this->once())
+                ->method('getFormattedNameDQL')
                 ->willReturn('Contact');
-
-            $this->dqlNameFormatterLink->expects($this->once())
-                ->method('getService')
-                ->willReturn($this->dqlNameFormatter);
         }
 
         $result = $this->provider->getNameDQL($format, $locale, $className, $alias);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
-    /**
-     * @return array
-     */
-    public function getNameDataProvider()
+    public function getNameDataProvider(): array
     {
         return [
             'test unsupported class' => [
@@ -106,10 +97,7 @@ class ContactEntityNameProviderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getNameDQLDataProvider()
+    public function getNameDQLDataProvider(): array
     {
         return [
             'test unsupported class Name' => [

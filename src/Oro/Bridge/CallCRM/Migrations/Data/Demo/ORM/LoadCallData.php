@@ -70,8 +70,8 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
     protected function persistDemoCalls(
         ObjectManager $om
     ) {
-        $accounts = $om->getRepository('OroAccountBundle:Account')->findAll();
-        $contacts = $om->getRepository('OroContactBundle:Contact')->findAll();
+        $accounts = $om->getRepository('OroAccountBundle:Account')->findBy(['organization' => $this->organization]);
+        $contacts = $om->getRepository('OroContactBundle:Contact')->findBy(['organization' => $this->organization]);
         $callStatus = $om->getRepository('OroCallBundle:CallStatus')->findOneBy([
             'name' => 'completed',
         ]);

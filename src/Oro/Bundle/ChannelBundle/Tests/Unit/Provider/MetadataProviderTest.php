@@ -95,7 +95,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($extendProvider);
         $configManager->expects($this->any())
             ->method('getConfigModelId')
-            ->will($this->onConsecutiveCalls($this->entityId1, $this->entityId2));
+            ->willReturnOnConsecutiveCalls($this->entityId1, $this->entityId2);
 
         $router = $this->createMock(RouterInterface::class);
         $router->expects($this->exactly(4))

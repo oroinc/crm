@@ -15,13 +15,13 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
 {
     private const EXCLUDED_ACTIONS = ['create', 'update'];
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|DoctrineHelper */
+    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $doctrineHelper;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|ConfigManager */
+    /** @var ConfigManager|\PHPUnit\Framework\MockObject\MockObject */
     private $configManager;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|ActivityContactProvider */
+    /** @var ActivityContactProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $activityContactProvider;
 
     /** @var UpdateActivityContactFields */
@@ -242,12 +242,10 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->willReturn(true);
         $this->configManager->expects($this->exactly(2))
             ->method('getEntityConfig')
-            ->willReturnMap(
-                [
-                    ['extend', self::TEST_CLASS_NAME, $expendConfig],
-                    ['activity', self::TEST_CLASS_NAME, $activityConfig]
-                ]
-            );
+            ->willReturnMap([
+                ['extend', self::TEST_CLASS_NAME, $expendConfig],
+                ['activity', self::TEST_CLASS_NAME, $activityConfig]
+            ]);
 
         $this->activityContactProvider->expects($this->never())
             ->method('getSupportedActivityClasses');
@@ -302,12 +300,10 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->willReturn(true);
         $this->configManager->expects($this->exactly(2))
             ->method('getEntityConfig')
-            ->willReturnMap(
-                [
-                    ['extend', self::TEST_CLASS_NAME, $expendConfig],
-                    ['activity', self::TEST_CLASS_NAME, $activityConfig]
-                ]
-            );
+            ->willReturnMap([
+                ['extend', self::TEST_CLASS_NAME, $expendConfig],
+                ['activity', self::TEST_CLASS_NAME, $activityConfig]
+            ]);
 
         $this->activityContactProvider->expects($this->once())
             ->method('getSupportedActivityClasses')
@@ -363,12 +359,10 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->willReturn(true);
         $this->configManager->expects($this->exactly(2))
             ->method('getEntityConfig')
-            ->willReturnMap(
-                [
-                    ['extend', self::TEST_CLASS_NAME, $expendConfig],
-                    ['activity', self::TEST_CLASS_NAME, $activityConfig]
-                ]
-            );
+            ->willReturnMap([
+                ['extend', self::TEST_CLASS_NAME, $expendConfig],
+                ['activity', self::TEST_CLASS_NAME, $activityConfig]
+            ]);
 
         $this->activityContactProvider->expects($this->once())
             ->method('getSupportedActivityClasses')
@@ -431,12 +425,10 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->willReturn(true);
         $this->configManager->expects($this->exactly(2))
             ->method('getEntityConfig')
-            ->willReturnMap(
-                [
-                    ['extend', self::TEST_CLASS_NAME, $expendConfig],
-                    ['activity', self::TEST_CLASS_NAME, $activityConfig]
-                ]
-            );
+            ->willReturnMap([
+                ['extend', self::TEST_CLASS_NAME, $expendConfig],
+                ['activity', self::TEST_CLASS_NAME, $activityConfig]
+            ]);
 
         $this->activityContactProvider->expects($this->once())
             ->method('getSupportedActivityClasses')
@@ -481,7 +473,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
         );
     }
 
-    public static function excludedActionProvider()
+    public static function excludedActionProvider(): array
     {
         return array_map(
             function ($action) {
@@ -517,12 +509,10 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->willReturn(true);
         $this->configManager->expects($this->exactly(2))
             ->method('getEntityConfig')
-            ->willReturnMap(
-                [
-                    ['extend', self::TEST_CLASS_NAME, $expendConfig],
-                    ['activity', self::TEST_CLASS_NAME, $activityConfig]
-                ]
-            );
+            ->willReturnMap([
+                ['extend', self::TEST_CLASS_NAME, $expendConfig],
+                ['activity', self::TEST_CLASS_NAME, $activityConfig]
+            ]);
 
         $this->activityContactProvider->expects($this->once())
             ->method('getSupportedActivityClasses')

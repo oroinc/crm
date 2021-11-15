@@ -25,8 +25,7 @@ class ReportGridListenerTest extends \PHPUnit\Framework\TestCase
         $event = new BuildBefore($datagrid, $datagridConfig);
         $filtersStateProvider = $this->createMock(DatagridStateProviderInterface::class);
 
-        $filtersStateProvider
-            ->expects($this->once())
+        $filtersStateProvider->expects($this->once())
             ->method('getState')
             ->with($datagridConfig, $parameters)
             ->willReturn($filtersState);

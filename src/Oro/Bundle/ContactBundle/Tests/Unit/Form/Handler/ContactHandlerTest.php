@@ -16,30 +16,31 @@ class ContactHandlerTest extends \PHPUnit\Framework\TestCase
 {
     private const FORM_DATA = ['field' => 'value'];
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|FormInterface */
+    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $form;
 
     /** @var Request */
     private $request;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManagerInterface */
+    /** @var EntityManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $manager;
-
-    /** @var ContactHandler */
-    private $handler;
 
     /** @var Contact */
     private $entity;
+
+    /** @var ContactHandler */
+    private $handler;
 
     protected function setUp(): void
     {
         $this->form = $this->createMock(Form::class);
         $this->request = new Request();
+        $this->manager = $this->createMock(EntityManagerInterface::class);
+        $this->entity = new Contact();
+
         $requestStack = new RequestStack();
         $requestStack->push($this->request);
-        $this->manager = $this->createMock(EntityManagerInterface::class);
 
-        $this->entity = new Contact();
         $this->handler = new ContactHandler($this->form, $requestStack, $this->manager);
     }
 

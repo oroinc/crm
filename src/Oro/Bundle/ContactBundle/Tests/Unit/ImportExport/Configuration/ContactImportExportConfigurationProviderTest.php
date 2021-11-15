@@ -5,19 +5,14 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\ImportExport\Configuration;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\ImportExport\Configuration\ContactImportExportConfigurationProvider;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
-use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ContactImportExportConfigurationProviderTest extends TestCase
+class ContactImportExportConfigurationProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $translator;
 
-    /**
-     * @var ContactImportExportConfigurationProvider
-     */
+    /** @var ContactImportExportConfigurationProvider */
     private $provider;
 
     protected function setUp(): void
@@ -29,17 +24,12 @@ class ContactImportExportConfigurationProviderTest extends TestCase
 
     public function testGet()
     {
-        $this->translator
-            ->expects(static::once())
+        $this->translator->expects(self::once())
             ->method('trans')
-            ->withConsecutive(
-                ['oro.contact.import.strategy.tooltip']
-            )
-            ->willReturnOnConsecutiveCalls(
-                '1'
-            );
+            ->with('oro.contact.import.strategy.tooltip')
+            ->willReturn('1');
 
-        static::assertEquals(
+        self::assertEquals(
             new ImportExportConfiguration([
                 ImportExportConfiguration::FIELD_ENTITY_CLASS => Contact::class,
                 ImportExportConfiguration::FIELD_EXPORT_PROCESSOR_ALIAS => 'oro_contact',

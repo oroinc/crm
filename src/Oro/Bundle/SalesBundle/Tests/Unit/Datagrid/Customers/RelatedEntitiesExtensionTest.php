@@ -18,11 +18,11 @@ use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var RelatedEntitiesExtension */
-    private $extension;
-
     /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $configProvider;
+
+    /** @var RelatedEntitiesExtension */
+    private $extension;
 
     protected function setUp(): void
     {

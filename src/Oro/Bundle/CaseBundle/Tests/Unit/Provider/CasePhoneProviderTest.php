@@ -2,21 +2,24 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Unit\Provider;
 
+use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\Provider\CasePhoneProvider;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class CasePhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $rootProvider;
+    /** @var PhoneProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $rootProvider;
 
     /** @var CasePhoneProvider */
-    protected $provider;
+    private $provider;
 
     protected function setUp(): void
     {
-        $this->rootProvider = $this->createMock('Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface');
-        $this->provider     = new CasePhoneProvider();
+        $this->rootProvider = $this->createMock(PhoneProviderInterface::class);
+
+        $this->provider = new CasePhoneProvider();
         $this->provider->setRootProvider($this->rootProvider);
     }
 
@@ -34,16 +37,14 @@ class CasePhoneProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPhoneNumber()
     {
-        $entity  = new CaseEntity();
-        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = new CaseEntity();
+        $contact = $this->createMock(Contact::class);
 
         $entity->setRelatedContact($contact);
         $this->rootProvider->expects($this->once())
             ->method('getPhoneNumber')
             ->with($this->identicalTo($contact))
-            ->will($this->returnValue('123-123'));
+            ->willReturn('123-123');
 
         $this->assertEquals(
             '123-123',
@@ -66,22 +67,18 @@ class CasePhoneProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPhoneNumbers()
     {
-        $entity  = new CaseEntity();
-        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = new CaseEntity();
+        $contact = $this->createMock(Contact::class);
 
         $entity->setRelatedContact($contact);
         $this->rootProvider->expects($this->once())
             ->method('getPhoneNumbers')
             ->with($this->identicalTo($contact))
-            ->will(
-                $this->returnValue(
-                    [
-                        ['123-123', $contact],
-                        ['456-456', $contact]
-                    ]
-                )
+            ->willReturn(
+                [
+                    ['123-123', $contact],
+                    ['456-456', $contact]
+                ]
             );
 
         $this->assertEquals(

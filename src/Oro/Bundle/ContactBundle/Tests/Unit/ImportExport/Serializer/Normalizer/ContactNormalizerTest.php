@@ -12,23 +12,19 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
 {
-    private SocialUrlFormatter|\PHPUnit\Framework\MockObject\MockObject $socialUrlFormatter;
+    /** @var SocialUrlFormatter|\PHPUnit\Framework\MockObject\MockObject */
+    private $socialUrlFormatter;
 
-    private FieldHelper|\PHPUnit\Framework\MockObject\MockObject $fieldHelper;
+    /** @var FieldHelper|\PHPUnit\Framework\MockObject\MockObject */
+    private $fieldHelper;
 
-    private ContactNormalizer $normalizer;
+    /** @var ContactNormalizer */
+    private $normalizer;
 
     protected function setUp(): void
     {
-        $this->socialUrlFormatter = $this
-            ->getMockBuilder(SocialUrlFormatter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->fieldHelper = $this
-            ->getMockBuilder(FieldHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->socialUrlFormatter = $this->createMock(SocialUrlFormatter::class);
+        $this->fieldHelper = $this->createMock(FieldHelper::class);
 
         $this->normalizer = new ContactNormalizer(
             $this->fieldHelper
@@ -36,18 +32,14 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $data
-     * @param string $link
-     *
      * @dataProvider socialDataProvider
      */
-    public function testNormalize($data, $link): void
+    public function testNormalize(string $data, string $link): void
     {
         $object = new ImportEntity();
         $object->setTwitter($data);
 
-        $this->fieldHelper
-            ->expects(self::once())
+        $this->fieldHelper->expects(self::once())
             ->method('getEntityFields')
             ->willReturn(
                 [
@@ -56,18 +48,13 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
             );
         $this->fieldHelper->expects(self::any())
             ->method('getObjectValue')
-            ->willReturnCallback(
-                function ($object, $field) {
-                    $propertyAccessor = PropertyAccess::createPropertyAccessor();
+            ->willReturnCallback(function ($object, $field) {
+                return PropertyAccess::createPropertyAccessor()->getValue($object, $field);
+            });
 
-                    return $propertyAccessor->getValue($object, $field);
-                }
-            );
-
-        $this->socialUrlFormatter
-            ->expects(self::once())
+        $this->socialUrlFormatter->expects(self::once())
             ->method('getSocialUrl')
-            ->with(self::equalTo(Social::TWITTER), self::equalTo($data))
+            ->with(Social::TWITTER, $data)
             ->willReturn($link);
 
         $this->normalizer->setSocialUrlFormatter($this->socialUrlFormatter);
@@ -77,15 +64,11 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $data
-     * @param string $link
-     *
      * @dataProvider socialDataProvider
      */
-    public function testDenormalize($data, $link): void
+    public function testDenormalize(string $data, string $link): void
     {
-        $this->fieldHelper
-            ->expects(self::once())
+        $this->fieldHelper->expects(self::once())
             ->method('getEntityFields')
             ->willReturn(
                 [
@@ -93,20 +76,14 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->socialUrlFormatter
-            ->expects(self::once())
+        $this->socialUrlFormatter->expects(self::once())
             ->method('getSocialUsername')
-            ->with(self::equalTo(Social::TWITTER), self::equalTo($data))
+            ->with(Social::TWITTER, $data)
             ->willReturn($link);
 
-        $this->fieldHelper
-            ->expects(self::once())
+        $this->fieldHelper->expects(self::once())
             ->method('setObjectValue')
-            ->with(
-                self::equalTo(new ImportEntity()),
-                self::equalTo(Social::TWITTER),
-                self::equalTo($link)
-            );
+            ->with(new ImportEntity(), Social::TWITTER, $link);
 
         $this->normalizer->setSocialUrlFormatter($this->socialUrlFormatter);
 
@@ -138,13 +115,9 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param mixed  $data
-     * @param string $type
-     * @param string $method
-     *
      * @dataProvider denormalizationProvider
      */
-    public function testSupportsDenormalization($data, $type, $method): void
+    public function testSupportsDenormalization(?array $data, string $type, string $method): void
     {
         $this->{'assert' . $method}($this->normalizer->supportsDenormalization($data, $type));
     }

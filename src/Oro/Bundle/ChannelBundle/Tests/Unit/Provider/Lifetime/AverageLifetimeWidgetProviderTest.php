@@ -3,6 +3,8 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
@@ -10,32 +12,29 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class AverageLifetimeWidgetProviderTest extends \PHPUnit\Framework\TestCase
 {
-    const TEST_TZ = 'UTC';
+    private const TEST_TZ = 'UTC';
 
     /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    protected $registry;
+    private $registry;
 
     /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
-    protected $aclHelper;
+    private $aclHelper;
 
     /** @var LocaleSettings|\PHPUnit\Framework\MockObject\MockObject */
-    protected $localeSettings;
+    private $localeSettings;
 
     /** @var DateFilterProcessor|\PHPUnit\Framework\MockObject\MockObject */
-    protected $dateFilterProcessor;
+    private $dateFilterProcessor;
 
     /** @var AverageLifetimeWidgetProvider */
-    protected $provider;
+    private $provider;
 
     protected function setUp(): void
     {
-        $this->registry = $this->createMock('Doctrine\Persistence\ManagerRegistry');
-        $this->localeSettings = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Model\LocaleSettings')
-            ->disableOriginalConstructor()->getMock();
-        $this->aclHelper           = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
-            ->disableOriginalConstructor()->getMock();
-        $this->dateFilterProcessor = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor')
-            ->disableOriginalConstructor()->getMock();
+        $this->registry = $this->createMock(ManagerRegistry::class);
+        $this->localeSettings = $this->createMock(LocaleSettings::class);
+        $this->aclHelper = $this->createMock(AclHelper::class);
+        $this->dateFilterProcessor = $this->createMock(DateFilterProcessor::class);
 
         $this->provider = new AverageLifetimeWidgetProvider(
             $this->registry,
@@ -45,41 +44,35 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown(): void
-    {
-        unset($this->provider, $this->registry, $this->aclHelper, $this->localeSettings);
-    }
-
     /**
      * @dataProvider chartDataProvider
      */
     public function testGetChartData(array $channelsData, array $averageData, array $expectedResult, array $dates)
     {
-        $channelRepo = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
-            ->disableOriginalConstructor()->getMock();
-        $averageRepo = $this
-            ->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository')
-            ->disableOriginalConstructor()->getMock();
+        $channelRepo = $this->createMock(ChannelRepository::class);
+        $averageRepo = $this->createMock(LifetimeValueAverageAggregationRepository::class);
 
-        $channelRepo->expects($this->once())->method('getAvailableChannelNames')
+        $channelRepo->expects($this->once())
+            ->method('getAvailableChannelNames')
             ->with($this->aclHelper)
-            ->will($this->returnValue($channelsData));
-        $averageRepo->expects($this->once())->method('findForPeriod')
-            ->with($this->isInstanceOf('\DateTime'), $this->isInstanceOf('\DateTime'), array_keys($channelsData))
-            ->will($this->returnValue($averageData));
+            ->willReturn($channelsData);
+        $averageRepo->expects($this->once())
+            ->method('findForPeriod')
+            ->with(
+                $this->isInstanceOf(\DateTime::class),
+                $this->isInstanceOf(\DateTime::class),
+                array_keys($channelsData)
+            )
+            ->willReturn($averageData);
 
-        $this->registry->expects($this->any())->method('getRepository')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['OroChannelBundle:Channel', null, $channelRepo],
-                        ['OroChannelBundle:LifetimeValueAverageAggregation', null, $averageRepo]
-                    ]
-                )
-            );
+        $this->registry->expects($this->any())
+            ->method('getRepository')
+            ->willReturnMap([
+                ['OroChannelBundle:Channel', null, $channelRepo],
+                ['OroChannelBundle:LifetimeValueAverageAggregation', null, $averageRepo]
+            ]);
 
-        $this->dateFilterProcessor
-            ->expects($this->once())
+        $this->dateFilterProcessor->expects($this->once())
             ->method('getModifiedDateData')
             ->with($dates)
             ->willReturn(['value' => $dates]);
@@ -87,12 +80,9 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->provider->getChartData($dates));
     }
 
-    /**
-     * @return array
-     */
-    public function chartDataProvider()
+    public function chartDataProvider(): array
     {
-        $now      = new \DateTime('now', new \DateTimeZone(self::TEST_TZ));
+        $now = new \DateTime('now', new \DateTimeZone(self::TEST_TZ));
         $nowMonth = $now->format('Y-m');
 
         $channels = [1 => ['name' => 'First'], 3 => ['name' => 'Second']];

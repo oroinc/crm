@@ -6,7 +6,6 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
@@ -20,14 +19,7 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    private $registry;
-
-    /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $aclHelper;
-
-    /** @var array */
-    private $opportunityStatuses = [
+    private array $opportunityStatuses = [
         ['id' => 'won', 'name' => 'Won'],
         ['id' => 'identification_alignment', 'name' => 'Identification'],
         ['id' => 'in_progress', 'name' => 'Open'],
@@ -36,6 +28,12 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
         ['id' => 'solution_development', 'name' => 'Development'],
         ['id' => 'lost', 'name' => 'Lost']
     ];
+
+    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
+    private $registry;
+
+    /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
+    private $aclHelper;
 
     /** @var OpportunityByStatusProvider */
     private $provider;
@@ -99,8 +97,7 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
         $this->aclHelper->expects($this->once())
             ->method('apply')
             ->with(
-                $this->callback(function ($query) use ($self, $expectation) {
-                    /** @var Query $query */
+                $this->callback(function (QueryBuilder $query) use ($self, $expectation) {
                     $self->assertEquals($expectation, $query->getDQL());
 
                     return true;

@@ -32,7 +32,7 @@ class ChannelLimitationExtensionConfigurationTest extends \PHPUnit\Framework\Tes
      *
      * @return array
      */
-    protected function processConfiguration(array $config)
+    private function processConfiguration(array $config)
     {
         $processor = new Processor();
 

@@ -2,16 +2,21 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\CaseBundle\Entity\CaseComment;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CaseSource;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class CaseEntityTest extends \PHPUnit\Framework\TestCase
 {
-    const TEST_ID = 12;
-
-    /**
-     * @var CaseEntity
-     */
-    protected $case;
+    /** @var CaseEntity */
+    private $case;
 
     protected function setUp(): void
     {
@@ -30,49 +35,41 @@ class CaseEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->case->{'get' . $property}());
     }
 
-    public function settersAndGettersDataProvider()
+    public function settersAndGettersDataProvider(): array
     {
-        $source = $this->getMockBuilder('Oro\Bundle\CaseBundle\Entity\CaseSource')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $source = $this->createMock(CaseSource::class);
+        $status = $this->createMock(CaseStatus::class);
+        $priority = $this->createMock(CasePriority::class);
 
-        $status = $this->getMockBuilder('Oro\Bundle\CaseBundle\Entity\CaseStatus')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $priority = $this->getMockBuilder('Oro\Bundle\CaseBundle\Entity\CasePriority')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return array(
-            array('subject', 'Test subject'),
-            array('description', 'Test Description'),
-            array('resolution', 'Test Resolution'),
-            array('assignedTo', $this->createMock('Oro\Bundle\UserBundle\Entity\User')),
-            array('owner', $this->createMock('Oro\Bundle\UserBundle\Entity\User')),
-            array('source', $source),
-            array('status', $status),
-            array('priority', $priority),
-            array('createdAt', new \DateTime()),
-            array('updatedAt', new \DateTime()),
-            array('reportedAt', new \DateTime()),
-            array('closedAt', new \DateTime()),
-            array('relatedContact', $this->createMock('Oro\Bundle\ContactBundle\Entity\Contact')),
-            array('relatedAccount', $this->createMock('Oro\Bundle\AccountBundle\Entity\Account')),
-            array('organization', $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization'))
-        );
+        return [
+            ['subject', 'Test subject'],
+            ['description', 'Test Description'],
+            ['resolution', 'Test Resolution'],
+            ['assignedTo', $this->createMock(User::class)],
+            ['owner', $this->createMock(User::class)],
+            ['source', $source],
+            ['status', $status],
+            ['priority', $priority],
+            ['createdAt', new \DateTime()],
+            ['updatedAt', new \DateTime()],
+            ['reportedAt', new \DateTime()],
+            ['closedAt', new \DateTime()],
+            ['relatedContact', $this->createMock(Contact::class)],
+            ['relatedAccount', $this->createMock(Account::class)],
+            ['organization', $this->createMock(Organization::class)]
+        ];
     }
 
     public function testGetComments()
     {
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $this->case->getComments());
+        $this->assertInstanceOf(ArrayCollection::class, $this->case->getComments());
 
         $this->assertEquals(0, $this->case->getComments()->count());
     }
 
     public function testAddComment()
     {
-        $comment = $this->createMock('Oro\Bundle\CaseBundle\Entity\CaseComment');
+        $comment = $this->createMock(CaseComment::class);
         $comment->expects($this->once())
             ->method('setCase')
             ->with($this->case);

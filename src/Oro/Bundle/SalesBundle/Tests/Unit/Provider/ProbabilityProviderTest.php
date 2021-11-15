@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
 
@@ -28,13 +29,10 @@ class ProbabilityProviderTest extends \PHPUnit\Framework\TestCase
     {
         $provider = $this->getProvider();
 
-        $this->assertEquals($this->getDefaultProbilities(), $provider->getAll());
+        $this->assertEquals($this->getDefaultProbabilities(), $provider->getAll());
     }
 
-    /**
-     * @return array
-     */
-    private function getDefaultProbilities()
+    private function getDefaultProbabilities(): array
     {
         return [
             'identification_alignment' => 0.3,
@@ -47,39 +45,17 @@ class ProbabilityProviderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return ProbabilityProvider
-     */
-    private function getProvider()
+    private function getProvider(): ProbabilityProvider
     {
-        $configManager = $this->getConfigManagerMock();
-        $provider = new ProbabilityProvider($configManager);
-
-        return $provider;
-    }
-
-    /**
-     * @return ConfigManager
-     */
-    private function getConfigManagerMock()
-    {
-        $configManager = $this->getMockBuilder(ConfigManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $configManager = $this->createMock(ConfigManager::class);
         $configManager->expects($this->any())
             ->method('get')
-            ->willReturn($this->getDefaultProbilities());
+            ->willReturn($this->getDefaultProbabilities());
 
-        return $configManager;
+        return new ProbabilityProvider($configManager);
     }
 
-    /**
-     * @param string $id
-     *
-     * @return AbstractEnumValue
-     */
-    private function getOpportunityStatus($id)
+    private function getOpportunityStatus(string $id): AbstractEnumValue
     {
         return new TestEnumValue($id, $id);
     }

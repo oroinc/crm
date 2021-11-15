@@ -9,7 +9,7 @@ use Oro\Bundle\SalesBundle\Provider\LeadPhoneProvider;
 class LeadPhoneProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var LeadPhoneProvider */
-    protected $provider;
+    private $provider;
 
     protected function setUp(): void
     {

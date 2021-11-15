@@ -4,6 +4,8 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\SalesBundle\EventListener\DefaultProbabilityListener;
@@ -14,13 +16,10 @@ class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider statusDataProvider
-     *
-     * @param string $statusId
-     * @param float $expectedProbability
      */
-    public function testShouldSetProbabilityOnUpdate($statusId, $expectedProbability)
+    public function testShouldSetProbabilityOnUpdate(string $statusId, float $expectedProbability)
     {
-        $opportunity = $this->getOpportunity($statusId, $this->getDefaultProbilities()[$statusId]);
+        $opportunity = $this->getOpportunity($statusId, $this->getDefaultProbabilities()[$statusId]);
         $eventArguments = $this->getPreUpdateEventArguments($opportunity, [
             'status' => [
                 $this->getOpportunityStatus($statusId),
@@ -72,16 +71,13 @@ class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
                 $this->getOpportunityStatus('won')
             ]
         ]);
-        $listener = $this->getListener($restricted = true);
+        $listener = $this->getListener(true);
         $listener->preUpdate($opportunity, $eventArguments);
 
         $this->assertEquals(0.25, $opportunity->getProbability());
     }
 
-    /**
-     * @return array
-     */
-    public function statusDataProvider()
+    public function statusDataProvider(): array
     {
         return [
             [
@@ -99,10 +95,7 @@ class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getDefaultProbilities()
+    private function getDefaultProbabilities(): array
     {
         return [
             'identification_alignment' => 0.3,
@@ -115,41 +108,38 @@ class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @param  bool $hasRestriction
-     * @return DefaultProbabilityListener
-     */
-    private function getListener($hasRestriction = false)
+    private function getListener(bool $hasRestriction = false): DefaultProbabilityListener
     {
-        $configManager = $this->getConfigManagerMock();
-        $restrictionManager = $this->getRestrictionManagerMock($hasRestriction);
-        $listener = new DefaultProbabilityListener($configManager, $restrictionManager);
+        $configManager = $this->createMock(ConfigManager::class);
+        $configManager->expects($this->any())
+            ->method('get')
+            ->willReturn($this->getDefaultProbabilities());
 
-        return $listener;
+        $restrictionManager = $this->createMock(RestrictionManager::class);
+        $restrictionManager->expects($this->any())
+            ->method('getEntityRestrictions')
+            ->willReturn([['field' => 'probability']]);
+        $restrictionManager->expects($this->any())
+            ->method('hasEntityClassRestrictions')
+            ->willReturn($hasRestriction);
+
+        return new DefaultProbabilityListener($configManager, $restrictionManager);
     }
 
-    /**
-     * @param object $object
-     * @param array $changeset
-     *
-     * @return PreUpdateEventArgs
-     */
-    private function getPreUpdateEventArguments($object, array $changeset = array())
+    private function getPreUpdateEventArguments(object $object, array $changeSet = []): PreUpdateEventArgs
     {
-        $entityManager = $this->getEntityManagerMock();
+        $em = $this->createMock(EntityManagerInterface::class);
+        $em->expects($this->any())
+            ->method('getUnitOfWork')
+            ->willReturn($this->createMock(UnitOfWork::class));
+        $em->expects($this->any())
+            ->method('getClassMetadata')
+            ->willReturn($this->createMock(ClassMetadata::class));
 
-        $arguments = new PreUpdateEventArgs($object, $entityManager, $changeset);
-
-        return $arguments;
+        return new PreUpdateEventArgs($object, $em, $changeSet);
     }
 
-    /**
-     * @param string $statusId
-     * @param float|null $probability
-     *
-     * @return OpportunityStub
-     */
-    private function getOpportunity($statusId, $probability = null)
+    private function getOpportunity(string $statusId, float $probability = null): OpportunityStub
     {
         $opportunity = new OpportunityStub();
         $opportunity->setStatus($this->getOpportunityStatus($statusId));
@@ -158,83 +148,13 @@ class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
         return $opportunity;
     }
 
-    /**
-     * @param string $id
-     *
-     * @return AbstractEnumValue
-     */
-    private function getOpportunityStatus($id)
+    private function getOpportunityStatus(string $id): AbstractEnumValue
     {
-        $enum = $this->getMockBuilder(AbstractEnumValue::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $enum = $this->createMock(AbstractEnumValue::class);
         $enum->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($id));
+            ->willReturn($id);
 
         return $enum;
-    }
-
-    /**
-     * @return ConfigManager
-     */
-    private function getConfigManagerMock()
-    {
-        $manager = $this->getMockBuilder(ConfigManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $manager->expects($this->any())->method('get')
-            ->will($this->returnValue($this->getDefaultProbilities()));
-
-        return $manager;
-    }
-
-    /**
-     * @param  bool $hasRestriction
-     * @return RestrictionManager
-     */
-    private function getRestrictionManagerMock($hasRestriction = false)
-    {
-        $manager = $this->getMockBuilder(RestrictionManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $manager->expects($this->any())
-            ->method('getEntityRestrictions')
-            ->will($this->returnValue([['field' => 'probability']]));
-
-        $manager->expects($this->any())
-            ->method('hasEntityClassRestrictions')
-            ->will($this->returnValue($hasRestriction));
-
-        return $manager;
-    }
-
-    /**
-     * @return EntityManagerInterface
-     */
-    private function getEntityManagerMock()
-    {
-        $uow = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $meta = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $em = $this->getMockBuilder(EntityManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $em->expects($this->any())->method('getUnitOfWork')
-            ->will($this->returnValue($uow));
-
-        $em->expects($this->any())->method('getClassMetadata')
-            ->will($this->returnValue($meta));
-
-        return $em;
     }
 }

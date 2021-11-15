@@ -55,35 +55,33 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
     private const TEST_ID_FIELD_NAME = 'id';
     private const TEST_SUBMITTED_NAME = 'nameSubmitted';
     private const TEST_CHANNEL_TYPE = 'channelType';
-
-    /** @var ChannelDatasourceType */
-    private $type;
+    private const TEST_ENTITY_NAME = 'OroIntegration:Channel';
 
     /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
     private $registry;
 
-    /** @var string */
-    private $testEntityName = 'OroIntegration:Channel';
-
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $entityConfigProvider;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var Translator|\PHPUnit\Framework\MockObject\MockObject */
     private $translator;
+
+    /** @var ChannelDatasourceType */
+    private $type;
 
     protected function setUp(): void
     {
+        $this->registry = $this->createMock(ManagerRegistry::class);
         $this->entityConfigProvider = $this->createMock(ConfigProvider::class);
         $this->translator = $this->createMock(Translator::class);
-        $this->registry = $this->createMock(ManagerRegistry::class);
 
-        $this->type = new ChannelDatasourceType($this->registry, $this->testEntityName);
+        $this->type = new ChannelDatasourceType($this->registry, self::TEST_ENTITY_NAME);
         parent::setUp();
     }
 
     protected function getExtensions()
     {
-        $transportName = uniqid('transport');
+        $transportName = 'test transport';
         $assetsHelper = $this->createMock(Packages::class);
         $integrationType = $this->createMock(ChannelInterface::class);
         $transportType = $this->createMock(TransportInterface::class);
@@ -222,18 +220,18 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
 
         $this->registry->expects($this->once())
             ->method('getManagerForClass')
-            ->with($this->testEntityName)
+            ->with(self::TEST_ENTITY_NAME)
             ->willReturn($em);
         $em->expects($this->once())
             ->method('getClassMetadata')
-            ->with($this->testEntityName)
+            ->with(self::TEST_ENTITY_NAME)
             ->willReturn($metadata);
         $metadata->expects($this->once())
             ->method('getSingleIdentifierFieldName')
             ->willReturn(self::TEST_ID_FIELD_NAME);
         $em->expects($this->once())
             ->method('getRepository')
-            ->with($this->testEntityName)
+            ->with(self::TEST_ENTITY_NAME)
             ->willReturn($repo);
         $repo->expects($this->once())
             ->method('find')

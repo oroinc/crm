@@ -12,42 +12,33 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class AccountHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    const FORM_DATA = ['field' => 'value'];
+    private const FORM_DATA = ['field' => 'value'];
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|FormInterface
-     */
-    protected $form;
+    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $form;
 
-    /**
-     * @var Request
-     */
-    protected $request;
+    /** @var Request */
+    private $request;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ObjectManager
-     */
-    protected $manager;
+    /** @var ObjectManager|\PHPUnit\Framework\MockObject\MockObject */
+    private $manager;
 
-    /**
-     * @var AccountHandler
-     */
-    protected $handler;
+    /** @var Account */
+    private $entity;
 
-    /**
-     * @var Account
-     */
-    protected $entity;
+    /** @var AccountHandler */
+    private $handler;
 
     protected function setUp(): void
     {
         $this->form = $this->createMock(Form::class);
         $this->request = new Request();
+        $this->manager = $this->createMock(ObjectManager::class);
+        $this->entity = new Account();
+
         $requestStack = new RequestStack();
         $requestStack->push($this->request);
-        $this->manager = $this->createMock(ObjectManager::class);
 
-        $this->entity  = new Account();
         $this->handler = new AccountHandler($this->form, $requestStack, $this->manager);
     }
 
@@ -105,7 +96,7 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->form->expects($this->once())
             ->method('isValid')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->manager->expects($this->once())
             ->method('persist')
@@ -132,7 +123,7 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->form->expects($this->once())
             ->method('isValid')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->form->expects($this->never())
             ->method('get');

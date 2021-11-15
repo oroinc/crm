@@ -20,50 +20,55 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    const TEST_NAME = 'name';
-    const FORM_DATA = ['field' => 'value'];
+    private const TEST_NAME = 'name';
+    private const FORM_DATA = ['field' => 'value'];
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|FormInterface */
-    protected $form;
+    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $form;
 
     /** @var Request */
-    protected $request;
+    private $request;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|ManagerRegistry */
-    protected $registry;
+    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
+    private $registry;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|EventDispatcherInterface */
-    protected $dispatcher;
-
-    /** @var ChannelHandler */
-    protected $handler;
+    /** @var EventDispatcherInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $dispatcher;
 
     /** @var Channel */
-    protected $entity;
+    private $entity;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|EntityManager */
-    protected $em;
+    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
+    private $em;
+
+    /** @var ChannelHandler */
+    private $handler;
 
     protected function setUp(): void
     {
         $this->request = new Request();
-        $requestStack = new RequestStack();
-        $requestStack->push($this->request);
         $this->form = $this->createMock(Form::class);
         $this->em = $this->createMock(EntityManager::class);
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->registry = $this->createMock(ManagerRegistry::class);
         $this->entity = new Channel();
+
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+
         $this->handler = new ChannelHandler($requestStack, $this->form, $this->registry, $this->dispatcher);
     }
 
     public function testProcessUnsupportedRequest(): void
     {
-        $this->form->expects($this->once())->method('setData')
+        $this->form->expects($this->once())
+            ->method('setData')
             ->with($this->entity);
 
-        $this->form->expects($this->never())->method('submit');
-        $this->dispatcher->expects($this->never())->method('dispatch');
+        $this->form->expects($this->never())
+            ->method('submit');
+        $this->dispatcher->expects($this->never())
+            ->method('dispatch');
 
         $this->assertFalse($this->handler->process($this->entity));
     }
@@ -76,11 +81,14 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
         $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod($method);
 
-        $this->form->expects($this->once())->method('setData')
+        $this->form->expects($this->once())
+            ->method('setData')
             ->with($this->entity);
-        $this->form->expects($this->once())->method('submit')
+        $this->form->expects($this->once())
+            ->method('submit')
             ->with(self::FORM_DATA);
-        $this->dispatcher->expects($this->never())->method('dispatch');
+        $this->dispatcher->expects($this->never())
+            ->method('dispatch');
 
         $this->assertFalse($this->handler->process($this->entity));
     }
@@ -95,19 +103,30 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
         $this->request->initialize([], self::FORM_DATA);
         $this->request->setMethod('POST');
 
-        $this->form->expects($this->once())->method('setData')->with($this->entity);
-        $this->form->expects($this->once())->method('submit')->with(self::FORM_DATA);
-        $this->form->expects($this->once())->method('isValid')
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($this->entity);
+        $this->form->expects($this->once())
+            ->method('submit')
+            ->with(self::FORM_DATA);
+        $this->form->expects($this->once())
+            ->method('isValid')
             ->willReturn(true);
 
-        $this->registry->expects($this->any())->method('getManager')->willReturn($this->em);
-        $this->em->expects($this->once())->method('persist')->with($this->entity);
-        $this->em->expects($this->once())->method('flush');
+        $this->registry->expects($this->any())
+            ->method('getManager')
+            ->willReturn($this->em);
+        $this->em->expects($this->once())
+            ->method('persist')
+            ->with($this->entity);
+        $this->em->expects($this->once())
+            ->method('flush');
 
-        $this->dispatcher->expects($this->once())->method('dispatch')
+        $this->dispatcher->expects($this->once())
+            ->method('dispatch')
             ->with(
                 $this->isInstanceOf(ChannelSaveEvent::class),
-                $this->equalTo(ChannelSaveEvent::EVENT_NAME)
+                ChannelSaveEvent::EVENT_NAME
             );
 
         $this->assertTrue($this->handler->process($this->entity));
@@ -115,8 +134,6 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider formViewDataProvider
-     *
-     * @param bool $isUpdateMode
      */
     public function testGetFormView(bool $isUpdateMode): void
     {
@@ -124,27 +141,34 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
 
         $form = $this->form;
         if ($isUpdateMode) {
-            $form        = $this->createMock(FormInterface::class);
-            $formConfig  = $this->createMock(FormConfigInterface::class);
+            $form = $this->createMock(FormInterface::class);
+            $formConfig = $this->createMock(FormConfigInterface::class);
             $formFactory = $this->createMock(FormFactoryInterface::class);
-            $formType    = $this->createMock(ResolvedFormTypeInterface::class);
+            $formType = $this->createMock(ResolvedFormTypeInterface::class);
 
-            $formConfig->expects($this->once())->method('getFormFactory')
+            $formConfig->expects($this->once())
+                ->method('getFormFactory')
                 ->willReturn($formFactory);
-            $formConfig->expects($this->once())->method('getType')
+            $formConfig->expects($this->once())
+                ->method('getType')
                 ->willReturn($formType);
-            $formType->expects($this->any())->method('getInnerType')
+            $formType->expects($this->any())
+                ->method('getInnerType')
                 ->willReturn(new FormStub('type' . self::TEST_NAME));
-            $this->form->expects($this->once())->method('getName')
+            $this->form->expects($this->once())
+                ->method('getName')
                 ->willReturn('form' . self::TEST_NAME);
-            $this->form->expects($this->once())->method('getConfig')
+            $this->form->expects($this->once())
+                ->method('getConfig')
                 ->willReturn($formConfig);
 
-            $formFactory->expects($this->once())->method('createNamed')
+            $formFactory->expects($this->once())
+                ->method('createNamed')
                 ->willReturn($form);
         }
 
-        $form->expects($this->once())->method('createView')
+        $form->expects($this->once())
+            ->method('createView')
             ->willReturn($this->getFormView());
 
         $this->assertInstanceOf(FormView::class, $this->handler->getFormView());
@@ -158,26 +182,22 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    protected function getFormView(): FormView
+    private function getFormView(): FormView
     {
-        $rootView       = new FormView();
+        $rootView = new FormView();
         $connectorsView = new FormView($rootView);
-        $typeView       = new FormView($rootView);
+        $typeView = new FormView($rootView);
 
         $rootView->children['connectors'] = $connectorsView;
-        $rootView->children['type']       = $typeView;
+        $rootView->children['type'] = $typeView;
 
         return $rootView;
     }
 
     /**
-     * @param Channel $entity
-     * @param mixed $requestValue
-     * @param string $expectedType
-     *
      * @dataProvider handleRequestDataProvider
      */
-    public function testHandleRequestChannelType(Channel $entity, $requestValue, $expectedType): void
+    public function testHandleRequestChannelType(Channel $entity, ?string $requestValue, string $expectedType): void
     {
         $this->request->setMethod('GET');
 
