@@ -18,8 +18,10 @@
                 {{ form_row(form.notes) }}
 
                 {% set additionalData = [] %}
-                {% for child in form.children if child.vars.extra_field is defined and child.vars.extra_field %}
-                    {% set additionalData = additionalData|merge([form_row(child)]) %}
+                {% for child in form.children %}
+                    {% if child.vars.extra_field is defined and child.vars.extra_field %}
+                        {% set additionalData = additionalData|merge([form_row(child)]) %}
+                    {% endif %}
                 {% endfor %}
                 {% if additionalData is not empty %}
                     <h5 class="user-fieldset">
@@ -64,8 +66,10 @@
                 {{ form_row(form.notes) }}
 
                 {% set additionalData = [] %}
-                {% for child in form.children if child.vars.extra_field is defined and child.vars.extra_field %}
-                    {% set additionalData = additionalData|merge([form_row(child)]) %}
+                {% for child in form.children %}
+                    {% if child.vars.extra_field is defined and child.vars.extra_field %}
+                        {% set additionalData = additionalData|merge([form_row(child)]) %}
+                    {% endif %}
                 {% endfor %}
                 {% if additionalData is not empty %}
                     <h5 class="user-fieldset">
