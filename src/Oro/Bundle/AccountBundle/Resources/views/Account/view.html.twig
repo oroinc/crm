@@ -82,10 +82,10 @@
     {# Render account channels #}
     {% for channel in channels %}
         {%- set accountChannelInfoSection -%}
-            {% spaceless %}
+            {% apply spaceless %}
                 {% set placeHolderName = 'oro_account_channel_info_' ~ channel.channelType %}
                 {{ placeholder(placeHolderName, {'accountId': entity.id, 'channelId': channel.id}) }}
-            {% endspaceless %}
+            {% endapply %}
         {%- endset -%}
         {% if accountChannelInfoSection|striptags|trim is not empty %}
             {% set dataBlocks = dataBlocks|merge([
