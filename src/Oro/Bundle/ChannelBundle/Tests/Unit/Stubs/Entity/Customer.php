@@ -32,7 +32,7 @@ class Customer implements ChannelAwareInterface
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"persist"})
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $account;
@@ -75,8 +75,6 @@ class Customer implements ChannelAwareInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @TODO remove null after BAP-5248
      */
     public function setDataChannel(Channel $channel = null)
     {
