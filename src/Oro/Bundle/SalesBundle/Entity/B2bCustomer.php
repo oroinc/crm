@@ -165,7 +165,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"persist"})
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      * @ConfigField(
      *  defaultValues={

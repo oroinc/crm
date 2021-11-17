@@ -9,6 +9,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\SalesBundle\Model\ExtendCustomer;
 
 /**
+ * Entity represents Sales Customer and handles all related mappings
+ *
  * @ORM\Table("orocrm_sales_customer")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
@@ -37,7 +39,7 @@ class Customer extends ExtendCustomer
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"persist"})
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @ConfigField(
      *      defaultValues={
