@@ -1,14 +1,14 @@
 <% if (!_.isEmpty(obj.icon)) { %>
     <% if (icon.type === 'file-path') { %>
-        <img src="<%= icon.data.path %>" class="separated-img">
+        <img src="<%- icon.data.path %>" class="separated-img">
     <% } else if (icon.type === 'icon') { %>
-        <i class="<%= icon.data.class %> hide-text separated-img"></i>
+        <i class="<%- icon.data.class %> hide-text separated-img"></i>
     <% } %>
 <% } %>
 
 <%= highlight(_.escape(text)) %>
 <% if (typeof(label) !== "undefined") { %>
-<span class="type">(<%= _.escape(label) %>)</span>
+<span class="type">(<%- label %>)</span>
 <% } %>
 
 <% if (typeof(matchValue) !== "undefined") { %>
@@ -17,6 +17,6 @@
 
 <% if (id === null) { %>
     <span class="select2__result-entry-info">
-        (<%= _.__('oro.sales.form.add_new_customer', {'account': context.account}) %>)
+        (<%= _.__('oro.sales.form.add_new_customer', {'account': _.escape(context.account)}) %>)
     </span>
 <% } %>

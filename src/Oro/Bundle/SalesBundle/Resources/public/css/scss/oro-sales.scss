@@ -17,10 +17,6 @@ form[name='opportunity'] {
 
         .control-group-oro_entity_config_scope_type.control-group {
             display: block;
-
-            .control-group-collection > .controls {
-                margin-left: 206px;
-            }
         }
 
         .enum-value-collection {
@@ -28,10 +24,6 @@ form[name='opportunity'] {
         }
 
         .control-group-oro_entity_config_scope_type {
-            .control-group-collection .control-label.wrap {
-                position: absolute;
-            }
-
             > .controls {
                 margin-left: 0;
             }

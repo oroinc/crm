@@ -1,1 +1,1 @@
-<%= _.escape(name) %><%if (typeof firstName != 'undefined' && typeof lastName != 'undefined') { %> - <%= _.escape(firstName) %> <%= _.escape(lastName) %><% } %>
+<%- name %><%if (typeof firstName != 'undefined' && typeof lastName != 'undefined') { %> - <%- firstName %> <%- lastName %><% } %>

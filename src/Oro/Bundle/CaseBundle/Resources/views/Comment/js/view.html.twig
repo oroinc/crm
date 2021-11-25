@@ -2,7 +2,7 @@
     <div class="accordion-group">
         <div class="accordion-heading collapse<% if (!collapsed) { %> show<% } %>">
             <div class="title-item">
-                <a href="#accordion-item<%= id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
+                <a href="#accordion-item<%- id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
                 <span class="visual">
                     <% if (createdBy) { %>
                         <span class="avatar">
@@ -14,7 +14,7 @@
                         </span>
 
                         <% if (createdBy.url) { %>
-                            <a class="user" href="<%= createdBy.url %>"><%- createdBy.fullName %></a>
+                            <a class="user" href="<%- createdBy.url %>"><%- createdBy.fullName %></a>
                         <% } else { %>
                             <span class="user"><%- createdBy %></span>
                         <% } %>
@@ -26,7 +26,7 @@
             </div>
             <div class="labels">
                 <% if (!public) { %>
-                    <span class="label"><%= _.__("oro.case.private") %></span>
+                    <span class="label"><%- _.__("oro.case.private") %></span>
                 <% } %>
             </div>
             <div class="details">
@@ -44,7 +44,7 @@
                 </button>
             </div>
         </div>
-        <div class="accordion-body collapse<% if (!collapsed) { %> show<% } %>" id="accordion-item<%= id %>">
+        <div class="accordion-body collapse<% if (!collapsed) { %> show<% } %>" id="accordion-item<%- id %>">
             <div class="message">
                 <%= message %>
                 <% if (updatedBy) { %>
