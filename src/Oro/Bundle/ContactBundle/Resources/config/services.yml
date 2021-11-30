@@ -233,6 +233,7 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@security.authorization_checker"
+            - '@property_accessor'
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -241,6 +242,7 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@security.authorization_checker"
+            - '@property_accessor'
         tags:
             - { name: oro_entity.form.entity_field.handler }
 

@@ -130,6 +130,7 @@ services:
             - [initDoctrinePropertiesByManagerRegistry, ["@doctrine"]]
             - [initSearchIndexer, ["@oro_search.index", '@oro_search.provider.search_mapping']]
             - [setAclHelper,["@oro_security.acl_helper"]]
+            - [setPropertyAccessor, ["@property_accessor"]]
 
     oro_channel.provider.channel_entity_exclusion_provider:
         class: Oro\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider

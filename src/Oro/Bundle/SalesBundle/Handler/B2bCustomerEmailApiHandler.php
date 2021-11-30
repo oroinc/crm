@@ -4,10 +4,13 @@ namespace Oro\Bundle\SalesBundle\Handler;
 
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApiHandler;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * Used to additionally process B2B customer's user email entity's data on form submission.
+ */
 class B2bCustomerEmailApiHandler extends AbstractEntityApiHandler
 {
     const ENTITY_CLASS = 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail';
@@ -18,10 +21,17 @@ class B2bCustomerEmailApiHandler extends AbstractEntityApiHandler
     /** @var AuthorizationCheckerInterface */
     protected $authorizationChecker;
 
-    public function __construct(EntityManager $entityManager, AuthorizationCheckerInterface $authorizationChecker)
-    {
+    /** @var PropertyAccessorInterface */
+    protected $propertyAccessor;
+
+    public function __construct(
+        EntityManager $entityManager,
+        AuthorizationCheckerInterface $authorizationChecker,
+        PropertyAccessorInterface $propertyAccessor
+    ) {
         $this->entityManager = $entityManager;
         $this->authorizationChecker = $authorizationChecker;
+        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
@@ -64,13 +74,12 @@ class B2bCustomerEmailApiHandler extends AbstractEntityApiHandler
      */
     protected function getChangeSet($entity)
     {
-        $accessor = PropertyAccess::createPropertyAccessor();
         $response = [
             'fields' => []
         ];
 
-        if ($accessor->isReadable($entity, 'updatedAt')) {
-            $response['fields']['updatedAt'] = $accessor->getValue($entity, 'updatedAt');
+        if ($this->propertyAccessor->isReadable($entity, 'updatedAt')) {
+            $response['fields']['updatedAt'] = $this->propertyAccessor->getValue($entity, 'updatedAt');
         }
 
         return $response;
