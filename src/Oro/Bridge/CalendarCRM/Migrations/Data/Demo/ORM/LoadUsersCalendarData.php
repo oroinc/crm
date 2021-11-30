@@ -329,7 +329,13 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
 
     protected function setSecurityContext(User $user)
     {
-        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
+        $token = new UsernamePasswordOrganizationToken(
+            $user,
+            $user->getUsername(),
+            'main',
+            $this->organization,
+            $user->getUserRoles()
+        );
         $this->tokenStorage->setToken($token);
     }
 

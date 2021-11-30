@@ -7,6 +7,7 @@ use Oro\Bundle\ContactBundle\Model\ExtendContactPhone;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
+ * Contact phone entity
  * @ORM\Entity
  * @ORM\Table("orocrm_contact_phone", indexes={
  *      @ORM\Index(name="primary_phone_idx", columns={"phone", "is_primary"}),
@@ -17,9 +18,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      defaultValues={
  *          "entity"={
  *              "icon"="fa-phone"
- *          },
- *          "note"={
- *              "immutable"=true
  *          },
  *          "comment"={
  *              "immutable"=true

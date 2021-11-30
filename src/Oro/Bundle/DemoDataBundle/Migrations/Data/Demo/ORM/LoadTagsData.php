@@ -112,7 +112,8 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
             $adminUser,
             $adminUser->getUsername(),
             'main',
-            $this->organization
+            $this->organization,
+            $adminUser->getUserRoles()
         );
         $tokenStorage = $this->container->get('security.token_storage');
         $tokenStorage->setToken($token);

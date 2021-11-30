@@ -9,15 +9,13 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
+ * Contact address entity
  * @ORM\Table("orocrm_contact_address")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *       defaultValues={
  *          "entity"={
  *              "icon"="fa-map-marker"
- *          },
- *          "note"={
- *              "immutable"=true
  *          },
  *          "activity"={
  *              "immutable"=true

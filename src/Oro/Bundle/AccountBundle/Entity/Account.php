@@ -46,7 +46,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *              "type"="ACL",
  *              "group_name"="",
  *              "category"="account_management",
- *              "field_acl_supported" = "true"
+ *              "field_acl_supported"=true
  *          },
  *          "merge"={
  *              "enable"=true

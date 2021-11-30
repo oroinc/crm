@@ -18,9 +18,6 @@ use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomerEmail;
  *          "entity"={
  *              "icon"="fa-envelope"
  *          },
- *          "note"={
- *              "immutable"=true
- *          },
  *          "comment"={
  *              "immutable"=true
  *          },

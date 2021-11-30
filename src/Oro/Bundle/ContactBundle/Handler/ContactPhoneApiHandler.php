@@ -4,10 +4,13 @@ namespace Oro\Bundle\ContactBundle\Handler;
 
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApiHandler;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * Used to additionally process contact's phone entity's data on form submission.
+ */
 class ContactPhoneApiHandler extends AbstractEntityApiHandler
 {
     const ENTITY_CLASS = 'Oro\Bundle\ContactBundle\Entity\ContactPhone';
@@ -18,10 +21,17 @@ class ContactPhoneApiHandler extends AbstractEntityApiHandler
     /** @var AuthorizationCheckerInterface */
     protected $authorizationChecker;
 
-    public function __construct(EntityManager $entityManager, AuthorizationCheckerInterface $authorizationChecker)
-    {
+    /** @var PropertyAccessorInterface */
+    protected $propertyAccessor;
+
+    public function __construct(
+        EntityManager $entityManager,
+        AuthorizationCheckerInterface $authorizationChecker,
+        PropertyAccessorInterface $propertyAccessor
+    ) {
         $this->entityManager = $entityManager;
         $this->authorizationChecker = $authorizationChecker;
+        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
@@ -64,13 +74,12 @@ class ContactPhoneApiHandler extends AbstractEntityApiHandler
      */
     protected function getChangeSet($entity)
     {
-        $accessor = PropertyAccess::createPropertyAccessor();
         $response = [
             'fields' => []
         ];
 
-        if ($accessor->isReadable($entity, 'updatedAt')) {
-            $response['fields']['updatedAt'] = $accessor->getValue($entity, 'updatedAt');
+        if ($this->propertyAccessor->isReadable($entity, 'updatedAt')) {
+            $response['fields']['updatedAt'] = $this->propertyAccessor->getValue($entity, 'updatedAt');
         }
 
         return $response;

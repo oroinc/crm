@@ -7,6 +7,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\SalesBundle\Model\ExtendLeadPhone;
 
 /**
+ * Lead phone entity
  * @ORM\Entity
  * @ORM\Table("orocrm_sales_lead_phone", indexes={
  *      @ORM\Index(name="primary_phone_idx", columns={"phone", "is_primary"}),
@@ -16,9 +17,6 @@ use Oro\Bundle\SalesBundle\Model\ExtendLeadPhone;
  *      defaultValues={
  *          "entity"={
  *              "icon"="fa-phone"
- *          },
- *          "note"={
- *              "immutable"=true
  *          },
  *          "comment"={
  *              "immutable"=true

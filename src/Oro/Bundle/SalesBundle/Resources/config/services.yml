@@ -316,6 +316,7 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@security.authorization_checker"
+            - "@property_accessor"
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -332,6 +333,7 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@security.authorization_checker"
+            - '@property_accessor'
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -366,6 +368,7 @@ services:
         arguments:
             - "@doctrine"
             - "@security.authorization_checker"
+            - '@property_accessor'
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -723,3 +726,7 @@ services:
         public: false
         tags:
             - { name: oro_email.emailtemplate.variable_provider, scope: entity }
+
+    Oro\Bundle\SalesBundle\EntityConfig\CustomerEntityConfiguration:
+        tags:
+            - oro_entity_config.validation.entity_config

@@ -138,7 +138,8 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             $user,
             $user->getUsername(),
             'main',
-            $this->getReference('default_organization')
+            $this->getReference('default_organization'),
+            $user->getUserRoles()
         );
         $tokenStorage->setToken($token);
     }
