@@ -96,7 +96,13 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
         foreach ($this->users as $user) {
             $tokenStorage = $this->container->get('security.token_storage');
 
-            $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
+            $token = new UsernamePasswordOrganizationToken(
+                $user,
+                $user->getUsername(),
+                'main',
+                $this->organization,
+                $user->getUserRoles()
+            );
 
             $tokenStorage->setToken($token);
             foreach ($params as $param) {

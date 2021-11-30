@@ -94,7 +94,13 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
     protected function setSecurityContext($user)
     {
         $tokenStorage = $this->container->get('security.token_storage');
-        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
+        $token = new UsernamePasswordOrganizationToken(
+            $user,
+            $user->getUsername(),
+            'main',
+            $this->organization,
+            $user->getUserRoles()
+        );
         $tokenStorage->setToken($token);
     }
 

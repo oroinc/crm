@@ -245,7 +245,8 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             $user,
             $user->getUsername(),
             'main',
-            $user->getOrganization()
+            $user->getOrganization(),
+            $user->getUserRoles()
         );
         $tokenStorage->setToken($token);
     }
