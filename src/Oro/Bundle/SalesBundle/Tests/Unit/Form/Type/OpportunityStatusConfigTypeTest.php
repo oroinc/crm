@@ -10,6 +10,7 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
 use Oro\Bundle\EntityConfigBundle\Metadata\Factory\MetadataFactory;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProviderBag;
+use Oro\Bundle\EntityConfigBundle\Tests\Unit\EntityConfig\Mock\ConfigurationHandlerMock;
 use Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber;
 use Oro\Bundle\EntityExtendBundle\Tools\EnumSynchronizer;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendDbIdentifierNameGenerator;
@@ -145,7 +146,8 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit\Framework\TestCase
             $metadataFactory,
             $modelManager,
             $auditManager,
-            $configCache
+            $configCache,
+            ConfigurationHandlerMock::getInstance()
         );
         $entityConfigManager->setProviderBag($configProviderBag);
 

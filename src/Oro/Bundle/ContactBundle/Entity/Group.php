@@ -10,6 +10,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
+ * Contact group entity
  * @ORM\Entity
  * @ORM\Table(name="orocrm_contact_group")
  * @Config(
@@ -25,9 +26,6 @@ use Oro\Bundle\UserBundle\Entity\User;
  *              "type"="ACL",
  *              "group_name"="",
  *              "category"="account_management"
- *          },
- *          "note"={
- *              "immutable"=true
  *          },
  *          "activity"={
  *              "immutable"=true

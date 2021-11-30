@@ -19,9 +19,6 @@ use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomerPhone;
  *          "entity"={
  *              "icon"="fa-phone"
  *          },
- *          "note"={
- *              "immutable"=true
- *          },
  *          "comment"={
  *              "immutable"=true
  *          },

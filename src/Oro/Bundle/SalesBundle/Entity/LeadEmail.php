@@ -7,6 +7,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\SalesBundle\Model\ExtendLeadEmail;
 
 /**
+ * Lead email entity
  * @ORM\Entity
  * @ORM\Table("orocrm_sales_lead_email", indexes={
  *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
@@ -15,9 +16,6 @@ use Oro\Bundle\SalesBundle\Model\ExtendLeadEmail;
  *      defaultValues={
  *          "entity"={
  *              "icon"="fa-envelope"
- *          },
- *          "note"={
- *              "immutable"=true
  *          },
  *          "comment"={
  *              "immutable"=true

@@ -9,15 +9,13 @@ use Oro\Bundle\FormBundle\Entity\PrimaryItem;
 use Oro\Bundle\SalesBundle\Model\ExtendLeadAddress;
 
 /**
+ * Lead address entity
  * @ORM\Table("orocrm_sales_lead_address")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *       defaultValues={
  *          "entity"={
  *              "icon"="fa-map-marker"
- *          },
- *          "note"={
- *              "immutable"=true
  *          },
  *          "activity"={
  *              "immutable"=true

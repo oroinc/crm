@@ -46,7 +46,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *              "type"="ACL",
  *              "group_name"="",
  *              "category"="sales_data",
- *              "field_acl_supported" = "true"
+ *              "field_acl_supported"=true
  *          },
  *          "form"={
  *              "form_type"="Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType",

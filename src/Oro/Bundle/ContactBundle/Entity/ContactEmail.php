@@ -8,6 +8,7 @@ use Oro\Bundle\EmailBundle\Entity\EmailInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
+ * Contact email entity
  * @ORM\Entity
  * @ORM\Table("orocrm_contact_email", indexes={
  *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
@@ -16,9 +17,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      defaultValues={
  *          "entity"={
  *              "icon"="fa-envelope"
- *          },
- *          "note"={
- *              "immutable"=true
  *          },
  *          "comment"={
  *              "immutable"=true
