@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\CaseBundle\Model;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
 use Oro\Bundle\ContactBundle\Entity\Contact;
@@ -28,9 +27,6 @@ class ViewFactory
 
     /** @var DateTimeFormatterInterface */
     protected $dateTimeFormatter;
-
-    /** @var CacheManager */
-    protected $imageCacheManager;
 
     /** @var AttachmentManager */
     protected $attachmentManager;

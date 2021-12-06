@@ -32,9 +32,18 @@
         'indexLabel': 'oro.contact.entity_plural_label'|trans,
         'entityTitle': fullname
     } %}
-    {% set avatar = oro_configured_image_url(entity, 'picture') %}
     {{ parent() }}
 {% endblock pageHeader %}
+
+{% block pageTitleIcon %}
+    <div class="page-title__icon">
+        {%- include '@OroAttachment/Twig/picture.html.twig' with {
+            file: entity.picture,
+            filter: 'avatar_med',
+            img_attrs: { alt: entity|oro_format_name }
+        } -%}
+    </div>
+{% endblock %}
 
 {% block stats %}
     {% include '@OroContact/Contact/headerStats.html.twig' with {'entity': entity} %}
