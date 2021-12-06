@@ -38,7 +38,7 @@ class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareI
             ->getSingleResult();
 
         if (!$user) {
-            throw new \LogicException("User was not found");
+            throw new \LogicException('User was not found');
         }
 
         while (($data = fgetcsv($handle, 1000, ',')) !== false) {

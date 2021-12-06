@@ -7,7 +7,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadFullOpportunityFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DomCrawler\Form;
 
 class OpportunityNotChangesTest extends WebTestCase
 {
@@ -36,7 +35,6 @@ class OpportunityNotChangesTest extends WebTestCase
             $this->getUrl('oro_sales_opportunity_update', ['id' => $opportunity->getId()])
         );
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
 
         $this->client->followRedirects(true);
@@ -45,9 +43,9 @@ class OpportunityNotChangesTest extends WebTestCase
         /** @var ManagerRegistry $manager */
         $registry = $this->client->getContainer()->get('doctrine');
         /** @var EntityManagerInterface $manager */
-        $manager = $registry->getManagerForClass('OroSalesBundle:Opportunity');
+        $manager = $registry->getManagerForClass(Opportunity::class);
 
-        $newOpportunity = $manager->find('OroSalesBundle:Opportunity', $opportunity->getId());
+        $newOpportunity = $manager->find(Opportunity::class, $opportunity->getId());
 
         $this->assertEquals(
             $originUpdatedAt->format('Y-m-d H:i:s'),

@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Model;
 
-use Doctrine\ORM\EntityManager;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -14,8 +13,7 @@ class RFMMetricStateManagerTest extends WebTestCase
         $this->initClient();
 
         if (!\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
-            static::markTestSkipped('There is not suitable channel data in the system.');
-            return;
+            self::markTestSkipped('There is not suitable channel data in the system.');
         }
 
         $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\DataFixtures\LoadCustomerData']);
@@ -76,17 +74,5 @@ class RFMMetricStateManagerTest extends WebTestCase
             $this->assertEmpty($entity->getFrequency());
             $this->assertEmpty($entity->getMonetary());
         }
-    }
-
-    /**
-     * @param object $entity
-     *
-     * @return EntityManager
-     */
-    protected function getManager($entity)
-    {
-        return $this->getContainer()
-            ->get('oro_entity.doctrine_helper')
-            ->getEntityManager($entity);
     }
 }

@@ -21,7 +21,7 @@ class RestLeadTest extends WebTestCase
     public function testPostLead()
     {
         $request = [
-            "lead" => [
+            'lead' => [
                 'name'          => 'lead_name_' . mt_rand(1, 500),
                 'firstName'     => 'first_name_' . mt_rand(1, 500),
                 'lastName'      => 'last_name_' . mt_rand(1, 500),

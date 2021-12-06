@@ -68,7 +68,7 @@ abstract class BaseStatistics extends WebTestCase
     protected function setAdvancedFilters(array &$data, string $formName, array $advancedFilters): void
     {
         if ($advancedFilters) {
-            $filters = \json_encode($advancedFilters['filters']);
+            $filters = json_encode($advancedFilters['filters'], JSON_THROW_ON_ERROR);
 
             $data[$formName]['queryFilter']['entity'] = $advancedFilters['entity'];
             $data[$formName]['queryFilter']['definition'] = '{"filters":[' . $filters . ']}';

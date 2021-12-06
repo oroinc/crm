@@ -3,10 +3,10 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Repository\ContactRepository;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
 use Oro\Bundle\ImportExportBundle\Tests\Functional\AbstractImportExportTestCase;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpenOpportunityFixtures;
 
 /**
@@ -17,17 +17,13 @@ class ImportExportTest extends AbstractImportExportTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtures(
-            [
-                LoadOpenOpportunityFixtures::class,
-            ]
-        );
+        $this->loadFixtures([LoadOpenOpportunityFixtures::class]);
     }
 
     public function testExportTemplate()
     {
         if (\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
-            static::markTestSkipped('Cannot be tested with Magento 1 connector installed');
+            self::markTestSkipped('Cannot be tested with Magento 1 connector installed');
         }
 
         $this->assertExportTemplateWorks(
@@ -59,7 +55,7 @@ class ImportExportTest extends AbstractImportExportTestCase
     public function testExport()
     {
         if (\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
-            static::markTestSkipped('Cannot be tested with Magento 1 connector installed');
+            self::markTestSkipped('Cannot be tested with Magento 1 connector installed');
         }
 
         $this->assertExportWorks(
@@ -91,7 +87,7 @@ class ImportExportTest extends AbstractImportExportTestCase
     public function testImportRecordWithAddOrReplaceStrategy()
     {
         if (\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
-            static::markTestSkipped('Cannot be tested with Magento 1 connector installed');
+            self::markTestSkipped('Cannot be tested with Magento 1 connector installed');
         }
 
         $this->assertImportWorks(
@@ -99,10 +95,7 @@ class ImportExportTest extends AbstractImportExportTestCase
             $this->getFullPathToDataFile('import_one_record.csv')
         );
 
-        static::assertCount(
-            1,
-            $this->getRepository()->findAll()
-        );
+        self::assertCount(1, $this->getRepository()->findAll());
     }
 
     public function testImportValidate()
@@ -114,23 +107,12 @@ class ImportExportTest extends AbstractImportExportTestCase
         );
     }
 
-    /**
-     * @return OpportunityRepository
-     */
-    private function getRepository()
+    private function getRepository(): ContactRepository
     {
-        return static::getContainer()
-            ->get('doctrine')
-            ->getManagerForClass(Contact::class)
-            ->getRepository(Contact::class);
+        return self::getContainer()->get('doctrine')->getRepository(Contact::class);
     }
 
-    /**
-     * @param string $fileName
-     *
-     * @return string
-     */
-    private function getFullPathToDataFile($fileName)
+    private function getFullPathToDataFile(string $fileName): string
     {
         $dataDir = $this->getContainer()
             ->get('kernel')

@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DomCrawler\Form;
 
 class ControllersGroupTest extends WebTestCase
 {
@@ -26,7 +25,6 @@ class ControllersGroupTest extends WebTestCase
     public function testCreate()
     {
         $crawler = $this->client->request('GET', $this->getUrl('oro_contact_group_create'));
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['oro_contact_group_form[label]'] = 'Contact Group Label';
         $form['oro_contact_group_form[owner]'] = 1;
@@ -36,7 +34,7 @@ class ControllersGroupTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Group saved", $crawler->html());
+        self::assertStringContainsString('Group saved', $crawler->html());
     }
 
     /**
@@ -57,7 +55,6 @@ class ControllersGroupTest extends WebTestCase
             'GET',
             $this->getUrl('oro_contact_group_update', array('id' => $result['id']))
         );
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['oro_contact_group_form[label]'] = 'Contact Group Label Updated';
 
@@ -66,7 +63,7 @@ class ControllersGroupTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Group saved", $crawler->html());
+        self::assertStringContainsString('Group saved', $crawler->html());
 
         return $id;
     }

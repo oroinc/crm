@@ -20,8 +20,7 @@ class ContactPaginationDeleteTest extends AbstractContactPaginationTestCase
 
         // remove second contact from DB
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
-        $contact = $this->getContainer()->get('doctrine')
-            ->getRepository('OroContactBundle:Contact')
+        $contact = $this->getContainer()->get('doctrine')->getRepository(Contact::class)
             ->findOneBy(['firstName' => LoadContactEntitiesData::SECOND_ENTITY_NAME]);
         $em->remove($contact);
         $em->flush();

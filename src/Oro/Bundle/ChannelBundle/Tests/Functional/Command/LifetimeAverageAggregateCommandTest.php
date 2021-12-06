@@ -26,7 +26,7 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
     {
         $result = $this->runCommand('oro:cron:lifetime-average:aggregate', []);
 
-        static::assertStringContainsString('Completed!', $result);
+        self::assertStringContainsString('Completed!', $result);
 
         self::assertMessageSent(
             Topics::AGGREGATE_LIFETIME_AVERAGE,

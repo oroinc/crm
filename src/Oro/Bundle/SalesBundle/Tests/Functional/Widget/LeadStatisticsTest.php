@@ -4,12 +4,12 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
 
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadLeadStatisticsWidgetFixture;
 
 class LeadStatisticsTest extends BaseStatistics
 {
-    /** @var array */
-    protected $metrics = [
+    public array $metrics = [
         'open_leads_count' => 'Open Leads',
         'new_leads_count' => 'New Leads'
     ];
@@ -17,9 +17,7 @@ class LeadStatisticsTest extends BaseStatistics
     protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
-        $this->loadFixtures([
-            LoadLeadStatisticsWidgetFixture::class
-        ]);
+        $this->loadFixtures([LoadLeadStatisticsWidgetFixture::class]);
     }
 
     public function testDefaultConfiguration(): void
@@ -41,7 +39,7 @@ class LeadStatisticsTest extends BaseStatistics
         $this->client->request($form->getMethod(), $form->getUri(), $data);
 
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, 'Failed in submit widget configuration options!');
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options!');
 
         $crawler = $this->client->request(
             'GET',
@@ -57,7 +55,7 @@ class LeadStatisticsTest extends BaseStatistics
         );
 
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in getting widget view!");
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
         $this->assertNotEmpty($crawler->html());
 
         $openLeadsMetric = $crawler->filterXPath(
@@ -66,9 +64,9 @@ class LeadStatisticsTest extends BaseStatistics
             )
         );
         $this->assertEquals(
-            $openLeadsMetric->text(),
             1,
-            '"Open Leads" metric doesn\'t much expected value !'
+            $openLeadsMetric->text(),
+            '"Open Leads" metric does not much expected value'
         );
         $newLeadsMetric = $crawler->filterXPath(
             $this->getMetricValueByLabel(
@@ -76,9 +74,9 @@ class LeadStatisticsTest extends BaseStatistics
             )
         );
         $this->assertEquals(
-            $newLeadsMetric->getNode(0)->nodeValue,
             1,
-            '"New Leads" metric doesn\'t much expected value !'
+            $newLeadsMetric->getNode(0)->nodeValue,
+            '"New Leads" metric does not much expected value'
         );
     }
 
@@ -122,7 +120,7 @@ class LeadStatisticsTest extends BaseStatistics
                 'dateRange' => ['type' => AbstractDateFilterType::TYPE_TODAY],
                 'comparePrevious' => true,
                 'advancedFilters' => [
-                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Lead',
+                    'entity' => Lead::class,
                     'filters' => [
                         'columnName' => 'updatedAt',
                         'criterion' => [
@@ -184,7 +182,7 @@ class LeadStatisticsTest extends BaseStatistics
                 'dateRange' => ['type' => AbstractDateFilterType::TYPE_TODAY],
                 'comparePrevious' => false,
                 'advancedFilters' => [
-                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Lead',
+                    'entity' => Lead::class,
                     'filters' => [
                         'columnName' => 'updatedAt',
                         'criterion' => [
@@ -212,7 +210,7 @@ class LeadStatisticsTest extends BaseStatistics
                 'dateRange' => ['type' => AbstractDateFilterType::TYPE_TODAY],
                 'comparePrevious' => true,
                 'advancedFilters' => [
-                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Lead',
+                    'entity' => Lead::class,
                     'filters' => [
                         'columnName' => 'createdAt',
                         'criterion' => [
@@ -246,10 +244,10 @@ class LeadStatisticsTest extends BaseStatistics
         return $this->getReference('widget_lead_statistics');
     }
 
-    protected function inspectResult(array $result, array $previousResult): void
+    private function inspectResult(array $result, array $previousResult): void
     {
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, 'Failed in submit widget configuration options !');
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options !');
 
         $crawler = $this->client->request(
             'GET',
@@ -266,7 +264,7 @@ class LeadStatisticsTest extends BaseStatistics
 
         $response = $this->client->getResponse();
 
-        $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting widget view !');
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view !');
         $this->assertNotEmpty($crawler->html());
 
         $openLeadsMetric = $crawler->filterXPath(
@@ -277,7 +275,7 @@ class LeadStatisticsTest extends BaseStatistics
         $this->assertEquals(
             $openLeadsMetric->text(),
             $result['open_leads_count'],
-            '"Open Leads" metric doesn\'t much expected value !'
+            '"Open Leads" metric does not much expected value'
         );
 
         $newLeadsMetric = $crawler->filterXPath(
@@ -288,7 +286,7 @@ class LeadStatisticsTest extends BaseStatistics
         $this->assertEquals(
             $newLeadsMetric->text(),
             $result['new_leads_count'],
-            '"New Leads" metric doesn\'t much expected value !'
+            '"New Leads" metric does not much expected value'
         );
 
         $deviationMetric = $crawler->filterXPath(
@@ -301,7 +299,7 @@ class LeadStatisticsTest extends BaseStatistics
             $this->assertEquals(
                 trim($deviationMetric->text()),
                 $previousResult['new_leads_count'],
-                '"New Leads" previous period metric doesn\'t much expected value !'
+                '"New Leads" previous period metric does not much expected value'
             );
         } else {
             $this->assertEquals(0, $deviationMetric->count());

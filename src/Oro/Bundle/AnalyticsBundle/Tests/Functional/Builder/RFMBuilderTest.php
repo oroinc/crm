@@ -9,15 +9,14 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 class RFMBuilderTest extends WebTestCase
 {
     /** @var RFMBuilder */
-    protected $builder;
+    private $builder;
 
     protected function setUp(): void
     {
         $this->initClient();
 
         if (!\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
-            static::markTestSkipped('There is no suitable channel data in the system.');
-            return;
+            self::markTestSkipped('There is no suitable channel data in the system.');
         }
 
         $this->loadFixtures([
@@ -40,10 +39,7 @@ class RFMBuilderTest extends WebTestCase
         $this->assertAnalyticBuild($channel, $expectedData);
     }
 
-    /**
-     * @return array
-     */
-    public function buildDataProvider()
+    public function buildDataProvider(): array
     {
         return [
             [
@@ -64,7 +60,7 @@ class RFMBuilderTest extends WebTestCase
         ];
     }
 
-    protected function assertAnalyticBuild(Channel $channel, array $expectedData)
+    private function assertAnalyticBuild(Channel $channel, array $expectedData): void
     {
         $expectedData = array_combine(array_map(function ($item) {
             return $this->getReference($item)->getId();

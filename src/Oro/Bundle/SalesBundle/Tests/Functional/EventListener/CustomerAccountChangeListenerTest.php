@@ -46,7 +46,7 @@ class CustomerAccountChangeListenerTest extends WebTestCase
          * @var B2bCustomer $b2bCustomer
          * @var Customer        $customer
          */
-        list($b2bCustomer, $customer) = $customers;
+        [$b2bCustomer, $customer] = $customers;
 
         $account = new Account();
         $account->setName('Account2');
@@ -65,9 +65,9 @@ class CustomerAccountChangeListenerTest extends WebTestCase
     /**
      * @param object $entity
      */
-    protected function flushAndRefresh($entity)
+    private function flushAndRefresh($entity)
     {
-        $em       = $this->getEntityManager();
+        $em = $this->getEntityManager();
         $entities = func_get_args();
 
         array_walk($entities, [$em, 'persist']);
@@ -78,7 +78,7 @@ class CustomerAccountChangeListenerTest extends WebTestCase
     /**
      * @return EntityManager
      */
-    protected function getEntityManager()
+    private function getEntityManager()
     {
         return $this->getContainer()->get('doctrine')->getManagerForClass(Customer::class);
     }

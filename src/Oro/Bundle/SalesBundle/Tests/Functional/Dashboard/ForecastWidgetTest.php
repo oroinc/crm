@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Dashboard;
 
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ConfigBundle\Tests\Functional\Traits\ConfigManagerAwareTestTrait;
 use Oro\Bundle\DashboardBundle\Tests\Functional\AbstractWidgetTestCase;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
@@ -14,8 +15,10 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
 {
     use ConfigManagerAwareTestTrait;
 
+    /** @var string|null */
     private $originalTimezone;
 
+    /** @var ConfigManager */
     private $globalScopeManager;
 
     protected function setUp(): void
@@ -29,7 +32,7 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
             LoadForecastWidgetFixtures::class
         ]);
 
-        $this->globalScopeManager = self::getConfigManager('global');
+        $this->globalScopeManager = self::getConfigManager();
         $this->originalTimezone = $this->globalScopeManager->get('oro_locale.timezone');
     }
 
@@ -42,8 +45,12 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
     /**
      * @dataProvider getTimeFilter
      */
-    public function testCloseDateFilterSuccess($dateRangeType, $timezone, array $value, $inProgressCount)
-    {
+    public function testCloseDateFilterSuccess(
+        int $dateRangeType,
+        string $timezone,
+        array $value,
+        int $inProgressCount
+    ) {
         $widget = $this->getReference('widget_forecast');
 
         $this->globalScopeManager->set('oro_locale.timezone', $timezone);
@@ -70,7 +77,7 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
             )
         );
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in gettting widget view !");
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
 
         $subWidgetValue = $crawler->filter('.big-numbers-items > li .value')->text();
 
@@ -81,7 +88,7 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
         );
     }
 
-    public function getTimeFilter()
+    public function getTimeFilter(): array
     {
         return [
             'Close Date: All time' => [

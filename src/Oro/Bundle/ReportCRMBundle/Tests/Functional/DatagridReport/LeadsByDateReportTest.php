@@ -63,7 +63,7 @@ class LeadsByDateReportTest extends WebTestCase
      *
      * @return array
      */
-    protected function getValuableDataFromResult(array $response, array $keys)
+    private function getValuableDataFromResult(array $response, array $keys)
     {
         return [
             'rows' => array_map(

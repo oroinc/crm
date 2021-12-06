@@ -3,6 +3,8 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\CustomerIdentity;
+use Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannels;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -13,7 +15,7 @@ class ChannelApiControllerTest extends WebTestCase
     protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());
-        $this->loadFixtures(['Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannels']);
+        $this->loadFixtures([LoadChannels::class]);
     }
 
     public function testCget()
@@ -27,10 +29,7 @@ class ChannelApiControllerTest extends WebTestCase
         $this->assertCount($this->getExpectedCountForCget(), $channels);
     }
 
-    /**
-     * @return int
-     */
-    protected function getExpectedCountForCget()
+    protected function getExpectedCountForCget(): int
     {
         return 2;
     }
@@ -53,10 +52,7 @@ class ChannelApiControllerTest extends WebTestCase
         $this->assertActiveChannels($channels);
     }
 
-    /**
-     * @param array $channels
-     */
-    protected function assertInactiveChannels($channels)
+    protected function assertInactiveChannels(array $channels): void
     {
         /** @var Channel $inactiveChannel */
         $inactiveChannel = $this->getReference('channel_2');
@@ -66,10 +62,7 @@ class ChannelApiControllerTest extends WebTestCase
         $this->assertEquals($channels[0]['name'], $inactiveChannel->getName());
     }
 
-    /**
-     * @param array $channels
-     */
-    protected function assertActiveChannels($channels)
+    protected function assertActiveChannels(array $channels): void
     {
         /** @var Channel $activeChannel */
         $activeChannel = $this->getReference('channel_1');
@@ -83,7 +76,7 @@ class ChannelApiControllerTest extends WebTestCase
     {
         $url = $this->getUrl(
             'oro_api_get_channels',
-            ['entity' => 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity']
+            ['entity' => CustomerIdentity::class]
         );
         $this->client->jsonRequest('GET', $url);
 

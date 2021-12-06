@@ -3,20 +3,20 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Grid;
 
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 
 class SalesFunnelGridTest extends AbstractDatagridTestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures([LoadSalesBundleFixtures::class]);
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function gridProvider()
+    public function gridProvider(): array
     {
         return [
             'Sales funnel grid by lead'                       => [

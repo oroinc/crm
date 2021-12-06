@@ -6,19 +6,14 @@ use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 use Symfony\Component\DomCrawler\Field\InputFormField;
-use Symfony\Component\DomCrawler\Form;
 
 class LeadControllersTest extends AbstractDatagridTestCase
 {
-    /** @var bool */
-    protected $isRealGridRequest = false;
+    protected bool $isRealGridRequest = false;
 
     protected function setUp(): void
     {
-        $this->initClient(
-            [],
-            $this->generateBasicAuthHeader()
-        );
+        $this->initClient([], $this->generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
         $this->loadFixtures([LoadSalesBundleFixtures::class]);
     }
@@ -30,13 +25,9 @@ class LeadControllersTest extends AbstractDatagridTestCase
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
-    /**
-     * @return string
-     */
-    public function testCreate()
+    public function testCreate(): string
     {
         $crawler = $this->client->request('GET', $this->getUrl('oro_sales_lead_create'));
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
         $form['oro_sales_lead_form[name]']                = $name;
@@ -47,7 +38,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
         $form['oro_sales_lead_form[owner]']               = 1;
         $form['oro_sales_lead_form[website]']             = 'http://example.com';
         //Add address fields to form as they are rendered with javascript
-        $doc = new \DOMDocument("1.0");
+        $doc = new \DOMDocument('1.0');
         $addressInputs = ['city', 'label', 'postalCode', 'street', 'street2'];
         foreach ($addressInputs as $addressInput) {
             $input = $doc->createElement('input');
@@ -85,15 +76,14 @@ class LeadControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Lead saved", $crawler->html());
+        self::assertStringContainsString('Lead saved', $crawler->html());
 
         return $name;
     }
 
     /**
      * @dataProvider updateWithInvalidWebsiteDataProvider
-     *
-     * @depends      testCreate
+     * @depends testCreate
      */
     public function testUpdateWithInvalidWebsite(string $website, string $name)
     {
@@ -109,7 +99,6 @@ class LeadControllersTest extends AbstractDatagridTestCase
             $this->getUrl('oro_sales_lead_update', ['id' => $result['id']])
         );
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['oro_sales_lead_form[website]'] = $website;
 
@@ -117,7 +106,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString(
+        self::assertStringContainsString(
             'This value is not a valid URL. Allowed URL protocols are: http, https.',
             $crawler->html()
         );
@@ -134,12 +123,9 @@ class LeadControllersTest extends AbstractDatagridTestCase
     }
 
     /**
-     * @param string $name
      * @depends testCreate
-     *
-     * @return string
      */
-    public function testUpdate($name)
+    public function testUpdate(string $name): array
     {
         $response = $this->client->requestGrid(
             'sales-lead-grid',
@@ -154,7 +140,6 @@ class LeadControllersTest extends AbstractDatagridTestCase
             $this->getUrl('oro_sales_lead_update', ['id' => $result['id']])
         );
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
         $form['oro_sales_lead_form[name]'] = $name;
@@ -164,7 +149,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Lead saved", $crawler->html());
+        self::assertStringContainsString('Lead saved', $crawler->html());
 
         $returnValue['name'] = $name;
 
@@ -172,12 +157,9 @@ class LeadControllersTest extends AbstractDatagridTestCase
     }
 
     /**
-     * @param array $returnValue
      * @depends testUpdate
-     *
-     * @return string
      */
-    public function testView($returnValue)
+    public function testView(array $returnValue)
     {
         $crawler = $this->client->request(
             'GET',
@@ -186,16 +168,13 @@ class LeadControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("{$returnValue['name']} - Leads - Sales", $crawler->html());
+        self::assertStringContainsString("{$returnValue['name']} - Leads - Sales", $crawler->html());
     }
 
     /**
-     * @param array $returnValue
      * @depends testUpdate
-     *
-     * @return string
      */
-    public function testInfo($returnValue)
+    public function testInfo(array $returnValue)
     {
         $crawler = $this->client->request(
             'GET',
@@ -207,15 +186,14 @@ class LeadControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString($returnValue['firstName'], $crawler->html());
-        static::assertStringContainsString($returnValue['lastName'], $crawler->html());
+        self::assertStringContainsString($returnValue['firstName'], $crawler->html());
+        self::assertStringContainsString($returnValue['lastName'], $crawler->html());
     }
 
     /**
-     * @param array $returnValue
      * @depends testUpdate
      */
-    public function testDelete($returnValue)
+    public function testDelete(array $returnValue)
     {
         $this->ajaxRequest(
             'DELETE',
@@ -235,9 +213,9 @@ class LeadControllersTest extends AbstractDatagridTestCase
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function gridProvider()
+    public function gridProvider(): array
     {
         return [
             'Lead grid'                => [

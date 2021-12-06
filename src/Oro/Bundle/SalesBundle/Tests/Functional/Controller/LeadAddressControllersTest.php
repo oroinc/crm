@@ -5,7 +5,6 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
-use Symfony\Component\DomCrawler\Form;
 
 class LeadAddressControllersTest extends WebTestCase
 {
@@ -33,7 +32,6 @@ class LeadAddressControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertEquals(200, $result->getStatusCode());
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save')->form();
         $formNode = $form->getNode();
         $formNode->setAttribute('action', $formNode->getAttribute('action') . '?_widgetContainer=dialog');
@@ -42,7 +40,7 @@ class LeadAddressControllersTest extends WebTestCase
         $form['oro_sales_lead_address_form[city]'] = 'City';
         $form['oro_sales_lead_address_form[postalCode]'] = 'Zip code';
 
-        $doc = new \DOMDocument("1.0");
+        $doc = new \DOMDocument('1.0');
         $doc->loadHTML(
             '<select name="oro_sales_lead_address_form[country]" id="oro_sales_lead_address_form_country" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
@@ -104,12 +102,11 @@ class LeadAddressControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertEquals(200, $result->getStatusCode());
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save')->form();
         $formNode = $form->getNode();
         $formNode->setAttribute('action', $formNode->getAttribute('action') . '?_widgetContainer=dialog');
 
-        $doc = new \DOMDocument("1.0");
+        $doc = new \DOMDocument('1.0');
         $doc->loadHTML(
             '<select name="oro_sales_lead_address_form[country]" id="oro_sales_lead_address_form_country" ' .
             'tabindex="-1" class="select2-offscreen"> ' .

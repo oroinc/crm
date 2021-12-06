@@ -10,18 +10,12 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class AbstractContactPaginationTestCase extends WebTestCase
 {
-    /**
-     * @var array
-     */
-    protected $gridParams         = [
+    protected array $gridParams = [
         'contacts-grid' =>
             'i=1&p=25&s%5BlastName%5D=-1&s%5BfirstName%5D=-1'
     ];
 
-    /**
-     * @var array
-     */
-    protected $gridParamsFiltered = [
+    protected array $gridParamsFiltered = [
         'contacts-grid' =>
             'i=1&p=25&s%5BlastName%5D=-1&s%5BfirstName%5D=-1&f%5BfirstName%5D%5Bvalue%5D=F&f%5BfirstName%5D%5Btype%5D=1'
     ];
@@ -31,31 +25,22 @@ class AbstractContactPaginationTestCase extends WebTestCase
         LoadContactEntitiesData::$owner = LoadUserData::USER_NAME;
         $this->initClient([], $this->generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
-        $this->loadFixtures(['Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadUserData']);
-        $this->loadFixtures(['Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData']);
+        $this->loadFixtures([LoadUserData::class]);
+        $this->loadFixtures([LoadContactEntitiesData::class]);
         $this->client->mergeServerParameters($this->generateBasicAuthHeader(
             LoadUserData::USER_NAME,
             LoadUserData::USER_PASSWORD
         ));
     }
 
-    /**
-     * @param array $params
-     */
-    protected function assertContactEntityGrid($params = [])
+    protected function assertContactEntityGrid(array $params = []): void
     {
         $this->client->request('GET', $this->getUrl('oro_contact_index', $params));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
-    /**
-     * @param string $route
-     * @param string $name
-     * @param array $gridParams
-     * @return Crawler
-     */
-    protected function openEntity($route, $name, array $gridParams)
+    protected function openEntity(string $route, string $name, array $gridParams): Crawler
     {
         return $this->client->request(
             'GET',
@@ -69,16 +54,12 @@ class AbstractContactPaginationTestCase extends WebTestCase
         );
     }
 
-    /**
-     * @param string|null $expectedMessage
-     * @return Crawler
-     */
-    protected function redirectViaFrontend($expectedMessage = null)
+    protected function redirectViaFrontend(string $expectedMessage = null): Crawler
     {
         $response = $this->client->getResponse();
         $this->assertEquals('application/json', $response->headers->get('Content-Type'));
 
-        $data = json_decode($response->getContent(), true);
+        $data = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $this->assertArrayHasKey('url', $data);
 
         if ($expectedMessage) {
@@ -89,15 +70,9 @@ class AbstractContactPaginationTestCase extends WebTestCase
         return $this->client->request('GET', $data['url']);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Contact
-     */
-    protected function getContactByName($name)
+    protected function getContactByName(string $name): Contact
     {
-        $contact = $this->getContainer()->get('doctrine')
-            ->getRepository('OroContactBundle:Contact')
+        $contact = $this->getContainer()->get('doctrine')->getRepository(Contact::class)
             ->findOneBy(['firstName' => $name]);
 
         // guard
@@ -106,28 +81,19 @@ class AbstractContactPaginationTestCase extends WebTestCase
         return $contact;
     }
 
-    /**
-     * @param Crawler $crawler
-     * @param string $name
-     */
-    protected function assertCurrentContactName(Crawler $crawler, $name)
+    protected function assertCurrentContactName(Crawler $crawler, string $name): void
     {
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString($name, $crawler->filter('h1.page-title__entity-title')->html());
+        self::assertStringContainsString($name, $crawler->filter('h1.page-title__entity-title')->html());
     }
 
-    /**
-     * @param Crawler $crawler
-     * @param bool $isFirst
-     * @param bool $isLast
-     */
-    protected function assertPositionEntityLinks(Crawler $crawler, $isFirst = false, $isLast = false)
+    protected function assertPositionEntityLinks(Crawler $crawler, bool $isFirst = false, bool $isLast = false): void
     {
         $showFirst = !$isFirst;
-        $showPrev  = !$isFirst;
-        $showLast  = !$isLast;
-        $showNext  = !$isLast;
+        $showPrev = !$isFirst;
+        $showLast = !$isLast;
+        $showNext = !$isLast;
 
         $this->assertEquals(
             (int)$showFirst,
@@ -147,21 +113,16 @@ class AbstractContactPaginationTestCase extends WebTestCase
         );
     }
 
-    /**
-     * @param Crawler $crawler
-     * @param int $position
-     * @param int $total
-     */
-    protected function assertPositionEntity(Crawler $crawler, $position, $total)
+    protected function assertPositionEntity(Crawler $crawler, int $position, int $total): void
     {
         $this->assertEquals((string)$position, $crawler->filter('#entity-pagination .page-current')->html());
-        static::assertStringContainsString(
+        self::assertStringContainsString(
             (string)$total,
             $crawler->filter('#entity-pagination .entity-pagination_total')->html()
         );
     }
 
-    protected function checkPaginationLinks(Crawler $crawler)
+    protected function checkPaginationLinks(Crawler $crawler): void
     {
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FIRST_ENTITY_NAME);
         $this->assertPositionEntityLinks($crawler, true);

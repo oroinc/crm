@@ -24,7 +24,7 @@ class RestOpportunityTest extends WebTestCase
     public function testPostOpportunity()
     {
         $request = [
-            "opportunity" => [
+            'opportunity' => [
                 'name'                => 'opportunity_name_' . mt_rand(1, 500),
                 'owner'               => '1',
                 'contact'             => $this->getReference('default_contact')->getId(),
@@ -154,7 +154,7 @@ class RestOpportunityTest extends WebTestCase
      * @param $result
      * @return EnumValue
      */
-    protected function getStatusByLabel($statusLabel)
+    private function getStatusByLabel($statusLabel)
     {
         return $this->getContainer()
             ->get('doctrine')

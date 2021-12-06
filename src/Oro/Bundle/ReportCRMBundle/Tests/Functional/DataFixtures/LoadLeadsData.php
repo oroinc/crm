@@ -106,16 +106,16 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     public function loadLeads(ObjectManager $manager)
     {
-        $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR . "leads.csv", "r");
+        $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR . 'leads.csv', 'r');
         if ($handle) {
             $headers = [];
-            if (($data = fgetcsv($handle, 1000, ",")) !== false) {
+            if (($data = fgetcsv($handle, 1000, ',')) !== false) {
                 //read headers
                 $headers = $data;
             }
             $randomUser = count($this->users) - 1;
             $i          = 0;
-            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+            while (($data = fgetcsv($handle, 1000, ',')) !== false) {
                 $user = $this->users[mt_rand(0, $randomUser)];
                 $this->setSecurityContext($user);
 

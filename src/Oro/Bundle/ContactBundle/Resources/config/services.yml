@@ -63,7 +63,7 @@ services:
         arguments:
             - 'Oro\Bundle\ContactBundle\Entity\Contact'
             - "@doctrine.orm.entity_manager"
-            - "@oro_attachment.manager"
+            - "@oro_attachment.manager.file.api"
 
     oro_contact.contact_address.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager

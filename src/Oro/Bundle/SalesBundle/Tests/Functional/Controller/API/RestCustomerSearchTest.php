@@ -2,19 +2,20 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RestCustomerSearchTest extends WebTestCase
 {
     /** @var string */
-    protected $baseUrl;
+    private $baseUrl;
 
     protected function setUp(): void
     {
         $this->markTestSkipped('Due to BAP-8365');
 
         $this->initClient([], $this->generateWsseAuthHeader());
-        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures([LoadSalesBundleFixtures::class]);
 
         $this->baseUrl = $this->getUrl('oro_api_get_search_customers');
     }

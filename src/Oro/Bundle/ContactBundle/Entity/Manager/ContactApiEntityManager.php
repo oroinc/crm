@@ -4,7 +4,7 @@ namespace Oro\Bundle\ContactBundle\Entity\Manager;
 
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
-use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
+use Oro\Bundle\AttachmentBundle\Entity\Manager\FileApiEntityManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 /**
@@ -12,21 +12,15 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
  */
 class ContactApiEntityManager extends ApiEntityManager
 {
-    /** @var  AttachmentManager */
-    protected $attachmentManager;
+    protected FileApiEntityManager $fileApiEntityManager;
 
-    /**
-     * @param string            $class
-     * @param ObjectManager     $om
-     * @param AttachmentManager $attachmentManager
-     */
     public function __construct(
-        $class,
+        string $class,
         ObjectManager $om,
-        AttachmentManager $attachmentManager
+        FileApiEntityManager $fileApiEntityManager
     ) {
         parent::__construct($class, $om);
-        $this->attachmentManager = $attachmentManager;
+        $this->fileApiEntityManager = $fileApiEntityManager;
     }
 
     /**
@@ -100,7 +94,7 @@ class ContactApiEntityManager extends ApiEntityManager
         $result['email'] = $email;
 
         if (!empty($result['picture'])) {
-            $result['picture'] = $this->attachmentManager->getFileRestApiUrl($result['picture']['id']);
+            $result['picture'] = $this->fileApiEntityManager->getFileRestApiUrl($result['picture']['id']);
         }
 
         return $result;
