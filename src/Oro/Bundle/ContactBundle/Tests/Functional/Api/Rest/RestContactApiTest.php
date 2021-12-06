@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional\Api\Rest;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\ContactBundle\Entity\Contact;
@@ -13,8 +13,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 class RestContactApiTest extends WebTestCase
 {
-    /** @var array */
-    protected $testAddress = [
+    private array $testAddress = [
         'street'     => 'contact_street',
         'city'       => 'contact_city',
         'country'    => 'US',
@@ -27,21 +26,16 @@ class RestContactApiTest extends WebTestCase
     protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());
-        $this->loadFixtures([
-            LoadAccountData::class
-        ]);
+        $this->loadFixtures([LoadAccountData::class]);
     }
 
-    /**
-     * @return array
-     */
-    public function testCreateContact()
+    public function testCreateContact(): array
     {
         /** @var Account $account */
-        $account         = $this->getReference('Account_first');
-        $contactGroup    = $this->getContactGroup();
+        $account = $this->getReference('Account_first');
+        $contactGroup = $this->getContactGroup();
         $contactGroupIds = $contactGroup ? [$contactGroup->getId()] : [];
-        $user            = $this->getUser();
+        $user = $this->getUser();
 
         $request = [
             'contact' => [
@@ -76,12 +70,9 @@ class RestContactApiTest extends WebTestCase
     }
 
     /**
-     * @param $request
-     *
      * @depends testCreateContact
-     * @return array
      */
-    public function testGetContact($request)
+    public function testGetContact(array $request): array
     {
         $this->client->jsonRequest(
             'GET',
@@ -129,10 +120,7 @@ class RestContactApiTest extends WebTestCase
     }
 
     /**
-     * @param array $requestData
-     *
      * @depends testCreateContact
-     * @return array
      */
     public function testContactsFiltering(array $requestData)
     {
@@ -237,23 +225,20 @@ class RestContactApiTest extends WebTestCase
     }
 
     /**
-     * @param array $contact
-     * @param array $request
-     *
      * @depends testGetContact
      * @depends testCreateContact
      */
-    public function testUpdateContact($contact, $request)
+    public function testUpdateContact(array $contact, array $request)
     {
         /** @var Account $account */
-        $account         = $this->getReference('Account_second');
+        $account = $this->getReference('Account_second');
         $this->testAddress['types'] = ['billing'];
 
-        $request['contact']['firstName'] .= "_Updated";
+        $request['contact']['firstName'] .= '_Updated';
         $request['contact']['addresses'][0]['types']   = $this->testAddress['types'];
         $request['contact']['addresses'][0]['primary'] = true;
-        $request['contact']['accounts']                = [$account->getId()];
-        $request['contact']['reportsTo']               = $contact['id'];
+        $request['contact']['accounts'] = [$account->getId()];
+        $request['contact']['reportsTo'] = $contact['id'];
 
         $this->client->jsonRequest('PUT', $this->getUrl('oro_api_put_contact', ['id' => $contact['id']]), $request);
         $result = $this->client->getResponse();
@@ -277,7 +262,7 @@ class RestContactApiTest extends WebTestCase
     /**
      * @depends testGetContact
      */
-    public function testDeleteContact($contact)
+    public function testDeleteContact(array $contact)
     {
         $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact', ['id' => $contact['id']]));
         $result = $this->client->getResponse();
@@ -288,7 +273,7 @@ class RestContactApiTest extends WebTestCase
         $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 
-    protected function assertAddresses(array $actualAddresses)
+    private function assertAddresses(array $actualAddresses)
     {
         $this->assertCount(1, $actualAddresses);
         $address = current($actualAddresses);
@@ -299,32 +284,23 @@ class RestContactApiTest extends WebTestCase
         }
     }
 
-    /**
-     * @return EntityManager
-     */
-    protected function getEntityManager()
+    private function getEntityManager(): EntityManagerInterface
     {
         return $this->getContainer()->get('doctrine')->getManager();
     }
 
-    /**
-     * @return Group|null
-     */
-    protected function getContactGroup()
+    private function getContactGroup(): ?Group
     {
-        $contactGroups = $this->getEntityManager()->getRepository('OroContactBundle:Group')->findAll();
-        if (0 == count($contactGroups)) {
+        $contactGroups = $this->getEntityManager()->getRepository(Group::class)->findAll();
+        if (!$contactGroups) {
             return null;
         }
 
         return current($contactGroups);
     }
 
-    /**
-     * @return User
-     */
-    protected function getUser()
+    private function getUser(): User
     {
-        return $this->getEntityManager()->getRepository('OroUserBundle:User')->findOneByUsername(self::USER_NAME);
+        return $this->getEntityManager()->getRepository(User::class)->findOneByUsername(self::USER_NAME);
     }
 }

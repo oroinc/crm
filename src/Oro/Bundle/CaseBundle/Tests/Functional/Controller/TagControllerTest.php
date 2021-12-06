@@ -38,8 +38,7 @@ class TagControllerTest extends WebTestCase
         $this->client->request('GET', $this->getUrl('oro_tag_search', ['id' => $tag->getId()]));
         $response = $this->client->getResponse();
 
-        static::assertResponseStatusCodeEquals($response, 200);
-
-        static::assertStringContainsString($processSettings->getMailbox()->getLabel(), $response->getContent());
+        self::assertResponseStatusCodeEquals($response, 200);
+        self::assertStringContainsString($processSettings->getMailbox()->getLabel(), $response->getContent());
     }
 }

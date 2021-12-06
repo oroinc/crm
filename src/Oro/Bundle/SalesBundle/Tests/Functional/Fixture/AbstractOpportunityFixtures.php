@@ -84,7 +84,7 @@ abstract class AbstractOpportunityFixtures extends AbstractFixture implements Co
         $customer = new B2bCustomer();
         $account  = $this->getReference('default_account');
         $customer->setAccount($account);
-        $customer->setName("Default customer");
+        $customer->setName('Default customer');
         $customer->setOrganization($this->getOrganization());
         $customer->setDataChannel($this->getReference('default_channel'));
 

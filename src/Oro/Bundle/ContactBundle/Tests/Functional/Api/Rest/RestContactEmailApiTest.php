@@ -22,7 +22,7 @@ class RestContactEmailApiTest extends WebTestCase
             'contactId' => $contact->getId(),
             'email' =>'test@test.test',
             'primary' => true
-        ]);
+        ], JSON_THROW_ON_ERROR);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_email'), [], [], [], $content);
         $contact = $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_CREATED);
@@ -77,7 +77,7 @@ class RestContactEmailApiTest extends WebTestCase
 
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_FORBIDDEN);
 
-        $realResponse = json_decode($this->client->getResponse()->getContent());
+        $realResponse = json_decode($this->client->getResponse()->getContent(), false, 512, JSON_THROW_ON_ERROR);
         $this->assertEquals(403, $realResponse->code);
         $this->assertEquals(
             'The delete operation is forbidden. Reason: '
@@ -117,7 +117,7 @@ class RestContactEmailApiTest extends WebTestCase
         ];
         $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact_email', $routeParams));
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_FORBIDDEN);
-        $realResponse = json_decode($this->client->getResponse()->getContent());
+        $realResponse = json_decode($this->client->getResponse()->getContent(), false, 512, JSON_THROW_ON_ERROR);
         $this->assertEquals(403, $realResponse->code);
         $this->assertEquals(
             'The delete operation is forbidden. Reason: '

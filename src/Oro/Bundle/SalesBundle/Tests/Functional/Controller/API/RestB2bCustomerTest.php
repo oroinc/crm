@@ -3,12 +3,12 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RestB2bCustomerTest extends WebTestCase
 {
-    /** @var array */
-    protected $testAddress = [
+    private array $testAddress = [
         'street'     => 'street',
         'city'       => 'city',
         'country'    => 'United States',
@@ -17,15 +17,12 @@ class RestB2bCustomerTest extends WebTestCase
     ];
 
     /** @var Channel */
-    protected static $dataChannel;
+    private static $dataChannel;
 
     protected function setUp(): void
     {
-        $this->initClient(
-            [],
-            $this->generateWsseAuthHeader()
-        );
-        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->initClient([], $this->generateWsseAuthHeader());
+        $this->loadFixtures([LoadSalesBundleFixtures::class]);
     }
 
     protected function postFixtureLoad()
@@ -33,14 +30,11 @@ class RestB2bCustomerTest extends WebTestCase
         self::$dataChannel = $this->getReference('default_channel');
     }
 
-    /**
-     * @return array
-     */
-    public function testCreateB2bCustomer()
+    public function testCreateB2bCustomer(): array
     {
         $request = [
             'b2bcustomer' => [
-                'name'                          => 'b2bcustomer_name_' . mt_rand(1, 500),
+                'name'                          => 'b2bcustomer_name_' . random_int(1, 500),
                 'customer_association_account'  => $this->getReference('default_account')->getId(),
                 'owner'                         => '1',
                 'dataChannel'                   => self::$dataChannel->getId(),
@@ -62,13 +56,9 @@ class RestB2bCustomerTest extends WebTestCase
     }
 
     /**
-     * @param $request
-     *
      * @depends testCreateB2bCustomer
-     *
-     * @return  mixed
      */
-    public function testGetB2bCustomer($request)
+    public function testGetB2bCustomer(array $request): array
     {
         $this->client->request(
             'GET',
@@ -92,13 +82,9 @@ class RestB2bCustomerTest extends WebTestCase
     }
 
     /**
-     * @param $request
-     *
      * @depends testGetB2bCustomer
-     *
-     * @return  mixed
      */
-    public function testUpdateB2bCustomer($request)
+    public function testUpdateB2bCustomer(array $request): array
     {
         $request['b2bcustomer']['name'] .= '_updated';
 
@@ -135,7 +121,7 @@ class RestB2bCustomerTest extends WebTestCase
     /**
      * @depends testUpdateB2bCustomer
      */
-    public function testGetB2bCustomers($request)
+    public function testGetB2bCustomers(array $request)
     {
         $this->client->request(
             'GET',
@@ -154,7 +140,7 @@ class RestB2bCustomerTest extends WebTestCase
     /**
      * @depends testUpdateB2bCustomer
      */
-    public function testDeleteB2bCustomer($request)
+    public function testDeleteB2bCustomer(array $request)
     {
         $this->client->request(
             'DELETE',

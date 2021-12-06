@@ -5,41 +5,34 @@ namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
 use Oro\Bundle\CaseBundle\Entity\CasePriority;
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class CaseControllerTest extends WebTestCase
 {
-    /**
-     * @var array
-     */
-    protected $casePostData = [
+    private array $casePostData = [
         'subject' => 'New case',
         'description' => 'New description',
         'resolution' => 'New resolution',
     ];
 
-    /**
-     * @var int
-     */
-    protected static $contactId;
+    /** @var int */
+    private static $contactId;
 
-    /**
-     * @var int
-     */
-    protected static $adminUserId = 1;
+    /** @var int */
+    private static $adminUserId = 1;
 
     protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());
-
-        $this->loadFixtures(['Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
+        $this->loadFixtures([LoadCaseEntityData::class]);
     }
 
     protected function postFixtureLoad()
     {
-        $contact = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroContactBundle:Contact')
-            ->findOneByEmail('daniel.case@example.com');
+        $contact = self::getContainer()->get('doctrine')->getRepository(Contact::class)
+            ->findOneBy(['email' => 'daniel.case@example.com']);
 
         $this->assertNotNull($contact);
 
@@ -99,10 +92,8 @@ class CaseControllerTest extends WebTestCase
 
     /**
      * @depends testCreate
-     * @param integer $id
-     * @return array
      */
-    public function testGet($id)
+    public function testGet(int $id): array
     {
         $this->client->jsonRequest(
             'GET',
@@ -135,10 +126,8 @@ class CaseControllerTest extends WebTestCase
 
     /**
      * @depends testGet
-     * @param array $originalCase
-     * @return integer
      */
-    public function testPut(array $originalCase)
+    public function testPut(array $originalCase): int
     {
         $id = $originalCase['id'];
 
@@ -183,10 +172,8 @@ class CaseControllerTest extends WebTestCase
 
     /**
      * @depends testPut
-     * @param integer $id
-     * @return integer
      */
-    public function testDelete($id)
+    public function testDelete(int $id)
     {
         $this->client->jsonRequest(
             'DELETE',
@@ -206,7 +193,7 @@ class CaseControllerTest extends WebTestCase
         $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 
-    protected function assertCaseDataEquals(array $expected, array $actual)
+    private function assertCaseDataEquals(array $expected, array $actual): void
     {
         $this->assertArrayHasKey('id', $actual);
         $this->assertGreaterThan(0, $actual['id']);

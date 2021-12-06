@@ -12,25 +12,19 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadCampaignByCloseRevenueWi
 class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
 {
     /** @var Widget */
-    protected $widget;
+    private $widget;
 
     protected function setUp(): void
     {
-        $this->initClient(
-            ['debug' => false],
-            $this->generateBasicAuthHeader()
-        );
-        $this->loadFixtures([
-            LoadCampaignByCloseRevenueWidgetFixture::class
-        ]);
-
+        $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
+        $this->loadFixtures([LoadCampaignByCloseRevenueWidgetFixture::class]);
         $this->widget = $this->getReference('widget_campaigns_by_close_revenue');
     }
 
     /**
      * @dataProvider widgetProvider
      */
-    public function testDateRangeAllTypeFilter($requestData)
+    public function testDateRangeAllTypeFilter(array $requestData)
     {
         $this->configureWidget($this->widget, $requestData['widgetConfig']);
 
@@ -46,7 +40,7 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
         );
         $response = $this->client->getResponse();
 
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in getting widget view !");
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
         $this->assertNotEmpty($crawler->html());
 
         $chartData = $this->getChartData($crawler);
@@ -65,7 +59,6 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
 
     /**
      * @dataProvider widgetConfigureProvider
-     * @array $requestData
      */
     public function testFilterCampaignByNullCloseRevenue(array $requestData)
     {
@@ -81,20 +74,17 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
             )
         );
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in getting widget view !");
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
         $this->assertNotEmpty($crawler->html());
         $chartData = $this->getChartData($crawler);
         $this->assertCount(
             $requestData['expectedCampaignCount'],
             $chartData,
-            "Opportunity with null or 0 close revenue is presented"
+            'Opportunity with null or 0 close revenue is presented'
         );
     }
 
-    /**
-     * @return array
-     */
-    public function widgetConfigureProvider()
+    public function widgetConfigureProvider(): array
     {
         return [
             'Closed lost opportunities' => [
@@ -110,10 +100,7 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function widgetProvider()
+    public function widgetProvider(): array
     {
         return [
             'Closed lost opportunities' => [

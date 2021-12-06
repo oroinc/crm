@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactUsBundle\Tests\Functional\Grid;
 
+use Oro\Bundle\ContactUsBundle\Tests\Functional\Fixtures\LoadContactUsBundleFixtures;
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 
 class ContactRequestsGridTest extends AbstractDatagridTestCase
@@ -9,14 +10,13 @@ class ContactRequestsGridTest extends AbstractDatagridTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->loadFixtures(['Oro\Bundle\ContactUsBundle\Tests\Functional\Fixtures\LoadContactUsBundleFixtures']);
+        $this->loadFixtures([LoadContactUsBundleFixtures::class]);
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function gridProvider()
+    public function gridProvider(): array
     {
         return [
             'Contact Request grid'                => [

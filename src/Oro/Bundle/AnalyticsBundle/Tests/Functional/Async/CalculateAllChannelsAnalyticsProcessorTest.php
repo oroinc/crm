@@ -27,8 +27,7 @@ class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
         $this->initClient();
 
         if (!\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
-            static::markTestSkipped('There is no suitable channel data in the system.');
-            return;
+            self::markTestSkipped('There is no suitable channel data in the system.');
         }
 
         $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\DataFixtures\LoadCustomerData']);
@@ -76,7 +75,7 @@ class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
     /**
      * @return EntityManagerInterface
      */
-    protected function getEntityManager()
+    private function getEntityManager()
     {
         return self::getContainer()->get('doctrine.orm.entity_manager');
     }

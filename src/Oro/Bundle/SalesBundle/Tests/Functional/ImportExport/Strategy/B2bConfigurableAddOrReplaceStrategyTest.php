@@ -5,12 +5,14 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\ImportExport\Strategy;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\BatchBundle\Entity\JobExecution;
 use Oro\Bundle\BatchBundle\Entity\StepExecution;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ImportExportBundle\Context\StepExecutionProxyContext;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\ImportExport\Strategy\B2bConfigurableAddOrReplaceStrategy;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -18,34 +20,17 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
 {
-    /**
-     * @var B2bConfigurableAddOrReplaceStrategy
-     */
-    protected $strategy;
+    /** @var B2bConfigurableAddOrReplaceStrategy */
+    private $strategy;
 
-    /**
-     * @var StepExecutionProxyContext
-     */
-    protected $context;
-
-    /**
-     * @var StepExecution
-     */
-    protected $stepExecution;
+    /** @var StepExecutionProxyContext */
+    private $context;
 
     protected function setUp(): void
     {
-        $this->initClient(
-            ['debug' => false],
-            $this->generateBasicAuthHeader()
-        );
+        $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
-
-        $this->loadFixtures(
-            [
-                'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures'
-            ]
-        );
+        $this->loadFixtures([LoadSalesBundleFixtures::class]);
 
         $container = $this->getContainer();
 
@@ -61,8 +46,7 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
             $container->get('oro_importexport.field.related_entity_state_helper')
         );
 
-        $this->stepExecution = new StepExecution('step', new JobExecution());
-        $this->context = new StepExecutionProxyContext($this->stepExecution);
+        $this->context = new StepExecutionProxyContext(new StepExecution('step', new JobExecution()));
         $this->strategy->setImportExportContext($this->context);
         $this->strategy->setEntityName(B2bCustomer::class);
         $this->strategy->setOwnershipSetter($container->get('oro_organization.entity_ownership_associations_setter'));
@@ -190,13 +174,8 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
         self::assertNull($existedCustomer->getShippingAddress()->getRegionText());
         self::assertNull($existedCustomer->getBillingAddress()->getRegionText());
 
-        $exceptedRegion = $this->getContainer()->get('doctrine')->getRepository('OroAddressBundle:Region')
-            ->findOneBy(
-                [
-                    'country' => $country,
-                    'name'    => 'Arizona'
-                ]
-            );
+        $exceptedRegion = $this->getContainer()->get('doctrine')->getRepository(Region::class)
+            ->findOneBy(['country' => $country, 'name' => 'Arizona']);
 
         self::assertEquals($exceptedRegion, $existedCustomer->getShippingAddress()->getRegion());
     }
@@ -235,13 +214,8 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
         self::assertNull($entity->getShippingAddress()->getRegionText());
         self::assertNull($entity->getBillingAddress()->getRegionText());
 
-        $exceptedRegion = $this->getContainer()->get('doctrine')->getRepository('OroAddressBundle:Region')
-            ->findOneBy(
-                [
-                    'country' => $country,
-                    'name'    => 'Arizona'
-                ]
-            );
+        $exceptedRegion = $this->getContainer()->get('doctrine')->getRepository(Region::class)
+            ->findOneBy(['country' => $country, 'name' => 'Arizona']);
 
         self::assertEquals($exceptedRegion, $entity->getShippingAddress()->getRegion());
         self::assertNull($entity->getId());

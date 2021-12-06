@@ -5,25 +5,20 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpenOpportunityFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Symfony\Component\DomCrawler\Form;
 
 class OpportunityEditWithEnabledWorkflowTest extends WebTestCase
 {
     /** @var WorkflowManager */
-    protected $workflowManager;
+    private $workflowManager;
 
     protected function setUp(): void
     {
-        $this->initClient(
-            ['debug' => false],
-            $this->generateBasicAuthHeader()
-        );
+        $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
+        $this->loadFixtures([LoadOpenOpportunityFixtures::class]);
+
         $this->workflowManager = $this->client->getContainer()->get('oro_workflow.manager');
         $this->workflowManager->activateWorkflow('opportunity_flow');
-        $this->loadFixtures([
-            LoadOpenOpportunityFixtures::class
-        ]);
     }
 
     public function testEditOpportunity()
@@ -37,7 +32,6 @@ class OpportunityEditWithEnabledWorkflowTest extends WebTestCase
             $this->getUrl('oro_sales_opportunity_update', ['id' => $opportunity->getId()])
         );
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['oro_sales_opportunity_form[name]']->setValue($newOpportunityName);
 

@@ -114,7 +114,7 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
      * @param int $position
      * @param int $total
      */
-    protected function checkViewEditPagination(Crawler $crawler, $name, $position, $total)
+    private function checkViewEditPagination(Crawler $crawler, $name, $position, $total)
     {
         $this->assertCurrentContactName($crawler, $name);
         $this->assertPositionEntityLinks($crawler);

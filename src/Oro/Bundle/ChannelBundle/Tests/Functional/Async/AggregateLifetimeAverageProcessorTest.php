@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Async;
 
-use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
@@ -23,8 +22,6 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->initClient();
     }
 
@@ -37,12 +34,10 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
 
     /**
      * @dataProvider timezoneProvider
-     *
-     * @param string $systemTimezone
      */
-    public function testValuesAggregation($systemTimezone)
+    public function testValuesAggregation(string $systemTimezone)
     {
-        $cm = self::getConfigManager('global');
+        $cm = self::getConfigManager();
         $cm->set('oro_locale.timezone', $systemTimezone);
         $cm->flush();
 
@@ -58,14 +53,14 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
         $processor->process($message, $connection->createSession());
 
         /** @var LifetimeValueAverageAggregationRepository $repository */
-        $repository = $this->getDoctrine()->getRepository(LifetimeValueAverageAggregation::class);
+        $repository = $this->getContainer()->get('doctrine')->getRepository(LifetimeValueAverageAggregation::class);
 
         $expectedTimeZoneResults = $this->getExpectedResultsFor($systemTimezone);
         $channelMap = $this->getChannelIdMap();
 
         $values = $repository->findForPeriod(new \DateTime('2013-10-01 00:00:00', new \DateTimeZone('UTC')));
         foreach ($values as $channelMonthData) {
-            $key         = sprintf('%02d_%d', $channelMonthData['month'], $channelMonthData['year']);
+            $key = sprintf('%02d_%d', $channelMonthData['month'], $channelMonthData['year']);
             $channelName = $channelMap[$channelMonthData['channelId']];
             if (isset($expectedTimeZoneResults[$channelName], $expectedTimeZoneResults[$channelName][$key])) {
                 $this->assertEquals(
@@ -77,10 +72,7 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
         }
     }
 
-    /**
-     * @return array
-     */
-    public function timezoneProvider()
+    public function timezoneProvider(): array
     {
         return [
             'UTC'         => ['$systemTimezone' => 'UTC'],
@@ -89,30 +81,14 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
         ];
     }
 
-    /**
-     * @param string $timeZone
-     *
-     * @return array
-     */
-    private function getExpectedResultsFor($timeZone)
+    private function getExpectedResultsFor(string $timeZone): array
     {
         $expectedResults = Yaml::parse(file_get_contents(__DIR__ .'/../Fixture/data/expected_results.yml'));
 
         return $expectedResults['data'][$timeZone];
     }
 
-    /**
-     * @return ManagerRegistry
-     */
-    private function getDoctrine()
-    {
-        return $this->getContainer()->get('doctrine');
-    }
-
-    /**
-     * @return \string[]
-     */
-    private function getChannelIdMap()
+    private function getChannelIdMap(): array
     {
         $channelMap = [];
 

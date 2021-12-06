@@ -2,50 +2,41 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
 
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class CommentControllerTest extends WebTestCase
 {
-    /**
-     * @var array
-     */
-    protected $commentPostData = [
+    private array $commentPostData = [
         'message' => 'New comment',
         'owner' => 1,
         'public' => true,
     ];
 
-    /**
-     * @var int
-     */
-    protected static $caseId;
+    /** @var int */
+    private static $caseId;
 
-    /**
-     * @var int
-     */
-    protected static $contactId;
+    /** @var int */
+    private static $contactId;
 
-    /**
-     * @var int
-     */
-    protected static $adminUserId = 1;
+    /** @var int */
+    private static $adminUserId = 1;
 
     protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());
-
-        $this->loadFixtures(['Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
+        $this->loadFixtures([LoadCaseEntityData::class]);
     }
 
     protected function postFixtureLoad()
     {
-        $case = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCaseBundle:CaseEntity')
-            ->findOneBySubject('Case #1');
+        $case = self::getContainer()->get('doctrine')->getRepository(CaseEntity::class)
+            ->findOneBy(['subject' =>  'Case #1']);
 
-        $contact = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroContactBundle:Contact')
-            ->findOneByEmail('daniel.case@example.com');
+        $contact = self::getContainer()->get('doctrine')->getRepository(Contact::class)
+            ->findOneBy(['email' => 'daniel.case@example.com']);
 
         $this->assertNotNull($case);
         $this->assertNotNull($contact);
@@ -54,7 +45,7 @@ class CommentControllerTest extends WebTestCase
         self::$contactId = $contact->getId();
     }
 
-    public function testCreate()
+    public function testCreate(): int
     {
         $this->client->jsonRequest(
             'POST',
@@ -74,7 +65,7 @@ class CommentControllerTest extends WebTestCase
     /**
      * @depends testCreate
      */
-    public function testCget()
+    public function testCget(): int
     {
         $this->client->jsonRequest(
             'GET',
@@ -102,10 +93,8 @@ class CommentControllerTest extends WebTestCase
 
     /**
      * @depends testCreate
-     * @param integer $id
-     * @return array
      */
-    public function testGet($id)
+    public function testGet(int $id): array
     {
         $this->client->jsonRequest(
             'GET',
@@ -133,7 +122,7 @@ class CommentControllerTest extends WebTestCase
     /**
      * @depends testGet
      */
-    public function testPut(array $originalComment)
+    public function testPut(array $originalComment): int
     {
         $id = $originalComment['id'];
 
@@ -171,9 +160,8 @@ class CommentControllerTest extends WebTestCase
 
     /**
      * @depends testPut
-     * @param integer $id
      */
-    public function testDelete($id)
+    public function testDelete(int $id)
     {
         $this->client->jsonRequest(
             'DELETE',
@@ -196,7 +184,7 @@ class CommentControllerTest extends WebTestCase
         $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 
-    protected function assertCommentDataEquals(array $expected, array $actual)
+    private function assertCommentDataEquals(array $expected, array $actual): void
     {
         $this->assertArrayHasKey('id', $actual);
         $this->assertGreaterThan(0, $actual['id']);

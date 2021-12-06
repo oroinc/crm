@@ -19,11 +19,7 @@ class ImportExportTest extends AbstractImportExportTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtures(
-            [
-                LoadContactEntitiesData::class,
-            ]
-        );
+        $this->loadFixtures([LoadContactEntitiesData::class]);
     }
 
     public function testExportTemplate()
@@ -56,10 +52,7 @@ class ImportExportTest extends AbstractImportExportTestCase
             $this->getFullPathToDataFile('import_one_record.csv')
         );
 
-        static::assertCount(
-            5,
-            $this->getContactRepository()->findAll()
-        );
+        self::assertCount(5, $this->getContactRepository()->findAll());
     }
 
     public function testImportRecordWithAddOrReplaceStrategy()
@@ -69,25 +62,19 @@ class ImportExportTest extends AbstractImportExportTestCase
             $this->getFullPathToDataFile('import_one_record.csv')
         );
 
-        static::assertCount(
-            5,
-            $this->getContactRepository()->findAll()
-        );
+        self::assertCount(5, $this->getContactRepository()->findAll());
     }
 
     public function testImportDuplicateRecord()
     {
-        $this->markTestSkipped("Unskip after BAP-16301");
+        $this->markTestSkipped('Unskip after BAP-16301');
 
         $this->assertImportWorks(
             $this->getExportImportConfiguration(),
             $this->getFullPathToDataFile('contact_with_duplicate_records.csv')
         );
 
-        static::assertCount(
-            5,
-            $this->getContactRepository()->findAll()
-        );
+        self::assertCount(5, $this->getContactRepository()->findAll());
     }
 
     public function testUpdateIfNoneEmptyStrategyOnLastName()
@@ -103,10 +90,7 @@ class ImportExportTest extends AbstractImportExportTestCase
             $this->getFullPathToDataFile('update_name_prefix.csv')
         );
 
-        static::assertCount(
-            4,
-            $this->getContactRepository()->findAll()
-        );
+        self::assertCount(4, $this->getContactRepository()->findAll());
 
         /** @var Contact $updatedContact */
         $updatedContact = $this->getReference('Contact_' . LoadContactEntitiesData::FIRST_ENTITY_NAME);
@@ -118,7 +102,7 @@ class ImportExportTest extends AbstractImportExportTestCase
          */
         $this->assertNotEmpty(
             $updatedContact->getTestMultiEnumSnapshot(),
-            "Update through the import-export functionality mustn't clear the system fields !"
+            'Update through the import-export functionality must not clear the system fields'
         );
     }
 
@@ -131,33 +115,17 @@ class ImportExportTest extends AbstractImportExportTestCase
         );
     }
 
-    /**
-     * @return ContactRepository
-     */
-    private function getContactRepository()
+    private function getContactRepository(): ContactRepository
     {
-        return static::getContainer()
-            ->get('doctrine')
-            ->getManagerForClass(Contact::class)
-            ->getRepository(Contact::class);
+        return self::getContainer()->get('doctrine')->getRepository(Contact::class);
     }
 
-    /**
-     * @return ConfigManager
-     */
-    private function getConfigManager()
+    private function getConfigManager(): ConfigManager
     {
-        return $config = $this
-            ->getContainer()
-            ->get('oro_entity_config.config_manager');
+        return self::getContainer()->get('oro_entity_config.config_manager');
     }
 
-    /**
-     * @param string $fileName
-     *
-     * @return string
-     */
-    private function getFullPathToDataFile($fileName)
+    private function getFullPathToDataFile(string $fileName): string
     {
         $dataDir = $this->getContainer()
             ->get('kernel')
@@ -166,16 +134,9 @@ class ImportExportTest extends AbstractImportExportTestCase
         return $dataDir . DIRECTORY_SEPARATOR . $fileName;
     }
 
-    /**
-     * @return string
-     */
-    private function getExportTemplateFileName()
+    private function getExportTemplateFileName(): string
     {
-        $organizationRepository = $this
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass(Organization::class)
-            ->getRepository(Organization::class);
+        $organizationRepository = $this->getContainer()->get('doctrine')->getRepository(Organization::class);
 
         /** @var Organization $organization */
         $organization = $organizationRepository->getFirst();
@@ -186,13 +147,9 @@ class ImportExportTest extends AbstractImportExportTestCase
         );
     }
 
-    /**
-     * @param string $fieldImportProcessorAlias
-     *
-     * @return ImportExportConfiguration
-     */
-    private function getExportImportConfiguration($fieldImportProcessorAlias = 'oro_contact.add_or_replace')
-    {
+    private function getExportImportConfiguration(
+        string $fieldImportProcessorAlias = 'oro_contact.add_or_replace'
+    ): ImportExportConfiguration {
         return new ImportExportConfiguration([
             ImportExportConfiguration::FIELD_ENTITY_CLASS => Contact::class,
             ImportExportConfiguration::FIELD_EXPORT_PROCESSOR_ALIAS => 'oro_contact',

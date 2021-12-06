@@ -14,19 +14,15 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityByStatusWidge
 class OpportunityByStatusTest extends AbstractWidgetTestCase
 {
     /** @var Widget */
-    protected $widget;
+    private $widget;
 
     protected function setUp(): void
     {
-        $this->initClient(
-            ['debug' => false],
-            $this->generateBasicAuthHeader()
-        );
+        $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
         $this->loadFixtures([
             LoadOpportunityByStatusWidgetFixture::class,
             LoadBusinessUnitData::class
         ]);
-
         $this->widget = $this->getReference('widget_opportunity_by_status');
     }
 
@@ -40,11 +36,11 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             )
         );
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting configure widget dialog window !');
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting configure widget dialog window !');
     }
 
     /**
-     * @depends      testGetWidgetConfigureDialog
+     * @depends testGetWidgetConfigureDialog
      * @dataProvider widgetProvider
      */
     public function testDateRangeBetweenFilter($requestData)
@@ -62,7 +58,7 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             )
         );
         $response = $this->client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode(), "Failed in getting widget view !");
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
         $this->assertNotEmpty($crawler->html());
 
         $data = $this->getChartData($crawler);
@@ -90,7 +86,7 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
         );
 
         $response = $this->client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode(), "Failed in getting widget view !");
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
         $this->assertNotEmpty($crawler->html());
 
         $this->assertEquals(
@@ -100,10 +96,7 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function widgetProvider()
+    public function widgetProvider(): array
     {
         return [
             'Opportunity by status with between date range filter' => [

@@ -16,7 +16,7 @@ class ContactEmailAddressHandlerTest extends WebTestCase
 {
     protected function setUp(): void
     {
-        $this->initClient([], static::generateBasicAuthHeader());
+        $this->initClient([], self::generateBasicAuthHeader());
         $listenerManager = $this->getContainer()->get('oro_platform.optional_listeners.manager');
         $listenerManager->disableListener('oro_email.listener.entity_listener');
         $this->loadFixtures([LoadContactEmailData::class]);

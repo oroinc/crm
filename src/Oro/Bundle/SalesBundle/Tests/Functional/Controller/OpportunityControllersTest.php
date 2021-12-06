@@ -4,33 +4,24 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Symfony\Component\DomCrawler\Form;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 
 class OpportunityControllersTest extends AbstractDatagridTestCase
 {
-    /** @var B2bCustomer */
-    protected static $customer;
-
     /** @var Account */
-    protected static $account;
+    private static $account;
 
-    /** @var bool */
-    protected $isRealGridRequest = false;
+    protected bool $isRealGridRequest = false;
 
     protected function setUp(): void
     {
-        $this->initClient(
-            ['debug' => false],
-            $this->generateBasicAuthHeader()
-        );
+        $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
-        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures([LoadSalesBundleFixtures::class]);
     }
 
     protected function postFixtureLoad()
     {
-        self::$customer = $this->getReference('default_b2bcustomer');
         self::$account = $this->getReference('default_account');
     }
 
@@ -54,7 +45,6 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
             )
         );
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['oro_sales_opportunity_form[name]'] = 'opname';
         $form['oro_sales_opportunity_form[probability]'] = 10;
@@ -67,14 +57,13 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Opportunity saved", $crawler->html());
+        self::assertStringContainsString('Opportunity saved', $crawler->html());
     }
 
-    public function testCreate()
+    public function testCreate(): string
     {
         $crawler = $this->client->request('GET', $this->getUrl('oro_sales_opportunity_create'));
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
         $form['oro_sales_opportunity_form[name]']         = $name;
@@ -91,18 +80,15 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Opportunity saved", $crawler->html());
+        self::assertStringContainsString('Opportunity saved', $crawler->html());
 
         return $name;
     }
 
     /**
-    * @param string $name
     * @depends testCreate
-    *
-    * @return string
     */
-    public function testUpdate($name)
+    public function testUpdate(string $name): array
     {
         $response = $this->client->requestGrid(
             'sales-opportunity-grid',
@@ -120,7 +106,6 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
             $this->getUrl('oro_sales_opportunity_update', ['id' => $result['id']])
         );
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
         $form['oro_sales_opportunity_form[name]'] = $name;
@@ -130,7 +115,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Opportunity saved", $crawler->html());
+        self::assertStringContainsString('Opportunity saved', $crawler->html());
 
         $returnValue['name'] = $name;
 
@@ -138,10 +123,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
     }
 
     /**
-     * @param array $returnValue
      * @depends testUpdate
-     *
-     * @return string
      */
     public function testView(array $returnValue)
     {
@@ -152,14 +134,11 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("{$returnValue['name']} - Opportunities - Sales", $crawler->html());
+        self::assertStringContainsString("{$returnValue['name']} - Opportunities - Sales", $crawler->html());
     }
 
     /**
-     * @param array $returnValue
      * @depends testUpdate
-     *
-     * @return string
      */
     public function testInfo(array $returnValue)
     {
@@ -197,9 +176,9 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
     }
 
     /**
-     * @return array
+     * {@inheritdoc }
      */
-    public function gridProvider()
+    public function gridProvider(): array
     {
         return [
             'Opportunity grid'                => [

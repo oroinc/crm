@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Tests\Functional\Command;
 
-use Doctrine\ORM\EntityManager;
-use Monolog\Registry;
+use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
-use Oro\Bundle\DotmailerBundle\Entity\Contact;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class ActivityContactRecalculateCommandTest extends WebTestCase
@@ -14,9 +13,7 @@ class ActivityContactRecalculateCommandTest extends WebTestCase
     protected function setUp(): void
     {
         $this->initClient();
-        $this->loadFixtures([
-            'Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData',
-        ]);
+        $this->loadFixtures([LoadContactEntitiesData::class]);
     }
 
     public function testRecalculationOfContactedContactHavingNoActivities()
@@ -31,34 +28,19 @@ class ActivityContactRecalculateCommandTest extends WebTestCase
         $this->assertEquals(0, $firstContact->getAcContactCount());
     }
 
-    protected function runActivityContactRecalculateCommand()
+    private function runActivityContactRecalculateCommand()
     {
         $this->runCommand(ActivityContactRecalculateCommand::getDefaultName());
     }
 
-    /**
-     * @param string $firstName
-     *
-     * @return Contact
-     */
-    protected function findContact($firstName)
+    private function findContact(string $firstName): Contact
     {
-        return $this->getRegistry()->getRepository('OroContactBundle:Contact')->findOneByFirstName($firstName);
+        return self::getContainer()->get('doctrine')->getRepository(Contact::class)
+            ->findOneBy(['firstName' => $firstName]);
     }
 
-    /**
-     * @return EntityManager
-     */
-    protected function getEntityManager()
+    private function getEntityManager(): EntityManagerInterface
     {
-        return $this->getRegistry()->getManager();
-    }
-
-    /**
-     * @return Registry
-     */
-    protected function getRegistry()
-    {
-        return $this->getContainer()->get('doctrine');
+        return self::getContainer()->get('doctrine')->getManager();
     }
 }

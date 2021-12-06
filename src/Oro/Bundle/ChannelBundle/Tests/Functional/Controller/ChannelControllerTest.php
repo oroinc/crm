@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Controller;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Oro\Bundle\ChannelBundle\Entity\CustomerIdentity;
+use Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\Testing\ResponseExtension;
-use Symfony\Component\Form\Form;
 
 /**
  * @group crm
@@ -16,8 +16,8 @@ class ChannelControllerTest extends WebTestCase
     use ResponseExtension;
     use MessageQueueExtension;
 
-    const CHANNEL_NAME = 'some name';
-    const GRID_NAME    = 'oro-channels-grid';
+    private const CHANNEL_NAME = 'some name';
+    private const GRID_NAME = 'oro-channels-grid';
 
     protected function setUp(): void
     {
@@ -26,34 +26,33 @@ class ChannelControllerTest extends WebTestCase
         $this->client->useHashNavigation(true);
     }
 
-    public function testCreateChannel()
+    public function testCreateChannel(): array
     {
-        $crawler      = $this->client->request('GET', $this->getUrl('oro_channel_create'));
-        $name         = 'Simple channel';
-        $form         = $crawler->selectButton('Save and Close')->form();
-        $channelType  = 'custom';
+        $crawler = $this->client->request('GET', $this->getUrl('oro_channel_create'));
+        $name = 'Simple channel';
+        $form = $crawler->selectButton('Save and Close')->form();
+        $channelType = 'custom';
 
-        $form['oro_channel_form[name]']        = $name;
+        $form['oro_channel_form[name]'] = $name;
         $form['oro_channel_form[channelType]'] = $channelType;
-        $form['oro_channel_form[entities]']    = json_encode(
-            ['Oro\Bundle\ChannelBundle\Entity\CustomerIdentity']
-        );
+        $form['oro_channel_form[entities]'] = json_encode([CustomerIdentity::class], JSON_THROW_ON_ERROR);
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
-        $result  = $this->client->getResponse();
+        $result = $this->client->getResponse();
 
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString('Channel saved', $crawler->html());
+        self::assertStringContainsString('Channel saved', $crawler->html());
 
-        $channelType  = ucfirst('custom');
+        $channelType = ucfirst('custom');
+
         return compact('name', 'channelType');
     }
 
     /**
      * @depends testCreateChannel
      */
-    public function testView($data)
+    public function testView(array $data)
     {
         $response = $this->client->requestGrid(
             self::GRID_NAME,
@@ -64,7 +63,7 @@ class ChannelControllerTest extends WebTestCase
 
         $gridResult = $this->getJsonResponseContent($response, 200);
         $gridResult = reset($gridResult['data']);
-        $id         = $gridResult['id'];
+        $id = $gridResult['id'];
 
         $crawler = $this->client->request(
             'GET',
@@ -74,19 +73,15 @@ class ChannelControllerTest extends WebTestCase
         $result = $this->client->getResponse();
 
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString('Channels', $crawler->html());
-        static::assertStringContainsString($data['name'], $crawler->html());
-        static::assertStringContainsString($data['channelType'], $crawler->html());
+        self::assertStringContainsString('Channels', $crawler->html());
+        self::assertStringContainsString($data['name'], $crawler->html());
+        self::assertStringContainsString($data['channelType'], $crawler->html());
     }
 
     /**
-     * @param array $data
-     *
      * @depends testCreateChannel
-     *
-     * @return array
      */
-    public function testUpdateChannel($data)
+    public function testUpdateChannel(array $data): array
     {
         $response = $this->client->requestGrid(
             self::GRID_NAME,
@@ -95,17 +90,16 @@ class ChannelControllerTest extends WebTestCase
             ]
         );
 
-        $result  = $this->getJsonResponseContent($response, 200);
-        $result  = reset($result['data']);
+        $result = $this->getJsonResponseContent($response, 200);
+        $result = reset($result['data']);
         $channel = $result;
 
         $crawler = $this->client->request(
             'GET',
             $this->getUrl('oro_channel_update', ['id' => $result['id']])
         );
-        /** @var Form $form */
-        $form                              = $crawler->selectButton('Save and Close')->form();
-        $name                              = 'name' . $this->generateRandomString();
+        $form = $crawler->selectButton('Save and Close')->form();
+        $name = 'name' . $this->generateRandomString();
         $form['oro_channel_form[name]'] = $name;
 
         $this->client->followRedirects(true);
@@ -113,7 +107,7 @@ class ChannelControllerTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200, 'text/html; charset=UTF-8');
-        static::assertStringContainsString('Channel saved', $crawler->html());
+        self::assertStringContainsString('Channel saved', $crawler->html());
 
         $channel['name'] = $name;
 
@@ -123,7 +117,7 @@ class ChannelControllerTest extends WebTestCase
     /**
      * @depends testUpdateChannel
      */
-    public function testDeleteChannel($channel)
+    public function testDeleteChannel(array $channel)
     {
         $this->ajaxRequest(
             'DELETE',
@@ -148,12 +142,10 @@ class ChannelControllerTest extends WebTestCase
 
     /**
      * @dataProvider gridProvider
-     *
-     * @param array $filters
      */
-    public function testGrid($filters)
+    public function testGrid(array $filters)
     {
-        $this->loadFixtures(['Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel']);
+        $this->loadFixtures([LoadChannel::class]);
 
         if (isset($filters['gridParameters']['id'])) {
             $gridId = $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['id'] . ']';
@@ -162,7 +154,7 @@ class ChannelControllerTest extends WebTestCase
         }
 
         $response = $this->client->requestGrid($filters['gridParameters'], $filters['gridFilters']);
-        $result   = $this->getJsonResponseContent($response, 200);
+        $result = $this->getJsonResponseContent($response, 200);
 
         foreach ($result['data'] as $row) {
             if ((isset($filters['gridParameters']['id']))) {
@@ -176,7 +168,7 @@ class ChannelControllerTest extends WebTestCase
         $this->assertCount((int) $filters['expectedResultCount'], $result['data']);
     }
 
-    public function gridProvider()
+    public function gridProvider(): array
     {
         return [
             'Channel grid'                => [
@@ -206,13 +198,5 @@ class ChannelControllerTest extends WebTestCase
                 ],
             ],
         ];
-    }
-
-    /**
-     * @return EntityManagerInterface
-     */
-    protected function getEntityManager()
-    {
-        return $this->getContainer()->get('doctrine.orm.entity_manager');
     }
 }

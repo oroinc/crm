@@ -76,7 +76,7 @@ class RestContactPhoneApiTest extends WebTestCase
         $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
 
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_FORBIDDEN);
-        $realResponse = json_decode($this->client->getResponse()->getContent());
+        $realResponse = json_decode($this->client->getResponse()->getContent(), false, 512, JSON_THROW_ON_ERROR);
         $this->assertEquals(403, $realResponse->code);
         $this->assertEquals(
             'The delete operation is forbidden. Reason: '
@@ -117,7 +117,7 @@ class RestContactPhoneApiTest extends WebTestCase
         ];
         $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_FORBIDDEN);
-        $realResponse = json_decode($this->client->getResponse()->getContent());
+        $realResponse = json_decode($this->client->getResponse()->getContent(), false, 512, JSON_THROW_ON_ERROR);
         $this->assertEquals(403, $realResponse->code);
         $this->assertEquals(
             'The delete operation is forbidden. Reason: '

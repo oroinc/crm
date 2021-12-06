@@ -256,7 +256,7 @@ class AccountLifetimeListenerTest extends WebTestCase
     /**
      * @return EntityManager
      */
-    protected function getEntityManager()
+    private function getEntityManager()
     {
         return $this->getContainer()->get('doctrine.orm.entity_manager');
     }
@@ -264,7 +264,7 @@ class AccountLifetimeListenerTest extends WebTestCase
     /**
      * @return AmountProvider
      */
-    protected function getAmountProvider()
+    private function getAmountProvider()
     {
         return $this->getContainer()->get('oro_channel.provider.lifetime.amount_provider');
     }
@@ -274,7 +274,7 @@ class AccountLifetimeListenerTest extends WebTestCase
      *
      * @return AbstractEnumValue
      */
-    protected function findOpportunityStatus($code)
+    private function findOpportunityStatus($code)
     {
         $status = $this->getEntityManager()
             ->getRepository(ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE))

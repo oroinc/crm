@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\AccountBundle\Tests\Functional;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,12 +13,8 @@ class MergingAccountsTest extends WebTestCase
 
     protected function setUp(): void
     {
-        $this->initClient([], static::generateBasicAuthHeader());
-        $this->loadFixtures(
-            [
-                '@OroAccountBundle/Tests/Functional/DataFixtures/accounts_data.yml'
-            ]
-        );
+        $this->initClient([], self::generateBasicAuthHeader());
+        $this->loadFixtures(['@OroAccountBundle/Tests/Functional/DataFixtures/accounts_data.yml']);
     }
 
     public function testMergingAccounts()
@@ -53,11 +50,9 @@ class MergingAccountsTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertHtmlResponseStatusCodeEquals($this->client->getResponse(), Response::HTTP_OK);
-        static::assertStringContainsString('Entities were successfully merged', $crawler->html());
+        self::assertStringContainsString('Entities were successfully merged', $crawler->html());
 
-        $accounts = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroAccountBundle:Account')
+        $accounts = $this->getContainer()->get('doctrine')->getRepository(Account::class)
             ->findAll();
 
         $this->assertCount(1, $accounts);

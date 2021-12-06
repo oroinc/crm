@@ -21,7 +21,7 @@ class RestContactAddressApiTest extends WebTestCase
             $this->getUrl('oro_api_get_contact_addresses', ['contactId' => $contactId])
         );
         $result = $this->client->getResponse();
-        $result = json_decode($result->getContent(), true);
+        $result = json_decode($result->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $this->assertArrayHasKey(0, $result);
         $this->assertCount(1, $result);
         $expected = [
@@ -49,7 +49,7 @@ class RestContactAddressApiTest extends WebTestCase
             'custom_field_2' => 'val2'
         ];
         foreach ($expected as $key => $value) {
-            static::assertEquals($value, $result[0][$key]);
+            self::assertEquals($value, $result[0][$key]);
         }
     }
 }

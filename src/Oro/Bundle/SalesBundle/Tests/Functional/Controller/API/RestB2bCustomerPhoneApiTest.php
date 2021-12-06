@@ -22,7 +22,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
             'entityId' => $customer->getId(),
             'phone' => '111',
             'primary' => true
-        ]);
+        ], JSON_THROW_ON_ERROR);
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_phone'), [], [], [], $content);
         $customer = $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_CREATED);
 
@@ -38,7 +38,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
             'entityId' => $customer->getId(),
             'phone' =>'test1@test.test',
             'primary' => true
-        ]);
+        ], JSON_THROW_ON_ERROR);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_phone'), [], [], [], $content);
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
@@ -49,7 +49,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
         $content = json_encode([
             'phone' =>'test@test.test',
             'primary' => true
-        ]);
+        ], JSON_THROW_ON_ERROR);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_phone'), [], [], [], $content);
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
@@ -61,7 +61,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
         $content = json_encode([
             'entityId' => $customer->getId(),
             'primary' => true
-        ]);
+        ], JSON_THROW_ON_ERROR);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_b2bcustomer_phone'), [], [], [], $content);
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
@@ -77,7 +77,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_b2bcustomer_phone', $routeParams));
 
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_FORBIDDEN);
-        $realResponse = json_decode($this->client->getResponse()->getContent());
+        $realResponse = json_decode($this->client->getResponse()->getContent(), false, 512, JSON_THROW_ON_ERROR);
         $this->assertEquals(403, $realResponse->code);
         $this->assertEquals(
             'The delete operation is forbidden. Reason: '

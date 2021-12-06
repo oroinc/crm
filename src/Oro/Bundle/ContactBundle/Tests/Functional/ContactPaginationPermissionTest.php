@@ -4,6 +4,7 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class ContactPaginationPermissionTest extends AbstractContactPaginationTestCase
 {
@@ -23,13 +24,10 @@ class ContactPaginationPermissionTest extends AbstractContactPaginationTestCase
 
         // change owner to second contact
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
-        $contact = $this->getContainer()->get('doctrine')
-            ->getRepository('OroContactBundle:Contact')
+        $contact = $this->getContainer()->get('doctrine')->getRepository(Contact::class)
             ->findOneBy(['firstName' => LoadContactEntitiesData::SECOND_ENTITY_NAME]);
 
-        $admin = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroUserBundle:User')
+        $admin = $this->getContainer()->get('doctrine')->getRepository(User::class)
             ->findOneByUsername('admin');
 
         $contact->setOwner($admin);

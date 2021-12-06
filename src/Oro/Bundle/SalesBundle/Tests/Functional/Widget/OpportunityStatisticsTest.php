@@ -4,12 +4,12 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
 
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatisticsWidgetFixture;
 
 class OpportunityStatisticsTest extends BaseStatistics
 {
-    /** @var array */
-    protected $metrics = [
+    public array $metrics = [
         'new_opportunities_count'          => 'New Opportunities count',
         'new_opportunities_amount'         => 'New Opportunities amount',
         'won_opportunities_to_date_count'  => 'Won Opportunities to date count',
@@ -19,9 +19,7 @@ class OpportunityStatisticsTest extends BaseStatistics
     protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
-        $this->loadFixtures([
-            LoadOpportunityStatisticsWidgetFixture::class
-        ]);
+        $this->loadFixtures([LoadOpportunityStatisticsWidgetFixture::class]);
     }
 
     public function testDefaultConfiguration(): void
@@ -42,7 +40,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         $this->client->request($form->getMethod(), $form->getUri(), $data);
 
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, 'Failed in submit widget configuration options !');
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options !');
 
         $crawler = $this->client->request(
             'GET',
@@ -58,7 +56,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         );
 
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting widget view !');
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view !');
         $this->assertNotEmpty($crawler->html());
 
         $newOpportunityCountMetric = $crawler->filterXPath(
@@ -67,9 +65,9 @@ class OpportunityStatisticsTest extends BaseStatistics
             )
         );
         $this->assertEquals(
-            $newOpportunityCountMetric->text(),
             2,
-            '"New Opportunities Count" metric doesn\'t much expected value !'
+            $newOpportunityCountMetric->text(),
+            '"New Opportunities Count" metric does not much expected value'
         );
 
         $newOpportunityAmountMetric = $crawler->filterXPath(
@@ -78,9 +76,9 @@ class OpportunityStatisticsTest extends BaseStatistics
             )
         );
         $this->assertEquals(
-            $newOpportunityAmountMetric->getNode(0)->nodeValue,
             '$60,000.00',
-            '"New Opportunities Amount" metric doesn\'t much expected value !'
+            $newOpportunityAmountMetric->getNode(0)->nodeValue,
+            '"New Opportunities Amount" metric does not much expected value'
         );
 
         $newOpportunityCountMetric = $crawler->filterXPath(
@@ -89,9 +87,9 @@ class OpportunityStatisticsTest extends BaseStatistics
             )
         );
         $this->assertEquals(
-            $newOpportunityCountMetric->text(),
             1,
-            '"Won Opportunities Count" metric doesn\'t much expected value !'
+            $newOpportunityCountMetric->text(),
+            '"Won Opportunities Count" metric does not much expected value'
         );
 
         $newOpportunityCountMetric = $crawler->filterXPath(
@@ -100,9 +98,9 @@ class OpportunityStatisticsTest extends BaseStatistics
             )
         );
         $this->assertEquals(
-            $newOpportunityCountMetric->text(),
             '$10,000.00',
-            '"Won Opportunities Count" metric doesn\'t much expected value !'
+            $newOpportunityCountMetric->text(),
+            '"Won Opportunities Count" metric does not much expected value'
         );
     }
 
@@ -146,7 +144,7 @@ class OpportunityStatisticsTest extends BaseStatistics
                 'dateRange' => ['type' => AbstractDateFilterType::TYPE_TODAY],
                 'comparePrevious' => true,
                 'advancedFilters' => [
-                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
+                    'entity' => Opportunity::class,
                     'filters' => [
                         'columnName' => 'updatedAt',
                         'criterion' => [
@@ -234,7 +232,7 @@ class OpportunityStatisticsTest extends BaseStatistics
                 'dateRange' => ['type' => AbstractDateFilterType::TYPE_TODAY],
                 'comparePrevious' => false,
                 'advancedFilters' => [
-                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
+                    'entity' => Opportunity::class,
                     'filters' => [
                         'columnName' => 'updatedAt',
                         'criterion' => [
@@ -264,7 +262,7 @@ class OpportunityStatisticsTest extends BaseStatistics
                 'dateRange' => ['type' => AbstractDateFilterType::TYPE_TODAY],
                 'comparePrevious' => true,
                 'advancedFilters' => [
-                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
+                    'entity' => Opportunity::class,
                     'filters' => [
                         'columnName' => 'createdAt',
                         'criterion' => [
@@ -305,10 +303,10 @@ class OpportunityStatisticsTest extends BaseStatistics
         return $this->getReference('widget_opportunity_statistics');
     }
 
-    protected function inspectResult(array $result, array $previousResult): void
+    private function inspectResult(array $result, array $previousResult): void
     {
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in submit widget configuration options !");
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options');
 
         $crawler = $this->client->request(
             'GET',
@@ -324,7 +322,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         );
 
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in gettting widget view !");
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
         $this->assertNotEmpty($crawler->html());
 
         $newOpportunityCountMetric = $crawler->filterXPath(
@@ -335,7 +333,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         $this->assertEquals(
             $newOpportunityCountMetric->text(),
             $result['new_opportunities_count'],
-            '"New Opportunities Count" metric doesn\'t much expected value !'
+            '"New Opportunities Count" metric does not much expected value'
         );
 
         $newOpportunityAmountMetric = $crawler->filterXPath(
@@ -346,7 +344,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         $this->assertEquals(
             $newOpportunityAmountMetric->getNode(0)->nodeValue,
             $result['new_opportunities_amount'],
-            '"New Opportunities Amount" metric doesn\'t much expected value !'
+            '"New Opportunities Amount" metric does not much expected value'
         );
 
         $newOpportunityCountMetric = $crawler->filterXPath(
@@ -357,7 +355,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         $this->assertEquals(
             $newOpportunityCountMetric->text(),
             $result['won_opportunities_to_date_count'],
-            '"Won Opportunities Count" metric doesn\'t much expected value !'
+            '"Won Opportunities Count" metric does not much expected value'
         );
 
         $newOpportunityCountMetric = $crawler->filterXPath(
@@ -368,7 +366,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         $this->assertEquals(
             $newOpportunityCountMetric->text(),
             $result['won_opportunities_to_date_amount'],
-            '"Won Opportunities Count" metric doesn\'t much expected value !'
+            '"Won Opportunities Count" metric does not much expected value'
         );
 
         $deviationMetric = $crawler->filterXPath(
@@ -381,7 +379,7 @@ class OpportunityStatisticsTest extends BaseStatistics
             $this->assertEquals(
                 trim($deviationMetric->text()),
                 $previousResult['new_opportunities_count'],
-                '"New Leads" previous period metric doesn\'t much expected value !'
+                '"New Leads" previous period metric does not much expected value'
             );
         } else {
             $this->assertEquals(0, $deviationMetric->count());

@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Dashboard;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\DashboardBundle\Tests\Functional\AbstractWidgetTestCase;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadCampaignLeadsWidgetFixture;
 
 /**
  * @dbIsolationPerTest
@@ -11,30 +12,25 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 class CampaignLeadsTest extends AbstractWidgetTestCase
 {
     /** @var Widget */
-    protected $widget;
+    private $widget;
 
     protected function setUp(): void
     {
-        $this->initClient(
-            ['debug' => false],
-            $this->generateBasicAuthHeader()
-        );
-        $this->loadFixtures([
-            'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadCampaignLeadsWidgetFixture'
-        ]);
-
+        $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
+        $this->loadFixtures([LoadCampaignLeadsWidgetFixture::class]);
         $this->widget = $this->getReference('widget_campaigns_leads');
     }
+
     public function testGetWidgetConfigureDialog()
     {
         $this->getConfigureDialog();
     }
 
     /**
-     * @depends      testGetWidgetConfigureDialog
+     * @depends testGetWidgetConfigureDialog
      * @dataProvider widgetProvider
      */
-    public function testDateRangeBetweenFilter($requestData)
+    public function testDateRangeBetweenFilter(array $requestData)
     {
         $this->configureWidget($this->widget, $requestData['widgetConfig']);
 
@@ -49,7 +45,7 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
             )
         );
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in getting widget view !");
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
         $this->assertNotEmpty($crawler->html());
 
         $data = $this->getChartData($crawler);
@@ -57,7 +53,7 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
         $this->assertEquals($requestData['expectedResultCount'], $data[0]->value);
     }
 
-    protected function getConfigureDialog()
+    private function getConfigureDialog()
     {
         $this->client->request(
             'GET',
@@ -67,13 +63,10 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
             )
         );
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting configure widget dialog window !');
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting configure widget dialog window !');
     }
 
-    /**
-     * @return array
-     */
-    public function widgetProvider()
+    public function widgetProvider(): array
     {
         return [
             'Opportunity by status with between date range filter' => [

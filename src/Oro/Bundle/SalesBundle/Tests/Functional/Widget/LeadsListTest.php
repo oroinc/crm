@@ -114,12 +114,12 @@ class LeadsListTest extends BaseStatistics
         $crawler = $this->getDashboardWidget();
 
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting widget view!');
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view!');
         $this->assertNotEmpty($crawler->html());
 
-        static::assertStringContainsString($expectedResults['owner'], $response->getContent());
-        static::assertStringContainsString($expectedResults['excluded_statuses'], $response->getContent());
-        static::assertStringContainsString($expectedResults['sort_by'], $response->getContent());
+        self::assertStringContainsString($expectedResults['owner'], $response->getContent());
+        self::assertStringContainsString($expectedResults['excluded_statuses'], $response->getContent());
+        self::assertStringContainsString($expectedResults['sort_by'], $response->getContent());
     }
 
     /**

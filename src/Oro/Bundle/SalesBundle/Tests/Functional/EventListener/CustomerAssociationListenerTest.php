@@ -81,7 +81,7 @@ class CustomerAssociationListenerTest extends WebTestCase
      * @param EntityManager $em
      * @param string        $name
      */
-    protected function loadTestCustomerTarget1(EntityManager $em, $name)
+    private function loadTestCustomerTarget1(EntityManager $em, $name)
     {
         $testCustomerTarget1 = new TestCustomer1();
         $testCustomerTarget1->setName($name);
@@ -92,14 +92,14 @@ class CustomerAssociationListenerTest extends WebTestCase
      * @param EntityManager $em
      * @param string        $name
      */
-    protected function loadTestCustomerTarget2(EntityManager $em, $name)
+    private function loadTestCustomerTarget2(EntityManager $em, $name)
     {
         $testCustomerTarget2 = new TestCustomer2();
         $testCustomerTarget2->setName($name);
         $em->persist($testCustomerTarget2);
     }
 
-    protected function loadEntities(EntityManager $em)
+    private function loadEntities(EntityManager $em)
     {
         $name = 'test_%s_%s';
 
@@ -115,7 +115,7 @@ class CustomerAssociationListenerTest extends WebTestCase
      *
      * @return array
      */
-    protected function sortTargets(array $targets)
+    private function sortTargets(array $targets)
     {
         /**
          * @param TestCustomer1|TestCustomer2 $item1
@@ -134,7 +134,7 @@ class CustomerAssociationListenerTest extends WebTestCase
     /**
      * @return EntityManager
      */
-    protected function getEntityManager()
+    private function getEntityManager()
     {
         return $this->getContainer()->get('doctrine')->getManagerForClass(Customer::class);
     }

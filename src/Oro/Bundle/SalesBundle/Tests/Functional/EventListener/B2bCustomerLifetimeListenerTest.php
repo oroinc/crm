@@ -2,13 +2,15 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\EventListener;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class B2bCustomerLifetimeListenerTest extends WebTestCase
@@ -16,14 +18,10 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     protected function setUp(): void
     {
         $this->initClient();
-        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures([LoadSalesBundleFixtures::class]);
     }
 
-    /**
-     * @return Opportunity
-     * @throws \Doctrine\ORM\ORMException
-     */
-    public function testCreateAffectsLifetimeIfValuable()
+    public function testCreateAffectsLifetimeIfValuable(): Opportunity
     {
         $em = $this->getEntityManager();
         /** @var B2bCustomer $b2bCustomer */
@@ -57,14 +55,10 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
     /**
      * @depends testCreateAffectsLifetimeIfValuable
-     *
-     * @param Opportunity $opportunity
-     *
-     * @return Opportunity
      */
-    public function testChangeStatusAffectsLifetime(Opportunity $opportunity)
+    public function testChangeStatusAffectsLifetime(Opportunity $opportunity): Opportunity
     {
-        $em          = $this->getEntityManager();
+        $em = $this->getEntityManager();
         $b2bCustomer = $opportunity->getCustomerAssociation()->getTarget();
         $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         $opportunity->setStatus($em->getReference($enumClass, 'lost'));
@@ -90,15 +84,11 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
     /**
      * @depends testChangeStatusAffectsLifetime
-     *
-     * @param Opportunity $opportunity
-     *
-     * @return Opportunity
      */
-    public function testCustomerChangeShouldUpdateBothCustomersIfValuable(Opportunity $opportunity)
+    public function testCustomerChangeShouldUpdateBothCustomersIfValuable(Opportunity $opportunity): Opportunity
     {
-        $em          = $this->getEntityManager();
-        /** @var  B2bCustomer $b2bCustomer */
+        $em = $this->getEntityManager();
+        /** @var B2bCustomer $b2bCustomer */
         $b2bCustomer = $opportunity->getCustomerAssociation()->getTarget();
         $this->assertEquals(100, $b2bCustomer->getLifetime());
         $newCustomer = new B2bCustomer();
@@ -125,16 +115,12 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
     /**
      * @depends testCustomerChangeShouldUpdateBothCustomersIfValuable
-     *
-     * @param Opportunity $opportunity
-     *
-     * @return Opportunity
      */
-    public function testRemoveSubtractLifetime(Opportunity $opportunity)
+    public function testRemoveSubtractLifetime(Opportunity $opportunity): Opportunity
     {
-        $em          = $this->getEntityManager();
         $b2bCustomer = $opportunity->getCustomerAssociation()->getCustomerTarget();
 
+        $em = $this->getEntityManager();
         $em->remove($opportunity);
         $em->flush();
         $em->refresh($b2bCustomer);
@@ -175,18 +161,19 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     /**
      * @depends testRemoveOpportunityFromB2bCustomer
      *
-     * Test that no processing occured for b2bcustomers that were deleted
+     * Test that no processing occurred for b2b customers that were deleted
      * assert that onFlush event listeners not throwing exceptions
      */
     public function testRemovedB2bCustomer()
     {
-        $em           = $this->getEntityManager();
-        $organization = $em->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $em = $this->getEntityManager();
+        $organization = $em->getRepository(Organization::class)->getFirst();
         $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
 
         $opportunity = new Opportunity();
         $opportunity->setName('remove_b2bcustomer_test');
-        $closeRevenue = $budgetAmount = MultiCurrency::create(50.00, 'USD');
+        $budgetAmount = MultiCurrency::create(50.00, 'USD');
+        $closeRevenue = $budgetAmount;
         $opportunity->setCloseRevenue($closeRevenue);
         $opportunity->setBudgetAmount($budgetAmount);
         $opportunity->setProbability(0.1);
@@ -207,18 +194,12 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $em->flush();
     }
 
-    /**
-     * @return EntityManager
-     */
-    protected function getEntityManager()
+    private function getEntityManager(): EntityManagerInterface
     {
         return $this->getContainer()->get('doctrine')->getManager();
     }
 
-    /**
-     * @return AccountCustomerManager
-     */
-    protected function getAccountCustomerManager()
+    private function getAccountCustomerManager(): AccountCustomerManager
     {
         return $this->getContainer()->get('oro_sales.manager.account_customer');
     }

@@ -11,7 +11,7 @@ class AccountControllerTest extends WebTestCase
 {
     protected function setUp(): void
     {
-        $this->initClient([], static::generateBasicAuthHeader());
+        $this->initClient([], self::generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
     }
 
@@ -20,7 +20,7 @@ class AccountControllerTest extends WebTestCase
         $this->client->request('GET', $this->getUrl('oro_account_index'));
         $result = $this->client->getResponse();
 
-        static::assertHtmlResponseStatusCodeEquals($result, 200);
+        self::assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate(): void
@@ -34,8 +34,8 @@ class AccountControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $result = $this->client->getResponse();
 
-        static::assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString('Account saved', $crawler->html());
+        self::assertHtmlResponseStatusCodeEquals($result, 200);
+        self::assertStringContainsString('Account saved', $crawler->html());
     }
 
     /**
@@ -48,7 +48,7 @@ class AccountControllerTest extends WebTestCase
             ['accounts-grid[_filter][name][value]' => 'Account_name']
         );
 
-        $result = static::getJsonResponseContent($response, 200);
+        $result = self::getJsonResponseContent($response, 200);
         $result = reset($result['data']);
 
         $id = $result['id'];
@@ -60,8 +60,8 @@ class AccountControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $result = $this->client->getResponse();
 
-        static::assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString('Account saved', $crawler->html());
+        self::assertHtmlResponseStatusCodeEquals($result, 200);
+        self::assertStringContainsString('Account saved', $crawler->html());
 
         return (int) $id;
     }
@@ -74,8 +74,8 @@ class AccountControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', $this->getUrl('oro_account_view', ['id' => $id]));
         $result = $this->client->getResponse();
 
-        static::assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString('Account_name_update - Accounts - Customers', $crawler->html());
+        self::assertHtmlResponseStatusCodeEquals($result, 200);
+        self::assertStringContainsString('Account_name_update - Accounts - Customers', $crawler->html());
     }
 
     /**
@@ -105,10 +105,10 @@ class AccountControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', $this->getUrl('oro_account_view', ['id' => $id]));
         $result = $this->client->getResponse();
 
-        static::assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString('Account_name_update - Accounts - Customers', $crawler->html());
-        static::assertStringContainsString(
-            \trim(static::getContainer()->get('twig')->render($template, ['customers' => $customers])),
+        self::assertHtmlResponseStatusCodeEquals($result, 200);
+        self::assertStringContainsString('Account_name_update - Accounts - Customers', $crawler->html());
+        self::assertStringContainsString(
+            trim(self::getContainer()->get('twig')->render($template, ['customers' => $customers])),
             $crawler->html()
         );
     }
@@ -127,6 +127,6 @@ class AccountControllerTest extends WebTestCase
         );
         //just verify method OK
         $result = $this->client->getResponse();
-        static::assertHtmlResponseStatusCodeEquals($result, 200);
+        self::assertHtmlResponseStatusCodeEquals($result, 200);
     }
 }

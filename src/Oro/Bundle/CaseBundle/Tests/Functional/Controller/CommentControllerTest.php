@@ -3,39 +3,35 @@
 namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class CommentControllerTest extends WebTestCase
 {
-    /**
-     * @var int
-     */
-    protected static $caseId;
+    /** @var int */
+    private static $caseId;
 
-    /**
-     * @var int
-     */
-    protected static $adminUserId = 1;
+    /** @var int */
+    private static $adminUserId = 1;
 
     protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
-
-        $this->loadFixtures(['Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
+        $this->loadFixtures([LoadCaseEntityData::class]);
     }
 
     protected function postFixtureLoad()
     {
-        $case = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCaseBundle:CaseEntity')
-            ->findOneBySubject('Case #1');
+        $case = self::getContainer()->get('doctrine')->getRepository(CaseEntity::class)
+            ->findOneBy(['subject' => 'Case #1']);
 
         $this->assertNotNull($case);
 
         self::$caseId = $case->getId();
     }
 
-    public function testCreateAction()
+    public function testCreateAction(): int
     {
         $crawler = $this->client->request(
             'GET',
@@ -59,16 +55,15 @@ class CommentControllerTest extends WebTestCase
 
         $this->assertHtmlResponseStatusCodeEquals($this->client->getResponse(), 200);
         $this->assertEquals(0, $crawler->filter('div')->count());
-        static::assertStringContainsString(
+        self::assertStringContainsString(
             '{"widget":{"trigger":[{"eventBroker":"widget","name":"formSave","args":[',
             $this->client->getResponse()->getContent()
         );
         $this->assertEquals(0, $crawler->filter('form')->count());
 
         /** @var CaseComment $comment */
-        $comment = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCaseBundle:CaseComment')
-            ->findOneByMessage('New comment');
+        $comment = self::getContainer()->get('doctrine')->getRepository(CaseComment::class)
+            ->findOneBy(['message' => 'New comment']);
 
         $this->assertNotNull($comment);
 
@@ -78,7 +73,7 @@ class CommentControllerTest extends WebTestCase
     /**
      * @depends testCreateAction
      */
-    public function testUpdateAction($id)
+    public function testUpdateAction(int $id): int
     {
         $crawler = $this->client->request(
             'GET',
@@ -102,7 +97,7 @@ class CommentControllerTest extends WebTestCase
 
         $this->assertHtmlResponseStatusCodeEquals($this->client->getResponse(), 200);
         $this->assertEquals(0, $crawler->filter('div')->count());
-        static::assertStringContainsString(
+        self::assertStringContainsString(
             '{"widget":{"trigger":[{"eventBroker":"widget","name":"formSave","args":[',
             $this->client->getResponse()->getContent()
         );
@@ -114,7 +109,7 @@ class CommentControllerTest extends WebTestCase
     /**
      * @depends testUpdateAction
      */
-    public function testCommentsListAction($id)
+    public function testCommentsListAction(int $id)
     {
         $this->client->request(
             'GET',
@@ -129,14 +124,12 @@ class CommentControllerTest extends WebTestCase
         $this->assertCount(4, $comments);
 
         /** @var CaseComment $comment */
-        $comment = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCaseBundle:CaseComment')
+        $comment = self::getContainer()->get('doctrine')->getRepository(CaseComment::class)
             ->find($id);
-        $userAvatar =  $this->getContainer()
-                ->get('oro_attachment.manager')
-                ->getFilteredImageUrl($comment->getOwner()->getAvatar(), 'avatar_xsmall');
+        $userAvatar =  self::getContainer()->get('oro_attachment.manager')
+            ->getFilteredImageUrl($comment->getOwner()->getAvatar(), 'avatar_xsmall');
 
-        $this->getContainer()->get('doctrine.orm.entity_manager')->refresh($comment);
+        self::getContainer()->get('doctrine.orm.entity_manager')->refresh($comment);
 
         $this->assertNotNull($comment);
 
@@ -150,20 +143,20 @@ class CommentControllerTest extends WebTestCase
                     ->format($comment->getCreatedAt()),
                 'updatedAt'     => $this->getContainer()->get('oro_locale.formatter.date_time')
                     ->format($comment->getUpdatedAt()),
-                'permissions'   => array(
+                'permissions'   => [
                     'edit'          => true,
                     'delete'        => true,
-                ),
-                'createdBy'         => array(
+                ],
+                'createdBy'         => [
                     'id'            => self::$adminUserId,
                     'url'           => $this->getContainer()->get('router')
-                        ->generate('oro_user_view', array('id' => self::$adminUserId)),
+                        ->generate('oro_user_view', ['id' => self::$adminUserId]),
                     'fullName'      => 'John Doe',
                     'avatar'        => $userAvatar,
-                    'permissions'   => array(
+                    'permissions'   => [
                         'view'          => true,
-                    ),
-                )
+                    ],
+                ]
             ],
             $comments[0]
         );

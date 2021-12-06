@@ -4,7 +4,6 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
-use Symfony\Component\DomCrawler\Form;
 
 class ContactAddressControllersTest extends WebTestCase
 {
@@ -27,7 +26,6 @@ class ContactAddressControllersTest extends WebTestCase
     public function testCreate()
     {
         $crawler = $this->client->request('GET', $this->getUrl('oro_contact_create'));
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['oro_contact_form[firstName]'] = 'Contact_fname';
         $form['oro_contact_form[lastName]'] = 'Contact_lname';
@@ -38,7 +36,7 @@ class ContactAddressControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Contact saved", $crawler->html());
+        self::assertStringContainsString('Contact saved', $crawler->html());
     }
 
     /**
@@ -65,7 +63,6 @@ class ContactAddressControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertEquals(200, $result->getStatusCode());
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save')->form();
         $formNode = $form->getNode();
         $formNode->setAttribute('action', $formNode->getAttribute('action') . '?_widgetContainer=dialog');
@@ -74,7 +71,7 @@ class ContactAddressControllersTest extends WebTestCase
         $form['oro_contact_address_form[city]'] = 'City';
         $form['oro_contact_address_form[postalCode]'] = 'Zip code';
 
-        $doc = new \DOMDocument("1.0");
+        $doc = new \DOMDocument('1.0');
         $doc->loadHTML(
             '<select name="oro_contact_address_form[country]" id="oro_contact_address_form_country" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
@@ -136,12 +133,11 @@ class ContactAddressControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertEquals(200, $result->getStatusCode());
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save')->form();
         $formNode = $form->getNode();
         $formNode->setAttribute('action', $formNode->getAttribute('action') . '?_widgetContainer=dialog');
 
-        $doc = new \DOMDocument("1.0");
+        $doc = new \DOMDocument('1.0');
         $doc->loadHTML(
             '<select name="oro_contact_address_form[country]" id="oro_contact_address_form_country" ' .
             'tabindex="-1" class="select2-offscreen"> ' .

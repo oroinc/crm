@@ -7,21 +7,19 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
-use Symfony\Component\DomCrawler\Form;
 
 class B2bCustomerControllerTest extends AbstractDatagridTestCase
 {
     /** @var B2bCustomer */
-    protected static $customer;
+    private static $customer;
 
     /** @var Account */
-    protected static $account;
+    private static $account;
 
     /** @var Channel */
-    protected static $channel;
+    private static $channel;
 
-    /** @var bool */
-    protected $isRealGridRequest = false;
+    protected bool $isRealGridRequest = false;
 
     protected function setUp(): void
     {
@@ -30,14 +28,14 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
             $this->generateBasicAuthHeader()
         );
         $this->client->useHashNavigation(true);
-        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures([LoadSalesBundleFixtures::class]);
     }
 
     protected function postFixtureLoad()
     {
-        self::$account  = $this->getReference('default_account');
+        self::$account = $this->getReference('default_account');
         self::$customer = $this->getReference('default_b2bcustomer');
-        self::$channel  = $this->getReference('default_channel');
+        self::$channel = $this->getReference('default_channel');
     }
 
     public function testIndex()
@@ -51,7 +49,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
      * {@inheritdoc}
      * @dataProvider gridProvider
      */
-    public function testGrid($requestData)
+    public function testGrid(array $requestData)
     {
         parent::testGrid($requestData);
     }
@@ -72,23 +70,19 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Customer saved", $crawler->html());
+        self::assertStringContainsString('Customer saved', $crawler->html());
     }
 
     /**
-     * @param string $name
-     *
      * @depends testCreate
-     *
-     * @return string
      */
-    public function testUpdate($name)
+    public function testUpdate(): array
     {
         $response = $this->client->requestGrid(
             'oro-sales-b2bcustomers-grid',
             [
                 'oro-sales-b2bcustomers-grid[_filter][name][channelName]' => 'b2b Channel',
-                'oro-sales-b2bcustomers-grid[_filter][name][value]' => $name,
+                'oro-sales-b2bcustomers-grid[_filter][name][value]' => null,
             ]
         );
 
@@ -100,7 +94,6 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
             $this->getUrl('oro_sales_b2bcustomer_update', ['id' => $result['id']])
         );
 
-        /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
         $form['oro_sales_b2bcustomer[name]'] = $name;
@@ -111,7 +104,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString("Customer saved", $crawler->html());
+        self::assertStringContainsString('Customer saved', $crawler->html());
 
         $returnValue['name'] = $name;
 
@@ -119,13 +112,9 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
     }
 
     /**
-     * @param array $returnValue
-     *
      * @depends testUpdate
-     *
-     * @return string
      */
-    public function testView($returnValue)
+    public function testView(array $returnValue)
     {
         $crawler = $this->client->request(
             'GET',
@@ -134,17 +123,13 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString($returnValue['name'], $crawler->html());
+        self::assertStringContainsString($returnValue['name'], $crawler->html());
     }
 
     /**
-     * @param array $returnValue
-     *
      * @depends testUpdate
-     *
-     * @return string
      */
-    public function testInfo($returnValue)
+    public function testInfo(array $returnValue)
     {
         $crawler = $this->client->request(
             'GET',
@@ -156,15 +141,13 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        static::assertStringContainsString($returnValue['name'], $crawler->html());
+        self::assertStringContainsString($returnValue['name'], $crawler->html());
     }
 
     /**
-     * @param array $returnValue
-     *
      * @depends testUpdate
      */
-    public function testDelete($returnValue)
+    public function testDelete(array $returnValue)
     {
         $this->ajaxRequest(
             'DELETE',
@@ -184,9 +167,9 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function gridProvider()
+    public function gridProvider(): array
     {
         return [
             'B2B Customer grid'              => [

@@ -18,7 +18,7 @@ class TestEntitiesMigration implements Migration
         $this->addCustomFieldsToContactAddress($schema);
     }
 
-    protected function addCustomFieldsToContactAddress(Schema $schema)
+    private function addCustomFieldsToContactAddress(Schema $schema): void
     {
         $table = $schema->getTable('orocrm_contact_address');
         if ($table->hasColumn('customField1')) {
