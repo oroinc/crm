@@ -109,7 +109,7 @@ class CommentControllerTest extends WebTestCase
     /**
      * @depends testUpdateAction
      */
-    public function testCommentsListAction(int $id)
+    public function testCommentsListAction(int $id): void
     {
         $this->client->request(
             'GET',
@@ -126,8 +126,11 @@ class CommentControllerTest extends WebTestCase
         /** @var CaseComment $comment */
         $comment = self::getContainer()->get('doctrine')->getRepository(CaseComment::class)
             ->find($id);
+        $avatarFile = $comment->getOwner()->getAvatar();
         $userAvatar =  self::getContainer()->get('oro_attachment.manager')
-            ->getFilteredImageUrl($comment->getOwner()->getAvatar(), 'avatar_xsmall');
+            ->getFilteredImageUrl($avatarFile, 'avatar_xsmall');
+        $userAvatarWebp =  self::getContainer()->get('oro_attachment.manager')
+            ->getFilteredImageUrl($avatarFile, 'avatar_xsmall', 'webp');
 
         self::getContainer()->get('doctrine.orm.entity_manager')->refresh($comment);
 
@@ -152,7 +155,15 @@ class CommentControllerTest extends WebTestCase
                     'url'           => $this->getContainer()->get('router')
                         ->generate('oro_user_view', ['id' => self::$adminUserId]),
                     'fullName'      => 'John Doe',
-                    'avatar'        => $userAvatar,
+                    'avatarPicture' => [
+                        'src' => $userAvatar,
+                        'sources' => [
+                            [
+                                'srcset' => $userAvatarWebp,
+                                'type' => 'image/webp'
+                            ]
+                        ],
+                    ],
                     'permissions'   => [
                         'view'          => true,
                     ],
@@ -162,7 +173,7 @@ class CommentControllerTest extends WebTestCase
         );
     }
 
-    public function testCommentsWidgetAction()
+    public function testCommentsWidgetAction(): void
     {
         $this->client->request(
             'GET',
