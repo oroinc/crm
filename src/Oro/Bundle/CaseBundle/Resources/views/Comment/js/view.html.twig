@@ -6,8 +6,13 @@
                 <span class="visual">
                     <% if (createdBy) { %>
                         <span class="avatar">
-                            <% if (createdBy.avatar) { %>
-                                <img src="<%- createdBy.avatar %>" />
+                            <% if (createdBy.avatarPicture && createdBy.avatarPicture.src) { %>
+                                <picture>
+                                    <% _.each(createdBy.avatarPicture.sources, function(source) { %>
+                                        <source srcset="<%- source.srcset %>" type="<%- source.type %>">
+                                    <% }); %>
+                                    <img src="<%- createdBy.avatarPicture.src %>"/>
+                                </picture>
                             <% } else { %>
                                 <span class="avatar-placeholder" aria-hidden="true"></span>
                             <% } %>

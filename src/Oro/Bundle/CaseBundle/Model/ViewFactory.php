@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\CaseBundle\Model;
 
-use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
+use Oro\Bundle\AttachmentBundle\Provider\PictureSourcesProviderInterface;
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
@@ -16,42 +16,37 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  */
 class ViewFactory
 {
-    /** @var AuthorizationCheckerInterface */
-    protected $authorizationChecker;
+    private AuthorizationCheckerInterface $authorizationChecker;
 
-    /** @var RouterInterface */
-    protected $router;
+    private RouterInterface $router;
 
-    /** @var EntityNameResolver */
-    protected $entityNameResolver;
+    private EntityNameResolver $entityNameResolver;
 
-    /** @var DateTimeFormatterInterface */
-    protected $dateTimeFormatter;
+    private DateTimeFormatterInterface $dateTimeFormatter;
 
-    /** @var AttachmentManager */
-    protected $attachmentManager;
+    private PictureSourcesProviderInterface $pictureSourcesProvider;
 
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         RouterInterface $router,
         EntityNameResolver $entityNameResolver,
         DateTimeFormatterInterface $dateTimeFormatter,
-        AttachmentManager $attachmentManager
+        PictureSourcesProviderInterface $pictureSourcesProvider
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->router = $router;
         $this->entityNameResolver = $entityNameResolver;
         $this->dateTimeFormatter = $dateTimeFormatter;
-        $this->attachmentManager = $attachmentManager;
+        $this->pictureSourcesProvider = $pictureSourcesProvider;
     }
 
     /**
      * @param CaseComment[] $comments
      * @return array
      */
-    public function createCommentViewList($comments)
+    public function createCommentViewList(array $comments): array
     {
-        $result = array();
+        $result = [];
 
         foreach ($comments as $comment) {
             $result[] = $this->createCommentView($comment);
@@ -60,11 +55,7 @@ class ViewFactory
         return $result;
     }
 
-    /**
-     * @param CaseComment $comment
-     * @return array
-     */
-    public function createCommentView(CaseComment $comment)
+    public function createCommentView(CaseComment $comment): array
     {
         $result = [
             'id'            => $comment->getId(),
@@ -77,10 +68,10 @@ class ViewFactory
                 $this->dateTimeFormatter->format($comment->getCreatedAt()) : null,
             'updatedAt'     => $comment->getUpdatedAt() ?
                 $this->dateTimeFormatter->format($comment->getUpdatedAt()) : null,
-            'permissions'   => array(
+            'permissions'   => [
                 'edit'      => $this->authorizationChecker->isGranted('EDIT', $comment),
                 'delete'    => $this->authorizationChecker->isGranted('DELETE', $comment),
-            ),
+            ],
         ];
 
         if ($comment->getContact()) {
@@ -96,55 +87,38 @@ class ViewFactory
         return $result;
     }
 
-    /**
-     * @param Contact|User $author
-     * @return array
-     */
-    protected function createAuthorView($author)
+    private function createAuthorView(Contact|User $author): array
     {
-        $result = array();
-        if ($author instanceof Contact) {
-            $result = $this->createContactView($author);
-        } elseif ($author instanceof User) {
-            $result = $this->createUserView($author);
-        }
-
-        return $result;
+        return $author instanceof Contact
+            ? $this->createContactView($author)
+            : $this->createUserView($author);
     }
 
-    /**
-     * @param Contact $contact
-     * @return array
-     */
-    protected function createContactView(Contact $contact)
+    private function createContactView(Contact $contact): array
     {
         return [
             'id' => $contact->getId(),
-            'url' => $this->router->generate('oro_contact_view', array('id' => $contact->getId())),
+            'url' => $this->router->generate('oro_contact_view', ['id' => $contact->getId()]),
             'fullName' => $this->entityNameResolver->getName($contact),
             'avatar' => null,
-            'permissions' => array(
+            'permissions' => [
                 'view' => $this->authorizationChecker->isGranted('VIEW', $contact)
-            ),
+            ],
         ];
     }
 
-    /**
-     * @param User $user
-     * @return array
-     */
-    protected function createUserView(User $user)
+    private function createUserView(User $user): array
     {
+        $avatar = $user->getAvatar();
+
         return [
             'id' => $user->getId(),
-            'url' => $this->router->generate('oro_user_view', array('id' => $user->getId())),
+            'url' => $this->router->generate('oro_user_view', ['id' => $user->getId()]),
             'fullName' => $this->entityNameResolver->getName($user),
-            'avatar' => $user->getAvatar()
-                ? $this->attachmentManager->getFilteredImageUrl($user->getAvatar(), 'avatar_xsmall')
-                : null,
-            'permissions' => array(
+            'avatarPicture' => $this->pictureSourcesProvider->getFilteredPictureSources($avatar, 'avatar_xsmall'),
+            'permissions' => [
                 'view' => $this->authorizationChecker->isGranted('VIEW', $user)
-            ),
+            ],
         ];
     }
 }
