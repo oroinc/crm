@@ -8,6 +8,9 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * Used to additionally process lead's phone entity's data on form submission.
+ */
 class LeadPhoneApiHandler extends AbstractEntityApiHandler
 {
     const ENTITY_CLASS = 'Oro\Bundle\SalesBundle\Entity\LeadPhone';
@@ -43,7 +46,7 @@ class LeadPhoneApiHandler extends AbstractEntityApiHandler
         $owner = $entity->getOwner();
         $owner->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
         $changeSet = $this->getChangeSet($owner);
-        $em = $this->doctrine->getEntityManager();
+        $em = $this->doctrine->getManager();
         $em->persist($owner);
         $em->flush();
 
