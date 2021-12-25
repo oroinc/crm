@@ -53,7 +53,7 @@ class LeadPhoneApiHandler extends AbstractEntityApiHandler
         $owner = $entity->getOwner();
         $owner->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
         $changeSet = $this->getChangeSet($owner);
-        $em = $this->doctrine->getEntityManager();
+        $em = $this->doctrine->getManager();
         $em->persist($owner);
         $em->flush();
 
