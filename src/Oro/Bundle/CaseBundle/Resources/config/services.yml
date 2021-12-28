@@ -38,7 +38,7 @@ services:
             - "@router"
             - "@oro_entity.entity_name_resolver"
             - "@oro_locale.formatter.date_time"
-            - "@oro_attachment.manager"
+            - "@oro_attachment.provider.picture_sources"
 
     oro_case.provider.phone.case:
         class: Oro\Bundle\CaseBundle\Provider\CasePhoneProvider
