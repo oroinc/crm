@@ -225,7 +225,7 @@ Feature: Activities
     And go to Activities/ Calendar Events
     And should see following grid:
       | Title                   | Calendar | Start                  | End                    | Recurrent | Recurrence |
-      | All day no repeat Event | John Doe | Jan 24, 2017, 12:00 AM | Feb 26, 2020, 11:59 PM | No        | N/A        |
+      | All day no repeat Event | John Doe | Jan 24, 2017, 12:00 AM | Feb 26, 2020, 11:59 PM | No        |            |
 
   Scenario: Add an event for Another Record
     Given go to Sales/ Leads
@@ -294,6 +294,6 @@ Feature: Activities
     And I sort grid by "Title"
     And should see following grid:
       | Title                   | Calendar | Recurrent | Recurrence                                |
-      | All day no repeat Event | John Doe | No        | N/A                                       |
-      | New event               | John Doe | No        | N/A                                       |
+      | All day no repeat Event | John Doe | No        |                                           |
+      | New event               | John Doe | No        |                                           |
       | Stand-Up                | John Doe | Yes       | Daily every 1 day, end after 1 occurrence |
