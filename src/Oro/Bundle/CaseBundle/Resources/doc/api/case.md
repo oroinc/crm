@@ -334,7 +334,22 @@ Example:
 
 #### delete_relationship
 
-Remove comments made on a specidic case.
+Remove comments made on a specific case.
+
+{@request:json_api}
+Example:
+
+```JSON
+{
+  "data": [
+    {
+      "type": "casecomments",
+      "id": "1"
+    }
+  ]
+}
+```
+{@/request}
 
 ### organization
 
