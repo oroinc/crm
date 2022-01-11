@@ -289,3 +289,18 @@ Example:
 #### delete_relationship
 
 Remove the address types of a specific contact address record.
+
+{@request:json_api}
+Example:
+
+```JSON
+{
+   "data": [
+      {
+         "type": "addresstypes",
+         "id": "billing"
+      }
+   ]
+}
+```
+{@/request}

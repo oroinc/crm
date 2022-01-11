@@ -233,6 +233,21 @@ Example:
 
 Remove contact records from a specific account record.
 
+{@request:json_api}
+Example:
+
+```JSON
+{
+  "data": [
+    {
+      "type": "contacts",
+      "id": "1"
+    }
+  ]
+}
+```
+{@/request}
+
 ### defaultContact
 
 #### get_subresource

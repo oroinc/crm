@@ -423,6 +423,21 @@ Example:
 
 Remove an opportunity record assigned to a specific lead record.
 
+{@request:json_api}
+Example:
+
+```JSON
+{
+  "data": [
+    {
+      "type": "opportunities",
+      "id": "1"
+    }
+  ]
+}
+```
+{@/request}
+
 ### organization
 
 #### get_subresource
@@ -544,6 +559,19 @@ Retrieve the ID of the campaign record of a specific lead record.
 #### update_relationship
 
 Replace the campaign of a specific lead record.
+
+{@request:json_api}
+Example:
+
+```JSON
+{
+  "data": {
+    "type": "campaigns",
+    "id": "1"
+  }
+}
+```
+{@/request}
 
 # Extend\Entity\EV_Lead_Status
 
