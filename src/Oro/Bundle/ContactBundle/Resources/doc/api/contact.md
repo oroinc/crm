@@ -313,6 +313,21 @@ Example:
 
 Remove account records from a specific contact.
 
+{@request:json_api}
+Example:
+
+```JSON
+{
+  "data": [
+    {
+      "type": "accounts",
+      "id": "1"
+    }
+  ]
+}
+```
+{@/request}
+
 ### addresses
 
 #### get_subresource
@@ -429,6 +444,21 @@ Example:
 
 Remove an account from the list of accounts for which a specific contact record is default.
 
+{@request:json_api}
+Example:
+
+```JSON
+{
+  "data": [
+    {
+      "type": "accounts",
+      "id": "2"
+    }
+  ]
+}
+```
+{@/request}
+
 ### groups
 
 #### get_subresource
@@ -480,6 +510,21 @@ Example:
 #### delete_relationship
 
 Remove a specific contact record from the groups.
+
+{@request:json_api}
+Example:
+
+```JSON
+{
+  "data": [
+    {
+      "type": "contactgroups",
+      "id": "1"
+    }
+  ]
+}
+```
+{@/request}
 
 ### method
 
