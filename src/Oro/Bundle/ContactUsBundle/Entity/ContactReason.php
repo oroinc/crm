@@ -81,7 +81,7 @@ class ContactReason extends ExtendContactReason
     {
         parent::__construct();
         $this->titles = new ArrayCollection();
-        $this->setDefaultTitle($defaultTitle);
+        $this->setDefaultTitle((string)$defaultTitle);
     }
 
     /**
@@ -99,7 +99,7 @@ class ContactReason extends ExtendContactReason
     {
         $this->titles = $titles;
         $defaultTitle = $this->getDefaultFallbackValue($this->titles);
-        $this->setDefaultTitle($defaultTitle);
+        $this->setDefaultTitle((string)$defaultTitle);
     }
 
     /**
