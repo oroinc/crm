@@ -93,8 +93,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowIfMessageBodyInvalidJson(): void
     {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('The malformed json given.');
+        $this->expectException(\JsonException::class);
 
         $message = new Message();
         $message->setBody('[}');
