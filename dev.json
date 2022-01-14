@@ -62,7 +62,7 @@
         "symfony/var-dumper": "~5.4.0",
         "symfony/var-exporter": "~5.4.0",
         "symfony/web-profiler-bundle": "~5.4.0",
-        "friendsofphp/php-cs-fixer": "~3.3.2",
+        "friendsofphp/php-cs-fixer": "~3.4.0",
         "oro/twig-inspector": "1.0.*"
     },
     "repositories": {
