@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Datagrid;
 
 use Oro\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtensionConfiguration;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
 class ChannelLimitationExtensionConfigurationTest extends \PHPUnit\Framework\TestCase
@@ -21,21 +22,14 @@ class ChannelLimitationExtensionConfigurationTest extends \PHPUnit\Framework\Tes
 
     public function testInvalidRelationGiven()
     {
-        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('Must contains relative path with single nesting');
 
         $this->processConfiguration(['root' => ['channel_relation_path' => '.entity.channel']]);
     }
 
-    /**
-     * @param array $config
-     *
-     * @return array
-     */
-    private function processConfiguration(array $config)
+    private function processConfiguration(array $config): array
     {
-        $processor = new Processor();
-
-        return $processor->processConfiguration(new ChannelLimitationExtensionConfiguration(), $config);
+        return (new Processor())->processConfiguration(new ChannelLimitationExtensionConfiguration(), $config);
     }
 }
