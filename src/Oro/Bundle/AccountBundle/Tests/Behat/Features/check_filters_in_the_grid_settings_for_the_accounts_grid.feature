@@ -1,3 +1,5 @@
+# Should be fixed in BB-21069
+@skip
 @regression
 @ticket-@BB-16554
 @fixture-OroContactBundle:LoadContactEntitiesFixture.yml
