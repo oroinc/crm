@@ -55,7 +55,10 @@ data:
         groups:
             data: []
         accounts:
-            data: []
+            data:
+                -
+                    type: accounts
+                    id: '<toString(@account1->id)>'
         createdBy:
             data:
                 type: users
@@ -67,6 +70,9 @@ data:
                 type: organizations
                 id: '<toString(@organization->id)>'
         defaultInAccounts:
-            data: []
+            data:
+                -
+                    type: accounts
+                    id: '<toString(@account1->id)>'
         picture:
             data: null
