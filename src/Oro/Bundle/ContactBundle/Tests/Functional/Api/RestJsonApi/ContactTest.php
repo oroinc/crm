@@ -16,17 +16,17 @@ class ContactTest extends RestJsonApiTestCase
     use PrimaryEmailTestTrait;
     use PrimaryPhoneTestTrait;
 
-    private const ENTITY_CLASS              = Contact::class;
-    private const ENTITY_TYPE               = 'contacts';
-    private const CREATE_MIN_REQUEST_DATA   = 'create_contact_min.yml';
+    private const ENTITY_CLASS = Contact::class;
+    private const ENTITY_TYPE = 'contacts';
+    private const CREATE_MIN_REQUEST_DATA = 'create_contact_min.yml';
     private const ENTITY_WITHOUT_EMAILS_REF = 'contact2';
-    private const ENTITY_WITH_EMAILS_REF    = 'contact1';
-    private const PRIMARY_EMAIL             = 'contact1_2@example.com';
-    private const NOT_PRIMARY_EMAIL         = 'contact1_1@example.com';
+    private const ENTITY_WITH_EMAILS_REF = 'contact1';
+    private const PRIMARY_EMAIL = 'contact1_2@example.com';
+    private const NOT_PRIMARY_EMAIL = 'contact1_1@example.com';
     private const ENTITY_WITHOUT_PHONES_REF = 'contact2';
-    private const ENTITY_WITH_PHONES_REF    = 'contact1';
-    private const PRIMARY_PHONE             = '5556661112';
-    private const NOT_PRIMARY_PHONE         = '5556661111';
+    private const ENTITY_WITH_PHONES_REF = 'contact1';
+    private const PRIMARY_PHONE = '5556661112';
+    private const NOT_PRIMARY_PHONE = '5556661111';
 
     protected function setUp(): void
     {
