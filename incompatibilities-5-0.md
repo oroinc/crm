@@ -1,0 +1,5 @@
+CaseBundle
+----------
+* The `ViewFactory::__construct(AuthorizationCheckerInterface $authorizationChecker, RouterInterface $router, EntityNameResolver $entityNameResolver, DateTimeFormatterInterface $dateTimeFormatter, AttachmentManager $attachmentManager)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-rc/src/Oro/Bundle/CaseBundle/Model/ViewFactory.php#L34 "Oro\Bundle\CaseBundle\Model\ViewFactory")</sup> method was changed to `ViewFactory::__construct(AuthorizationCheckerInterface $authorizationChecker, RouterInterface $router, EntityNameResolver $entityNameResolver, DateTimeFormatterInterface $dateTimeFormatter, PictureSourcesProviderInterface $pictureSourcesProvider)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0/src/Oro/Bundle/CaseBundle/Model/ViewFactory.php#L29 "Oro\Bundle\CaseBundle\Model\ViewFactory")</sup>
+* The `ViewFactory::$attachmentManager`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-rc/src/Oro/Bundle/CaseBundle/Model/ViewFactory.php#L32 "Oro\Bundle\CaseBundle\Model\ViewFactory::$attachmentManager")</sup> property was removed.
+
