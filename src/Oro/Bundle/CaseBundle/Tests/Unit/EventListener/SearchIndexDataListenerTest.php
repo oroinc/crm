@@ -6,6 +6,7 @@ use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\EventListener\SearchIndexDataListener;
 use Oro\Bundle\SearchBundle\Engine\ObjectMapper;
 use Oro\Bundle\SearchBundle\Event\PrepareEntityMapEvent;
+use Oro\Bundle\SearchBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\SearchBundle\Provider\SearchMappingProvider;
 use Oro\Bundle\SearchBundle\Test\Unit\SearchMappingTypeCastingHandlersTestTrait;
 use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
@@ -49,7 +50,8 @@ class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
             PropertyAccess::createPropertyAccessor(),
             $this->getTypeCastingHandlerRegistry(),
             $this->createMock(EventDispatcherInterface::class),
-            $htmlTagHelper
+            $htmlTagHelper,
+            new DateTimeFormatter()
         );
 
         $this->listener = new SearchIndexDataListener($this->mapper);
