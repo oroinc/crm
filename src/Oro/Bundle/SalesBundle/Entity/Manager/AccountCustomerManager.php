@@ -14,62 +14,39 @@ use Oro\Bundle\SalesBundle\Exception\Customer\InvalidCustomerRelationEntityExcep
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\AccountProviderInterface;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
+/**
+ * Provides a set of methods to manage associations between Account and other entities classified as customers.
+ */
 class AccountCustomerManager
 {
-    /** @var DoctrineHelper */
-    protected $doctrineHelper;
-
-    /** @var ConfigProvider */
-    protected $provider;
-
-    /** @var AccountProviderInterface */
-    protected $accountProvider;
+    private DoctrineHelper $doctrineHelper;
+    private ConfigProvider $provider;
+    private AccountProviderInterface $accountProvider;
 
     public function __construct(
         DoctrineHelper $doctrineHelper,
         ConfigProvider $provider,
         AccountProviderInterface $accountProvider
     ) {
-        $this->doctrineHelper  = $doctrineHelper;
-        $this->provider        = $provider;
+        $this->doctrineHelper = $doctrineHelper;
+        $this->provider = $provider;
         $this->accountProvider = $accountProvider;
     }
 
     /**
-     * @param $targetClassName
-     *
-     * @return string
+     * Gets the name of an association to the given target customer type.
      */
-    public static function getCustomerTargetField($targetClassName)
+    public static function getCustomerTargetField(string $targetClassName): string
     {
-        return ExtendHelper::buildAssociationName(
-            $targetClassName,
-            CustomerScope::ASSOCIATION_KIND
-        );
+        return ExtendHelper::buildAssociationName($targetClassName, CustomerScope::ASSOCIATION_KIND);
     }
 
     /**
-     * Creates new Customer from provided Account and optionally target
+     * Creates an account for the given target customer.
      *
-     * @param Account     $account
-     *
-     * @param object|null $target
-     *
-     * @return Customer
+     * @throws InvalidCustomerRelationEntityException when the target is not supported
      */
-    public static function createCustomer(Account $account, $target = null)
-    {
-        $customer = new Customer();
-
-        return $customer->setTarget($account, $target);
-    }
-
-    /**
-     * @param object $target
-     *
-     * @return Account
-     */
-    public function createAccountForTarget($target)
+    public function createAccountForTarget(object $target): Account
     {
         $targetClassName = ClassUtils::getClass($target);
         $this->assertValidTarget($targetClassName);
@@ -78,41 +55,38 @@ class AccountCustomerManager
     }
 
     /**
-     * @param object $target
-     * @param bool   $throwExceptionOnNotFound
+     * Gets an association between an account and a customer.
      *
-     * @return Customer
-     * @throws EntityNotFoundException
+     * @throws InvalidCustomerRelationEntityException when the target is not supported
+     * @throws EntityNotFoundException when a customer association does not exist for an existing target
      */
-    public function getAccountCustomerByTarget($target, $throwExceptionOnNotFound = true)
+    public function getAccountCustomerByTarget(object $target, bool $throwExceptionOnNotFound = true): ?Customer
     {
-        $customerRepo = $this->getCustomerRepository();
         if ($target instanceof Account) {
-            $customerFields = $this->getCustomerTargetFields();
-            if ($this->doctrineHelper->isNewEntity($target)) {
-                return self::createCustomer($target);
+            $customer = null;
+            if (!$this->doctrineHelper->isNewEntity($target)) {
+                $customer = $this->getCustomerRepository()->getAccountCustomer(
+                    $target,
+                    $this->getCustomerTargetFields()
+                );
             }
-            $customer       = $customerRepo->getAccountCustomer($target, $customerFields);
-            if (!$customer) {
-                $customer = static::createCustomer($target);
+            if (null === $customer) {
+                $customer = new Customer();
+                $customer->setTarget($target, null);
             }
         } else {
             $targetClassName = ClassUtils::getClass($target);
             $this->assertValidTarget($targetClassName);
-            $targetField = self::getCustomerTargetField($targetClassName);
-            $id          = $this->doctrineHelper->getSingleEntityIdentifier($target, false);
-            $customer    = $id
-                ? $customerRepo->findOneBy([$targetField => $id])
+            $id = $this->doctrineHelper->getSingleEntityIdentifier($target, false);
+            $customer = $id
+                ? $this->getCustomerRepository()->findOneBy([self::getCustomerTargetField($targetClassName) => $id])
                 : null;
-
-            if (!$customer && $throwExceptionOnNotFound) {
-                throw new EntityNotFoundException(
-                    sprintf(
-                        'Sales Customer for target of type "%s" and identifier %s was not found',
-                        $targetClassName,
-                        $id
-                    )
-                );
+            if (null === $customer && $throwExceptionOnNotFound) {
+                throw new EntityNotFoundException(sprintf(
+                    'Sales Customer for target of type "%s" and identifier %s was not found',
+                    $targetClassName,
+                    $id
+                ));
             }
         }
 
@@ -120,38 +94,28 @@ class AccountCustomerManager
     }
 
     /**
-     * @return array
+     * @return string[]
      */
-    public function getCustomerTargetFields()
+    public function getCustomerTargetFields(): array
     {
         $customerFields = [];
         foreach ($this->provider->getCustomerClasses() as $customerClass) {
-            $customerField    = ExtendHelper::buildAssociationName(
-                $customerClass,
-                CustomerScope::ASSOCIATION_KIND
-            );
-            $customerFields[] = $customerField;
+            $customerFields[] = self::getCustomerTargetField($customerClass);
         }
 
         return $customerFields;
     }
 
-    /**
-     * @param string $targetClassName
-     */
-    protected function assertValidTarget($targetClassName)
+    private function assertValidTarget(string $targetClassName): void
     {
-        if (!in_array($targetClassName, $this->provider->getCustomerClasses(), true)) {
+        if (!\in_array($targetClassName, $this->provider->getCustomerClasses(), true)) {
             throw new InvalidCustomerRelationEntityException(
                 sprintf('object of class "%s" is not valid customer target', $targetClassName)
             );
         }
     }
 
-    /**
-     * @return CustomerRepository
-     */
-    protected function getCustomerRepository()
+    private function getCustomerRepository(): CustomerRepository
     {
         return $this->doctrineHelper->getEntityRepository(Customer::class);
     }

@@ -101,8 +101,8 @@ class CustomerAssociationListener
         $needFlush = false;
         foreach ($invalidTargets as $class => $invalidTargetEntities) {
             foreach ($invalidTargetEntities as $item) {
-                $account  = $this->manager->createAccountForTarget($item);
-                $customer = AccountCustomerManager::createCustomer($account, $item);
+                $customer = new Customer();
+                $customer->setTarget($this->manager->createAccountForTarget($item), $item);
                 $em->persist($customer);
                 $needFlush = true;
             }

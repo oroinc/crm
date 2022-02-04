@@ -2,21 +2,24 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity\Manager;
 
+use Doctrine\ORM\EntityNotFoundException;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
+use Oro\Bundle\SalesBundle\Exception\Customer\InvalidCustomerRelationEntityException;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\AccountProviderInterface;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
-use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub as Customer;
-use Oro\Bundle\SalesBundle\Tests\Unit\Stub\AccountCustomerManager;
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub as TargetEntity;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var AccountCustomerManager */
-    private $manager;
-
     /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $doctrineHelper;
 
@@ -26,19 +29,14 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
     /** @var AccountProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $accountProvider;
 
-    /** @var CustomerRepository|\PHPUnit\Framework\MockObject\MockObject */
-    private $customerRepo;
+    /** @var AccountCustomerManager */
+    private $manager;
 
     protected function setUp(): void
     {
-        $this->customerRepo = $this->createMock(CustomerRepository::class);
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->configProvider = $this->createMock(ConfigProvider::class);
-        $this->accountProvider = $this->getMockForAbstractClass(AccountProviderInterface::class);
-
-        $this->doctrineHelper->expects($this->any())
-            ->method('getEntityRepository')
-            ->willReturn($this->customerRepo);
+        $this->accountProvider = $this->createMock(AccountProviderInterface::class);
 
         $this->manager = new AccountCustomerManager(
             $this->doctrineHelper,
@@ -47,53 +45,247 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetCustomerTargetField()
+    public function testGetCustomerTargetField(): void
     {
-        $targetClassName = 'TestClass';
+        $targetClassName = TargetEntity::class;
         $expected = ExtendHelper::buildAssociationName(
             $targetClassName,
             CustomerScope::ASSOCIATION_KIND
         );
-        $this->assertEquals($expected, AccountCustomerManager::getCustomerTargetField($targetClassName));
+        self::assertEquals($expected, AccountCustomerManager::getCustomerTargetField($targetClassName));
     }
 
-    public function testCreateCustomerFromAccount()
+    public function testCreateAccountForTarget(): void
     {
-        $account = (new Account())->setName('test');
-        $customer = $this->manager->createCustomer($account);
-        $this->assertEquals($account, $customer->getAccount());
-    }
+        $target = new TargetEntity();
+        $account = $this->createMock(Account::class);
 
-    public function testGetAccountCustomerByTargetIfTargetIsAccount()
-    {
-        $target = (new Account())->setName('test');
-        $this->configProvider->expects($this->once())
+        $this->configProvider->expects(self::once())
             ->method('getCustomerClasses')
-            ->willReturn(['TestClass']);
+            ->willReturn([TargetEntity::class]);
+        $this->accountProvider->expects(self::once())
+            ->method('getAccount')
+            ->with(self::identicalTo($target))
+            ->willReturn($account);
+
+        self::assertSame($account, $this->manager->createAccountForTarget($target));
+    }
+
+    public function testCreateAccountForTargetWhenTargetIsNotSupported(): void
+    {
+        $this->expectException(InvalidCustomerRelationEntityException::class);
+        $this->expectExceptionMessage('object of class "stdClass" is not valid customer target');
+
+        $this->configProvider->expects(self::once())
+            ->method('getCustomerClasses')
+            ->willReturn([TargetEntity::class]);
+
+        $this->manager->createAccountForTarget(new \stdClass());
+    }
+
+    public function testGetAccountCustomerByTargetWhenTargetIsNewAccount(): void
+    {
+        $target = $this->createMock(Account::class);
+
+        $this->doctrineHelper->expects(self::once())
+            ->method('isNewEntity')
+            ->with(self::identicalTo($target))
+            ->willReturn(true);
+        $this->configProvider->expects(self::never())
+            ->method('getCustomerClasses');
+        $this->doctrineHelper->expects(self::never())
+            ->method('getEntityRepository');
 
         $customer = $this->manager->getAccountCustomerByTarget($target);
-        $this->assertEquals($target, $customer->getAccount());
+        self::assertNull($customer->getId());
+        self::assertEquals($target, $customer->getAccount());
     }
 
-    public function testGetOrCreateAccountCustomerByExistedTarget()
+    public function testGetAccountCustomerByTargetWhenTargetIsExistingAccountAndAssociationDoesNotExist(): void
     {
-        $target = new Customer();
-        $targetField = AccountCustomerManager::getCustomerTargetField(Customer::class);
-        $existedCustomer = new Customer();
-        $this->configProvider->expects($this->once())
+        $target = $this->createMock(Account::class);
+
+        $this->doctrineHelper->expects(self::once())
+            ->method('isNewEntity')
+            ->with(self::identicalTo($target))
+            ->willReturn(false);
+        $this->configProvider->expects(self::once())
             ->method('getCustomerClasses')
-            ->willReturn([Customer::class]);
-        $this->doctrineHelper->expects($this->once())
+            ->willReturn([TargetEntity::class]);
+
+        $customerRepository = $this->createMock(CustomerRepository::class);
+        $this->doctrineHelper->expects(self::once())
+            ->method('getEntityRepository')
+            ->with(Customer::class)
+            ->willReturn($customerRepository);
+        $customerRepository->expects(self::once())
+            ->method('getAccountCustomer')
+            ->with(
+                self::identicalTo($target),
+                [AccountCustomerManager::getCustomerTargetField(TargetEntity::class)]
+            )
+            ->willReturn(null);
+
+        $customer = $this->manager->getAccountCustomerByTarget($target);
+        self::assertNull($customer->getId());
+        self::assertEquals($target, $customer->getAccount());
+    }
+
+    public function testGetAccountCustomerByTargetWhenTargetIsExistingAccountAndAssociationExists(): void
+    {
+        $target = $this->createMock(Account::class);
+        $existingCustomer = new Customer();
+
+        $this->doctrineHelper->expects(self::once())
+            ->method('isNewEntity')
+            ->with(self::identicalTo($target))
+            ->willReturn(false);
+        $this->configProvider->expects(self::once())
+            ->method('getCustomerClasses')
+            ->willReturn([TargetEntity::class]);
+
+        $customerRepository = $this->createMock(CustomerRepository::class);
+        $this->doctrineHelper->expects(self::once())
+            ->method('getEntityRepository')
+            ->with(Customer::class)
+            ->willReturn($customerRepository);
+        $customerRepository->expects(self::once())
+            ->method('getAccountCustomer')
+            ->with(
+                self::identicalTo($target),
+                [AccountCustomerManager::getCustomerTargetField(TargetEntity::class)]
+            )
+            ->willReturn($existingCustomer);
+
+        self::assertSame($existingCustomer, $this->manager->getAccountCustomerByTarget($target));
+    }
+
+    public function testGetAccountCustomerByTargetForExistingTargetAndAssociationDoesNotExist(): void
+    {
+        $target = new TargetEntity();
+        $targetId = 123;
+
+        $this->expectException(EntityNotFoundException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Sales Customer for target of type "%s" and identifier %d was not found',
+            get_class($target),
+            $targetId
+        ));
+
+        $this->configProvider->expects(self::once())
+            ->method('getCustomerClasses')
+            ->willReturn([TargetEntity::class]);
+        $this->doctrineHelper->expects(self::once())
             ->method('getSingleEntityIdentifier')
-            ->with($target)
-            ->willReturn(1);
-        $this->customerRepo->expects($this->once())
+            ->with(self::identicalTo($target))
+            ->willReturn($targetId);
+
+        $customerRepository = $this->createMock(CustomerRepository::class);
+        $this->doctrineHelper->expects(self::once())
+            ->method('getEntityRepository')
+            ->with(Customer::class)
+            ->willReturn($customerRepository);
+        $customerRepository->expects(self::once())
             ->method('findOneBy')
-            ->with([$targetField => 1])
-            ->willReturn($existedCustomer);
+            ->with([AccountCustomerManager::getCustomerTargetField(TargetEntity::class) => $targetId])
+            ->willReturn(null);
 
-        $customer = $this->manager->getAccountCustomerByTarget($target);
+        $this->manager->getAccountCustomerByTarget($target);
+    }
 
-        $this->assertEquals($existedCustomer, $customer);
+    public function testGetAccountCustomerByTargetForExistingTargetAndAssociationDoesNotExistAndNoException(): void
+    {
+        $target = new TargetEntity();
+        $targetId = 123;
+
+        $this->configProvider->expects(self::once())
+            ->method('getCustomerClasses')
+            ->willReturn([TargetEntity::class]);
+        $this->doctrineHelper->expects(self::once())
+            ->method('getSingleEntityIdentifier')
+            ->with(self::identicalTo($target))
+            ->willReturn($targetId);
+
+        $customerRepository = $this->createMock(CustomerRepository::class);
+        $this->doctrineHelper->expects(self::once())
+            ->method('getEntityRepository')
+            ->with(Customer::class)
+            ->willReturn($customerRepository);
+        $customerRepository->expects(self::once())
+            ->method('findOneBy')
+            ->with([AccountCustomerManager::getCustomerTargetField(TargetEntity::class) => $targetId])
+            ->willReturn(null);
+
+        self::assertNull($this->manager->getAccountCustomerByTarget($target, false));
+    }
+
+    public function testGetAccountCustomerByTargetForExistingTargetAndAssociationExists(): void
+    {
+        $target = new TargetEntity();
+        $targetId = 123;
+        $existingCustomer = new Customer();
+
+        $this->configProvider->expects(self::once())
+            ->method('getCustomerClasses')
+            ->willReturn([TargetEntity::class]);
+        $this->doctrineHelper->expects(self::once())
+            ->method('getSingleEntityIdentifier')
+            ->with(self::identicalTo($target))
+            ->willReturn($targetId);
+
+        $customerRepository = $this->createMock(CustomerRepository::class);
+        $this->doctrineHelper->expects(self::once())
+            ->method('getEntityRepository')
+            ->with(Customer::class)
+            ->willReturn($customerRepository);
+        $customerRepository->expects(self::once())
+            ->method('findOneBy')
+            ->with([AccountCustomerManager::getCustomerTargetField(TargetEntity::class) => $targetId])
+            ->willReturn($existingCustomer);
+
+        self::assertSame($existingCustomer, $this->manager->getAccountCustomerByTarget($target));
+    }
+
+    public function testGetAccountCustomerByTargetForNewTarget(): void
+    {
+        $target = new TargetEntity();
+
+        $this->expectException(EntityNotFoundException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Sales Customer for target of type "%s" and identifier %s was not found',
+            get_class($target),
+            ''
+        ));
+
+        $this->configProvider->expects(self::once())
+            ->method('getCustomerClasses')
+            ->willReturn([TargetEntity::class]);
+        $this->doctrineHelper->expects(self::once())
+            ->method('getSingleEntityIdentifier')
+            ->with(self::identicalTo($target))
+            ->willReturn(null);
+
+        $this->doctrineHelper->expects(self::never())
+            ->method('getEntityRepository');
+
+        $this->manager->getAccountCustomerByTarget($target);
+    }
+
+    public function testGetAccountCustomerByTargetForNewTargetAndNoException(): void
+    {
+        $target = new TargetEntity();
+
+        $this->configProvider->expects(self::once())
+            ->method('getCustomerClasses')
+            ->willReturn([TargetEntity::class]);
+        $this->doctrineHelper->expects(self::once())
+            ->method('getSingleEntityIdentifier')
+            ->with(self::identicalTo($target))
+            ->willReturn(null);
+
+        $this->doctrineHelper->expects(self::never())
+            ->method('getEntityRepository');
+
+        self::assertNull($this->manager->getAccountCustomerByTarget($target, false));
     }
 }
