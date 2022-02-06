@@ -6,7 +6,6 @@ use Oro\Bundle\AddressBundle\Tests\Functional\Api\RestJsonApi\PrimaryEmailTestTr
 use Oro\Bundle\AddressBundle\Tests\Functional\Api\RestJsonApi\PrimaryPhoneTestTrait;
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadB2bCustomersData;
 
 /**
  * @dbIsolationPerTest
@@ -31,6 +30,6 @@ class B2bCustomerTest extends RestJsonApiTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtures([LoadB2bCustomersData::class]);
+        $this->loadFixtures(['@OroSalesBundle/Tests/Functional/Api/DataFixtures/b2b_customers.yml']);
     }
 }

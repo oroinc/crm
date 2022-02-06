@@ -1,0 +1,58 @@
+dependencies:
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser
+    - Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail:
+    customer1_email1:
+        email: customer1_1@example.com
+    customer1_email2:
+        email: customer1_2@example.com
+        primary: true
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone:
+    customer1_phone1:
+        phone: 5556661111
+    customer1_phone2:
+        phone: 5556661112
+        primary: true
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+    customer1:
+        name: Customer 1
+        __calls:
+            - addEmail: ['@customer1_email1']
+            - addEmail: ['@customer1_email2']
+            - addPhone: ['@customer1_phone1']
+            - addPhone: ['@customer1_phone2']
+        account: '@account1'
+        dataChannel: '@default_channel'
+        owner: '@user'
+        organization: '@organization'
+    customer2:
+        name: Customer 2
+        account: '@account1'
+        dataChannel: '@default_channel'
+        owner: '@user'
+        organization: '@organization'
+    customer3:
+        name: Customer 3
+        dataChannel: '@default_channel'
+        owner: '@user'
+        organization: '@organization'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+    account{1..2}:
+        name: Account <current()>
+        owner: '@user'
+        organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+    account1_customer1:
+        account: '@account1'
+        __calls:
+            - setCustomerTarget: ['@customer1']
+    account1_customer2:
+        account: '@account1'
+        __calls:
+            - setCustomerTarget: ['@customer2']

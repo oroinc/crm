@@ -1,0 +1,9 @@
+oro_api:
+    api_doc_cache:
+        resettable_services:
+            - oro_sales.api.account_customer_association_provider
+
+oro_sales:
+    api:
+        customer_association_names:
+            Oro\Bundle\SalesBundle\Entity\B2bCustomer: b2bCustomers
