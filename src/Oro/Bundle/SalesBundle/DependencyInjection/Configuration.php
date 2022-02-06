@@ -18,6 +18,24 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('oro_sales');
         $rootNode = $treeBuilder->getRootNode();
+        $rootNode
+            ->children()
+                ->arrayNode('api')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('customer_association_names')
+                            ->info(
+                                'The names that should be used for customer associations in Account API.'
+                                . ' Use this config when automatically generated names are not correct.'
+                            )
+                            ->example(['Acme\AppBundle\Entity\Customer' => 'acmeCustomers'])
+                            ->useAttributeAsKey('name')
+                            ->normalizeKeys(false)
+                            ->prototype('scalar')->cannotBeEmpty()->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
 
         $defaults = [
             'in_progress'               => 0,
