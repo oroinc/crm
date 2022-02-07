@@ -115,7 +115,7 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
         $labelSelector = sprintf("label:contains('%s')", 'Social');
         /** @var NodeElement $label */
         $label = $this->getSession()->getPage()->find('css', $labelSelector);
-        $links = $label->getParent()->findAll('css', 'ul.list-inline li a');
+        $links = $label->getParent()->findAll('css', 'ul.social-list li a');
 
         $socialNetworks = [];
 
