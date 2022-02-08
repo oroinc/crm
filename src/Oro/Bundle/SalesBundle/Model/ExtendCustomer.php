@@ -2,14 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Model;
 
-use Oro\Bundle\SalesBundle\Entity\Customer;
-
 /**
+ * The model to make Customer entity extendable.
  * The real implementation of this class is auto generated.
- *
- * @method bool                    supportCustomerTarget($targetClass)
- * @method ExtendCustomer|Customer setCustomerTarget($target)
- * @method object|null             getCustomerTarget()
  */
 class ExtendCustomer
 {
@@ -22,5 +17,39 @@ class ExtendCustomer
      */
     public function __construct()
     {
+    }
+
+    /**
+     * Checks if the given entity type is a supported customer.
+     *
+     * @param string $targetClass
+     *
+     * @return bool
+     */
+    public function supportCustomerTarget($targetClass)
+    {
+        return false;
+    }
+
+    /**
+     * Gets a customer entity that is associated with an account.
+     *
+     * @return object|null
+     */
+    public function getCustomerTarget()
+    {
+        return null;
+    }
+
+    /**
+     * Sets a customer entity that should be associated with an account.
+     *
+     * @param object $target
+     *
+     * @return self
+     */
+    public function setCustomerTarget($target)
+    {
+        return $this;
     }
 }

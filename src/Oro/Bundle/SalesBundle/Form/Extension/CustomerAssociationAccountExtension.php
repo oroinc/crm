@@ -9,6 +9,7 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -122,7 +123,8 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
         $account = $event->getForm()->get('customer_association_account')->getData();
         if ($this->doctrineHelper->isNewEntity($target)) {
             $account = $account ?? $this->getManager()->createAccountForTarget($target);
-            $customer = AccountCustomerManager::createCustomer($account, $target);
+            $customer = new Customer();
+            $customer->setTarget($account, $target);
             $this->doctrineHelper->getEntityManager($customer)->persist($customer);
 
             return;
@@ -136,7 +138,8 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
         if ($customer) {
             $customer->setTarget($account, $target);
         } else {
-            $customer = AccountCustomerManager::createCustomer($account, $target);
+            $customer = new Customer();
+            $customer->setTarget($account, $target);
             $this->doctrineHelper->getEntityManager($customer)->persist($customer);
         }
     }
@@ -156,7 +159,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
      */
     public static function getExtendedTypes(): iterable
     {
-        return ['Symfony\Component\Form\Extension\Core\Type\FormType'];
+        return [FormType::class];
     }
 
     private function getConfigProvider(): ConfigProvider

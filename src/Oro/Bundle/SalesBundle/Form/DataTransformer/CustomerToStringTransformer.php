@@ -8,18 +8,18 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
+/**
+ * Transforms a value between a Customer entity and its string representation.
+ */
 class CustomerToStringTransformer implements DataTransformerInterface
 {
-    /** @var DataTransformerInterface */
-    protected $entityToStringTransformer;
-
-    /** @var AccountCustomerManager */
-    protected $accountCustomerManager;
+    private DataTransformerInterface $entityToStringTransformer;
+    private AccountCustomerManager $accountCustomerManager;
 
     public function __construct(DataTransformerInterface $entityToStringTransformer, AccountCustomerManager $manager)
     {
         $this->entityToStringTransformer = $entityToStringTransformer;
-        $this->accountCustomerManager    = $manager;
+        $this->accountCustomerManager = $manager;
     }
 
     /**
@@ -36,20 +36,22 @@ class CustomerToStringTransformer implements DataTransformerInterface
         }
 
         $data = json_decode($value, true);
-
         if (!is_array($data)) {
             throw new TransformationFailedException('Expected an array after decoding a string.');
         }
 
         if (!empty($data['value'])) {
-            $accountCustomerManagerClass = get_class($this->accountCustomerManager);
+            $account = new Account();
+            $account->setName($data['value']);
+            $customer = new Customer();
+            $customer->setTarget($account, null);
 
-            return $accountCustomerManagerClass::createCustomer((new Account())->setName($data['value']));
+            return $customer;
         }
 
-        $target = $this->entityToStringTransformer->reverseTransform($value);
-
-        return $this->accountCustomerManager->getAccountCustomerByTarget($target);
+        return $this->accountCustomerManager->getAccountCustomerByTarget(
+            $this->entityToStringTransformer->reverseTransform($value)
+        );
     }
 
     /**

@@ -19,17 +19,12 @@ use Symfony\Component\Validator\Constraints\NotNull;
  */
 class HandleCustomerAssociation implements ProcessorInterface
 {
-    private const ACCOUNT_FIELD_NAME  = 'account';
+    private const ACCOUNT_FIELD_NAME = 'account';
     private const CUSTOMER_FIELD_NAME = 'customer';
 
-    /** @var AccountCustomerManager */
-    private $accountCustomerManager;
-
-    /** @var FieldAclHelper */
-    private $fieldAclHelper;
-
-    /** @var bool */
-    private $isRelationOptional;
+    private AccountCustomerManager $accountCustomerManager;
+    private FieldAclHelper $fieldAclHelper;
+    private bool $isRelationOptional;
 
     public function __construct(
         AccountCustomerManager $accountCustomerManager,
@@ -165,15 +160,18 @@ class HandleCustomerAssociation implements ProcessorInterface
 
     private function createCustomerAssociationForAccount(Account $account): Customer
     {
-        return AccountCustomerManager::createCustomer($account);
+        $customerAssociation = new Customer();
+        $customerAssociation->setTarget($account, null);
+
+        return $customerAssociation;
     }
 
     private function createCustomerAssociationForCustomer(object $customer): Customer
     {
-        return AccountCustomerManager::createCustomer(
-            $this->accountCustomerManager->createAccountForTarget($customer),
-            $customer
-        );
+        $customerAssociation = new Customer();
+        $customerAssociation->setTarget($this->accountCustomerManager->createAccountForTarget($customer), $customer);
+
+        return $customerAssociation;
     }
 
     private function isCustomerAssociationForAccountEquals(
