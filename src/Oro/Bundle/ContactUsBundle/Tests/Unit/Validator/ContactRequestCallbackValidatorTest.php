@@ -11,29 +11,29 @@ class ContactRequestCallbackValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider validationDataProvider
-     *
-     * @param mixed  $phone
-     * @param mixed  $email
-     * @param string $method
-     * @param int    $expectedViolationCount
      */
-    public function testValidationCallback($phone, $email, $method, $expectedViolationCount)
-    {
+    public function testValidationCallback(
+        ?string $phone,
+        ?string $email,
+        string $method,
+        int $expectedViolationCount
+    ): void {
         $request = new ContactRequest();
         $request->setPhone($phone);
         $request->setEmailAddress($email);
         $request->setPreferredContactMethod($method);
 
-        $context = $this->createMock(ExecutionContextInterface::class);
         $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
-        $context->expects($this->exactly($expectedViolationCount))
-            ->method('buildViolation')
-            ->willReturn($builder);
         $builder->expects($this->exactly($expectedViolationCount))
             ->method('atPath')
             ->willReturnSelf();
         $builder->expects($this->exactly($expectedViolationCount))
             ->method('addViolation');
+        $context = $this->createMock(ExecutionContextInterface::class);
+        $context->expects($this->exactly($expectedViolationCount))
+            ->method('buildViolation')
+            ->willReturn($builder);
+
         ContactRequestCallbackValidator::validate($request, $context);
     }
 
@@ -41,7 +41,7 @@ class ContactRequestCallbackValidatorTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'phone only required'                 => [
-                uniqid('phone'),
+                'phone',
                 null,
                 ContactRequest::CONTACT_METHOD_PHONE,
                 0
@@ -54,7 +54,7 @@ class ContactRequestCallbackValidatorTest extends \PHPUnit\Framework\TestCase
             ],
             'email only required'                 => [
                 null,
-                uniqid('email'),
+                'email',
                 ContactRequest::CONTACT_METHOD_EMAIL,
                 0
             ],
@@ -72,19 +72,19 @@ class ContactRequestCallbackValidatorTest extends \PHPUnit\Framework\TestCase
             ],
             'both required, email given only'     => [
                 null,
-                uniqid('email'),
+                'email',
                 ContactRequest::CONTACT_METHOD_BOTH,
                 1
             ],
             'both required, phone given only'     => [
-                uniqid('phone'),
+                'phone',
                 null,
                 ContactRequest::CONTACT_METHOD_BOTH,
                 1
             ],
             'both required, both given'           => [
-                uniqid('phone'),
-                uniqid('email'),
+                'phone',
+                'email',
                 ContactRequest::CONTACT_METHOD_BOTH,
                 0
             ],
