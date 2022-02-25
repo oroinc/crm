@@ -35,11 +35,11 @@
 {% endmacro %}
 
 {%- macro getSocialUrl(type, value) -%}
-    {% if value|slice(0, 5) == 'http:' or value|slice(0, 6) == 'https:' %}
-        {{ value }}
-    {% else %}
-        {{ oro_social_url(type, value) }}
-    {% endif %}
+    {%- if value|slice(0, 5) == 'http:' or value|slice(0, 6) == 'https:' -%}
+        {{- value -}}
+    {%- else -%}
+        {{- oro_social_url(type, value) -}}
+    {%- endif -%}
 {%- endmacro -%}
 
 <div class="widget-content">
@@ -53,31 +53,31 @@
 
             {%- set socialData -%}
                 {%- if entity.twitter or entity.facebook or entity.googlePlus or entity.linkedIn -%}
-                    <ul class="list-inline">
+                    <ul class="social-list extra-list">
                         {% if entity.twitter %}
                             <li>
-                                <a class="no-hash" href="{{ contactInfo.getSocialUrl('twitter', entity.twitter) }}" target="_blank" title="Twitter">
+                                <a class="no-hash" href="{{- contactInfo.getSocialUrl('twitter', entity.twitter) -}}" target="_blank" title="Twitter">
                                     <i class="fa-twitter"></i>
                                 </a>
                             </li>
                         {% endif %}
                         {% if entity.facebook %}
                             <li>
-                                <a class="no-hash" href="{{ contactInfo.getSocialUrl('facebook', entity.facebook) }}" target="_blank" title="Facebook">
+                                <a class="no-hash" href="{{- contactInfo.getSocialUrl('facebook', entity.facebook) -}}" target="_blank" title="Facebook">
                                     <i class="fa-facebook"></i>
                                 </a>
                             </li>
                         {% endif %}
                         {% if entity.googlePlus %}
                             <li>
-                                <a class="no-hash" href="{{ contactInfo.getSocialUrl('google_plus', entity.googlePlus) }}" target="_blank" title="Google+">
+                                <a class="no-hash" href="{{- contactInfo.getSocialUrl('google_plus', entity.googlePlus) -}}" target="_blank" title="Google+">
                                     <i class="fa-google-plus"></i>
                                 </a>
                             </li>
                         {% endif %}
                         {% if entity.linkedIn %}
                             <li>
-                                <a class="no-hash" href="{{ contactInfo.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank" title="LinkedIn">
+                                <a class="no-hash" href="{{- contactInfo.getSocialUrl('linked_in', entity.linkedIn) -}}" target="_blank" title="LinkedIn">
                                     <i class="fa-linkedin"></i>
                                 </a>
                             </li>

@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class ChannelIntegrationConstraintValidatorTest extends ConstraintValidatorTestCase
+class ChannelIntegrationValidatorTest extends ConstraintValidatorTestCase
 {
     /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $provider;
@@ -22,23 +22,28 @@ class ChannelIntegrationConstraintValidatorTest extends ConstraintValidatorTestC
         parent::setUp();
     }
 
-    protected function createValidator()
+    protected function createValidator(): ChannelIntegrationConstraintValidator
     {
         return new ChannelIntegrationConstraintValidator($this->provider);
+    }
+
+    public function testGetTargets()
+    {
+        $constraint = new ChannelIntegrationConstraint();
+        self::assertEquals(Constraint::CLASS_CONSTRAINT, $constraint->getTargets());
     }
 
     public function testValidateException()
     {
         $this->expectException(UnexpectedTypeException::class);
 
-        $constraint = $this->createMock(Constraint::class);
-        $this->validator->validate(false, $constraint);
+        $this->validator->validate(false, $this->createMock(Constraint::class));
     }
 
     /**
-     * @dataProvider validItemsDataProvider
+     * @dataProvider validateDataProvider
      */
-    public function testValidateValid(bool $isValid, ?Integration $integration)
+    public function testValidate(bool $valid, ?Integration $integration)
     {
         $channel = $this->createMock(Channel::class);
         $channel->expects($this->once())
@@ -55,7 +60,7 @@ class ChannelIntegrationConstraintValidatorTest extends ConstraintValidatorTestC
         $constraint = new ChannelIntegrationConstraint();
         $this->validator->validate($channel, $constraint);
 
-        if ($isValid) {
+        if ($valid) {
             $this->assertNoViolation();
         } else {
             $this->buildViolation('oro.channel.form.integration_invalid.label')
@@ -64,16 +69,16 @@ class ChannelIntegrationConstraintValidatorTest extends ConstraintValidatorTestC
         }
     }
 
-    public function validItemsDataProvider(): array
+    public function validateDataProvider(): array
     {
         return [
             'valid'   => [
-                '$isValid'     => true,
-                '$integration' => new Integration(),
+                'valid' => true,
+                'integration' => new Integration(),
             ],
             'invalid' => [
-                '$isValid'     => false,
-                '$integration' => null,
+                'valid' => false,
+                'integration' => null,
             ],
         ];
     }

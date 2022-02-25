@@ -6,12 +6,8 @@ use Oro\Bundle\SalesBundle\Entity\Customer;
 
 class CustomerStub extends Customer
 {
-    /** @var object|null */
-    protected $customerTarget;
+    private ?object $customerTarget = null;
 
-    /**
-     * @inheritDoc
-     */
     public function __construct($id = null)
     {
         parent::__construct();
@@ -20,7 +16,7 @@ class CustomerStub extends Customer
     }
 
     /**
-     * @return object|null
+     * {@inheritDoc}
      */
     public function getCustomerTarget()
     {
@@ -28,13 +24,11 @@ class CustomerStub extends Customer
     }
 
     /**
-     * @param object|null $customerTarget
-     *
-     * @return CustomerStub
+     * {@inheritDoc}
      */
-    public function setCustomerTarget($customerTarget)
+    public function setCustomerTarget($target)
     {
-        $this->customerTarget = $customerTarget;
+        $this->customerTarget = $target;
 
         return $this;
     }

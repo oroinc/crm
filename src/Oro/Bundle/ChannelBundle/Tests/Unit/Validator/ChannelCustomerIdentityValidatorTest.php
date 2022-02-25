@@ -9,25 +9,30 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class ChannelCustomerIdentityConstraintValidatorTest extends ConstraintValidatorTestCase
+class ChannelCustomerIdentityValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function createValidator()
+    protected function createValidator(): ChannelCustomerIdentityConstraintValidator
     {
         return new ChannelCustomerIdentityConstraintValidator();
+    }
+
+    public function testGetTargets()
+    {
+        $constraint = new ChannelCustomerIdentityConstraint();
+        self::assertEquals(Constraint::CLASS_CONSTRAINT, $constraint->getTargets());
     }
 
     public function testValidateException()
     {
         $this->expectException(UnexpectedTypeException::class);
 
-        $constraint = $this->createMock(Constraint::class);
-        $this->validator->validate(false, $constraint);
+        $this->validator->validate(false, $this->createMock(Constraint::class));
     }
 
     /**
-     * @dataProvider validItemsDataProvider
+     * @dataProvider validateDataProvider
      */
-    public function testValidateValid(array $entities, string $customerIdentity, bool $isValid)
+    public function testValidate(array $entities, string $customerIdentity, bool $valid)
     {
         $channel = $this->createMock(Channel::class);
         $channel->expects($this->once())
@@ -40,7 +45,7 @@ class ChannelCustomerIdentityConstraintValidatorTest extends ConstraintValidator
         $constraint = new ChannelCustomerIdentityConstraint();
         $this->validator->validate($channel, $constraint);
 
-        if ($isValid) {
+        if ($valid) {
             $this->assertNoViolation();
         } else {
             $this->buildViolation('oro.channel.form.customer_identity_selected_not_correctly.label')
@@ -49,7 +54,7 @@ class ChannelCustomerIdentityConstraintValidatorTest extends ConstraintValidator
         }
     }
 
-    public function validItemsDataProvider(): array
+    public function validateDataProvider(): array
     {
         $entities = [
             'Oro\Bundle\AcmeBundle\Entity\Test1',
@@ -59,14 +64,14 @@ class ChannelCustomerIdentityConstraintValidatorTest extends ConstraintValidator
 
         return [
             'valid'   => [
-                'entities'         => $entities,
+                'entities' => $entities,
                 'customerIdentity' => 'Oro\Bundle\AcmeBundle\Entity\Test2',
-                'isValid'          => true
+                'valid' => true
             ],
             'invalid' => [
-                'entities'         => $entities,
+                'entities' => $entities,
                 'customerIdentity' => 'Oro\Bundle\AcmeBundle\Entity\Test0',
-                'isValid'          => false
+                'valid' => false
             ],
         ];
     }

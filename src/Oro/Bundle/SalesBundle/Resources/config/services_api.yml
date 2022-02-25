@@ -1,4 +1,12 @@
 services:
+    oro_sales.api.account_customer_association_provider:
+        class: Oro\Bundle\SalesBundle\Api\AccountCustomerAssociationProvider
+        arguments:
+            - !abstract '$customerAssociationNames defined in Oro\Bundle\SalesBundle\DependencyInjection\OroSalesExtension'
+            - '@oro_sales.customer.config_provider'
+            - '@oro_api.value_normalizer'
+            - '@oro_api.resources_provider'
+
     oro_sales.api.b2bcustomer.compute_primary_phone:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\ComputePrimaryField
         arguments:
@@ -114,3 +122,38 @@ services:
             - '@oro_security.form.field_acl_helper'
         tags:
             - { name: oro.api.processor, action: customize_form_data, event: post_submit, class: Oro\Bundle\SalesBundle\Entity\Opportunity }
+
+    oro_sales.api.get_config.add_account_customer_associations:
+        class: Oro\Bundle\SalesBundle\Api\Processor\AddAccountCustomerAssociations
+        arguments:
+            - '@oro_sales.api.account_customer_association_provider'
+            - '@oro_api.doctrine_helper'
+        tags:
+            - { name: oro.api.processor, action: get_config, extra: '!identifier_fields_only', priority: -10 }
+
+    oro_sales.api.get_config.add_account_customer_association_descriptions:
+        class: Oro\Bundle\SalesBundle\Api\Processor\AddAccountCustomerAssociationDescriptions
+        arguments:
+            - '@oro_sales.api.account_customer_association_provider'
+            - '@oro_api.value_normalizer'
+            - '@oro_api.complete_descriptions.resource_doc_parser_provider'
+            - '@oro_api.entity_name_provider'
+        tags:
+            - { name: oro.api.processor, action: get_config, extra: descriptions, priority: -208 }
+
+    oro_sales.api.collect_subresources.exclude_change_customer_subresources:
+        class: Oro\Bundle\SalesBundle\Api\Processor\ExcludeChangeCustomerSubresources
+        arguments:
+            - '@oro_sales.api.account_customer_association_provider'
+        tags:
+            - { name: oro.api.processor, action: collect_subresources, priority: -20 }
+
+    oro_sales.api.handle_customer_account_association:
+        class: Oro\Bundle\SalesBundle\Api\Processor\HandleCustomerAccountAssociation
+        arguments:
+            - '@oro_api.doctrine_helper'
+            - '@Psr\Container\ContainerInterface'
+        tags:
+            - { name: oro.api.processor, action: customize_form_data, event: post_submit }
+            - { name: container.service_subscriber }
+            - { name: container.service_subscriber, id: oro_sales.customer.config_provider, key: Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider }

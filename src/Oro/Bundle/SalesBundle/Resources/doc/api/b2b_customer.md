@@ -57,12 +57,6 @@ Example:
                "id": "2"
             }
          },
-         "account": {
-            "data": {
-               "type": "accounts",
-               "id": "26"
-            }
-         },
          "leads": {
             "data": [
                {
@@ -232,17 +226,19 @@ The **phones** collection should contain the primary phone number if the request
 
 ### account
 
+The account associated with the business customer record.
+
 #### create
 
-{@inheritdoc}
+The account associated with the business customer record.
 
-**The required field.**
+**If not specified, a new account will be created.**
 
 #### update
 
-{@inheritdoc}
+The account associated with the business customer record.
 
-**This field must not be empty, if it is passed.**
+**The required field.**
 
 ### dataChannel
 
@@ -277,33 +273,6 @@ Filter records by primary email address.
 Filter records by primary phone number.
 
 ## SUBRESOURCES
-
-### account
-
-#### get_subresource
-
-Retrieve the accout record that a specific business customer record is assigned to.
-
-#### get_relationship
-
-Retrieve the IDs of the accounts that a specific business customer is assigned to.
-
-#### update_relationship
-
-Replace the accounts that a specific business customer is assigned to.
-
-{@request:json_api}
-Example:
-
-```JSON
-{
-  "data": {
-    "type": "accounts",
-    "id": "26"
-  }
-}
-```
-{@/request}
 
 ### billingAddress
 

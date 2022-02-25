@@ -220,7 +220,7 @@ oro_behat_extension:
 
     First Widget Add Button:
       selector:
-        locator: '(//div[(contains(@class,"widget-picker__results"))]//div[@style="opacity: 1;"]//button[contains(text(),"Add")])[1]'
+        locator: '(//div[(contains(@class,"widget-picker__results"))]//details[@style="opacity: 1;"]//button[contains(text(),"Add")])[1]'
         type: xpath
 
     Enter keyword:
