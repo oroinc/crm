@@ -478,10 +478,10 @@ services:
             - { name: kernel.event_listener, event: oro.entity_extend.entity.schema.update, method: clear }
 
     oro_sales.customer.config_cache_impl:
-        parent: oro.cache.abstract
+        parent: oro.data.cache
         public: false
-        calls:
-            - [ setNamespace, [ 'oro_sales_customer' ] ]
+        tags:
+            - { name: 'cache.pool', namespace: 'oro_sales_customer' }
 
     oro_sales.customer.config_provider:
         class: Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider
