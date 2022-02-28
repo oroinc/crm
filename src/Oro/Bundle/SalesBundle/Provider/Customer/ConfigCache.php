@@ -2,17 +2,18 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Customer;
 
-use Doctrine\Common\Cache\CacheProvider;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * The cache for customer configuration.
  */
 class ConfigCache
 {
-    /** @var CacheProvider */
-    private $cache;
+    private CacheItemPoolInterface $cache;
+    private ?CacheItemInterface $cacheItem = null;
 
-    public function __construct(CacheProvider $cache)
+    public function __construct(CacheItemPoolInterface $cache)
     {
         $this->cache = $cache;
     }
@@ -22,34 +23,25 @@ class ConfigCache
      */
     public function clear(): void
     {
-        $this->cache->deleteAll();
+        $this->cache->clear();
     }
 
     /**
      * Fetches customer classes from the cache.
-     *
-     * @param string $key
-     *
-     * @return string[]|null
      */
     public function getClasses(string $key): ?array
     {
-        $classes = $this->cache->fetch($key);
-        if (false === $classes) {
-            return null;
-        }
-
-        return $classes;
+        $this->cacheItem = $this->cache->getItem($key);
+        return $this->cacheItem->isHit() ? $this->cacheItem->get() : null;
     }
 
     /**
-     * Puts customer classes to the cache.
-     *
-     * @param string   $key
-     * @param string[] $classes
+     * Puts customer classes to the cache
      */
     public function setClasses(string $key, array $classes): void
     {
-        $this->cache->save($key, $classes);
+        $this->cacheItem ??= $this->cache->getItem($key);
+        $this->cacheItem->set($classes);
+        $this->cache->save($this->cacheItem);
     }
 }
