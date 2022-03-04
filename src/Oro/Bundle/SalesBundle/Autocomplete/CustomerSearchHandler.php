@@ -15,6 +15,9 @@ use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
 use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\SearchBundle\Query\Result\Item;
 
+/**
+ * Search autocomplete handler for business customer form type
+ */
 class CustomerSearchHandler extends ContextSearchHandler
 {
     const AMOUNT_SEARCH_RESULT = 10;
@@ -356,7 +359,7 @@ class CustomerSearchHandler extends ContextSearchHandler
             $searchItem = $item['searchItem'];
             $this->dispatcher->dispatch(new PrepareResultItemEvent($searchItem), PrepareResultItemEvent::EVENT_NAME);
 
-            $text = $searchItem->getRecordTitle();
+            $text = $searchItem->getSelectedData()['name'];
             $className = $searchItem->getEntityName();
             $identifier = $searchItem->getRecordId();
 

@@ -12,7 +12,7 @@
 {% set entityType = 'oro.sales.opportunity.entity_label'|trans %}
 
 {% if is_granted('VIEW', entity, 'name') %}
-    {% set title = entity ? entity.__toString : indexer_item.recordTitle %}
+    {% set title = indexer_item.selectedData.name %}
 {% else %}
     {% set title = 'view %entityName%'|trans({'%entityName%' : entityType}) %}
 {% endif %}
