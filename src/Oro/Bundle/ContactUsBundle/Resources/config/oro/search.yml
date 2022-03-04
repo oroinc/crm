@@ -13,9 +13,9 @@ search:
                 relation_type:          many-to-one
                 relation_fields:
                     -
-                        name:           label
+                        name:           defaultTitle
                         target_type:    text
-                        target_fields:  [label]
+                        target_fields:  [contactReason]
             -
                 name:                   firstName
                 target_type:            text
