@@ -1,7 +1,6 @@
 search:
     Oro\Bundle\CaseBundle\Entity\CaseEntity:
         alias:                          oro_case
-        title_fields:                   [subject]
         route:
             name:                       oro_case_view
             parameters:

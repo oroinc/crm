@@ -2,7 +2,6 @@ search:
     Oro\Bundle\ContactBundle\Entity\Contact:
         alias: oro_contact
         label: oro.contact.entity_plural_label
-        title_fields: [namePrefix, firstName, lastName]
         route:
             name: oro_contact_view
             parameters:

@@ -115,7 +115,6 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
             $resultItem = [
                 'id'      => $id,
                 'entity'  => $className,
-                'title'   => $item->getRecordTitle(),
                 'channel' => null
             ];
 
