@@ -2,13 +2,13 @@ The upgrade instructions are available at [Oro documentation website](https://do
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
-## 5.0.0
+## 5.0.0 (2022-01-26)
+[Show detailed list of changes](incompatibilities-5-0.md)
 
 ### Changed
 
 #### ContactBundle
 * Business logic from the `PrepareResultItemListener` is removed and class is deprecated as now search engine generates and stores entity name in the index in a separate field
-
 
 ## 5.0.0-rc (2021-12-07)
 [Show detailed list of changes](incompatibilities-5-0-rc.md)
