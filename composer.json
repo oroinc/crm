@@ -31,11 +31,11 @@
         "exclude-from-classmap": ["/Tests/"]
     },
     "require": {
-        "oro/platform": "5.0.*",
-        "oro/crm-task-bundle": "5.0.*",
-        "oro/crm-call-bundle": "5.0.*",
-        "oro/calendar-bundle": "5.0.*",
-        "oro/marketing": "5.0.*"
+        "oro/platform": "5.1.*",
+        "oro/crm-task-bundle": "5.1.*",
+        "oro/crm-call-bundle": "5.1.*",
+        "oro/calendar-bundle": "5.1.*",
+        "oro/marketing": "5.1.*"
     },
     "require-dev": {
         "behat/behat": "~3.10.0",
@@ -46,7 +46,7 @@
         "friends-of-behat/symfony-extension": "~2.2.0",
         "nelmio/alice": "~3.9.0",
         "theofidry/alice-data-fixtures": "~1.4.0",
-        "phpunit/phpunit": "~9.5.1",
+        "phpunit/phpunit": "9.5.13",
         "johnkary/phpunit-speedtrap": "~4.0.0",
         "squizlabs/php_codesniffer": "~3.6.0",
         "phpmd/phpmd": "~2.11.1",
@@ -76,7 +76,7 @@
             "require": "~5.4.0"
         },
         "branch-alias": {
-            "dev-master": "5.0-dev"
+            "dev-master": "5.1-dev"
         }
     }
 }
