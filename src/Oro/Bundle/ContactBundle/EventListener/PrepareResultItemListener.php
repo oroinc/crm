@@ -9,6 +9,8 @@ use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 
 /**
  * Fills a title for found Contact entity when the title is empty.
+ *
+ * @deprecated deprecated since 5.0
  */
 class PrepareResultItemListener
 {
@@ -23,15 +25,6 @@ class PrepareResultItemListener
 
     public function prepareResultItem(PrepareResultItemEvent $event): void
     {
-        $resultItem = $event->getResultItem();
-        if ($resultItem->getEntityName() !== Contact::class || trim($resultItem->getRecordTitle())) {
-            return;
-        }
-
-        /** @var Contact $entity */
-        $entity = $this->doctrine->getManagerForClass(Contact::class)
-            ->find(Contact::class, $resultItem->getId());
-
-        $resultItem->setRecordTitle($this->nameFormatter->format($entity));
+        // entity title is now selected from the search index
     }
 }

@@ -62,8 +62,11 @@ Oro\Bundle\SalesBundle\Entity\SalesFunnel:
         startDate:
             - NotBlank: ~
             - Type:
-                type: \DateTimeInterface
+                type: DateTimeInterface
                 message: oro.sales.sales_funnel.start_date.type.message
+                payload:
+                    jsValidation:
+                        type: Date
 
 Oro\Bundle\SalesBundle\Entity\B2bCustomer:
     properties:

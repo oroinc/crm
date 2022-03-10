@@ -66,6 +66,13 @@ class OroTestFrameworkBundleInstaller implements
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->setPrimaryKey(['id']);
+
+        $table = $schema->createTable('test_customer_with_contact_info');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('name', 'string', ['length' => 255]);
+        $table->addColumn('email', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('phone', 'string', ['length' => 255, 'notnull' => false]);
+        $table->setPrimaryKey(['id']);
     }
 
     public function addCustomerAssociations(Schema $schema)
