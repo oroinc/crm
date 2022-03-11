@@ -27,7 +27,7 @@
                 </span>
             </div>
             <div class="message-item">
-                <div class="message"><%= briefMessage %></div>
+                <div class="message"><%- briefMessage %></div>
             </div>
             <div class="labels">
                 <% if (!public) { %>
@@ -35,7 +35,7 @@
                 <% } %>
             </div>
             <div class="details">
-                <span class="date"><%= createdAt %></span>
+                <span class="date"><%- createdAt %></span>
             </div>
             <div class="actions">
                 <button class="btn btn-icon btn-lighter item-edit-button<% if (!permissions.edit) { %> disabled<% } %>"
@@ -51,7 +51,7 @@
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> show<% } %>" id="accordion-item<%- id %>">
             <div class="message">
-                <%= message %>
+                <%- message %>
                 <% if (updatedBy) { %>
                 <div class="details">
                     <div>
