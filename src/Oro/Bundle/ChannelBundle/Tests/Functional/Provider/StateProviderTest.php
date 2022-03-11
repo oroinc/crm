@@ -32,18 +32,18 @@ class StateProviderTest extends WebTestCase
     {
         parent::tearDown();
 
-        $this->getContainer()->get('oro_channel.state_cache')->deleteAll();
+        $this->getContainer()->get('oro_channel.state_cache')->clear();
     }
 
     public function testIsEntityEnabledForNonSupportedEntity()
     {
-        $this->getContainer()->get('oro_channel.state_cache')->deleteAll();
+        $this->getContainer()->get('oro_channel.state_cache')->clear();
         $this->assertFalse($this->stateProvider->isEntityEnabled(\stdClass::class));
     }
 
     public function testIsEntityEnabledWithoutLoggedUser()
     {
-        $this->getContainer()->get('oro_channel.state_cache')->deleteAll();
+        $this->getContainer()->get('oro_channel.state_cache')->clear();
         $this->assertTrue($this->stateProvider->isEntityEnabled(CustomerIdentity::class));
     }
 

@@ -18,7 +18,7 @@ class CustomerEntityConfiguration implements EntityConfigInterface
     public function configure(NodeBuilder $nodeBuilder): void
     {
         $nodeBuilder
-            ->booleanNode('enabled')
+            ->node('enabled', 'normalized_boolean')
                 ->info('`boolean` is used to enable the “customer” functionality.')
             ->end()
             ->scalarNode('associated_opportunity_block_priority')

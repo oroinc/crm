@@ -1,7 +1,6 @@
 search:
     Oro\Bundle\SalesBundle\Entity\Lead:
         alias:                          oro_sales_lead
-        title_fields:                   [name]
         route:
             name:                       oro_sales_lead_view
             parameters:
@@ -63,7 +62,6 @@ search:
 
     Oro\Bundle\SalesBundle\Entity\Opportunity:
         alias:                          oro_sales_opportunity
-        title_fields:                   [name]
         route:
             name:                       oro_sales_opportunity_view
             parameters:
@@ -126,7 +124,6 @@ search:
 
     Oro\Bundle\SalesBundle\Entity\SalesFunnel:
         alias:                          oro_sales_funnel
-        title_fields:                   [lead, opportunity]
         route:
             name:                       oro_sales_salesfunnel_view
             parameters:
@@ -180,7 +177,6 @@ search:
 
     Oro\Bundle\SalesBundle\Entity\B2bCustomer:
         alias:                          oro_sales_b2bcustomer
-        title_fields:                   [name]
         route:
             name:                       oro_sales_b2bcustomer_view
             parameters:

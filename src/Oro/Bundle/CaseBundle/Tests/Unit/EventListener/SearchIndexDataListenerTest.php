@@ -4,6 +4,7 @@ namespace Oro\Bundle\CaseBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\EventListener\SearchIndexDataListener;
+use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\SearchBundle\Engine\ObjectMapper;
 use Oro\Bundle\SearchBundle\Event\PrepareEntityMapEvent;
 use Oro\Bundle\SearchBundle\Formatter\DateTimeFormatter;
@@ -49,6 +50,7 @@ class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
             $this->createMock(SearchMappingProvider::class),
             PropertyAccess::createPropertyAccessor(),
             $this->getTypeCastingHandlerRegistry(),
+            $this->createMock(EntityNameResolver::class),
             $this->createMock(EventDispatcherInterface::class),
             $htmlTagHelper,
             new DateTimeFormatter()

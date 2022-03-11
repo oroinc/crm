@@ -2,7 +2,6 @@ search:
     Oro\Bundle\AccountBundle\Entity\Account:
         alias: oro_account
         label: oro.account.entity_plural_label
-        title_fields: [name]
         route:
             name: oro_account_view
             parameters:
