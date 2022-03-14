@@ -1,4 +1,5 @@
 @regression
+@fixture-OroAccountBundle:account-with-contact.yml
 Feature: Account attachment
   In order to have ability add attachments to account
   As a sales rep
@@ -6,9 +7,6 @@ Feature: Account attachment
 
   Scenario: Add attachment from view account page
     Given I login as administrator
-    And the following account:
-      | name          | extendDescription    |
-      | Charlie Sheen | <sentences(3, true)> |
     And I go to Customers/Accounts
     And click view "Charlie Sheen" in grid
     And follow "More actions"
@@ -46,7 +44,7 @@ Feature: Account attachment
     And click "Send email"
     And fill form with:
       | Subject | Hello World |
-      | To      | [John Doe]  |
+      | To      | [Another Contact]  |
     When select cat2 as email attachment from record
     And click "Send"
     Then I should see "The email was sent" flash message

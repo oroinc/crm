@@ -1,17 +1,17 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Entity\Provider;
+namespace Oro\Bundle\SalesBundle\Entity\Provider;
 
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Entity\Provider\EmailOwnerProviderInterface;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 
 /**
- * The email address owner provider for Contact entity.
+ * The email address owner provider for Lead entity.
  */
 class EmailOwnerProvider implements EmailOwnerProviderInterface
 {
@@ -20,7 +20,7 @@ class EmailOwnerProvider implements EmailOwnerProviderInterface
      */
     public function getEmailOwnerClass(): string
     {
-        return Contact::class;
+        return Lead::class;
     }
 
     /**
@@ -29,16 +29,16 @@ class EmailOwnerProvider implements EmailOwnerProviderInterface
     public function findEmailOwner(EntityManagerInterface $em, string $email): ?EmailOwnerInterface
     {
         $qb = $em->createQueryBuilder()
-            ->from(ContactEmail::class, 'ce')
-            ->select('ce')
-            ->join('ce.owner', 'c')
+            ->from(LeadEmail::class, 'le')
+            ->select('le')
+            ->join('le.owner', 'l')
             ->setParameter('email', $email);
         if ($em->getConnection()->getDatabasePlatform() instanceof PostgreSqlPlatform) {
-            $qb->where('LOWER(ce.email) = LOWER(:email)');
+            $qb->where('LOWER(le.email) = LOWER(:email)');
         } else {
-            $qb->where('ce.email = :email');
+            $qb->where('le.email = :email');
         }
-        /** @var ContactEmail|null $emailEntity */
+        /** @var LeadEmail|null $emailEntity */
         $emailEntity = $qb->getQuery()->getOneOrNullResult();
         if (null === $emailEntity) {
             return null;
@@ -53,14 +53,14 @@ class EmailOwnerProvider implements EmailOwnerProviderInterface
     public function getOrganizations(EntityManagerInterface $em, string $email): array
     {
         $qb = $em->createQueryBuilder()
-            ->from(ContactEmail::class, 'ce')
-            ->select('IDENTITY(c.organization) AS id')
-            ->join('ce.owner', 'c')
+            ->from(LeadEmail::class, 'le')
+            ->select('IDENTITY(l.organization) AS id')
+            ->join('le.owner', 'l')
             ->setParameter('email', $email);
         if ($em->getConnection()->getDatabasePlatform() instanceof PostgreSqlPlatform) {
-            $qb->where('LOWER(ce.email) = LOWER(:email)');
+            $qb->where('LOWER(le.email) = LOWER(:email)');
         } else {
-            $qb->where('ce.email = :email');
+            $qb->where('le.email = :email');
         }
         $rows = $qb->getQuery()->getArrayResult();
 
@@ -78,12 +78,12 @@ class EmailOwnerProvider implements EmailOwnerProviderInterface
     public function getEmails(EntityManagerInterface $em, int $organizationId): iterable
     {
         $qb = $em->createQueryBuilder()
-            ->from(ContactEmail::class, 'ce')
-            ->select('ce.email')
-            ->join('ce.owner', 'c')
-            ->where('c.organization = :organizationId')
+            ->from(LeadEmail::class, 'le')
+            ->select('le.email')
+            ->join('le.owner', 'l')
+            ->where('l.organization = :organizationId')
             ->setParameter('organizationId', $organizationId)
-            ->orderBy('ce.id');
+            ->orderBy('le.id');
         $iterator = new BufferedQueryResultIterator($qb);
         $iterator->setBufferSize(5000);
         foreach ($iterator as $row) {
