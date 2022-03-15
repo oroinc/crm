@@ -1,0 +1,61 @@
+dependencies:
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser
+
+Oro\Bundle\OrganizationBundle\Entity\Organization:
+    another_organization:
+        name: 'Another Organization'
+        enabled: true
+        users: ['@user']
+
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+    email1:
+        email: 'john.smith@example.com'
+    email2:
+        email: 'test@example.com'
+    email3:
+        email: 'test@example.com'
+    email4:
+        email: 'jane.smith@example.com'
+    email5:
+        email: 'charlie.smith@example.com'
+    email6:
+        email: 'john.smith@example.com'
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+    contact1:
+        firstName: 'John'
+        lastName: 'Smith'
+        emails: ['@email1']
+        organization: '@organization'
+        owner: '@user'
+    contact2:
+        firstName: 'Nancy'
+        lastName: 'Sallee'
+        emails: ['@email2']
+        organization: '@organization'
+        owner: '@user'
+    contact3:
+        firstName: 'Marlene'
+        lastName: 'Bradley'
+        emails: ['@email3']
+        organization: '@organization'
+        owner: '@user'
+    contact4:
+        firstName: 'Jane'
+        lastName: 'Smith'
+        emails: ['@email4']
+        organization: '@organization'
+        owner: '@user'
+    contact5:
+        firstName: 'Charlie'
+        lastName: 'Smith'
+        emails: ['@email5']
+        organization: '@another_organization'
+        owner: '@user'
+    contact6:
+        firstName: 'John'
+        lastName: 'Smith'
+        emails: ['@email6']
+        organization: '@another_organization'
+        owner: '@user'

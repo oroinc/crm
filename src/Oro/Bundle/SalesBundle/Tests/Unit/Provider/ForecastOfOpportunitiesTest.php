@@ -10,7 +10,6 @@ use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
-use Oro\Bundle\TranslationBundle\Translation\Translator;
 use Oro\Component\Testing\ReflectionUtil;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -33,7 +32,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->translator = $this->createMock(Translator::class);
+        $this->translator = $this->createMock(TranslatorInterface::class);
         $this->dateHelper = $this->createMock(DateHelper::class);
         $this->forecastProvider = $this->createMock(ForecastProvider::class);
         $this->filterDateRangeConverter = $this->createMock(FilterDateRangeConverter::class);

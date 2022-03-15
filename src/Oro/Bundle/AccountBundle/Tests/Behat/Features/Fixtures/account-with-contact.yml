@@ -1,0 +1,19 @@
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+    contact-email:
+        email: 'another@sheen.com'
+        primary: true
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+    charlieContact:
+        firstName: 'Another'
+        lastName: 'Contact'
+        owner: '@admin'
+        organization: '@organization'
+        emails: ['@contact-email']
+
+Oro\Bundle\AccountBundle\Entity\Account:
+    charlieAccount:
+        name: 'Charlie Sheen'
+        extendDescription: '<sentences(3, true)>'
+        owner: '@admin'
+        organization: '@organization'
