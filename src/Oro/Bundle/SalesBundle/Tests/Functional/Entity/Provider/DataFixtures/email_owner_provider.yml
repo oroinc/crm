@@ -1,0 +1,67 @@
+dependencies:
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser
+
+Oro\Bundle\OrganizationBundle\Entity\Organization:
+    another_organization:
+        name: 'Another Organization'
+        enabled: true
+        users: ['@user']
+
+Oro\Bundle\SalesBundle\Entity\LeadEmail:
+    email1:
+        email: 'john.smith@example.com'
+    email2:
+        email: 'test@example.com'
+    email3:
+        email: 'test@example.com'
+    email4:
+        email: 'jane.smith@example.com'
+    email5:
+        email: 'charlie.smith@example.com'
+    email6:
+        email: 'john.smith@example.com'
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+    lead1:
+        name: 'Lead 1'
+        firstName: 'John'
+        lastName: 'Smith'
+        emails: ['@email1']
+        organization: '@organization'
+        owner: '@user'
+    lead2:
+        name: 'Lead 2'
+        firstName: 'Nancy'
+        lastName: 'Sallee'
+        emails: ['@email2']
+        organization: '@organization'
+        owner: '@user'
+    lead3:
+        name: 'Lead 3'
+        firstName: 'Marlene'
+        lastName: 'Bradley'
+        emails: ['@email3']
+        organization: '@organization'
+        owner: '@user'
+    lead4:
+        name: 'Lead 4'
+        firstName: 'Jane'
+        lastName: 'Smith'
+        emails: ['@email4']
+        organization: '@organization'
+        owner: '@user'
+    lead5:
+        name: 'Lead 5'
+        firstName: 'Charlie'
+        lastName: 'Smith'
+        emails: ['@email5']
+        organization: '@another_organization'
+        owner: '@user'
+    lead6:
+        name: 'Lead 6'
+        firstName: 'John'
+        lastName: 'Smith'
+        emails: ['@email6']
+        organization: '@another_organization'
+        owner: '@user'

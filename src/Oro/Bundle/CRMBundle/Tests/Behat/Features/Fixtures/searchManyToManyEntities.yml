@@ -17,3 +17,4 @@ Oro\Bundle\ContactBundle\Entity\Contact:
       - addEmail: ['@contactEmail1']
     accounts: ['@account1']
     owner: '@admin'
+    organization: '@organization'
