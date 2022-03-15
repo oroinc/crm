@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Migrations\Schema;
 
+use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
@@ -10,8 +11,11 @@ use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInte
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_5\OroContactBundle as AttachmentMigration;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_6\OroContactBundle as ActivityMigration;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_8\OroContactBundle as ContactOrganizations;
+use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
+use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -19,17 +23,16 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
  */
 class OroContactBundleInstaller implements
     Installation,
+    DatabasePlatformAwareInterface,
     AttachmentExtensionAwareInterface,
     ActivityExtensionAwareInterface
 {
-    /**
-     * @var ActivityExtension
-     */
+    use DatabasePlatformAwareTrait;
+
+    /** @var ActivityExtension */
     protected $activityExtension;
 
-    /**
-     * @var AttachmentExtension
-     */
+    /** @var AttachmentExtension */
     protected $attachmentExtension;
 
     /**
@@ -53,7 +56,7 @@ class OroContactBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_17';
+        return 'v1_18';
     }
 
     /**
@@ -66,6 +69,7 @@ class OroContactBundleInstaller implements
         $this->createOrocrmContactAddressTable($schema);
         $this->createOrocrmContactAdrToAdrTypeTable($schema);
         $this->createOrocrmContactEmailTable($schema);
+        $this->createOrocrmContactEmailTableCaseInsensitiveIndex($queries);
         $this->createOrocrmContactGroupTable($schema);
         $this->createOrocrmContactMethodTable($schema);
         $this->createOrocrmContactPhoneTable($schema);
@@ -190,6 +194,15 @@ class OroContactBundleInstaller implements
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_335A28C37E3C61F9', []);
         $table->addIndex(['email', 'is_primary'], 'primary_email_idx', []);
+    }
+
+    private function createOrocrmContactEmailTableCaseInsensitiveIndex(QueryBag $queries)
+    {
+        if ($this->platform instanceof PostgreSqlPlatform) {
+            $queries->addPostQuery(new SqlMigrationQuery(
+                'CREATE INDEX idx_contact_email_ci ON orocrm_contact_email (LOWER(email))'
+            ));
+        }
     }
 
     /**
