@@ -1,0 +1,3 @@
+oro_email:
+  public_email_owners:
+    - Oro\Bundle\ContactBundle\Entity\Contact

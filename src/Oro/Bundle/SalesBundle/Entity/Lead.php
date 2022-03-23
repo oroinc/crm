@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -80,7 +81,8 @@ use Oro\Bundle\UserBundle\Entity\User;
  */
 class Lead extends ExtendLead implements
     FullNameInterface,
-    EmailHolderInterface
+    EmailHolderInterface,
+    EmailOwnerInterface
 {
     const INTERNAL_STATUS_CODE = 'lead_status';
 
@@ -486,6 +488,22 @@ class Lead extends ExtendLead implements
         $this->phones   = new ArrayCollection();
         $this->emails   = new ArrayCollection();
         $this->addresses = new ArrayCollection();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getClass()
+    {
+        return 'Oro\Bundle\SalesBundle\Entity\Lead';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEmailFields()
+    {
+        return null;
     }
 
     /**

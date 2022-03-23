@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Schema;
 
+use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
@@ -13,10 +14,13 @@ use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
+use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionAwareInterface;
 use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionTrait;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_11\OroSalesBundle as SalesOrganizations;
@@ -36,6 +40,7 @@ use Oro\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
  */
 class OroSalesBundleInstaller implements
     Installation,
+    DatabasePlatformAwareInterface,
     ExtendExtensionAwareInterface,
     ActivityExtensionAwareInterface,
     AttachmentExtensionAwareInterface,
@@ -43,6 +48,7 @@ class OroSalesBundleInstaller implements
     RenameExtensionAwareInterface,
     CustomerExtensionAwareInterface
 {
+    use DatabasePlatformAwareTrait;
     use CustomerExtensionTrait;
 
     /** @var ExtendExtension */
@@ -105,7 +111,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_40';
+        return 'v1_41';
     }
 
     /**
@@ -121,6 +127,7 @@ class OroSalesBundleInstaller implements
         $this->createOrocrmSalesB2bCustomerTable($schema);
         $this->createOrocrmLeadPhoneTable($schema);
         $this->createOrocrmSalesLeadEmailTable($schema);
+        $this->createOrocrmSalesLeadEmailTableCaseInsensitiveIndex($queries);
         $this->createOrocrmB2bCustomerPhoneTable($schema);
         $this->createOrocrmB2bCustomerEmailTable($schema);
         AddCustomersTable::addCustomersTable($schema);
@@ -158,6 +165,7 @@ class OroSalesBundleInstaller implements
         $this->customerExtension->addCustomerAssociation($schema, 'orocrm_sales_b2bcustomer');
 
         $this->addOpportunitiesByStatusIndex($schema);
+        $this->addLeadOwnerToOroEmailAddress($schema);
     }
 
     /**
@@ -449,6 +457,15 @@ class OroSalesBundleInstaller implements
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_9F15A0937E3C61F9', []);
         $table->addIndex(['email', 'is_primary'], 'lead_primary_email_idx', []);
+    }
+
+    private function createOrocrmSalesLeadEmailTableCaseInsensitiveIndex(QueryBag $queries)
+    {
+        if ($this->platform instanceof PostgreSqlPlatform) {
+            $queries->addPostQuery(new SqlMigrationQuery(
+                'CREATE INDEX idx_lead_email_ci ON orocrm_sales_lead_email (LOWER(email))'
+            ));
+        }
     }
 
     /**
@@ -752,6 +769,18 @@ class OroSalesBundleInstaller implements
         $table->addIndex(
             ['organization_id', 'status_id', 'close_revenue_value', 'budget_amount_value', 'created_at'],
             'opportunities_by_status_idx'
+        );
+    }
+
+    private function addLeadOwnerToOroEmailAddress(Schema $schema): void
+    {
+        $table = $schema->getTable('oro_email_address');
+        $table->addColumn('owner_lead_id', 'integer', ['notnull' => false]);
+        $table->addIndex(['owner_lead_id']);
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_sales_lead'),
+            ['owner_lead_id'],
+            ['id']
         );
     }
 }

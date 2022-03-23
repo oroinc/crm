@@ -53,6 +53,12 @@ Oro\Bundle\NoteBundle\Entity\Note:
     owner: '@admin'
     organization: '@organization'
 
+Oro\Bundle\CalendarBundle\Entity\Calendar:
+  calendar:
+    name: User calendar
+    owner: '@admin'
+    organization: '@organization'
+
 Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
   calendarEvent{1..2}:
     title: '<sentence(6, true)>'
@@ -63,6 +69,7 @@ Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
     start: '<dateTimeBetween($createdAt, $createdAt)>'
     end: '<dateTimeBetween($createdAt, $createdAt)>'
     allDay: false
+    calendar: '@calendar'
 
 Oro\Bundle\CallBundle\Entity\Call:
   call{1..2}:
@@ -74,6 +81,7 @@ Oro\Bundle\CallBundle\Entity\Call:
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     callDateTime: '<dateTimeBetween($createdAt, $createdAt)>'
+    owner: '@admin'
     organization: '@organization'
 
 Oro\Bundle\TaskBundle\Entity\Task:
@@ -84,3 +92,5 @@ Oro\Bundle\TaskBundle\Entity\Task:
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     dueDate: '<dateTimeBetween($updatedAt, "now")>'
+    owner: '@admin'
+    organization: '@organization'

@@ -14,9 +14,9 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\FormBundle\Autocomplete\SearchHandlerInterface;
 use Oro\Bundle\FormBundle\Autocomplete\SearchRegistry;
-use Oro\Bundle\FormBundle\Form\Extension\TooltipFormExtension;
 use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Oro\Bundle\FormBundle\Form\Type\OroJquerySelect2HiddenType;
+use Oro\Bundle\FormBundle\Tests\Unit\Stub\TooltipFormExtensionStub;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormSubscriber;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\DefaultOwnerSubscriber;
@@ -28,7 +28,6 @@ use Oro\Bundle\IntegrationBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Oro\Bundle\TranslationBundle\Translation\IdentityTranslator;
-use Oro\Bundle\TranslationBundle\Translation\Translator;
 use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
 use Oro\Component\Testing\Unit\PreloadedExtension;
@@ -60,26 +59,22 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
     /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
     private $registry;
 
-    /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $entityConfigProvider;
-
-    /** @var Translator|\PHPUnit\Framework\MockObject\MockObject */
-    private $translator;
-
     /** @var ChannelDatasourceType */
     private $type;
 
     protected function setUp(): void
     {
         $this->registry = $this->createMock(ManagerRegistry::class);
-        $this->entityConfigProvider = $this->createMock(ConfigProvider::class);
-        $this->translator = $this->createMock(Translator::class);
 
         $this->type = new ChannelDatasourceType($this->registry, self::TEST_ENTITY_NAME);
+
         parent::setUp();
     }
 
-    protected function getExtensions()
+    /**
+     * {@inheritDoc}
+     */
+    protected function getExtensions(): array
     {
         $transportName = 'test transport';
         $assetsHelper = $this->createMock(Packages::class);
@@ -130,42 +125,29 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             ->method('getProvider')
             ->willReturn($cp);
 
-        $validator = new RecursiveValidator(
-            new ExecutionContextFactory(new IdentityTranslator()),
-            new LazyLoadingMetadataFactory(new LoaderChain([])),
-            new ConstraintValidatorFactory()
-        );
-
-        $settingsProvider = $this->createMock(ChannelSettingsProvider::class);
-
         return [
             new PreloadedExtension(
                 [
                     $this->type,
-                    ChannelType::class                       => $this->getChannelType($registry),
-                    IntegrationTypeSelectType::class         => new IntegrationTypeSelectType($registry, $assetsHelper),
-                    OrganizationUserAclSelectType::class     => new OrganizationUserAclSelectType(),
-                    UserAclSelectType::class                 => new UserAclSelectType(),
-                    OroEntitySelectOrCreateInlineType::class => new OroEntitySelectOrCreateInlineType(
-                        $authorizationChecker,
-                        $cm,
-                        $em,
-                        $searchRegistry
-                    ),
-                    OroJquerySelect2HiddenType::class        => new OroJquerySelect2HiddenType(
-                        $em,
-                        $searchRegistry,
-                        $cp
-                    )
+                    $this->getChannelType($registry),
+                    new IntegrationTypeSelectType($registry, $assetsHelper),
+                    new OrganizationUserAclSelectType(),
+                    new UserAclSelectType(),
+                    new OroEntitySelectOrCreateInlineType($authorizationChecker, $cm, $em, $searchRegistry),
+                    new OroJquerySelect2HiddenType($em, $searchRegistry, $cp)
                 ],
                 [
                     FormType::class    => [
                         new FormTypeCsrfExtension($this->createMock(CsrfTokenManagerInterface::class)),
-                        new FormTypeValidatorExtension($validator),
-                        new TooltipFormExtension($this->entityConfigProvider, $this->translator),
+                        new FormTypeValidatorExtension(new RecursiveValidator(
+                            new ExecutionContextFactory(new IdentityTranslator()),
+                            new LazyLoadingMetadataFactory(new LoaderChain([])),
+                            new ConstraintValidatorFactory()
+                        )),
+                        new TooltipFormExtensionStub($this)
                     ],
                     ChannelType::class => [
-                        new IntegrationTypeExtension($settingsProvider)
+                        new IntegrationTypeExtension($this->createMock(ChannelSettingsProvider::class))
                     ]
                 ]
             )
@@ -187,7 +169,10 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         $form->submit(
             [
                 'identifier' => self::TEST_ID,
-                'data'       => json_encode(['name' => self::TEST_SUBMITTED_NAME, 'type' => self::TEST_TYPE])
+                'data'       => json_encode(
+                    ['name' => self::TEST_SUBMITTED_NAME, 'type' => self::TEST_TYPE],
+                    JSON_THROW_ON_ERROR
+                )
             ]
         );
 
