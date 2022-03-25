@@ -412,14 +412,14 @@ datagrids:
                 birthday:
                     type: date
                     data_name: c.birthday
-                    enabled: false
+                    renderable: false
                 gender:
                     type: choice
                     data_name: c.gender
                     options:
                         field_options:
                             choices: "@oro_user.gender_provider->getChoices"
-                    enabled: false
+                    renderable: false
                 email:
                     type: string
                     data_name: email.email
@@ -429,31 +429,31 @@ datagrids:
                 fax:
                     type: string
                     data_name: c.fax
-                    enabled: false
+                    renderable: false
                 skype:
                     type: string
                     data_name: c.skype
-                    enabled: false
+                    renderable: false
                 twitter:
                     type: string
                     data_name: c.twitter
-                    enabled: false
+                    renderable: false
                 facebook:
                     type: string
                     data_name: c.facebook
-                    enabled: false
+                    renderable: false
                 linkedIn:
                     type: string
                     data_name: c.linkedIn
-                    enabled: false
+                    renderable: false
                 googlePlus:
                     type: string
                     data_name: c.googlePlus
-                    enabled: false
+                    renderable: false
                 source:
                     type: entity
                     data_name: contactSource.name
-                    enabled: false
+                    renderable: false
                     options:
                         field_options:
                             class: Oro\Bundle\ContactBundle\Entity\Source
@@ -462,7 +462,7 @@ datagrids:
                 countryName:
                     type: choice
                     data_name: address.country
-                    enabled: false
+                    renderable: false
                     options:
                         field_options:
                             choices: "@oro_address.provider.country->getCountriesNames"
@@ -470,30 +470,30 @@ datagrids:
                 regionLabel:
                     type: string
                     data_name: regionLabel
-                    enabled: false
+                    renderable: false
                 addressPostalCode:
                     type: string
                     data_name: addressPostalCode
-                    enabled: false
+                    renderable: false
                 addressCity:
                     type: string
                     data_name: addressCity
-                    enabled: false
+                    renderable: false
                 addressStreet:
                     type: string
                     data_name: addressStreet
-                    enabled: false
+                    renderable: false
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
                 updatedAt:
                     type:      datetime
                     data_name: c.updatedAt
-                    enabled: false
+                    renderable: false
                 pictureFilename:
                     type:      string
                     data_name: pictureFilename
-                    enabled: false
+                    renderable: false
                 owner:
                     type: choice-tree
                     label: oro.user.owner.label
@@ -507,11 +507,11 @@ datagrids:
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
                     className: 'Oro\Bundle\UserBundle\Entity\User'
-                    enabled: false
+                    renderable: false
                 reportsName:
                     type: string
                     data_name: reportsName
-                    enabled: false
+                    renderable: false
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
@@ -760,7 +760,7 @@ datagrids:
                 contactSourceLabel:
                     type: entity
                     data_name: contactSource.name
-                    enabled: false
+                    renderable: false
                     options:
                         field_options:
                             class: Oro\Bundle\ContactBundle\Entity\Source
@@ -769,7 +769,7 @@ datagrids:
                 countryName:
                     type: entity
                     data_name: address.country
-                    enabled: false
+                    renderable: false
                     options:
                         field_options:
                             class: Oro\Bundle\AddressBundle\Entity\Country
@@ -779,11 +779,11 @@ datagrids:
                 regionLabel:
                     type: string
                     data_name: regionLabel
-                    enabled: false
+                    renderable: false
                 addressPostalCode:
                     type: string
                     data_name: addressPostalCode
-                    enabled: false
+                    renderable: false
         properties:
             id: ~
         options:
@@ -872,7 +872,7 @@ datagrids:
                 contactSourceLabel:
                     type: entity
                     data_name: contactSource.name
-                    enabled: false
+                    renderable: false
                     options:
                         field_options:
                             class: Oro\Bundle\ContactBundle\Entity\Source
@@ -881,7 +881,7 @@ datagrids:
                 countryName:
                     type: entity
                     data_name: address.country
-                    enabled: false
+                    renderable: false
                     options:
                         field_options:
                             class: Oro\Bundle\AddressBundle\Entity\Country
@@ -891,11 +891,11 @@ datagrids:
                 regionLabel:
                     type: string
                     data_name: regionLabel
-                    enabled: false
+                    renderable: false
                 addressPostalCode:
                     type: string
                     data_name: addressPostalCode
-                    enabled: false
+                    renderable: false
         options:
             entityHint: oro.contact.entity_plural_label
             entity_pagination: true
