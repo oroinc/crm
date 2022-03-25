@@ -208,15 +208,15 @@ datagrids:
                 updatedAt:
                     type: datetime
                     data_name: o.updatedAt
-                    enabled: false
+                    renderable: false
                 contactName:
                     type: string
                     data_name: contactName
-                    enabled: false
+                    renderable: false
                 closeRevenue:
                     type: currency
                     data_name: closeRevenue
-                    enabled: false
+                    renderable: false
                 closeRevenueCurrency:
                     type: choice
                     data_name: closeRevenueCurrency
@@ -225,11 +225,11 @@ datagrids:
                         field_options:
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
                             multiple: true
-                    enabled: false
+                    renderable: false
                 closeReasonLabel:
                     type: entity
                     data_name: closeReason.name
-                    enabled: false
+                    renderable: false
                     options:
                         field_options:
                             class: Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
@@ -591,36 +591,36 @@ datagrids:
                 createdAt:
                      type: datetime
                      data_name: l.createdAt
-                     enabled: false
+                     renderable: false
                 updatedAt:
                     type: datetime
                     data_name: l.updatedAt
-                    enabled: false
+                    renderable: false
                 jobTitle:
                     type: string
                     data_name: l.jobTitle
-                    enabled: false
+                    renderable: false
                 companyName:
                     type: string
                     data_name: l.companyName
-                    enabled: false
+                    renderable: false
                 industry:
                     type: string
                     data_name: l.industry
-                    enabled: false
+                    renderable: false
                 website:
                     type: string
                     data_name: l.website
-                    enabled: false
+                    renderable: false
                 numberOfEmployees:
                     type: number-range
                     data_name: l.numberOfEmployees
-                    enabled: false
+                    renderable: false
                 source:
                     type: enum
                     enum_code: lead_source
                     data_name: source
-                    enabled: false
+                    renderable: false
                 email:
                     type: string
                     data_name: email.email
@@ -630,7 +630,7 @@ datagrids:
                 countryName:
                     type: entity
                     data_name: address.country
-                    enabled: false
+                    renderable: false
                     options:
                         lazy: true
                         field_options:
@@ -641,19 +641,19 @@ datagrids:
                 regionLabel:
                     type: string
                     data_name: regionLabel
-                    enabled: false
+                    renderable: false
                 addressPostalCode:
                     type: string
                     data_name: addressPostalCode
-                    enabled: false
+                    renderable: false
                 addressCity:
                     type: string
                     data_name: addressCity
-                    enabled: false
+                    renderable: false
                 addressStreet:
                     type: string
                     data_name: addressStreet
-                    enabled: false
+                    renderable: false
                 owner:
                     type: choice-tree
                     label: oro.user.owner.label
@@ -664,7 +664,7 @@ datagrids:
                 contactName:
                     type: string
                     data_name: contactName
-                    enabled: false
+                    renderable: false
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
@@ -673,11 +673,11 @@ datagrids:
                 twitter:
                     type: string
                     data_name: l.twitter
-                    enabled: false
+                    renderable: false
                 linkedIn:
                     type: string
                     data_name: l.linkedIn
-                    enabled: false
+                    renderable: false
         views_list: "@oro_sales.lead.datagrid_view_list"
 
     sales-funnel-grid:
@@ -937,7 +937,7 @@ datagrids:
                  id:
                      type: number-range
                      data_name: lead.id
-                     enabled: false
+                     renderable: false
                  name:
                      type: string
                      data_name: lead.name
@@ -956,7 +956,7 @@ datagrids:
                  countryName:
                      type: entity
                      data_name: address.country
-                     enabled: false
+                     renderable: false
                      options:
                          lazy: true
                          field_options:
@@ -967,11 +967,11 @@ datagrids:
                  regionLabel:
                      type: string
                      data_name: regionLabel
-                     enabled: false
+                     renderable: false
                  addressPostalCode:
                      type: string
                      data_name: addressPostalCode
-                     enabled: false
+                     renderable: false
 
     # opportunities with "In progress" status for Sales Funnel flow
     sales-funnel-opportunity-grid:
@@ -1037,7 +1037,7 @@ datagrids:
                 id:
                     type: number-range
                     data_name: opportunity.id
-                    enabled: false
+                    renderable: false
                 name:
                     type: string
                     data_name: opportunity.name
@@ -1272,7 +1272,7 @@ datagrids:
                     type: choice-tree
                     data_name: c.owner
                     label: oro.user.owner.label
-                    enabled: false
+                    renderable: false
                     autocomplete_alias: assigned_to_organization_users
                     renderedPropertyName: 'fullName'
                     className: 'Oro\Bundle\UserBundle\Entity\User'
@@ -1281,19 +1281,19 @@ datagrids:
                     type: choice-business-unit
                     data_name: c.owner
                     className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
-                    enabled: false
+                    renderable: false
                 accountName:
                     type: string
                     data_name: accountName
-                    enabled: false
+                    renderable: false
                 contactName:
                     type: string
                     data_name: contactName
-                    enabled: false
+                    renderable: false
                 baCountryName:
                     type: entity
                     data_name: ba.country
-                    enabled: false
+                    renderable: false
                     options:
                         lazy: true
                         field_options:
@@ -1304,23 +1304,23 @@ datagrids:
                 baRegionLabel:
                     type: string
                     data_name: baRegionLabel
-                    enabled: false
+                    renderable: false
                 baCity:
                     type: string
                     data_name: baCity
-                    enabled: false
+                    renderable: false
                 baStreet:
                     type: string
                     data_name: baStreet
-                    enabled: false
+                    renderable: false
                 baPostalCode:
                     type: string
                     data_name: baPostalCode
-                    enabled: false
+                    renderable: false
                 saCountryName:
                     type: entity
                     data_name: sa.country
-                    enabled: false
+                    renderable: false
                     options:
                         lazy: true
                         field_options:
@@ -1331,19 +1331,19 @@ datagrids:
                 saRegionLabel:
                     type: string
                     data_name: saRegionLabel
-                    enabled: false
+                    renderable: false
                 saCity:
                     type: string
                     data_name: saCity
-                    enabled: false
+                    renderable: false
                 saStreet:
                     type: string
                     data_name: saStreet
-                    enabled: false
+                    renderable: false
                 saPostalCode:
                     type: string
                     data_name: saPostalCode
-                    enabled: false
+                    renderable: false
         properties:
             id: ~
             view_link:
@@ -1558,7 +1558,7 @@ datagrids:
                  countryName:
                     type: entity
                     data_name: address.country
-                    enabled: false
+                    renderable: false
                     options:
                         lazy: true
                         field_options:
@@ -1569,11 +1569,11 @@ datagrids:
                  regionLabel:
                     type: string
                     data_name: regionLabel
-                    enabled: false
+                    renderable: false
                  addressPostalCode:
                     type: string
                     data_name: addressPostalCode
-                    enabled: false
+                    renderable: false
 
     base-sales-b2bcustomer-opportunities-grid:
         extended_entity_name: Oro\Bundle\SalesBundle\Entity\Opportunity
@@ -2295,7 +2295,7 @@ datagrids:
                  countryName:
                     type: entity
                     data_name: address.country
-                    enabled: false
+                    renderable: false
                     options:
                         lazy: true
                         field_options:
@@ -2306,8 +2306,8 @@ datagrids:
                  regionLabel:
                     type: string
                     data_name: regionLabel
-                    enabled: false
+                    renderable: false
                  addressPostalCode:
                     type: string
                     data_name: addressPostalCode
-                    enabled: false
+                    renderable: false
