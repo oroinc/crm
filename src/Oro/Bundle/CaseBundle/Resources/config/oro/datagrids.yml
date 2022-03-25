@@ -114,7 +114,7 @@ datagrids:
                 source:
                     label: oro.case.datagrid.source.label
                     type: entity
-                    enabled: false
+                    renderable: false
                     data_name: source.name
                     options:
                         field_options:
@@ -127,13 +127,13 @@ datagrids:
                     autocomplete_alias: assigned_to_organization_users
                     renderedPropertyName: 'fullName'
                     className: 'Oro\Bundle\UserBundle\Entity\User'
-                    enabled: false
+                    renderable: false
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: caseEntity.owner
                     className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
-                    enabled: false
+                    renderable: false
         properties:
             id: ~
             view_link:
@@ -177,12 +177,12 @@ datagrids:
                     label: oro.case.datagrid.related_contact.label
                     type: string
                     data_name: relatedContactName
-                    enabled: false
+                    renderable: false
                 relatedAccount:
                     label: oro.case.datagrid.related_account.label
                     type: string
                     data_name: relatedAccountName
-                    enabled: false
+                    renderable: false
         options:
             entity_pagination: true
 
@@ -198,7 +198,7 @@ datagrids:
                     label: oro.case.datagrid.related_contact.label
                     type: string
                     data_name: relatedContactName
-                    enabled: false
+                    renderable: false
         source:
             query:
                 where:
@@ -215,7 +215,7 @@ datagrids:
                     label: oro.case.datagrid.related_account.label
                     type: string
                     data_name: relatedAccountName
-                    enabled: false
+                    renderable: false
         source:
             query:
                 where:

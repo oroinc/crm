@@ -53,27 +53,27 @@ datagrids:
                 timesContacted:
                     type: number-range
                     data_name: timesContacted
-                    enabled: false
+                    renderable: false
                 timesContactedIn:
                     type: number-range
                     data_name: timesContactedIn
-                    enabled: false
+                    renderable: false
                 timesContactedOut:
                     type: number-range
                     data_name: timesContactedOut
-                    enabled: false
+                    renderable: false
                 lastContactedDate:
                     type: datetime
                     data_name: lastContactedDate
-                    enabled: false
+                    renderable: false
                 lastContactedDateIn:
                     type: datetime
                     data_name: lastContactedDateIn
-                    enabled: false
+                    renderable: false
                 lastContactedDateOut:
                     type: datetime
                     data_name: lastContactedDateOut
-                    enabled: false
+                    renderable: false
 
     activity-contact-days-since-last-contact-hidden-mixin:
         source:
@@ -94,7 +94,7 @@ datagrids:
                 daysSinceLastContact:
                     type: number-range
                     data_name: daysSinceLastContact
-                    enabled: false
+                    renderable: false
 
     activity-contact-last-contacted-date-data-mixin:
         source:
