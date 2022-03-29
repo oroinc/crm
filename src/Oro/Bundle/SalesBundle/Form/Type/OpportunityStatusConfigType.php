@@ -83,7 +83,6 @@ class OpportunityStatusConfigType extends AbstractType
                 'items' => $items,
                 'config' => $config,
                 'config_model' => $options['config_model'],
-                'config_manager' => $this->entityConfigManager,
                 'label' => false,
             ]
         );
