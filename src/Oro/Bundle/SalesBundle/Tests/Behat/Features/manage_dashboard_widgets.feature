@@ -1,3 +1,6 @@
+@ticket-CRM-9032
+@ticket-CRM-9079
+@ticket-BB-17275
 @fixture-OroSalesBundle:leads_data.yml
 @fixture-OroSalesBundle:opportunities_data.yml
 Feature: Manage dashboard widgets
@@ -74,6 +77,15 @@ Feature: Manage dashboard widgets
     When I click "First Widget Add Button"
     And I click "Close" in modal window
     Then I should see "Opportunity Statistics" widget on dashboard
+
+  Scenario: Check availability additional option of custom date range
+    Given I click "Opportunity Statistics Actions"
+    When I click "Configure" in "Opportunity Statistics" widget
+    And I should not see an "Date Custom Part" element
+    And I fill form with:
+      | Date range | Custom |
+    Then I should see an "Date Custom Part" element
+    And I click "Close" in modal window
 
   Scenario: Check configuration of Opportunity Statistics widget
     Given I click "Opportunity Statistics Actions"
