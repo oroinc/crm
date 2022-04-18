@@ -31,6 +31,11 @@ services:
             - 'Oro\Bundle\SalesBundle\Entity\LeadEmail'
             - "@doctrine.orm.entity_manager"
 
+    oro_sales.lead.email.owner.provider:
+        class: Oro\Bundle\SalesBundle\Entity\Provider\EmailOwnerProvider
+        tags:
+            - { name: oro_email.owner.provider, order: 6 }
+
     oro_sales.salesfunnel.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         public: true
