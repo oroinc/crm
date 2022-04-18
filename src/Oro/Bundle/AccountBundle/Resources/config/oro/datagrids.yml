@@ -356,7 +356,7 @@ datagrids:
                 countryName:
                     type: entity
                     data_name: address.country
-                    enabled: false
+                    renderable: false
                     options:
                         field_options:
                             class: Oro\Bundle\AddressBundle\Entity\Country
@@ -366,11 +366,11 @@ datagrids:
                 regionLabel:
                     type: string
                     data_name: regionLabel
-                    enabled: false
+                    renderable: false
                 addressPostalCode:
                     type: string
                     data_name: addressPostalCode
-                    enabled: false
+                    renderable: false
         options:
             routerEnabled: false
             rowSelection:

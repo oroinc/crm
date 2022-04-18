@@ -24,7 +24,7 @@ class ControllersCrmTest extends BaseControllersTest
     /**
      * @dataProvider exportDataProvider
      */
-    public function testExport()
+    public function testExport(): void
     {
         $this->markTestSkipped('Skipped by BAP-2946');
     }
