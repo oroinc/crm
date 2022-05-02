@@ -9,15 +9,10 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-/**
- * This is the class that loads and manages AccountBundle service configuration
- */
 class OroAccountExtension extends Extension implements PrependExtensionInterface
 {
-    public const ALIAS = 'oro_account';
-
     /**
-     * @throws \Exception If something went wrong
+     * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -28,11 +23,9 @@ class OroAccountExtension extends Extension implements PrependExtensionInterface
         $loader->load('controllers_api.yml');
     }
 
-    public function getAlias()
-    {
-        return self::ALIAS;
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function prepend(ContainerBuilder $container)
     {
         if ('test' === $container->getParameter('kernel.environment')) {

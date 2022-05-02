@@ -6,9 +6,6 @@ use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * This is the class that validates and merges configuration from your config files
- */
 class Configuration implements ConfigurationInterface
 {
     /**
