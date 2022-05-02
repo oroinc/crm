@@ -18,11 +18,4 @@ class OroAccountExtensionTest extends ExtensionTestCase
         ];
         $this->assertDefinitionsLoaded($expectedDefinitions);
     }
-
-    public function testGetAlias(): void
-    {
-        $extension = new OroAccountExtension();
-
-        self::assertEquals('oro_account', $extension->getAlias());
-    }
 }
