@@ -29,6 +29,7 @@
                 </span>
                 </div>
             </div>
+            {{ include('@OroPlatform/Collector/collectors_toggle.html.twig') }}
         {% endblock text %}
     {% endset %}
     {% include '@WebProfiler/Profiler/toolbar_item.html.twig' with {'link': false, additional_classes: 'sf-toolbar-block-right'} %}
