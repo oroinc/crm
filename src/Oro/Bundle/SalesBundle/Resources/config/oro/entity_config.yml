@@ -1,6 +1,6 @@
 entity_config:
     customer:
-        # You can find out more about attributes in the documentation: https://doc.oroinc.com/backend/configuration/annotation/config.html#customer
+        # You can find out more about attributes in the documentation: https://doc.oroinc.com/backend/configuration/annotation/config/#customer
         entity:
             items:
                 enabled:
