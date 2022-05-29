@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Dashboard\Provider;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
@@ -93,7 +93,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $this->assertCount(6, $data);
     }
 
-    public function opportunitiesBySourceDataProvider()
+    public function opportunitiesBySourceDataProvider(): array
     {
         return [
             ['data' => [
@@ -108,13 +108,9 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         ];
     }
 
-    /**
-     * @param array $data
-     * @return WidgetOpportunityByLeadSourceProvider
-     */
-    private function getProvider(array $data)
+    private function getProvider(array $data): WidgetOpportunityByLeadSourceProvider
     {
-        $doctrine = $this->getDoctrineMock($data);
+        $doctrine = $this->getDoctrine($data);
         $aclHelper = $this->createMock(AclHelper::class);
         $processor = $this->createMock(DateFilterProcessor::class);
 
@@ -140,18 +136,14 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         );
     }
 
-    /**
-     * @param array $data
-     * @return Registry|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private function getDoctrineMock(array $data)
+    private function getDoctrine(array $data): ManagerRegistry
     {
         $repo = $this->createMock(OpportunityRepository::class);
         $repo->expects($this->any())
             ->method('getOpportunitiesCountGroupByLeadSource')
             ->willReturn($data);
 
-        $doctrine = $this->createMock(Registry::class);
+        $doctrine = $this->createMock(ManagerRegistry::class);
         $doctrine->expects($this->any())
             ->method('getRepository')
             ->willReturn($repo);

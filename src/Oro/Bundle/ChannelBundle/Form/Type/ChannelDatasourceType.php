@@ -2,37 +2,31 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Type;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
 use Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * The form type to select channel datasource.
+ */
 class ChannelDatasourceType extends AbstractType
 {
-    const NAME = 'oro_channel_datasource_form';
+    private ManagerRegistry $doctrine;
+    private string $integrationEntityClass;
 
-    /** @var ManagerRegistry */
-    protected $registry;
-
-    /** @var string */
-    protected $integrationEntityFQCN;
-
-    /**
-     * @param ManagerRegistry $registry
-     * @param string          $integrationEntityFQCN
-     */
-    public function __construct(ManagerRegistry $registry, $integrationEntityFQCN)
+    public function __construct(ManagerRegistry $doctrine, string $integrationEntityClass)
     {
-        $this->registry              = $registry;
-        $this->integrationEntityFQCN = $integrationEntityFQCN;
+        $this->doctrine = $doctrine;
+        $this->integrationEntityClass = $integrationEntityClass;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -44,21 +38,21 @@ class ChannelDatasourceType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return self::NAME;
+        return 'oro_channel_datasource_form';
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $em          = $this->registry->getManagerForClass($this->integrationEntityFQCN);
+        $em = $this->doctrine->getManagerForClass($this->integrationEntityClass);
         $formFactory = $builder->getFormFactory();
 
         $data = $builder->create('data', HiddenType::class);
         $data->addViewTransformer(new ArrayToJsonTransformer());
         $identifier = $builder->create('identifier', HiddenType::class);
-        $identifier->addViewTransformer(new EntityToIdTransformer($em, $this->integrationEntityFQCN));
+        $identifier->addViewTransformer(new EntityToIdTransformer($em, $this->integrationEntityClass));
         $builder->addViewTransformer(new DatasourceDataTransformer($formFactory));
 
         $builder->add($data);
@@ -68,7 +62,7 @@ class ChannelDatasourceType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {

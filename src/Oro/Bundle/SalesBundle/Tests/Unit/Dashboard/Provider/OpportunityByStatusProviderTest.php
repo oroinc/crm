@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Dashboard\Provider;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -30,7 +29,7 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
     ];
 
     /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    private $registry;
+    private $doctrine;
 
     /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $aclHelper;
@@ -40,11 +39,11 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->registry = $this->createMock(Registry::class);
+        $this->doctrine = $this->createMock(ManagerRegistry::class);
         $this->aclHelper = $this->createMock(AclHelper::class);
 
         $this->provider = new OpportunityByStatusProvider(
-            $this->registry,
+            $this->doctrine,
             $this->aclHelper,
             $this->createMock(WidgetProviderFilterManager::class),
             $this->createMock(DateFilterProcessor::class),
@@ -58,8 +57,7 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetOpportunitiesGroupedByStatusDQL(WidgetOptionBag $widgetOptions, string $expectation)
     {
         $opportunityQB = new QueryBuilder($this->createMock(EntityManagerInterface::class));
-        $opportunityQB
-            ->from(Opportunity::class, 'o', null);
+        $opportunityQB->from(Opportunity::class, 'o');
 
         $statusesQuery = $this->createMock(AbstractQuery::class);
         $statusesQB = $this->createMock(QueryBuilder::class);
@@ -80,7 +78,7 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
             ->withConsecutive(['o'], ['s'])
             ->willReturnOnConsecutiveCalls($opportunityQB, $statusesQB);
 
-        $this->registry->expects($this->exactly(2))
+        $this->doctrine->expects($this->exactly(2))
             ->method('getRepository')
             ->withConsecutive(
                 ['OroSalesBundle:Opportunity'],
@@ -173,8 +171,7 @@ DQL
         array $expected
     ) {
         $opportunityQB = new QueryBuilder($this->createMock(EntityManagerInterface::class));
-        $opportunityQB
-            ->from(Opportunity::class, 'o', null);
+        $opportunityQB->from(Opportunity::class, 'o');
 
         $statusesQuery = $this->createMock(AbstractQuery::class);
         $statusesQB = $this->createMock(QueryBuilder::class);
@@ -195,7 +192,7 @@ DQL
             ->withConsecutive(['o'], ['s'])
             ->willReturnOnConsecutiveCalls($opportunityQB, $statusesQB);
 
-        $this->registry->expects($this->exactly(2))
+        $this->doctrine->expects($this->exactly(2))
             ->method('getRepository')
             ->withConsecutive(
                 ['OroSalesBundle:Opportunity'],

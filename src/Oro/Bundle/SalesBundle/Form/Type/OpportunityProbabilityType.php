@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\EntityBundle\ORM\Registry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
@@ -12,27 +12,23 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Range;
 
+/**
+ * The form type for an opportunity probability.
+ */
 class OpportunityProbabilityType extends AbstractType
 {
     const NAME = 'oro_sales_opportunity_probability';
 
-    /**
-     * @var array List of statuses which have non-editable probability
-     */
+    /** @var array List of statuses which have non-editable probability */
     public static $immutableProbabilityStatuses = ['won', 'lost'];
 
-    /** @var EnumTypeHelper */
-    protected $typeHelper;
+    private EnumTypeHelper $typeHelper;
+    private ManagerRegistry $doctrine;
 
-    /** @var array */
-    private $enumStatuses;
-
-    public function __construct(EnumTypeHelper $typeHelper, Registry $registry)
+    public function __construct(EnumTypeHelper $typeHelper, ManagerRegistry $doctrine)
     {
-        $enumCode = $typeHelper->getEnumCode(Opportunity::class, 'status');
-        $enumValueClassName = ExtendHelper::buildEnumValueClassName($enumCode);
-
-        $this->enumStatuses = $registry->getRepository($enumValueClassName)->findBy([], ['priority' => 'ASC']);
+        $this->typeHelper = $typeHelper;
+        $this->doctrine = $doctrine;
     }
 
     /**
@@ -40,11 +36,9 @@ class OpportunityProbabilityType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            [
-                'validation_groups' => null,
-            ]
-        );
+        $resolver->setDefaults([
+            'validation_groups' => null
+        ]);
     }
 
     /**
@@ -54,11 +48,11 @@ class OpportunityProbabilityType extends AbstractType
     {
         $constraint = new Range(['min' => 0, 'max' => 100]);
         // Generate a probability field for each status
-        foreach ($this->enumStatuses as $status) {
-            $disabled = in_array($status->getId(), self::$immutableProbabilityStatuses);
+        $enumStatuses = $this->getEnumStatuses();
+        foreach ($enumStatuses as $status) {
+            $disabled = \in_array($status->getId(), self::$immutableProbabilityStatuses, true);
 
             $attr = [];
-
             if ($disabled) {
                 $attr['readonly'] = true;
             }
@@ -92,5 +86,15 @@ class OpportunityProbabilityType extends AbstractType
     public function getBlockPrefix()
     {
         return self::NAME;
+    }
+
+    private function getEnumStatuses(): array
+    {
+        $enumValueClassName = ExtendHelper::buildEnumValueClassName(
+            $this->typeHelper->getEnumCode(Opportunity::class, 'status')
+        );
+
+        return $this->doctrine->getRepository($enumValueClassName)
+            ->findBy([], ['priority' => 'ASC']);
     }
 }
