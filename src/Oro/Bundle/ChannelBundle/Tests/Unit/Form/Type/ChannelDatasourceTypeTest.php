@@ -6,6 +6,7 @@ use Doctrine\Inflector\Rules\English\InflectorFactory;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider as ChannelSettingsProvider;
@@ -32,7 +33,6 @@ use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
 use Oro\Component\Testing\Unit\PreloadedExtension;
 use Oro\Component\Testing\Unit\TestContainerBuilder;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Csrf\Type\FormTypeCsrfExtension;
@@ -57,16 +57,16 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
     private const TEST_ENTITY_NAME = 'OroIntegration:Channel';
 
     /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    private $registry;
+    private $doctrine;
 
     /** @var ChannelDatasourceType */
     private $type;
 
     protected function setUp(): void
     {
-        $this->registry = $this->createMock(ManagerRegistry::class);
+        $this->doctrine = $this->createMock(ManagerRegistry::class);
 
-        $this->type = new ChannelDatasourceType($this->registry, self::TEST_ENTITY_NAME);
+        $this->type = new ChannelDatasourceType($this->doctrine, self::TEST_ENTITY_NAME);
 
         parent::setUp();
     }
@@ -203,7 +203,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         $entity->setName(self::TEST_NAME);
         $entity->setType(self::TEST_TYPE);
 
-        $this->registry->expects($this->once())
+        $this->doctrine->expects($this->once())
             ->method('getManagerForClass')
             ->with(self::TEST_ENTITY_NAME)
             ->willReturn($em);

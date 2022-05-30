@@ -2,13 +2,16 @@
 
 namespace Oro\Bundle\ChannelBundle\Builder;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 
+/**
+ * The builder for a {@see \Oro\Bundle\ChannelBundle\Entity\Channel} object.
+ */
 class ChannelObjectBuilder
 {
     const CUSTOM_CHANNEL_TYPE = 'custom';
@@ -34,7 +37,7 @@ class ChannelObjectBuilder
     /** @var bool */
     protected $populateEntities = false;
 
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     protected $em;
 
     /** @var SettingsProvider */
@@ -46,17 +49,17 @@ class ChannelObjectBuilder
     /** @var \DateTime */
     protected $createdAt;
 
-    public function __construct(EntityManager $em, SettingsProvider $settingsProvider, Channel $channel)
+    public function __construct(EntityManagerInterface $em, SettingsProvider $settingsProvider, Channel $channel)
     {
-        $this->em               = $em;
+        $this->em = $em;
         $this->settingsProvider = $settingsProvider;
-        $this->channel          = $channel;
-        $this->channelType      = $channel->getChannelType();
-        $this->dataSource       = $channel->getDataSource();
-        $this->name             = $channel->getName();
-        $this->owner            = $channel->getOwner();
-        $this->entities         = $channel->getEntities();
-        $this->status           = (bool) $channel->getStatus();
+        $this->channel = $channel;
+        $this->channelType = $channel->getChannelType();
+        $this->dataSource = $channel->getDataSource();
+        $this->name = $channel->getName();
+        $this->owner = $channel->getOwner();
+        $this->entities = $channel->getEntities();
+        $this->status = (bool)$channel->getStatus();
     }
 
     /**
@@ -213,7 +216,7 @@ class ChannelObjectBuilder
      */
     protected function getDefaultOrganization()
     {
-        $repo    = $this->em->getRepository('OroOrganizationBundle:Organization');
+        $repo = $this->em->getRepository(Organization::class);
         $default = $repo->findOneBy(['name' => LoadOrganizationAndBusinessUnitData::MAIN_ORGANIZATION]);
 
         if (!$default) {

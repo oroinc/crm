@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use Doctrine\Persistence\ObjectRepository;
-use Oro\Bundle\EntityBundle\ORM\Registry;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
@@ -81,21 +81,20 @@ class OpportunityProbabilityTypeTest extends \PHPUnit\Framework\TestCase
     private function getFormType(array $enumOptions): OpportunityProbabilityType
     {
         $enumTypeHelper = $this->createMock(EnumTypeHelper::class);
-        $objectRepository = $this->createMock(ObjectRepository::class);
-        $registry = $this->createMock(Registry::class);
+        $repository = $this->createMock(EntityRepository::class);
+        $doctrine = $this->createMock(ManagerRegistry::class);
 
-        $enumTypeHelper->expects($this->once())
+        $enumTypeHelper->expects($this->any())
             ->method('getEnumCode')
             ->willReturn('opportunity_status');
 
-        $objectRepository->expects($this->once())
+        $doctrine->expects($this->any())
+            ->method('getRepository')
+            ->willReturn($repository);
+        $repository->expects($this->any())
             ->method('findBy')
             ->willReturn($enumOptions);
 
-        $registry->expects($this->any())
-            ->method('getRepository')
-            ->willReturn($objectRepository);
-
-        return new OpportunityProbabilityType($enumTypeHelper, $registry);
+        return new OpportunityProbabilityType($enumTypeHelper, $doctrine);
     }
 }

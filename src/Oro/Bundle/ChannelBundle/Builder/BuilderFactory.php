@@ -2,44 +2,31 @@
 
 namespace Oro\Bundle\ChannelBundle\Builder;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 /**
- * The factory to create ChannelObjectBuilder.
+ * The factory to create a {@see ChannelObjectBuilder}.
  */
 class BuilderFactory
 {
-    /** @var ManagerRegistry */
-    private $registry;
+    private ManagerRegistry $doctrine;
+    private SettingsProvider $settingsProvider;
 
-    /** @var SettingsProvider */
-    private $settingsProvider;
-
-    public function __construct(ManagerRegistry $registry, SettingsProvider $settingsProvider)
+    public function __construct(ManagerRegistry $doctrine, SettingsProvider $settingsProvider)
     {
-        $this->registry = $registry;
+        $this->doctrine = $doctrine;
         $this->settingsProvider = $settingsProvider;
     }
 
-    /**
-     * @param Channel $channel
-     *
-     * @return ChannelObjectBuilder
-     */
-    public function createBuilderForChannel(Channel $channel)
+    public function createBuilderForChannel(Channel $channel): ChannelObjectBuilder
     {
-        return new ChannelObjectBuilder($this->registry->getManager(), $this->settingsProvider, $channel);
+        return $this->createChannelObjectBuilder($channel);
     }
 
-    /**
-     * @param Integration $integration
-     *
-     * @return ChannelObjectBuilder
-     */
-    public function createBuilderForIntegration(Integration $integration)
+    public function createBuilderForIntegration(Integration $integration): ChannelObjectBuilder
     {
         $channel = new Channel();
         $channelType = $this->getChannelTypeForIntegration($integration->getType());
@@ -74,7 +61,7 @@ class BuilderFactory
         $integration->setEditMode(Integration::EDIT_MODE_DISALLOW);
         $integration->setConnectors($connectors);
 
-        $builder = new ChannelObjectBuilder($this->registry->getManager(), $this->settingsProvider, $channel);
+        $builder = $this->createChannelObjectBuilder($channel);
         $builder
             ->setChannelType($channelType)
             ->setEntities($entities);
@@ -82,20 +69,12 @@ class BuilderFactory
         return $builder;
     }
 
-    /**
-     * @return ChannelObjectBuilder
-     */
-    public function createBuilder()
+    public function createBuilder(): ChannelObjectBuilder
     {
-        return new ChannelObjectBuilder($this->registry->getManager(), $this->settingsProvider, new Channel());
+        return $this->createChannelObjectBuilder(new Channel());
     }
 
-    /**
-     * @param string $integrationType
-     *
-     * @return string|null
-     */
-    private function getChannelTypeForIntegration($integrationType)
+    private function getChannelTypeForIntegration(string $integrationType): ?string
     {
         $channelTypes = $this->settingsProvider->getChannelTypes();
         foreach ($channelTypes as $channelType => $config) {
@@ -105,5 +84,10 @@ class BuilderFactory
         }
 
         return null;
+    }
+
+    private function createChannelObjectBuilder(Channel $channel): ChannelObjectBuilder
+    {
+        return new ChannelObjectBuilder($this->doctrine->getManager(), $this->settingsProvider, $channel);
     }
 }

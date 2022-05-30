@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Provider;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\Repository\ContactRepository;
 use Oro\Bundle\ContactBundle\Provider\EmailRecipientsProvider;
@@ -11,8 +11,8 @@ use Oro\Bundle\EmailBundle\Provider\EmailRecipientsHelper;
 
 class EmailRecipientsProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Registry|\PHPUnit\Framework\MockObject\MockObject */
-    private $registry;
+    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
+    private $doctrine;
 
     /** @var EmailRecipientsHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $emailRecipientsHelper;
@@ -22,11 +22,11 @@ class EmailRecipientsProviderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->registry = $this->createMock(Registry::class);
+        $this->doctrine = $this->createMock(ManagerRegistry::class);
         $this->emailRecipientsHelper = $this->createMock(EmailRecipientsHelper::class);
 
         $this->emailRecipientsProvider = new EmailRecipientsProvider(
-            $this->registry,
+            $this->doctrine,
             $this->emailRecipientsHelper
         );
     }
@@ -38,9 +38,9 @@ class EmailRecipientsProviderTest extends \PHPUnit\Framework\TestCase
     {
         $contactRepository = $this->createMock(ContactRepository::class);
 
-        $this->registry->expects($this->once())
+        $this->doctrine->expects($this->once())
             ->method('getRepository')
-            ->with('OroContactBundle:Contact')
+            ->with(Contact::class)
             ->willReturn($contactRepository);
 
         $this->emailRecipientsHelper->expects($this->once())
