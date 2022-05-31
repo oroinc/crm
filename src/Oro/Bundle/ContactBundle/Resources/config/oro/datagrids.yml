@@ -465,7 +465,7 @@ datagrids:
                     renderable: false
                     options:
                         field_options:
-                            choices: "@oro_address.provider.country->getCountriesNames"
+                            choices: "@oro_address.provider.country->getCountryChoices"
                             translatable_options: false
                 regionLabel:
                     type: string
