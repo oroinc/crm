@@ -39,10 +39,6 @@ Feature: Column names are translated in exported file
       | Formatting          | German (Germany) |
     When I save and close form
     Then I should see "Localization has been saved" flash message
-    And I should see "Translation cache update is required. Click here to update" flash message
-    Then I click "Click here"
-    When I click "Update Cache"
-    Then I should see "Translation Cache has been updated"
     And I go to System/Configuration
     And I follow "System Configuration/General Setup/Localization" on configuration sidebar
     And I fill form with:
