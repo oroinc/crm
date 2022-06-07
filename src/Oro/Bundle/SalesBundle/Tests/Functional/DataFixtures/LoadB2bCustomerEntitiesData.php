@@ -4,7 +4,9 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadB2bCustomerEntitiesData extends AbstractFixture
 {
@@ -30,8 +32,8 @@ class LoadB2bCustomerEntitiesData extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        $user = $manager->getRepository('OroUserBundle:User')->findOneByUsername(self::$owner);
-        $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $user = $manager->getRepository(User::class)->findOneByUsername(self::$owner);
+        $organization = $manager->getRepository(Organization::class)->getFirst();
 
         foreach ($this->b2bCustomersData as $customerName) {
             $contact = new B2bCustomer();
