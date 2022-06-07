@@ -5,6 +5,7 @@ namespace Oro\Bundle\ContactUsBundle\Tests\Functional\Fixtures;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadContactUsBundleFixtures extends AbstractFixture
 {
@@ -20,7 +21,7 @@ class LoadContactUsBundleFixtures extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         $this->em = $manager;
-        $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization = $manager->getRepository(Organization::class)->getFirst();
 
         $contactUsRequest = new ContactRequest();
         $contactUsRequest->setFirstName('fname');

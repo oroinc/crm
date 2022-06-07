@@ -68,7 +68,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     public function load(ObjectManager $manager)
     {
         $this->em = $manager;
-        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->organization = $manager->getRepository(Organization::class)->getFirst();
         $this->securityToken->setToken(new OrganizationToken($this->organization));
 
         $this->createChannel();
@@ -249,7 +249,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     protected function getUser()
     {
         if (empty($this->user)) {
-            $this->user = $this->em->getRepository('OroUserBundle:User')->findOneBy(['username' => 'admin']);
+            $this->user = $this->em->getRepository(User::class)->findOneBy(['username' => 'admin']);
         }
 
         return $this->user;

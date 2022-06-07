@@ -74,7 +74,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      */
     public function load(ObjectManager $manager)
     {
-        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->organization = $manager->getRepository(Organization::class)->getFirst();
         $this->initSupportingEntities($manager);
         $this->loadLeads($manager);
     }
@@ -85,8 +85,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             $this->em = $manager;
         }
 
-        $this->users     = $this->em->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
+        $this->users = $this->em->getRepository(User::class)->findAll();
+        $this->countries = $this->em->getRepository(Country::class)->findAll();
 
         $className     = ExtendHelper::buildEnumValueClassName('lead_source');
         $enumRepo      = $manager->getRepository($className);

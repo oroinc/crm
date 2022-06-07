@@ -5,6 +5,8 @@ namespace Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -64,8 +66,8 @@ class LoadCaseEntityData extends AbstractFixture implements ContainerAwareInterf
     {
         $caseManager = $this->container->get('oro_case.manager');
 
-        $adminUser = $manager->getRepository('OroUserBundle:User')->findOneByUsername('admin');
-        $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $adminUser = $manager->getRepository(User::class)->findOneByUsername('admin');
+        $organization = $manager->getRepository(Organization::class)->getFirst();
 
         foreach ($this->casesData as $caseData) {
             $case = $caseManager->createCase()
