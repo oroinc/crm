@@ -27,30 +27,20 @@ class ChannelSelectTypeTest extends OrmTestCase
         $registry = $this->createMock(ManagerRegistry::class);
 
         $em = $this->getTestEntityManager();
-        $em->getConfiguration()->setMetadataDriverImpl(new AnnotationDriver(
-            new AnnotationReader(),
-            'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
-        ));
-        $em->getConfiguration()->setEntityNamespaces([
-            'OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
-        ]);
+        $em->getConfiguration()->setMetadataDriverImpl(new AnnotationDriver(new AnnotationReader()));
 
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);
 
-        $entityType = new EntityType($registry);
-
-        $channelsProvider = $this->createMock(ChannelsByEntitiesProvider::class);
-
-        $this->type = new ChannelSelectType($channelsProvider);
+        $this->type = new ChannelSelectType($this->createMock(ChannelsByEntitiesProvider::class));
 
         $this->factory = Forms::createFormFactoryBuilder()
             ->addExtensions(
                 [
                     new PreloadedExtension(
                         [
-                            EntityType::class => $entityType,
+                            EntityType::class => new EntityType($registry),
                             $this->type
                         ],
                         []
