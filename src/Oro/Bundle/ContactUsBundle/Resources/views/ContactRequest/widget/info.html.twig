@@ -20,14 +20,16 @@
             {{ ui.renderHtmlProperty('oro.contactus.contactrequest.comment.label'|trans, entity.comment|nl2br) }}
             {{ ui.renderHtmlProperty('oro.contactus.contactrequest.feedback.label'|trans, entity.feedback|nl2br) }}
 
-            {% if entity.opportunity %}
+            {% set opportunityResourceEnabled = feature_resource_enabled('Oro\\Bundle\\SalesBundle\\Entity\\Opportunity', 'entities') %}
+            {% if entity.opportunity and opportunityResourceEnabled %}
                 {{ ui.renderHtmlProperty(
                     'oro.contactus.contactrequest.opportunity.label'|trans,
                     ui.entityViewLink(entity.opportunity, entity.opportunity.name, 'oro_sales_opportunity_view')
                 ) }}
             {% endif %}
 
-            {% if entity.lead %}
+            {% set leadResourceEnabled = feature_resource_enabled('Oro\\Bundle\\SalesBundle\\Entity\\Lead', 'entities') %}
+            {% if entity.lead and leadResourceEnabled %}
                 {{ ui.renderHtmlProperty(
                     'oro.contactus.contactrequest.lead.label'|trans,
                     ui.entityViewLink(entity.lead, entity.lead.name, 'oro_sales_lead_view')
