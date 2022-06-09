@@ -30,8 +30,9 @@
             ) }}
             {{ ui.renderProperty('oro.sales.lead.job_title.label'|trans, entity.jobTitle) }}
 
+            {% set opportunityResourceEnabled = feature_resource_enabled('Oro\\Bundle\\SalesBundle\\Entity\\Opportunity', 'entities') %}
             {%- set opportunitiesData -%}
-                {%- if entity.opportunities.count -%}
+                {%- if opportunityResourceEnabled and entity.opportunities.count -%}
                     {% set opportunityViewGranted = is_granted('oro_sales_opportunity_view') %}
                     {%- for opportunity in entity.opportunities -%}
                         {%- if opportunityViewGranted -%}
@@ -85,7 +86,9 @@
             {{ ui.renderHtmlProperty('oro.sales.lead.website.label'|trans, website is defined ? ui.renderUrl(website, website, 'no-hash') : null) }}
             {{ ui.renderCollapsibleHtmlProperty('oro.sales.lead.notes.label'|trans, entity.notes|oro_html_strip_tags, entity, 'notes') }}
             {{ ui.renderHtmlProperty('oro.contact.social.label'|trans, socialData) }}
-            {{ ui.renderHtmlProperty('oro.sales.opportunity.entity_label'|trans, opportunitiesData) }}
+            {% if opportunityResourceEnabled %}
+                {{ ui.renderHtmlProperty('oro.sales.opportunity.entity_label'|trans, opportunitiesData) }}
+            {% endif %}
         </div>
     </div>
 </div>
