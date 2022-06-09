@@ -29,7 +29,7 @@ class LoadOpportunityStatusBoardFixtures extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         $this->em = $manager;
-        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->organization = $manager->getRepository(Organization::class)->getFirst();
         $this->createOpportunities();
     }
 

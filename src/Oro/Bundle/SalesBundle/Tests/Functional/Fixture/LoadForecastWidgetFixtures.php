@@ -8,6 +8,7 @@ use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class LoadForecastWidgetFixtures extends AbstractFixture
@@ -19,7 +20,7 @@ class LoadForecastWidgetFixtures extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->organization = $manager->getRepository(Organization::class)->getFirst();
 
         $this->addWidget($manager);
         $this->createOpportunity($manager);

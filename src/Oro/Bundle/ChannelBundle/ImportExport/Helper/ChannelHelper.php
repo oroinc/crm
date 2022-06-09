@@ -2,67 +2,57 @@
 
 namespace Oro\Bundle\ChannelBundle\ImportExport\Helper;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
+/**
+ * The utility class to get an integration channel.
+ */
 class ChannelHelper
 {
-    /** @var ManagerRegistry */
-    protected $registry;
+    private ManagerRegistry $doctrine;
+    private array $integrationToChannelMap = [];
 
-    /** @var null|array */
-    protected $integrationToChannelMap;
-
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $doctrine)
     {
-        $this->registry = $registry;
+        $this->doctrine = $doctrine;
     }
 
-    /**
-     * @param Integration $integration
-     *
-     * @param bool        $optional
-     *
-     * @throws \LogicException
-     * @return null|Channel
-     */
-    public function getChannel(Integration $integration, $optional = false)
+    public function getChannel(Integration $integration, bool $optional = false): ?Channel
     {
         $this->ensureInitialized();
 
         if (isset($this->integrationToChannelMap[$integration->getId()])) {
-            /** @var EntityManager $em */
-            $em = $this->registry->getManager();
-            $id = $this->integrationToChannelMap[$integration->getId()];
-
-            $channel = $em->getPartialReference('OroChannelBundle:Channel', $id);
-
-            return $channel;
-        } elseif (!$optional) {
+            return $this->getEntityManager()->getPartialReference(
+                Channel::class,
+                $this->integrationToChannelMap[$integration->getId()]
+            );
+        }
+        if (!$optional) {
             throw new \LogicException('Unable to find channel for given integration');
         }
 
         return null;
     }
 
-    /**
-     * Initialize map from database
-     */
-    protected function ensureInitialized()
+    private function ensureInitialized(): void
     {
-        /** @var EntityManager $em */
-        $em = $this->registry->getManager();
-        $qb = $em->createQueryBuilder()
+        $qb = $this->getEntityManager()
+            ->createQueryBuilder()
             ->select('c.id, i.id as integrationId')
-            ->from('OroChannelBundle:Channel', 'c')
+            ->from(Channel::class, 'c')
             ->innerJoin('c.dataSource', 'i');
 
         $result = $qb->getQuery()->getArrayResult();
-
         foreach ($result as $row) {
             $this->integrationToChannelMap[$row['integrationId']] = $row['id'];
         }
+    }
+
+    private function getEntityManager(): EntityManagerInterface
+    {
+        return $this->doctrine->getManager();
     }
 }

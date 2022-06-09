@@ -71,7 +71,7 @@ class LoadOpportunityStatisticsWidgetFixture extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->organization = $manager->getRepository(Organization::class)->getFirst();
         $this->em = $manager;
         $this->createOpportunities($manager);
 
