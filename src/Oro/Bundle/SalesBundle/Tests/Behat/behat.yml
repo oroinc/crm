@@ -161,6 +161,9 @@ oro_behat_extension:
           Primary Location Use Default: 'localization[oro_locale___country][use_parent_scope_value]'
           Primary Location: 'localization[oro_locale___country][value]'
 
+    CurrencyPopover:
+      selector: '.action-cell button[data-toggle="popover"]'
+
     EuroAsDefaultValue:
       selector:
           type: xpath
