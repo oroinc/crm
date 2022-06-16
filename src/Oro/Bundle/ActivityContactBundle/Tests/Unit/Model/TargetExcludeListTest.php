@@ -3,10 +3,7 @@
 namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Model;
 
 use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
-use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
-use Oro\Bundle\CallBundle\Entity\Call;
-use Oro\Bundle\EmailBundle\Entity\Email;
-use Oro\Bundle\TaskBundle\Entity\Task;
+use Oro\Bundle\TestFrameworkBundle\Entity\TestActivity;
 use Oro\Bundle\UserBundle\Entity\User;
 
 class TargetExcludeListTest extends \PHPUnit\Framework\TestCase
@@ -15,20 +12,15 @@ class TargetExcludeListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [User::class, true],
-            [Task::class, true],
-            [CalendarEvent::class, true],
-            [Call::class, true],
-            [Email::class, true],
+            [TestActivity::class, true],
             [\DateTime::class, false],
         ];
     }
 
     /**
-     * @param string $className
-     * @param bool $isExcluded
      * @dataProvider isExcludedDataProvider
      */
-    public function testIsExcluded($className, $isExcluded)
+    public function testIsExcluded(string $className, bool $isExcluded): void
     {
         $this->assertEquals($isExcluded, TargetExcludeList::isExcluded($className));
     }
