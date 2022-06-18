@@ -31,6 +31,8 @@
     }
 ] %}
 
+{% set leadResourceEnabled = feature_resource_enabled('Oro\\Bundle\\SalesBundle\\Entity\\Lead', 'entities') %}
+{% if leadResourceEnabled %}
 {% set tabs = tabs|merge([
     {
         'alias': 'oro_sales_b2bcustomer_leads' ~ uniqueSuffix,
@@ -39,7 +41,10 @@
         'url': path('oro_sales_b2bcustomer_widget_leads', {'id': customer.id})
     }
 ]) %}
+{% endif %}
 
+{% set opportunityResourceEnabled = feature_resource_enabled('Oro\\Bundle\\SalesBundle\\Entity\\Opportunity', 'entities') %}
+{% if (opportunityResourceEnabled) %}
 {% set tabs = tabs|merge([
     {
         'alias': 'oro_sales_b2bcustomer_opportunities' ~ uniqueSuffix,
@@ -48,6 +53,7 @@
         'url': path('oro_sales_b2bcustomer_widget_opportunities', {'id': customer.id})
     }
 ]) %}
+{% endif %}
 
 {% set tabPanelOptions = {
     subTabs: isMobileVersion()
