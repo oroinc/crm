@@ -32,12 +32,14 @@ class EmailOwnerProvider implements EmailOwnerProviderInterface
             ->from(ContactEmail::class, 'ce')
             ->select('ce')
             ->join('ce.owner', 'c')
-            ->setParameter('email', $email);
+            ->setParameter('email', $email)
+            ->setMaxResults(1);
         if ($em->getConnection()->getDatabasePlatform() instanceof PostgreSqlPlatform) {
             $qb->where('LOWER(ce.email) = LOWER(:email)');
         } else {
             $qb->where('ce.email = :email');
         }
+
         /** @var ContactEmail|null $emailEntity */
         $emailEntity = $qb->getQuery()->getOneOrNullResult();
         if (null === $emailEntity) {

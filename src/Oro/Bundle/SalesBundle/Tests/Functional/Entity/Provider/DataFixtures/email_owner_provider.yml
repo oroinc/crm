@@ -13,6 +13,8 @@ Oro\Bundle\SalesBundle\Entity\LeadEmail:
         email: 'john.smith@example.com'
     email2:
         email: 'test@example.com'
+    email2_2:
+        email: 'test@example.com'
     email3:
         email: 'test@example.com'
     email4:
@@ -34,7 +36,7 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         name: 'Lead 2'
         firstName: 'Nancy'
         lastName: 'Sallee'
-        emails: ['@email2']
+        emails: ['@email2', '@email2_2']
         organization: '@organization'
         owner: '@user'
     lead3:
