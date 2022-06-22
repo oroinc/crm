@@ -62,14 +62,16 @@
                     {% if entity.twitter %}
                         <li>
                             <a class="no-hash" href="{{- salesLeadInfo.getSocialUrl('twitter', entity.twitter) -}}" target="_blank" title="Twitter">
-                                <i class="fa-twitter"></i>
+                                <i class="fa-twitter" aria-hidden="true"></i>
+                                <span class="sr-only">Twitter</span>
                             </a>
                         </li>
                     {% endif %}
                     {% if entity.linkedIn %}
                         <li>
                             <a class="no-hash" href="{{- salesLeadInfo.getSocialUrl('linked_in', entity.linkedIn) -}}" target="_blank" title="LinkedIn">
-                                <i class="fa-linkedin"></i>
+                                <i class="fa-linkedin" aria-hidden="true"></i>
+                                <span class="sr-only">LinkedIn</span>
                             </a>
                         </li>
                     {% endif %}

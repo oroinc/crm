@@ -203,6 +203,7 @@
                         }),
                         'aCss': 'btn btn-icon btn-square-default entity-select-btn',
                         'iCss': 'fa-bars',
+                        'ariaLabel': 'oro.form.entity_select'|trans({'%name%': label|trans({}, translation_domain) }),
                         'dataAttributes': { 'purpose': 'open-dialog-widget'},
                         'widget' : {
                             'type' : 'dialog',
@@ -228,7 +229,7 @@
                     <div class="dropdown btn-group entity-create-dropdown">
                         <button id="{{ togglerId }}" type="button" data-toggle="dropdown"
                                 class="dropdown-toggle btn btn-icon btn-square-default entity-create-btn"
-                                aria-haspopup="true" aria-expanded="false">
+                                aria-haspopup="true" aria-expanded="false" aria-label="{{ 'oro.ui.dropdown_option_aria_label'|trans({}, translation_domain) }}">
                             <span class="fa-plus" aria-hidden="true"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="{{ togglerId }}">
