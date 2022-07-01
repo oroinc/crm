@@ -3,6 +3,15 @@ oro_api:
         resettable_services:
             - oro_sales.api.account_customer_association_provider
 
+oro_entity:
+    entity_name_representation:
+        Oro\Bundle\SalesBundle\Entity\Lead:
+            full: [ name ]
+            short: [ name ]
+        Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+            full: [ name ]
+            short: [ name ]
+
 oro_sales:
     api:
         customer_association_names:
