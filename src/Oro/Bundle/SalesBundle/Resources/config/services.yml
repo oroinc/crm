@@ -183,18 +183,6 @@ services:
         tags:
             - { name: oro_dashboard.big_number.provider, alias: opportunity_stats }
 
-    oro_sales.provider.lead_entity_name:
-        class: Oro\Bundle\SalesBundle\Provider\LeadEntityNameProvider
-        public: false
-        tags:
-            - { name: oro_entity.name_provider, priority: 100 }
-
-    oro_sales.provider.b2bcustomer_entity_name:
-        class: Oro\Bundle\SalesBundle\Provider\B2bCustomerEntityNameProvider
-        public: false
-        tags:
-            - { name: oro_entity.name_provider, priority: 100 }
-
     oro_sales.provider.sales_funnel_entity_name:
         class: Oro\Bundle\SalesBundle\Provider\SalesFunnelEntityNameProvider
         public: false
