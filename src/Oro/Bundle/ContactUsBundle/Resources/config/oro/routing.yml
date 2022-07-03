@@ -10,22 +10,6 @@ oro_contact_reason:
 
 
 #
-# DEPRECATED OLD REST API ROUTES
-#
-
-oro_api_options_contactrequests:
-    path: '/api/rest/{version}/contactrequests.{_format}'
-    methods: [OPTIONS]
-    defaults:
-        _controller: 'Oro\Bundle\ContactUsBundle\Controller\Api\Rest\ContactRequestController::optionsAction'
-        _format: json
-        version: latest
-    requirements:
-        _format: json
-        version: latest|v1
-
-
-#
 # OLD REST API ROUTES
 #
 
