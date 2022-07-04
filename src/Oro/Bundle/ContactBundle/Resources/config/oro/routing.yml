@@ -5,33 +5,6 @@ oro_contact_bundle:
 
 
 #
-# DEPRECATED OLD REST API ROUTES
-#
-
-oro_api_post_contact_deprecated:
-    path: '/api/rest/{version}/contact.{_format}'
-    methods: [POST]
-    defaults:
-        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactController::postAction'
-        _format: json
-        version: latest
-    requirements:
-        _format: json|html
-        version: latest|v1
-
-oro_api_post_contactgroup_deprecated:
-    path: '/api/rest/{version}/contactgroup.{_format}'
-    methods: [POST]
-    defaults:
-        _controller: 'Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactGroupController::postAction'
-        _format: json
-        version: latest
-    requirements:
-        _format: json|html
-        version: latest|v1
-
-
-#
 # OLD REST API ROUTES
 #
 
