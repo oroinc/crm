@@ -161,6 +161,9 @@ oro_behat_extension:
           Primary Location Use Default: 'localization[oro_locale___country][use_parent_scope_value]'
           Primary Location: 'localization[oro_locale___country][value]'
 
+    CurrencyPopover:
+      selector: '.action-cell button[data-toggle="popover"]'
+
     EuroAsDefaultValue:
       selector:
           type: xpath
@@ -267,6 +270,38 @@ oro_behat_extension:
       selector:
         type: 'xpath'
         locator: '//div[@title="Opportunities List"]/..//button[contains(@id,"dashboard-action")]'
+
+    Opportunity Statistics Form:
+      selector: 'form[name="opportunity_statistics"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Start Date: 'opportunity_statistics[dateRange][value][start]'
+          End Date: 'opportunity_statistics[dateRange][value][end]'
+          Type:
+            type: 'xpath'
+            locator: '//select[@data-name="custom_part"]'
+
+    Forecast Actions:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Forecast"]/..//button[contains(@id,"dashboard-action")]'
+
+    Forecast:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Forecast"]/../..'
+
+    Forecast Form:
+      selector: 'form[name="forecast_of_opportunities"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Start Date: 'forecast_of_opportunities[dateRange][value][start]'
+          End Date: 'forecast_of_opportunities[dateRange][value][end]'
+          Type:
+            type: 'xpath'
+            locator: '//select[@data-name="custom_part"]'
 
     Date Custom Part:
       selector:

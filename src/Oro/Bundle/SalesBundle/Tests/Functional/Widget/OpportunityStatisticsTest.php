@@ -40,7 +40,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         $this->client->request($form->getMethod(), $form->getUri(), $data);
 
         $response = $this->client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options !');
+        self::assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options !');
 
         $crawler = $this->client->request(
             'GET',
@@ -56,15 +56,15 @@ class OpportunityStatisticsTest extends BaseStatistics
         );
 
         $response = $this->client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view !');
-        $this->assertNotEmpty($crawler->html());
+        self::assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view !');
+        self::assertNotEmpty($crawler->html());
 
         $newOpportunityCountMetric = $crawler->filterXPath(
             $this->getMetricValueByLabel(
                 $this->metrics['new_opportunities_count']
             )
         );
-        $this->assertEquals(
+        self::assertEquals(
             2,
             $newOpportunityCountMetric->text(),
             '"New Opportunities Count" metric does not much expected value'
@@ -75,7 +75,7 @@ class OpportunityStatisticsTest extends BaseStatistics
                 $this->metrics['new_opportunities_amount']
             )
         );
-        $this->assertEquals(
+        self::assertEquals(
             '$60,000.00',
             $newOpportunityAmountMetric->getNode(0)->nodeValue,
             '"New Opportunities Amount" metric does not much expected value'
@@ -86,7 +86,7 @@ class OpportunityStatisticsTest extends BaseStatistics
                 $this->metrics['won_opportunities_to_date_count']
             )
         );
-        $this->assertEquals(
+        self::assertEquals(
             1,
             $newOpportunityCountMetric->text(),
             '"Won Opportunities Count" metric does not much expected value'
@@ -97,7 +97,7 @@ class OpportunityStatisticsTest extends BaseStatistics
                 $this->metrics['won_opportunities_to_date_amount']
             )
         );
-        $this->assertEquals(
+        self::assertEquals(
             '$10,000.00',
             $newOpportunityCountMetric->text(),
             '"Won Opportunities Count" metric does not much expected value'
@@ -159,7 +159,6 @@ class OpportunityStatisticsTest extends BaseStatistics
                             ]
                         ]
                     ]
-
                 ],
                 'widgetItemResult' => [
                     'new_opportunities_count' => 0,
@@ -208,9 +207,9 @@ class OpportunityStatisticsTest extends BaseStatistics
             'Apply "Custom" date range filter' => [
                 'owners' => '',
                 'dateRange' => [
-                    'type' => AbstractDateFilterType::TYPE_MORE_THAN,
+                    'type' => AbstractDateFilterType::TYPE_BETWEEN,
                     'start' => '2017-01-01',
-                    'end' => ''
+                    'end' => date_format($this->createDateTime('+1 day'), 'Y-m-d H:i:s'),
                 ],
                 'comparePrevious' => true,
                 'advancedFilters' => [],
@@ -238,7 +237,7 @@ class OpportunityStatisticsTest extends BaseStatistics
                         'criterion' => [
                             'filter' => 'datetime',
                             'data' => [
-                                'type' => strval(AbstractDateFilterType::TYPE_BETWEEN),
+                                'type' => AbstractDateFilterType::TYPE_BETWEEN,
                                 'part' => 'value',
                                 'value' => [
                                     'start' => date_format($this->createDateTime('-1 day'), 'Y-m-d H:i:s'),
@@ -247,7 +246,6 @@ class OpportunityStatisticsTest extends BaseStatistics
                             ]
                         ]
                     ]
-
                 ],
                 'widgetItemResult' => [
                     'new_opportunities_count' => 0,
@@ -268,7 +266,7 @@ class OpportunityStatisticsTest extends BaseStatistics
                         'criterion' => [
                             'filter' => 'datetime',
                             'data' => [
-                                'type' => strval(AbstractDateFilterType::TYPE_BETWEEN),
+                                'type' => AbstractDateFilterType::TYPE_BETWEEN,
                                 'part' => 'value',
                                 'value' => [
                                     'start' => date_format($this->createDateTime('-1 day'), 'Y-m-d H:i:s'),
@@ -277,7 +275,6 @@ class OpportunityStatisticsTest extends BaseStatistics
                             ]
                         ]
                     ]
-
                 ],
                 'widgetItemResult' => [
                     'new_opportunities_count' => 2,
@@ -306,7 +303,7 @@ class OpportunityStatisticsTest extends BaseStatistics
     private function inspectResult(array $result, array $previousResult): void
     {
         $response = $this->client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options');
+        self::assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options');
 
         $crawler = $this->client->request(
             'GET',
@@ -322,17 +319,17 @@ class OpportunityStatisticsTest extends BaseStatistics
         );
 
         $response = $this->client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
-        $this->assertNotEmpty($crawler->html());
+        self::assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
+        self::assertNotEmpty($crawler->html());
 
         $newOpportunityCountMetric = $crawler->filterXPath(
             $this->getMetricValueByLabel(
                 $this->metrics['new_opportunities_count']
             )
         );
-        $this->assertEquals(
-            $newOpportunityCountMetric->text(),
+        self::assertEquals(
             $result['new_opportunities_count'],
+            $newOpportunityCountMetric->text(),
             '"New Opportunities Count" metric does not much expected value'
         );
 
@@ -341,9 +338,9 @@ class OpportunityStatisticsTest extends BaseStatistics
                 $this->metrics['new_opportunities_amount']
             )
         );
-        $this->assertEquals(
-            $newOpportunityAmountMetric->getNode(0)->nodeValue,
+        self::assertEquals(
             $result['new_opportunities_amount'],
+            $newOpportunityAmountMetric->getNode(0)->nodeValue,
             '"New Opportunities Amount" metric does not much expected value'
         );
 
@@ -352,9 +349,9 @@ class OpportunityStatisticsTest extends BaseStatistics
                 $this->metrics['won_opportunities_to_date_count']
             )
         );
-        $this->assertEquals(
-            $newOpportunityCountMetric->text(),
+        self::assertEquals(
             $result['won_opportunities_to_date_count'],
+            $newOpportunityCountMetric->text(),
             '"Won Opportunities Count" metric does not much expected value'
         );
 
@@ -363,9 +360,9 @@ class OpportunityStatisticsTest extends BaseStatistics
                 $this->metrics['won_opportunities_to_date_amount']
             )
         );
-        $this->assertEquals(
-            $newOpportunityCountMetric->text(),
+        self::assertEquals(
             $result['won_opportunities_to_date_amount'],
+            $newOpportunityCountMetric->text(),
             '"Won Opportunities Count" metric does not much expected value'
         );
 
@@ -376,13 +373,13 @@ class OpportunityStatisticsTest extends BaseStatistics
         );
 
         if (!empty($previousResult)) {
-            $this->assertEquals(
-                trim($deviationMetric->text()),
+            self::assertEquals(
                 $previousResult['new_opportunities_count'],
+                trim($deviationMetric->text()),
                 '"New Leads" previous period metric does not much expected value'
             );
         } else {
-            $this->assertEquals(0, $deviationMetric->count());
+            self::assertEquals(0, $deviationMetric->count());
         }
     }
 }

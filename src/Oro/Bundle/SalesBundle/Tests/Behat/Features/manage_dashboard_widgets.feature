@@ -1,6 +1,7 @@
 @ticket-CRM-9032
 @ticket-CRM-9079
 @ticket-BB-17275
+@ticket-BAP-21315
 @fixture-OroSalesBundle:leads_data.yml
 @fixture-OroSalesBundle:opportunities_data.yml
 Feature: Manage dashboard widgets
@@ -33,8 +34,8 @@ Feature: Manage dashboard widgets
       | Excluded statuses | New        |
       | Sort By           | First name |
     When I click "Widget Save Button"
-    And I should see "Widget has been successfully configured" flash message
-    Then I should see following grid:
+    Then I should see "Widget has been successfully configured" flash message
+    And I should see following grid:
       | Lead name     | Status       | Last contact datetime |
       | Alan          | Qualified    |                       |
       | John          | Disqualified |                       |
@@ -44,8 +45,8 @@ Feature: Manage dashboard widgets
       | Excluded statuses | [New, Disqualified] |
       | Sort By           | First name          |
     And I click "Widget Save Button"
-    And I should see "Widget has been successfully configured" flash message
-    Then I should see following grid:
+    Then I should see "Widget has been successfully configured" flash message
+    And I should see following grid:
       | Lead name     | Status       | Last contact datetime |
       | Alan          | Qualified    |                       |
 
@@ -67,8 +68,8 @@ Feature: Manage dashboard widgets
     And I click "Configure" in "Lead Statistics" widget
     And I click "Delete column"
     And I click "Widget Save Button"
-    And I should see "Widget has been successfully configured" flash message
-    Then I should not see "Open Leads"
+    Then I should see "Widget has been successfully configured" flash message
+    And I should not see "Open Leads"
     And I should see "New Leads"
 
   Scenario: Add Opportunity statistics widget
@@ -82,17 +83,44 @@ Feature: Manage dashboard widgets
     Given I click "Opportunity Statistics Actions"
     When I click "Configure" in "Opportunity Statistics" widget
     And I should not see an "Date Custom Part" element
-    And I fill form with:
+    And I fill "Opportunity Statistics Form" with:
       | Date range | Custom |
     Then I should see an "Date Custom Part" element
-    And I click "Close" in modal window
+
+  Scenario: Check date range values with "between" type
+    When I fill "Opportunity Statistics Form" with:
+      | Start Date | Jun 7, 2022 |
+      | End Date   | Jun 8, 2022 |
+    And I click "Widget Save Button"
+    Then I should see "Widget has been successfully configured" flash message
+    And I should see "Date range: Jun 7, 2022 - Jun 8, 2022"
+
+  Scenario: Check date range values with "earlier than" type
+    When I click "Opportunity Statistics Actions"
+    And I click "Configure" in "Opportunity Statistics" widget
+    And I fill "Opportunity Statistics Form" with:
+      | Type     | earlier than |
+      | End Date | Jun 7, 2022  |
+    And I click "Widget Save Button"
+    Then I should see "Widget has been successfully configured" flash message
+    And I should see "Date range: earlier than Jun 7, 2022"
+
+  Scenario: Check date range values with "later than" type
+    When I click "Opportunity Statistics Actions"
+    And I click "Configure" in "Opportunity Statistics" widget
+    And I fill "Opportunity Statistics Form" with:
+      | Type       | later than  |
+      | Start Date | Jun 7, 2022 |
+    And I click "Widget Save Button"
+    Then I should see "Widget has been successfully configured" flash message
+    And I should see "Date range: later than Jun 7, 2022"
 
   Scenario: Check configuration of Opportunity Statistics widget
     Given I click "Opportunity Statistics Actions"
     And I click "Configure" in "Opportunity Statistics" widget
     When I click "Widget Save Button"
-    And I should see "Widget has been successfully configured" flash message
-    Then I should see "New Opportunities Count"
+    Then I should see "Widget has been successfully configured" flash message
+    And I should see "New Opportunities Count"
     And I should see "New Opportunities Amount"
     And I should see "Won Opportunities To Date Count"
     And I should see "Won Opportunities To Date Amount"
@@ -100,8 +128,8 @@ Feature: Manage dashboard widgets
     And I click "Configure" in "Opportunity Statistics" widget
     And I click "Delete column"
     And I click "Widget Save Button"
-    And I should see "Widget has been successfully configured" flash message
-    Then I should not see "New Opportunities Count"
+    Then I should see "Widget has been successfully configured" flash message
+    And I should not see "New Opportunities Count"
     And I should see "New Opportunities Amount"
     And I should see "Won Opportunities To Date Count"
     And I should see "Won Opportunities To Date Amount"
@@ -120,8 +148,8 @@ Feature: Manage dashboard widgets
       | Excluded statuses | Needs Analysis   |
       | Sort By           | Opportunity name |
     When I click "Widget Save Button"
-    And I should see "Widget has been successfully configured" flash message
-    Then I should see following grid:
+    Then I should see "Widget has been successfully configured" flash message
+    And I should see following grid:
       | Opportunity name | Budget amount | Budget amount ($) | Status     |
       | Opportunity 1    | $50.00        | $50.00            | Open       |
       | Opportunity 3    | $150.00       | $150.00           | Closed Won |
@@ -131,7 +159,25 @@ Feature: Manage dashboard widgets
       | Excluded statuses | [Needs Analysis, Open] |
       | Sort By           | Opportunity name       |
     And I click "Widget Save Button"
-    And I should see "Widget has been successfully configured" flash message
-    Then I should see following grid:
+    Then I should see "Widget has been successfully configured" flash message
+    And I should see following grid:
       | Opportunity name | Budget amount | Budget amount ($) | Status     |
       | Opportunity 3    | $150.00       | $150.00           | Closed Won |
+
+  Scenario: Add Forecast widget
+    When I click "Add widget"
+    And I type "Forecast" in "Enter keyword"
+    And I click "First Widget Add Button"
+    And I click "Close" in modal window
+    Then I should see "Forecast" widget on dashboard
+
+  Scenario: Check date range values with "earlier than" type
+    When I click "Forecast Actions"
+    And I click "Configure" in "Forecast" widget
+    And I fill "Forecast Form" with:
+      | Date range | Custom       |
+      | Type       | earlier than |
+      | End Date   | Jun 8, 2022  |
+    And I click "Widget Save Button"
+    Then I should see "Widget has been successfully configured" flash message
+    And I should see "Date range: earlier than Jun 8, 2022"

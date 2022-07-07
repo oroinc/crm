@@ -32,14 +32,18 @@ class LeadStatisticsTest extends BaseStatistics
 
         $this->createMetricsElements($data, 'lead_statistics');
         $this->setComparePrevious($data, 'lead_statistics', true);
-        $this->createAndSetDateRangeFormElements($data, 'lead_statistics', [
-            'type' => AbstractDateFilterType::TYPE_ALL_TIME
-        ]);
+        $this->createAndSetDateRangeFormElements(
+            $data,
+            'lead_statistics',
+            [
+                'type' => AbstractDateFilterType::TYPE_ALL_TIME
+            ]
+        );
 
         $this->client->request($form->getMethod(), $form->getUri(), $data);
 
         $response = $this->client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options!');
+        self::assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options!');
 
         $crawler = $this->client->request(
             'GET',
@@ -55,15 +59,15 @@ class LeadStatisticsTest extends BaseStatistics
         );
 
         $response = $this->client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
-        $this->assertNotEmpty($crawler->html());
+        self::assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view');
+        self::assertNotEmpty($crawler->html());
 
         $openLeadsMetric = $crawler->filterXPath(
             $this->getMetricValueByLabel(
                 $this->metrics['open_leads_count']
             )
         );
-        $this->assertEquals(
+        self::assertEquals(
             1,
             $openLeadsMetric->text(),
             '"Open Leads" metric does not much expected value'
@@ -73,7 +77,7 @@ class LeadStatisticsTest extends BaseStatistics
                 $this->metrics['new_leads_count']
             )
         );
-        $this->assertEquals(
+        self::assertEquals(
             1,
             $newLeadsMetric->getNode(0)->nodeValue,
             '"New Leads" metric does not much expected value'
@@ -90,7 +94,7 @@ class LeadStatisticsTest extends BaseStatistics
         array $advancedFilters,
         array $result,
         array $previousResult
-    ) {
+    ): void {
         $this->getConfigureDialog();
 
         $crawler = $this->client->getCrawler();
@@ -135,7 +139,6 @@ class LeadStatisticsTest extends BaseStatistics
                             ]
                         ]
                     ]
-
                 ],
                 'widgetItemResult' => [
                     'open_leads_count' => 0,
@@ -168,9 +171,9 @@ class LeadStatisticsTest extends BaseStatistics
             'Apply "Custom" date range filter' => [
                 'owners' => '',
                 'dateRange' => [
-                    'type' => AbstractDateFilterType::TYPE_MORE_THAN,
+                    'type' => AbstractDateFilterType::TYPE_BETWEEN,
                     'start' => '2017-01-01',
-                    'end' => ''
+                    'end' => date_format($this->createDateTime('+1 day'), 'Y-m-d H:i:s'),
                 ],
                 'comparePrevious' => true,
                 'advancedFilters' => [],
@@ -188,7 +191,7 @@ class LeadStatisticsTest extends BaseStatistics
                         'criterion' => [
                             'filter' => 'datetime',
                             'data' => [
-                                'type' => strval(AbstractDateFilterType::TYPE_BETWEEN),
+                                'type' => AbstractDateFilterType::TYPE_BETWEEN,
                                 'part' => 'value',
                                 'value' => [
                                     'start' => date_format($this->createDateTime('-1 day'), 'Y-m-d H:i:s'),
@@ -197,7 +200,6 @@ class LeadStatisticsTest extends BaseStatistics
                             ]
                         ]
                     ]
-
                 ],
                 'widgetItemResult' => [
                     'open_leads_count' => 0,
@@ -216,7 +218,7 @@ class LeadStatisticsTest extends BaseStatistics
                         'criterion' => [
                             'filter' => 'datetime',
                             'data' => [
-                                'type' => strval(AbstractDateFilterType::TYPE_BETWEEN),
+                                'type' => AbstractDateFilterType::TYPE_BETWEEN,
                                 'part' => 'value',
                                 'value' => [
                                     'start' => date_format($this->createDateTime('-1 day'), 'Y-m-d H:i:s'),
@@ -225,7 +227,6 @@ class LeadStatisticsTest extends BaseStatistics
                             ]
                         ]
                     ]
-
                 ],
                 'widgetItemResult' => [
                     'open_leads_count' => 1,
@@ -247,7 +248,7 @@ class LeadStatisticsTest extends BaseStatistics
     private function inspectResult(array $result, array $previousResult): void
     {
         $response = $this->client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options !');
+        self::assertEquals(200, $response->getStatusCode(), 'Failed in submit widget configuration options !');
 
         $crawler = $this->client->request(
             'GET',
@@ -264,17 +265,17 @@ class LeadStatisticsTest extends BaseStatistics
 
         $response = $this->client->getResponse();
 
-        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view !');
-        $this->assertNotEmpty($crawler->html());
+        self::assertEquals(200, $response->getStatusCode(), 'Failed in getting widget view !');
+        self::assertNotEmpty($crawler->html());
 
         $openLeadsMetric = $crawler->filterXPath(
             $this->getMetricValueByLabel(
                 $this->metrics['open_leads_count']
             )
         );
-        $this->assertEquals(
-            $openLeadsMetric->text(),
+        self::assertEquals(
             $result['open_leads_count'],
+            $openLeadsMetric->text(),
             '"Open Leads" metric does not much expected value'
         );
 
@@ -283,9 +284,9 @@ class LeadStatisticsTest extends BaseStatistics
                 $this->metrics['new_leads_count']
             )
         );
-        $this->assertEquals(
-            $newLeadsMetric->text(),
+        self::assertEquals(
             $result['new_leads_count'],
+            $newLeadsMetric->text(),
             '"New Leads" metric does not much expected value'
         );
 
@@ -296,13 +297,13 @@ class LeadStatisticsTest extends BaseStatistics
         );
 
         if (!empty($previousResult)) {
-            $this->assertEquals(
-                trim($deviationMetric->text()),
+            self::assertEquals(
                 $previousResult['new_leads_count'],
+                trim($deviationMetric->text()),
                 '"New Leads" previous period metric does not much expected value'
             );
         } else {
-            $this->assertEquals(0, $deviationMetric->count());
+            self::assertEquals(0, $deviationMetric->count());
         }
     }
 }
