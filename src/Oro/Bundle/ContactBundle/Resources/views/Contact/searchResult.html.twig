@@ -9,6 +9,7 @@
 {% set title = indexer_item.recordTitle ?: 'N/A'|trans %}
 {% set entityType = 'oro.contact.entity_label'|trans %}
 {% set showImage = true %}
+{% set iconType = 'user' %}
 {% set image = entity ? entity.picture : null %}
 {% set entityInfo = [
     {'title': 'oro.ui.created_at'|trans, 'value': entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A'|trans},
