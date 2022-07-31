@@ -6,6 +6,9 @@ use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+/**
+ * Represents Doctrine repository for Channel entity.
+ */
 interface ChannelRepositoryInterface
 {
     /**
@@ -17,23 +20,6 @@ interface ChannelRepositoryInterface
      * @return array
      */
     public function getAvailableChannelNames(AclHelper $aclHelper, $type = null);
-
-    /**
-     * @param \DateTime $start
-     * @param \DateTime $end
-     * @param AclHelper $aclHelper
-     * @param string    $type
-     *
-     * @return integer
-     *
-     * @deprecated Deprecated since version 2.0, to be removed in 3.0.
-     */
-    public function getVisitsCountByPeriodForChannelType(
-        \DateTime $start,
-        \DateTime $end,
-        AclHelper $aclHelper,
-        $type
-    );
 
     /**
      * @param array     $entities
