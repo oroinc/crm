@@ -2,6 +2,7 @@
 @ticket-CRM-9079
 @ticket-BB-17275
 @ticket-BAP-21315
+@ticket-BAP-21448
 @fixture-OroSalesBundle:leads_data.yml
 @fixture-OroSalesBundle:opportunities_data.yml
 Feature: Manage dashboard widgets
@@ -181,3 +182,14 @@ Feature: Manage dashboard widgets
     And I click "Widget Save Button"
     Then I should see "Widget has been successfully configured" flash message
     And I should see "Date range: earlier than Jun 8, 2022"
+
+  Scenario: Check date range values with "between" type next day
+    When I click "Opportunity Statistics Actions"
+    And I click "Configure" in "Opportunity Statistics" widget
+    And I fill "Opportunity Statistics Form" with:
+      | Type       | between             |
+      | Start Date | <Date:today +1 day> |
+      | End Date   | <Date:today +1 day> |
+    And I click "Widget Save Button"
+    Then I should see "Widget has been successfully configured" flash message
+    And I should see "−$300.00 (−100%)" in the "DeviationNegative" element

@@ -2,7 +2,7 @@
 {% if item.value.deviation is defined %}
 <div class="deviation">
     <span class="deviation {% if item.value.isPositive is defined %}{% if item.value.isPositive %}positive{% else %}negative{% endif %}{% endif %}">
-        {{ item.value.deviation }}
+        {{ item.value.deviation|oro_html_sanitize|raw }}
     </span>
 </div>
 <div class="deviation">

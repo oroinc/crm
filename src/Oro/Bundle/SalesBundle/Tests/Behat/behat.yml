@@ -317,6 +317,9 @@ oro_behat_extension:
       selector: 'div.grid-container'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
 
+    DeviationNegative:
+      selector: '.deviation.negative'
+
   pages:
     Opportunity Index:
       route: 'oro_sales_opportunity_index'
