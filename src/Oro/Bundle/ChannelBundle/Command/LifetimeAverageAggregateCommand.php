@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Oro\Bundle\ChannelBundle\Command;
 
 use Oro\Bundle\ChannelBundle\Async\Topics;
-use Oro\Bundle\CronBundle\Command\CronCommandInterface;
+use Oro\Bundle\CronBundle\Command\CronCommandScheduleDefinitionInterface;
 use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Schedules daily aggregation of average lifetime value per sales channel.
  */
-class LifetimeAverageAggregateCommand extends Command implements CronCommandInterface
+class LifetimeAverageAggregateCommand extends Command implements CronCommandScheduleDefinitionInterface
 {
     /** @var string */
     protected static $defaultName = 'oro:cron:lifetime-average:aggregate';
@@ -30,19 +30,12 @@ class LifetimeAverageAggregateCommand extends Command implements CronCommandInte
         $this->messageProducer = $messageProducer;
     }
 
-    public function getDefaultDefinition()
+    /**
+     * {@inheritDoc}
+     */
+    public function getDefaultDefinition(): string
     {
         return '0 4 * * *';
-    }
-
-    /**
-     * @deprecated Since 2.0.3. Will be removed in 2.1. Must be refactored at BAP-13973
-     *
-     * @return bool
-     */
-    public function isActive()
-    {
-        return true;
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */

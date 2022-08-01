@@ -7,7 +7,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\CronBundle\Command\CronCommandInterface;
+use Oro\Bundle\CronBundle\Command\CronCommandScheduleDefinitionInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,35 +16,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Calculates all registered analytic metrics.
  */
-class CalculateAnalyticsCommand extends Command implements CronCommandInterface
+class CalculateAnalyticsCommand extends Command implements CronCommandScheduleDefinitionInterface
 {
     /** @var string */
     protected static $defaultName = 'oro:cron:analytic:calculate';
 
-    private ManagerRegistry $registry;
+    private ManagerRegistry $doctrine;
     private CalculateAnalyticsScheduler $calculateAnalyticsScheduler;
 
-    public function __construct(ManagerRegistry $registry, CalculateAnalyticsScheduler $calculateAnalyticsScheduler)
+    public function __construct(ManagerRegistry $doctrine, CalculateAnalyticsScheduler $calculateAnalyticsScheduler)
     {
         parent::__construct();
-
-        $this->registry = $registry;
+        $this->doctrine = $doctrine;
         $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
     }
 
-    public function getDefaultDefinition()
+    /**
+     * {@inheritDoc}
+     */
+    public function getDefaultDefinition(): string
     {
         return '0 0 * * *';
-    }
-
-    /**
-     * @deprecated Since 2.0.3. Will be removed in 2.1. Must be refactored at BAP-13973
-     *
-     * @return bool
-     */
-    public function isActive()
-    {
-        return true;
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -69,7 +61,7 @@ class CalculateAnalyticsCommand extends Command implements CronCommandInterface
         if ($channelId) {
             $output->writeln(sprintf('Schedule analytics calculation for "%s" channel.', $channelId));
 
-            $channel = $this->registry->getRepository(Channel::class)->find($channelId);
+            $channel = $this->doctrine->getRepository(Channel::class)->find($channelId);
 
             // check if given channel is active.
             if (Channel::STATUS_ACTIVE != $channel->getStatus()) {
