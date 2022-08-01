@@ -242,10 +242,9 @@ datagrids:
                 pageSize:
                     default_per_page: 10
             routerEnabled: false
-
+        acl_resource: oro_case_view
         source:
             type: orm
-            acl_resource: oro_case_view
             query:
                 select:
                     - caseEntity.id
