@@ -1,0 +1,35 @@
+- [AccountBundle](#accountbundle)
+- [ChannelBundle](#channelbundle)
+- [ContactBundle](#contactbundle)
+- [SalesBundle](#salesbundle)
+
+AccountBundle
+-------------
+* The `AccountEntityNameProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/AccountBundle/Provider/AccountEntityNameProvider.php#L12 "Oro\Bundle\AccountBundle\Provider\AccountEntityNameProvider")</sup> class was removed.
+
+ChannelBundle
+-------------
+* The `AmountProvider::getChannelAccountLifetimeQueryBuilder($addChannelParam = false)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ChannelBundle/Provider/Lifetime/AmountProvider.php#L59 "Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider")</sup> method was changed to `AmountProvider::getChannelAccountLifetimeQueryBuilder($addChannelParam = false)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.1.0-alpha.2/src/Oro/Bundle/ChannelBundle/Provider/Lifetime/AmountProvider.php#L51 "Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider")</sup>
+* The `ChannelHelper::getChannel(Channel $integration, $optional = false)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ChannelBundle/ImportExport/Helper/ChannelHelper.php#L31 "Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper")</sup> method was changed to `ChannelHelper::getChannel(Channel $integration, $optional = false)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.1.0-alpha.2/src/Oro/Bundle/ChannelBundle/ImportExport/Helper/ChannelHelper.php#L23 "Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper")</sup>
+* The `ChannelDatasourceType::__construct(ManagerRegistry $registry, $integrationEntityFQCN)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ChannelBundle/Form/Type/ChannelDatasourceType.php#L28 "Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType")</sup> method was changed to `ChannelDatasourceType::__construct(ManagerRegistry $doctrine, $integrationEntityClass)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.1.0-alpha.2/src/Oro/Bundle/ChannelBundle/Form/Type/ChannelDatasourceType.php#L22 "Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType")</sup>
+* The `BuilderFactory::__construct(ManagerRegistry $registry, SettingsProvider $settingsProvider)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ChannelBundle/Builder/BuilderFactory.php#L21 "Oro\Bundle\ChannelBundle\Builder\BuilderFactory")</sup> method was changed to `BuilderFactory::__construct(ManagerRegistry $doctrine, SettingsProvider $settingsProvider)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.1.0-alpha.2/src/Oro/Bundle/ChannelBundle/Builder/BuilderFactory.php#L18 "Oro\Bundle\ChannelBundle\Builder\BuilderFactory")</sup>
+* The `ChannelObjectBuilder::__construct(EntityManager $em, SettingsProvider $settingsProvider, Channel $channel)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ChannelBundle/Builder/ChannelObjectBuilder.php#L49 "Oro\Bundle\ChannelBundle\Builder\ChannelObjectBuilder")</sup> method was changed to `ChannelObjectBuilder::__construct(EntityManagerInterface $em, SettingsProvider $settingsProvider, Channel $channel)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.1.0-alpha.2/src/Oro/Bundle/ChannelBundle/Builder/ChannelObjectBuilder.php#L52 "Oro\Bundle\ChannelBundle\Builder\ChannelObjectBuilder")</sup>
+* The `AmountProvider::$registry`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ChannelBundle/Provider/Lifetime/AmountProvider.php#L16 "Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider::$registry")</sup> property was removed.
+* The `ChannelHelper::$registry`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ChannelBundle/ImportExport/Helper/ChannelHelper.php#L13 "Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper::$registry")</sup> property was removed.
+* The following properties in class `ChannelDatasourceType`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ChannelBundle/Form/Type/ChannelDatasourceType.php#L19 "Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType")</sup> were removed:
+   - `$registry`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ChannelBundle/Form/Type/ChannelDatasourceType.php#L19 "Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType::$registry")</sup>
+   - `$integrationEntityFQCN`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ChannelBundle/Form/Type/ChannelDatasourceType.php#L22 "Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType::$integrationEntityFQCN")</sup>
+
+ContactBundle
+-------------
+* The `EmailRecipientsProvider::getContactRepository`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ContactBundle/Provider/EmailRecipientsProvider.php#L54 "Oro\Bundle\ContactBundle\Provider\EmailRecipientsProvider::getContactRepository")</sup> method was removed.
+* The `EmailRecipientsProvider::__construct(Registry $registry, EmailRecipientsHelper $emailRecipientsHelper)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ContactBundle/Provider/EmailRecipientsProvider.php#L22 "Oro\Bundle\ContactBundle\Provider\EmailRecipientsProvider")</sup> method was changed to `EmailRecipientsProvider::__construct(ManagerRegistry $doctrine, EmailRecipientsHelper $emailRecipientsHelper)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.1.0-alpha.2/src/Oro/Bundle/ContactBundle/Provider/EmailRecipientsProvider.php#L19 "Oro\Bundle\ContactBundle\Provider\EmailRecipientsProvider")</sup>
+* The `EmailRecipientsProvider::$registry`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/ContactBundle/Provider/EmailRecipientsProvider.php#L17 "Oro\Bundle\ContactBundle\Provider\EmailRecipientsProvider::$registry")</sup> property was removed.
+
+SalesBundle
+-----------
+* The following classes were removed:
+   - `B2bCustomerEntityNameProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/SalesBundle/Provider/B2bCustomerEntityNameProvider.php#L13 "Oro\Bundle\SalesBundle\Provider\B2bCustomerEntityNameProvider")</sup>
+   - `LeadEntityNameProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/SalesBundle/Provider/LeadEntityNameProvider.php#L13 "Oro\Bundle\SalesBundle\Provider\LeadEntityNameProvider")</sup>
+* The `OpportunityProbabilityType::__construct(EnumTypeHelper $typeHelper, Registry $registry)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.0.0-alpha.1/src/Oro/Bundle/SalesBundle/Form/Type/OpportunityProbabilityType.php#L30 "Oro\Bundle\SalesBundle\Form\Type\OpportunityProbabilityType")</sup> method was changed to `OpportunityProbabilityType::__construct(EnumTypeHelper $typeHelper, ManagerRegistry $doctrine)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.1.0-alpha.2/src/Oro/Bundle/SalesBundle/Form/Type/OpportunityProbabilityType.php#L28 "Oro\Bundle\SalesBundle\Form\Type\OpportunityProbabilityType")</sup>
+
