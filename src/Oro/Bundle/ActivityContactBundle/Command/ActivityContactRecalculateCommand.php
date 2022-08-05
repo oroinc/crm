@@ -107,8 +107,8 @@ class ActivityContactRecalculateCommand extends Command
                     count($entityConfigsWithApplicableActivities)
                 )
             );
-            $this->em                     = $this->registry->getManager();
-            $this->activityListRepository = $this->em->getRepository(ActivityList::ENTITY_NAME);
+            $this->em = $this->registry->getManager();
+            $this->activityListRepository = $this->em->getRepository(ActivityList::class);
 
             foreach ($entityConfigsWithApplicableActivities as $activityScopeConfig) {
                 $entityClassName = $activityScopeConfig->getId()->getClassName();
