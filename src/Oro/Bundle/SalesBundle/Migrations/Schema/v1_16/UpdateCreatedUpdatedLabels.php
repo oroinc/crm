@@ -39,18 +39,6 @@ class UpdateCreatedUpdatedLabels implements Migration
                 'field' => 'updatedAt',
                 'value' => 'oro.ui.updated_at',
                 'replace' => 'oro.sales.opportunity.updated_at.label'
-            ],
-            [
-                'entityName' => 'Oro\Bundle\SalesBundle\Entity\SalesFunnel',
-                'field' => 'createdAt',
-                'value' => 'oro.ui.created_at',
-                'replace' => 'oro.sales.salesfunnel.created_at.label'
-            ],
-            [
-                'entityName' => 'Oro\Bundle\SalesBundle\Entity\SalesFunnel',
-                'field' => 'updatedAt',
-                'value' => 'oro.ui.updated_at',
-                'replace' => 'oro.sales.salesfunnel.updated_at.label'
             ]
         ];
 

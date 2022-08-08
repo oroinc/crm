@@ -6,6 +6,8 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\WorkflowBundle\Migrations\Schema\RemoveWorkflowFieldsTrait;
 
 class RemoveWorkflowFields implements Migration, OrderedMigrationInterface
@@ -27,10 +29,8 @@ class RemoveWorkflowFields implements Migration, OrderedMigrationInterface
     {
         //workflow now has no direct relations
         $this->removeWorkflowFields($schema->getTable('orocrm_sales_lead'));
-        $this->removeConfigsForWorkflowFields('Oro\Bundle\SalesBundle\Entity\Lead', $queries);
+        $this->removeConfigsForWorkflowFields(Lead::class, $queries);
         $this->removeWorkflowFields($schema->getTable('orocrm_sales_opportunity'));
-        $this->removeConfigsForWorkflowFields('Oro\Bundle\SalesBundle\Entity\Opportunity', $queries);
-        $this->removeWorkflowFields($schema->getTable('orocrm_sales_funnel'));
-        $this->removeConfigsForWorkflowFields('Oro\Bundle\SalesBundle\Entity\SalesFunnel', $queries);
+        $this->removeConfigsForWorkflowFields(Opportunity::class, $queries);
     }
 }

@@ -4,31 +4,21 @@ namespace Oro\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\SalesBundle\Entity\Lead;
-use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 
+/**
+ * Checks if action with Lead is allowed.
+ */
 class LeadActionsAccessProvider
 {
-    /** @var WorkflowRegistry */
-    protected $workflowRegistry;
-
-    /** @var FeatureChecker */
-    protected $featureChecker;
+    private WorkflowRegistry $workflowRegistry;
+    private FeatureChecker $featureChecker;
 
     /**
      * Used to store cached value of enabled workflows for Lead entity
-     *
-     * @var bool
      */
-    protected $isLeadWfEnabled;
-
-    /**
-     * Used to store cached value of enabled workflows for SalesFunnel entity
-     *
-     * @var bool
-     */
-    protected $isSalesFunnelWfEnabled;
+    private ?bool $isLeadWfEnabled = null;
 
     public function __construct(WorkflowRegistry $workflowRegistry, FeatureChecker $featureChecker)
     {
@@ -36,54 +26,27 @@ class LeadActionsAccessProvider
         $this->featureChecker   = $featureChecker;
     }
 
-    /**
-     * @param Lead $lead
-     *
-     * @return bool
-     */
-    public function isDisqualifyAllowed(Lead $lead)
+    public function isDisqualifyAllowed(Lead $lead): bool
     {
         return $lead->getStatus()->getId() !== ChangeLeadStatus::STATUS_DISQUALIFY &&
-               !$this->isLeadWfEnabled() &&
-               !$this->isSalesFunnelWfEnabled();
+               !$this->isLeadWfEnabled();
     }
 
-    /**
-     * @param Lead $lead
-     *
-     * @return bool
-     */
-    public function isConvertToOpportunityAllowed(Lead $lead)
+    public function isConvertToOpportunityAllowed(Lead $lead): bool
     {
         return $lead->getOpportunities()->count() === 0 &&
                !$this->isLeadWfEnabled() &&
-               !$this->isSalesFunnelWfEnabled() &&
                $this->featureChecker->isFeatureEnabled('sales_opportunity');
     }
 
-    /**
-     * @return bool
-     */
-    protected function isLeadWfEnabled()
+    private function isLeadWfEnabled(): bool
     {
         if (null === $this->isLeadWfEnabled) {
             $this->isLeadWfEnabled = !$this->workflowRegistry
-                ->getActiveWorkflowsByEntityClass(Lead::class)->isEmpty();
+                ->getActiveWorkflowsByEntityClass(Lead::class)
+                ->isEmpty();
         }
 
         return $this->isLeadWfEnabled;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isSalesFunnelWfEnabled()
-    {
-        if (null === $this->isSalesFunnelWfEnabled) {
-            $this->isSalesFunnelWfEnabled = !$this->workflowRegistry
-                ->getActiveWorkflowsByEntityClass(SalesFunnel::class)->isEmpty();
-        }
-
-        return $this->isSalesFunnelWfEnabled;
     }
 }

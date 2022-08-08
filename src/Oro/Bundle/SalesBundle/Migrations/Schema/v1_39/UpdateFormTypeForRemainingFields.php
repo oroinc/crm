@@ -39,13 +39,6 @@ class UpdateFormTypeForRemainingFields implements Migration, ContainerAwareInter
         );
 
         $this->updateFieldFormType(
-            'orocrm_sales_funnel',
-            'data_channel',
-            ChannelSelectType::class,
-            'oro_channel_select_type'
-        );
-
-        $this->updateFieldFormType(
             'orocrm_sales_opportunity',
             'customer',
             B2bCustomerSelectType::class,

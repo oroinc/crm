@@ -1,9 +1,0 @@
-{% extends '@OroUI/actions/index.html.twig' %}
-{% import '@OroUI/macros.html.twig' as UI %}
-{% set gridName = 'sales-funnel-grid' %}
-{% set pageTitle = 'oro.sales.salesfunnel.entity_plural_label'|trans %}
-
-{% block navButtons %}
-    {# TODO: this block must be removed in scope of BAP-4637 #}
-    {% include '@OroWorkflow/Widget/buttons.html.twig' %}
-{% endblock navButtons %}

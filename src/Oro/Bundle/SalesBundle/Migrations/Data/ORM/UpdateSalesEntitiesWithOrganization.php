@@ -4,16 +4,20 @@ namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\UpdateWithOrganization;
 
+/**
+ * Updates sales entities with organization.
+ */
 class UpdateSalesEntitiesWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getDependencies()
     {
-        return ['Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData'];
+        return [LoadOrganizationAndBusinessUnitData::class];
     }
 
     /**
@@ -23,6 +27,5 @@ class UpdateSalesEntitiesWithOrganization extends UpdateWithOrganization impleme
     {
         $this->update($manager, 'OroSalesBundle:Lead');
         $this->update($manager, 'OroSalesBundle:Opportunity');
-        $this->update($manager, 'OroSalesBundle:SalesFunnel');
     }
 }

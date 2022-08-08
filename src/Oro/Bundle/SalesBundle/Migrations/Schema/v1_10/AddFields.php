@@ -24,7 +24,6 @@ class AddFields implements Migration, OrderedMigrationInterface
     {
         $this->modifyOrocrmSalesLeadTable($schema);
         $this->modifyOrocrmSalesOpportunityTable($schema);
-        $this->modifyOrocrmSalesSalesFunnelTable($schema);
 
         $queries->addPostQuery(new MigrateAccountRelations());
     }
@@ -74,21 +73,6 @@ class AddFields implements Migration, OrderedMigrationInterface
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_C0FE4AACBDC09B73'
-        );
-    }
-
-    protected function modifyOrocrmSalesSalesFunnelTable(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_sales_funnel');
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['data_channel_id'], 'IDX_E20C7344BDC09B73', []);
-
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_E20C7344BDC09B73'
         );
     }
 }

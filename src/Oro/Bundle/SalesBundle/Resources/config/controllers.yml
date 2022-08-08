@@ -50,10 +50,3 @@ services:
             - ['setContainer', ['@Psr\Container\ContainerInterface']]
         tags:
             - { name: container.service_subscriber }
-
-    Oro\Bundle\SalesBundle\Controller\SalesFunnelController:
-        calls:
-            - ['setContainer', ['@Psr\Container\ContainerInterface']]
-        tags:
-            - { name: container.service_subscriber }
-            - { name: container.service_subscriber, id: oro_sales.salesfunnel.form }

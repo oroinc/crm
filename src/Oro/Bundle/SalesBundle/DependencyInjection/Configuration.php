@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
@@ -53,10 +53,6 @@ class Configuration implements ConfigurationInterface
                 ],
                 'opportunity_feature_enabled' => [
                     'value' => true,
-                    'type'  => 'boolean',
-                ],
-                'salesfunnel_feature_enabled' => [
-                    'value' => false,
                     'type'  => 'boolean',
                 ],
                 'default_opportunity_probabilities' => [
