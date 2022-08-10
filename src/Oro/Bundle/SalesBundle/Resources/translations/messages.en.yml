@@ -631,7 +631,7 @@ oro:
                     probability.tooltip:                       Enter default probability (%) for this status
                 display_relevant_opportunities:
                     label:                                     Display relevant opportunities
-                    tooltip:                                   Enable this option to display a list of other opportunities related to the same account on the opportunity view page and give sales reps quick access to deal history.
+                    tooltip:                                   Enable the option to give sales reps quick access to the deal history and display a list of opportunities related to the same account on the opportunity view page.
 
         privilege:
             category.sales_data.label: Sales Data
