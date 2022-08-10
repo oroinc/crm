@@ -1,0 +1,8 @@
+services:
+    oro_contact_us.tests.api.skipped_entity_provider:
+        class: Oro\Bundle\ApiBundle\Tests\Functional\Environment\SkippedEntityProvider
+        decorates: oro_api.tests.skipped_entity_provider
+        arguments:
+            - '@.inner'
+        calls:
+            - [ addSkippedEntity, [ 'Oro\Bundle\ContactUsBundle\Entity\ContactReason', [ 'get_list', 'delete', 'delete_list' ] ] ]

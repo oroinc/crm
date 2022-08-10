@@ -206,8 +206,9 @@ oro:
 
             workflow:
                 close_date.label: Close date
-            feature.label:        Opportunity
-            feature.description:  Enables Opportunity entity
+            feature:
+                label: Opportunities
+                description: Enables opportunities and their related actions, processes and features, such as workflows, probabilities, widgets, and access to opportunities via the API.
             datagrid:
                 view:     View
                 update:   Update
@@ -352,8 +353,9 @@ oro:
 
             convert:
                  error:           Unable to convert lead to opportunity
-            feature.label:        Lead
-            feature.description:  Enables Lead entity
+            feature:
+                label: Leads
+                description: Enables leads and lead-related actions, processes and features, such as workflows and widgets, and access to leads via API.
             customer_association:
                 label:            Customer
                 description:      A customer or an account the lead is created for.
@@ -550,6 +552,9 @@ oro:
             import: Import
             contact_information:
                 label: Contact Information
+            feature:
+                label: Business Customers
+                description: Enables creating and managing business customers.
 
         #
         # Entity Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone

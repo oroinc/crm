@@ -13,6 +13,7 @@ features:
             - oro_sales_lead_data_channel_aware_create
             - oro_sales_lead_disqualify
             - oro_sales_lead_convert_to_opportunity
+            - oro_sales_b2bcustomer_widget_leads
         workflows:
             - b2b_flow_lead
         processes:
@@ -52,6 +53,7 @@ features:
             - oro_sales_opportunity_index
             - oro_sales_opportunity_data_channel_aware_create
             - oro_sales_opportunity_customer_aware_create
+            - oro_sales_b2bcustomer_widget_opportunities
         workflows:
             - opportunity_flow
         api_resources:
@@ -86,3 +88,39 @@ features:
             - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
         commands:
             - oro:b2b:lifetime:recalculate
+
+    business_customers:
+        label: oro.sales.b2bcustomer.feature.label
+        description: oro.sales.b2bcustomer.feature.description
+        allow_if_all_abstain: true
+        routes:
+            - oro_sales_b2bcustomer_index
+            - oro_sales_b2bcustomer_view
+            - oro_sales_b2bcustomer_widget_info
+            - oro_sales_b2bcustomer_create
+            - oro_sales_b2bcustomer_update
+            - oro_sales_widget_b2bcustomer_info
+            - oro_api_get_b2bcustomers
+            - oro_api_get_b2bcustomer
+            - oro_api_put_b2bcustomer
+            - oro_api_post_b2bcustomer
+            - oro_api_delete_b2bcustomer
+            - oro_api_options_b2bcustomers
+            - oro_api_post_b2bcustomer_email
+            - oro_api_delete_b2bcustomer_email
+            - oro_api_options_b2bcustomer_emails
+            - oro_api_get_b2bcustomer_phones
+            - oro_api_get_b2bcustomer_phone_primary
+            - oro_api_post_b2bcustomer_phone
+            - oro_api_delete_b2bcustomer_phone
+            - oro_api_options_b2bcustomer_phones
+        entities:
+            - Oro\Bundle\SalesBundle\Entity\B2bCustomer
+            - Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail
+            - Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone
+        api_resources:
+            - Oro\Bundle\SalesBundle\Entity\B2bCustomer
+            - Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail
+            - Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone
+        navigation_items:
+            - application_menu.customers_tab.b2bcustomer_list

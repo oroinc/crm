@@ -31,8 +31,7 @@
     }
 ] %}
 
-{% set leadResourceEnabled = feature_resource_enabled('Oro\\Bundle\\SalesBundle\\Entity\\Lead', 'entities') %}
-{% if leadResourceEnabled %}
+{% if feature_resource_enabled('Oro\\Bundle\\SalesBundle\\Entity\\Lead', 'entities') %}
 {% set tabs = tabs|merge([
     {
         'alias': 'oro_sales_b2bcustomer_leads' ~ uniqueSuffix,
@@ -43,8 +42,7 @@
 ]) %}
 {% endif %}
 
-{% set opportunityResourceEnabled = feature_resource_enabled('Oro\\Bundle\\SalesBundle\\Entity\\Opportunity', 'entities') %}
-{% if (opportunityResourceEnabled) %}
+{% if feature_resource_enabled('Oro\\Bundle\\SalesBundle\\Entity\\Opportunity', 'entities') %}
 {% set tabs = tabs|merge([
     {
         'alias': 'oro_sales_b2bcustomer_opportunities' ~ uniqueSuffix,

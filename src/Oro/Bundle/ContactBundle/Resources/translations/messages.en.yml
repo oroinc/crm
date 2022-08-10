@@ -21,7 +21,10 @@ oro:
         controller:
             contact_group.saved.message: Contact Group saved
             contact.saved.message:       Contact saved
-
+        feature:
+            manage:
+                label: Contact Management
+                description: Enables creating and managing contacts.
         #
         # Form
         #
@@ -252,6 +255,11 @@ oro:
             owner.label:         Owner
             organization.label:  Organization
             has_group.label:     Has group
+
+            feature:
+                manage:
+                    label: Contact Group Management
+                    description: Enables creating and managing groups of contacts.
 
         #
         # Entity Oro\Bundle\ContactBundle\Entity\Method

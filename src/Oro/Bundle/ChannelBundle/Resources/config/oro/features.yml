@@ -1,0 +1,24 @@
+features:
+    channels:
+        label: oro.channel.feature.label
+        description: oro.channel.feature.description
+        allow_if_all_abstain: true
+        routes:
+            - oro_channel_index
+            - oro_channel_create
+            - oro_channel_update
+            - oro_channel_view
+            - oro_channel_widget_info
+            - oro_channel_integration_create
+            - oro_channel_integration_update
+            - oro_api_get_channels
+            - oro_api_options_channels
+            - oro_api_delete_channel
+        entities:
+            - Oro\Bundle\ChannelBundle\Entity\Channel
+        api_resources:
+            - Oro\Bundle\ChannelBundle\Entity\Channel
+        dashboard_widgets:
+            - e_commerce
+        navigation_items:
+            - application_menu.system_tab.channels_list

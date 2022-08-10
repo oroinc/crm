@@ -52,6 +52,11 @@ oro:
                     status:
                         activated:     Channel activated
                         deactivated:   Channel deactivated
+
+        feature:
+            label: Channels
+            description: Enables creating and managing customer data channels.
+
         form:
             select_entities.label:          Please select entities
             select_data_source.label:       Please select customer source

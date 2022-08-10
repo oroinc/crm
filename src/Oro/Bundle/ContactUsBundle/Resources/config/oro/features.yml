@@ -1,0 +1,39 @@
+features:
+    contact_requests:
+        label: oro.contactus.contactrequest.feature.label
+        description: oro.contactus.contactrequest.feature.description
+        allow_if_all_abstain: true
+        routes:
+            - oro_contactus_request_index
+            - oro_contactus_request_view
+            - oro_contactus_request_info
+            - oro_contactus_request_create
+            - oro_contactus_request_update
+            - oro_contactus_request_delete
+            - oro_api_get_contactrequest
+        workflows:
+            - orocrm_contact_us_contact_request
+        entities:
+            - Oro\Bundle\ContactUsBundle\Entity\ContactRequest
+        api_resources:
+            - Oro\Bundle\ContactUsBundle\Entity\ContactRequest
+        navigation_items:
+            - application_menu.activities_tab.oro_contactus_requests
+
+    # Additionally:
+    #  - If at least one reason exists - it should be available on "contact us" view|form
+    manage_contact_reasons:
+        label: oro.contactus.contactreason.feature.manage.label
+        description: oro.contactus.contactreason.feature.manage.description
+        allow_if_all_abstain: true
+        routes:
+            - oro_contactus_reason_index
+            - oro_contactus_reason_create
+            - oro_contactus_reason_update
+            - oro_contactus_reason_delete
+        entities:
+            - Oro\Bundle\ContactUsBundle\Entity\ContactReason
+        api_resources:
+            - [Oro\Bundle\ContactUsBundle\Entity\ContactReason, [create, update, delete, delete_list]]
+        navigation_items:
+            - application_menu.system_tab.oro_contactus_reasons
