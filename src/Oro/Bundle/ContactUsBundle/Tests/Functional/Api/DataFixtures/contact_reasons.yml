@@ -1,0 +1,10 @@
+Oro\Bundle\ContactUsBundle\Entity\ContactReason:
+    reason{1..2}:
+        defaultTitle: 'Reason <current()>'
+    reason3:
+        defaultTitle: 'Reason 3'
+        deletedAt: '<(new DateTime("2022-01-01T10:20:30Z"))>'
+
+Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue:
+    localized_fallback_value1:
+        string: 'Value 1'

@@ -13,6 +13,7 @@ use Oro\Bundle\ChannelBundle\Provider\SettingsProvider as ChannelSettingsProvide
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\FormBundle\Autocomplete\SearchHandlerInterface;
 use Oro\Bundle\FormBundle\Autocomplete\SearchRegistry;
 use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
@@ -89,6 +90,9 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         $registry->addTransportType($transportName, self::TEST_TYPE, $transportType);
 
         $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $authorizationChecker->expects($this->any())
+            ->method('isGranted')
+            ->willReturn(true);
 
         $em = $this->createMock(EntityManager::class);
         $metadata = $this->createMock(ClassMetadata::class);
@@ -133,7 +137,13 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                     new IntegrationTypeSelectType($registry, $assetsHelper),
                     new OrganizationUserAclSelectType(),
                     new UserAclSelectType(),
-                    new OroEntitySelectOrCreateInlineType($authorizationChecker, $cm, $em, $searchRegistry),
+                    new OroEntitySelectOrCreateInlineType(
+                        $authorizationChecker,
+                        $this->createMock(FeatureChecker::class),
+                        $cm,
+                        $em,
+                        $searchRegistry
+                    ),
                     new OroJquerySelect2HiddenType($em, $searchRegistry, $cp)
                 ],
                 [

@@ -17,45 +17,30 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SecurityBundle\Authentication\Token\OrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareInterface
 {
-    const CUSTOMER_NAME = 'b2bCustomer name';
-    const CHANNEL_TYPE  = 'b2b';
-    const CHANNEL_NAME  = 'b2b Channel';
-    const ACCOUNT_NAME  = 'some account name';
+    public const CUSTOMER_NAME = 'b2bCustomer name';
+    public const CHANNEL_TYPE  = 'b2b';
+    public const CHANNEL_NAME  = 'b2b Channel';
+    public const ACCOUNT_NAME  = 'some account name';
 
-    /** @var ObjectManager */
-    protected $em;
-
-    /** @var BuilderFactory */
-    protected $factory;
-
-    /** @var Channel */
-    protected $channel;
-
-    /** @var User */
-    protected $user;
-
-    /** @var Organization */
-    protected $organization;
-
-    /** @var AccountCustomerManager */
-    protected $accountCustomerManager;
-
-    /** @var TokenStorage */
-    protected $securityToken;
+    protected ObjectManager $em;
+    private BuilderFactory $factory;
+    private User $user;
+    private Organization $organization;
+    private AccountCustomerManager $accountCustomerManager;
+    private TokenStorageInterface $securityToken;
 
     /**
      * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(ContainerInterface $container = null): void
     {
         $this->factory = $container->get('oro_channel.builder.factory');
         $this->accountCustomerManager = $container->get('oro_sales.manager.account_customer');
@@ -77,11 +62,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $this->createB2bCustomer();
         $this->createLead();
         $this->createOpportunity();
-        $this->createSalesFunnelByLead();
-        $this->createSalesFunnelByOpportunity();
     }
 
-    protected function createAccount()
+    private function createAccount(): void
     {
         $account = new Account();
         $account->setName(self::ACCOUNT_NAME);
@@ -91,11 +74,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $this->em->flush();
 
         $this->setReference('default_account', $account);
-
-        return $this;
     }
 
-    protected function createContact()
+    private function createContact(): void
     {
         $contact = new Contact();
         $contact->setFirstName('John');
@@ -106,11 +87,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $this->em->flush();
 
         $this->setReference('default_contact', $contact);
-
-        return $this;
     }
 
-    protected function createB2bCustomer()
+    private function createB2bCustomer(): void
     {
         $customer = new B2bCustomer();
         $account  = $this->getReference('default_account');
@@ -127,10 +106,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $this->setReference('default_b2bcustomer', $customer);
         $accountCustomer = $this->accountCustomerManager->getAccountCustomerByTarget($customer);
         $this->setReference('default_account_customer', $accountCustomer);
-        return $this;
     }
 
-    protected function createLead()
+    private function createLead(): void
     {
         $lead = new Lead();
         $lead->setName('Lead name');
@@ -170,11 +148,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $this->setReference('default_lead', $lead);
         $this->setReference('second_lead', $lead2);
         $this->setReference('third_lead', $lead3);
-
-        return $this;
     }
 
-    protected function createOpportunity()
+    private function createOpportunity(): void
     {
         $opportunity = new Opportunity();
         $opportunity->setName('opname');
@@ -188,42 +164,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $this->em->flush();
 
         $this->setReference('default_opportunity', $opportunity);
-
-        return $this;
     }
 
-    protected function createSalesFunnelByLead()
-    {
-        $date = new \DateTime('now');
-
-        $salesFunnel = new SalesFunnel();
-        $salesFunnel->setLead($this->getReference('default_lead'));
-        $salesFunnel->setOwner($this->getUser());
-        $salesFunnel->setStartDate($date);
-        $salesFunnel->setOrganization($this->organization);
-
-        $this->em->persist($salesFunnel);
-        $this->em->flush();
-    }
-
-    protected function createSalesFunnelByOpportunity()
-    {
-        $date = new \DateTime('now');
-
-        $salesFunnel = new SalesFunnel();
-        $salesFunnel->setOpportunity($this->getReference('default_opportunity'));
-        $salesFunnel->setOwner($this->getUser());
-        $salesFunnel->setStartDate($date);
-        $salesFunnel->setOrganization($this->organization);
-
-        $this->em->persist($salesFunnel);
-        $this->em->flush();
-    }
-
-    /**
-     * @return Channel
-     */
-    protected function createChannel()
+    private function createChannel(): void
     {
         $channel = $this
             ->factory
@@ -239,14 +182,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $this->em->flush();
 
         $this->setReference('default_channel', $channel);
-
-        return $this;
     }
 
-    /**
-     * @return User
-     */
-    protected function getUser()
+    private function getUser(): User
     {
         if (empty($this->user)) {
             $this->user = $this->em->getRepository(User::class)->findOneBy(['username' => 'admin']);
@@ -255,10 +193,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         return $this->user;
     }
 
-    /**
-     * @return Address
-     */
-    protected function getBillingAddress()
+    private function getBillingAddress(): Address
     {
         $address = new Address();
         $address->setCountry($this->getCounty())
@@ -271,10 +206,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         return $address;
     }
 
-    /**
-     * @return Address
-     */
-    protected function getShippingAddress()
+    private function getShippingAddress(): Address
     {
         $address = new Address();
         $address->setCountry($this->getCounty())
@@ -287,10 +219,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         return $address;
     }
 
-    /**
-     * @return Country
-     */
-    protected function getCounty()
+    private function getCounty(): Country
     {
         return $this->em->find(Country::class, 'IM');
     }

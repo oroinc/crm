@@ -1,0 +1,9 @@
+dependencies:
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser
+
+Oro\Bundle\ContactBundle\Entity\Group:
+    contact_group{1..2}:
+        label: 'Group <current()>'
+        owner: '@user'
+        organization: '@organization'

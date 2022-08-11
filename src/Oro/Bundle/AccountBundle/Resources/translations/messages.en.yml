@@ -23,6 +23,10 @@ oro:
         sections:
             general:                General
             website_activity:       Website Activity
+        feature:
+            manage:
+                label: Account Management
+                description: Enables creating and managing accounts.
         form:
             choose_account:         Choose an account...
             select_contacts:        Select contacts

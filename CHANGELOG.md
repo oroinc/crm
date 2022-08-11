@@ -2,6 +2,9 @@ The upgrade instructions are available at [Oro documentation website](https://do
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
+## 5.1.0-alpha.2 (2022-08-01)
+[Show detailed list of changes](incompatibilities-5-1-alpha-2.md)
+
 ## 5.1.0-alpha.1 (2022-05-31)
 [Show detailed list of changes](incompatibilities-5-1-alpha.md)
 
@@ -747,4 +750,3 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Localized countries and regions
  * Enhanced data change log with ability to save changes for collections
  * Removed dependency on lib ICU
-

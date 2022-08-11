@@ -192,51 +192,6 @@ services:
         tags:
             - { name: form.type, alias: oro_sales_opportunity_status_select }
 
-    oro_sales.salesfunnel.form.type:
-        class: Oro\Bundle\SalesBundle\Form\Type\SalesFunnelType
-        tags:
-            - { name: form.type, alias: "oro_sales_funnel" }
-
-    oro_sales.salesfunnel.form.type.api:
-        class: Oro\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
-        tags:
-            - { name: form.type, alias: "oro_sales_salesfunnel_api" }
-
-    oro_sales.salesfunnel.form:
-        class: Symfony\Component\Form\Form
-        public: true
-        factory: ['@form.factory', createNamed]
-        arguments:
-            - "oro_sales_salesfunnel_form"
-            - Oro\Bundle\SalesBundle\Form\Type\SalesFunnelType
-
-    oro_sales.salesfunnel.form.api:
-        class: Symfony\Component\Form\Form
-        public: true
-        factory: ['@form.factory', createNamed]
-        arguments:
-            - "salesfunnel"
-            - Oro\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
-
-    Oro\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler:
-        alias: oro_sales.salesfunnel.form.handler
-
-    oro_sales.salesfunnel.form.handler:
-        class: Oro\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
-        public: true
-        arguments:
-            - "@oro_sales.salesfunnel.form"
-            - "@request_stack"
-            - "@doctrine.orm.entity_manager"
-
-    oro_sales.salesfunnel.form.handler.api:
-        class: Oro\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
-        public: true
-        arguments:
-            - "@oro_sales.salesfunnel.form.api"
-            - "@request_stack"
-            - "@doctrine.orm.entity_manager"
-
     oro_sales.b2bcustomer.form.type:
         class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType
         arguments:

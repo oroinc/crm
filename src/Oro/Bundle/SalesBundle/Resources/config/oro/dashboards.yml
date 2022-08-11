@@ -91,20 +91,6 @@ dashboards:
                         choices:
                             oro.sales.dashboard.opportunities_by_state.quantity_as_data.amount: 0
                             oro.sales.dashboard.opportunities_by_state.quantity_as_data.count: 1
-        my_sales_flow_b2b_chart:
-            label:       oro.sales.dashboard.my_sales_flow_b2b_chart.title
-            route:       oro_sales_dashboard_sales_flow_b2b_chart
-            acl:         oro_sales_opportunity_view
-            description: oro.sales.dashboard.my_sales_flow_b2b_chart.description
-            icon:        bundles/orosales/img/my_sales_flow_b2b.png
-            icon_class:  fa-globe
-            configuration:
-                dateRange:
-                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
-                    options:
-                       label: oro.dashboard.date_range.label
-                       value_types: true
-                    show_on_widget: true
         campaigns_leads:
             label:       oro.campaign.dashboard.campaigns_leads.title
             route:       oro_campaign_dashboard_campaigns_leads_chart

@@ -8,6 +8,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ConfigBundle\Config\GlobalScopeManager;
 use Oro\Bundle\DistributionBundle\Handler\ApplicationState;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -17,7 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
  *  | Class                                      | Feature                               |
  *  | Oro\Bundle\SalesBundle\Entity\Lead         | oro_sales.lead_feature_enabled        |
  *  | Oro\Bundle\SalesBundle\Entity\Opportunity  | oro_sales.opportunity_feature_enabled |
- *  | Oro\Bundle\SalesBundle\Entity\SalesFunnel  | oro_sales.salesfunnel_feature_enabled |
  */
 class UpdateFeaturesConfigs extends AbstractFixture implements ContainerAwareInterface
 {
@@ -26,13 +27,10 @@ class UpdateFeaturesConfigs extends AbstractFixture implements ContainerAwareInt
     /**
      * List of classes for which feature will be enabled if at least one active channel contains them,
      * otherwise disable them.
-     *
-     * @var array
      */
-    protected $featuresClasses = [
-        'Oro\Bundle\SalesBundle\Entity\Lead'        => 'oro_sales.lead_feature_enabled',
-        'Oro\Bundle\SalesBundle\Entity\Opportunity' => 'oro_sales.opportunity_feature_enabled',
-        'Oro\Bundle\SalesBundle\Entity\SalesFunnel' => 'oro_sales.salesfunnel_feature_enabled',
+    protected array $featuresClasses = [
+        Lead::class        => 'oro_sales.lead_feature_enabled',
+        Opportunity::class => 'oro_sales.opportunity_feature_enabled',
     ];
 
     /**
@@ -44,8 +42,8 @@ class UpdateFeaturesConfigs extends AbstractFixture implements ContainerAwareInt
             $configManager = $this->getConfigManager();
 
             $classes = $this->getEnabledFeatureClasses();
-            foreach ($this->featuresClasses as $className => $featureName) {
-                $value = in_array($className, $classes, true);
+            foreach (array_keys($this->featuresClasses) as $className) {
+                $value = \in_array($className, $classes, true);
                 $configManager->set($this->featuresClasses[$className], $value);
             }
             $configManager->flush();
@@ -54,10 +52,7 @@ class UpdateFeaturesConfigs extends AbstractFixture implements ContainerAwareInt
         }
     }
 
-    /**
-     * @return array
-     */
-    protected function getEnabledFeatureClasses()
+    protected function getEnabledFeatureClasses(): array
     {
         $query = <<<SQL
 SELECT DISTINCT(e.name)
@@ -81,7 +76,7 @@ SQL;
         return array_map('current', $entities);
     }
 
-    protected function clearChannelsConfigurations()
+    protected function clearChannelsConfigurations(): void
     {
         $this->getConnection()->executeStatement(
             'DELETE FROM orocrm_channel_entity_name WHERE name IN (:classes)',
@@ -97,18 +92,12 @@ SQL;
         );
     }
 
-    /**
-     * @return GlobalScopeManager
-     */
-    protected function getConfigManager()
+    protected function getConfigManager(): GlobalScopeManager
     {
         return $this->container->get('oro_config.global');
     }
 
-    /**
-     * @return Connection
-     */
-    protected function getConnection()
+    protected function getConnection(): Connection
     {
         return $this->container->get('doctrine.dbal.default_connection');
     }

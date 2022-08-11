@@ -36,14 +36,6 @@ services:
         tags:
             - { name: oro_email.owner.provider, order: 6 }
 
-    oro_sales.salesfunnel.manager.api:
-        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-        public: true
-        parent: oro_soap.manager.entity_manager.abstract
-        arguments:
-            - 'Oro\Bundle\SalesBundle\Entity\SalesFunnel'
-            - '@doctrine.orm.entity_manager'
-
     oro_sales.lead.datagrid_helper:
         class: Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
         public: true
@@ -182,12 +174,6 @@ services:
              - [setCurrencyQBTransformer, ["@oro_currency.query.currency_transformer"]]
         tags:
             - { name: oro_dashboard.big_number.provider, alias: opportunity_stats }
-
-    oro_sales.provider.sales_funnel_entity_name:
-        class: Oro\Bundle\SalesBundle\Provider\SalesFunnelEntityNameProvider
-        public: false
-        tags:
-            - { name: oro_entity.name_provider, priority: 100 }
 
     oro_sales.autocomplete.forecast_widget_business_unit.search_handler:
         class: Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
@@ -723,3 +709,12 @@ services:
     Oro\Bundle\SalesBundle\EntityConfig\CustomerEntityConfiguration:
         tags:
             - oro_entity_config.validation.entity_config
+
+    oro_sales.cache_warmer.remove_sales_funnel_entity_config:
+        class: Oro\Bundle\SalesBundle\CacheWarmer\RemoveSalesFunnelEntityConfigWarmer
+        arguments:
+            - '@doctrine'
+            - '@logger'
+            - '@oro_distribution.handler.application_status'
+        tags:
+            - { name: oro_entity_extend.warmer }

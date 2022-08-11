@@ -6,8 +6,6 @@ use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider;
 use Oro\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider;
-use Oro\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository;
-use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
@@ -17,12 +15,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Handles dashboard actions logic
+ * Handles dashboard actions logic.
  */
 class DashboardController extends AbstractController
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedServices()
     {
@@ -44,11 +42,8 @@ class DashboardController extends AbstractController
      *      requirements={"widget"="[\w\-]+"}
      * )
      * @Template("@OroSales/Dashboard/opportunitiesByLeadSource.html.twig")
-     * @param Request $request
-     * @param mixed $widget
-     * @return array
      */
-    public function opportunitiesByLeadSourceAction(Request $request, $widget)
+    public function opportunitiesByLeadSourceAction(Request $request, mixed $widget): array
     {
         $options = $this->get(WidgetConfigs::class)->getWidgetOptions(
             $request->query->get('_widgetId', null)
@@ -92,14 +87,10 @@ class DashboardController extends AbstractController
      *      requirements={"widget"="[\w\-]+"}
      * )
      * @Template("@OroSales/Dashboard/opportunityByStatus.html.twig")
-     * @param Request $request
-     * @param mixed $widget
-     * @return array
      */
-    public function opportunityByStatusAction(Request $request, $widget)
+    public function opportunityByStatusAction(Request $request, mixed $widget): array
     {
-        $options = $this->get(WidgetConfigs::class)
-            ->getWidgetOptions($request->query->get('_widgetId', null));
+        $options = $this->get(WidgetConfigs::class)->getWidgetOptions($request->query->get('_widgetId', null));
         if ($options->get('useQuantityAsData')) {
             $valueOptions = [
                 'field_name' => 'quantity'
@@ -111,9 +102,8 @@ class DashboardController extends AbstractController
                 'formatter'  => 'formatCurrency'
             ];
         }
-        $items = $this->get(OpportunityByStatusProvider::class)
-            ->getOpportunitiesGroupedByStatus($options);
-        $widgetAttr              = $this->get(WidgetConfigs::class)->getWidgetAttributesForTwig($widget);
+        $items = $this->get(OpportunityByStatusProvider::class)->getOpportunitiesGroupedByStatus($options);
+        $widgetAttr = $this->get(WidgetConfigs::class)->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get(ChartViewBuilder::class)
             ->setArrayData($items)
             ->setOptions(
@@ -122,62 +112,6 @@ class DashboardController extends AbstractController
                     'data_schema' => [
                         'label' => ['field_name' => 'label'],
                         'value' => $valueOptions
-                    ]
-                ]
-            )
-            ->getView();
-
-        return $widgetAttr;
-    }
-
-    /**
-     * @Route(
-     *      "/sales_flow_b2b/chart/{widget}",
-     *      name="oro_sales_dashboard_sales_flow_b2b_chart",
-     *      requirements={"widget"="[\w_-]+"}
-     * )
-     * @Template("@OroSales/Dashboard/salesFlowChart.html.twig")
-     * @param Request $request
-     * @param mixed $widget
-     * @return array
-     */
-    public function mySalesFlowB2BAction(Request $request, $widget)
-    {
-        $dateRange = $this->get(WidgetConfigs::class)
-            ->getWidgetOptions($request->query->get('_widgetId', null))
-            ->get('dateRange');
-
-        $dateTo   = $dateRange['end'];
-        $dateFrom = $dateRange['start'];
-
-        /** @var WorkflowRegistry $workflowRegistry */
-        $workflowRegistry = $this->get(WorkflowRegistry::class);
-        $workflows = $workflowRegistry->getActiveWorkflowsByEntityClass(SalesFunnel::class);
-
-        $customStepCalculations = ['won_opportunity' => 'opportunity.closeRevenueValue'];
-
-        /** @var SalesFunnelRepository $salesFunnerRepository */
-        $salesFunnerRepository = $this->getDoctrine()->getRepository('OroSalesBundle:SalesFunnel');
-
-        $data = $salesFunnerRepository->getFunnelChartData(
-            $dateFrom,
-            $dateTo,
-            $workflows->isEmpty() ? null : $workflows->first(),
-            $customStepCalculations,
-            $this->get(AclHelper::class)
-        );
-
-        $widgetAttr              = $this->get(WidgetConfigs::class)->getWidgetAttributesForTwig($widget);
-        $widgetAttr['chartView'] = $this->get(ChartViewBuilder::class)
-            ->setArrayData($data)
-            ->setOptions(
-                [
-                    'name'        => 'flow_chart',
-                    'settings'    => ['quarterDate' => $dateFrom],
-                    'data_schema' => [
-                        'label'    => ['field_name' => 'label'],
-                        'value'    => ['field_name' => 'value'],
-                        'isNozzle' => ['field_name' => 'isNozzle'],
                     ]
                 ]
             )

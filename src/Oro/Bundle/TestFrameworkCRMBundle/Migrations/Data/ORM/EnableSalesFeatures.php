@@ -8,12 +8,15 @@ use Oro\Bundle\ConfigBundle\Config\GlobalScopeManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
+/**
+ * Enables sales features.
+ */
 class EnableSalesFeatures extends AbstractFixture implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function load(ObjectManager $manager)
     {
@@ -22,9 +25,6 @@ class EnableSalesFeatures extends AbstractFixture implements ContainerAwareInter
         // Enable Lead and Opportunity features, for tests after upgrade
         $configManager->set('oro_sales.lead_feature_enabled', true);
         $configManager->set('oro_sales.opportunity_feature_enabled', true);
-
-        // Enable Sales Funnel feature for REST API tests
-        $configManager->set('oro_sales.salesfunnel_feature_enabled', true);
 
         $configManager->flush();
     }

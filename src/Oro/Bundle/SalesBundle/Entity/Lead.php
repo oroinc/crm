@@ -493,14 +493,6 @@ class Lead extends ExtendLead implements
     /**
      * {@inheritDoc}
      */
-    public function getClass()
-    {
-        return 'Oro\Bundle\SalesBundle\Entity\Lead';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getEmailFields()
     {
         return null;

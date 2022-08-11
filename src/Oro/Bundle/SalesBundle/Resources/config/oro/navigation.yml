@@ -24,14 +24,6 @@ navigation:
                     routes:      ['/^oro_sales_opportunity/']
                     description: 'oro.sales.menu.opportunity_list.description'
 
-            sales_salesfunnel_list:
-                label: 'oro.sales.salesfunnel.entity_plural_label'
-                route: 'oro_sales_salesfunnel_index'
-                position: 10
-                extras:
-                    routes:      ['/^oro_sales_salesfunnel/']
-                    description: 'oro.sales.menu.sales_salesfunnel_list.description'
-
             b2bcustomer_list:
                 label: 'oro.sales.b2bcustomer.entity_plural_label'
                 route: 'oro_sales_b2bcustomer_index'
@@ -83,7 +75,6 @@ navigation:
                 children:
                     sales_tab:
                         children:
-                            sales_salesfunnel_list: ~
                             lead_list: ~
                             opportunity_list: ~
                     customers_tab:
@@ -107,11 +98,6 @@ navigation:
         oro_sales_lead_create: 'Create Lead'
         oro_sales_lead_update: '%lead.name% - Edit'
         oro_sales_lead_convert_to_opportunity: '%lead.name% - Convert To Opportunity'
-
-        oro_sales_salesfunnel_index: ~
-        oro_sales_salesfunnel_view: '%sales_funnel%'
-        oro_sales_salesfunnel_create: 'Create Sales Activity'
-        oro_sales_salesfunnel_update: '%sales_funnel% - Edit'
 
         oro_sales_b2bcustomer_index: ~
         oro_sales_b2bcustomer_view:   '%b2bcustomer.name%'

@@ -52,16 +52,6 @@ class OroSalesBundle implements Migration
      */
     public static function addOrganization(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_sales_funnel');
-        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['organization_id'], 'IDX_E20C734432C8A3DE', []);
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_organization'),
-            ['organization_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
-        );
-
         $table = $schema->getTable('orocrm_sales_lead');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['organization_id'], 'IDX_73DB463332C8A3DE', []);

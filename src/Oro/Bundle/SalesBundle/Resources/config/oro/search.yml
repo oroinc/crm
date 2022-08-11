@@ -121,60 +121,6 @@ search:
                         target_type:   integer
                         target_fields: [dataChannelId]
 
-
-    Oro\Bundle\SalesBundle\Entity\SalesFunnel:
-        alias:                          oro_sales_funnel
-        route:
-            name:                       oro_sales_salesfunnel_view
-            parameters:
-                id:                     id
-        search_template:                '@OroSales/SalesFunnel/searchResult.html.twig'
-        fields:
-            -
-                name:                   lead
-                relation_type:          many-to-one
-                relation_fields:
-                    -
-                        name: name
-                        target_type: text
-                        target_fields: [leadName]
-                    -
-                        name: namePrefix
-                        target_type: text
-                        target_fields: [namePrefix]
-                    -
-                        name: firstName
-                        target_type: text
-                        target_fields: [firstName]
-                    -
-                        name: middleName
-                        target_type: text
-                        target_fields: [middleName]
-                    -
-                        name: lastName
-                        target_type: text
-                        target_fields: [lastName]
-                    -
-                        name: nameSuffix
-                        target_type: text
-                        target_fields: [nameSuffix]
-            -
-                name:                   opportunity
-                relation_type:          many-to-one
-                relation_fields:
-                    -
-                        name: name
-                        target_type: text
-                        target_fields: [opportunityName]
-            -
-                name:                  dataChannel
-                relation_type:         many-to-one
-                relation_fields:
-                    -
-                        name:          id
-                        target_type:   integer
-                        target_fields: [dataChannelId]
-
     Oro\Bundle\SalesBundle\Entity\B2bCustomer:
         alias:                          oro_sales_b2bcustomer
         route:

@@ -2,5 +2,23 @@ api:
     entities:
 #        Oro\Bundle\ContactUsBundle\Entity\ContactRequest: ~
 
-        # remove this exclusion when ContactRequest entity will be enabled for API
-        Oro\Bundle\ContactUsBundle\Entity\ContactReason: { exclude: true}
+        Oro\Bundle\ContactUsBundle\Entity\ContactReason:
+            documentation_resource: '@OroContactUsBundle/Resources/doc/api/contact_reason.md'
+            fields:
+                labels:
+                    property_path: titles
+                    form_options:
+                        by_reference: true
+                deactivatedAt:
+                    property_path: deletedAt
+                    form_options:
+                        mapped: false
+            actions:
+                delete:
+                    exclude: false # set manually because this entity is marked as a dictionary
+                delete_list:
+                    exclude: false # set manually because this entity is marked as a dictionary
+                create:
+                    exclude: false # set manually because this entity is marked as a dictionary
+                update:
+                    exclude: false # set manually because this entity is marked as a dictionary

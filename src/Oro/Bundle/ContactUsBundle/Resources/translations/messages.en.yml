@@ -38,6 +38,10 @@ oro:
             entity:
                 saved: Contact request has been saved successfully
 
+            feature:
+                label: Contact Requests
+                description: Enables creating and managing contact requests submitted by customers.
+
         contactreason:
             entity_label: Contact Reason
             entity_plural_label: Contact Reasons
@@ -45,9 +49,18 @@ oro:
             entity_description: Represents contact reason
             id.label:    ID
             label.label: Label
-            deleted_at.label: Deleted At
+            deleted_at:
+                label: Deleted At
+                description: The date and time when the contact reason was deactivated.
             saved: Contact reason has been saved successfully
-            titles.label: Translatable labels
+            titles:
+                label: Label
+                description: The label of the contact reason (it is a list of localized entities to hold the localized text for each localization).
+
+            feature:
+                manage:
+                    label: Contact Reason Management
+                    description: Enables creating and managing contact reasons that help categorize the contact requests submitted by customers through phone, email, or any other embedded channel.
 
         block:
             general:                General

@@ -7,7 +7,6 @@ use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
@@ -35,14 +34,14 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider = new LeadActionsAccessProvider($this->workflowRegistry, $this->featureChecker);
     }
 
-    public function testIsDisqualifyAllowedWhenLeadDisqualified()
+    public function testIsDisqualifyAllowedWhenLeadDisqualified(): void
     {
         $this->assertFalse(
             $this->provider->isDisqualifyAllowed($this->getDisqualifiedLead())
         );
     }
 
-    public function testIsDisqualifyAllowedWhenLeadWfEnabled()
+    public function testIsDisqualifyAllowedWhenLeadWfEnabled(): void
     {
         $this->makeLeadWfEnabled();
         $this->assertFalse(
@@ -50,28 +49,21 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testIsDisqualifyAllowedWhenSalesFunnelWfEnabled()
+    public function testIsDisqualifyAllowedWhenAllChecksPassed(): void
     {
         $lead = $this->getValidLead();
-        $this->makeLeadWfDisabledAndSalesFunnelWfEnabled();
-        $this->assertFalse($this->provider->isDisqualifyAllowed($lead));
-    }
-
-    public function testIsDisqualifyAllowedWhenAllChecksPassed()
-    {
-        $lead = $this->getValidLead();
-        $this->makeWorkFlowsDisabled();
+        $this->makeLeadWfDisabled();
         $this->assertTrue($this->provider->isDisqualifyAllowed($lead));
     }
 
-    public function testIsConvertToOpportunityAllowedWhenLeadHasOpportunities()
+    public function testIsConvertToOpportunityAllowedWhenLeadHasOpportunities(): void
     {
         $this->assertFalse(
             $this->provider->isConvertToOpportunityAllowed($this->getLeadWithOpportunities())
         );
     }
 
-    public function testIsConvertToOpportunityAllowedWhenLeadWfEnabled()
+    public function testIsConvertToOpportunityAllowedWhenLeadWfEnabled(): void
     {
         $this->makeLeadWfEnabled();
         $this->assertFalse(
@@ -79,18 +71,12 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testIsConvertToOpportunityAllowedWhenSalesFunnelWfEnabled()
+    public function testIsConvertToOpportunityAllowedWhenFeatureDisabled(): void
     {
         $lead = $this->getValidLead();
-        $this->makeLeadWfDisabledAndSalesFunnelWfEnabled();
-        $this->assertFalse($this->provider->isConvertToOpportunityAllowed($lead));
-    }
-
-    public function testIsConvertToOpportunityAllowedWhenFeatureDisabled()
-    {
-        $lead = $this->getValidLead();
-        $this->makeWorkFlowsDisabled();
-        $this->featureChecker->expects($this->once())
+        $this->makeLeadWfDisabled();
+        $this->featureChecker
+            ->expects($this->once())
             ->method('isFeatureEnabled')
             ->with('sales_opportunity')
             ->willReturn(false);
@@ -98,10 +84,10 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->provider->isConvertToOpportunityAllowed($lead));
     }
 
-    public function testIsConvertToOpportunityAllowedWhenAllChecksPassed()
+    public function testIsConvertToOpportunityAllowedWhenAllChecksPassed(): void
     {
         $lead = $this->getValidLead();
-        $this->makeWorkFlowsDisabled();
+        $this->makeLeadWfDisabled();
         $this->featureChecker->expects($this->once())
             ->method('isFeatureEnabled')
             ->with('sales_opportunity')
@@ -133,31 +119,20 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
         return $lead;
     }
 
-    private function makeWorkFlowsDisabled(): void
+    private function makeLeadWfDisabled(): void
     {
-        $this->workflowRegistry->expects($this->exactly(2))
+        $this->workflowRegistry->expects($this->once())
             ->method('getActiveWorkflowsByEntityClass')
             ->willReturnMap([
-                [Lead::class, new ArrayCollection([])],
-                [SalesFunnel::class, new ArrayCollection([])]
+                [Lead::class, new ArrayCollection([])]
             ]);
     }
 
-    public function makeLeadWfEnabled(): void
+    private function makeLeadWfEnabled(): void
     {
         $this->workflowRegistry->expects($this->once())
             ->method('getActiveWorkflowsByEntityClass')
             ->with(Lead::class)
             ->willReturn(new ArrayCollection([1]));
-    }
-
-    public function makeLeadWfDisabledAndSalesFunnelWfEnabled(): void
-    {
-        $this->workflowRegistry->expects($this->exactly(2))
-            ->method('getActiveWorkflowsByEntityClass')
-            ->willReturnMap([
-                [Lead::class, new ArrayCollection([])],
-                [SalesFunnel::class, new ArrayCollection([1])]
-            ]);
     }
 }

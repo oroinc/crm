@@ -1,0 +1,33 @@
+features:
+    manage_accounts:
+        label: oro.account.feature.manage.label
+        description: oro.account.feature.manage.description
+        allow_if_all_abstain: true
+        routes:
+            - oro_account_view
+            - oro_account_create
+            - oro_account_update
+            - oro_account_index
+            - oro_account_widget_contacts
+            - oro_account_widget_contacts_info
+            - oro_account_widget_info
+            - oro_api_get_accounts
+            - oro_api_get_account
+            - oro_api_put_account
+            - oro_api_post_account
+            - oro_api_delete_account
+            - oro_api_options_accounts
+        entities:
+            - Oro\Bundle\AccountBundle\Entity\Account
+        api_resources:
+            - [Oro\Bundle\AccountBundle\Entity\Account, [create, update, delete, delete_list]]
+        dashboard_widgets:
+            - my_accounts_activity
+            - quick_launchpad.accounts
+        navigation_items:
+            - application_menu.customers_tab.account_list
+            - shortcuts.shortcut_new_account
+            - shortcuts.shortcut_list_accounts
+        placeholder_items:
+            - accounts_launchpad
+            - account_lifetime_value

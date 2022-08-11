@@ -1,0 +1,85 @@
+features:
+    # Additionally:
+    #  - If at least one group exists - it should be available on "contact" view|form
+    manage_contact_groups:
+        label: oro.contact.group.feature.manage.label
+        description: oro.contact.group.feature.manage.description
+        allow_if_all_abstain: true
+        routes:
+            - oro_contact_group_index
+            - oro_contact_group_create
+            - oro_contact_group_update
+            - oro_api_get_contactgroups
+            - oro_api_get_contactgroup
+            - oro_api_put_contactgroup
+            - oro_api_post_contactgroup
+            - oro_api_delete_contactgroup
+            - oro_api_options_contactgroups
+        entities:
+            - Oro\Bundle\ContactBundle\Entity\Group
+        api_resources:
+            - [Oro\Bundle\ContactBundle\Entity\Group, [create, update, delete, delete_list]]
+        navigation_items:
+            - application_menu.system_tab.contact_group_list
+            - shortcuts.shortcut_new_contact_group
+
+    manage_contacts:
+        label: oro.contact.feature.manage.label
+        description: oro.contact.feature.manage.description
+        allow_if_all_abstain: true
+        routes:
+            - oro_contact_view
+            - oro_contact_info
+            - oro_contact_create
+            - oro_contact_update
+            - oro_contact_index
+            - oro_account_widget_contacts
+            - oro_account_widget_contacts_info
+            - oro_api_get_contacts
+            - oro_api_get_contact
+            - oro_api_put_contact
+            - oro_api_post_contact
+            - oro_api_delete_contact
+            - oro_api_options_contacts
+            - oro_contact_address_book
+            - oro_contact_address_create
+            - oro_contact_address_update
+            - oro_api_get_contact_address
+            - oro_api_get_contact_addresses
+            - oro_api_delete_contact_address
+            - oro_api_get_contact_address_by_type
+            - oro_api_get_contact_address_primary
+            - oro_api_options_contact_addresses
+            - oro_api_get_contact_phones
+            - oro_api_get_contact_phone_primary
+            - oro_api_post_contact_phone
+            - oro_api_delete_contact_phone
+            - oro_api_options_contact_phones
+            - oro_api_post_contact_email
+            - oro_api_delete_contact_email
+            - oro_api_options_contact_emails
+        entities:
+            - Oro\Bundle\ContactBundle\Entity\Contact
+            - Oro\Bundle\ContactBundle\Entity\ContactAddress
+            - Oro\Bundle\ContactBundle\Entity\ContactEmail
+            - Oro\Bundle\ContactBundle\Entity\ContactPhone
+            - Oro\Bundle\ContactBundle\Entity\Method
+            - Oro\Bundle\ContactBundle\Entity\Source
+        api_resources:
+            - [Oro\Bundle\ContactBundle\Entity\Contact, [create, update, delete, delete_list]]
+            - [Oro\Bundle\ContactBundle\Entity\ContactAddress, [create, update, delete, delete_list]]
+            - [Oro\Bundle\ContactBundle\Entity\ContactEmail, [create, update, delete, delete_list]]
+            - [Oro\Bundle\ContactBundle\Entity\ContactPhone, [create, update, delete, delete_list]]
+            - [Oro\Bundle\ContactBundle\Entity\Method, [create, update, delete, delete_list]]
+            - [Oro\Bundle\ContactBundle\Entity\Source, [create, update, delete, delete_list]]
+        dashboard_widgets:
+            - quick_launchpad.contacts
+            - my_contacts_activity
+        navigation_items:
+            - application_menu.customers_tab.contact_list
+            - shortcuts.shortcut_new_contact
+            - shortcuts.shortcut_list_contacts
+        placeholder_items:
+            - contacts_launchpad
+            - oro_add_contact_button
+            - oro_add_contact_link
