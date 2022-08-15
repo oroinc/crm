@@ -5,44 +5,28 @@ namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
-use Oro\Bundle\DataAuditBundle\Tests\Unit\Fixture\Repository\UserRepository;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
-use Oro\Bundle\TagBundle\Entity\TagManager;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\Group;
+use Oro\Bundle\UserBundle\Entity\Role;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadRolesData;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Loads Sale and Marketing users for default organization
+ * Loads Sale and Marketing users for default organization.
  */
 class LoadUserData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /** @var ContainerInterface */
-    private $container;
-
-    /** @var  EntityRepository */
-    protected $roles;
-
-    /** @var  EntityRepository */
-    protected $group;
-
-    /** @var UserRepository */
-    protected $user;
-
-    /** @var  TagManager */
-    protected $tagManager;
-
-    /** @var UserManager */
-    private $userManager;
+    private ContainerInterface $container;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             LoadGroupData::class,
@@ -50,33 +34,30 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
         ];
     }
 
-    public function setContainer(ContainerInterface $container = null)
+    /**
+     * {@inheritDoc}
+     */
+    public function setContainer(ContainerInterface $container = null): void
     {
         $this->container = $container;
-        /** @var  EntityManager $entityManager */
-        $entityManager = $container->get('doctrine.orm.entity_manager');
-        $this->roles = $entityManager->getRepository('OroUserBundle:Role');
-        $this->group = $entityManager->getRepository('OroUserBundle:Group');
-        $this->user = $entityManager->getRepository('OroUserBundle:User');
-        $this->tagManager = $container->get('oro_tag.tag.manager');
-        $this->userManager = $this->container->get('oro_user.manager');
     }
 
-    public function load(ObjectManager $manager)
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $manager): void
     {
+        /** @var UserManager $userManager */
+        $userManager = $this->container->get('oro_user.manager');
+
+        /** @var Organization $organization */
         $organization = $this->getReference('default_organization');
+        $marketingRole = $this->getRole($manager, 'ROLE_MARKETING_MANAGER');
+        $saleRole = $this->getRole($manager, LoadRolesData::ROLE_MANAGER);
+        $salesGroup = $this->getGroup($manager, 'Executive Sales');
+        $marketingGroup = $this->getGroup($manager, 'Executive Marketing');
 
-        /** @var \Oro\Bundle\UserBundle\Entity\Role $marketingRole */
-        $marketingRole = $this->roles->findOneBy(array('role' => 'ROLE_MARKETING_MANAGER'));
-        /** @var \Oro\Bundle\UserBundle\Entity\Role $saleRole */
-        $saleRole = $this->roles->findOneBy(array('role' => LoadRolesData::ROLE_MANAGER));
-        /** @var \Oro\Bundle\UserBundle\Entity\Group $salesGroup */
-        $salesGroup = $this->group->findOneBy(array('name' => 'Executive Sales'));
-        /** @var \Oro\Bundle\UserBundle\Entity\Group $marketingGroup */
-        $marketingGroup = $this->group->findOneBy(array('name' => 'Executive Marketing'));
-
-        $sale = $this->userManager->createUser();
-
+        $sale = $userManager->createUser();
         $sale
             ->setUsername('sale')
             ->setPlainPassword('sale')
@@ -87,25 +68,19 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
             ->setEmail('sale@example.com')
             ->setOrganization($organization)
             ->addOrganization($organization)
-            ->setBusinessUnits(
-                new ArrayCollection(
-                    [
-                        $this->getBusinessUnit($manager, 'Acme, General'),
-                        $this->getBusinessUnit($manager, 'Acme, East'),
-                        $this->getBusinessUnit($manager, 'Acme, West')
-                    ]
-                )
-            );
-
+            ->setBusinessUnits(new ArrayCollection([
+                $this->getBusinessUnit($manager, 'Acme, General'),
+                $this->getBusinessUnit($manager, 'Acme, East'),
+                $this->getBusinessUnit($manager, 'Acme, West')
+            ]));
         if ($this->hasReference('default_main_business')) {
             $sale->setOwner($this->getBusinessUnit($manager, 'Acme, General'));
         }
         $this->addReference('default_sale', $sale);
-        $this->userManager->updateUser($sale);
+        $userManager->updateUser($sale);
 
-        /** @var \Oro\Bundle\UserBundle\Entity\User $marketing */
-        $marketing = $this->userManager->createUser();
-
+        /** @var User $marketing */
+        $marketing = $userManager->createUser();
         $marketing
             ->setUsername('marketing')
             ->setPlainPassword('marketing')
@@ -116,30 +91,30 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
             ->setEmail('marketing@example.com')
             ->setOrganization($organization)
             ->addOrganization($organization)
-            ->setBusinessUnits(
-                new ArrayCollection(
-                    [
-                        $this->getBusinessUnit($manager, 'Acme, General'),
-                        $this->getBusinessUnit($manager, 'Acme, East'),
-                        $this->getBusinessUnit($manager, 'Acme, West')
-                    ]
-                )
-            );
-
+            ->setBusinessUnits(new ArrayCollection([
+                $this->getBusinessUnit($manager, 'Acme, General'),
+                $this->getBusinessUnit($manager, 'Acme, East'),
+                $this->getBusinessUnit($manager, 'Acme, West')
+            ]));
         if ($this->hasReference('default_main_business')) {
             $marketing->setOwner($this->getBusinessUnit($manager, 'Acme, General'));
         }
         $this->addReference('default_marketing', $marketing);
-        $this->userManager->updateUser($marketing);
+        $userManager->updateUser($marketing);
     }
 
-    /**
-     * @param ObjectManager $manager
-     * @param $name
-     * @return BusinessUnit
-     */
-    protected function getBusinessUnit(ObjectManager $manager, $name)
+    private function getRole(ObjectManager $manager, string $role): Role
     {
-        return $manager->getRepository('OroOrganizationBundle:BusinessUnit')->findOneBy(['name' => $name]);
+        return $manager->getRepository(Role::class)->findOneBy(['role' => $role]);
+    }
+
+    private function getGroup(ObjectManager $manager, string $name): Group
+    {
+        return $manager->getRepository(Group::class)->findOneBy(['name' => $name]);
+    }
+
+    private function getBusinessUnit(ObjectManager $manager, string $name): BusinessUnit
+    {
+        return $manager->getRepository(BusinessUnit::class)->findOneBy(['name' => $name]);
     }
 }
