@@ -4,23 +4,19 @@ namespace Oro\Bundle\ContactBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 
+/**
+ * This constraint is used to check whether at least one of the fields first name, last name,
+ * emails or phones is defined for Contact entity.
+ */
 class HasContactInformation extends Constraint
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function validatedBy()
-    {
-        return 'oro_contact.has_contact_information';
-    }
+    public string $message = 'oro.contact.validators.contact.has_information';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getTargets()
+    public function getTargets(): string
     {
-        return [
-            static::CLASS_CONSTRAINT,
-        ];
+        return self::CLASS_CONSTRAINT;
     }
 }

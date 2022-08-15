@@ -280,13 +280,6 @@ services:
         tags:
             - { name: oro_entity.delete_handler_extension, entity: Oro\Bundle\ContactBundle\Entity\ContactPhone }
 
-    oro_contact.validator.has_contact_information:
-        class: Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformationValidator
-        arguments:
-            - '@translator'
-        tags:
-            - { name: validator.constraint_validator, alias: oro_contact.has_contact_information }
-
     oro_contact.formatter.contact_entity_name:
         class: Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter
         arguments:
