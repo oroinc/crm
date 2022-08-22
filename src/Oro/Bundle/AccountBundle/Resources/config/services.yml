@@ -64,7 +64,7 @@ services:
         parent: oro_form.autocomplete.search_handler
         arguments:
             - 'Oro\Bundle\AccountBundle\Entity\Account'
-            - ["name"]
+            - ['name']
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: oro_account_view }
 

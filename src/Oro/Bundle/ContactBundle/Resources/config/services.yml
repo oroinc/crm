@@ -144,7 +144,7 @@ services:
         parent: oro_form.autocomplete.full_name.search_handler
         arguments:
             - 'Oro\Bundle\ContactBundle\Entity\Contact'
-            - ["namePrefix", "firstName", "middleName", "lastName", "nameSuffix"]
+            - ['namePrefix', 'firstName', 'middleName', 'lastName', 'nameSuffix']
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: contacts, acl_resource: oro_contact_view }
 

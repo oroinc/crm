@@ -52,7 +52,6 @@ services:
 
     oro_contact_us.form.autocomplete.contact_reason.search_handler:
         class: Oro\Bundle\ContactUsBundle\Autocomplete\ContactReasonSearchHandler
-        lazy: true
         arguments:
             - '@oro_entity.doctrine_helper'
             - '@property_accessor'

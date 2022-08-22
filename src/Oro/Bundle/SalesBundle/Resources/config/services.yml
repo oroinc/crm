@@ -44,38 +44,34 @@ services:
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity\Opportunity'
-            - ["name"]
+            - ['name']
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: opportunities, acl_resource: oro_sales_opportunity_view }
-        lazy: true
 
     oro_sales.form.autocomplete.lead.search_handler:
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity\Lead'
-            - ["name"]
+            - ['name']
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: leads, acl_resource: oro_sales_lead_view }
-        lazy: true
 
     oro_sales.form.autocomplete.b2bcustomer.search_handler:
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity\B2bCustomer'
-            - ["name"]
+            - ['name']
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: b2b_customers, acl_resource: oro_sales_b2bcustomer_view }
-        lazy: true
 
     oro_sales.form.autocomplete.b2b_customers_with_channel.search_handler:
         class: Oro\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity\B2bCustomer'
-            - ["name", "account.name", "dataChannel.id"]
+            - ['name', 'account.name', 'dataChannel.id']
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: b2b_customers_with_channel, acl_resource: oro_sales_b2bcustomer_view }
-        lazy: true
 
     oro_sales.provider.enitity_state:
         parent: oro_channel.provider.utils.entity_state_provider
@@ -180,8 +176,8 @@ services:
         parent: oro_form.autocomplete.search_handler
         arguments:
             - 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
-            - ["name"]
-            - '@oro_organization.provider.busines_unit_acl'
+            - ['name']
+            - '@oro_organization.provider.business_unit_acl'
             - 'Oro\Bundle\SalesBundle\Entity\Opportunity'
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: forecast_widget_business_units }
