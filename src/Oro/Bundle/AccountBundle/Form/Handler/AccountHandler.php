@@ -4,52 +4,35 @@ namespace Oro\Bundle\AccountBundle\Form\Handler;
 
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 
-class AccountHandler
+/**
+ * The handler for account form.
+ */
+class AccountHandler implements FormHandlerInterface
 {
     use RequestHandlerTrait;
 
-    /**
-     * @var FormInterface
-     */
-    protected $form;
+    protected ObjectManager $manager;
 
-    /**
-     * @var RequestStack
-     */
-    protected $requestStack;
-
-    /**
-     * @var ObjectManager
-     */
-    protected $manager;
-
-    public function __construct(FormInterface $form, RequestStack $requestStack, ObjectManager $manager)
+    public function __construct(ObjectManager $manager)
     {
-        $this->form    = $form;
-        $this->requestStack = $requestStack;
         $this->manager = $manager;
     }
 
     /**
-     * Process form
-     *
-     * @param  Account $entity
-     *
-     * @return bool True on successful processing, false otherwise
+     * {@inheritDoc}
      */
-    public function process(Account $entity)
+    public function process($entity, FormInterface $form, Request $request)
     {
-        $this->form->setData($entity);
+        $form->setData($entity);
+        if (\in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->submitPostPutRequest($form, $request);
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->submitPostPutRequest($this->form, $request);
-
-            if ($this->form->isValid()) {
+            if ($form->isValid()) {
                 $this->onSuccess($entity);
 
                 return true;
@@ -62,7 +45,7 @@ class AccountHandler
     /**
      * "Success" form handler
      */
-    protected function onSuccess(Account $entity)
+    protected function onSuccess(Account $entity): void
     {
         $this->manager->persist($entity);
         $this->manager->flush();

@@ -8,7 +8,6 @@ use Oro\Bundle\AccountBundle\Form\Handler\AccountHandler;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class AccountHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,10 +35,7 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
         $this->manager = $this->createMock(ObjectManager::class);
         $this->entity = new Account();
 
-        $requestStack = new RequestStack();
-        $requestStack->push($this->request);
-
-        $this->handler = new AccountHandler($this->form, $requestStack, $this->manager);
+        $this->handler = new AccountHandler($this->manager);
     }
 
     public function testProcessUnsupportedRequest(): void
@@ -51,7 +47,7 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->never())
             ->method('submit');
 
-        $this->assertFalse($this->handler->process($this->entity));
+        $this->assertFalse($this->handler->process($this->entity, $this->form, $this->request));
     }
 
     /**
@@ -70,7 +66,7 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('submit')
             ->with(self::FORM_DATA);
 
-        $this->assertFalse($this->handler->process($this->entity));
+        $this->assertFalse($this->handler->process($this->entity, $this->form, $this->request));
     }
 
     public function supportedMethods(): array
@@ -105,7 +101,7 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
         $this->manager->expects($this->once())
             ->method('flush');
 
-        $this->assertTrue($this->handler->process($this->entity));
+        $this->assertTrue($this->handler->process($this->entity, $this->form, $this->request));
     }
 
     public function testProcessWithoutContactViewPermission(): void
@@ -128,6 +124,6 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->never())
             ->method('get');
 
-        $this->assertTrue($this->handler->process($this->entity));
+        $this->assertTrue($this->handler->process($this->entity, $this->form, $this->request));
     }
 }

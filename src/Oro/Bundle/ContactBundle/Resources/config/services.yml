@@ -26,8 +26,6 @@ services:
         class: Oro\Bundle\ContactBundle\Form\Handler\ContactHandler
         public: true
         arguments:
-            - "@oro_contact.form.contact"
-            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact.contact.manager:
@@ -91,8 +89,6 @@ services:
         class: Oro\Bundle\ContactBundle\Form\Handler\ContactHandler
         public: true
         arguments:
-            - "@oro_contact.form.contact.api"
-            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact.group.manager.api:
@@ -136,8 +132,6 @@ services:
         class: Oro\Bundle\AddressBundle\Form\Handler\AddressHandler
         public: true
         arguments:
-            - "@oro_contact.contact_address.form"
-            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact.form.autocomplete.contact.search_handler:

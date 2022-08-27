@@ -26,7 +26,7 @@ class LeadAddressController extends AbstractController
      * @Template
      * @AclAncestor("oro_sales_lead_view")
      */
-    public function addressBookAction(Lead $lead)
+    public function addressBookAction(Lead $lead): array
     {
         return [
             'entity' => $lead,
@@ -43,11 +43,8 @@ class LeadAddressController extends AbstractController
      * @Template("@OroSales/LeadAddress/update.html.twig")
      * @AclAncestor("oro_sales_lead_update")
      * @ParamConverter("lead", options={"id" = "leadId"})
-     * @param Request $request
-     * @param Lead $lead
-     * @return array|RedirectResponse
      */
-    public function createAction(Request $request, Lead $lead)
+    public function createAction(Request $request, Lead $lead): array|RedirectResponse
     {
         return $this->update($request, $lead, new LeadAddress());
     }
@@ -61,24 +58,16 @@ class LeadAddressController extends AbstractController
      * @Template
      * @AclAncestor("oro_sales_lead_update")
      * @ParamConverter("lead", options={"id" = "leadId"})
-     * @param Request $request
-     * @param Lead $lead
-     * @param LeadAddress $address
-     * @return array|RedirectResponse
      */
-    public function updateAction(Request $request, Lead $lead, LeadAddress $address)
+    public function updateAction(Request $request, Lead $lead, LeadAddress $address): array|RedirectResponse
     {
         return $this->update($request, $lead, $address);
     }
 
     /**
-     * @param Request $request
-     * @param Lead $lead
-     * @param LeadAddress $address
-     * @return array
      * @throws BadRequestHttpException
      */
-    protected function update(Request $request, Lead $lead, LeadAddress $address)
+    protected function update(Request $request, Lead $lead, LeadAddress $address): array|RedirectResponse
     {
         $responseData = [
             'saved' => false,
@@ -101,20 +90,24 @@ class LeadAddressController extends AbstractController
 
         // Update lead's modification date when an address is changed
         $lead->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-
-        if ($this->get(AddressHandler::class)->process($address)) {
+        $form = $this->get('oro_sales.lead_address.form');
+        if ($this->get(AddressHandler::class)->process(
+            $address,
+            $form,
+            $request
+        )) {
             $this->getDoctrine()->getManager()->flush();
             $responseData['entity'] = $address;
             $responseData['saved'] = true;
         }
 
-        $responseData['form'] = $this->get('oro_sales.lead_address.form')->createView();
+        $responseData['form'] = $form->createView();
 
         return $responseData;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedServices()
     {

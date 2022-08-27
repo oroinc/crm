@@ -147,6 +147,28 @@ class AccountController extends RestController
         return $this->get('oro_account.form.handler.account.api');
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * overriden because of new updateHandler requirements ->process(entity, form, request)
+     */
+    protected function processForm($entity)
+    {
+        $this->fixRequestAttributes($entity);
+
+        $result = $this->getFormHandler()->process(
+            $entity,
+            $this->getForm(),
+            $this->get('request_stack')->getCurrentRequest()
+        );
+        if (\is_object($result) || null === $result) {
+            return $result;
+        }
+
+        // some form handlers may return true/false rather than saved entity
+        return $result ? $entity : null;
+    }
+
     protected function getPreparedItem($entity, $resultFields = [])
     {
         $result = parent::getPreparedItem($entity, $resultFields);

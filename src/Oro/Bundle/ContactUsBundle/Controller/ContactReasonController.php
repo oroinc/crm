@@ -4,7 +4,7 @@ namespace Oro\Bundle\ContactUsBundle\Controller;
 
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactReasonType;
-use Oro\Bundle\FormBundle\Model\UpdateHandler;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -30,9 +30,8 @@ class ContactReasonController extends AbstractController
      *      class="OroContactUsBundle:ContactReason",
      *      permission="VIEW"
      * )
-     * @return array
      */
-    public function indexAction()
+    public function indexAction(): array
     {
         return [
             'entity_class' => ContactReason::class
@@ -40,8 +39,6 @@ class ContactReasonController extends AbstractController
     }
 
     /**
-     * @return array|RedirectResponse
-     *
      * @Route("/create", name="oro_contactus_reason_create")
      * @Template("@OroContactUs/ContactReason/update.html.twig")
      * @Acl(
@@ -51,17 +48,13 @@ class ContactReasonController extends AbstractController
      *      permission="CREATE"
      * )
      */
-    public function createAction()
+    public function createAction(): array|RedirectResponse
     {
         return $this->update(new ContactReason());
     }
 
     /**
      * @ParamConverter("contactReason", options={"repository_method" = "getContactReason"})
-     *
-     * @param ContactReason $contactReason
-     * @return array
-     *
      * @Route("/update/{id}", name="oro_contactus_reason_update", requirements={"id"="\d+"})
      * @Template
      * @Acl(
@@ -71,19 +64,14 @@ class ContactReasonController extends AbstractController
      *      permission="EDIT"
      * )
      */
-    public function updateAction(ContactReason $contactReason)
+    public function updateAction(ContactReason $contactReason): array|RedirectResponse
     {
         return $this->update($contactReason);
     }
 
-    /**
-     * @param ContactReason $contactReason
-     *
-     * @return array|RedirectResponse
-     */
-    protected function update(ContactReason $contactReason)
+    protected function update(ContactReason $contactReason): array|RedirectResponse
     {
-        return $this->get(UpdateHandler::class)->update(
+        return $this->get(UpdateHandlerFacade::class)->update(
             $contactReason,
             $this->createForm(ContactReasonType::class, $contactReason),
             $this->get(TranslatorInterface::class)->trans('oro.contactus.contactreason.saved')
@@ -92,10 +80,6 @@ class ContactReasonController extends AbstractController
 
     /**
      * @ParamConverter("contactReason", options={"repository_method" = "getContactReason"})
-     *
-     * @param ContactReason $contactReason
-     * @return JsonResponse
-     *
      * @Route("/delete/{id}", name="oro_contactus_reason_delete", requirements={"id"="\d+"}, methods={"DELETE"})
      * @Acl(
      *      id="oro_contactus_reason_delete",
@@ -105,7 +89,7 @@ class ContactReasonController extends AbstractController
      * )
      * @CsrfProtection()
      */
-    public function deleteAction(ContactReason $contactReason)
+    public function deleteAction(ContactReason $contactReason): JsonResponse
     {
         $em = $this->get('doctrine')->getManagerForClass(ContactReason::class);
         $em->remove($contactReason);
@@ -115,7 +99,7 @@ class ContactReasonController extends AbstractController
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedServices()
     {
@@ -123,7 +107,7 @@ class ContactReasonController extends AbstractController
             parent::getSubscribedServices(),
             [
                 TranslatorInterface::class,
-                UpdateHandler::class,
+                UpdateHandlerFacade::class
             ]
         );
     }
