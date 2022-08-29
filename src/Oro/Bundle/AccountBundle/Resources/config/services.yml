@@ -18,8 +18,6 @@ services:
         public: true
         class: Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
         arguments:
-            - "@oro_account.form.account"
-            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     # Form type
@@ -56,8 +54,6 @@ services:
         public: true
         class: Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
         arguments:
-            - "@oro_account.form.account.api"
-            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_account.form.autocomplete.account.search_handler:

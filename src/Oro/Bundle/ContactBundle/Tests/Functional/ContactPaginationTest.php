@@ -45,13 +45,15 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
         $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, 2, 4);
 
         // save entity and stay on page
-        $save    = $crawler->selectButton('Save and Close')->form();
-        $save->setValues(['input_action' => 'save_and_stay']);
+        $save = $crawler->selectButton('Save and Close')->form();
+        $save->setValues(['input_action' => '{"route": "oro_contact_update", "params": {"id": "$id"}}']);
         $crawler = $this->client->submit($save);
         $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, 2, 4);
 
         // save entity and go to view page
         $saveAndClose = $crawler->selectButton('Save and Close')->form();
+        $redirectAction = $crawler->selectButton('Save and Close')->attr('data-action');
+        $saveAndClose->setValues(['input_action' => $redirectAction]);
         $crawler      = $this->client->submit($saveAndClose);
         $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, 2, 4);
     }

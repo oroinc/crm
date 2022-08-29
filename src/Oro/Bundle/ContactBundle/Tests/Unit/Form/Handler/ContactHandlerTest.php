@@ -10,7 +10,6 @@ use Oro\Bundle\ContactBundle\Form\Handler\ContactHandler;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -38,13 +37,10 @@ class ContactHandlerTest extends \PHPUnit\Framework\TestCase
         $this->manager = $this->createMock(EntityManagerInterface::class);
         $this->entity = new Contact();
 
-        $requestStack = new RequestStack();
-        $requestStack->push($this->request);
-
-        $this->handler = new ContactHandler($this->form, $requestStack, $this->manager);
+        $this->handler = new ContactHandler($this->manager);
     }
 
-    public function testProcessUnsupportedRequest()
+    public function testProcessUnsupportedRequest(): void
     {
         $this->form->expects($this->once())
             ->method('setData')
@@ -53,13 +49,13 @@ class ContactHandlerTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->never())
             ->method('submit');
 
-        $this->assertFalse($this->handler->process($this->entity));
+        $this->assertFalse($this->handler->process($this->entity, $this->form, $this->request));
     }
 
     /**
      * @dataProvider supportedMethods
      */
-    public function testProcessSupportedRequest(string $method)
+    public function testProcessSupportedRequest(string $method): void
     {
         $this->form->expects($this->once())
             ->method('setData')
@@ -72,7 +68,7 @@ class ContactHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('submit')
             ->with(self::FORM_DATA);
 
-        $this->assertFalse($this->handler->process($this->entity));
+        $this->assertFalse($this->handler->process($this->entity, $this->form, $this->request));
     }
 
     public function supportedMethods(): array
@@ -86,7 +82,7 @@ class ContactHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider processValidDataProvider
      */
-    public function testProcessValidData(bool $isDataChanged)
+    public function testProcessValidData(bool $isDataChanged): void
     {
         $appendedAccount = new Account();
         $appendedAccount->setId(1);
@@ -143,7 +139,7 @@ class ContactHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->configureUnitOfWork($isDataChanged);
 
-        $this->assertTrue($this->handler->process($this->entity));
+        $this->assertTrue($this->handler->process($this->entity, $this->form, $this->request));
 
         $actualAccounts = $this->entity->getAccounts()->toArray();
         $this->assertCount(1, $actualAccounts);

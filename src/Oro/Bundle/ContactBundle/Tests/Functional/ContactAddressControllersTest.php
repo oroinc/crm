@@ -27,6 +27,9 @@ class ContactAddressControllersTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', $this->getUrl('oro_contact_create'));
         $form = $crawler->selectButton('Save and Close')->form();
+        $redirectAction = $crawler->selectButton('Save and Close')->attr('data-action');
+        $form->setValues(['input_action' => $redirectAction]);
+
         $form['oro_contact_form[firstName]'] = 'Contact_fname';
         $form['oro_contact_form[lastName]'] = 'Contact_lname';
         $form['oro_contact_form[owner]'] = '1';

@@ -25,7 +25,7 @@ class ContactAddressController extends AbstractController
      * @Template
      * @AclAncestor("oro_contact_view")
      */
-    public function addressBookAction(Contact $contact)
+    public function addressBookAction(Contact $contact): array
     {
         return [
             'entity' => $contact,
@@ -42,11 +42,8 @@ class ContactAddressController extends AbstractController
      * @Template("@OroContact/ContactAddress/update.html.twig")
      * @AclAncestor("oro_contact_create")
      * @ParamConverter("contact", options={"id" = "contactId"})
-     * @param Request $request
-     * @param Contact $contact
-     * @return array|RedirectResponse
      */
-    public function createAction(Request $request, Contact $contact)
+    public function createAction(Request $request, Contact $contact): array|RedirectResponse
     {
         return $this->update($request, $contact, new ContactAddress());
     }
@@ -60,23 +57,16 @@ class ContactAddressController extends AbstractController
      * @Template
      * @AclAncestor("oro_contact_update")
      * @ParamConverter("contact", options={"id" = "contactId"})
-     * @param Request $request
-     * @param Contact $contact
-     * @return array|RedirectResponse
      */
-    public function updateAction(Request $request, Contact $contact, ContactAddress $address)
+    public function updateAction(Request $request, Contact $contact, ContactAddress $address): array|RedirectResponse
     {
         return $this->update($request, $contact, $address);
     }
 
     /**
-     * @param Request $request
-     * @param Contact $contact
-     * @param ContactAddress $address
-     * @return array
      * @throws BadRequestHttpException
      */
-    protected function update(Request $request, Contact $contact, ContactAddress $address)
+    protected function update(Request $request, Contact $contact, ContactAddress $address): array|RedirectResponse
     {
         $responseData = [
             'saved' => false,
@@ -100,18 +90,24 @@ class ContactAddressController extends AbstractController
         // Update contact's modification date when an address is changed
         $contact->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
 
-        if ($this->get(AddressHandler::class)->process($address)) {
+        $form = $this->get('oro_contact.contact_address.form');
+        if ($this->get(AddressHandler::class)->process(
+            $address,
+            $form,
+            $request
+        )) {
             $this->getDoctrine()->getManager()->flush();
             $responseData['entity'] = $address;
             $responseData['saved'] = true;
         }
 
-        $responseData['form'] = $this->get('oro_contact.contact_address.form')->createView();
+        $responseData['form'] = $form->createView();
+
         return $responseData;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedServices()
     {
