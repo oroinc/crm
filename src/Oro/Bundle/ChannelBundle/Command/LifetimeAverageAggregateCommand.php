@@ -66,7 +66,7 @@ timezone change):
 
   <info>php %command.full_name% --force</info>
 
-The <info>--use-delete</info> option enables DELETE statements in SQL instead of TRUNCATE, which may help to regenerate
+The <info>--use-delete</info> option enables DELETE statements in SQL instead of TRUNCATE, which may help regenerate
 the data from scratch faster on some large data sets:
 
   <info>php %command.full_name% --force --use-delete</info>
