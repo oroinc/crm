@@ -1,0 +1,3 @@
+services:
+    Oro\Bundle\SalesBundle\Tests\Behat\ReferenceRepositoryInitializer:
+        tags: [ oro_behat.reference_repository_initializer ]

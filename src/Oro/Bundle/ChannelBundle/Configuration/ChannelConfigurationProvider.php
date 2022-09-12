@@ -3,9 +3,8 @@
 namespace Oro\Bundle\ChannelBundle\Configuration;
 
 use Oro\Component\Config\Cache\PhpArrayConfigProvider;
-use Oro\Component\Config\Loader\CumulativeConfigLoader;
 use Oro\Component\Config\Loader\CumulativeConfigProcessorUtil;
-use Oro\Component\Config\Loader\YamlCumulativeFileLoader;
+use Oro\Component\Config\Loader\Factory\CumulativeConfigLoaderFactory;
 use Oro\Component\Config\Resolver\ResolverInterface;
 use Oro\Component\Config\ResourcesContainerInterface;
 
@@ -24,8 +23,7 @@ class ChannelConfigurationProvider extends PhpArrayConfigProvider
     private const DEPENDENT         = 'dependent';
     private const CUSTOMER_IDENTITY = 'customer_identity';
 
-    /** @var ResolverInterface */
-    private $resolver;
+    private ResolverInterface $resolver;
 
     public function __construct(string $cacheFile, bool $debug, ResolverInterface $resolver)
     {
@@ -87,10 +85,7 @@ class ChannelConfigurationProvider extends PhpArrayConfigProvider
     protected function doLoadConfig(ResourcesContainerInterface $resourcesContainer)
     {
         $configs = [];
-        $configLoader = new CumulativeConfigLoader(
-            'oro_channels',
-            new YamlCumulativeFileLoader(self::CONFIG_FILE)
-        );
+        $configLoader = CumulativeConfigLoaderFactory::create('oro_channels', self::CONFIG_FILE);
         $resources = $configLoader->load($resourcesContainer);
         foreach ($resources as $resource) {
             if (!empty($resource->data[ChannelConfiguration::ROOT_NODE])) {
