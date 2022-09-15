@@ -54,13 +54,12 @@ class CalculateAnalyticsSchedulerTest extends WebTestCase
         $this->getEntityManager()->persist($channel);
         $this->getEntityManager()->flush();
 
-        $traces = self::getMessageCollector()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
-        self::assertCount(1, $traces);
-        self::assertEquals([
+        self::assertMessagesCount(Topics::CALCULATE_CHANNEL_ANALYTICS, 1);
+        self::assertMessageSent(Topics::CALCULATE_CHANNEL_ANALYTICS, [
             'channel_id' => $channel->getId(),
             'customer_ids' => [],
-        ], $traces[0]['message']->getBody());
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
+        ]);
+        self::assertMessageSentWithPriority(Topics::CALCULATE_CHANNEL_ANALYTICS, MessagePriority::VERY_LOW);
     }
 
     /**
