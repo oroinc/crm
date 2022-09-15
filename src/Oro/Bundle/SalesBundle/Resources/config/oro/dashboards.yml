@@ -119,6 +119,25 @@ dashboards:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
+                maxResults:
+                    type: Symfony\Component\Form\Extension\Core\Type\IntegerType
+                    options:
+                        label: oro.campaign.dashboard.campaigns_leads.max_results.label
+                        required: false
+                        constraints:
+                            - Range:
+                                  min: 0
+                            - Type: integer
+                    show_on_widget: false
+                hideCampaign:
+                    type: Symfony\Component\Form\Extension\Core\Type\ChoiceType
+                    options:
+                        label: oro.campaign.dashboard.campaigns_leads.hide_campaign.label
+                        required: true
+                        choices:
+                            'oro.dashboard.widget.option_value.boolean.true': true
+                            'oro.dashboard.widget.option_value.boolean.false': false
+                    show_on_widget: true
         campaigns_opportunity:
             label:       oro.campaign.dashboard.campaigns_opportunity.title
             route:       oro_campaign_dashboard_campaigns_opportunity_chart
@@ -133,6 +152,16 @@ dashboards:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
+                maxResults:
+                    type: Symfony\Component\Form\Extension\Core\Type\IntegerType
+                    options:
+                        label: oro.campaign.dashboard.campaigns_leads.max_results.label
+                        required: false
+                        constraints:
+                            - Range:
+                                  min: 0
+                            - Type: integer
+                    show_on_widget: false
         campaigns_by_close_revenue:
             label:       oro.campaign.dashboard.campaigns_by_close_revenue.title
             route:       oro_campaign_dashboard_campaigns_by_close_revenue_chart
@@ -147,6 +176,16 @@ dashboards:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
+                maxResults:
+                    type: Symfony\Component\Form\Extension\Core\Type\IntegerType
+                    options:
+                        label: oro.campaign.dashboard.campaigns_leads.max_results.label
+                        required: false
+                        constraints:
+                            - Range:
+                                  min: 0
+                            - Type: integer
+                    show_on_widget: false
         forecast_of_opportunities:
             label:       oro.sales.dashboard.forecast_of_opportunities.title
             route:       oro_dashboard_itemized_data_widget
