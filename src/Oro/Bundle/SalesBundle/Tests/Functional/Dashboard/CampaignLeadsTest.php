@@ -49,8 +49,12 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
         $this->assertNotEmpty($crawler->html());
 
         $data = $this->getChartData($crawler);
-        $this->assertEquals('Campaign', $data[0]->label);
-        $this->assertEquals($requestData['expectedResultCount'], $data[0]->value);
+        $this->assertCount($requestData['itemCount'], $data);
+        foreach ($data as $item) {
+            if ($item->label === 'Campaign') {
+                $this->assertEquals($requestData['expectedLeadsCount'], $item->value);
+            }
+        }
     }
 
     private function getConfigureDialog()
@@ -69,33 +73,54 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
     public function widgetProvider(): array
     {
         return [
-            'Opportunity by status with between date range filter' => [
+            'Campaigns with lead between date range filter' => [
                 [
                     'widgetConfig' => [
-                        'campaigns_leads[dateRange][part]'   => 'value',
-                        'campaigns_leads[dateRange][type]'   => AbstractDateFilterType::TYPE_BETWEEN,
-                        'campaigns_leads[dateRange][value][start]'  => '2016-12-28',
-                        'campaigns_leads[dateRange][value][end]'    => '2016-12-29'
+                        'campaigns_leads[dateRange][part]'         => 'value',
+                        'campaigns_leads[dateRange][type]'         => AbstractDateFilterType::TYPE_BETWEEN,
+                        'campaigns_leads[dateRange][value][start]' => '2016-12-28',
+                        'campaigns_leads[dateRange][value][end]'   => '2016-12-29',
+                        'campaigns_leads[hideCampaign]'            => "1",
+                        'campaigns_leads[maxResults]'              => 5,
                     ],
-                    'expectedResultCount' => 2
+                    'itemCount' => 1,
+                    'expectedLeadsCount' => 2
                 ],
             ],
-            'Opportunity by status with this month date range filter'  => [
+            'Campaigns with leads within this month date range filter'  => [
                 [
                     'widgetConfig' => [
-                        'campaigns_leads[dateRange][part]'   => 'value',
-                        'campaigns_leads[dateRange][type]'   => AbstractDateFilterType::TYPE_THIS_MONTH
+                        'campaigns_leads[dateRange][part]' => 'value',
+                        'campaigns_leads[dateRange][type]' => AbstractDateFilterType::TYPE_THIS_MONTH,
+                        'campaigns_leads[hideCampaign]'    => "1",
+                        'campaigns_leads[maxResults]'      => 5,
                     ],
-                    'expectedResultCount' => 1
+                    'itemCount' => 1,
+                    'expectedLeadsCount' => 1
                 ],
             ],
-            'Opportunity by status with this all time date range filter' => [
+            'Campaigns with leads in all time date range filter' => [
                 [
                     'widgetConfig' => [
-                        'campaigns_leads[dateRange][part]'   => 'value',
-                        'campaigns_leads[dateRange][type]'   => AbstractDateFilterType::TYPE_ALL_TIME
+                        'campaigns_leads[dateRange][part]' => 'value',
+                        'campaigns_leads[dateRange][type]' => AbstractDateFilterType::TYPE_ALL_TIME,
+                        'campaigns_leads[hideCampaign]'    => "1",
+                        'campaigns_leads[maxResults]'      => 5,
                     ],
-                    'expectedResultCount' => 4
+                    'itemCount' => 1,
+                    'expectedLeadsCount' => 4
+                ],
+            ],
+            'All campaigns in all time date range filter' => [
+                [
+                    'widgetConfig' => [
+                        'campaigns_leads[dateRange][part]' => 'value',
+                        'campaigns_leads[dateRange][type]' => AbstractDateFilterType::TYPE_ALL_TIME,
+                        'campaigns_leads[hideCampaign]'    => "0",
+                        'campaigns_leads[maxResults]'      => 5,
+                    ],
+                    'itemCount' => 2,
+                    'expectedLeadsCount' => 4
                 ],
             ],
         ];
