@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\FormBundle\Model\UpdateHandler;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
@@ -15,6 +15,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -34,7 +35,7 @@ class B2bCustomerController extends AbstractController
      * @Template
      * @AclAncestor("oro_sales_b2bcustomer_view")
      */
-    public function indexAction()
+    public function indexAction(): array
     {
         return [
             'entity_class' => B2bCustomer::class
@@ -51,7 +52,7 @@ class B2bCustomerController extends AbstractController
      *      class="OroSalesBundle:B2bCustomer"
      * )
      */
-    public function viewAction(B2bCustomer $customer)
+    public function viewAction(B2bCustomer $customer): array
     {
         return [
             'entity' => $customer
@@ -63,7 +64,7 @@ class B2bCustomerController extends AbstractController
      * @AclAncestor("oro_sales_b2bcustomer_view")
      * @Template
      */
-    public function infoAction(B2bCustomer $customer)
+    public function infoAction(B2bCustomer $customer): array
     {
         return [
             'entity' => $customer
@@ -75,7 +76,7 @@ class B2bCustomerController extends AbstractController
      * @AclAncestor("oro_sales_lead_view")
      * @Template
      */
-    public function b2bCustomerLeadsAction(B2bCustomer $customer)
+    public function b2bCustomerLeadsAction(B2bCustomer $customer): array
     {
         return [
             'entity' => $customer
@@ -94,34 +95,18 @@ class B2bCustomerController extends AbstractController
      * )
      * @Template("@OroSales/B2bCustomer/update.html.twig")
      */
-    public function createAction()
+    public function createAction(): array|RedirectResponse
     {
         return $this->update(new B2bCustomer());
     }
 
-    /**
-     * @param  B2bCustomer $entity
-     *
-     * @return array
-     */
-    protected function update(B2bCustomer $entity = null)
+    protected function update(B2bCustomer $entity = null): array|RedirectResponse
     {
-        return $this->get(UpdateHandler::class)->handleUpdate(
+        return $this->get(UpdateHandlerFacade::class)->update(
             $entity,
             $this->createForm(B2bCustomerType::class, $entity),
-            function (B2bCustomer $entity) {
-                return [
-                    'route' => 'oro_sales_b2bcustomer_update',
-                    'parameters' => ['id' => $entity->getId()],
-                ];
-            },
-            function (B2bCustomer $entity) {
-                return [
-                    'route' => 'oro_sales_b2bcustomer_view',
-                    'parameters' => ['id' => $entity->getId()],
-                ];
-            },
             $this->get(TranslatorInterface::class)->trans('oro.sales.controller.b2bcustomer.saved.message'),
+            null,
             $this->get(B2bCustomerHandler::class)
         );
     }
@@ -129,7 +114,6 @@ class B2bCustomerController extends AbstractController
     /**
      * Update user form
      * @Route("/update/{id}", name="oro_sales_b2bcustomer_update", requirements={"id"="\d+"}, defaults={"id"=0})
-     *
      * @Template
      * @Acl(
      *      id="oro_sales_b2bcustomer_update",
@@ -138,7 +122,7 @@ class B2bCustomerController extends AbstractController
      *      class="OroSalesBundle:B2bCustomer"
      * )
      */
-    public function updateAction(B2bCustomer $entity)
+    public function updateAction(B2bCustomer $entity): array|RedirectResponse
     {
         return $this->update($entity);
     }
@@ -152,7 +136,7 @@ class B2bCustomerController extends AbstractController
      * @AclAncestor("oro_sales_opportunity_view")
      * @Template
      */
-    public function b2bCustomerOpportunitiesAction(B2bCustomer $customer)
+    public function b2bCustomerOpportunitiesAction(B2bCustomer $customer): array
     {
         return [
             'entity' => $customer
@@ -170,7 +154,7 @@ class B2bCustomerController extends AbstractController
      * @AclAncestor("oro_sales_b2bcustomer_view")
      * @Template
      */
-    public function accountCustomersInfoAction(Account $account, Channel $channel)
+    public function accountCustomersInfoAction(Account $account, Channel $channel): array
     {
         $customers = $this->getDoctrine()
             ->getRepository('OroSalesBundle:B2bCustomer')
@@ -189,7 +173,7 @@ class B2bCustomerController extends AbstractController
      * @AclAncestor("oro_sales_b2bcustomer_view")
      * @Template
      */
-    public function customerInfoAction(B2bCustomer $customer, Channel $channel)
+    public function customerInfoAction(B2bCustomer $customer, Channel $channel): array
     {
         return [
             'customer'             => $customer,
@@ -200,16 +184,16 @@ class B2bCustomerController extends AbstractController
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedServices()
     {
         return array_merge(
             parent::getSubscribedServices(),
             [
-                UpdateHandler::class,
                 TranslatorInterface::class,
                 B2bCustomerHandler::class,
+                UpdateHandlerFacade::class
             ]
         );
     }

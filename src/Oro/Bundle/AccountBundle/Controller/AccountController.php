@@ -5,7 +5,7 @@ namespace Oro\Bundle\AccountBundle\Controller;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AccountBundle\Event\CollectAccountWebsiteActivityCustomersEvent;
 use Oro\Bundle\AccountBundle\Form\Handler\AccountHandler;
-use Oro\Bundle\FormBundle\Model\UpdateHandler;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -31,7 +32,7 @@ class AccountController extends AbstractController
      * )
      * @Template()
      */
-    public function viewAction(Account $account)
+    public function viewAction(Account $account): array
     {
         $channels = $this->getDoctrine()
             ->getRepository('OroChannelBundle:Channel')
@@ -59,7 +60,7 @@ class AccountController extends AbstractController
      * )
      * @Template("@OroAccount/Account/update.html.twig")
      */
-    public function createAction()
+    public function createAction(): array|RedirectResponse
     {
         return $this->update();
     }
@@ -76,7 +77,7 @@ class AccountController extends AbstractController
      * )
      * @Template()
      */
-    public function updateAction(Account $entity)
+    public function updateAction(Account $entity): array|RedirectResponse
     {
         return $this->update($entity);
     }
@@ -91,7 +92,7 @@ class AccountController extends AbstractController
      * @AclAncestor("oro_account_view")
      * @Template
      */
-    public function indexAction()
+    public function indexAction(): array
     {
         return [
             'entity_class' => Account::class
@@ -103,20 +104,17 @@ class AccountController extends AbstractController
         return $this->get(ApiEntityManager::class);
     }
 
-    /**
-     * @param Account $entity
-     * @return array
-     */
-    protected function update(Account $entity = null)
+    protected function update(Account $entity = null): array|RedirectResponse
     {
         if (!$entity) {
             $entity = $this->getManager()->createEntity();
         }
 
-        return $this->get(UpdateHandler::class)->update(
+        return $this->get(UpdateHandlerFacade::class)->update(
             $entity,
             $this->get('oro_account.form.account'),
             $this->get(TranslatorInterface::class)->trans('oro.account.controller.account.saved.message'),
+            null,
             $this->get(AccountHandler::class)
         );
     }
@@ -131,7 +129,7 @@ class AccountController extends AbstractController
      * @AclAncestor("oro_contact_view")
      * @Template()
      */
-    public function contactsInfoAction(Account $account = null)
+    public function contactsInfoAction(Account $account = null): array
     {
         return [
             'account' => $account
@@ -143,7 +141,7 @@ class AccountController extends AbstractController
      * @AclAncestor("oro_account_view")
      * @Template()
      */
-    public function infoAction(Account $account)
+    public function infoAction(Account $account): array
     {
         return [
             'account' => $account
@@ -151,7 +149,7 @@ class AccountController extends AbstractController
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedServices()
     {
@@ -160,10 +158,10 @@ class AccountController extends AbstractController
             [
                 EventDispatcherInterface::class,
                 TranslatorInterface::class,
-                UpdateHandler::class,
                 ApiEntityManager::class,
                 'oro_account.form.account' => Form::class,
                 AccountHandler::class,
+                UpdateHandlerFacade::class
             ]
         );
     }

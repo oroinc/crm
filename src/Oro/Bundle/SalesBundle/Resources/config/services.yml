@@ -36,14 +36,6 @@ services:
         tags:
             - { name: oro_email.owner.provider, order: 6 }
 
-    oro_sales.salesfunnel.manager.api:
-        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-        public: true
-        parent: oro_soap.manager.entity_manager.abstract
-        arguments:
-            - 'Oro\Bundle\SalesBundle\Entity\SalesFunnel'
-            - '@doctrine.orm.entity_manager'
-
     oro_sales.lead.datagrid_helper:
         class: Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
         public: true
@@ -52,38 +44,34 @@ services:
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity\Opportunity'
-            - ["name"]
+            - ['name']
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: opportunities, acl_resource: oro_sales_opportunity_view }
-        lazy: true
 
     oro_sales.form.autocomplete.lead.search_handler:
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity\Lead'
-            - ["name"]
+            - ['name']
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: leads, acl_resource: oro_sales_lead_view }
-        lazy: true
 
     oro_sales.form.autocomplete.b2bcustomer.search_handler:
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity\B2bCustomer'
-            - ["name"]
+            - ['name']
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: b2b_customers, acl_resource: oro_sales_b2bcustomer_view }
-        lazy: true
 
     oro_sales.form.autocomplete.b2b_customers_with_channel.search_handler:
         class: Oro\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
         parent: oro_channel.autocomplete.channel_limitation_handler
         arguments:
             - 'Oro\Bundle\SalesBundle\Entity\B2bCustomer'
-            - ["name", "account.name", "dataChannel.id"]
+            - ['name', 'account.name', 'dataChannel.id']
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: b2b_customers_with_channel, acl_resource: oro_sales_b2bcustomer_view }
-        lazy: true
 
     oro_sales.provider.enitity_state:
         parent: oro_channel.provider.utils.entity_state_provider
@@ -183,19 +171,13 @@ services:
         tags:
             - { name: oro_dashboard.big_number.provider, alias: opportunity_stats }
 
-    oro_sales.provider.sales_funnel_entity_name:
-        class: Oro\Bundle\SalesBundle\Provider\SalesFunnelEntityNameProvider
-        public: false
-        tags:
-            - { name: oro_entity.name_provider, priority: 100 }
-
     oro_sales.autocomplete.forecast_widget_business_unit.search_handler:
         class: Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
         parent: oro_form.autocomplete.search_handler
         arguments:
             - 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
-            - ["name"]
-            - '@oro_organization.provider.busines_unit_acl'
+            - ['name']
+            - '@oro_organization.provider.business_unit_acl'
             - 'Oro\Bundle\SalesBundle\Entity\Opportunity'
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: forecast_widget_business_units }
@@ -723,3 +705,12 @@ services:
     Oro\Bundle\SalesBundle\EntityConfig\CustomerEntityConfiguration:
         tags:
             - oro_entity_config.validation.entity_config
+
+    oro_sales.cache_warmer.remove_sales_funnel_entity_config:
+        class: Oro\Bundle\SalesBundle\CacheWarmer\RemoveSalesFunnelEntityConfigWarmer
+        arguments:
+            - '@doctrine'
+            - '@logger'
+            - '@oro_distribution.handler.application_status'
+        tags:
+            - { name: oro_entity_extend.warmer }

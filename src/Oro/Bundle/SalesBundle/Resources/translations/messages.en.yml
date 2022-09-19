@@ -1,9 +1,6 @@
 "New Contact Information": "New Contact Information"
 oro:
     dashboard:
-        my_sales_flow:
-            b2b: B2B
-            b2c: B2C
         opportunity_statistics:
             title: Opportunity statistics
             description: This widget displays a set of metrics that indicate performance of opportunity pipeline.
@@ -58,9 +55,6 @@ oro:
                 excluded_statuses:
                     label: Excluded statuses
                     placeholder: Choose statuses to exclude
-            my_sales_flow_b2b_chart:
-                title:       My Sales Flow B2B
-                description: This widget gives you a quick overview of a B2B workflow in form of a funnel chart.
             opportunities_by_lead_source_chart:
                 title:       Opportunities By Lead Source
                 description: This widget displays a breakdown of opportunities by Lead source in form of a pie chart.
@@ -106,7 +100,6 @@ oro:
             lead_list.description: List of leads
             b2bcustomer_list.description: List of business customers
             opportunity_list.description: List of opportunities
-            sales_salesfunnel_list.description: List of sales funnels
             shortcut_list_leads.label: Show leads list
             shortcut_list_leads.description: List of leads
             shortcut_list_opportunities.label: Show opportunities list
@@ -120,7 +113,6 @@ oro:
         controller:
             lead.saved.message: Lead saved
             opportunity.saved.message: Opportunity saved
-            sales_funnel.saved.message: Sales process saved
             b2bcustomer.saved.message: Customer saved
         form:
             choose_opportunity: Choose an opportunity...
@@ -214,8 +206,9 @@ oro:
 
             workflow:
                 close_date.label: Close date
-            feature.label:        Opportunity
-            feature.description:  Enables Opportunity entity
+            feature:
+                label: Opportunities
+                description: Enables opportunities and their related actions, processes and features, such as workflows, probabilities, widgets, and access to opportunities via the API.
             datagrid:
                 view:     View
                 update:   Update
@@ -360,8 +353,9 @@ oro:
 
             convert:
                  error:           Unable to convert lead to opportunity
-            feature.label:        Lead
-            feature.description:  Enables Lead entity
+            feature:
+                label: Leads
+                description: Enables leads and lead-related actions, processes and features, such as workflows and widgets, and access to leads via API.
             customer_association:
                 label:            Customer
                 description:      A customer or an account the lead is created for.
@@ -477,34 +471,6 @@ oro:
             owner.label:         Owner
             primary.label:       Primary
 
-        salesfunnel:
-            entity_label:         Sales Process
-            entity_plural_label:  Sales Processes
-            entity_grid_all_view_label: All %entity_plural_label%
-            entity_description:   Sales funnel is a sales process that involves a series of steps which enable sales force to close deals (Currently deprecated).
-            new_entity:           New Sales Process
-            id.label:             'Sales #'
-            start_date:
-                label:            Start Date
-                description:      The date of the sales process initiation.
-            lead:
-                label:            Lead
-                description:      The lead that forms a part of a sales process.
-            opportunity:
-                label:            Opportunity
-                description:      The opportunity that forms a part of a sales process.
-            owner.label:          Owner
-            data_channel.label:   Channel
-            organization.label:   Organization
-            feature.label:        Sales Process (Deprecated)
-            feature.description:  Enables Sales Processes. Beware that this feature is deprecated and will be removed in a future.
-
-            hint: 'Sales Process #%id%'
-
-            datagrid:
-                view:   View
-                update: Update
-                delete: Delete
         #
         # Oro/Bundle/SalesBundle/Entity/B2bCustomer.php
         #
@@ -586,6 +552,9 @@ oro:
             import: Import
             contact_information:
                 label: Contact Information
+            feature:
+                label: Business Customers
+                description: Enables creating and managing business customers.
 
         #
         # Entity Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone
@@ -648,7 +617,6 @@ oro:
             groups:
                 crm.title: CRM
                 sales_pipeline.title: Sales Pipeline
-                salesfunnel.title: Sales Process (Deprecated)
                 lead.title: Lead
                 opportunity.title: Opportunity
                 opportunity_status_probabilities:
@@ -666,11 +634,9 @@ oro:
                     feature_enabled.label:                     Enable Opportunity
                 opportunity_status_probabilities:
                     probability.tooltip:                       Enter default probability (%) for this status
-                sales_salesfunnel:
-                    feature_enabled.label:                     Enable Sales Process
                 display_relevant_opportunities:
                     label:                                     Display relevant opportunities
-                    tooltip:                                   Enable this option to display a list of other opportunities related to the same account on the opportunity view page and give sales reps quick access to deal history.
+                    tooltip:                                   Enable the option to give sales reps quick access to the deal history and display a list of opportunities related to the same account on the opportunity view page.
 
         privilege:
             category.sales_data.label: Sales Data

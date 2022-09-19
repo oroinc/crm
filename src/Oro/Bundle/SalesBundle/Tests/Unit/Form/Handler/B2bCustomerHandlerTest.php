@@ -9,7 +9,6 @@ use Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -41,12 +40,7 @@ class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
         $this->requestChannelProvider = $this->createMock(RequestChannelProvider::class);
         $this->entity = new B2bCustomer();
 
-        $requestStack = new RequestStack();
-        $requestStack->push($this->request);
-
         $this->handler = new B2bCustomerHandler(
-            $this->form,
-            $requestStack,
             $this->manager,
             $this->requestChannelProvider
         );
@@ -65,7 +59,7 @@ class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->never())
             ->method('submit');
 
-        self::assertFalse($this->handler->process($this->entity));
+        self::assertFalse($this->handler->process($this->entity, $this->form, $this->request));
     }
 
     /**
@@ -86,7 +80,7 @@ class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('isValid')
             ->willReturn(true);
 
-        self::assertTrue($this->handler->process($this->entity));
+        self::assertTrue($this->handler->process($this->entity, $this->form, $this->request));
     }
 
     public function supportedMethods(): array

@@ -10,18 +10,19 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ConvertToExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ConvertToExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionAwareInterface
 {
-    /** @var ConvertToExtendExtension */
-    protected $сonvertToExtendExtension;
+    protected ConvertToExtendExtension $convertToExtendExtension;
 
     /**
      * {@inheritdoc}
      */
     public function setConvertToExtendExtension(ConvertToExtendExtension $convertToExtendExtension)
     {
-        $this->сonvertToExtendExtension = $convertToExtendExtension;
+        $this->convertToExtendExtension = $convertToExtendExtension;
     }
 
     /**
@@ -31,10 +32,10 @@ class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionA
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->сonvertToExtendExtension->manyToOneRelation(
+        $this->convertToExtendExtension->manyToOneRelation(
             $queries,
             $schema,
-            'Oro\Bundle\SalesBundle\Entity\Opportunity',
+            Opportunity::class,
             'dataChannel',
             'orocrm_sales_opportunity',
             'data_channel',
@@ -55,36 +56,12 @@ class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionA
                 'dataaudit' => ['auditable' => false]
             ]
         );
-        $this->сonvertToExtendExtension->manyToOneRelation(
+        $this->convertToExtendExtension->manyToOneRelation(
             $queries,
             $schema,
-            'Oro\Bundle\SalesBundle\Entity\Lead',
+            Lead::class,
             'dataChannel',
             'orocrm_sales_lead',
-            'data_channel',
-            'orocrm_channel',
-            'name',
-            [
-                ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
-                'extend' => [
-                    'owner' => ExtendScope::OWNER_CUSTOM,
-                    'is_extend' => true,
-                ],
-                'form' => [
-                    'is_enabled' => true,
-                    'form_type' => 'oro_channel_select_type'
-                ],
-                'view' => ['is_displayable' => true],
-                'merge' => ['display' => false],
-                'dataaudit' => ['auditable' => false]
-            ]
-        );
-        $this->сonvertToExtendExtension->manyToOneRelation(
-            $queries,
-            $schema,
-            'Oro\Bundle\SalesBundle\Entity\SalesFunnel',
-            'dataChannel',
-            'orocrm_sales_funnel',
             'data_channel',
             'orocrm_channel',
             'name',

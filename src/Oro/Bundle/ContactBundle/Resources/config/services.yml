@@ -26,8 +26,6 @@ services:
         class: Oro\Bundle\ContactBundle\Form\Handler\ContactHandler
         public: true
         arguments:
-            - "@oro_contact.form.contact"
-            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact.contact.manager:
@@ -91,8 +89,6 @@ services:
         class: Oro\Bundle\ContactBundle\Form\Handler\ContactHandler
         public: true
         arguments:
-            - "@oro_contact.form.contact.api"
-            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact.group.manager.api:
@@ -136,15 +132,13 @@ services:
         class: Oro\Bundle\AddressBundle\Form\Handler\AddressHandler
         public: true
         arguments:
-            - "@oro_contact.contact_address.form"
-            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact.form.autocomplete.contact.search_handler:
         parent: oro_form.autocomplete.full_name.search_handler
         arguments:
             - 'Oro\Bundle\ContactBundle\Entity\Contact'
-            - ["namePrefix", "firstName", "middleName", "lastName", "nameSuffix"]
+            - ['namePrefix', 'firstName', 'middleName', 'lastName', 'nameSuffix']
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: contacts, acl_resource: oro_contact_view }
 
@@ -279,13 +273,6 @@ services:
             - '@translator'
         tags:
             - { name: oro_entity.delete_handler_extension, entity: Oro\Bundle\ContactBundle\Entity\ContactPhone }
-
-    oro_contact.validator.has_contact_information:
-        class: Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformationValidator
-        arguments:
-            - '@translator'
-        tags:
-            - { name: validator.constraint_validator, alias: oro_contact.has_contact_information }
 
     oro_contact.formatter.contact_entity_name:
         class: Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter

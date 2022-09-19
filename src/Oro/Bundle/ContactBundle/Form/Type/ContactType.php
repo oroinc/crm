@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Form\Type;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Form\Type\AddressCollectionType;
 use Oro\Bundle\AddressBundle\Form\Type\EmailCollectionType;
 use Oro\Bundle\AddressBundle\Form\Type\EmailType;
@@ -10,6 +11,12 @@ use Oro\Bundle\AddressBundle\Form\Type\PhoneType;
 use Oro\Bundle\AddressBundle\Form\Type\TypedAddressType;
 use Oro\Bundle\AttachmentBundle\Form\Type\ImageType;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\ContactBundle\Entity\Method;
+use Oro\Bundle\ContactBundle\Entity\Source;
 use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Oro\Bundle\FormBundle\Form\Type\OroBirthdayType;
 use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
@@ -26,221 +33,172 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * The form type for Contact entity
+ */
 class ContactType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->buildPlainFields($builder, $options);
-        $this->buildRelationFields($builder, $options);
+        $this->buildPlainFields($builder);
+        $this->buildRelationFields($builder);
 
         // set predefined accounts in case of creating a new contact
-        $builder->addEventListener(
-            FormEvents::POST_SET_DATA,
-            function (FormEvent $event) {
-                $contact = $event->getData();
-                if ($contact && $contact instanceof Contact && !$contact->getId() && $contact->hasAccounts()) {
-                    $form = $event->getForm();
-                    $form->get('appendAccounts')->setData($contact->getAccounts());
-                }
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
+            $contact = $event->getData();
+            if ($contact instanceof Contact
+                && !$contact->getId()
+                && $contact->hasAccounts()
+            ) {
+                $form = $event->getForm();
+                $form->get('appendAccounts')->setData($contact->getAccounts());
             }
-        );
+        });
     }
 
-    protected function buildPlainFields(FormBuilderInterface $builder, array $options)
+    private function buildPlainFields(FormBuilderInterface $builder): void
     {
-        // basic plain fields
         $builder
-            ->add('namePrefix', TextType::class, array('required' => false, 'label' => 'oro.contact.name_prefix.label'))
-            ->add('firstName', TextType::class, array('required' => false, 'label' => 'oro.contact.first_name.label'))
-            ->add('middleName', TextType::class, array('required' => false, 'label' => 'oro.contact.middle_name.label'))
-            ->add('lastName', TextType::class, array('required' => false, 'label' => 'oro.contact.last_name.label'))
-            ->add('nameSuffix', TextType::class, array('required' => false, 'label' => 'oro.contact.name_suffix.label'))
-            ->add('gender', GenderType::class, array('required' => false, 'label' => 'oro.contact.gender.label'))
-            ->add(
-                'birthday',
-                OroBirthdayType::class,
-                array('required' => false, 'label' => 'oro.contact.birthday.label')
-            )
+            ->add('namePrefix', TextType::class, ['required' => false, 'label' => 'oro.contact.name_prefix.label'])
+            ->add('firstName', TextType::class, ['required' => false, 'label' => 'oro.contact.first_name.label'])
+            ->add('middleName', TextType::class, ['required' => false, 'label' => 'oro.contact.middle_name.label'])
+            ->add('lastName', TextType::class, ['required' => false, 'label' => 'oro.contact.last_name.label'])
+            ->add('nameSuffix', TextType::class, ['required' => false, 'label' => 'oro.contact.name_suffix.label'])
+            ->add('gender', GenderType::class, ['required' => false, 'label' => 'oro.contact.gender.label'])
+            ->add('birthday', OroBirthdayType::class, ['required' => false, 'label' => 'oro.contact.birthday.label'])
             ->add(
                 'description',
                 OroResizeableRichTextType::class,
-                array(
-                    'required' => false,
-                    'label' => 'oro.contact.description.label'
-                )
-            );
-
-        $builder
-            ->add('jobTitle', TextType::class, array('required' => false, 'label' => 'oro.contact.job_title.label'))
-            ->add('fax', TextType::class, array('required' => false, 'label' => 'oro.contact.fax.label'))
-            ->add('skype', TextType::class, array('required' => false, 'label' => 'oro.contact.skype.label'));
-
-        $builder
-            ->add('twitter', TextType::class, array('required' => false, 'label' => 'oro.contact.twitter.label'))
-            ->add('facebook', TextType::class, array('required' => false, 'label' => 'oro.contact.facebook.label'))
-            ->add('googlePlus', TextType::class, array('required' => false, 'label' => 'oro.contact.google_plus.label'))
-            ->add('linkedIn', TextType::class, array('required' => false, 'label' => 'oro.contact.linked_in.label'))
-            ->add(
-                'picture',
-                ImageType::class,
-                array(
-                    'label'          => 'oro.contact.picture.label',
-                    'required'       => false
-                )
-            );
+                ['required' => false, 'label' => 'oro.contact.description.label']
+            )
+            ->add('jobTitle', TextType::class, ['required' => false, 'label' => 'oro.contact.job_title.label'])
+            ->add('fax', TextType::class, ['required' => false, 'label' => 'oro.contact.fax.label'])
+            ->add('skype', TextType::class, ['required' => false, 'label' => 'oro.contact.skype.label'])
+            ->add('twitter', TextType::class, ['required' => false, 'label' => 'oro.contact.twitter.label'])
+            ->add('facebook', TextType::class, ['required' => false, 'label' => 'oro.contact.facebook.label'])
+            ->add('googlePlus', TextType::class, ['required' => false, 'label' => 'oro.contact.google_plus.label'])
+            ->add('linkedIn', TextType::class, ['required' => false, 'label' => 'oro.contact.linked_in.label'])
+            ->add('picture', ImageType::class, ['required' => false, 'label' => 'oro.contact.picture.label']);
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function buildRelationFields(FormBuilderInterface $builder, array $options)
+    private function buildRelationFields(FormBuilderInterface $builder): void
     {
-        // contact source
         $builder->add(
             'source',
             TranslatableEntityType::class,
-            array(
-                'label'        => 'oro.contact.source.label',
-                'class'        => 'OroContactBundle:Source',
+            [
+                'class' => Source::class,
+                'required' => false,
+                'label' => 'oro.contact.source.label',
                 'choice_label' => 'label',
-                'required'     => false,
-                'placeholder'  => false,
-            )
+                'placeholder' => false,
+            ]
         );
-
-        // assigned to (user)
         $builder->add(
             'assignedTo',
             OrganizationUserAclSelectType::class,
-            array('required' => false, 'label' => 'oro.contact.assigned_to.label')
+            ['required' => false, 'label' => 'oro.contact.assigned_to.label']
         );
-
-        // reports to (contact)
         $builder->add(
             'reportsTo',
             ContactSelectType::class,
-            array('required' => false, 'label' => 'oro.contact.reports_to.label')
+            ['required' => false, 'label' => 'oro.contact.reports_to.label']
         );
-
-        // contact method
         $builder->add(
             'method',
             TranslatableEntityType::class,
-            array(
-                'label'        => 'oro.contact.method.label',
-                'class'        => 'OroContactBundle:Method',
+            [
+                'class' => Method::class,
+                'label' => 'oro.contact.method.label',
                 'choice_label' => 'label',
-                'required'     => false,
-                'placeholder'  => 'oro.contact.form.choose_contact_method'
-            )
+                'required' => false,
+                'placeholder' => 'oro.contact.form.choose_contact_method'
+            ]
         );
-
-        // addresses, emails and phones
         $builder->add(
             'addresses',
             AddressCollectionType::class,
-            array(
-                'label'    => '',
+            [
+                'label' => '',
                 'entry_type' => TypedAddressType::class,
                 'required' => true,
-                'entry_options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactAddress')
-            )
+                'entry_options' => ['data_class' => ContactAddress::class]
+            ]
         );
         $builder->add(
             'emails',
             EmailCollectionType::class,
-            array(
-                'label'    => 'oro.contact.emails.label',
-                'entry_type'     => EmailType::class,
+            [
+                'label' => 'oro.contact.emails.label',
+                'entry_type' => EmailType::class,
                 'required' => false,
-                'entry_options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactEmail')
-            )
+                'entry_options' => ['data_class' => ContactEmail::class]
+            ]
         );
         $builder->add(
             'phones',
             PhoneCollectionType::class,
-            array(
-                'label'    => 'oro.contact.phones.label',
-                'entry_type'     => PhoneType::class,
+            [
+                'label' => 'oro.contact.phones.label',
+                'entry_type' => PhoneType::class,
                 'required' => false,
-                'entry_options'  => array('data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactPhone')
-            )
+                'entry_options' => ['data_class' => ContactPhone::class]
+            ]
         );
-
-        // groups
         $builder->add(
             'groups',
             EntityType::class,
-            array(
-                'label'    => 'oro.contact.groups.label',
-                'class'    => 'OroContactBundle:Group',
+            [
+                'label' => 'oro.contact.groups.label',
+                'class' => Group::class,
                 'choice_label' => 'label',
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
                 'translatable_options' => false
-            )
+            ]
         );
-
-        // accounts
         $builder->add(
             'appendAccounts',
             EntityIdentifierType::class,
-            array(
-                'class'    => 'OroAccountBundle:Account',
-                'required' => false,
-                'mapped'   => false,
-                'multiple' => true,
-            )
+            ['class' => Account::class, 'required' => false, 'mapped' => false, 'multiple' => true]
         );
         $builder->add(
             'removeAccounts',
             EntityIdentifierType::class,
-            array(
-                'class'    => 'OroAccountBundle:Account',
-                'required' => false,
-                'mapped'   => false,
-                'multiple' => true,
-            )
+            ['class' => Account::class, 'required' => false, 'mapped' => false, 'multiple' => true]
         );
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class'           => 'Oro\Bundle\ContactBundle\Entity\Contact',
-                'csrf_token_id'        => 'contact',
-            )
-        );
+        $resolver->setDefaults([
+            'data_class' => Contact::class,
+            'csrf_token_id' => 'contact',
+        ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         /** @var Contact $contact */
-        $contact                                       = $form->getData();
+        $contact = $form->getData();
         $view->children['reportsTo']->vars['excluded'] = array_merge(
             $view->children['reportsTo']->vars['excluded'],
-            array($contact->getId())
+            [$contact->getId()]
         );
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
-    }
-
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getBlockPrefix()
     {

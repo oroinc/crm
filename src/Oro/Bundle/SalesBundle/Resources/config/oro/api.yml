@@ -165,9 +165,6 @@ api:
             # this entity does not have own API resource
             actions: false
 
-        Oro\Bundle\SalesBundle\Entity\SalesFunnel:
-            documentation_resource: '@OroSalesBundle/Resources/doc/api/sale_funnel.md'
-
         Oro\Bundle\SalesBundle\Entity\LeadAddress:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/lead_address.md'
             fields:

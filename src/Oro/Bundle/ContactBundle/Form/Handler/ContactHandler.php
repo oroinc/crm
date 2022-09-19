@@ -6,54 +6,37 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 
-class ContactHandler
+/**
+ * The handler for Contact form.
+ */
+class ContactHandler implements FormHandlerInterface
 {
     use RequestHandlerTrait;
 
-    /**
-     * @var FormInterface
-     */
-    protected $form;
+    protected EntityManagerInterface $manager;
 
-    /**
-     * @var RequestStack
-     */
-    protected $requestStack;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $manager;
-
-    public function __construct(FormInterface $form, RequestStack $requestStack, EntityManagerInterface $manager)
+    public function __construct(EntityManagerInterface $manager)
     {
-        $this->form    = $form;
-        $this->requestStack = $requestStack;
         $this->manager = $manager;
     }
 
     /**
-     * Process form
-     *
-     * @param  Contact $entity
-     *
-     * @return bool True on successful processing, false otherwise
+     * {@inheritDoc}
      */
-    public function process(Contact $entity)
+    public function process($entity, FormInterface $form, Request $request)
     {
-        $this->form->setData($entity);
+        $form->setData($entity);
+        if (\in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->submitPostPutRequest($form, $request);
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->submitPostPutRequest($this->form, $request);
-
-            if ($this->form->isValid()) {
-                $appendAccounts = $this->form->get('appendAccounts')->getData();
-                $removeAccounts = $this->form->get('removeAccounts')->getData();
+            if ($form->isValid()) {
+                $appendAccounts = $form->get('appendAccounts')->getData();
+                $removeAccounts = $form->get('removeAccounts')->getData();
                 $this->onSuccess($entity, $appendAccounts, $removeAccounts);
 
                 return true;
@@ -66,7 +49,7 @@ class ContactHandler
     /**
      * "Success" form handler
      */
-    protected function onSuccess(Contact $entity, array $appendAccounts, array $removeAccounts)
+    protected function onSuccess(Contact $entity, array $appendAccounts, array $removeAccounts): void
     {
         $this->appendAccounts($entity, $appendAccounts);
         $this->removeAccounts($entity, $removeAccounts);
@@ -79,9 +62,8 @@ class ContactHandler
 
     /**
      * Set updated at to current DateTime when related entities updated
-     * TODO: consider refactoring of this feature to make it applicable to all entities
      */
-    protected function setUpdatedAt(Contact $entity)
+    protected function setUpdatedAt(Contact $entity): void
     {
         /** @var UnitOfWork $uow */
         $uow = $this->manager->getUnitOfWork();
@@ -104,7 +86,7 @@ class ContactHandler
      * @param Contact $contact
      * @param Account[] $accounts
      */
-    protected function appendAccounts(Contact $contact, array $accounts)
+    protected function appendAccounts(Contact $contact, array $accounts): void
     {
         foreach ($accounts as $account) {
             $contact->addAccount($account);
@@ -117,7 +99,7 @@ class ContactHandler
      * @param Contact $contact
      * @param Account[] $accounts
      */
-    protected function removeAccounts(Contact $contact, array $accounts)
+    protected function removeAccounts(Contact $contact, array $accounts): void
     {
         foreach ($accounts as $account) {
             $contact->removeAccount($account);

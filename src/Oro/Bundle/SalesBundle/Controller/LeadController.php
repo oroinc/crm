@@ -4,10 +4,11 @@ namespace Oro\Bundle\SalesBundle\Controller;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\FormBundle\Model\UpdateHandler;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Form\Handler\LeadHandler;
 use Oro\Bundle\SalesBundle\Form\Handler\LeadToOpportunityHandler;
+use Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
@@ -18,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,7 +42,7 @@ class LeadController extends AbstractController
      *      class="OroSalesBundle:Lead"
      * )
      */
-    public function viewAction(Lead $lead)
+    public function viewAction(Lead $lead): array
     {
         $leadActionsAccessProvider = $this->get(LeadActionsAccessProvider::class);
 
@@ -56,7 +58,7 @@ class LeadController extends AbstractController
      * @AclAncestor("oro_sales_lead_view")
      * @Template()
      */
-    public function infoAction(Lead $lead)
+    public function infoAction(Lead $lead): array
     {
         return array(
             'entity'  => $lead
@@ -74,7 +76,7 @@ class LeadController extends AbstractController
      *      class="OroSalesBundle:Lead"
      * )
      */
-    public function createAction()
+    public function createAction(): array|RedirectResponse
     {
         return $this->update(new Lead());
     }
@@ -82,7 +84,6 @@ class LeadController extends AbstractController
     /**
      * Update user form
      * @Route("/update/{id}", name="oro_sales_lead_update", requirements={"id"="\d+"}, defaults={"id"=0})
-     *
      * @Template
      * @Acl(
      *      id="oro_sales_lead_update",
@@ -91,7 +92,7 @@ class LeadController extends AbstractController
      *      class="OroSalesBundle:Lead"
      * )
      */
-    public function updateAction(Lead $entity)
+    public function updateAction(Lead $entity): array|RedirectResponse
     {
         return $this->update($entity);
     }
@@ -106,7 +107,7 @@ class LeadController extends AbstractController
      * @Template
      * @AclAncestor("oro_sales_lead_view")
      */
-    public function indexAction()
+    public function indexAction(): array
     {
         return [
             'entity_class' => Lead::class
@@ -118,9 +119,9 @@ class LeadController extends AbstractController
      * @AclAncestor("oro_sales_lead_view")
      * @Template()
      */
-    public function accountLeadsAction(Account $account)
+    public function accountLeadsAction(Account $account): array
     {
-        return array('entity' => $account);
+        return ['entity' => $account];
     }
 
     /**
@@ -129,14 +130,13 @@ class LeadController extends AbstractController
      * @Route("/create/{channelIds}", name="oro_sales_lead_data_channel_aware_create")
      * @Template("@OroSales/Lead/update.html.twig")
      * @AclAncestor("oro_sales_lead_view")
-     *
      * @ParamConverter(
      *      "channel",
      *      class="OroChannelBundle:Channel",
      *      options={"id" = "channelIds"}
      * )
      */
-    public function leadWithDataChannelCreateAction(Channel $channel)
+    public function leadWithDataChannelCreateAction(Channel $channel): array|RedirectResponse
     {
         $lead = new Lead();
         $lead->setDataChannel($channel);
@@ -156,7 +156,7 @@ class LeadController extends AbstractController
      *      class="OroSalesBundle:Lead"
      * )
      */
-    public function disqualifyAction(Lead $lead, Request $request)
+    public function disqualifyAction(Lead $lead, Request $request): JsonResponse
     {
         if (!$this->get(LeadActionsAccessProvider::class)->isDisqualifyAllowed($lead)) {
             throw new AccessDeniedException();
@@ -184,7 +184,7 @@ class LeadController extends AbstractController
      * )
      * @Template()
      */
-    public function convertToOpportunityAction(Lead $lead, Request $request)
+    public function convertToOpportunityAction(Lead $lead, Request $request): array|RedirectResponse
     {
         if (!$this->get(LeadActionsAccessProvider::class)->isConvertToOpportunityAllowed($lead)) {
             throw new AccessDeniedException('Lead couldn\'t be converted to opportunity!');
@@ -192,8 +192,10 @@ class LeadController extends AbstractController
 
         return $this->get(LeadToOpportunityHandler::class)->create(
             $lead,
-            $this->get(UpdateHandler::class),
+            $this->createForm(LeadToOpportunityType::class),
             $this->get(TranslatorInterface::class)->trans('oro.sales.controller.opportunity.saved.message'),
+            $request,
+            $this->get(UpdateHandlerFacade::class),
             function () use ($request) {
                 $request->getSession()->getFlashBag()->add(
                     'error',
@@ -203,23 +205,19 @@ class LeadController extends AbstractController
         );
     }
 
-    /**
-     * @param Lead $entity
-     *
-     * @return array
-     */
-    protected function update(Lead $entity)
+    protected function update(Lead $entity): array|RedirectResponse
     {
-        return $this->get(UpdateHandler::class)->update(
+        return $this->get(UpdateHandlerFacade::class)->update(
             $entity,
             $this->get('oro_sales.lead.form'),
             $this->get(TranslatorInterface::class)->trans('oro.sales.controller.lead.saved.message'),
+            null,
             $this->get(LeadHandler::class)
         );
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedServices()
     {
@@ -227,12 +225,12 @@ class LeadController extends AbstractController
             parent::getSubscribedServices(),
             [
                 TranslatorInterface::class,
-                UpdateHandler::class,
                 LeadActionsAccessProvider::class,
                 ChangeLeadStatus::class,
                 LeadToOpportunityHandler::class,
                 LeadHandler::class,
                 'oro_sales.lead.form' => Form::class,
+                UpdateHandlerFacade::class
             ]
         );
     }

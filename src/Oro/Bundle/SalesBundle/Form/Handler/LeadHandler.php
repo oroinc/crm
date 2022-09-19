@@ -4,55 +4,38 @@ namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
+use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 
-class LeadHandler
+/**
+ * The handler for Lead form.
+ */
+class LeadHandler implements FormHandlerInterface
 {
     use RequestHandlerTrait;
 
-    /** @var FormInterface */
-    protected $form;
+    protected ObjectManager $manager;
+    protected RequestChannelProvider $requestChannelProvider;
 
-    /** @var RequestStack */
-    protected $requestStack;
-
-    /** @var ObjectManager */
-    protected $manager;
-
-    /** @var RequestChannelProvider */
-    protected $requestChannelProvider;
-
-    public function __construct(
-        FormInterface $form,
-        RequestStack $requestStack,
-        ObjectManager $manager,
-        RequestChannelProvider $requestChannelProvider
-    ) {
-        $this->form                   = $form;
-        $this->requestStack           = $requestStack;
+    public function __construct(ObjectManager $manager, RequestChannelProvider $requestChannelProvider)
+    {
         $this->manager                = $manager;
         $this->requestChannelProvider = $requestChannelProvider;
     }
 
     /**
-     * Process form
-     *
-     * @param  Lead $entity
-     *
-     * @return bool True on successful processing, false otherwise
+     * {@inheritDoc}
      */
-    public function process(Lead $entity)
+    public function process($entity, FormInterface $form, Request $request)
     {
-        $this->form->setData($entity);
+        $form->setData($entity);
+        if (\in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->submitPostPutRequest($form, $request);
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->submitPostPutRequest($this->form, $request);
-
-            if ($this->form->isValid()) {
+            if ($form->isValid()) {
                 $this->onSuccess($entity);
 
                 return true;
@@ -65,7 +48,7 @@ class LeadHandler
     /**
      * "Success" form handler
      */
-    protected function onSuccess(Lead $entity)
+    protected function onSuccess(Lead $entity): void
     {
         $this->manager->persist($entity);
         $this->manager->flush();

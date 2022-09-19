@@ -21,10 +21,11 @@ oro:
         menu:
             index.label: Cases
 
+        feature:
+            label: Cases
+            description: Enables case creation and management to monitor the issues reported by customers or found internally.
+
         caseentity:
-            #
-            # Oro/Bundle/CaseBundle/Entity/CaseEntity
-            #
             entity_label:                   Case
             entity_plural_label:            Cases
             entity_grid_all_view_label: All %entity_plural_label%
@@ -72,9 +73,6 @@ oro:
             organization.label:             Organization
 
         casecomment:
-            #
-            # Oro/Bundle/CaseBundle/Entity/CaseComment
-            #
             entity_label:                   Case Comment
             entity_plural_label:            Case Comments
             entity_grid_all_view_label: All %entity_plural_label%

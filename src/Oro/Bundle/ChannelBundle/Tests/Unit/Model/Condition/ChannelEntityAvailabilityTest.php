@@ -7,7 +7,7 @@ use Oro\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\ConfigExpression\ContextAccessor;
 use Oro\Component\ConfigExpression\Exception\InvalidArgumentException;
 use Symfony\Component\PropertyAccess\PropertyPath;
@@ -28,7 +28,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider evaluateProvider
      */
-    public function testEvaluate(array $options, bool $expectedResult)
+    public function testEvaluate(array $options, bool $expectedResult): void
     {
         $channel = $this->createMock(Channel::class);
         $channel->expects($this->once())
@@ -57,7 +57,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
                     new PropertyPath('[channel]'),
                     [
                         Opportunity::class,
-                        SalesFunnel::class
+                        User::class
                     ]
                 ],
                 'expectedResult' => false
@@ -65,7 +65,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testInitializeFailsWhenOptionNotOneElement()
+    public function testInitializeFailsWhenOptionNotOneElement(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid options count: 0');

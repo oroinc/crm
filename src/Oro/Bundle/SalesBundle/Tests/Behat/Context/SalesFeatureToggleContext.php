@@ -7,7 +7,6 @@ use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 /**
  * This context save behat execution time, all detailed steps can be found at
  * - "Manage Opportunity Feature"
- * - "Manage Salesfunnel Feature"
  * - "Manage Lead Feature"
  */
 class SalesFeatureToggleContext extends OroFeatureContext
@@ -42,22 +41,6 @@ class SalesFeatureToggleContext extends OroFeatureContext
     public function disableLeadFeature()
     {
         $this->setFeatureState(0, 'oro_sales', 'lead_feature_enabled');
-    }
-
-    /**
-     * @When /^(?:|I )enable SalesFunnel feature$/
-     */
-    public function enableSalesFunnelFeature()
-    {
-        $this->setFeatureState(1, 'oro_sales', 'salesfunnel_feature_enabled');
-    }
-
-    /**
-     * @When /^(?:|I )disable SalesFunnel feature$/
-     */
-    public function disableSalesFunnelFeature()
-    {
-        $this->setFeatureState(0, 'oro_sales', 'salesfunnel_feature_enabled');
     }
 
     /**

@@ -1,0 +1,49 @@
+features:
+    case:
+        label: oro.case.feature.label
+        description: oro.case.feature.description
+        allow_if_all_abstain: true
+        routes:
+            - oro_case_index
+            - oro_case_view
+            - oro_case_create
+            - oro_case_update
+            - oro_case_account_widget_cases
+            - oro_case_contact_widget_cases
+            - oro_case_comment_list
+            - oro_case_comment_create
+            - oro_case_comment_update
+            - oro_case_widget_comments
+            - oro_case_api_get_cases
+            - oro_case_api_get_case
+            - oro_case_api_put_case
+            - oro_case_api_post_case
+            - oro_case_api_delete_case
+            - oro_case_api_options_cases
+            - oro_case_api_get_comments
+            - oro_case_api_get_comment
+            - oro_case_api_put_comment
+            - oro_case_api_post_comment
+            - oro_case_api_delete_comment
+            - oro_case_api_options_comments
+        entities:
+            - Oro\Bundle\CaseBundle\Entity\CaseEntity
+            - Oro\Bundle\CaseBundle\Entity\CasePriority
+            - Oro\Bundle\CaseBundle\Entity\CaseSource
+            - Oro\Bundle\CaseBundle\Entity\CaseStatus
+            - Oro\Bundle\CaseBundle\Entity\CaseComment
+            - Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings
+        api_resources:
+            - Oro\Bundle\CaseBundle\Entity\CaseEntity
+            - Oro\Bundle\CaseBundle\Entity\CasePriority
+            - Oro\Bundle\CaseBundle\Entity\CaseSource
+            - Oro\Bundle\CaseBundle\Entity\CaseStatus
+            - Oro\Bundle\CaseBundle\Entity\CaseComment
+        navigation_items:
+            - application_menu.activities_tab.oro_case_index
+        placeholder_items:
+            - oro_user_cases_grid
+            - oro_account_cases_grid
+            - oro_contact_cases_grid
+        processes:
+            - convert_mailbox_email_to_case

@@ -65,7 +65,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
         $form['oro_sales_b2bcustomer[dataChannel]'] = self::$channel->getId();
         $form['oro_sales_b2bcustomer[owner]']   = 1;
 
-        $this->client->followRedirects(true);
+        $this->client->followRedirects();
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();

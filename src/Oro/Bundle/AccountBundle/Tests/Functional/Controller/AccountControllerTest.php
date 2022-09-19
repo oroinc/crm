@@ -30,7 +30,7 @@ class AccountControllerTest extends WebTestCase
         $form['oro_account_form[name]'] = 'Account_name';
         $form['oro_account_form[owner]'] = 1;
 
-        $this->client->followRedirects(true);
+        $this->client->followRedirects();
         $crawler = $this->client->submit($form);
         $result = $this->client->getResponse();
 

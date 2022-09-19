@@ -4,68 +4,64 @@ namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
-use Oro\Bundle\FormBundle\Model\UpdateHandler;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProviderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * The handler for LeadToOpportunity form.
+ */
 class LeadToOpportunityHandler extends OpportunityHandler
 {
-    /** @var LeadToOpportunityProviderInterface */
-    protected $leadToOpportunityProvider;
+    protected LeadToOpportunityProviderInterface $leadToOpportunityProvider;
 
     /** @var callable */
     protected $errorMessageCallback;
 
     public function __construct(
-        FormInterface $form,
-        RequestStack $requestStack,
         ObjectManager $manager,
         RequestChannelProvider $requestChannelProvider,
         LeadToOpportunityProviderInterface $leadToOpportunityProvider,
         LoggerInterface $logger
     ) {
         $this->leadToOpportunityProvider = $leadToOpportunityProvider;
-        parent::__construct($form, $requestStack, $manager, $requestChannelProvider, $logger);
+        parent::__construct($manager, $requestChannelProvider, $logger);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
-    public function process(Opportunity $entity)
+    public function process($entity, FormInterface $form, Request $request)
     {
-        $processResult = parent::process($entity);
-        if ($processResult && in_array($this->requestStack->getCurrentRequest()->getMethod(), ['POST', 'PUT'], true)) {
+        $processResult = parent::process($entity, $form, $request);
+        if ($processResult && \in_array($request->getMethod(), ['POST', 'PUT'], true)) {
             return $this->leadToOpportunityProvider->saveOpportunity($entity, $this->errorMessageCallback);
         }
+
         return $processResult;
     }
 
-    /**
-     * @param Lead          $lead
-     * @param UpdateHandler $handler
-     * @param string        $saveMessage
-     * @param callable      $errorMessageCallback
-     *
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
-     */
     public function create(
         Lead $lead,
-        UpdateHandler $handler,
-        $saveMessage,
+        FormInterface $form,
+        string $saveMessage,
+        Request $request,
+        UpdateHandlerFacade $handler,
         callable $errorMessageCallback
-    ) {
+    ): array|RedirectResponse {
         $this->errorMessageCallback = $errorMessageCallback;
-        $isGetRequest = $this->requestStack->getCurrentRequest()->getMethod() === 'GET';
+        $isGetRequest = 'GET' === $request->getMethod();
         $opportunity = $this->leadToOpportunityProvider->prepareOpportunityForForm($lead, $isGetRequest);
 
-        return $handler->update($opportunity, $this->form, $saveMessage, $this);
+        return $handler->update($opportunity, $form, $saveMessage, $request, $this);
     }
 
-    protected function onSuccess(Opportunity $entity)
+    protected function onSuccess(Opportunity $entity): void
     {
         $this->manager->persist($entity);
     }

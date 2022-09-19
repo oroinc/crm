@@ -51,31 +51,22 @@ class OroSalesBundleInstaller implements
     use DatabasePlatformAwareTrait;
     use CustomerExtensionTrait;
 
-    /** @var ExtendExtension */
-    protected $extendExtension;
-
-    /** @var ActivityExtension */
-    protected $activityExtension;
-
-    /** @var AttachmentExtension */
-    protected $attachmentExtension;
-
-    /** @var ActivityListExtension */
-    protected $activityListExtension;
-
-    /** @var RenameExtension */
-    protected $renameExtension;
+    protected ExtendExtension $extendExtension;
+    protected ActivityExtension $activityExtension;
+    protected AttachmentExtension $attachmentExtension;
+    protected ActivityListExtension $activityListExtension;
+    protected RenameExtension $renameExtension;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setActivityListExtension(ActivityListExtension $activityListExtension)
+    public function setActivityListExtension(ActivityListExtension $activityListExtension): void
     {
         $this->activityListExtension = $activityListExtension;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setExtendExtension(ExtendExtension $extendExtension)
     {
@@ -83,7 +74,7 @@ class OroSalesBundleInstaller implements
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setActivityExtension(ActivityExtension $activityExtension)
     {
@@ -91,7 +82,7 @@ class OroSalesBundleInstaller implements
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setAttachmentExtension(AttachmentExtension $attachmentExtension)
     {
@@ -99,7 +90,7 @@ class OroSalesBundleInstaller implements
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setRenameExtension(RenameExtension $renameExtension)
     {
@@ -107,11 +98,11 @@ class OroSalesBundleInstaller implements
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getMigrationVersion()
     {
-        return 'v1_41';
+        return 'v1_42';
     }
 
     /**
@@ -121,7 +112,6 @@ class OroSalesBundleInstaller implements
     {
         /** Tables generation **/
         $this->createOrocrmSalesOpportunityTable($schema);
-        $this->createOrocrmSalesFunnelTable($schema);
         $this->createOrocrmSalesOpportCloseRsnTable($schema);
         $this->createOrocrmSalesLeadTable($schema);
         $this->createOrocrmSalesB2bCustomerTable($schema);
@@ -137,7 +127,6 @@ class OroSalesBundleInstaller implements
 
         /** Foreign keys generation **/
         $this->addOrocrmSalesOpportunityForeignKeys($schema);
-        $this->addOrocrmSalesFunnelForeignKeys($schema);
         $this->addOrocrmSalesLeadForeignKeys($schema);
         $this->addOrocrmSalesB2bCustomerForeignKeys($schema);
         $this->addOroEmailMailboxProcessorForeignKeys($schema);
@@ -242,26 +231,6 @@ class OroSalesBundleInstaller implements
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->addUniqueIndex(['label'], 'uniq_4516951bea750e8');
         $table->setPrimaryKey(['name']);
-    }
-
-    /**
-     * Create oro_sales_funnel table
-     */
-    protected function createOrocrmSalesFunnelTable(Schema $schema)
-    {
-        $table = $schema->createTable('orocrm_sales_funnel');
-        $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
-        $table->addColumn('opportunity_id', 'integer', ['notnull' => false]);
-        $table->addColumn('lead_id', 'integer', ['notnull' => false]);
-        $table->addColumn('startdate', 'date', []);
-        $table->addColumn('createdat', 'datetime', []);
-        $table->addColumn('updatedat', 'datetime', ['notnull' => false]);
-        $table->addIndex(['opportunity_id'], 'idx_e20c73449a34590f', []);
-        $table->addIndex(['lead_id'], 'idx_e20c734455458d', []);
-        $table->addIndex(['startdate'], 'sales_start_idx', []);
-        $table->setPrimaryKey(['id']);
-        $table->addIndex(['user_owner_id'], 'idx_e20c73449eb185f9', []);
     }
 
     /**
@@ -530,32 +499,6 @@ class OroSalesBundleInstaller implements
             ['customer_association_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
-        );
-    }
-
-    /**
-     * Add oro_sales_funnel foreign keys.
-     */
-    protected function addOrocrmSalesFunnelForeignKeys(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_sales_funnel');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_user'),
-            ['user_owner_id'],
-            ['id'],
-            ['onUpdate' => null, 'onDelete' => 'SET NULL']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_opportunity'),
-            ['opportunity_id'],
-            ['id'],
-            ['onUpdate' => null, 'onDelete' => 'SET NULL']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_lead'),
-            ['lead_id'],
-            ['id'],
-            ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
     }
 

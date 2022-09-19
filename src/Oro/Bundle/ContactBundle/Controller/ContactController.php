@@ -7,7 +7,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Form\Handler\ContactHandler;
 use Oro\Bundle\ContactBundle\Form\Type\ContactType;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-use Oro\Bundle\FormBundle\Model\UpdateHandler;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
@@ -27,7 +27,6 @@ class ContactController extends AbstractController
 {
     /**
      * @Route("/view/{id}", name="oro_contact_view", requirements={"id"="\d+"})
-     *
      * @Template
      * @Acl(
      *      id="oro_contact_view",
@@ -36,7 +35,7 @@ class ContactController extends AbstractController
      *      class="OroContactBundle:Contact"
      * )
      */
-    public function viewAction(Contact $contact)
+    public function viewAction(Contact $contact): array
     {
         return [
             'entity' => $contact,
@@ -45,14 +44,10 @@ class ContactController extends AbstractController
 
     /**
      * @Route("/info/{id}", name="oro_contact_info", requirements={"id"="\d+"})
-     *
      * @Template
      * @AclAncestor("oro_contact_view")
-     * @param Request $request
-     * @param Contact $contact
-     * @return array|RedirectResponse
      */
-    public function infoAction(Request $request, Contact $contact)
+    public function infoAction(Request $request, Contact $contact): array|RedirectResponse
     {
         if (!$request->get('_wid')) {
             return $this->redirect(
@@ -60,9 +55,9 @@ class ContactController extends AbstractController
             );
         }
 
-        return array(
+        return [
             'entity'  => $contact
-        );
+        ];
     }
 
     /**
@@ -75,10 +70,8 @@ class ContactController extends AbstractController
      *      permission="CREATE",
      *      class="OroContactBundle:Contact"
      * )
-     * @param Request $request
-     * @return array|RedirectResponse
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): array|RedirectResponse
     {
         // add predefined account to contact
         $contact = null;
@@ -106,7 +99,6 @@ class ContactController extends AbstractController
     /**
      * Update user form
      * @Route("/update/{id}", name="oro_contact_update", requirements={"id"="\d+"})
-     *
      * @Template
      * @Acl(
      *      id="oro_contact_update",
@@ -115,7 +107,7 @@ class ContactController extends AbstractController
      *      class="OroContactBundle:Contact"
      * )
      */
-    public function updateAction(Contact $entity)
+    public function updateAction(Contact $entity): array|RedirectResponse
     {
         return $this->update($entity);
     }
@@ -131,7 +123,7 @@ class ContactController extends AbstractController
      * @Template
      * @AclAncestor("oro_contact_view")
      */
-    public function indexAction()
+    public function indexAction(): array
     {
         return [
             'entity_class' => Contact::class
@@ -143,16 +135,17 @@ class ContactController extends AbstractController
         return $this->get(ApiEntityManager::class);
     }
 
-    protected function update(Contact $entity = null)
+    protected function update(Contact $entity = null): array|RedirectResponse
     {
         if (!$entity) {
             $entity = $this->getManager()->createEntity();
         }
 
-        return $this->get(UpdateHandler::class)->update(
+        return $this->get(UpdateHandlerFacade::class)->update(
             $entity,
             $this->get(ContactType::class),
             $this->get(TranslatorInterface::class)->trans('oro.contact.controller.contact.saved.message'),
+            null,
             $this->get(ContactHandler::class)
         );
     }
@@ -162,7 +155,7 @@ class ContactController extends AbstractController
      * @AclAncestor("oro_contact_view")
      * @Template()
      */
-    public function accountContactsAction(Account $account)
+    public function accountContactsAction(Account $account): array
     {
         $defaultContact = $account->getDefaultContact();
         $contacts = $account->getContacts();
@@ -203,7 +196,7 @@ class ContactController extends AbstractController
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedServices()
     {
@@ -212,10 +205,10 @@ class ContactController extends AbstractController
             [
                 EntityRoutingHelper::class,
                 ApiEntityManager::class,
-                UpdateHandler::class,
                 ContactType::class,
                 TranslatorInterface::class,
                 ContactHandler::class,
+                UpdateHandlerFacade::class
             ]
         );
     }

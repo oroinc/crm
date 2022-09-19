@@ -134,7 +134,10 @@
                 'oro.contact.reports_to.label'|trans,
                 ui.entityViewLink(entity.reportsTo, entity.reportsTo|oro_format_name, 'oro_contact_view')
             ) }}
+
+            {% if entity.groups.count or feature_resource_enabled('Oro\\Bundle\\ContactBundle\\Entity\\Group', 'entities') %}
             {{ ui.renderProperty('oro.contact.groups.label'|trans, entity.groups.count ? entity.groupLabels|join(', ') : null) }}
+            {% endif %}
         </div>
     </div>
 </div>

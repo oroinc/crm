@@ -4,56 +4,39 @@ namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
+use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 
-class B2bCustomerHandler
+/**
+ * The handler for b2bcustomer form.
+ */
+class B2bCustomerHandler implements FormHandlerInterface
 {
     use RequestHandlerTrait;
 
-    /** @var FormInterface */
-    protected $form;
+    protected ObjectManager $manager;
+    protected RequestChannelProvider $requestChannelProvider;
 
-    /** @var RequestStack */
-    protected $requestStack;
-
-    /** @var ObjectManager */
-    protected $manager;
-
-    /** @var RequestChannelProvider */
-    protected $requestChannelProvider;
-
-    public function __construct(
-        FormInterface $form,
-        RequestStack $requestStack,
-        ObjectManager $manager,
-        RequestChannelProvider $requestChannelProvider
-    ) {
-        $this->form                   = $form;
-        $this->requestStack           = $requestStack;
+    public function __construct(ObjectManager $manager, RequestChannelProvider $requestChannelProvider)
+    {
         $this->manager                = $manager;
         $this->requestChannelProvider = $requestChannelProvider;
     }
 
     /**
-     * Process form
-     *
-     * @param  B2bCustomer $entity
-     *
-     * @return bool        True on successful processing, false otherwise
+     * {@inheritDoc}
      */
-    public function process(B2bCustomer $entity)
+    public function process($entity, FormInterface $form, Request $request)
     {
         $this->requestChannelProvider->setDataChannel($entity);
 
-        $this->form->setData($entity);
-
-        $request = $this->requestStack->getCurrentRequest();
-        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
-            $this->submitPostPutRequest($this->form, $request);
-            if ($this->form->isValid()) {
+        $form->setData($entity);
+        if (\in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->submitPostPutRequest($form, $request);
+            if ($form->isValid()) {
                 $this->onSuccess($entity);
 
                 return true;
@@ -66,7 +49,7 @@ class B2bCustomerHandler
     /**
      * "Success" form handler
      */
-    protected function onSuccess(B2bCustomer $entity)
+    protected function onSuccess(B2bCustomer $entity): void
     {
         $this->manager->persist($entity);
         $this->manager->flush();

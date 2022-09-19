@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\ChannelBundle\Entity\Repository;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -27,40 +26,6 @@ abstract class ChannelRepositoryAbstract extends EntityRepository implements Cha
         }
 
         return $aclHelper->apply($qb)->getArrayResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getVisitsCountByPeriodForChannelType(
-        \DateTime $start,
-        \DateTime $end,
-        AclHelper $aclHelper,
-        $type
-    ) {
-        @trigger_error(
-            'getVisitsCountByPeriodForChannelType() is deprecated since version 2.0, to be removed in 3.0.',
-            E_USER_DEPRECATED
-        );
-
-        $qb = $this->_em->createQueryBuilder();
-
-        $qb->select('COUNT(visit.id)')
-            ->from('OroTrackingBundle:TrackingVisit', 'visit')
-            ->join('visit.trackingWebsite', 'site')
-            ->leftJoin('site.channel', 'channel')
-            ->where($qb->expr()->orX(
-                $qb->expr()->isNull('channel.id'),
-                $qb->expr()->andX(
-                    $qb->expr()->eq('channel.channelType', ':type')
-                )
-            ))
-            ->andWhere($qb->expr()->between('visit.firstActionTime', ':dateStart', ':dateEnd'))
-            ->setParameter('type', $type)
-            ->setParameter('dateStart', $start, Types::DATETIME_MUTABLE)
-            ->setParameter('dateEnd', $end, Types::DATETIME_MUTABLE);
-
-        return (int) $aclHelper->apply($qb)->getSingleScalarResult();
     }
 
     /**

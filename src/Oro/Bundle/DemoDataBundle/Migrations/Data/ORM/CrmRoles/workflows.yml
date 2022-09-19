@@ -3,29 +3,24 @@ ROLE_SALES_MANAGER:
     permissions:
         workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
         workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
-        workflow|b2b_flow_sales_funnel: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
 
 ROLE_SALES_REP:
     bap_role: ROLE_USER
     permissions:
         workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
         workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
-        workflow|b2b_flow_sales_funnel: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
 
 ROLE_ONLINE_SALES_REP:
     permissions:
         workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
         workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
-        workflow|b2b_flow_sales_funnel: []
 
 ROLE_MARKETING_MANAGER:
     permissions:
         workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM]
         workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM]
-        workflow|b2b_flow_sales_funnel: []
 
 ROLE_LEADS_DEVELOPMENT_REP:
     permissions:
         workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
         workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
-        workflow|b2b_flow_sales_funnel: []

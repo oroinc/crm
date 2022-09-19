@@ -93,7 +93,7 @@ api:
             actions: false
 
         Oro\Bundle\ContactBundle\Entity\Group:
-            documentation_resource: '@OroContactBundle/Resources/doc/api/group.md'
+            documentation_resource: '@OroContactBundle/Resources/doc/api/contact_group.md'
 
         Oro\Bundle\ContactBundle\Entity\Method:
             documentation_resource: '@OroContactBundle/Resources/doc/api/contact.md'

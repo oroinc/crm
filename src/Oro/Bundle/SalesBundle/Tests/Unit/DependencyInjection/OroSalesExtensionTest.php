@@ -25,9 +25,9 @@ class OroSalesExtensionTest extends ExtensionTestCase
             Api\LeadController::class,
             Api\LeadEmailController::class,
             Api\LeadPhoneController::class,
-            Api\OpportunityController::class,
-            Api\SalesFunnelController::class,
+            Api\OpportunityController::class
         ];
+
         $this->assertDefinitionsLoaded($expectedDefinitions);
     }
 }

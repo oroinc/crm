@@ -7,19 +7,38 @@ use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformation;
 use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformationValidator;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class HasContactInformationValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function createValidator()
+    /**
+     * {@inheritDoc}
+     */
+    protected function createValidator(): HasContactInformationValidator
     {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->expects($this->any())
-            ->method('trans')
-            ->willReturnArgument(0);
+        return new HasContactInformationValidator();
+    }
 
-        return new HasContactInformationValidator($translator);
+    public function testInvalidConstraintType()
+    {
+        $this->expectException(UnexpectedTypeException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Expected argument of type "%s", "%s" given',
+            HasContactInformation::class,
+            NotBlank::class
+        ));
+
+        $this->validator->validate(new Contact(), new NotBlank());
+    }
+
+    public function testNotContactEntity()
+    {
+        $this->expectException(UnexpectedTypeException::class);
+        $this->expectExceptionMessage(sprintf('Expected argument of type "%s", "stdClass" given', Contact::class));
+
+        $this->validator->validate(new \stdClass(), new HasContactInformation());
     }
 
     /**
@@ -57,7 +76,7 @@ class HasContactInformationValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
-    public function testInvalidValue()
+    public function testContactWithoutContactInformation()
     {
         $value = new Contact();
 
@@ -66,15 +85,5 @@ class HasContactInformationValidatorTest extends ConstraintValidatorTestCase
 
         $this->buildViolation('oro.contact.validators.contact.has_information')
             ->assertRaised();
-    }
-
-    public function testInvalidArgument()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'Validator expects $value to be instance of "Oro\Bundle\ContactBundle\Entity\Contact"'
-        );
-
-        $this->validator->validate(new ContactEmail(), new HasContactInformation());
     }
 }

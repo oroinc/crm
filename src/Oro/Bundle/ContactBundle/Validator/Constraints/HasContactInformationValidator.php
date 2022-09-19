@@ -5,43 +5,39 @@ namespace Oro\Bundle\ContactBundle\Validator\Constraints;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
+/**
+ * Validates whether at least one of the fields first name, last name,
+ * emails or phones is defined for Contact entity.
+ */
 class HasContactInformationValidator extends ConstraintValidator
 {
-    /** @var TranslatorInterface */
-    protected $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
-        if (!$value) {
+        if (!$constraint instanceof HasContactInformation) {
+            throw new UnexpectedTypeException($constraint, HasContactInformation::class);
+        }
+
+        if (null === $value) {
             return;
         }
 
         if (!$value instanceof Contact) {
-            throw new \InvalidArgumentException(sprintf(
-                'Validator expects $value to be instance of "%s"',
-                'Oro\Bundle\ContactBundle\Entity\Contact'
-            ));
+            throw new UnexpectedTypeException($value, Contact::class);
         }
 
-        if ($value->getFirstName() ||
-            $value->getLastName() ||
-            $value->getEmails()->count() > 0 ||
-            $value->getPhones()->count() > 0) {
+        if ($value->getFirstName()
+            || $value->getLastName()
+            || $value->getEmails()->count() > 0
+            || $value->getPhones()->count() > 0
+        ) {
             return;
         }
 
-        $this->context->addViolation(
-            $this->translator->trans('oro.contact.validators.contact.has_information', [], 'validators')
-        );
+        $this->context->addViolation($constraint->message);
     }
 }

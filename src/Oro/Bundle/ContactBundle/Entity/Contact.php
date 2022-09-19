@@ -764,16 +764,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     }
 
     /**
-     * Get entity class name.
-     *
-     * @return string
-     */
-    public function getClass()
-    {
-        return 'Oro\Bundle\ContactBundle\Entity\Contact';
-    }
-
-    /**
      * Get names of fields contain email addresses
      *
      * @return string[]|null
