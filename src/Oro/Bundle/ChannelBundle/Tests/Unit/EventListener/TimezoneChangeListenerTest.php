@@ -6,14 +6,13 @@ use Oro\Bundle\ChannelBundle\Async\Topics;
 use Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener;
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 use Oro\Bundle\MessageQueueBundle\Test\Unit\MessageQueueExtension;
-use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 
 class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
 {
     use MessageQueueExtension;
 
-    public function testWasNotChanged()
+    public function testWasNotChanged(): void
     {
         $listener = new TimezoneChangeListener(self::getMessageProducer());
 
@@ -22,7 +21,7 @@ class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
         self::assertMessagesEmpty(Topics::AGGREGATE_LIFETIME_AVERAGE);
     }
 
-    public function testSuccessChange()
+    public function testSuccessChange(): void
     {
         $listener = new TimezoneChangeListener(self::getMessageProducer());
 
@@ -30,7 +29,8 @@ class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
 
         self::assertMessageSent(
             Topics::AGGREGATE_LIFETIME_AVERAGE,
-            new Message(['force' => true], MessagePriority::VERY_LOW)
+            ['force' => true]
         );
+        self::assertMessageSentWithPriority(Topics::AGGREGATE_LIFETIME_AVERAGE, MessagePriority::VERY_LOW);
     }
 }
