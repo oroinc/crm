@@ -11,8 +11,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadCampaignByCloseRevenueWi
  */
 class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
 {
-    /** @var Widget */
-    private $widget;
+    private Widget $widget;
 
     protected function setUp(): void
     {
@@ -24,7 +23,7 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
     /**
      * @dataProvider widgetProvider
      */
-    public function testDateRangeAllTypeFilter(array $requestData)
+    public function testDateRangeAllTypeFilter(array $requestData): void
     {
         $this->configureWidget($this->widget, $requestData['widgetConfig']);
 
@@ -60,7 +59,7 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
     /**
      * @dataProvider widgetConfigureProvider
      */
-    public function testFilterCampaignByNullCloseRevenue(array $requestData)
+    public function testFilterCampaignByNullCloseRevenue(array $requestData): void
     {
         $this->configureWidget($this->widget, $requestData['widgetConfig']);
         $crawler = $this->client->request(
@@ -90,8 +89,9 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
             'Closed lost opportunities' => [
                 [
                     'widgetConfig' => [
-                        'campaigns_by_close_revenue[dateRange][part]'   => 'value',
-                        'campaigns_by_close_revenue[dateRange][type]'   => AbstractDateFilterType::TYPE_ALL_TIME,
+                        'campaigns_by_close_revenue[dateRange][part]' => 'value',
+                        'campaigns_by_close_revenue[dateRange][type]' => AbstractDateFilterType::TYPE_ALL_TIME,
+                        'campaigns_by_close_revenue[maxResults]'      => 5,
                     ],
                     'expectedResult'        => 200, // 2 opportunities * $100
                     'expectedCampaignCount' => 1 // Opportunity with test campaign have null close revenue
@@ -106,8 +106,9 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
             'Closed lost opportunities' => [
                 [
                     'widgetConfig' => [
-                        'campaigns_by_close_revenue[dateRange][part]'   => 'value',
-                        'campaigns_by_close_revenue[dateRange][type]'   => AbstractDateFilterType::TYPE_ALL_TIME,
+                        'campaigns_by_close_revenue[dateRange][part]' => 'value',
+                        'campaigns_by_close_revenue[dateRange][type]' => AbstractDateFilterType::TYPE_ALL_TIME,
+                        'campaigns_by_close_revenue[maxResults]'      => 5,
                     ],
                     'expectedResult' => 200 // 2 opportunities * $100
                 ],
@@ -115,10 +116,11 @@ class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
             'Opportunities for today' => [
                 [
                     'widgetConfig' => [
-                        'campaigns_by_close_revenue[dateRange][part]'   => 'value',
-                        'campaigns_by_close_revenue[dateRange][type]'   => AbstractDateFilterType::TYPE_BETWEEN,
-                        'campaigns_by_close_revenue[dateRange][value][start]'   => '2016-12-29 00:00:00',
+                        'campaigns_by_close_revenue[dateRange][part]'         => 'value',
+                        'campaigns_by_close_revenue[dateRange][type]'         => AbstractDateFilterType::TYPE_BETWEEN,
+                        'campaigns_by_close_revenue[dateRange][value][start]' => '2016-12-29 00:00:00',
                         'campaigns_by_close_revenue[dateRange][value][end]'   => '2016-12-29 23:59:59',
+                        'campaigns_by_close_revenue[maxResults]'              => 5,
                     ],
                     'expectedResult' => 100 // 1 opportunity * $100
                 ],

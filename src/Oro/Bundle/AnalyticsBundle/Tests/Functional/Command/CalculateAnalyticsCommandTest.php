@@ -6,7 +6,6 @@ use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 
 /**
@@ -44,14 +43,12 @@ class CalculateAnalyticsCommandTest extends WebTestCase
 
         self::assertMessageSent(
             Topics::CALCULATE_CHANNEL_ANALYTICS,
-            new Message(
-                [
-                    'channel_id' => $channel->getId(),
-                    'customer_ids' => []
-                ],
-                MessagePriority::VERY_LOW
-            )
+            [
+                'channel_id' => $channel->getId(),
+                'customer_ids' => [],
+            ]
         );
+        self::assertMessageSentWithPriority(Topics::CALCULATE_CHANNEL_ANALYTICS, MessagePriority::VERY_LOW);
     }
 
     public function testShouldNotScheduleCalculateAnalyticsForNonSupportedChannel()
@@ -88,10 +85,8 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         self::assertStringContainsString('Schedule analytics calculation for all channels.', $result);
         self::assertStringContainsString('Completed', $result);
 
-        self::assertMessageSent(
-            Topics::CALCULATE_ALL_CHANNELS_ANALYTICS,
-            new Message([], MessagePriority::VERY_LOW)
-        );
+        self::assertMessageSent(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS, []);
+        self::assertMessageSentWithPriority(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS, MessagePriority::VERY_LOW);
     }
 
     public function testThrowIfCustomerIdsSetWithoutChannelId()
@@ -127,13 +122,11 @@ class CalculateAnalyticsCommandTest extends WebTestCase
 
         self::assertMessageSent(
             Topics::CALCULATE_CHANNEL_ANALYTICS,
-            new Message(
-                [
-                    'channel_id' => $channel->getId(),
-                    'customer_ids' => [$customerOne->getId(), $customerTwo->getId()]
-                ],
-                MessagePriority::VERY_LOW
-            )
+            [
+                'channel_id' => $channel->getId(),
+                'customer_ids' => [$customerOne->getId(), $customerTwo->getId()]
+            ]
         );
+        self::assertMessageSentWithPriority(Topics::CALCULATE_CHANNEL_ANALYTICS, MessagePriority::VERY_LOW);
     }
 }
