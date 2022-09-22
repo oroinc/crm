@@ -11,14 +11,10 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class LoadCampaignLeadsWidgetFixture extends AbstractFixture
 {
-    /**
-     * @var Organization
-     */
-    protected $organization;
-    /**
-     * @var ObjectManager
-     */
-    protected $em;
+    protected Organization $organization;
+
+    protected ObjectManager $em;
+
     protected function createLeads()
     {
         $createdAt = new \DateTime('2016-12-28 12:03:10', new \DateTimeZone('UTC'));
@@ -32,7 +28,7 @@ class LoadCampaignLeadsWidgetFixture extends AbstractFixture
         $this->createLead($createdAt, ++$i);
     }
 
-    public function createLead($createdAt, $id)
+    public function createLead($createdAt, $id): void
     {
         $lead = new Lead();
         $lead->setName('name '.$id);
@@ -43,7 +39,7 @@ class LoadCampaignLeadsWidgetFixture extends AbstractFixture
         $this->em->flush();
     }
 
-    public function createCampaign()
+    public function createCampaign(): void
     {
         $campaign = new Campaign();
         $campaign->setName('Campaign');
@@ -55,6 +51,18 @@ class LoadCampaignLeadsWidgetFixture extends AbstractFixture
         $this->setReference('default_campaign', $campaign);
     }
 
+    public function createOrphanCampaign(): void
+    {
+        $campaign = new Campaign();
+        $campaign->setName('OrphanCampaign');
+        $campaign->setCode('ocmp');
+        $campaign->setOrganization($this->organization);
+        $campaign->setReportPeriod(Campaign::PERIOD_HOURLY);
+        $this->em->persist($campaign);
+        $this->em->flush();
+        $this->setReference('orphan_campaign', $campaign);
+    }
+
     /**
      * @inheritDoc
      */
@@ -63,6 +71,7 @@ class LoadCampaignLeadsWidgetFixture extends AbstractFixture
         $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
         $this->em = $manager;
         $this->createCampaign();
+        $this->createOrphanCampaign();
         $this->createLeads();
         $dashboard = new Dashboard();
         $dashboard->setName('dashboard');
