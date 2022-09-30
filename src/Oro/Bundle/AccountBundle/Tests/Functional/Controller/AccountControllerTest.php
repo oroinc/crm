@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Oro\Bundle\AccountBundle\Tests\Functional\Controller;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AccountBundle\Event\CollectAccountWebsiteActivityCustomersEvent;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\UIBundle\Tests\Functional\Stub\PlaceholderConfigurationProviderDecorator;
@@ -13,75 +14,10 @@ class AccountControllerTest extends WebTestCase
     {
         $this->initClient([], self::generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
+        $this->loadFixtures(['@OroAccountBundle/Tests/Functional/DataFixtures/accounts_data.yml']);
     }
 
-    public function testIndex(): void
-    {
-        $this->client->request('GET', $this->getUrl('oro_account_index'));
-        $result = $this->client->getResponse();
-
-        self::assertHtmlResponseStatusCodeEquals($result, 200);
-    }
-
-    public function testCreate(): void
-    {
-        $crawler = $this->client->request('GET', $this->getUrl('oro_account_create'));
-        $form = $crawler->selectButton('Save and Close')->form();
-        $form['oro_account_form[name]'] = 'Account_name';
-        $form['oro_account_form[owner]'] = 1;
-
-        $this->client->followRedirects();
-        $crawler = $this->client->submit($form);
-        $result = $this->client->getResponse();
-
-        self::assertHtmlResponseStatusCodeEquals($result, 200);
-        self::assertStringContainsString('Account saved', $crawler->html());
-    }
-
-    /**
-     * @depends testCreate
-     */
-    public function testUpdate(): int
-    {
-        $response = $this->client->requestGrid(
-            'accounts-grid',
-            ['accounts-grid[_filter][name][value]' => 'Account_name']
-        );
-
-        $result = self::getJsonResponseContent($response, 200);
-        $result = reset($result['data']);
-
-        $id = $result['id'];
-        $crawler = $this->client->request('GET', $this->getUrl('oro_account_update', ['id' => $result['id']]));
-        $form = $crawler->selectButton('Save and Close')->form();
-        $form['oro_account_form[name]'] = 'Account_name_update';
-
-        $this->client->followRedirects(true);
-        $crawler = $this->client->submit($form);
-        $result = $this->client->getResponse();
-
-        self::assertHtmlResponseStatusCodeEquals($result, 200);
-        self::assertStringContainsString('Account saved', $crawler->html());
-
-        return (int) $id;
-    }
-
-    /**
-     * @depends testUpdate
-     */
-    public function testView($id): void
-    {
-        $crawler = $this->client->request('GET', $this->getUrl('oro_account_view', ['id' => $id]));
-        $result = $this->client->getResponse();
-
-        self::assertHtmlResponseStatusCodeEquals($result, 200);
-        self::assertStringContainsString('Account_name_update - Accounts - Customers', $crawler->html());
-    }
-
-    /**
-     * @depends testUpdate
-     */
-    public function testViewWithCustomerDataSuppliedByEventListener($id): void
+    public function testViewWithCustomerDataSuppliedByEventListener(): void
     {
         $customers = ['one', 'two'];
         $template = 'testCustomersWebActivity.html.twig';
@@ -102,31 +38,17 @@ class AccountControllerTest extends WebTestCase
 
         $this->client->disableReboot();
 
-        $crawler = $this->client->request('GET', $this->getUrl('oro_account_view', ['id' => $id]));
+        $accountRepository = self::getContainer()->get('doctrine')->getRepository(Account::class);
+        $accountId = $accountRepository->findOneBy(['name' => 'Account 1'])->getId();
+
+        $crawler = $this->client->request('GET', $this->getUrl('oro_account_view', ['id' => $accountId]));
         $result = $this->client->getResponse();
 
         self::assertHtmlResponseStatusCodeEquals($result, 200);
-        self::assertStringContainsString('Account_name_update - Accounts - Customers', $crawler->html());
+        self::assertStringContainsString('Account 1 - Accounts - Customers', $crawler->html());
         self::assertStringContainsString(
             trim(self::getContainer()->get('twig')->render($template, ['customers' => $customers])),
             $crawler->html()
         );
-    }
-
-    /**
-     * @depends testUpdate
-     */
-    public function testContactWidget($id): void
-    {
-        $this->client->request(
-            'GET',
-            $this->getUrl(
-                'oro_account_widget_contacts_info',
-                ['id' => $id, '_widgetContainer' => 'dialog']
-            )
-        );
-        //just verify method OK
-        $result = $this->client->getResponse();
-        self::assertHtmlResponseStatusCodeEquals($result, 200);
     }
 }

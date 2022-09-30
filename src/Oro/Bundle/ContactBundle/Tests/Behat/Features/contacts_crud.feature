@@ -112,6 +112,7 @@ Scenario: Assert field values of Contact view page after edit
   And Phone "+1 415-656-4418" should be primary
   And email "sheen@charlie.com" should be primary
   And avatar should not be default avatar
+  And page has "Charlie2 Sheen2" header
 
 Scenario: Delete contact
   Given I remember number of files in attachment directory
