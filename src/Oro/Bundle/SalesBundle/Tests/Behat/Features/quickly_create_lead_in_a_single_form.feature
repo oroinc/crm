@@ -1,4 +1,5 @@
 @ticket-CRM-5308
+@ticket-BAP-21510
 @automatically-ticket-tagged
 @fixture-OroSalesBundle:lead.yml
 Feature: Quickly create Lead in a single form
@@ -71,6 +72,22 @@ Feature: Quickly create Lead in a single form
       | Last Name  | Doe                          |
       | Phones     | [33-33-33, 44-44-44]         |
       | Emails     | [lead3@ex.com, lead4@ex.com] |
+
+  Scenario Outline: Validation website data
+    When I go to Sales/ Leads
+    And I should see "Bruce"
+    And I click "Edit" on row "Willis" in grid
+    And I fill form with:
+      | Website | <Website> |
+    Then I should see "This value is not a valid URL. Allowed URL protocols are: http, https."
+    And I click "Cancel"
+
+    Examples:
+      | Website                            |
+      | sample-string                      |
+      | unsupported-protocol://sample-site |
+      | javascript:alert(1)                |
+      | jAvAsCrIpt:alert(1)                |
 
   Scenario: Inline edit Lead
     Given I go to Sales/ Leads
