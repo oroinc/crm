@@ -1,1 +1,1 @@
-<%= highlight(name) %><% if (typeof contactName != 'undefined') { %> - <%= highlight(contactName) %><% } %>
+<%= highlight(_.escape(name)) %><% if (typeof contactName != 'undefined') { %> - <%= highlight(_.escape(contactName)) %><% } %>

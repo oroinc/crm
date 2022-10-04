@@ -261,6 +261,11 @@ oro_behat_extension:
         type: 'xpath'
         locator: '//div[@title="Opportunity statistics"]/..//button[contains(@id,"dashboard-action")]'
 
+    Opportunities by Status:
+      selector:
+        type: 'xpath'
+        locator: '//div[@title="Opportunities by Status"]/../..'
+
     Opportunities List:
       selector:
         type: 'xpath'
@@ -292,6 +297,26 @@ oro_behat_extension:
         type: 'xpath'
         locator: '//div[@title="Forecast"]/../..'
 
+    Lead Statistics Form:
+      selector: 'form[name="lead_statistics"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Start Date range: 'lead_statistics[dateRange][value][start]'
+          End Date range: 'lead_statistics[dateRange][value][end]'
+          Start Date filter:
+            type: 'css'
+            locator: '.datepicker-input[aria-label="Datetime filter from date value"]'
+          End Date filter:
+            type: 'css'
+            locator: '.datepicker-input[aria-label="Datetime filter to date value"]'
+
+    Previous period disable:
+      selector: '[id^=lead_statistics_usePreviousInterval]'
+
+    Lead Statistics Widget New Leads count:
+      selector: '[data-widget-title="Lead statistics"] .deviation.positive'
+
     Forecast Form:
       selector: 'form[name="forecast_of_opportunities"]'
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
@@ -319,6 +344,14 @@ oro_behat_extension:
 
     DeviationNegative:
       selector: '.deviation.negative'
+
+    Leads List Sort:
+      selector: '[id^=leads_list_sortBy_order]'
+
+    Leads List Updated At:
+      selector:
+        type: xpath
+        locator: '//div[contains(@class, "select2-result-label") and contains(., "Updated At")]'
 
   pages:
     Opportunity Index:
@@ -371,5 +404,6 @@ oro_behat_extension:
         - Oro\Bundle\LocaleBundle\Tests\Behat\Context\LocalizationContext
         - Oro\Bundle\EmailBundle\Tests\Behat\Context\EmailContext
         - Oro\Bundle\SearchBundle\Tests\Behat\Context\SearchContext
+        - Oro\Bundle\FilterBundle\Tests\Behat\Context\FilterContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'

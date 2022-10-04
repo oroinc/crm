@@ -3,6 +3,7 @@
 @ticket-BB-17275
 @ticket-BAP-21315
 @ticket-BAP-21448
+@ticket-BAP-21510
 @fixture-OroSalesBundle:leads_data.yml
 @fixture-OroSalesBundle:opportunities_data.yml
 Feature: Manage dashboard widgets
@@ -34,12 +35,13 @@ Feature: Manage dashboard widgets
     And I fill form with:
       | Excluded statuses | New        |
       | Sort By           | First name |
+    And I fill in "Leads List Sort" with "Descending"
     When I click "Widget Save Button"
     Then I should see "Widget has been successfully configured" flash message
     And I should see following grid:
       | Lead name     | Status       | Last contact datetime |
-      | Alan          | Qualified    |                       |
       | John          | Disqualified |                       |
+      | Alan          | Qualified    |                       |
     When I click "Leads List Actions"
     And I click "Configure" in "Leads List" widget
     And I fill form with:
@@ -50,6 +52,17 @@ Feature: Manage dashboard widgets
     And I should see following grid:
       | Lead name     | Status       | Last contact datetime |
       | Alan          | Qualified    |                       |
+    When I click "Leads List Actions"
+    And I click "Configure" in "Leads List" widget
+    And I fill form with:
+      | Excluded statuses | [Disqualified, Qualified] |
+      | Sort By           | Last name |
+    And I fill in "Leads List Sort" with "Ascending"
+    When I click "Widget Save Button"
+    Then I should see "Widget has been successfully configured" flash message
+    And I should see following grid:
+      | Lead name | Status | Last contact datetime |
+      | Bruce     | New    |                       |
 
   Scenario: Add Lead Statistics widget
     Given I click "Add widget"
