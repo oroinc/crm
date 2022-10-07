@@ -1,0 +1,19 @@
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+    contactEmail1:
+        email: 'contact_email_1@gmail.com'
+        primary: true
+    contactEmail2:
+        email: 'contact_email_2@gmail.com'
+        primary: true
+    contactEmail3:
+        email: 'contact_email_3@gmail.com'
+        primary: true
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+    contact{1..3}:
+        firstName: 'Account_FirstName_<current()>'
+        lastName: 'Account_LastName_<current()>'
+        __calls:
+            - addEmail: ['@contactEmail<current()>']
+        owner: '@admin'
+        organization: '@organization'
