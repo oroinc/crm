@@ -201,14 +201,14 @@ Feature: Activities
     Given go to Activities/ Calendar Events
     And click "Create Calendar event"
     When I fill "Event Form" with:
-      | Title         | All day no repeat Event        |
-      | Start         | <DateTime:2017-01-24 12:00 AM> |
-      | End           | <DateTime:2020-02-26 12:00 AM> |
-      | All-Day Event | true                           |
-      | Repeat        | false                          |
-      | Description   | testfull desc                  |
-      | Guests        | John Doe                       |
-      | Color         | Cornflower Blue                |
+      | Title         | All day no repeat Event     |
+      | Start         | <DateTime:+2 days 12:00 AM> |
+      | End           | <DateTime:+4 days 12:00 AM> |
+      | All-Day Event | true                        |
+      | Repeat        | false                       |
+      | Description   | testfull desc               |
+      | Guests        | John Doe                    |
+      | Color         | Cornflower Blue             |
     And set Reminders with:
       | Method        | Interval unit | Interval number |
       | Email         | days          | 1               |
@@ -224,8 +224,8 @@ Feature: Activities
     And should see "Context SomeCompany"
     And go to Activities/ Calendar Events
     And should see following grid:
-      | Title                   | Calendar | Start                  | End                    | Recurrent | Recurrence |
-      | All day no repeat Event | John Doe | Jan 24, 2017, 12:00 AM | Feb 26, 2020, 11:59 PM | No        |            |
+      | Title                   | Calendar | Start            | End              | Recurrent | Recurrence |
+      | All day no repeat Event | John Doe | +2 days 12:00 AM | +4 days 11:59 PM | No        |            |
 
   Scenario: Add an event for Another Record
     Given go to Sales/ Leads
@@ -233,14 +233,14 @@ Feature: Activities
     When click "More actions"
     And click "Add Event"
     And I fill "Event Form" with:
-      | Title         | New event                      |
-      | Start         | <DateTime:2018-05-24 12:00 AM> |
-      | End           | <DateTime:2019-05-26 12:00 AM> |
-      | All-Day Event | true                           |
-      | Repeat        | false                          |
-      | Description   | testfull desc                  |
-      | Guests        | John Doe                       |
-      | Color         | Cornflower Blue                |
+      | Title         | New event                   |
+      | Start         | <DateTime:+2 days 12:00 AM> |
+      | End           | <DateTime:+4 days 12:00 AM> |
+      | All-Day Event | true                        |
+      | Repeat        | false                       |
+      | Description   | testfull desc               |
+      | Guests        | John Doe                    |
+      | Color         | Cornflower Blue             |
     And set Reminders with:
       | Method        | Interval unit | Interval number |
       | Email         | days          | 1               |
@@ -256,17 +256,18 @@ Feature: Activities
   Scenario: Create an event from My Calendar
     Given click My Calendar in user menu
     And click on "Empty slot"
-    And I fill "Event Form" with:
-      | Title         | Stand-Up        |
-      | All-Day Event | false           |
-      | Repeat        | false           |
-      | Description   | testfull desc   |
-      | Guests        | Charlie Sheen   |
-      | Color         | Cornflower Blue |
+    When I fill "Event Form" with:
+      | Title         | Stand-Up            |
+      | Start         | <DateTime:+2 hours> |
+      | All-Day Event | false               |
+      | Repeat        | false               |
+      | Description   | testfull desc       |
+      | Guests        | Charlie Sheen       |
+      | Color         | Cornflower Blue     |
     And set Reminders with:
       | Method        | Interval unit | Interval number |
-      | Email         | days          | 1               |
-      | Flash message | hours         | 1               |
+      | Email         | hours         | 1               |
+      | Flash message | minutes       | 5               |
     And click "Save"
     And click "Notify"
     Then I should see "Stand-Up" in calendar with:
