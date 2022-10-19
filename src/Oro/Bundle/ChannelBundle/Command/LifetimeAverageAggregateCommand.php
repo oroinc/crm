@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace Oro\Bundle\ChannelBundle\Command;
 
-use Oro\Bundle\ChannelBundle\Async\Topics;
+use Oro\Bundle\ChannelBundle\Async\Topic\AggregateLifetimeAverageTopic;
 use Oro\Bundle\CronBundle\Command\CronCommandScheduleDefinitionInterface;
-use Oro\Component\MessageQueue\Client\Message;
-use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -75,14 +73,11 @@ HELP
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->messageProducer->send(
-            Topics::AGGREGATE_LIFETIME_AVERAGE,
-            new Message(
-                [
-                    'force' => (bool) $input->getOption('force'),
-                    'use_truncate' => ! (bool) $input->getOption('use-delete'),
-                ],
-                MessagePriority::VERY_LOW
-            )
+            AggregateLifetimeAverageTopic::getName(),
+            [
+                'force' => (bool) $input->getOption('force'),
+                'use_truncate' => ! (bool) $input->getOption('use-delete'),
+            ]
         );
 
         $output->writeln('<info>Completed!</info>');

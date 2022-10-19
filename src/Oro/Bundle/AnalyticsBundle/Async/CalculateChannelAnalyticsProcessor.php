@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Async;
 
+use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateChannelAnalyticsTopic;
 use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
@@ -10,30 +11,20 @@ use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-use Oro\Component\MessageQueue\Util\JSON;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Calculates analytics for specified channel
+ */
 class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
-    /**
-     * @var DoctrineHelper
-     */
-    private $doctrineHelper;
+    private DoctrineHelper $doctrineHelper;
 
-    /**
-     * @var AnalyticsBuilder
-     */
-    private $analyticsBuilder;
+    private AnalyticsBuilder $analyticsBuilder;
 
-    /**
-     * @var JobRunner
-     */
-    private $jobRunner;
+    private JobRunner $jobRunner;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(
         DoctrineHelper $doctrineHelper,
@@ -50,49 +41,40 @@ class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, T
     /**
      * {@inheritdoc}
      */
-    public function process(MessageInterface $message, SessionInterface $session)
+    public function process(MessageInterface $message, SessionInterface $session): string
     {
-        $body = JSON::decode($message->getBody());
-        $body = array_replace_recursive([
-            'channel_id' => null,
-            'customer_ids' => [],
-        ], $body);
+        $messageBody = $message->getBody();
 
-        if (false == $body['channel_id']) {
-            $this->logger->critical('The message invalid. It must have channel_id set');
-
-            return self::REJECT;
-        }
-
-        $jobName = 'oro_analytics:calculate_channel_analytics:'.$body['channel_id'];
-        $ownerId = $message->getMessageId();
-
-        $em = $this->doctrineHelper->getEntityManager(Channel::class);
+        $entityManager = $this->doctrineHelper->getEntityManager(Channel::class);
 
         /** @var Channel $channel */
-        $channel = $em->find(Channel::class, $body['channel_id']);
-        if (! $channel) {
-            $this->logger->error(sprintf('Channel not found: %s', $body['channel_id']));
+        $channel = $entityManager?->find(Channel::class, $messageBody['channel_id']);
+        if (!$channel) {
+            $this->logger->error(sprintf('Channel not found: %s', $messageBody['channel_id']));
 
             return self::REJECT;
         }
-        if (Channel::STATUS_ACTIVE != $channel->getStatus()) {
-            $this->logger->error(sprintf('Channel not active: %s', $body['channel_id']));
+        if (Channel::STATUS_ACTIVE !== $channel->getStatus()) {
+            $this->logger->error(sprintf('Channel not active: %s', $messageBody['channel_id']));
 
             return self::REJECT;
         }
-        if (false == is_a($channel->getCustomerIdentity(), AnalyticsAwareInterface::class, true)) {
+
+        if (false === is_a($channel->getCustomerIdentity(), AnalyticsAwareInterface::class, true)) {
             $this->logger->error(
-                sprintf('Channel is not supposed to calculate analytics: %s', $body['channel_id'])
+                sprintf('Channel is not supposed to calculate analytics: %s', $messageBody['channel_id'])
             );
 
             return self::REJECT;
         }
 
-        $em->getConnection()->getConfiguration()->setSQLLogger(null);
+        $jobName = 'oro_analytics:calculate_channel_analytics:' . $messageBody['channel_id'];
+        $ownerId = $message->getMessageId();
 
-        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($channel, $body) {
-            $this->analyticsBuilder->build($channel, $body['customer_ids']);
+        $entityManager?->getConnection()?->getConfiguration()?->setSQLLogger(null);
+
+        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($channel, $messageBody) {
+            $this->analyticsBuilder->build($channel, $messageBody['customer_ids']);
 
             return true;
         });
@@ -103,8 +85,8 @@ class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, T
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedTopics()
+    public static function getSubscribedTopics(): array
     {
-        return [Topics::CALCULATE_CHANNEL_ANALYTICS];
+        return [CalculateChannelAnalyticsTopic::getName()];
     }
 }

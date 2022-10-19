@@ -5,7 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor;
-use Oro\Bundle\ChannelBundle\Async\Topics;
+use Oro\Bundle\ChannelBundle\Async\Topic\ChannelStatusChangedTopic;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -14,7 +14,6 @@ use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\Message;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 
 /**
@@ -25,20 +24,15 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
     use ClassExtensionTrait;
     use LoggerAwareTraitTestTrait;
 
-    /** @var StateProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $stateProvider;
+    private StateProvider|\PHPUnit\Framework\MockObject\MockObject $stateProvider;
 
-    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $entityManager;
+    private EntityManager|\PHPUnit\Framework\MockObject\MockObject $entityManager;
 
-    /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $session;
+    private SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session;
 
-    /** @var Channel */
-    private $channel;
+    private Channel $channel;
 
-    /** @var ChangeIntegrationStatusProcessor */
-    private $processor;
+    private ChangeIntegrationStatusProcessor $processor;
 
     protected function setUp(): void
     {
@@ -55,7 +49,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->entityManager->expects(self::any())
             ->method('find')
-            ->willReturnMap([[Channel::class, 'aChannelId', null, null, $this->channel]]);
+            ->willReturnMap([[Channel::class, 1, null, null, $this->channel]]);
 
         $this->processor = new ChangeIntegrationStatusProcessor($doctrine, $this->stateProvider);
         $this->setUpLoggerMock($this->processor);
@@ -74,41 +68,20 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldSubscribeOnChannelStatusChangedTopic(): void
     {
-        self::assertEquals([Topics::CHANNEL_STATUS_CHANGED], ChangeIntegrationStatusProcessor::getSubscribedTopics());
-    }
-
-    public function testShouldLogAndRejectIfMessageBodyMissChangeId(): void
-    {
-        $message = new Message();
-        $message->setBody('[]');
-
-        $this->loggerMock->expects(self::once())
-            ->method('critical')
-            ->with('The message invalid. It must have channelId set');
-
-        $status = $this->processor->process($message, $this->session);
-
-        self::assertEquals(MessageProcessorInterface::REJECT, $status);
-    }
-
-    public function testThrowIfMessageBodyInvalidJson(): void
-    {
-        $this->expectException(\JsonException::class);
-
-        $message = new Message();
-        $message->setBody('[}');
-
-        $this->processor->process($message, $this->session);
+        self::assertEquals(
+            [ChannelStatusChangedTopic::getName()],
+            ChangeIntegrationStatusProcessor::getSubscribedTopics()
+        );
     }
 
     public function testShouldRejectMessageIfChannelNotExist(): void
     {
         $message = new Message();
-        $message->setBody(JSON::encode(['channelId' => 'missingChannelId']));
+        $message->setBody(['channelId' => PHP_INT_MAX]);
 
         $this->loggerMock->expects(self::once())
             ->method('critical')
-            ->with('Channel not found: missingChannelId');
+            ->with(sprintf('Channel not found: %d', PHP_INT_MAX));
 
         $status = $this->processor->process($message, $this->session);
 
@@ -118,7 +91,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
     public function testShouldDoNothingIfChannelDataSourceIsNotInstanceOfIntegration(): void
     {
         $message = new Message();
-        $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
+        $message->setBody(['channelId' => 1]);
 
         $this->stateProvider->expects(self::once())
             ->method('processChannelChange');
@@ -141,7 +114,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('flush');
 
         $message = new Message();
-        $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
+        $message->setBody(['channelId' => 1]);
 
         $this->stateProvider->expects(self::once())
             ->method('processChannelChange');
@@ -165,7 +138,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('processChannelChange');
 
         $message = new Message();
-        $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
+        $message->setBody(['channelId' => 1]);
 
         $status = $this->processor->process($message, $this->session);
 
@@ -189,7 +162,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('processChannelChange');
 
         $message = new Message();
-        $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
+        $message->setBody(['channelId' => 1]);
 
         $status = $this->processor->process($message, $this->session);
 
@@ -213,7 +186,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('processChannelChange');
 
         $message = new Message();
-        $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
+        $message->setBody(['channelId' => 1]);
 
         $status = $this->processor->process($message, $this->session);
 
@@ -237,7 +210,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('processChannelChange');
 
         $message = new Message();
-        $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
+        $message->setBody(['channelId' => 1]);
 
         $status = $this->processor->process($message, $this->session);
 
@@ -260,7 +233,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('processChannelChange');
 
         $message = new Message();
-        $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
+        $message->setBody(['channelId' => 1]);
 
         $status = $this->processor->process($message, $this->session);
 

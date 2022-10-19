@@ -2,12 +2,13 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
-use Oro\Bundle\ChannelBundle\Async\Topics;
+use Oro\Bundle\ChannelBundle\Async\Topic\AggregateLifetimeAverageTopic;
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
-use Oro\Component\MessageQueue\Client\Message;
-use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 
+/**
+ * Sends MQ message to aggregate an average lifetime value
+ */
 class TimezoneChangeListener
 {
     /**
@@ -27,8 +28,10 @@ class TimezoneChangeListener
         }
 
         $this->messageProducer->send(
-            Topics::AGGREGATE_LIFETIME_AVERAGE,
-            new Message(['force' => true], MessagePriority::VERY_LOW)
+            AggregateLifetimeAverageTopic::getName(),
+            [
+                'force' => true,
+            ]
         );
     }
 }

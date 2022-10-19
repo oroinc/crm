@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        tags:
+            - { name: oro_message_queue.topic }
+
+    Oro\Bundle\ChannelBundle\Async\Topic\ChannelStatusChangedTopic: ~
+    Oro\Bundle\ChannelBundle\Async\Topic\AggregateLifetimeAverageTopic: ~
