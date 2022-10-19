@@ -2,7 +2,7 @@
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Oro\Bundle\AnalyticsBundle\Async\Topics;
+use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateChannelAnalyticsTopic;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
@@ -27,9 +27,9 @@ class CalculateAnalyticsSchedulerTest extends WebTestCase
         $this->loadFixtures([LoadChannel::class]);
     }
 
-    public function testCouldBeGetFromContainerAsService()
+    public function testCouldBeGetFromContainerAsService(): void
     {
-        $service = $this->getContainer()->get('oro_analytics.calculate_analytics_scheduler');
+        $service = self::getContainer()->get('oro_analytics.calculate_analytics_scheduler');
 
         $this->assertInstanceOf(CalculateAnalyticsScheduler::class, $service);
     }
@@ -37,7 +37,7 @@ class CalculateAnalyticsSchedulerTest extends WebTestCase
     /**
      * Test for analytics_channel_calculate_rfm process
      */
-    public function testShouldScheduleAnalyticsCalculateIfStatusTrueAndRFMEnabled()
+    public function testShouldScheduleAnalyticsCalculateIfStatusTrueAndRFMEnabled(): void
     {
         /** @var Channel $channel */
         $channel = $this->getReference('default_channel');
@@ -54,18 +54,15 @@ class CalculateAnalyticsSchedulerTest extends WebTestCase
         $this->getEntityManager()->persist($channel);
         $this->getEntityManager()->flush();
 
-        self::assertMessagesCount(Topics::CALCULATE_CHANNEL_ANALYTICS, 1);
-        self::assertMessageSent(Topics::CALCULATE_CHANNEL_ANALYTICS, [
+        self::assertMessagesCount(CalculateChannelAnalyticsTopic::getName(), 1);
+        self::assertMessageSent(CalculateChannelAnalyticsTopic::getName(), [
             'channel_id' => $channel->getId(),
             'customer_ids' => [],
         ]);
-        self::assertMessageSentWithPriority(Topics::CALCULATE_CHANNEL_ANALYTICS, MessagePriority::VERY_LOW);
+        self::assertMessageSentWithPriority(CalculateChannelAnalyticsTopic::getName(), MessagePriority::VERY_LOW);
     }
 
-    /**
-     * @return EntityManagerInterface
-     */
-    private function getEntityManager()
+    private function getEntityManager(): EntityManagerInterface
     {
         return self::getContainer()->get('doctrine.orm.entity_manager');
     }

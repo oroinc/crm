@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Async;
 
+use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateAllChannelsAnalyticsTopic;
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
@@ -11,17 +12,14 @@ use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 
+/**
+ * Calculates analytics for all channels
+ */
 class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
-    /**
-     * @var DoctrineHelper
-     */
-    private $doctrineHelper;
+    private DoctrineHelper $doctrineHelper;
 
-    /**
-     * @var CalculateAnalyticsScheduler
-     */
-    private $calculateAnalyticsScheduler;
+    private CalculateAnalyticsScheduler $calculateAnalyticsScheduler;
 
     public function __construct(
         DoctrineHelper $doctrineHelper,
@@ -34,7 +32,7 @@ class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterfac
     /**
      * {@inheritdoc}
      */
-    public function process(MessageInterface $message, SessionInterface $session)
+    public function process(MessageInterface $message, SessionInterface $session): string
     {
         $qb = $this->doctrineHelper->getEntityRepository(Channel::class)->createQueryBuilder('c');
 
@@ -60,8 +58,8 @@ class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterfac
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedTopics()
+    public static function getSubscribedTopics(): array
     {
-        return [Topics::CALCULATE_ALL_CHANNELS_ANALYTICS];
+        return [CalculateAllChannelsAnalyticsTopic::getName()];
     }
 }
