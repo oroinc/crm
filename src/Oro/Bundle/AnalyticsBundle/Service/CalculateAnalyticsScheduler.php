@@ -1,11 +1,13 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Service;
 
-use Oro\Bundle\AnalyticsBundle\Async\Topics;
-use Oro\Component\MessageQueue\Client\Message;
-use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateAllChannelsAnalyticsTopic;
+use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateChannelAnalyticsTopic;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 
+/**
+ * Schedules channels analytics calculation
+ */
 class CalculateAnalyticsScheduler
 {
     /**
@@ -25,22 +27,16 @@ class CalculateAnalyticsScheduler
     public function scheduleForChannel($channelId, array $customerIds = [])
     {
         $this->messageProducer->send(
-            Topics::CALCULATE_CHANNEL_ANALYTICS,
-            new Message(
-                [
-                    'channel_id' => $channelId,
-                    'customer_ids' => $customerIds,
-                ],
-                MessagePriority::VERY_LOW
-            )
+            CalculateChannelAnalyticsTopic::getName(),
+            [
+                'channel_id' => $channelId,
+                'customer_ids' => $customerIds,
+            ]
         );
     }
 
     public function scheduleForAllChannels()
     {
-        $this->messageProducer->send(
-            Topics::CALCULATE_ALL_CHANNELS_ANALYTICS,
-            new Message([], MessagePriority::VERY_LOW)
-        );
+        $this->messageProducer->send(CalculateAllChannelsAnalyticsTopic::getName(), []);
     }
 }

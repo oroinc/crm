@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        tags:
+            - { name: oro_message_queue.topic }
+
+    Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateAllChannelsAnalyticsTopic: ~
+    Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateChannelAnalyticsTopic: ~

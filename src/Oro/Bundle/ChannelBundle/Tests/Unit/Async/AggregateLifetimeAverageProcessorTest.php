@@ -5,7 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectRepository;
 use Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
-use Oro\Bundle\ChannelBundle\Async\Topics;
+use Oro\Bundle\ChannelBundle\Async\Topic\AggregateLifetimeAverageTopic;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
@@ -13,32 +13,31 @@ use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
 use Oro\Component\MessageQueue\Transport\Message;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 
 class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;
 
-    public function testShouldImplementMessageProcessorInterface()
+    public function testShouldImplementMessageProcessorInterface(): void
     {
         $this->assertClassImplements(MessageProcessorInterface::class, AggregateLifetimeAverageProcessor::class);
     }
 
-    public function testShouldImplementTopicSubscriberInterface()
+    public function testShouldImplementTopicSubscriberInterface(): void
     {
         $this->assertClassImplements(TopicSubscriberInterface::class, AggregateLifetimeAverageProcessor::class);
     }
 
-    public function testShouldSubscribeOnChannelStatusChangedTopic()
+    public function testShouldSubscribeOnChannelStatusChangedTopic(): void
     {
-        $this->assertEquals(
-            [Topics::AGGREGATE_LIFETIME_AVERAGE],
+        self::assertEquals(
+            [AggregateLifetimeAverageTopic::getName()],
             AggregateLifetimeAverageProcessor::getSubscribedTopics()
         );
     }
 
-    public function testCouldBeConstructedWithDoctrineAndLocaleSettingsAsArguments()
+    public function testCouldBeConstructedWithDoctrineAndLocaleSettingsAsArguments(): void
     {
         new AggregateLifetimeAverageProcessor(
             $this->getDoctrine(),
@@ -47,34 +46,17 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testThrowIfMessageBodyInvalidJson()
-    {
-        $this->expectException(\JsonException::class);
-
-        $processor = new AggregateLifetimeAverageProcessor(
-            $this->getDoctrine(),
-            $this->createMock(LocaleSettings::class),
-            new JobRunner()
-        );
-
-        $message = new Message();
-        $message->setBody('[}');
-
-        $session = $this->createMock(SessionInterface::class);
-        $processor->process($message, $session);
-    }
-
-    public function testShouldDoAggregateAndWithoutForceByDefault()
+    public function testShouldDoAggregateAndWithoutForceWithDefaultValues(): void
     {
         $localeSettings = $this->createMock(LocaleSettings::class);
-        $localeSettings->expects($this->once())
+        $localeSettings->expects(self::once())
             ->method('getTimeZone')
             ->willReturn('theTimeZone');
 
         $repository = $this->createMock(LifetimeValueAverageAggregationRepository::class);
-        $repository->expects($this->never())
+        $repository->expects(self::never())
             ->method('clearTableData');
-        $repository->expects($this->once())
+        $repository->expects(self::once())
             ->method('aggregate')
             ->with('theTimeZone', false);
 
@@ -85,26 +67,29 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
         );
 
         $message = new Message();
-        $message->setBody(JSON::encode([]));
+        $message->setBody([
+            'force' => false,
+            'use_truncate' => true,
+        ]);
 
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
-        $this->assertEquals(MessageProcessorInterface::ACK, $status);
+        self::assertEquals(MessageProcessorInterface::ACK, $status);
     }
 
-    public function testShouldClearTableBeforeAggregateIfForceTrue()
+    public function testShouldClearTableBeforeAggregateIfForceTrue(): void
     {
         $localeSettings = $this->createMock(LocaleSettings::class);
-        $localeSettings->expects($this->once())
+        $localeSettings->expects(self::once())
             ->method('getTimeZone')
             ->willReturn('theTimeZone');
 
         $repository = $this->createMock(LifetimeValueAverageAggregationRepository::class);
-        $repository->expects($this->once())
+        $repository->expects(self::once())
             ->method('clearTableData')
             ->with(false);
-        $repository->expects($this->once())
+        $repository->expects(self::once())
             ->method('aggregate')
             ->with('theTimeZone', true);
 
@@ -115,61 +100,29 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
         );
 
         $message = new Message();
-        $message->setBody(JSON::encode([
-            'force' => true
-        ]));
-
-        $session = $this->createMock(SessionInterface::class);
-        $status = $processor->process($message, $session);
-
-        $this->assertEquals(MessageProcessorInterface::ACK, $status);
-    }
-
-    public function testShouldTruncateTableBeforeAggregateIfForceTrue()
-    {
-        $localeSettings = $this->createMock(LocaleSettings::class);
-        $localeSettings->expects($this->once())
-            ->method('getTimeZone')
-            ->willReturn('theTimeZone');
-
-        $repository = $this->createMock(LifetimeValueAverageAggregationRepository::class);
-        $repository->expects($this->once())
-            ->method('clearTableData')
-            ->with(true);
-        $repository->expects($this->once())
-            ->method('aggregate')
-            ->with('theTimeZone', true);
-
-        $processor = new AggregateLifetimeAverageProcessor(
-            $this->getDoctrine($repository),
-            $localeSettings,
-            new JobRunner()
-        );
-
-        $message = new Message();
-        $message->setBody(JSON::encode([
+        $message->setBody([
             'force' => true,
-            'use_truncate' => false,
-        ]));
+            'use_truncate' => true,
+        ]);
 
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
-        $this->assertEquals(MessageProcessorInterface::ACK, $status);
+        self::assertEquals(MessageProcessorInterface::ACK, $status);
     }
 
-    public function testShouldRunAggregateLifetimeAverageAsUniqueJob()
+    public function testShouldTruncateTableBeforeAggregateIfForceTrue(): void
     {
         $localeSettings = $this->createMock(LocaleSettings::class);
-        $localeSettings->expects($this->once())
+        $localeSettings->expects(self::once())
             ->method('getTimeZone')
             ->willReturn('theTimeZone');
 
         $repository = $this->createMock(LifetimeValueAverageAggregationRepository::class);
-        $repository->expects($this->once())
+        $repository->expects(self::once())
             ->method('clearTableData')
             ->with(true);
-        $repository->expects($this->once())
+        $repository->expects(self::once())
             ->method('aggregate')
             ->with('theTimeZone', true);
 
@@ -183,13 +136,15 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
 
         $message = new Message();
         $message->setMessageId('theMessageId');
-        $message->setBody(JSON::encode([
+        $message->setBody([
             'force' => true,
             'use_truncate' => false,
-        ]));
+        ]);
 
         $session = $this->createMock(SessionInterface::class);
-        $processor->process($message, $session);
+        $status = $processor->process($message, $session);
+
+        self::assertEquals(MessageProcessorInterface::ACK, $status);
 
         $uniqueJobs = $jobRunner->getRunUniqueJobs();
         self::assertCount(1, $uniqueJobs);
@@ -200,7 +155,7 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
     private function getDoctrine(ObjectRepository $repository = null): ManagerRegistry
     {
         $registry = $this->createMock(ManagerRegistry::class);
-        $registry->expects($this->any())
+        $registry->expects(self::any())
             ->method('getRepository')
             ->willReturn($repository);
 

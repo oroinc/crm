@@ -2,7 +2,8 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Command;
 
-use Oro\Bundle\AnalyticsBundle\Async\Topics;
+use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateAllChannelsAnalyticsTopic;
+use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateChannelAnalyticsTopic;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -28,12 +29,12 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\DataFixtures\LoadCustomerData']);
     }
 
-    public function testShouldScheduleCalculateAnalyticsForGivenChannel()
+    public function testShouldScheduleCalculateAnalyticsForGivenChannel(): void
     {
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.CustomerChannel');
 
-        $result = $this->runCommand('oro:cron:analytic:calculate', ['--channel='.$channel->getId()]);
+        $result = self::runCommand('oro:cron:analytic:calculate', ['--channel='.$channel->getId()]);
 
         self::assertStringContainsString(
             sprintf('Schedule analytics calculation for "%s" channel.', $channel->getId()),
@@ -42,22 +43,22 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         self::assertStringContainsString('Completed', $result);
 
         self::assertMessageSent(
-            Topics::CALCULATE_CHANNEL_ANALYTICS,
+            CalculateChannelAnalyticsTopic::getName(),
             [
                 'channel_id' => $channel->getId(),
                 'customer_ids' => [],
             ]
         );
-        self::assertMessageSentWithPriority(Topics::CALCULATE_CHANNEL_ANALYTICS, MessagePriority::VERY_LOW);
+        self::assertMessageSentWithPriority(CalculateChannelAnalyticsTopic::getName(), MessagePriority::VERY_LOW);
     }
 
-    public function testShouldNotScheduleCalculateAnalyticsForNonSupportedChannel()
+    public function testShouldNotScheduleCalculateAnalyticsForNonSupportedChannel(): void
     {
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.CustomerIdentity');
         $channelId = $channel->getId();
 
-        $result = $this->runCommand('oro:cron:analytic:calculate', ['--channel=' . $channelId]);
+        $result = self::runCommand('oro:cron:analytic:calculate', ['--channel=' . $channelId]);
 
         self::assertStringContainsString('Schedule analytics calculation for "'. $channelId.'" channel.', $result);
         self::assertStringContainsString(
@@ -66,38 +67,38 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         );
     }
 
-    public function testShouldNotScheduleCalculateAnalyticsForNonActiveChannel()
+    public function testShouldNotScheduleCalculateAnalyticsForNonActiveChannel(): void
     {
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.AnalyticsAwareInterface');
         $channelId = $channel->getId();
 
-        $result = $this->runCommand('oro:cron:analytic:calculate', ['--channel=' . $channelId]);
+        $result = self::runCommand('oro:cron:analytic:calculate', ['--channel=' . $channelId]);
 
         self::assertStringContainsString('Schedule analytics calculation for "'. $channelId . '" channel.', $result);
         self::assertStringContainsString(sprintf('Channel not active: %s', $channelId), $result);
     }
 
-    public function testShouldScheduleAnalyticsCalculationForAllAvailableChannels()
+    public function testShouldScheduleAnalyticsCalculationForAllAvailableChannels(): void
     {
-        $result = $this->runCommand('oro:cron:analytic:calculate');
+        $result = self::runCommand('oro:cron:analytic:calculate');
 
         self::assertStringContainsString('Schedule analytics calculation for all channels.', $result);
         self::assertStringContainsString('Completed', $result);
 
-        self::assertMessageSent(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS, []);
-        self::assertMessageSentWithPriority(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS, MessagePriority::VERY_LOW);
+        self::assertMessageSent(CalculateAllChannelsAnalyticsTopic::getName(), []);
+        self::assertMessageSentWithPriority(CalculateAllChannelsAnalyticsTopic::getName(), MessagePriority::VERY_LOW);
     }
 
-    public function testThrowIfCustomerIdsSetWithoutChannelId()
+    public function testThrowIfCustomerIdsSetWithoutChannelId(): void
     {
-        $result = $this->runCommand('oro:cron:analytic:calculate', ['--ids=1', '--ids=2']);
+        $result = self::runCommand('oro:cron:analytic:calculate', ['--ids=1', '--ids=2']);
 
         self::assertStringContainsString('In CalculateAnalyticsCommand.php', $result);
         self::assertStringContainsString('Option "ids" does not work without "channel"', $result);
     }
 
-    public function testShouldScheduleCalculateAnalyticsForGivenChannelWithCustomerIdsSet()
+    public function testShouldScheduleCalculateAnalyticsForGivenChannelWithCustomerIdsSet(): void
     {
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.CustomerChannel');
@@ -108,7 +109,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         /** @var \Oro\Bundle\MagentoBundle\Entity\Customer $customerTwo */
         $customerTwo = $this->getReference('Channel.CustomerChannel.Customer2');
 
-        $result = $this->runCommand('oro:cron:analytic:calculate', [
+        $result = self::runCommand('oro:cron:analytic:calculate', [
             '--channel='.$channel->getId(),
             '--ids='.$customerOne->getId(),
             '--ids='.$customerTwo->getId(),
@@ -121,12 +122,12 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         self::assertStringContainsString('Completed', $result);
 
         self::assertMessageSent(
-            Topics::CALCULATE_CHANNEL_ANALYTICS,
+            CalculateChannelAnalyticsTopic::getName(),
             [
                 'channel_id' => $channel->getId(),
                 'customer_ids' => [$customerOne->getId(), $customerTwo->getId()]
             ]
         );
-        self::assertMessageSentWithPriority(Topics::CALCULATE_CHANNEL_ANALYTICS, MessagePriority::VERY_LOW);
+        self::assertMessageSentWithPriority(CalculateChannelAnalyticsTopic::getName(), MessagePriority::VERY_LOW);
     }
 }

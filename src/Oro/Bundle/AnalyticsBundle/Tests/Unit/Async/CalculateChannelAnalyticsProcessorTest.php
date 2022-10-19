@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor;
-use Oro\Bundle\AnalyticsBundle\Async\Topics;
+use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateChannelAnalyticsTopic;
 use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\CustomerAwareStub;
@@ -17,7 +17,6 @@ use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
 use Oro\Component\MessageQueue\Transport\Message;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Psr\Log\LoggerInterface;
 
@@ -28,25 +27,25 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
 {
     use ClassExtensionTrait;
 
-    public function testShouldImplementMessageProcessorInterface()
+    public function testShouldImplementMessageProcessorInterface(): void
     {
         $this->assertClassImplements(MessageProcessorInterface::class, CalculateChannelAnalyticsProcessor::class);
     }
 
-    public function testShouldImplementTopicSubscriberInterface()
+    public function testShouldImplementTopicSubscriberInterface(): void
     {
         $this->assertClassImplements(TopicSubscriberInterface::class, CalculateChannelAnalyticsProcessor::class);
     }
 
-    public function testShouldSubscribeOnCalculateChannelAnalyticsTopic()
+    public function testShouldSubscribeOnCalculateChannelAnalyticsTopic(): void
     {
-        $this->assertEquals(
-            [Topics::CALCULATE_CHANNEL_ANALYTICS],
+        self::assertEquals(
+            [CalculateChannelAnalyticsTopic::getName()],
             CalculateChannelAnalyticsProcessor::getSubscribedTopics()
         );
     }
 
-    public function testCouldBeConstructedWithExpectedArguments()
+    public function testCouldBeConstructedWithExpectedArguments(): void
     {
         new CalculateChannelAnalyticsProcessor(
             $this->getDoctrineHelper(),
@@ -56,53 +55,12 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testShouldLogAndRejectIfMessageBodyMissChannelId()
-    {
-        $message = new Message();
-        $message->setBody('[]');
-
-        $logger = $this->createMock(LoggerInterface::class);
-        $logger->expects($this->once())
-            ->method('critical')
-            ->with('The message invalid. It must have channel_id set');
-
-        $processor = new CalculateChannelAnalyticsProcessor(
-            $this->getDoctrineHelper(),
-            $this->createMock(AnalyticsBuilder::class),
-            new JobRunner(),
-            $logger
-        );
-
-        $session = $this->createMock(SessionInterface::class);
-        $status = $processor->process($message, new $session);
-
-        $this->assertEquals(MessageProcessorInterface::REJECT, $status);
-    }
-
-    public function testThrowIfMessageBodyInvalidJson()
-    {
-        $this->expectException(\JsonException::class);
-
-        $processor = new CalculateChannelAnalyticsProcessor(
-            $this->getDoctrineHelper(),
-            $this->createMock(AnalyticsBuilder::class),
-            new JobRunner(),
-            $this->createMock(LoggerInterface::class)
-        );
-
-        $message = new Message();
-        $message->setBody('[}');
-
-        $session = $this->createMock(SessionInterface::class);
-        $processor->process($message, $session);
-    }
-
-    public function testShouldRejectMessageIfChannelNotExist()
+    public function testShouldRejectMessageIfChannelNotExist(): void
     {
         $entityManager = $this->getEntityManager();
-        $entityManager->expects($this->once())
+        $entityManager->expects(self::once())
             ->method('find')
-            ->with(Channel::class, 'theChannelId')
+            ->with(Channel::class, 1)
             ->willReturn(null);
 
         $doctrineHelper = $this->getDoctrineHelper($entityManager);
@@ -112,12 +70,12 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('build');
 
         $message = new Message();
-        $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
+        $message->setBody(['channel_id' => 1]);
 
         $logger = $this->createMock(LoggerInterface::class);
-        $logger->expects($this->once())
+        $logger->expects(self::once())
             ->method('error')
-            ->with('Channel not found: theChannelId');
+            ->with('Channel not found: 1');
 
         $processor = new CalculateChannelAnalyticsProcessor(
             $doctrineHelper,
@@ -129,18 +87,18 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
-        $this->assertEquals(MessageProcessorInterface::REJECT, $status);
+        self::assertEquals(MessageProcessorInterface::REJECT, $status);
     }
 
-    public function testShouldRejectMessageIfChannelStatusIsNotActive()
+    public function testShouldRejectMessageIfChannelStatusIsNotActive(): void
     {
         $channel = new Channel();
         $channel->setStatus(Channel::STATUS_INACTIVE);
 
         $entityManager = $this->getEntityManager();
-        $entityManager->expects($this->once())
+        $entityManager->expects(self::once())
             ->method('find')
-            ->with(Channel::class, 'theChannelId')
+            ->with(Channel::class, 1)
             ->willReturn($channel);
 
         $doctrineHelper = $this->getDoctrineHelper($entityManager);
@@ -150,12 +108,12 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('build');
 
         $message = new Message();
-        $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
+        $message->setBody(['channel_id' => 1]);
 
         $logger = $this->createMock(LoggerInterface::class);
-        $logger->expects($this->once())
+        $logger->expects(self::once())
             ->method('error')
-            ->with('Channel not active: theChannelId');
+            ->with('Channel not active: 1');
 
         $processor = new CalculateChannelAnalyticsProcessor(
             $doctrineHelper,
@@ -167,19 +125,19 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
-        $this->assertEquals(MessageProcessorInterface::REJECT, $status);
+        self::assertEquals(MessageProcessorInterface::REJECT, $status);
     }
 
-    public function testShouldRejectMessageIfChannelCustomerIdentityIsNotInstanceOfAnalyticsAwareInterface()
+    public function testShouldRejectMessageIfChannelCustomerIdentityIsNotInstanceOfAnalyticsAwareInterface(): void
     {
         $channel = new Channel();
         $channel->setStatus(Channel::STATUS_ACTIVE);
         $channel->setCustomerIdentity(\stdClass::class);
 
         $entityManager = $this->getEntityManager();
-        $entityManager->expects($this->once())
+        $entityManager->expects(self::once())
             ->method('find')
-            ->with(Channel::class, 'theChannelId')
+            ->with(Channel::class, 1)
             ->willReturn($channel);
 
         $doctrineHelper = $this->getDoctrineHelper($entityManager);
@@ -189,12 +147,12 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('build');
 
         $message = new Message();
-        $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
+        $message->setBody(['channel_id' => 1]);
 
         $logger = $this->createMock(LoggerInterface::class);
-        $logger->expects($this->once())
+        $logger->expects(self::once())
             ->method('error')
-            ->with('Channel is not supposed to calculate analytics: theChannelId');
+            ->with('Channel is not supposed to calculate analytics: 1');
 
         $processor = new CalculateChannelAnalyticsProcessor(
             $doctrineHelper,
@@ -206,7 +164,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
-        $this->assertEquals(MessageProcessorInterface::REJECT, $status);
+        self::assertEquals(MessageProcessorInterface::REJECT, $status);
     }
 
     public function testShouldBuildAnalyticsForGivenChannelIfChannelCustomerIdentityInstanceOfAnalyticsAwareInterface()
@@ -219,9 +177,9 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         $channel->setCustomerIdentity(CustomerAwareStub::class);
 
         $entityManager = $this->getEntityManager();
-        $entityManager->expects($this->once())
+        $entityManager->expects(self::once())
             ->method('find')
-            ->with(Channel::class, 'theChannelId')
+            ->with(Channel::class, 1)
             ->willReturn($channel);
 
         $doctrineHelper = $this->getDoctrineHelper($entityManager);
@@ -239,15 +197,18 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         );
 
         $message = new Message();
-        $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
+        $message->setBody([
+            'channel_id' => 1,
+            'customer_ids' => [],
+        ]);
 
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
-        $this->assertEquals(MessageProcessorInterface::ACK, $status);
+        self::assertEquals(MessageProcessorInterface::ACK, $status);
     }
 
-    public function testShouldPassCustomerIdsToBuildMethod()
+    public function testShouldPassCustomerIdsToBuildMethod(): void
     {
         //guard
         $this->assertClassImplements(AnalyticsAwareInterface::class, CustomerAwareStub::class);
@@ -257,9 +218,9 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         $channel->setCustomerIdentity(CustomerAwareStub::class);
 
         $entityManager = $this->getEntityManager();
-        $entityManager->expects($this->once())
+        $entityManager->expects(self::once())
             ->method('find')
-            ->with(Channel::class, 'theChannelId')
+            ->with(Channel::class, 1)
             ->willReturn($channel);
 
         $doctrineHelper = $this->getDoctrineHelper($entityManager);
@@ -277,18 +238,18 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         );
 
         $message = new Message();
-        $message->setBody(JSON::encode([
-            'channel_id' => 'theChannelId',
+        $message->setBody([
+            'channel_id' => 1,
             'customer_ids' => ['theCustomerFooId', 'theCustomerBarId'],
-        ]));
+        ]);
 
         $session = $this->createMock(SessionInterface::class);
         $status = $processor->process($message, $session);
 
-        $this->assertEquals(MessageProcessorInterface::ACK, $status);
+        self::assertEquals(MessageProcessorInterface::ACK, $status);
     }
 
-    public function testShouldRunCalculateAnalyticsAsUniqueJob()
+    public function testShouldRunCalculateAnalyticsAsUniqueJob(): void
     {
         //guard
         $this->assertClassImplements(AnalyticsAwareInterface::class, CustomerAwareStub::class);
@@ -298,9 +259,9 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         $channel->setCustomerIdentity(CustomerAwareStub::class);
 
         $entityManager = $this->getEntityManager();
-        $entityManager->expects($this->once())
+        $entityManager->expects(self::once())
             ->method('find')
-            ->with(Channel::class, 'theChannelId')
+            ->with(Channel::class, 1)
             ->willReturn($channel);
 
         $doctrineHelper = $this->getDoctrineHelper($entityManager);
@@ -316,17 +277,17 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
 
         $message = new Message();
         $message->setMessageId('theMessageId');
-        $message->setBody(JSON::encode([
-            'channel_id' => 'theChannelId',
+        $message->setBody([
+            'channel_id' => 1,
             'customer_ids' => ['theCustomerFooId', 'theCustomerBarId'],
-        ]));
+        ]);
 
         $session = $this->createMock(SessionInterface::class);
         $processor->process($message, $session);
 
         $uniqueJobs = $jobRunner->getRunUniqueJobs();
         self::assertCount(1, $uniqueJobs);
-        self::assertEquals('oro_analytics:calculate_channel_analytics:theChannelId', $uniqueJobs[0]['jobName']);
+        self::assertEquals('oro_analytics:calculate_channel_analytics:1', $uniqueJobs[0]['jobName']);
         self::assertEquals('theMessageId', $uniqueJobs[0]['ownerId']);
     }
 
@@ -336,12 +297,12 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
     private function getEntityManager()
     {
         $connection = $this->createMock(Connection::class);
-        $connection->expects($this->any())
+        $connection->expects(self::any())
             ->method('getConfiguration')
             ->willReturn(new Configuration());
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager->expects($this->any())
+        $entityManager->expects(self::any())
             ->method('getConnection')
             ->willReturn($connection);
 
@@ -351,7 +312,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
     private function getDoctrineHelper(EntityManagerInterface $entityManager = null): DoctrineHelper
     {
         $doctrineHelper = $this->createMock(DoctrineHelper::class);
-        $doctrineHelper->expects($this->any())
+        $doctrineHelper->expects(self::any())
             ->method('getEntityManager')
             ->willReturn($entityManager);
 

@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Async;
 
+use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateAllChannelsAnalyticsTopic;
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
@@ -11,6 +12,9 @@ use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 
+/**
+ * Calculates analytics for all channels
+ */
 class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
     /**
@@ -62,6 +66,6 @@ class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterfac
      */
     public static function getSubscribedTopics()
     {
-        return [Topics::CALCULATE_ALL_CHANNELS_ANALYTICS];
+        return [CalculateAllChannelsAnalyticsTopic::getName()];
     }
 }
