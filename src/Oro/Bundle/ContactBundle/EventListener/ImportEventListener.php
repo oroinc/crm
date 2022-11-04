@@ -5,7 +5,7 @@ namespace Oro\Bundle\ContactBundle\EventListener;
 use Oro\Bundle\BatchBundle\Entity\JobExecution;
 use Oro\Bundle\BatchBundle\Event\JobExecutionEvent;
 use Oro\Bundle\BatchBundle\Job\BatchStatus;
-use Oro\Bundle\ContactBundle\Async\Topics;
+use Oro\Bundle\ContactBundle\Async\Topic\ActualizeContactEmailAssociationsTopic;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationProviderInterface;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
@@ -51,7 +51,7 @@ class ImportEventListener
 
         $this->optionalListenerManager->enableListener('oro_email.listener.entity_listener');
 
-        $this->messageProducer->send(Topics::ACTUALIZE_CONTACT_EMAIL_ASSOCIATIONS, []);
+        $this->messageProducer->send(ActualizeContactEmailAssociationsTopic::getName(), []);
     }
 
     private function isSupportedJob(JobExecution $jobExecution): bool

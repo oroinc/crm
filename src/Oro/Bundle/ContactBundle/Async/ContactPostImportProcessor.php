@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ContactBundle\Async;
 
 use Doctrine\DBAL\Exception\RetryableException;
+use Oro\Bundle\ContactBundle\Async\Topic\ActualizeContactEmailAssociationsTopic;
 use Oro\Bundle\ContactBundle\Handler\ContactEmailAddressHandler;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
@@ -51,6 +52,6 @@ class ContactPostImportProcessor implements MessageProcessorInterface, TopicSubs
 
     public static function getSubscribedTopics(): array
     {
-        return [Topics::ACTUALIZE_CONTACT_EMAIL_ASSOCIATIONS];
+        return [ActualizeContactEmailAssociationsTopic::getName()];
     }
 }

@@ -1,0 +1,12 @@
+services:
+    _instanceof:
+        Oro\Component\MessageQueue\Client\TopicSubscriberInterface:
+            tags:
+                - { name: oro_message_queue.client.message_processor }
+
+    oro_contact.async.contact_post_import_processor:
+        class: Oro\Bundle\ContactBundle\Async\ContactPostImportProcessor
+        arguments:
+            - '@oro_contact.handler.contact_email_address_handler'
+        calls:
+            - [setLogger, ['@logger']]
