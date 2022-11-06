@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\EventListener;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
@@ -19,7 +19,7 @@ class AccountLifetimeListenerTest extends WebTestCase
         $this->initClient();
     }
 
-    public function testCreateAccount()
+    public function testCreateAccount(): Account
     {
         $em = $this->getEntityManager();
 
@@ -37,9 +37,9 @@ class AccountLifetimeListenerTest extends WebTestCase
      * @dataProvider accountOpportunitiesProvider
      * @depends testCreateAccount
      */
-    public function testAccountOpportunities($updateDataCb, $expectedResult, Account $account)
+    public function testAccountOpportunities(callable $updateDataCb, int $expectedResult, Account $account)
     {
-        call_user_func($updateDataCb, $account);
+        $updateDataCb($account);
 
         $this->assertEquals($expectedResult, $this->getAmountProvider()->getAccountLifeTimeValue($account));
     }
@@ -47,7 +47,7 @@ class AccountLifetimeListenerTest extends WebTestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function accountOpportunitiesProvider()
+    public function accountOpportunitiesProvider(): array
     {
         $opportunities = [];
 
@@ -253,28 +253,17 @@ class AccountLifetimeListenerTest extends WebTestCase
         ];
     }
 
-    /**
-     * @return EntityManager
-     */
-    private function getEntityManager()
+    private function getEntityManager(): EntityManagerInterface
     {
         return $this->getContainer()->get('doctrine.orm.entity_manager');
     }
 
-    /**
-     * @return AmountProvider
-     */
-    private function getAmountProvider()
+    private function getAmountProvider(): AmountProvider
     {
         return $this->getContainer()->get('oro_channel.provider.lifetime.amount_provider');
     }
 
-    /**
-     * @param string $code
-     *
-     * @return AbstractEnumValue
-     */
-    private function findOpportunityStatus($code)
+    private function findOpportunityStatus(string $code): AbstractEnumValue
     {
         $status = $this->getEntityManager()
             ->getRepository(ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE))

@@ -59,12 +59,9 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
     }
 
     /**
-     * @param bool $gridVisit
-     * @param string $expected
-     *
      * @dataProvider storageRebuildDataProvider
      */
-    public function testStorageRebuild($gridVisit, $expected)
+    public function testStorageRebuild(bool $gridVisit, array $expected)
     {
         $this->client->followRedirects(true);
         $crawler = $this->openEntity(
@@ -87,10 +84,7 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
         $this->assertPositionEntity($crawler, $expected['position'], $expected['total']);
     }
 
-    /**
-     * @return array
-     */
-    public function storageRebuildDataProvider()
+    public function storageRebuildDataProvider(): array
     {
         return [
             'visit grid' => [
@@ -110,13 +104,7 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
         ];
     }
 
-    /**
-     * @param Crawler $crawler
-     * @param $name
-     * @param int $position
-     * @param int $total
-     */
-    private function checkViewEditPagination(Crawler $crawler, $name, $position, $total)
+    private function checkViewEditPagination(Crawler $crawler, string $name, int $position, int $total): void
     {
         $this->assertCurrentContactName($crawler, $name);
         $this->assertPositionEntityLinks($crawler);

@@ -15,11 +15,8 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
 {
     use ConfigManagerAwareTestTrait;
 
-    /** @var string|null */
-    private $originalTimezone;
-
-    /** @var ConfigManager */
-    private $globalScopeManager;
+    private ?string $originalTimezone;
+    private ConfigManager $globalScopeManager;
 
     protected function setUp(): void
     {
