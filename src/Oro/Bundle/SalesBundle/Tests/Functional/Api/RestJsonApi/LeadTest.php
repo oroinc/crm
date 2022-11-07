@@ -19,17 +19,17 @@ class LeadTest extends RestJsonApiTestCase
     use PrimaryEmailTestTrait;
     use PrimaryPhoneTestTrait;
 
-    private const ENTITY_CLASS              = Lead::class;
-    private const ENTITY_TYPE               = 'leads';
-    private const CREATE_MIN_REQUEST_DATA   = 'create_lead_min.yml';
+    private const ENTITY_CLASS = Lead::class;
+    private const ENTITY_TYPE = 'leads';
+    private const CREATE_MIN_REQUEST_DATA = 'create_lead_min.yml';
     private const ENTITY_WITHOUT_EMAILS_REF = 'lead2';
-    private const ENTITY_WITH_EMAILS_REF    = 'lead1';
-    private const PRIMARY_EMAIL             = 'lead1_2@example.com';
-    private const NOT_PRIMARY_EMAIL         = 'lead1_1@example.com';
+    private const ENTITY_WITH_EMAILS_REF = 'lead1';
+    private const PRIMARY_EMAIL = 'lead1_2@example.com';
+    private const NOT_PRIMARY_EMAIL = 'lead1_1@example.com';
     private const ENTITY_WITHOUT_PHONES_REF = 'lead2';
-    private const ENTITY_WITH_PHONES_REF    = 'lead1';
-    private const PRIMARY_PHONE             = '5556661112';
-    private const NOT_PRIMARY_PHONE         = '5556661111';
+    private const ENTITY_WITH_PHONES_REF = 'lead1';
+    private const PRIMARY_PHONE = '5556661112';
+    private const NOT_PRIMARY_PHONE = '5556661111';
 
     protected function setUp(): void
     {
@@ -38,22 +38,16 @@ class LeadTest extends RestJsonApiTestCase
     }
 
     /**
-     * @param array  $parameters
-     * @param string $expectedDataFileName
-     *
      * @dataProvider cgetDataProvider
      */
-    public function testGetList(array $parameters, $expectedDataFileName)
+    public function testGetList(array $parameters, string $expectedDataFileName)
     {
         $response = $this->cget(['entity' => 'leads'], $parameters);
 
         $this->assertResponseContains($expectedDataFileName, $response);
     }
 
-    /**
-     * @return array
-     */
-    public function cgetDataProvider()
+    public function cgetDataProvider(): array
     {
         return [
             'without parameters'                                                        => [
@@ -280,12 +274,9 @@ class LeadTest extends RestJsonApiTestCase
     }
 
     /**
-     * @param array  $parameters
-     * @param string $expectedDataFileName
-     *
      * @dataProvider getAccountSubresourceDataProvider
      */
-    public function testGetAccountSubresource(array $parameters, $expectedDataFileName)
+    public function testGetAccountSubresource(array $parameters, string $expectedDataFileName)
     {
         $this->assertNotEmpty($this->getReference('organization')->getName());
 
@@ -301,10 +292,7 @@ class LeadTest extends RestJsonApiTestCase
         $this->assertResponseContains($expectedDataFileName, $response);
     }
 
-    /**
-     * @return array
-     */
-    public function getAccountSubresourceDataProvider()
+    public function getAccountSubresourceDataProvider(): array
     {
         return [
             'without parameters'         => [
@@ -341,12 +329,9 @@ class LeadTest extends RestJsonApiTestCase
     }
 
     /**
-     * @param array  $parameters
-     * @param string $expectedDataFileName
-     *
      * @dataProvider getCustomerSubresourceDataProvider
      */
-    public function testGetCustomerSubresource(array $parameters, $expectedDataFileName)
+    public function testGetCustomerSubresource(array $parameters, string $expectedDataFileName)
     {
         $response = $this->getSubresource(
             [
@@ -360,10 +345,7 @@ class LeadTest extends RestJsonApiTestCase
         $this->assertResponseContains($expectedDataFileName, $response);
     }
 
-    /**
-     * @return array
-     */
-    public function getCustomerSubresourceDataProvider()
+    public function getCustomerSubresourceDataProvider(): array
     {
         return [
             'without parameters'         => [

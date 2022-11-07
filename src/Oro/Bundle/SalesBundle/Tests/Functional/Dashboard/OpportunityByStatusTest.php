@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Dashboard;
 
 use Oro\Bundle\DashboardBundle\Entity\Widget;
@@ -13,8 +14,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityByStatusWidge
  */
 class OpportunityByStatusTest extends AbstractWidgetTestCase
 {
-    /** @var Widget */
-    private $widget;
+    private Widget $widget;
 
     protected function setUp(): void
     {
@@ -43,7 +43,7 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
      * @depends testGetWidgetConfigureDialog
      * @dataProvider widgetProvider
      */
-    public function testDateRangeBetweenFilter($requestData)
+    public function testDateRangeBetweenFilter(array $requestData)
     {
         $this->configureWidget($this->widget, $requestData['widgetConfig']);
 
@@ -52,7 +52,7 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             $this->getUrl(
                 'oro_sales_dashboard_opportunity_by_state_chart',
                 [
-                    'widget' => 'opportunities_by_state',
+                    'widget'    => 'opportunities_by_state',
                     '_widgetId' => $this->widget->getId()
                 ]
             )
@@ -79,7 +79,7 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             $this->getUrl(
                 'oro_sales_dashboard_opportunity_by_state_chart',
                 [
-                    'widget' => 'opportunities_by_state',
+                    'widget'    => 'opportunities_by_state',
                     '_widgetId' => $this->widget->getId()
                 ]
             )
@@ -99,21 +99,21 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
     public function widgetProvider(): array
     {
         return [
-            'Opportunity by status with between date range filter' => [
+            'Opportunity by status with between date range filter'       => [
                 [
-                    'widgetConfig' => [
-                        'opportunities_by_state[dateRange][part]'   => 'value',
-                        'opportunities_by_state[dateRange][type]'   => AbstractDateFilterType::TYPE_BETWEEN,
-                        'opportunities_by_state[dateRange][value][start]'  => '2016-12-28',
-                        'opportunities_by_state[dateRange][value][end]'    => '2016-12-29',
-                        'opportunities_by_state[useQuantityAsData]' => 1
+                    'widgetConfig'        => [
+                        'opportunities_by_state[dateRange][part]'         => 'value',
+                        'opportunities_by_state[dateRange][type]'         => AbstractDateFilterType::TYPE_BETWEEN,
+                        'opportunities_by_state[dateRange][value][start]' => '2016-12-28',
+                        'opportunities_by_state[dateRange][value][end]'   => '2016-12-29',
+                        'opportunities_by_state[useQuantityAsData]'       => 1
                     ],
                     'expectedResultCount' => 2
                 ],
             ],
-            'Opportunity by status with this month date range filter'  => [
+            'Opportunity by status with this month date range filter'    => [
                 [
-                    'widgetConfig' => [
+                    'widgetConfig'        => [
                         'opportunities_by_state[dateRange][part]'   => 'value',
                         'opportunities_by_state[dateRange][type]'   => AbstractDateFilterType::TYPE_THIS_MONTH,
                         'opportunities_by_state[useQuantityAsData]' => 1
@@ -123,7 +123,7 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             ],
             'Opportunity by status with this all time date range filter' => [
                 [
-                    'widgetConfig' => [
+                    'widgetConfig'        => [
                         'opportunities_by_state[dateRange][part]'   => 'value',
                         'opportunities_by_state[dateRange][type]'   => AbstractDateFilterType::TYPE_ALL_TIME,
                         'opportunities_by_state[useQuantityAsData]' => 1

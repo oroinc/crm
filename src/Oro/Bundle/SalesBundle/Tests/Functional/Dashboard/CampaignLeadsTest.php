@@ -11,8 +11,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadCampaignLeadsWidgetFixtu
  */
 class CampaignLeadsTest extends AbstractWidgetTestCase
 {
-    /** @var Widget */
-    private $widget;
+    private Widget $widget;
 
     protected function setUp(): void
     {
@@ -80,7 +79,7 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
                         'campaigns_leads[dateRange][type]'         => AbstractDateFilterType::TYPE_BETWEEN,
                         'campaigns_leads[dateRange][value][start]' => '2016-12-28',
                         'campaigns_leads[dateRange][value][end]'   => '2016-12-29',
-                        'campaigns_leads[hideCampaign]'            => "1",
+                        'campaigns_leads[hideCampaign]'            => '1',
                         'campaigns_leads[maxResults]'              => 5,
                     ],
                     'itemCount' => 1,
@@ -92,7 +91,7 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
                     'widgetConfig' => [
                         'campaigns_leads[dateRange][part]' => 'value',
                         'campaigns_leads[dateRange][type]' => AbstractDateFilterType::TYPE_THIS_MONTH,
-                        'campaigns_leads[hideCampaign]'    => "1",
+                        'campaigns_leads[hideCampaign]'    => '1',
                         'campaigns_leads[maxResults]'      => 5,
                     ],
                     'itemCount' => 1,
@@ -104,7 +103,7 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
                     'widgetConfig' => [
                         'campaigns_leads[dateRange][part]' => 'value',
                         'campaigns_leads[dateRange][type]' => AbstractDateFilterType::TYPE_ALL_TIME,
-                        'campaigns_leads[hideCampaign]'    => "1",
+                        'campaigns_leads[hideCampaign]'    => '1',
                         'campaigns_leads[maxResults]'      => 5,
                     ],
                     'itemCount' => 1,
@@ -116,7 +115,7 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
                     'widgetConfig' => [
                         'campaigns_leads[dateRange][part]' => 'value',
                         'campaigns_leads[dateRange][type]' => AbstractDateFilterType::TYPE_ALL_TIME,
-                        'campaigns_leads[hideCampaign]'    => "0",
+                        'campaigns_leads[hideCampaign]'    => '0',
                         'campaigns_leads[maxResults]'      => 5,
                     ],
                     'itemCount' => 2,

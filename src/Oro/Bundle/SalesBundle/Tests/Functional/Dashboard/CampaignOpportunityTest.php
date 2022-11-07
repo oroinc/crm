@@ -11,8 +11,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadCampaignOpportunityWidge
  */
 class CampaignOpportunityTest extends AbstractWidgetTestCase
 {
-    /** @var Widget */
-    private $widget;
+    private Widget $widget;
 
     protected function setUp(): void
     {
