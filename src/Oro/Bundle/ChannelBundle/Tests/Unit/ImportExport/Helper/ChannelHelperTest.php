@@ -38,7 +38,7 @@ class ChannelHelperTest extends OrmTestCase
     /**
      * @dataProvider getChannelDataProvider
      */
-    public function testGetChannel(int $integrationId, int|false|null$expected, bool $optional)
+    public function testGetChannel(int $integrationId, int|false|null $expected, bool $optional)
     {
         $integration = $this->createMock(Channel::class);
         $integration->expects($this->any())
