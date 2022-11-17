@@ -16,3 +16,7 @@ oro_sales:
     api:
         customer_association_names:
             Oro\Bundle\SalesBundle\Entity\B2bCustomer: b2bCustomers
+
+oro_email:
+    public_email_owners:
+        - Oro\Bundle\SalesBundle\Entity\Lead
