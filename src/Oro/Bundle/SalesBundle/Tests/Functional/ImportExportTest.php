@@ -46,6 +46,7 @@ class ImportExportTest extends AbstractImportExportTestCase
                 'Customer Customer Payment term Label',
                 'Channel Name',
                 'Customer Customer Parent Parent Id',
+                'Customer Customer Parent Name',
                 'Customer Customer Parent Owner Id',
                 'Customer Customer Owner Id',
             ]
@@ -79,7 +80,8 @@ class ImportExportTest extends AbstractImportExportTestCase
                 'Channel Name',
                 'Customer Customer Parent Parent Id',
                 'Customer Customer Parent Owner Id',
-                'Customer Customer Owner Id',
+                'Customer Customer Parent Name',
+                'Customer Customer Owner Id'
             ]
         );
     }
