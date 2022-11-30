@@ -40,6 +40,7 @@ Feature: Merging contacts
   Scenario: Merge 5 contacts
     Given I go to Customers/Contacts
     And number of records should be 5
+    And I sort grid by "Email"
     When I check all records in grid
     And I click "Merge" link from mass action dropdown
     And I click "Merge"

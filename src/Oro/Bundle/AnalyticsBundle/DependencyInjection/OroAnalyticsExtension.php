@@ -23,5 +23,7 @@ class OroAnalyticsExtension extends Extension
         $loader->load('services.yml');
         $loader->load('commands.yml');
         $loader->load('controllers.yml');
+        $loader->load('mq_topics.yml');
+        $loader->load('mq_processors.yml');
     }
 }

@@ -7,6 +7,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+/**
+ * This is the class that loads and manages ChannelBundle service configuration
+ */
 class OroChannelExtension extends Extension
 {
     /**
@@ -19,5 +22,7 @@ class OroChannelExtension extends Extension
         $loader->load('commands.yml');
         $loader->load('controllers.yml');
         $loader->load('controllers_api.yml');
+        $loader->load('mq_topics.yml');
+        $loader->load('mq_processors.yml');
     }
 }

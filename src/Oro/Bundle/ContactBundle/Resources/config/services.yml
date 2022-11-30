@@ -179,15 +179,6 @@ services:
             - { name: kernel.event_listener, event: akeneo_batch.before_job_execution, method: onBeforeJobExecution }
             - { name: kernel.event_listener, event: akeneo_batch.after_job_execution, method: onAfterJobExecution }
 
-    oro_contact.async.contact_post_import_processor:
-        class: Oro\Bundle\ContactBundle\Async\ContactPostImportProcessor
-        arguments:
-            - '@oro_contact.handler.contact_email_address_handler'
-        calls:
-            - [setLogger, ['@logger']]
-        tags:
-            - { name: 'oro_message_queue.client.message_processor' }
-
     oro_contact.social_url_formatter:
         class: Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter
         arguments:

@@ -1,0 +1,19 @@
+services:
+    _instanceof:
+        Oro\Component\MessageQueue\Client\TopicSubscriberInterface:
+            tags:
+                - { name: oro_message_queue.client.message_processor }
+
+    oro_analytics.async.calculate_all_channels_analytics_processor:
+        class: Oro\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@oro_analytics.calculate_analytics_scheduler'
+
+    oro_analytics.async.calculate_channel_analytics_processor:
+        class: Oro\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@oro_analytics.builder'
+            - '@oro_message_queue.job.runner'
+            - '@logger'

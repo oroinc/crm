@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Command;
 
-use Oro\Bundle\ChannelBundle\Async\Topics;
+use Oro\Bundle\ChannelBundle\Async\Topic\AggregateLifetimeAverageTopic;
 use Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadLifetimeHistoryData;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -28,9 +28,9 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
         self::assertStringContainsString('Completed!', $result);
 
         self::assertMessageSent(
-            Topics::AGGREGATE_LIFETIME_AVERAGE,
+            AggregateLifetimeAverageTopic::getName(),
             ['force' => false, 'use_truncate' => true]
         );
-        self::assertMessageSentWithPriority(Topics::AGGREGATE_LIFETIME_AVERAGE, MessagePriority::VERY_LOW);
+        self::assertMessageSentWithPriority(AggregateLifetimeAverageTopic::getName(), MessagePriority::VERY_LOW);
     }
 }

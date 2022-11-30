@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Async;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Oro\Bundle\ChannelBundle\Async\Topic\ChannelStatusChangedTopic;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -11,7 +12,6 @@ use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-use Oro\Component\MessageQueue\Util\JSON;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
@@ -43,18 +43,13 @@ class ChangeIntegrationStatusProcessor implements
      */
     public function process(MessageInterface $message, SessionInterface $session): string
     {
-        $body = array_replace(['channelId' => null], JSON::decode($message->getBody()));
-        if (!$body['channelId']) {
-            $this->logger->critical('The message invalid. It must have channelId set');
-
-            return self::REJECT;
-        }
+        $messageBody = $message->getBody();
 
         $entityManager = $this->registry->getManagerForClass(Channel::class);
 
-        $channel = $entityManager->find(Channel::class, $body['channelId']);
+        $channel = $entityManager->find(Channel::class, $messageBody['channelId']);
         if (!$channel) {
-            $this->logger->critical(sprintf('Channel not found: %s', $body['channelId']));
+            $this->logger->critical(sprintf('Channel not found: %d', $messageBody['channelId']));
 
             return self::REJECT;
         }
@@ -86,6 +81,6 @@ class ChangeIntegrationStatusProcessor implements
      */
     public static function getSubscribedTopics(): array
     {
-        return [Topics::CHANNEL_STATUS_CHANGED];
+        return [ChannelStatusChangedTopic::getName()];
     }
 }

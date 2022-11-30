@@ -5,7 +5,7 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\EventListener;
 use Oro\Bundle\BatchBundle\Entity\JobExecution;
 use Oro\Bundle\BatchBundle\Event\JobExecutionEvent;
 use Oro\Bundle\BatchBundle\Item\ExecutionContext;
-use Oro\Bundle\ContactBundle\Async\Topics;
+use Oro\Bundle\ContactBundle\Async\Topic\ActualizeContactEmailAssociationsTopic;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\EventListener\ImportEventListener;
 use Oro\Bundle\ContactBundle\ImportExport\Configuration\ContactImportExportConfigurationProvider;
@@ -15,14 +15,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportEventListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var OptionalListenerManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $optionalListenerManager;
+    private OptionalListenerManager|\PHPUnit\Framework\MockObject\MockObject $optionalListenerManager;
 
-    /** @var MessageProducerInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $messageProducer;
+    private MessageProducerInterface|\PHPUnit\Framework\MockObject\MockObject $messageProducer;
 
-    /** @var ImportEventListener */
-    private $listener;
+    private ImportEventListener $listener;
 
     protected function setUp(): void
     {
@@ -99,7 +96,7 @@ class ImportEventListenerTest extends \PHPUnit\Framework\TestCase
 
         $this->messageProducer->expects(self::once())
             ->method('send')
-            ->with(Topics::ACTUALIZE_CONTACT_EMAIL_ASSOCIATIONS, []);
+            ->with(ActualizeContactEmailAssociationsTopic::getName(), []);
 
         $this->listener->onAfterJobExecution($event);
     }
