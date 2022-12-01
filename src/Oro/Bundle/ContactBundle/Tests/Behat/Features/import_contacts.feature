@@ -1,4 +1,5 @@
 @ticket-BAP-16465
+@ticket-BB-21883
 
 Feature: Import Contacts
   In order to add multiple contacts at once
@@ -76,3 +77,20 @@ Feature: Import Contacts
     Then exported file contains at least the following columns:
       | Id | Name prefix | First name | Middle name | Last name | Name suffix | Gender | Description | Job Title | Fax | Skype | Twitter | Facebook | Google+ | LinkedIn | Birthday   | Source Name | Contact Method Name | Emails 1 Email              | Phones 1 Phone | Accounts 1 Account name | Accounts Default Contact 1 Account name | Addresses 1 Label | Addresses 1 Organization | Addresses 1 Name prefix | Addresses 1 First name | Addresses 1 Middle name | Addresses 1 Last name | Addresses 1 Name suffix | Addresses 1 Street  | Addresses 1 Street 2 | Addresses 1 Zip/Postal Code | Addresses 1 City | Addresses 1 State | Addresses 1 State Combined code | Addresses 1 Country ISO2 code | Organization Name | Picture URI                       | Picture UUID | Tags |
       | 1  | Mr.         | Roy        |             | Greenwell |             | male   |             |           |     |       |         |          |         |          | 01/18/1968 | website     |                     | RoyLGreenwell@superrito.com | 765-538-2134   | Big D Supermarkets      | Big D Supermarkets                      | Primary Address   |                          |                         | Roy                    |                         | Greenwell             |                         | 2413 Capitol Avenue |                      | 47981                       | Romney           |                   | US-IN                           | US                            | ORO               | <contains("attachment/download")> | <notEmpty()> |      |
+
+  Scenario: Check account contact
+    Given I go to Customers/ Accounts
+    When I click view Greenwell in grid
+    Then I should see 1 contact
+
+  Scenario: Import new Contacts with Add strategy
+    Given I go to Customers/ Contacts
+    When I fill template with data:
+      | Id | Name prefix | First name | Last name | Gender | Birthday   | Source Name | Owner Username      | Assigned to Username | Emails 1 Email              | Phones 1 Phone | Groups 1 Label           | Accounts 1 Account name |
+      |    | Mr.         | Roy        | Greenwell | male   | 01/18/1968 | website     | austin.rivers_3d974 | austin.rivers_3d974  | RoyLGreenwell@superrito.com | 765-538-2134   | Demographic Segmentation | Big D Supermarkets      |
+    When I import file with strategy "Add"
+
+  Scenario: Check account contact after second import
+    Given I go to Customers/ Accounts
+    When I click view Greenwell in grid
+    Then I should see 2 contacts
