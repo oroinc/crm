@@ -111,9 +111,12 @@ class ContactAddStrategy extends AbstractImportStrategy
             }
         }
 
-        // clear accounts
+        // update accounts
         foreach ($entity->getAccounts() as $account) {
             $entity->removeAccount($account);
+            if ($account = $this->findExistingEntity($account)) {
+                $entity->addAccount($account);
+            }
         }
 
         // update addresses
