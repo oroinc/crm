@@ -6,6 +6,9 @@ use Doctrine\Common\Collections\Collection;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\FormBundle\Entity\PrimaryItem;
 
+/**
+ * Updates Contact entity scalars and relations during import/export (afterProcessEntity callback)
+ */
 class ContactImportHelper
 {
     public function updateScalars(Contact $entity)
@@ -59,6 +62,11 @@ class ContactImportHelper
             $entity->setPrimaryPhone($primaryPhone);
         } elseif ($phones->count() > 0) {
             $entity->setPrimaryPhone($phones->first());
+        }
+
+        // ensure bidirectional many-to-many account to contact association
+        foreach ($entity->getAccounts() as $account) {
+            $account->addContact($entity);
         }
     }
 
