@@ -3,10 +3,12 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\EmailBundle\Entity\EmailInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\SalesBundle\Model\ExtendLeadEmail;
 
 /**
+ * Represents the lead email adress.
  * @ORM\Entity
  * @ORM\Table("orocrm_sales_lead_email", indexes={
  *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
@@ -34,7 +36,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendLeadEmail;
  *      }
  * )
  */
-class LeadEmail extends ExtendLeadEmail
+class LeadEmail extends ExtendLeadEmail implements EmailInterface
 {
     /**
      * @ORM\ManyToOne(targetEntity="Lead", inversedBy="emails")
@@ -60,5 +62,21 @@ class LeadEmail extends ExtendLeadEmail
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEmailField()
+    {
+        return 'email';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEmailOwner()
+    {
+        return $this->getOwner();
     }
 }
