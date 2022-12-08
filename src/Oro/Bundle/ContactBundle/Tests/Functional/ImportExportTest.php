@@ -22,17 +22,15 @@ class ImportExportTest extends AbstractImportExportTestCase
         $this->loadFixtures([LoadContactEntitiesData::class]);
     }
 
-    public function testExportTemplate()
+    public function testExportTemplate(): void
     {
-        $exportTemplateFileName = $this->getExportTemplateFileName();
-
         $this->assertExportTemplateWorks(
             $this->getExportImportConfiguration(),
-            $this->getFullPathToDataFile($exportTemplateFileName)
+            $this->getFullPathToDataFile($this->getExportTemplateFileName())
         );
     }
 
-    public function testExport()
+    public function testExport(): void
     {
         $this->assertExportWorks(
             $this->getExportImportConfiguration(),
@@ -45,7 +43,7 @@ class ImportExportTest extends AbstractImportExportTestCase
         );
     }
 
-    public function testImportRecordWithAddStrategy()
+    public function testImportRecordWithAddStrategy(): void
     {
         $this->assertImportWorks(
             $this->getExportImportConfiguration('oro_contact.add'),
@@ -55,7 +53,7 @@ class ImportExportTest extends AbstractImportExportTestCase
         self::assertCount(5, $this->getContactRepository()->findAll());
     }
 
-    public function testImportRecordWithAddOrReplaceStrategy()
+    public function testImportRecordWithAddOrReplaceStrategy(): void
     {
         $this->assertImportWorks(
             $this->getExportImportConfiguration(),
@@ -65,7 +63,37 @@ class ImportExportTest extends AbstractImportExportTestCase
         self::assertCount(5, $this->getContactRepository()->findAll());
     }
 
-    public function testImportDuplicateRecord()
+
+    public function testImportDuplicatedAddressPhoneWithAddStrategy(): void
+    {
+        $this->assertImportWorks(
+            $this->getExportImportConfiguration('oro_contact.add'),
+            $this->getFullPathToDataFile('contact_with_duplicate_address_phone.csv')
+        );
+
+        self::assertCount(8, $this->getContactRepository()->findAll());
+    }
+
+    public function testImportDuplicatedAddressPhoneWithAddOrReplaceStrategy(): void
+    {
+        $this->assertImportWorks(
+            $this->getExportImportConfiguration(),
+            $this->getFullPathToDataFile('contact_with_duplicate_address_phone.csv')
+        );
+
+        $results = $this->getContactRepository()->findAll();
+        self::assertCount(8, $results);
+        foreach ($results as $contact) {
+            if (!in_array($contact->getFirstName(), ['Andrea', 'Matteo', 'Roberto', 'Stefano'])) {
+                continue;
+            }
+
+            self::assertFalse($contact->getPhones()->isEmpty());
+            self::assertFalse($contact->getAddresses()->isEmpty());
+        }
+    }
+
+    public function testImportDuplicateRecord(): void
     {
         $this->markTestSkipped('Unskip after BAP-16301');
 
@@ -77,7 +105,7 @@ class ImportExportTest extends AbstractImportExportTestCase
         self::assertCount(5, $this->getContactRepository()->findAll());
     }
 
-    public function testUpdateIfNoneEmptyStrategyOnLastName()
+    public function testUpdateIfNoneEmptyStrategyOnLastName(): void
     {
         $configManager = $this->getConfigManager();
         $importExportFieldConfig = $configManager
@@ -106,7 +134,7 @@ class ImportExportTest extends AbstractImportExportTestCase
         );
     }
 
-    public function testImportValidate()
+    public function testImportValidate(): void
     {
         $this->assertImportValidateWorks(
             $this->getExportImportConfiguration(),
