@@ -1,5 +1,7 @@
 Oro\Bundle\ChannelBundle\Entity\Channel:
     channel_b2b:
+        __calls:
+            - setEntities: [ [ '@channel-entity-b2bcustomer', '@channel-entity-lead', '@channel-entity-opportunity' ] ]
         name: 'Sales Channel'
         status: true
         channelType: b2b

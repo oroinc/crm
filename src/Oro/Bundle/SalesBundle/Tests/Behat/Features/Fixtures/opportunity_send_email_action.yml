@@ -40,6 +40,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
   opportunity-wo-contact:
     name: 'opportunity wo contact'
     customerAssociation: '@customer-1'
+    status: '@opportunity_status_in_progress'
     organization: '@organization'
     owner: '@admin'
 
@@ -47,6 +48,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
     name: 'opportunity w contact name and email'
     customerAssociation: '@customer-1'
     contact: '@contact-w-name-email'
+    status: '@opportunity_status_in_progress'
     organization: '@organization'
     owner: '@admin'
 
@@ -54,6 +56,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
     name: 'opportunity w contact no name'
     customerAssociation: '@customer-1'
     contact: '@contact-wo-name'
+    status: '@opportunity_status_in_progress'
     organization: '@organization'
     owner: '@admin'
 
@@ -61,11 +64,13 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
     name: 'opportunity with account name'
     customerAssociation: '@customer-1'
     contact: '@contact-wo-name'
+    status: '@opportunity_status_in_progress'
     organization: '@organization'
     owner: '@admin'
 
   opportunity-w-contact-no-email:
     name: 'opportunity w contact no email'
+    status: '@opportunity_status_in_progress'
     customerAssociation: '@customer-1'
     contact: '@contact-wo-email'
     organization: '@organization'

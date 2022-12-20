@@ -9,10 +9,16 @@ Oro\Bundle\EmailBundle\Entity\EmailFolder:
         outdatedAt: '<dateTime()>'
         failedCount: '<randomNumber()>'
         origin: '@email_origin'
+    send_folder:
+        name: 'Sent'
+        fullName: 'Sent'
+        type: 'sent'
+        syncEnabled: true
+        origin: '@email_origin'
 
 Oro\Bundle\EmailBundle\Entity\Mailbox:
     email_mailbox:
-        email: 'Mailbox.email'
+        email: 'test@test.com'
         label: 'Mailbox.label'
         createdAt: '<dateTime()>'
         updatedAt: '<dateTime()>'
@@ -71,8 +77,8 @@ Oro\Bundle\ImapBundle\Entity\UserEmailOrigin:
         imapPort: '<randomNumber()>'
         smtpHost: 'UserEmailOrigin.smtpHost'
         smtpPort: '<randomNumber()>'
-        imapEncryption: l3
-        smtpEncryption: l3
+        imapEncryption: ssl
+        smtpEncryption: ssl
         user: 'UserEmailOrigin.user'
         password: 'UserEmailOrigin.password'
         accessToken: 'UserEmailOrigin.accessToken'
@@ -81,6 +87,7 @@ Oro\Bundle\ImapBundle\Entity\UserEmailOrigin:
         owner: '@admin'
         organization: '@organization'
         mailbox: '@email_mailbox'
+        folders: ['@email_folder', '@send_folder']
 
 # Must be added after email created to guarantee that id != email_id. Required by BAP-20028
 Oro\Bundle\EmailBundle\Entity\EmailUser:

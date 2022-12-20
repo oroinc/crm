@@ -1,3 +1,6 @@
+include:
+    - '@OroSalesBundle:SalesB2bChannel.yml'
+
 Oro\Bundle\UserBundle\Entity\User:
     second_user:
         username: user2
@@ -12,6 +15,7 @@ Oro\Bundle\UserBundle\Entity\User:
 Oro\Bundle\ContactBundle\Entity\ContactEmail:
     contactEmail{1..20}:
         email: '<email()>'
+        primary: true
 
 Oro\Bundle\ContactBundle\Entity\Contact:
     contact{1..20}:
@@ -33,6 +37,7 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
         account: '@account<current()>'
         contact: '@contact<current()>'
         owner: '@admin'
+        dataChannel: '@salesChannel'
         organization: '@organization'
 
 Oro\Bundle\SalesBundle\Entity\Customer:

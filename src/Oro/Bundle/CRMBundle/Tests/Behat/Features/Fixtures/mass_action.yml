@@ -27,6 +27,8 @@ Oro\Bundle\AccountBundle\Entity\Account:
 
 Oro\Bundle\ChannelBundle\Entity\Channel:
   b2bchannel:
+    __calls:
+      - setEntities: [ [ '@channel-entity-b2bcustomer', '@channel-entity-lead', '@channel-entity-opportunity' ] ]
     name: 'Sales Channel'
     status: true
     channelType: b2b
@@ -51,3 +53,4 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
     contact: '@contact-*'
     owner: '@admin'
     organization: '@organization'
+    dataChannel: '@b2bchannel'

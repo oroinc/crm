@@ -1,6 +1,10 @@
+include:
+  - '@OroSalesBundle:SalesB2bChannel.yml'
+
 Oro\Bundle\ContactBundle\Entity\ContactEmail:
   contactEmail{1..10}:
     email: '<email()>'
+    primary: true
 
 Oro\Bundle\ContactBundle\Entity\Contact:
   contact{1..10}:
@@ -23,6 +27,7 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
     contact: '@contact<current()>'
     owner: '@admin'
     organization: '@organization'
+    dataChannel: '@salesChannel'
 
 Oro\Bundle\SalesBundle\Entity\Customer:
   customer{1..10}:

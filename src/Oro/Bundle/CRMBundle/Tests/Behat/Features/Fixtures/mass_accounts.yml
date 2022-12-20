@@ -1,0 +1,24 @@
+Oro\Bundle\UserBundle\Entity\User:
+    user_new:
+        username: 'Test User'
+        email: 'testuser@example.com'
+        firstName: 'User'
+        lastName: 'Test'
+        salt: '5ejjb5y9va4g4co8kco4o8wgkgcc48k'
+        password: 'fhUh+Xk/mjDUR5xLb93SIL/QF/lEK3RcGE3l9dRh4+N4rQCNrOaOYyVtqWajPOBHQDqFGwl+Ran2HTdpbniEUQ=='
+        enabled: true
+        owner: '@business_unit'
+        organization: '@organization'
+        organizations: [ '@organization' ]
+        userRoles: [ '@adminRole' ]
+
+Oro\Bundle\AccountBundle\Entity\Account:
+    own_account:
+        name: 'Andrea Joed'
+        owner: '@admin'
+        organization: '@organization'
+
+    account-{1..2}:
+        name: '<words(3, true)>'
+        owner: '@user_new'
+        organization: '@organization'

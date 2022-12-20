@@ -36,11 +36,11 @@ Feature: Country and region translations for opportunity
     Then I should see "Saved successfully" flash message
     When I click on "Contact hamburger"
     Then should see following "Select Contact" grid:
-      | First name   | Last name    | Email             | Phone      | Country           | State       | Zip/Postal Code |
-      | Catherine    | Hinojosa     |                   |            |                   |             |                 |
-      | Charlie      | Sheen        | charlie@gmail.com | 4157319375 | GermanyZulu       | BerlinZulu  |                 |
-      | TestContact1 | TestContact1 | test1@test.com    | 5556668888 | GermanyZulu       | BerlinZulu  | 10001           |
-      | TestContact2 | TestContact2 | test2@test.com    | 5556669999 | United StatesZulu | FloridaZulu | 10002           |
+      | First name   | Last name    | Email                          | Phone      | Country           | State       | Zip/Postal Code |
+      | Catherine    | Hinojosa     | CatherineJHinojosa@armyspy.com |            |                   |             |                 |
+      | Charlie      | Sheen        | charlie@gmail.com              | 4157319375 | GermanyZulu       | BerlinZulu  |                 |
+      | TestContact1 | TestContact1 | test1@test.com                 | 5556668888 | GermanyZulu       | BerlinZulu  | 10001           |
+      | TestContact2 | TestContact2 | test2@test.com                 | 5556669999 | United StatesZulu | FloridaZulu | 10002           |
     When I click on Charlie in grid
     And save and close form
     Then I should see "Opportunity saved" flash message

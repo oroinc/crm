@@ -1,6 +1,26 @@
+Oro\Bundle\CaseBundle\Entity\CasePriority:
+  new_case_priority:
+    __construct: [ 'new_priority' ]
+    label: 'New Priority'
+    order: 1
+
+Oro\Bundle\CaseBundle\Entity\CaseStatus:
+  new_case_status:
+    __construct: [ 'new_status' ]
+    label: 'New Status'
+    order: 1
+
+Oro\Bundle\CaseBundle\Entity\CaseSource:
+  new_case_source:
+    __construct: [ 'new_source' ]
+    label: 'New Source'
+
 Oro\Bundle\CaseBundle\Entity\CaseEntity:
   case-{1..10}:
     subject: '<words(3, true)>'
     description: '<sentences(3, true)>'
     owner: '@admin'
     organization: '@organization'
+    source: '@new_case_source'
+    priority: '@new_case_priority'
+    status: '@new_case_status'
