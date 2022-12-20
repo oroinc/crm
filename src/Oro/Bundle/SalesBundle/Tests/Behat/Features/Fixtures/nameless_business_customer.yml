@@ -3,6 +3,8 @@ include:
 
 Oro\Bundle\ChannelBundle\Entity\Channel:
   salesChannel:
+    __calls:
+      - setEntities: [ [ '@salesEntityName' ] ]
     owner: '@organization'
     name: Business Customers
     channelType: b2b

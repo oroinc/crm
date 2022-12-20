@@ -20,8 +20,8 @@ Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
     uid: 'b492f575-6043-4d19-8f9c-865d6c67a3d8'
     title: 'System Calendar Event 1'
     description: 'System Calendar Event 1 Description'
-    start: '<dateTime()>'
-    end: '<dateTime()>'
+    start: <dateTimeBetween('+1 day', '+5 days')>
+    end: <dateTimeBetween($start, '+10 days')>
     createdAt: '<dateTime()>'
     updatedAt: '<dateTime()>'
     __calls:

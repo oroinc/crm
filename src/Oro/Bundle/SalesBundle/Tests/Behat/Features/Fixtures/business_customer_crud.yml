@@ -1,6 +1,8 @@
 Oro\Bundle\ChannelBundle\Entity\Channel:
   salesChannel:
     owner: '@organization'
+    __calls:
+      - setEntities: [ [ '@salesEntityName' ] ]
     name: Business Customers
     channelType: b2b
     status: 1

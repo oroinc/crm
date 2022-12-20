@@ -10,6 +10,7 @@ Oro\Bundle\AccountBundle\Entity\Account:
 Oro\Bundle\ContactBundle\Entity\ContactEmail:
     contactEmail1:
         email: 'CatherineJHinojosa@armyspy.com'
+        primary: true
 
 Oro\Bundle\ContactBundle\Entity\Contact:
   contact1:

@@ -55,6 +55,16 @@ Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
     end: '<dateTimeBetween($createdAt, $createdAt)>'
     allDay: false
 
+Oro\Bundle\CallBundle\Entity\CallStatus:
+  new_call_status:
+    __construct: ['new_status']
+    label: 'New Status'
+
+Oro\Bundle\CallBundle\Entity\CallDirection:
+  new_call_direction:
+    __construct: ['new_direction']
+    label: 'New Direction'
+
 Oro\Bundle\CallBundle\Entity\Call:
   call:
     subject: 'Proposed Charlie to star in new film'
@@ -66,6 +76,14 @@ Oro\Bundle\CallBundle\Entity\Call:
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     callDateTime: '<dateTimeBetween($createdAt, $createdAt)>'
     organization: '@organization'
+    callStatus: '@new_call_status'
+    direction: '@new_call_direction'
+
+Oro\Bundle\TaskBundle\Entity\TaskPriority:
+  testPriority:
+    __construct: [test]
+    label: test
+    order: 2
 
 Oro\Bundle\TaskBundle\Entity\Task:
   task:
@@ -75,6 +93,7 @@ Oro\Bundle\TaskBundle\Entity\Task:
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     dueDate: '<dateTimeBetween($updatedAt, "now")>'
+    taskPriority: '@testPriority'
 
 Oro\Bundle\UserBundle\Entity\User:
   mistyUser:

@@ -1,0 +1,14 @@
+Oro\Bundle\ChannelBundle\Entity\Channel:
+    salesChannel:
+        __calls:
+            - setEntities: [ [ '@salesEntityName' ] ]
+        owner: '@organization'
+        name: Business Customers
+        channelType: b2b
+        status: 1
+        customerIdentity: 'Oro\\Bundle\\SalesBundle\\Entity\\B2bCustomer'
+
+Oro\Bundle\ChannelBundle\Entity\EntityName:
+    salesEntityName:
+        __construct: ['Oro\\Bundle\\SalesBundle\\Entity\\B2bCustomer']
+        channel: '@salesChannel'
