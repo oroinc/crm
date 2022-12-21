@@ -1,4 +1,5 @@
 @ticket-BAP-21510
+@fixture-OroContactBundle:LoadContactForGroupFixture.yml
 
 Feature: Contact group CRUD
   In order to have the ability to work with contact groups
@@ -30,3 +31,14 @@ Feature: Contact group CRUD
     Then I should see "Item deleted" flash message
     When I filter Label as is equal to "Contact Group Label Updated"
     Then there is no records in grid
+
+  Scenario: Check filters of all contacts grid work well in contact group view page
+    Given I reset "Label" filter
+    When I click "Edit" on row "Sales Group" in grid
+    Then number of records should be 1
+    When I filter First Name as Contains "Test"
+    Then number of records should be 1
+    When I reset First Name filter
+    And filter Last Name as Contains "Contact1"
+    Then number of records should be 1
+    And I reset Last Name filter

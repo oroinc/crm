@@ -145,7 +145,7 @@ datagrids:
                     data_name: c.firstName
                 lastName:
                     type: string
-                    data_name: c.firstName
+                    data_name: c.lastName
         sorters:
             columns:
                 hasGroup:
