@@ -1,0 +1,34 @@
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+    contact_email:
+        email: 'test1@test.com'
+        primary: true
+
+Oro\Bundle\ContactBundle\Entity\ContactPhone:
+    contact_phone:
+        phone: '5556668888'
+        primary: true
+
+Oro\Bundle\ContactBundle\Entity\ContactAddress:
+    contact_address:
+        country: '@germany'
+        primary: true
+        street: 'streetN1'
+        city: 'TestCity1'
+        postalCode: '10001'
+        organization: 'TestOrg1'
+        region: '@berlin'
+        firstName: 'TestContact1'
+        lastName: 'TestContact1'
+        types: ['@billingType', '@shippingType']
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+    contact:
+        owner: '@admin'
+        organization: '@organization'
+        birthday: '<(new \DateTime("2000-01-01", new \DateTimeZone("UTC")))>'
+        firstName: 'Test'
+        lastName: 'Contact1'
+        __calls:
+            - addEmail: ['@contact_email']
+            - addPhone: ['@contact_phone']
+            - addAddress: ['@contact_address']
