@@ -53,11 +53,8 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
 
     /**
      * @dataProvider formDataProviderForPreSet
-     *
-     * @param Channel|null $formData
-     * @param string       $channelType
      */
-    public function testPreSet($formData, $channelType)
+    public function testPreSet(?Channel $formData, string $channelType)
     {
         $events = $this->subscriber->getSubscribedEvents();
         $this->assertArrayHasKey(FormEvents::PRE_SET_DATA, $events);
@@ -91,10 +88,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         $this->subscriber->preSet($event);
     }
 
-    /**
-     * @return array
-     */
-    public function formDataProviderForPreSet()
+    public function formDataProviderForPreSet(): array
     {
         $channelUpdate = $this->createMock(Channel::class);
         $channelUpdate->expects($this->any())
@@ -153,9 +147,9 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function getExtensions()
+    protected function getExtensions(): array
     {
         $channelType = new ChannelType($this->settingsProvider, $this->subscriber);
         $provider = $this->createMock(EntityProvider::class);

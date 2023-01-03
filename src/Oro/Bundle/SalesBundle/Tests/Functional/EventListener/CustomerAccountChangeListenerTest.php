@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\EventListener;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
@@ -15,10 +15,7 @@ class CustomerAccountChangeListenerTest extends WebTestCase
         $this->initClient();
     }
 
-    /**
-     * @return array
-     */
-    public function testSyncOnCreateCustomer()
+    public function testSyncOnCreateCustomer(): array
     {
         $account = new Account();
         $account->setName('Account1');
@@ -44,7 +41,7 @@ class CustomerAccountChangeListenerTest extends WebTestCase
     {
         /**
          * @var B2bCustomer $b2bCustomer
-         * @var Customer        $customer
+         * @var Customer $customer
          */
         [$b2bCustomer, $customer] = $customers;
 
@@ -62,10 +59,7 @@ class CustomerAccountChangeListenerTest extends WebTestCase
         $this->assertSame($b2bCustomer, $customer->getTarget());
     }
 
-    /**
-     * @param object $entity
-     */
-    private function flushAndRefresh($entity)
+    private function flushAndRefresh(object $entity): void
     {
         $em = $this->getEntityManager();
         $entities = func_get_args();
@@ -75,10 +69,7 @@ class CustomerAccountChangeListenerTest extends WebTestCase
         array_walk($entities, [$em, 'refresh']);
     }
 
-    /**
-     * @return EntityManager
-     */
-    private function getEntityManager()
+    private function getEntityManager(): EntityManagerInterface
     {
         return $this->getContainer()->get('doctrine')->getManagerForClass(Customer::class);
     }

@@ -57,13 +57,7 @@ class LeadsByDateReportTest extends WebTestCase
         );
     }
 
-    /**
-     * @param array $response
-     * @param array $keys
-     *
-     * @return array
-     */
-    private function getValuableDataFromResult(array $response, array $keys)
+    private function getValuableDataFromResult(array $response, array $keys): array
     {
         return [
             'rows' => array_map(

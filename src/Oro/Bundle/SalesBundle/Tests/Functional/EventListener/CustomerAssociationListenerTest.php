@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\EventListener;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -77,29 +77,21 @@ class CustomerAssociationListenerTest extends WebTestCase
         );
     }
 
-    /**
-     * @param EntityManager $em
-     * @param string        $name
-     */
-    private function loadTestCustomerTarget1(EntityManager $em, $name)
+    private function loadTestCustomerTarget1(EntityManagerInterface $em, string $name): void
     {
         $testCustomerTarget1 = new TestCustomer1();
         $testCustomerTarget1->setName($name);
         $em->persist($testCustomerTarget1);
     }
 
-    /**
-     * @param EntityManager $em
-     * @param string        $name
-     */
-    private function loadTestCustomerTarget2(EntityManager $em, $name)
+    private function loadTestCustomerTarget2(EntityManagerInterface $em, string $name): void
     {
         $testCustomerTarget2 = new TestCustomer2();
         $testCustomerTarget2->setName($name);
         $em->persist($testCustomerTarget2);
     }
 
-    private function loadEntities(EntityManager $em)
+    private function loadEntities(EntityManagerInterface $em): void
     {
         $name = 'test_%s_%s';
 
@@ -110,31 +102,16 @@ class CustomerAssociationListenerTest extends WebTestCase
         $em->flush();
     }
 
-    /**
-     * @param array $targets
-     *
-     * @return array
-     */
-    private function sortTargets(array $targets)
+    private function sortTargets(array $targets): array
     {
-        /**
-         * @param TestCustomer1|TestCustomer2 $item1
-         * @param TestCustomer1|TestCustomer2 $item2
-         *
-         * @return int
-         */
-        $sort = function ($item1, $item2) {
+        usort($targets, function (TestCustomer1|TestCustomer2 $item1, TestCustomer1|TestCustomer2 $item2): int {
             return strcmp($item1->getName(), $item2->getName());
-        };
-        usort($targets, $sort);
+        });
 
         return $targets;
     }
 
-    /**
-     * @return EntityManager
-     */
-    private function getEntityManager()
+    private function getEntityManager(): EntityManagerInterface
     {
         return $this->getContainer()->get('doctrine')->getManagerForClass(Customer::class);
     }

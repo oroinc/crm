@@ -2,8 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
-use Oro\Bundle\EntityExtendBundle\Model\EnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RestOpportunityTest extends WebTestCase
@@ -15,17 +16,14 @@ class RestOpportunityTest extends WebTestCase
             $this->generateWsseAuthHeader()
         );
 
-        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures([LoadSalesBundleFixtures::class]);
     }
 
-    /**
-     * @return array
-     */
-    public function testPostOpportunity()
+    public function testPostOpportunity(): array
     {
         $request = [
             'opportunity' => [
-                'name'                => 'opportunity_name_' . mt_rand(1, 500),
+                'name'                => 'opportunity_name_' . random_int(1, 500),
                 'owner'               => '1',
                 'contact'             => $this->getReference('default_contact')->getId(),
                 'status'              => 'in_progress',
@@ -47,12 +45,9 @@ class RestOpportunityTest extends WebTestCase
     }
 
     /**
-     * @param $request
-     *
      * @depends testPostOpportunity
-     * @return  mixed
      */
-    public function testGetOpportunity($request)
+    public function testGetOpportunity(array $request): array
     {
         $this->client->request(
             'GET',
@@ -67,16 +62,14 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals('in_progress', $this->getStatusByLabel($result['status'])->getId());
         // Incomplete CRM-816
         //$this->assertEquals($request['opportunity']['owner'], $result['owner']['id']);
+
         return $request;
     }
 
     /**
-     * @param $request
-     *
      * @depends testGetOpportunity
-     * @return  mixed
      */
-    public function testPutOpportunity($request)
+    public function testPutOpportunity(array $request): array
     {
         $request['opportunity']['name'] .= '_updated';
 
@@ -107,7 +100,7 @@ class RestOpportunityTest extends WebTestCase
     /**
      * @depends testPutOpportunity
      */
-    public function testGetOpportunities($request)
+    public function testGetOpportunities(array $request)
     {
         $baseUrl = $this->getUrl('oro_api_get_opportunities');
         $this->client->request('GET', $baseUrl);
@@ -132,7 +125,7 @@ class RestOpportunityTest extends WebTestCase
     /**
      * @depends testPutOpportunity
      */
-    public function testDeleteOpportunity($request)
+    public function testDeleteOpportunity(array $request)
     {
         $this->client->request(
             'DELETE',
@@ -150,16 +143,12 @@ class RestOpportunityTest extends WebTestCase
         $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 
-    /**
-     * @param $result
-     * @return EnumValue
-     */
-    private function getStatusByLabel($statusLabel)
+    private function getStatusByLabel(string $statusLabel): AbstractEnumValue
     {
         return $this->getContainer()
             ->get('doctrine')
             ->getManager()
             ->getRepository(ExtendHelper::buildEnumValueClassName('opportunity_status'))
-            ->findOneByName($statusLabel);
+            ->findOneBy(['name' => $statusLabel]);
     }
 }

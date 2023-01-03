@@ -9,12 +9,12 @@ class RestAccountTest extends WebTestCase
 {
     protected function setUp(): void
     {
-        $this->initClient([], $this->generateWsseAuthHeader());
+        $this->initClient([], self::generateWsseAuthHeader());
     }
 
-    public function testCreate()
+    public function testCreate(): array
     {
-        $doctrine = $this->getContainer()->get('doctrine');
+        $doctrine = self::getContainer()->get('doctrine');
         $manager = $doctrine->getManagerForClass(Account::class);
         $manager->createQuery(sprintf('DELETE FROM %s', Account::class))->execute();
 
@@ -31,7 +31,7 @@ class RestAccountTest extends WebTestCase
             $request
         );
 
-        $result = $this->getJsonResponseContent($this->client->getResponse(), 201);
+        $result = self::getJsonResponseContent($this->client->getResponse(), 201);
         $this->assertArrayHasKey('id', $result);
 
         $request['id'] = $result['id'];
@@ -39,9 +39,7 @@ class RestAccountTest extends WebTestCase
     }
 
     /**
-     * @param array $request
      * @depends testCreate
-     * @return array
      */
     public function testGet(array $request)
     {
@@ -50,13 +48,13 @@ class RestAccountTest extends WebTestCase
             $this->getUrl('oro_api_get_accounts')
         );
 
-        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $result = self::getJsonResponseContent($this->client->getResponse(), 200);
 
         $id = $request['id'];
         $result = array_filter(
             $result,
             function ($a) use ($id) {
-                return $a['id'] == $id;
+                return $a['id'] === $id;
             }
         );
 
@@ -68,10 +66,10 @@ class RestAccountTest extends WebTestCase
             $this->getUrl('oro_api_get_account', ['id' => $request['id']])
         );
 
-        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $result = self::getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals($request['account']['name'], $result['name']);
-        $this->assertTrue(array_key_exists('lifetimeValue', $result));
+        $this->assertArrayHasKey('lifetimeValue', $result);
     }
 
     /**
@@ -88,14 +86,14 @@ class RestAccountTest extends WebTestCase
         );
         $result = $this->client->getResponse();
 
-        $this->assertEmptyResponseStatusCodeEquals($result, 204);
+        self::assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_api_get_account', ['id' => $request['id']])
         );
 
-        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $result = self::getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals(
             $request['account']['name'],
@@ -104,18 +102,17 @@ class RestAccountTest extends WebTestCase
     }
 
     /**
-     * @param array $request
      * @depends testCreate
      */
-    public function testList($request)
+    public function testList()
     {
         $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_api_get_accounts')
         );
 
-        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
-        $this->assertEquals(1, count($result));
+        $result = self::getJsonResponseContent($this->client->getResponse(), 200);
+        $this->assertCount(1, $result);
     }
 
     /**
@@ -129,9 +126,9 @@ class RestAccountTest extends WebTestCase
             $this->getUrl('oro_api_delete_account', ['id' => $request['id']])
         );
         $result = $this->client->getResponse();
-        $this->assertEmptyResponseStatusCodeEquals($result, 204);
+        self::assertEmptyResponseStatusCodeEquals($result, 204);
         $this->client->jsonRequest('GET', $this->getUrl('oro_api_get_account', ['id' => $request['id']]));
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 404);
+        self::assertJsonResponseStatusCodeEquals($result, 404);
     }
 }

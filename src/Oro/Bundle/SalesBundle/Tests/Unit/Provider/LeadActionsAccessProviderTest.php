@@ -75,8 +75,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
     {
         $lead = $this->getValidLead();
         $this->makeLeadWfDisabled();
-        $this->featureChecker
-            ->expects($this->once())
+        $this->featureChecker->expects($this->once())
             ->method('isFeatureEnabled')
             ->with('sales_opportunity')
             ->willReturn(false);
