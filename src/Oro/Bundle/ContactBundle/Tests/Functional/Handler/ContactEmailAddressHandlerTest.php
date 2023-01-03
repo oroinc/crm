@@ -94,10 +94,6 @@ class ContactEmailAddressHandlerTest extends WebTestCase
         );
     }
 
-    /**
-     * @param EmailAddressManager $emailAddressManager
-     * @return array|string[]
-     */
     private function getEmailAddresses(EmailAddressManager $emailAddressManager): array
     {
         $repo = $emailAddressManager->getEmailAddressRepository();
@@ -115,14 +111,11 @@ class ContactEmailAddressHandlerTest extends WebTestCase
         );
     }
 
-    /**
-     * @param EmailAddressManager $emailAddressManager
-     * @param Contact $contact
-     * @param string $email
-     * @return EmailAddress
-     */
-    private function createEmailAddress(EmailAddressManager $emailAddressManager, Contact $contact, $email)
-    {
+    private function createEmailAddress(
+        EmailAddressManager $emailAddressManager,
+        Contact $contact,
+        string $email
+    ): EmailAddress {
         $detachedEmailAddress = $emailAddressManager->newEmailAddress();
         $detachedEmailAddress->setOwner($contact);
         $detachedEmailAddress->setEmail($email);

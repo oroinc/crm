@@ -8,13 +8,10 @@ class RestContactGroupsApiTest extends WebTestCase
 {
     protected function setUp(): void
     {
-        $this->initClient([], $this->generateWsseAuthHeader());
+        $this->initClient([], self::generateWsseAuthHeader());
     }
 
-    /**
-     * @return array
-     */
-    public function testCreateContactGroup()
+    public function testCreateContactGroup(): array
     {
         $request = [
             'contact_group' => [
@@ -24,18 +21,15 @@ class RestContactGroupsApiTest extends WebTestCase
         ];
         $this->client->jsonRequest('POST', $this->getUrl('oro_api_post_contactgroup'), $request);
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 201);
+        self::assertJsonResponseStatusCodeEquals($result, 201);
 
         return $request;
     }
 
     /**
-     * @param $request
-     *
-     * @return array
      * @depends testCreateContactGroup
      */
-    public function testGetContactGroup($request)
+    public function testGetContactGroup(array $request): array
     {
         $this->client->jsonRequest(
             'GET',
@@ -43,9 +37,9 @@ class RestContactGroupsApiTest extends WebTestCase
         );
         $result = $this->client->getResponse();
         $result = json_decode($result->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        $flag   = 1;
+        $flag = 1;
         foreach ($result as $group) {
-            if ($group['label'] == $request['contact_group']['label']) {
+            if ($group['label'] === $request['contact_group']['label']) {
                 $flag = 0;
                 break;
             }
@@ -57,7 +51,7 @@ class RestContactGroupsApiTest extends WebTestCase
             $this->getUrl('oro_api_get_contactgroup', ['id' => $group['id']])
         );
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 200);
+        self::assertJsonResponseStatusCodeEquals($result, 200);
 
         return $group;
     }
@@ -66,7 +60,7 @@ class RestContactGroupsApiTest extends WebTestCase
      * @depends testGetContactGroup
      * @depends testCreateContactGroup
      */
-    public function testUpdateContactGroup($group, $request)
+    public function testUpdateContactGroup(array $group, array $request)
     {
         $group['label'] .= '_Updated';
         $this->client->jsonRequest(
@@ -75,14 +69,14 @@ class RestContactGroupsApiTest extends WebTestCase
             $request
         );
         $result = $this->client->getResponse();
-        $this->assertEmptyResponseStatusCodeEquals($result, 204);
+        self::assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_api_get_contactgroup', ['id' => $group['id']])
         );
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 200);
+        self::assertJsonResponseStatusCodeEquals($result, 200);
         $result = json_decode($result->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $this->assertEquals($request['contact_group']['label'], $result['label'], 'ContactGroup does not updated');
     }
@@ -90,20 +84,20 @@ class RestContactGroupsApiTest extends WebTestCase
     /**
      * @depends testGetContactGroup
      */
-    public function testDeleteContact($group)
+    public function testDeleteContact(array $group)
     {
         $this->client->jsonRequest(
             'DELETE',
             $this->getUrl('oro_api_delete_contactgroup', ['id' => $group['id']])
         );
         $result = $this->client->getResponse();
-        $this->assertEmptyResponseStatusCodeEquals($result, 204);
+        self::assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->jsonRequest(
             'GET',
             $this->getUrl('oro_api_get_contactgroup', ['id' => $group['id']])
         );
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 404);
+        self::assertJsonResponseStatusCodeEquals($result, 404);
     }
 }

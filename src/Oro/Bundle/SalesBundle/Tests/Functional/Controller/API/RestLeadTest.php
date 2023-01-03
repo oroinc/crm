@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RestLeadTest extends WebTestCase
@@ -12,20 +13,17 @@ class RestLeadTest extends WebTestCase
             [],
             $this->generateWsseAuthHeader()
         );
-        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures([LoadSalesBundleFixtures::class]);
     }
 
-    /**
-     * @return array
-     */
-    public function testPostLead()
+    public function testPostLead(): array
     {
         $request = [
             'lead' => [
-                'name'          => 'lead_name_' . mt_rand(1, 500),
-                'firstName'     => 'first_name_' . mt_rand(1, 500),
-                'lastName'      => 'last_name_' . mt_rand(1, 500),
-                'owner'         => '1',
+                'name'      => 'lead_name_' . random_int(1, 500),
+                'firstName' => 'first_name_' . random_int(1, 500),
+                'lastName'  => 'last_name_' . random_int(1, 500),
+                'owner'     => '1',
             ]
         ];
 
@@ -43,12 +41,9 @@ class RestLeadTest extends WebTestCase
     }
 
     /**
-     * @param $request
-     *
      * @depends testPostLead
-     * @return  mixed
      */
-    public function testGetLead($request)
+    public function testGetLead(array $request): array
     {
         $this->client->request(
             'GET',
@@ -64,16 +59,14 @@ class RestLeadTest extends WebTestCase
         $this->assertEquals('New', $result['status']);
         // Incomplete CRM-816
         //$this->assertEquals($request['lead']['owner'], $result['owner']['id']);
+
         return $request;
     }
 
     /**
-     * @param $request
-     *
      * @depends testGetLead
-     * @return  mixed
      */
-    public function testPutLead($request)
+    public function testPutLead(array $request): array
     {
         $request['lead']['firstName'] .= '_updated';
         $request['lead']['lastName'] .= '_updated';
@@ -107,7 +100,7 @@ class RestLeadTest extends WebTestCase
     /**
      * @depends testPutLead
      */
-    public function testGetLeads($request)
+    public function testGetLeads(array $request)
     {
         $this->client->request(
             'GET',
@@ -129,7 +122,7 @@ class RestLeadTest extends WebTestCase
     /**
      * @depends testPutLead
      */
-    public function testDeleteLead($request)
+    public function testDeleteLead(array $request)
     {
         $this->client->request(
             'DELETE',

@@ -13,8 +13,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
 {
-    /** @var EmbeddedFormTypeExtension */
-    private $extension;
+    private EmbeddedFormTypeExtension $extension;
 
     protected function setUp(): void
     {
@@ -23,9 +22,9 @@ class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
-    protected function getExtensions()
+    protected function getExtensions(): array
     {
         return [
             new PreloadedExtension(
@@ -48,7 +47,7 @@ class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
 
     public function testBuildForm()
     {
-        $builder      = $this->factory->createNamedBuilder('root');
+        $builder = $this->factory->createNamedBuilder('root');
         $builderInner = $this->factory->createNamedBuilder('additional');
         $builderInner->add('dataChannel', TextType::class, ['required' => false, 'constraints' => []]);
         $builder->add($builderInner);
