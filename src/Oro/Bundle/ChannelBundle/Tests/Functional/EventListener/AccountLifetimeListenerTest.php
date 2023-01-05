@@ -4,9 +4,12 @@ namespace Oro\Bundle\ChannelBundle\Tests\Functional\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Async\Topic\LifetimeHistoryStatusUpdateTopic;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
@@ -14,6 +17,8 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class AccountLifetimeListenerTest extends WebTestCase
 {
+    use MessageQueueExtension;
+
     protected function setUp(): void
     {
         $this->initClient();
@@ -27,7 +32,6 @@ class AccountLifetimeListenerTest extends WebTestCase
             ->setName('account');
         $em->persist($account);
         $em->flush();
-
         $this->assertEquals(0, $this->getAmountProvider()->getAccountLifeTimeValue($account));
 
         return $account;
@@ -40,6 +44,13 @@ class AccountLifetimeListenerTest extends WebTestCase
     public function testAccountOpportunities(callable $updateDataCb, int $expectedResult, Account $account)
     {
         $updateDataCb($account);
+
+        if ($messages = self::getSentMessagesByTopic(LifetimeHistoryStatusUpdateTopic::getName())) {
+            $repository = $this->getEntityManager()->getRepository(LifetimeValueHistory::class);
+            foreach ($messages as $message) {
+                $repository->massStatusUpdate(... $message);
+            }
+        }
 
         $this->assertEquals($expectedResult, $this->getAmountProvider()->getAccountLifeTimeValue($account));
     }
@@ -135,7 +146,7 @@ class AccountLifetimeListenerTest extends WebTestCase
                 function (Account $account) use (&$opportunities) {
                     $em = $this->getEntityManager();
 
-                    $em->remove($opportunities['op3']);
+                    $em->remove($em->merge($opportunities['op3']));
                     $em->flush();
                 },
                 5,
@@ -144,7 +155,7 @@ class AccountLifetimeListenerTest extends WebTestCase
                 function (Account $account) use (&$opportunities) {
                     $em = $this->getEntityManager();
 
-                    $em->remove($opportunities['op2']);
+                    $em->remove($em->merge($opportunities['op2']));
                     $em->flush();
                 },
                 5,
@@ -245,7 +256,7 @@ class AccountLifetimeListenerTest extends WebTestCase
                 function (Account $account) use (&$opportunities) {
                     $em = $this->getEntityManager();
 
-                    $em->remove($opportunities['op1']);
+                    $em->remove($em->merge($opportunities['op1']));
                     $em->flush();
                 },
                 0,

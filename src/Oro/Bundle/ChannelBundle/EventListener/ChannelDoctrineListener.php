@@ -11,6 +11,7 @@ use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\ChannelBundle\Entity\Manager\LifetimeHistoryStatusUpdateManager;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
@@ -21,36 +22,27 @@ use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
  */
 class ChannelDoctrineListener
 {
-    const MAX_UPDATE_CHUNK_SIZE = 50;
+    public const MAX_UPDATE_CHUNK_SIZE = 50;
+    protected LifetimeHistoryStatusUpdateManager $statusUpdateManager;
 
     /** @var UnitOfWork */
-    protected $uow;
+    protected ?UnitOfWork $uow = null;
+    protected ?EntityManager $em = null;
+    protected ?LifetimeHistoryRepository $lifetimeRepo = null;
+    protected ?CustomerRepository $customerRepo = null;
 
-    /** @var EntityManager */
-    protected $em;
-
-    /** @var LifetimeHistoryRepository */
-    protected $lifetimeRepo;
-
-    /** @var CustomerRepository */
-    protected $customerRepo;
-
-    /** @var array */
-    protected $queued = [];
-
-    /** @var array */
-    protected $customerIdentities = [];
-
-    /** @var bool */
-    protected $isInProgress = false;
-
+    protected array $queued = [];
+    protected array $customerIdentities = [];
+    protected bool $isInProgress = false;
     public function __construct(
-        SettingsProvider $settingsProvider
+        SettingsProvider $settingsProvider,
+        LifetimeHistoryStatusUpdateManager $statusUpdateManager
     ) {
         $settings = $settingsProvider->getLifetimeValueSettings();
         foreach ($settings as $singleChannelTypeData) {
             $this->customerIdentities[$singleChannelTypeData['entity']] = $singleChannelTypeData['field'];
         }
+        $this->statusUpdateManager = $statusUpdateManager;
     }
 
     public function onFlush(OnFlushEventArgs $args)
@@ -101,8 +93,8 @@ class ChannelDoctrineListener
 
             $this->em->flush();
 
-            foreach (array_chunk($toOutDate, self::MAX_UPDATE_CHUNK_SIZE) as $chunks) {
-                $this->getLifetimeRepository()->massStatusUpdate($chunks);
+            foreach (array_chunk($toOutDate, self::MAX_UPDATE_CHUNK_SIZE) as $records) {
+                $this->statusUpdateManager->massUpdate($records);
             }
 
             $this->queued       = [];
@@ -266,7 +258,7 @@ class ChannelDoctrineListener
     protected function getLifetimeRepository()
     {
         if (null === $this->lifetimeRepo) {
-            $this->lifetimeRepo = $this->em->getRepository('OroChannelBundle:LifetimeValueHistory');
+            $this->lifetimeRepo = $this->em->getRepository(LifetimeValueHistory::class);
         }
 
         return $this->lifetimeRepo;
