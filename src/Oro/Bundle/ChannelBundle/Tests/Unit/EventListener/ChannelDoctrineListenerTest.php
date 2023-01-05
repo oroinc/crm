@@ -6,13 +6,18 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Async\Topic\LifetimeHistoryStatusUpdateTopic;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\ChannelBundle\Entity\Manager\LifetimeHistoryStatusUpdateManager;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
 use Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Component\Testing\ReflectionUtil;
 use Oro\Component\TestUtils\ORM\OrmTestCase;
 
@@ -46,6 +51,11 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     /** @var SettingsProvider */
     private $settingsProvider;
 
+    /** @var MessageProducerInterface */
+    private $messageProducer;
+    /** @var LifetimeHistoryStatusUpdateManager */
+    private $statusUpdateManager;
+
     protected function setUp(): void
     {
         $this->lifetimeRepo = $this->createMock(LifetimeHistoryRepository::class);
@@ -62,11 +72,31 @@ class ChannelDoctrineListenerTest extends OrmTestCase
             ->method('getLifetimeValueSettings')
             ->willReturn($this->settings);
 
-        $this->channelDoctrineListener = new ChannelDoctrineListener($this->settingsProvider);
+        $this->messageProducer = $this->createMock(MessageProducerInterface::class);
+    }
+
+    protected function setUpDoctrineListener(bool $useQueue = true): void
+    {
+        $managerRegistry = $this->createMock(ManagerRegistry::class);
+        $managerRegistry->expects(self::any())
+            ->method('getRepository')
+            ->with(LifetimeValueHistory::class)
+            ->willReturn($this->lifetimeRepo);
+        $this->statusUpdateManager = new LifetimeHistoryStatusUpdateManager(
+            $managerRegistry,
+            $this->messageProducer
+        );
+        $this->statusUpdateManager->setUseQueue($useQueue);
+        $this->channelDoctrineListener = new ChannelDoctrineListener(
+            $this->settingsProvider,
+            $this->statusUpdateManager
+        );
     }
 
     public function testOnFlush()
     {
+        $this->setUpDoctrineListener();
+
         $args = new OnFlushEventArgs($this->em);
 
         $this->em->expects(self::any())
@@ -117,7 +147,7 @@ class ChannelDoctrineListenerTest extends OrmTestCase
             ->method('getScheduledCollectionUpdates')
             ->willReturn([]);
 
-        $channelDoctrineListener = new ChannelDoctrineListener($this->settingsProvider);
+        $channelDoctrineListener = new ChannelDoctrineListener($this->settingsProvider, $this->statusUpdateManager);
 
         $channelDoctrineListener->onFlush($args);
 
@@ -136,19 +166,26 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         return $channelDoctrineListener;
     }
 
-    public function testPostFlush()
+    /**
+     * @dataProvider useQueueDataProvider
+     * @param string $sapiName
+     * @return void
+     */
+    public function testPostFlush(bool $useQueue)
     {
+        $this->setUpDoctrineListener($useQueue);
+        $lifetimeAmounts = [100, 200];
         $this->em->expects(self::any())
             ->method('getRepository')
-            ->with('OroChannelBundle:LifetimeValueHistory')
+            ->with(LifetimeValueHistory::class)
             ->willReturn($this->lifetimeRepo);
 
-        $account = $this->createMock(Account::class);
-        $channel = $this->createMock(Channel::class);
-        $channel->expects(self::any())
-            ->method('getId')
-            ->willReturn(1);
+        $account = new Account();
+        ReflectionUtil::setId($account, 1);
+        $channel = new Channel();
+        ReflectionUtil::setId($channel, 2);
         $account2 = clone $account;
+        ReflectionUtil::setId($account2, 3);
 
         $this->lifetimeRepo->expects(self::exactly(2))
             ->method('calculateAccountLifetime')
@@ -157,14 +194,36 @@ class ChannelDoctrineListenerTest extends OrmTestCase
                 self::isInstanceOf(Account::class),
                 self::isInstanceOf(Channel::class)
             )
-            ->willReturnOnConsecutiveCalls(100, 200);
+            ->willReturnOnConsecutiveCalls(... $lifetimeAmounts);
 
         $this->em->expects(self::exactly(2))
             ->method('persist');
         $this->em->expects(self::once())
             ->method('flush');
 
-        $channelDoctrineListener = new ChannelDoctrineListener($this->settingsProvider);
+        $records = [
+            [1, 2, null],
+            [3, 2, null],
+        ];
+        $status = LifetimeValueHistory::STATUS_OLD;
+
+        if ($useQueue) {
+            $this->messageProducer->expects(self::once())
+                ->method('send')
+                ->with(
+                    LifetimeHistoryStatusUpdateTopic::getName(),
+                    [
+                        LifetimeHistoryStatusUpdateTopic::RECORDS_FIELD => $records,
+                        LifetimeHistoryStatusUpdateTopic::STATUS_FIELD => $status,
+                    ]
+                );
+        } else {
+            $this->lifetimeRepo->expects(self::once())
+                ->method('massStatusUpdate')
+                ->withAnyParameters();
+        }
+
+        $channelDoctrineListener = new ChannelDoctrineListener($this->settingsProvider, $this->statusUpdateManager);
 
         ReflectionUtil::setPropertyValue($channelDoctrineListener, 'queued', [
             uniqid('accountId__channelId', true) => ['account' => $account, 'channel' => $channel],
@@ -176,11 +235,12 @@ class ChannelDoctrineListenerTest extends OrmTestCase
 
     public function testScheduleEntityUpdate()
     {
+        $this->setUpDoctrineListener();
         $account = $this->createMock(Account::class);
         $channel = $this->createMock(Channel::class);
         $customer = new \stdClass();
 
-        $channelDoctrineListener = new ChannelDoctrineListener($this->settingsProvider);
+        $channelDoctrineListener = new ChannelDoctrineListener($this->settingsProvider, $this->statusUpdateManager);
 
         $this->uow->expects(self::exactly(2))
             ->method('isScheduledForDelete')
@@ -194,6 +254,7 @@ class ChannelDoctrineListenerTest extends OrmTestCase
 
     public function testScheduleEntityUpdateFailed()
     {
+        $this->setUpDoctrineListener();
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('UOW is missing, listener is not initialized');
 
@@ -202,5 +263,13 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         $customer = new \stdClass();
 
         $this->channelDoctrineListener->scheduleEntityUpdate($customer, $account, $channel);
+    }
+
+    public function useQueueDataProvider(): array
+    {
+        return [
+            [true],
+            [false]
+        ];
     }
 }

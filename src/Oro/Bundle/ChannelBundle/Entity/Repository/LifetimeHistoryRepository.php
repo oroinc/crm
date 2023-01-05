@@ -10,6 +10,9 @@ use Oro\Bundle\SalesBundle\Entity\Customer as CustomerAssociation;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
+/**
+ *  LifetimeValueHistory entity repository
+ */
 class LifetimeHistoryRepository extends EntityRepository
 {
     /**
@@ -73,7 +76,7 @@ class LifetimeHistoryRepository extends EntityRepository
      *
      * @param array $records    Array of entities that will be used as limitation criteria
      *                          Should contain arrays with following data inside:
-     *                          [0 => "account entity or ID", 1 => "channel entity or ID", "exclusion entity or ID"]
+     *                          [0 => "account entity or ID", 1 => "channel ID", "exclusion entity or ID"]
      * @param int   $status     Status to be set
      */
     public function massStatusUpdate(array $records, $status = LifetimeValueHistory::STATUS_OLD)
@@ -82,7 +85,7 @@ class LifetimeHistoryRepository extends EntityRepository
         /** @var Channel $channel */
         foreach ($records as $row) {
             list($account, $channel, $excludeEntry) = $row;
-            $groupedByChannel[$channel ? $channel->getId() : ''][] = [$account, $excludeEntry];
+            $groupedByChannel[$channel ?: ''][] = [$account, $excludeEntry];
         }
 
         foreach ($groupedByChannel as $channelId => $pairs) {
