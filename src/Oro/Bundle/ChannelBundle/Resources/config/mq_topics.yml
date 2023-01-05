@@ -5,3 +5,4 @@ services:
 
     Oro\Bundle\ChannelBundle\Async\Topic\ChannelStatusChangedTopic: ~
     Oro\Bundle\ChannelBundle\Async\Topic\AggregateLifetimeAverageTopic: ~
+    Oro\Bundle\ChannelBundle\Async\Topic\LifetimeHistoryStatusUpdateTopic: ~
