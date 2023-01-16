@@ -14,7 +14,7 @@ Feature: Opportunity crud
     And click View Acme in grid
     And I follow "More actions"
     And click "Create Opportunity"
-    And fill "Opportunity Form" with:
+    And I fill "Opportunity Form" with:
       | Opportunity Name | Opportunity_1 |
       | Probability (%)  | 10            |
       | Budget Amount    | 50            |
