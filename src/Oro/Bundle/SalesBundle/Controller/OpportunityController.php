@@ -3,8 +3,10 @@
 namespace Oro\Bundle\SalesBundle\Controller;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-use Oro\Bundle\FormBundle\Model\UpdateHandler;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+use Oro\Bundle\FormBundle\Provider\SaveAndReturnActionFormTemplateDataProvider;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler;
@@ -24,17 +26,19 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class OpportunityController extends AbstractController
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedServices()
     {
         return array_merge(parent::getSubscribedServices(), [
             OpportunityHandler::class,
             TranslatorInterface::class,
-            UpdateHandler::class,
             'oro_sales.opportunity.form' => Form::class,
             AccountCustomerManager::class,
-            EntityRoutingHelper::class
+            EntityRoutingHelper::class,
+            UpdateHandlerFacade::class,
+            SaveAndReturnActionFormTemplateDataProvider::class,
+            ConfigManager::class,
         ]);
     }
 
@@ -67,7 +71,7 @@ class OpportunityController extends AbstractController
     public function infoAction(Opportunity $entity)
     {
         return [
-            'entity'  => $entity
+            'entity' => $entity,
         ];
     }
 
@@ -116,7 +120,7 @@ class OpportunityController extends AbstractController
     public function indexAction()
     {
         return [
-            'entity_class' => Opportunity::class
+            'entity_class' => Opportunity::class,
         ];
     }
 
@@ -156,26 +160,63 @@ class OpportunityController extends AbstractController
      */
     public function opportunityWithCustomerCreateAction($targetClass, $targetId)
     {
+        if (!$this->isQuickCreationButtonsEnabled()) {
+            throw $this->createNotFoundException();
+        }
+
         $target = $this->get(EntityRoutingHelper::class)->getEntity($targetClass, $targetId);
+        if (!$this->isGranted('VIEW', $target)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $customer = $this->get(AccountCustomerManager::class)->getAccountCustomerByTarget($target);
 
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($customer);
 
-        return $this->update($opportunity);
+        $saveAndReturnActionFormTemplateDataProvider = $this->get(SaveAndReturnActionFormTemplateDataProvider::class);
+        $saveAndReturnActionFormTemplateDataProvider
+            ->setSaveFormActionRoute(
+                'oro_sales_opportunity_customer_aware_create',
+                [
+                    'targetClass' => $targetClass,
+                    'targetId' => $targetId,
+                ]
+            )
+            ->setReturnActionRoute(
+                'oro_customer_customer_view',
+                [
+                    'id' => $targetId,
+                ],
+                'oro_customer_customer_view'
+            );
+
+        return $this->update($opportunity, $saveAndReturnActionFormTemplateDataProvider);
     }
 
     /**
-     * @param  Opportunity $entity
+     * @param Opportunity $entity
      * @return array
      */
     protected function update(Opportunity $entity)
     {
-        return $this->get(UpdateHandler::class)->update(
+        $args = \func_get_args();
+        $resultProvider = $args[1] ?? null;
+
+        return $this->get(UpdateHandlerFacade::class)->update(
             $entity,
             $this->get('oro_sales.opportunity.form'),
             $this->get(TranslatorInterface::class)->trans('oro.sales.controller.opportunity.saved.message'),
-            $this->get(OpportunityHandler::class)
+            null,
+            function (Opportunity $data) {
+                return $this->get(OpportunityHandler::class)->process($data);
+            },
+            $resultProvider
         );
+    }
+
+    private function isQuickCreationButtonsEnabled(): bool
+    {
+        return $this->get(ConfigManager::class)->get('oro_ui.enable_quick_creation_buttons');
     }
 }

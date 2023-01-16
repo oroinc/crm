@@ -33,7 +33,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      routeView="oro_sales_opportunity_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="fa-usd"
+ *              "icon"="fa-line-chart"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

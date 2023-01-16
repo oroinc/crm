@@ -1,3 +1,4 @@
+@feature-BB-21879
 @fixture-OroSalesBundle:opportunity_from_related.yml
 Feature: Create Opportunity from related entity views
   In order to ease opportunity management
@@ -5,10 +6,12 @@ Feature: Create Opportunity from related entity views
   I should have a possibility to create Opportunity from related entity views
 
   Scenario: Sales Rep creates Opportunity for Account
-    Given I login as "Johnconnor8" user
+    Given I enable configuration options:
+      | oro_ui.enable_quick_creation_buttons |
+    When I login as "Johnconnor8" user
     And I go to Customers/Accounts
     And click View SkyNet in grid
-    When I follow "More actions"
+    And I follow "More actions"
     And click "Create Opportunity"
     And I fill in "Opportunity name" with "First Invasion"
     And I save and close form

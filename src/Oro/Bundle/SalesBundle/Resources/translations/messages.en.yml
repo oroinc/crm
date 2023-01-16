@@ -626,6 +626,13 @@ oro:
             importexport.empty_account: 'Customer Account must not be empty.'
             importexport.not_matched_account: 'Customer does not match the Account.'
             label:            Account
+            quick_access_button:
+                create_opportunity:
+                    label: Create Opportunity
+                    widget:
+                        title: Create Opportunity
+                new_opportunity:
+                    label: New Opportunity
 
         widgets:
             b2bcustomer_information: Business Customer Information

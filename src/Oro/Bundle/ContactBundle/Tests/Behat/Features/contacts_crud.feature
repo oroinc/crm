@@ -85,7 +85,7 @@ Scenario: Add/Delete address from contact view
   When I delete Ukraine address
   And click "Yes, Delete"
   Then contact has one address
-  When I click "+ Add Address"
+  When I click "Add Address"
   And fill form with:
     | Country         | Germany       |
     | Street          | Mühlendamm 78 |
