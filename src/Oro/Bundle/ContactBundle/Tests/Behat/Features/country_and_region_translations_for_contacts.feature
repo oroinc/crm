@@ -48,7 +48,7 @@ Feature: Country and region translations for contacts
 
   Scenario: Add Address to contact
     Given I click view "TestContact1" in grid
-    When I click "+ Add Address"
+    When I click "Add Address"
     And fill form with:
       | Primary         | true          |
       | Country         | GermanyZulu   |

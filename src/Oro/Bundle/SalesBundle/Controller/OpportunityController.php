@@ -5,6 +5,8 @@ namespace Oro\Bundle\SalesBundle\Controller;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+use Oro\Bundle\FormBundle\Provider\FormTemplateDataProviderInterface;
+use Oro\Bundle\FormBundle\Provider\SaveAndReturnActionFormTemplateDataProvider;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler;
@@ -35,7 +37,8 @@ class OpportunityController extends AbstractController
             'oro_sales.opportunity.form' => Form::class,
             AccountCustomerManager::class,
             EntityRoutingHelper::class,
-            UpdateHandlerFacade::class
+            UpdateHandlerFacade::class,
+            SaveAndReturnActionFormTemplateDataProvider::class,
         ]);
     }
 
@@ -147,22 +150,46 @@ class OpportunityController extends AbstractController
     public function opportunityWithCustomerCreateAction($targetClass, $targetId): array|RedirectResponse
     {
         $target = $this->get(EntityRoutingHelper::class)->getEntity($targetClass, $targetId);
+        if (!$this->isGranted('VIEW', $target)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $customer = $this->get(AccountCustomerManager::class)->getAccountCustomerByTarget($target);
 
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($customer);
 
-        return $this->update($opportunity);
+        $saveAndReturnActionFormTemplateDataProvider = $this->get(SaveAndReturnActionFormTemplateDataProvider::class);
+        $saveAndReturnActionFormTemplateDataProvider
+            ->setSaveFormActionRoute(
+                'oro_sales_opportunity_customer_aware_create',
+                [
+                    'targetClass' => $targetClass,
+                    'targetId' => $targetId,
+                ]
+            )
+            ->setReturnActionRoute(
+                'oro_customer_customer_view',
+                [
+                    'id' => $targetId,
+                ],
+                'oro_customer_customer_view'
+            );
+
+        return $this->update($opportunity, $saveAndReturnActionFormTemplateDataProvider);
     }
 
-    protected function update(Opportunity $entity): array|RedirectResponse
-    {
+    protected function update(
+        Opportunity $entity,
+        FormTemplateDataProviderInterface|null $resultProvider = null
+    ): array|RedirectResponse {
         return $this->get(UpdateHandlerFacade::class)->update(
             $entity,
             $this->get('oro_sales.opportunity.form'),
             $this->get(TranslatorInterface::class)->trans('oro.sales.controller.opportunity.saved.message'),
             null,
-            $this->get(OpportunityHandler::class)
+            $this->get(OpportunityHandler::class),
+            $resultProvider
         );
     }
 }

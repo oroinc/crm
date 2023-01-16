@@ -1,5 +1,27 @@
 {% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+{% import '@OroUI/macros.html.twig' as UI %}
 
 <div class="widget-content">
+
+    {% if is_granted('oro_sales_opportunity_create') %}
+        {{ UI.renderButtonsRow(UI.quickAccessAddButton({
+            'dataUrl': path('oro_sales_opportunity_customer_aware_create', {
+                targetClass: gridParams.customer_class,
+                targetId: gridParams.customer_id
+            }),
+            'title': 'oro.sales.customer.quick_access_button.new_opportunity.label'|trans,
+            'label': 'oro.sales.customer.quick_access_button.new_opportunity.label'|trans,
+            'widget': {
+                'reload-grid-name': 'sales-customers-opportunities-grid',
+                'options': {
+                    'alias': 'oro_sales_opportunity_customer_aware_create_dialog',
+                    'dialogOptions': {
+                        'title': 'oro.sales.customer.quick_access_button.create_opportunity.widget.title'|trans,
+                    }
+                }
+            }
+        })) }}
+    {% endif %}
+
     {{ dataGrid.renderGrid('sales-customers-opportunities-grid', gridParams, {cssClass: 'inner-grid'}) }}
 </div>

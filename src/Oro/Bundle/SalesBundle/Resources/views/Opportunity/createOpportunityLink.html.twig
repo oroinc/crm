@@ -1,12 +1,20 @@
 {% import '@OroUI/macros.html.twig' as UI %}
 
-{{ UI.link({
-    'path': path('oro_sales_opportunity_customer_aware_create', {
+{{ UI.quickAccessLink({
+    'dataUrl': path('oro_sales_opportunity_customer_aware_create', {
         targetId: entity.id,
         targetClass: oro_class_name(entity, true)
     }),
-    'iCss': 'fa-usd',
-    'aCss': 'dropdown-item',
-    'title': 'oro.sales.opportunity.create.label'|trans,
-    'label': 'oro.sales.opportunity.create.label'|trans
+    'iCss': 'fa-line-chart',
+    'title': 'oro.sales.customer.quick_access_button.create_opportunity.label'|trans,
+    'label': 'oro.sales.customer.quick_access_button.create_opportunity.label'|trans,
+    'widget': {
+        'reload-grid-name': 'sales-customers-opportunities-grid',
+        'options': {
+            'alias': 'oro_sales_opportunity_customer_aware_create_dialog',
+            'dialogOptions': {
+                'title': 'oro.sales.customer.quick_access_button.create_opportunity.widget.title'|trans,
+            }
+        }
+    }
 }) }}
