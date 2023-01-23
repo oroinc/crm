@@ -27,11 +27,11 @@ class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testOnMailboxSave()
     {
-        $event = $this->createMailboxSavedEventMock();
+        $event = $this->createMock(MailboxSaved::class);
 
-        $mailbox = $this->createMailboxMock();
+        $mailbox = $this->createMock(Mailbox::class);
 
-        $settings = $this->createCaseMailboxProcessSettingsMock();
+        $settings = $this->createMock(CaseMailboxProcessSettings::class);
 
         $mailbox->expects(self::once())
             ->method('getProcessSettings')
@@ -41,13 +41,13 @@ class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
             ->method('getMailbox')
             ->willReturn($mailbox);
 
-        $organization = $this->createOrganizationMock();
+        $organization = $this->createMock(Organization::class);
 
         $mailbox->expects(self::once())
             ->method('getOrganization')
             ->willReturn($organization);
 
-        $tags = $this->createCollectionMock();
+        $tags = $this->createMock(Collection::class);
 
         $settings->expects(self::once())
             ->method('getTags')
@@ -66,9 +66,9 @@ class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testOnMailboxSaveNotCaseSettings()
     {
-        $event = $this->createMailboxSavedEventMock();
+        $event = $this->createMock(MailboxSaved::class);
 
-        $mailbox = $this->createMailboxMock();
+        $mailbox = $this->createMock(Mailbox::class);
 
         $mailbox->expects(self::once())
             ->method('getProcessSettings')
@@ -82,45 +82,5 @@ class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
             ->method('saveTagging');
 
         $this->listener->onMailboxSave($event);
-    }
-
-    /**
-     * @return MailboxSaved|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private function createMailboxSavedEventMock()
-    {
-        return $this->createMock(MailboxSaved::class);
-    }
-
-    /**
-     * @return Mailbox|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private function createMailboxMock()
-    {
-        return $this->createMock(Mailbox::class);
-    }
-
-    /**
-     * @return Organization|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private function createOrganizationMock()
-    {
-        return $this->createMock(Organization::class);
-    }
-
-    /**
-     * @return CaseMailboxProcessSettings|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private function createCaseMailboxProcessSettingsMock()
-    {
-        return $this->createMock(CaseMailboxProcessSettings::class);
-    }
-
-    /**
-     * @return Collection|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private function createCollectionMock()
-    {
-        return $this->createMock(Collection::class);
     }
 }
