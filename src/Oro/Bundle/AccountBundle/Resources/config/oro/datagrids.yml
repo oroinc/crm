@@ -373,6 +373,7 @@ datagrids:
                     renderable: false
         options:
             routerEnabled: false
+            requestMethod: POST
             rowSelection:
                 dataField: id
                 columnName: hasContact

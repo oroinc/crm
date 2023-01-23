@@ -17,6 +17,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+/**
+ * Account entity form representation
+ */
 class AccountType extends AbstractType
 {
     /** @var RouterInterface */
@@ -73,6 +76,7 @@ class AccountType extends AbstractType
                     'default_element'       => 'default_contact',
                     'required'              => false,
                     'selector_window_title' => 'oro.account.form.select_contacts',
+                    'selection_url_method'  => 'POST',
                 )
             );
         }
