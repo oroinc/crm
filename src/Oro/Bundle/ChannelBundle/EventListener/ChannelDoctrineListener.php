@@ -11,6 +11,7 @@ use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\ChannelBundle\Entity\Manager\LifetimeHistoryStatusUpdateManager;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
@@ -44,13 +45,20 @@ class ChannelDoctrineListener
     /** @var bool */
     protected $isInProgress = false;
 
-    public function __construct(
-        SettingsProvider $settingsProvider
-    ) {
+    /** @var LifetimeHistoryStatusUpdateManager */
+    protected $statusUpdateManager;
+
+    public function __construct(SettingsProvider $settingsProvider)
+    {
         $settings = $settingsProvider->getLifetimeValueSettings();
         foreach ($settings as $singleChannelTypeData) {
             $this->customerIdentities[$singleChannelTypeData['entity']] = $singleChannelTypeData['field'];
         }
+    }
+
+    public function setStatusUpdateManager(LifetimeHistoryStatusUpdateManager $statusUpdateManager)
+    {
+        $this->statusUpdateManager = $statusUpdateManager;
     }
 
     public function onFlush(OnFlushEventArgs $args)
@@ -101,8 +109,8 @@ class ChannelDoctrineListener
 
             $this->em->flush();
 
-            foreach (array_chunk($toOutDate, self::MAX_UPDATE_CHUNK_SIZE) as $chunks) {
-                $this->getLifetimeRepository()->massStatusUpdate($chunks);
+            foreach (array_chunk($toOutDate, self::MAX_UPDATE_CHUNK_SIZE) as $records) {
+                $this->statusUpdateManager->massUpdate($records);
             }
 
             $this->queued       = [];
@@ -266,7 +274,7 @@ class ChannelDoctrineListener
     protected function getLifetimeRepository()
     {
         if (null === $this->lifetimeRepo) {
-            $this->lifetimeRepo = $this->em->getRepository('OroChannelBundle:LifetimeValueHistory');
+            $this->lifetimeRepo = $this->em->getRepository(LifetimeValueHistory::class);
         }
 
         return $this->lifetimeRepo;

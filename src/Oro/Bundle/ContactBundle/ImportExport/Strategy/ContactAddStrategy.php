@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\ImportExport\Strategy;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\AbstractImportStrategy;
@@ -111,14 +112,22 @@ class ContactAddStrategy extends AbstractImportStrategy
             }
         }
 
-        // clear accounts
+        // update accounts
         foreach ($entity->getAccounts() as $account) {
             $entity->removeAccount($account);
+            if ($account = $this->findExistingEntity($account)) {
+                $entity->addAccount($account);
+            }
         }
 
         // update addresses
         /** @var ContactAddress $contactAddress */
         foreach ($entity->getAddresses() as $contactAddress) {
+            $existingCountry = $this->findExistingEntity($contactAddress->getCountry());
+            if ($existingCountry instanceof Country) {
+                $contactAddress->setCountry($existingCountry);
+            }
+
             // update address types
             foreach ($contactAddress->getTypes() as $addressType) {
                 $contactAddress->removeType($addressType);

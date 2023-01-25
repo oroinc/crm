@@ -52,7 +52,7 @@ Feature: Country and region translations for lead
 
   Scenario: Add Address to existing lead
     Given I click view "testlead1" in grid
-    When I click "+ Add Address"
+    When I click "Add Address"
     And fill form with:
       | Primary         | true          |
       | Country         | GermanyZulu   |

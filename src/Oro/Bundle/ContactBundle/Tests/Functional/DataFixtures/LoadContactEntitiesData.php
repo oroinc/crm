@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 class LoadContactEntitiesData extends AbstractFixture
@@ -29,14 +30,15 @@ class LoadContactEntitiesData extends AbstractFixture
         [
             'firstName' => self::SECOND_ENTITY_NAME,
             'lastName'  => 'Brock',
+            'TelephoneNumber' => '585-255-1127'
         ],
         [
             'firstName' => self::THIRD_ENTITY_NAME,
-            'lastName'  => 'Bryson',
+            'lastName'  => 'Bryson'
         ],
         [
             'firstName' => self::FOURTH_ENTITY_NAME,
-            'lastName'  => 'Church',
+            'lastName'  => 'Church'
         ],
     ];
 
@@ -54,6 +56,12 @@ class LoadContactEntitiesData extends AbstractFixture
             $contact->setOrganization($organization);
             $contact->setFirstName($contactData['firstName']);
             $contact->setLastName($contactData['lastName']);
+
+            if (isset($contactData['TelephoneNumber'])) {
+                $phone = new ContactPhone($contactData['TelephoneNumber']);
+                $phone->setPrimary(true);
+                $contact->addPhone($phone);
+            }
 
             if (isset($contactData['testMultiEnum'])) {
                 $testMultiEnumValue = $manager->getRepository(

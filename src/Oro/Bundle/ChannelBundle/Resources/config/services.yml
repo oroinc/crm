@@ -233,7 +233,9 @@ services:
     oro_channel.event_listener.doctrine:
       class: Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
       arguments:
-          - "@oro_channel.provider.settings_provider"
+          - '@oro_channel.provider.settings_provider'
+      calls:
+          - ['setStatusUpdateManager', ['@oro_channel.manager.lifetime_history_status_update']]
       tags:
         - { name: doctrine.event_listener, event: onFlush }
         - { name: doctrine.event_listener, event: postFlush }
@@ -347,3 +349,18 @@ services:
             - { name: doctrine.event_listener, event: onClear }
             - { name: container.service_subscriber, id: oro_currency.query.currency_transformer }
             - { name: container.service_subscriber, id: oro_sales.manager.account_customer }
+            - { name: container.service_subscriber, id: oro_channel.manager.lifetime_history_status_update }
+
+    oro_channel.manager.lifetime_history_status_update:
+        class: Oro\Bundle\ChannelBundle\Entity\Manager\LifetimeHistoryStatusUpdateManager
+        arguments:
+            - '@doctrine'
+            - '@oro_message_queue.client.message_producer'
+
+    oro_channel.event_listener.lifetime_history_demo_data_fixtures:
+        class: Oro\Bundle\ChannelBundle\EventListener\LifetimeHistoryDataFixturesListener
+        arguments:
+            - '@oro_channel.manager.lifetime_history_status_update'
+        tags:
+            - { name: kernel.event_listener, event: oro_migration.data_fixtures.pre_load, method: onPreLoad }
+

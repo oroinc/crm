@@ -18,3 +18,8 @@ services:
             - '@oro_channel.provider.state_provider'
         calls:
             - [setLogger, ['@logger']]
+
+    oro_channel.async.lifetime_history_update_processor:
+        class: Oro\Bundle\ChannelBundle\Async\LifetimeHistoryStatusUpdateProcessor
+        arguments:
+            - '@doctrine'

@@ -9,6 +9,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\ChannelBundle\Entity\Manager\LifetimeHistoryStatusUpdateManager;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
@@ -40,7 +41,8 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
     {
         return [
             'oro_currency.query.currency_transformer' => CurrencyQueryBuilderTransformerInterface::class,
-            'oro_sales.manager.account_customer' => AccountCustomerManager::class
+            'oro_sales.manager.account_customer' => AccountCustomerManager::class,
+            'oro_channel.manager.lifetime_history_status_update' => LifetimeHistoryStatusUpdateManager::class,
         ];
     }
 
@@ -65,9 +67,7 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
         }
 
         $em = $args->getEntityManager();
-        $lifetimeRepository = $em->getRepository(LifetimeValueHistory::class);
         $lifetimeAmountQb = $this->getLifetimeAmountQueryBuilder($em);
-
         $historyUpdates = [];
         foreach ($this->accounts as $account) {
             $lifetimeAmountQb->setParameter('account', $account->getId());
@@ -84,7 +84,7 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
 
         $this->accounts = [];
         $em->flush();
-        $lifetimeRepository->massStatusUpdate($historyUpdates);
+        $this->sendHistoryUpdates($historyUpdates);
     }
 
     public function onClear(): void
@@ -228,5 +228,11 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
         }
 
         return $this->accountCustomerManager;
+    }
+
+    private function sendHistoryUpdates(array $historyUpdates): void
+    {
+        $statusUpdateManager = $this->container->get('oro_channel.manager.lifetime_history_status_update');
+        $statusUpdateManager->massUpdate($historyUpdates);
     }
 }

@@ -34,6 +34,8 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 
     public function testCreateWithCustomer()
     {
+        $this->setQuickCreationButtonsEnabled(true);
+
         $crawler = $this->client->request(
             'GET',
             $this->getUrl(
@@ -58,6 +60,8 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         self::assertStringContainsString('Opportunity saved', $crawler->html());
+
+        $this->setQuickCreationButtonsEnabled(false);
     }
 
     public function testCreate(): string
@@ -225,5 +229,12 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                 ],
             ]
         ];
+    }
+
+    private function setQuickCreationButtonsEnabled(bool $isEnabled): void
+    {
+        $configManager = self::getContainer()->get('oro_config.manager');
+        $configManager->set('oro_ui.enable_quick_creation_buttons', $isEnabled);
+        $configManager->flush();
     }
 }
