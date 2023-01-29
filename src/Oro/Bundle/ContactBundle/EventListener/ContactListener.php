@@ -3,13 +3,16 @@
 namespace Oro\Bundle\ContactBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\UnitOfWork;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * Listens to Contact save events and generate timestamps
+ */
 class ContactListener
 {
     /** @var TokenStorageInterface */
@@ -22,13 +25,13 @@ class ContactListener
 
     public function prePersist(Contact $entity, LifecycleEventArgs $args)
     {
-        $this->setCreatedProperties($entity, $args->getEntityManager());
-        $this->setUpdatedProperties($entity, $args->getEntityManager());
+        $this->setCreatedProperties($entity, $args->getObjectManager());
+        $this->setUpdatedProperties($entity, $args->getObjectManager());
     }
 
     public function preUpdate(Contact $entity, PreUpdateEventArgs $args)
     {
-        $this->setUpdatedProperties($entity, $args->getEntityManager(), true);
+        $this->setUpdatedProperties($entity, $args->getObjectManager(), true);
     }
 
     protected function setCreatedProperties(Contact $contact, EntityManager $entityManager)
