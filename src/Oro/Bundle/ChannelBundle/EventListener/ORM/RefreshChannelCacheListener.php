@@ -2,10 +2,13 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener\ORM;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 
+/**
+ * Listens to Channel events and process channel changes
+ */
 class RefreshChannelCacheListener
 {
     /** @var StateProvider  */

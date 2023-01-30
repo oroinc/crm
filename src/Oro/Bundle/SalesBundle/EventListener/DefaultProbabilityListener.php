@@ -2,12 +2,15 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\WorkflowBundle\Restriction\RestrictionManager;
 
+/**
+ * Listens to Opportunity Entity events to generate defaultProbability
+ */
 class DefaultProbabilityListener
 {
     /** @var ConfigManager $configManager */
@@ -91,8 +94,8 @@ class DefaultProbabilityListener
 
     protected function recomputeChangeSet(LifecycleEventArgs $args)
     {
-        $entity = $args->getEntity();
-        $em = $args->getEntityManager();
+        $entity = $args->getObject();
+        $em = $args->getObjectManager();
         $uow = $em->getUnitOfWork();
         $meta = $em->getClassMetadata(get_class($entity));
         $uow->recomputeSingleEntityChangeSet($meta, $entity);

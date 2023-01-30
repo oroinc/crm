@@ -4,6 +4,9 @@ namespace Oro\Bundle\SalesBundle\EventListener\Config;
 
 use Oro\Bundle\ConfigBundle\Event\ConfigGetEvent;
 
+/**
+ * Listens to ConfigGetEvent to merge probabilities
+ */
 class DefaultProbabilityListener
 {
     /**
