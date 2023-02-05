@@ -28,7 +28,7 @@ use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\EmailCollectionTypeStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\PhoneCollectionTypeParent;
 use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\PhoneCollectionTypeStub;
 use Oro\Component\Testing\Unit\EntityTrait;
-use Oro\Component\Testing\Unit\Form\Type\Stub\EntityType;
+use Oro\Component\Testing\Unit\Form\Type\Stub\EntityTypeStub;
 use Oro\Component\Testing\Unit\FormIntegrationTestCase;
 use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -49,51 +49,46 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function getExtensions()
+    protected function getExtensions(): array
     {
-        $contactEntityType = new EntityType([
-            1 => $this->getEntity(Contact::class, ['first_name' => 'first name']),
-            2 => $this->getEntity(Contact::class, ['first_name' => 'first name new']),
-        ], 'oro_contact_select');
-        $channelEntityType = new EntityType([], 'oro_select2_entity');
-        $emailEntityType = new EntityType([
-            1 => $this->getEntity(B2bCustomerEmail::class, ['email' => 'test@email.com']),
-            2 => $this->getEntity(B2bCustomerEmail::class, ['email' => 'test_new@email.com']),
-        ], 'test_email_entity');
-        $phoneEntityType = new EntityType([
-            1 => $this->getEntity(B2bCustomerPhone::class, ['phone' => '12345678']),
-            2 => $this->getEntity(B2bCustomerPhone::class, ['phone' => '87654321'])
-        ], 'test_phone_entity');
-        $countryEntityType = new EntityType([], 'oro_country');
-        $regionEntityType = new EntityType([], 'oro_region');
-
-        $channelsProvider = $this->createMock(ChannelsByEntitiesProvider::class);
-        $repository = $this->createMock(ObjectRepository::class);
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
             ->method('getRepository')
-            ->willReturn($repository);
-        $formFactory = $this->createMock(FormFactoryInterface::class);
+            ->willReturn($this->createMock(ObjectRepository::class));
 
         return [
             new PreloadedExtension(
                 [
-                    B2bCustomerType::class => $this->formType,
-                    ContactSelectType::class => $contactEntityType,
+                    $this->formType,
+                    ContactSelectType::class => new EntityTypeStub([
+                        1 => $this->getEntity(Contact::class, ['first_name' => 'first name']),
+                        2 => $this->getEntity(Contact::class, ['first_name' => 'first name new']),
+                    ]),
                     EmailCollectionType::class => new EmailCollectionTypeStub(),
-                    EmailCollectionTypeParent::class => $emailEntityType,
+                    EmailCollectionTypeParent::class => new EntityTypeStub([
+                        1 => $this->getEntity(B2bCustomerEmail::class, ['email' => 'test@email.com']),
+                        2 => $this->getEntity(B2bCustomerEmail::class, ['email' => 'test_new@email.com']),
+                    ]),
                     PhoneCollectionType::class => new PhoneCollectionTypeStub(),
-                    PhoneCollectionTypeParent::class => $phoneEntityType,
-                    ChannelSelectType::class => new ChannelSelectType($channelsProvider),
-                    Select2EntityType::class => $channelEntityType,
-                    AddressType::class => new AddressType(
-                        new AddressCountryAndRegionSubscriber($objectManager, $formFactory),
+                    PhoneCollectionTypeParent::class => new EntityTypeStub([
+                        1 => $this->getEntity(B2bCustomerPhone::class, ['phone' => '12345678']),
+                        2 => $this->getEntity(B2bCustomerPhone::class, ['phone' => '87654321'])
+                    ]),
+                    ChannelSelectType::class => new ChannelSelectType(
+                        $this->createMock(ChannelsByEntitiesProvider::class)
+                    ),
+                    Select2EntityType::class => new EntityTypeStub(),
+                    new AddressType(
+                        new AddressCountryAndRegionSubscriber(
+                            $objectManager,
+                            $this->createMock(FormFactoryInterface::class)
+                        ),
                         new AddressIdentifierSubscriber()
                     ),
-                    CountryType::class => $countryEntityType,
-                    RegionType::class => $regionEntityType,
+                    CountryType::class => new EntityTypeStub(),
+                    RegionType::class => new EntityTypeStub(),
                 ],
                 [
                     FormType::class => [
