@@ -19,17 +19,11 @@ use Oro\Component\ChainProcessor\ProcessorInterface;
  */
 class UpdateActivityContactFields implements ProcessorInterface
 {
-    /** @var DoctrineHelper */
-    private $doctrineHelper;
-
-    /** @var ConfigManager */
-    private $configManager;
-
-    /** @var  ActivityContactProvider */
-    private $activityContactProvider;
-
+    private DoctrineHelper $doctrineHelper;
+    private ConfigManager $configManager;
+    private ActivityContactProvider $activityContactProvider;
     /** @var string[] */
-    private $excludedActions;
+    private array $excludedActions;
 
     /**
      * @param DoctrineHelper          $doctrineHelper
@@ -52,7 +46,7 @@ class UpdateActivityContactFields implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContextInterface $context)
+    public function process(ContextInterface $context): void
     {
         /** @var ConfigContext $context */
 
@@ -75,12 +69,7 @@ class UpdateActivityContactFields implements ProcessorInterface
         $this->updateFields($definition, $context->getTargetAction());
     }
 
-    /**
-     * @param string $entityClass
-     *
-     * @return bool
-     */
-    private function isSupportedEntity($entityClass)
+    private function isSupportedEntity(string $entityClass): bool
     {
         if (!$this->configManager->hasConfig($entityClass)) {
             // only extended entities are supported
@@ -108,11 +97,7 @@ class UpdateActivityContactFields implements ProcessorInterface
         return true;
     }
 
-    /**
-     * @param EntityDefinitionConfig $definition
-     * @param string|null            $targetAction
-     */
-    private function updateFields(EntityDefinitionConfig $definition, $targetAction)
+    private function updateFields(EntityDefinitionConfig $definition, ?string $targetAction): void
     {
         $renameMap = [
             ActivityScope::LAST_CONTACT_DATE     => 'lastContactedDate',
