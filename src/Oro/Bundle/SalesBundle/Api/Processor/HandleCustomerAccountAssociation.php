@@ -36,7 +36,7 @@ class HandleCustomerAccountAssociation implements ProcessorInterface, ServiceSub
     /**
      * {@inheritDoc}
      */
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return [
             ConfigProvider::class,
@@ -47,7 +47,7 @@ class HandleCustomerAccountAssociation implements ProcessorInterface, ServiceSub
     /**
      * {@inheritDoc}
      */
-    public function process(ContextInterface $context)
+    public function process(ContextInterface $context): void
     {
         /** @var CustomizeFormDataContext $context */
 
