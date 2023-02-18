@@ -196,7 +196,7 @@ dashboards:
             icon_class:  fa-pie-chart
             configuration_dialog_options:
                 resizable: true
-                minWidth: 780
+                minWidth: 375
             data_items:
                 in_progress:
                     data_provider: "@oro_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, inProgressCount, integer)"
