@@ -148,6 +148,8 @@ class ContactReasonTest extends RestJsonApiTestCase
 
     public function testCreate(): void
     {
+        $this->enableTwig();
+
         $data = [
             'data'     => [
                 'type'          => 'contactreasons',
