@@ -5249,7 +5249,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "53e07bb0d8dc98037a3287da53b61dedaf1e9b39"
+                "reference": "8a70eae582bc64a3dccc1ff4611dddb51c0c8df6"
             },
             "require": {
                 "ass/xmlsecurity": "1.1.1",

@@ -78,5 +78,11 @@
         "branch-alias": {
             "dev-master": "5.1-dev"
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": false,
+            "symfony/runtime": false
+        }
     }
 }
