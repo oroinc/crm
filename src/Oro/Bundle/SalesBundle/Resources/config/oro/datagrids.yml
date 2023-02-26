@@ -100,10 +100,10 @@ datagrids:
                 label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
             status:
-                context:
-                    enum_code: opportunity_status
-                frontend_type: enum
                 label:         oro.sales.opportunity.status.label
+                frontend_type: select
+                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+                translatable_options: false
             primaryEmail:
                 label:         oro.contact.email.label
             ownerName:
@@ -224,6 +224,7 @@ datagrids:
                     options:
                         field_options:
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            translatable_options: false
                             multiple: true
                     renderable: false
                 closeReasonLabel:
@@ -248,6 +249,7 @@ datagrids:
                     options:
                         field_options:
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            translatable_options: false
                             multiple: true
                 probability:
                     type: percent
@@ -374,10 +376,10 @@ datagrids:
             name:
                 label:         oro.sales.lead.name.label
             status:
-                context:
-                    enum_code: lead_status
-                frontend_type: enum
                 label:         oro.sales.lead.status.label
+                frontend_type: select
+                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+                translatable_options: false
             firstName:
                 label:         oro.sales.lead.first_name.label
             lastName:
@@ -406,10 +408,10 @@ datagrids:
                 frontend_type: integer
                 renderable: false
             source:
-                context:
-                    enum_code: lead_source
-                frontend_type: enum
                 label:         oro.sales.lead.source.label
+                frontend_type: select
+                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_source')"
+                translatable_options: false
                 renderable: false
             email:
                 label:         oro.sales.lead.email.label
@@ -1141,6 +1143,7 @@ datagrids:
                 frontend_type: select
                 label:         oro.sales.lead.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+                translatable_options: false
             firstName:
                 label:         oro.sales.lead.first_name.label
             lastName:
@@ -1249,6 +1252,7 @@ datagrids:
                     options:
                         field_options:
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            translatable_options: false
                             multiple: true
                 probability:
                     type: percent
@@ -1348,6 +1352,7 @@ datagrids:
                 frontend_type: select
                 label:         oro.sales.opportunity.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+                translatable_options: false
             primaryEmail:
                 label:         oro.contact.email.label
         sorters:
@@ -1407,6 +1412,7 @@ datagrids:
                 frontend_type: select
                 label:         oro.sales.lead.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+                translatable_options: false
             firstName:
                 label:         oro.sales.lead.first_name.label
             lastName:
@@ -1489,6 +1495,7 @@ datagrids:
                 frontend_type: select
                 label:         oro.sales.opportunity.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+                translatable_options: false
             primaryEmail:
                 label:         oro.contact.email.label
             ownerName:
@@ -1639,6 +1646,7 @@ datagrids:
                 frontend_type: select
                 label:         oro.sales.opportunity.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+                translatable_options: false
             probability:
                 label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
@@ -1693,6 +1701,7 @@ datagrids:
                 frontend_type: select
                 label:         oro.sales.lead.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+                translatable_options: false
         options:
             entityHint: oro.sales.opportunity.entity_plural_label
             toolbarOptions:
@@ -1777,6 +1786,7 @@ datagrids:
                     options:
                         field_options:
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            translatable_options: false
                             multiple: true
                 probability:
                     type: percent
@@ -1823,6 +1833,7 @@ datagrids:
                 frontend_type: select
                 label:         oro.sales.opportunity.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+                translatable_options: false
             closeDate:
                 label:         oro.sales.opportunity.close_date.label
                 frontend_type: date
@@ -1878,6 +1889,7 @@ datagrids:
                 frontend_type: select
                 label:         oro.sales.lead.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+                translatable_options: false
             firstName:
                 label:         oro.sales.lead.first_name.label
             lastName:
