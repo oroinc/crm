@@ -232,7 +232,7 @@ datagrids:
         mass_actions:
             merge:
                 type: merge
-                entity_name: 'Oro\Bundle\AccountBundle\Entity\Account'
+                entity_name: Oro\Bundle\AccountBundle\Entity\Account
                 data_identifier: a.id
         options:
             entityHint: oro.account.entity_plural_label
