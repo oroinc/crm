@@ -27,6 +27,8 @@ services:
             - "@oro_activity_contact.provider"
             - "@oro_entity.doctrine_helper"
             - "@oro_entity_config.config_manager"
+        calls:
+            - ['setChangedTargetsBag', ['@oro_activity_contact.activity_listener.changed_targets_bag']]
         tags:
             - { name: kernel.event_listener, event: oro_activity.add_activity, method: onAddActivity }
             - { name: kernel.event_listener, event: oro_activity.remove_activity, method: onRemoveActivity }
@@ -56,3 +58,8 @@ services:
         class: Oro\Bundle\ActivityContactBundle\Placeholder\PlaceholderFilter
         public: true
         parent: oro_activity_list.placeholder.filter
+
+    oro_activity_contact.activity_listener.changed_targets_bag:
+        class: Oro\Bundle\ActivityContactBundle\Tools\ActivityListenerChangedTargetsBag
+        arguments:
+            - "@oro_entity.doctrine_helper"
