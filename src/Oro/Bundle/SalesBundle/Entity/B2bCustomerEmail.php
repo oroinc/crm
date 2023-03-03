@@ -3,8 +3,10 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomerEmail;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
  * Entity holds one email of Business Customer. Will be used in collection of emails and can be marked as primary.
@@ -33,8 +35,10 @@ use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomerEmail;
  *      }
  * )
  */
-class B2bCustomerEmail extends ExtendB2bCustomerEmail
+class B2bCustomerEmail extends AbstractEmail implements ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     /**
      * @ORM\ManyToOne(targetEntity="B2bCustomer", inversedBy="emails")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")

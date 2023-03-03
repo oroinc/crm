@@ -3,13 +3,13 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\DataTransformer;
 
 use Oro\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
+use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Test\FormInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
 {

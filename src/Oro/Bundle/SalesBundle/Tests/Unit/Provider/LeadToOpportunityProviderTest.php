@@ -7,6 +7,7 @@ use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
+use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Bundle\SalesBundle\Entity\LeadAddress;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
@@ -15,7 +16,6 @@ use Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub as Lead;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub as Opportunity;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
 {

@@ -16,6 +16,7 @@ use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
+use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Bundle\FormBundle\Form\Extension\AdditionalAttrExtension;
 use Oro\Bundle\FormBundle\Form\Type\Select2EntityType;
 use Oro\Bundle\FormBundle\Tests\Unit\Stub\StripTagsExtensionStub;
@@ -33,7 +34,6 @@ use Oro\Component\Testing\Unit\FormIntegrationTestCase;
 use Oro\Component\Testing\Unit\PreloadedExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class B2bCustomerTypeTest extends FormIntegrationTestCase
 {
@@ -44,7 +44,7 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
 
     protected function setUp(): void
     {
-        $this->formType = new B2bCustomerType(new PropertyAccessor());
+        $this->formType = new B2bCustomerType(PropertyAccess::createPropertyAccessor());
         parent::setUp();
     }
 

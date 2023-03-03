@@ -4,8 +4,8 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class RFMMetricCategoryTest extends \PHPUnit\Framework\TestCase
 {

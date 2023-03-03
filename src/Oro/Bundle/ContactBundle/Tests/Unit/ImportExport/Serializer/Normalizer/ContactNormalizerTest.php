@@ -7,8 +7,8 @@ use Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
 use Oro\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use Oro\Bundle\ContactBundle\Model\Social;
 use Oro\Bundle\EntityBundle\Helper\FieldHelper;
+use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Bundle\ImportExportBundle\Tests\Unit\Strategy\Stub\ImportEntity;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
 {

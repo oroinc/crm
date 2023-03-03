@@ -3,8 +3,10 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\SalesBundle\Model\ExtendLeadPhone;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
  * Lead phone entity
@@ -33,8 +35,10 @@ use Oro\Bundle\SalesBundle\Model\ExtendLeadPhone;
  *      }
  * )
  */
-class LeadPhone extends ExtendLeadPhone
+class LeadPhone extends AbstractPhone implements ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     /**
      * @ORM\ManyToOne(targetEntity="Lead", inversedBy="phones")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")

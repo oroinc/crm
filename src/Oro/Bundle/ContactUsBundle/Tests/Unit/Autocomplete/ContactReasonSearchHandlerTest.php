@@ -12,8 +12,8 @@ use Oro\Bundle\ContactUsBundle\Autocomplete\ContactReasonSearchHandler;
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\ContactUsBundle\Tests\Unit\Stub\ContactReasonStub;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Component\Testing\ReflectionUtil;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ContactReasonSearchHandlerTest extends \PHPUnit\Framework\TestCase
 {

@@ -4,16 +4,21 @@ namespace Oro\Bundle\TestFrameworkCRMBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\TestFrameworkBundle\Entity\TestFrameworkEntityInterface;
-use Oro\Bundle\TestFrameworkCRMBundle\Model\ExtendTestCustomer2;
 
 /**
+ * Store test customer number 2.
+ *
  * @ORM\Table(name="test_customer2")
  * @ORM\Entity
  * @Config
  */
-class TestCustomer2 extends ExtendTestCustomer2 implements TestFrameworkEntityInterface
+class TestCustomer2 implements TestFrameworkEntityInterface, ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     /**
      * @var integer
      *

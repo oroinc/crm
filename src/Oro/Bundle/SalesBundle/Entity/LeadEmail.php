@@ -3,9 +3,11 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
 use Oro\Bundle\EmailBundle\Entity\EmailInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\SalesBundle\Model\ExtendLeadEmail;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
  * Lead email entity
@@ -33,8 +35,10 @@ use Oro\Bundle\SalesBundle\Model\ExtendLeadEmail;
  *      }
  * )
  */
-class LeadEmail extends ExtendLeadEmail implements EmailInterface
+class LeadEmail extends AbstractEmail implements ExtendEntityInterface, EmailInterface
 {
+    use ExtendEntityTrait;
+
     /**
      * @ORM\ManyToOne(targetEntity="Lead", inversedBy="emails")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")

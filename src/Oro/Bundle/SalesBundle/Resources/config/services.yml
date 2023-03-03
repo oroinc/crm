@@ -422,10 +422,10 @@ services:
         tags:
             - { name: oro_entity_extend.entity_config_dumper_extension }
 
-    oro_sales.entity_generator.customer_extension:
-        class: Oro\Bundle\SalesBundle\Tools\CustomerGeneratorExtension
+    oro_sales.entity_field.customer_extension:
+        class: Oro\Bundle\SalesBundle\EntityExtend\CustomerEntityFieldExtension
         tags:
-            - { name: oro_entity_extend.entity_generator_extension }
+            - { name: 'oro_entity_extend.entity_field_extension', priority: 20 }
 
     oro_sales.migration.extension.customer:
         class: Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtension
@@ -531,6 +531,10 @@ services:
             - '@oro_entity.doctrine_helper'
             - '@oro_sales.customer.config_provider'
             - '@oro_sales.provider.customer.account_creation'
+            - '@oro_sales.factory.customer_factory'
+
+    oro_sales.factory.customer_factory:
+        class: Oro\Bundle\SalesBundle\Entity\Factory\CustomerFactory
 
     Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager:
         alias: oro_sales.manager.account_customer
