@@ -3,9 +3,10 @@
 namespace Oro\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\ContactBundle\Model\ExtendGroup;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -36,8 +37,10 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      }
  * )
  */
-class Group extends ExtendGroup
+class Group implements ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
@@ -77,8 +80,6 @@ class Group extends ExtendGroup
      */
     public function __construct($label = null)
     {
-        parent::__construct();
-
         $this->label = $label;
     }
 

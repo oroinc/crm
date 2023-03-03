@@ -10,8 +10,6 @@ class CustomerStub extends Customer
 
     public function __construct($id = null)
     {
-        parent::__construct();
-
         $this->id = $id;
     }
 

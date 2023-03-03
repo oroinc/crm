@@ -5,11 +5,12 @@ namespace Oro\Bundle\AccountBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\AccountBundle\Model\ExtendAccount;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\LocaleBundle\Model\NameInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -68,8 +69,10 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      }
  * )
  */
-class Account extends ExtendAccount implements EmailHolderInterface, NameInterface
+class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -220,8 +223,6 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
 
     public function __construct()
     {
-        parent::__construct();
-
         $this->contacts = new ArrayCollection();
     }
 

@@ -6,7 +6,7 @@ use Doctrine\ORM\Query\Expr\Join;
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\FormBundle\Autocomplete\SearchHandlerInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * ORM search for contact reasons by default title
@@ -16,13 +16,13 @@ class ContactReasonSearchHandler implements SearchHandlerInterface
     /** @var DoctrineHelper */
     private $doctrineHelper;
 
-    /** @var PropertyAccessor */
+    /** @var PropertyAccessorInterface */
     private $propertyAccessor;
 
     /** @var array */
     private $displayFields = ['defaultTitle'];
 
-    public function __construct(DoctrineHelper $doctrineHelper, PropertyAccessor $propertyAccessor)
+    public function __construct(DoctrineHelper $doctrineHelper, PropertyAccessorInterface $propertyAccessor)
     {
         $this->doctrineHelper = $doctrineHelper;
         $this->propertyAccessor = $propertyAccessor;

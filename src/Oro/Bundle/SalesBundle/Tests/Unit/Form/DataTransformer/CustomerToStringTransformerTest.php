@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\DataTransformer;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Entity\Factory\CustomerFactory;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Form\DataTransformer\CustomerToStringTransformer;
 use Oro\Component\Testing\ReflectionUtil;
@@ -21,14 +22,21 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerToStringTransformer */
     private $transformer;
 
+    /** @var CustomerFactory|\PHPUnit\Framework\MockObject\MockObject  */
+    private $customerFactory;
+
     protected function setUp(): void
     {
         $this->entityToStringTransformer = $this->createMock(DataTransformerInterface::class);
         $this->accountCustomerManager = $this->createMock(AccountCustomerManager::class);
+        $this->customerFactory = $this->getMockBuilder(CustomerFactory::class)
+            ->onlyMethods(['createCustomer'])
+            ->getMock();
 
         $this->transformer = new CustomerToStringTransformer(
             $this->entityToStringTransformer,
-            $this->accountCustomerManager
+            $this->accountCustomerManager,
+            $this->customerFactory
         );
     }
 
@@ -75,8 +83,8 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
 
         $account = new Account();
         $account->setName($accountName);
-        $customer = (new Customer())->setTarget($account);
-
+        $customer = $this->getMockBuilder(Customer::class)->addMethods(['setCustomerTarget'])->getMock();
+        $this->customerFactory->expects($this->once())->method('createCustomer')->willReturn($customer);
         $this->entityToStringTransformer->expects(self::never())
             ->method('reverseTransform');
         $this->accountCustomerManager->expects(self::never())
@@ -92,7 +100,8 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
 
         $account = new Account();
         ReflectionUtil::setId($account, $accountId);
-        $customer = (new Customer())->setTarget($account);
+        $customer = $this->getMockBuilder(Customer::class)->onlyMethods(['setTarget'])->getMock();
+        $this->customerFactory->expects($this->never())->method('createCustomer');
 
         $this->entityToStringTransformer->expects(self::once())
             ->method('reverseTransform')
@@ -105,19 +114,22 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
         /** @var Customer $result */
         $result = $this->transformer->reverseTransform($value);
         self::assertSame($customer, $result);
-        self::assertSame($account, $result->getAccount());
     }
 
     public function testTransformForCustomerEntity(): void
     {
         $account = new Account();
-        $customer = (new Customer())->setTarget($account);
+        $customer = $this->getMockBuilder(Customer::class)
+            ->onlyMethods(['getTarget'])
+            ->addMethods(['getCustomerTarget'])
+            ->getMock();
         $transformedValue = 'transformedValue';
 
         $this->entityToStringTransformer->expects(self::once())
             ->method('transform')
             ->with(self::identicalTo($account))
             ->willReturn($transformedValue);
+        $customer->expects($this->once())->method('getTarget')->willReturn($account);
 
         self::assertEquals($transformedValue, $this->transformer->transform($customer));
     }

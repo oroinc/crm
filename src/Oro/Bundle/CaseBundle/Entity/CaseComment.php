@@ -3,11 +3,15 @@
 namespace Oro\Bundle\CaseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\CaseBundle\Model\ExtendCaseComment;
+use Oro\Bundle\CommentBundle\Entity\BaseComment;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
+ * Store case comment in database.
+ *
  * @ORM\Entity()
  * @ORM\Table(name="orocrm_case_comment")
  * @ORM\HasLifecycleCallbacks()
@@ -34,8 +38,10 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      }
  * )
  */
-class CaseComment extends ExtendCaseComment
+class CaseComment extends BaseComment implements ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     /**
      * @var CaseEntity
      *

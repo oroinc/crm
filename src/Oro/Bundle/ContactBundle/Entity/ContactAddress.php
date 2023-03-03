@@ -4,9 +4,11 @@ namespace Oro\Bundle\ContactBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\ContactBundle\Model\ExtendContactAddress;
+use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
  * Contact address entity
@@ -30,8 +32,10 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  * )
  * @ORM\Entity
  */
-class ContactAddress extends ExtendContactAddress
+class ContactAddress extends AbstractTypedAddress implements ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     /**
      * @ORM\ManyToOne(targetEntity="Contact", inversedBy="addresses", cascade={"persist"})
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")

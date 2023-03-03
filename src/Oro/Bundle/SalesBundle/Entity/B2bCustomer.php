@@ -12,8 +12,9 @@ use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomer;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
@@ -73,10 +74,12 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class B2bCustomer extends ExtendB2bCustomer implements
-    ChannelAwareInterface
+class B2bCustomer implements
+    ChannelAwareInterface,
+    ExtendEntityInterface
 {
     use ChannelEntityTrait;
+    use ExtendEntityTrait;
 
     /**
      * @var integer
@@ -300,10 +303,8 @@ class B2bCustomer extends ExtendB2bCustomer implements
      */
     public function __construct()
     {
-        parent::__construct();
-
-        $this->phones        = new ArrayCollection();
-        $this->emails        = new ArrayCollection();
+        $this->phones = new ArrayCollection();
+        $this->emails = new ArrayCollection();
     }
 
     /**

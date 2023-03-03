@@ -9,10 +9,11 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
-use Oro\Bundle\ContactBundle\Model\ExtendContact;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -84,8 +85,10 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class Contact extends ExtendContact implements EmailOwnerInterface
+class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     /*
      * Fields have to be duplicated here to enable dataaudit only for contact
      */
@@ -761,6 +764,7 @@ class Contact extends ExtendContact implements EmailOwnerInterface
         if ($this->defaultInAccounts) {
             $this->defaultInAccounts = clone $this->defaultInAccounts;
         }
+        $this->cloneExtendEntityStorage();
     }
 
     /**

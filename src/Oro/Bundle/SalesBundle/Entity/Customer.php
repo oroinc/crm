@@ -6,7 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\SalesBundle\Model\ExtendCustomer;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
  * Entity represents Sales Customer and handles all related mappings
@@ -17,9 +18,15 @@ use Oro\Bundle\SalesBundle\Model\ExtendCustomer;
  *      mode="hidden"
  * )
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository")
+ *
+ * @method Customer supportCustomerTarget($targetClass)
+ * @method Customer getCustomerTarget()
+ * @method Customer setCustomerTarget()
  */
-class Customer extends ExtendCustomer
+class Customer implements ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     /**
      * @var integer
      *
@@ -65,6 +72,11 @@ class Customer extends ExtendCustomer
     public function getAccount()
     {
         return $this->account;
+    }
+
+    public function setAccount(Account $account): void
+    {
+        $this->account = $account;
     }
 
     /**
