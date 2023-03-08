@@ -3,11 +3,11 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\ImportExport\Helper;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Component\TestUtils\ORM\Mocks\EntityManagerMock;
 use Oro\Component\TestUtils\ORM\OrmTestCase;
 
 class ChannelHelperTest extends OrmTestCase
@@ -16,11 +16,8 @@ class ChannelHelperTest extends OrmTestCase
     private const TEST_INTEGRATION_ID_WITHOUT_CHANNEL = 2;
     private const TEST_CHANNEL_ID = 2;
 
-    /** @var EntityManagerMock */
-    private $em;
-
-    /** @var ChannelHelper */
-    private $helper;
+    private EntityManagerInterface $em;
+    private ChannelHelper $helper;
 
     protected function setUp(): void
     {

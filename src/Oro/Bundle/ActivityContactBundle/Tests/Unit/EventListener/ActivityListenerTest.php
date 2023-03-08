@@ -6,6 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
@@ -24,7 +25,6 @@ use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Component\Testing\Unit\EntityTrait;
 use Oro\Component\Testing\Unit\TestContainerBuilder;
-use Oro\Component\TestUtils\ORM\Mocks\UnitOfWork;
 
 class ActivityListenerTest extends \PHPUnit\Framework\TestCase
 {
@@ -35,9 +35,6 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
 
     /** @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $config;
-
-    /** @var ActivityListenerChangedTargetsBag|\PHPUnit\Framework\MockObject\MockObject */
-    private $changedTargets;
 
     /** @var TestTarget */
     private $testTarget;
@@ -52,7 +49,6 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->config = $this->createMock(ConfigInterface::class);
-        $this->changedTargets = new ActivityListenerChangedTargetsBag($this->doctrineHelper);
 
         $providers = TestContainerBuilder::create()
             ->add(TestActivity::class, new TestDirectionProvider())
@@ -74,8 +70,7 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
             $this->doctrineHelper,
             $configManager
         );
-
-        $this->listener->setChangedTargetsBag($this->changedTargets);
+        $this->listener->setChangedTargetsBag(new ActivityListenerChangedTargetsBag($this->doctrineHelper));
     }
 
     /**
@@ -237,9 +232,11 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
         $uow = $this->createMock(UnitOfWork::class);
 
         $onFlushEvent = $this->createMock(OnFlushEventArgs::class);
-        $onFlushEvent->method('getEntityManager')
+        $onFlushEvent->expects($this->any())
+            ->method('getEntityManager')
             ->willReturn($em);
-        $em->method('getUnitOfWork')
+        $em->expects($this->any())
+            ->method('getUnitOfWork')
             ->willReturn($uow);
         $uow->expects(self::once())
             ->method('getScheduledEntityUpdates')
@@ -247,16 +244,19 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
         $uow->expects(self::once())
             ->method('getScheduledEntityDeletions')
             ->willReturn([]);
-        $uow->method('getEntityChangeSet')
+        $uow->expects($this->any())
+            ->method('getEntityChangeSet')
             ->willReturnCallback(function ($entity) use ($changeSets) {
                 return $changeSets[$entity->getId()] ?? [];
             });
-        $this->doctrineHelper
+        $this->doctrineHelper->expects($this->any())
             ->method('getEntityIdentifierFieldNamesForClass')
             ->willReturnCallback(fn ($class) => Email::class === $class ? [true] : []);
-        $this->doctrineHelper->method('getEntityClass')
+        $this->doctrineHelper->expects($this->any())
+            ->method('getEntityClass')
             ->willReturnCallback(fn ($entity) => $entity::class);
-        $this->doctrineHelper->method('getSingleEntityIdentifier')
+        $this->doctrineHelper->expects($this->any())
+            ->method('getSingleEntityIdentifier')
             ->willReturnCallback(fn ($entity) => $entity->getId());
         $this->config->expects(self::once())
             ->method('is')
@@ -266,7 +266,8 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
         $em2 = $this->createMock(EntityManager::class);
         $accountRepository = $this->createMock(ServiceEntityRepository::class);
         $postFlushEvent = $this->createMock(PostFlushEventArgs::class);
-        $postFlushEvent->method('getEntityManager')
+        $postFlushEvent->expects($this->any())
+            ->method('getEntityManager')
             ->willReturn($em2);
         $em2->expects(self::once())
             ->method('persist')
