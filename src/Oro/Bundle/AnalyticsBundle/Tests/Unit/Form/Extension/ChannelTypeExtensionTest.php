@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension;
 use Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
@@ -16,7 +17,6 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\Testing\ReflectionUtil;
-use Oro\Component\TestUtils\ORM\Mocks\UnitOfWork;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
@@ -328,11 +328,10 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
 
     private function getCollection(array $items = []): PersistentCollection
     {
-        $uow = new UnitOfWork();
         $em = $this->createMock(EntityManager::class);
         $em->expects($this->any())
             ->method('getUnitOfWork')
-            ->willReturn($uow);
+            ->willReturn($this->createMock(UnitOfWork::class));
 
         $metadata = $this->createMock(ClassMetadata::class);
 
