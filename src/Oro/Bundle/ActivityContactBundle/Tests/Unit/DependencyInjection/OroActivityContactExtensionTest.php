@@ -7,11 +7,14 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class OroActivityContactExtensionTest extends \PHPUnit\Framework\TestCase
 {
-    public function testLoad()
+    public function testLoad(): void
     {
-        $configuration = new ContainerBuilder();
-        $loader        = new OroActivityContactExtension();
-        $loader->load([], $configuration);
-        $this->assertTrue($configuration instanceof ContainerBuilder);
+        $container = new ContainerBuilder();
+        $container->setParameter('kernel.environment', 'prod');
+
+        $extension = new OroActivityContactExtension();
+        $extension->load([], $container);
+
+        self::assertNotEmpty($container->getDefinitions());
     }
 }

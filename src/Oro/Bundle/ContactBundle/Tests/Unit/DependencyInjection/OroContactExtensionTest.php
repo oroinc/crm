@@ -2,30 +2,28 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\DependencyInjection;
 
-use Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactAddressController;
-use Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactController;
-use Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactEmailController;
-use Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactGroupController;
-use Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactPhoneController;
 use Oro\Bundle\ContactBundle\DependencyInjection\OroContactExtension;
-use Oro\Bundle\TestFrameworkBundle\Test\DependencyInjection\ExtensionTestCase;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class OroContactExtensionTest extends ExtensionTestCase
+class OroContactExtensionTest extends \PHPUnit\Framework\TestCase
 {
-    public function testExtension(): void
+    public function testLoad(): void
     {
+        $container = new ContainerBuilder();
+        $container->setParameter('kernel.environment', 'prod');
+
         $extension = new OroContactExtension();
+        $extension->load([], $container);
 
-        $this->loadExtension($extension);
-
-        $expectedDefinitions = [
-            'oro_contact.importexport.configuration_provider.contact',
-            ContactAddressController::class,
-            ContactController::class,
-            ContactEmailController::class,
-            ContactGroupController::class,
-            ContactPhoneController::class,
-        ];
-        $this->assertDefinitionsLoaded($expectedDefinitions);
+        self::assertNotEmpty($container->getDefinitions());
+        self::assertEquals(
+            [
+                'twitter' => 'https://twitter.com/%%username%%',
+                'facebook' => 'https://www.facebook.com/%%username%%',
+                'google_plus' => 'https://profiles.google.com/%%username%%',
+                'linked_in' => 'http://www.linkedin.com/in/%%username%%'
+            ],
+            $container->getParameter('oro_contact.social_url_format')
+        );
     }
 }

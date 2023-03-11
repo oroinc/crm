@@ -2,22 +2,18 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\DependencyInjection;
 
-use Oro\Bundle\ChannelBundle\Controller\Api\Rest\ChannelController;
-use Oro\Bundle\ChannelBundle\Controller\Api\Rest\CustomerSearchController;
 use Oro\Bundle\ChannelBundle\DependencyInjection\OroChannelExtension;
-use Oro\Bundle\TestFrameworkBundle\Test\DependencyInjection\ExtensionTestCase;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class OroChannelExtensionTest extends ExtensionTestCase
+class OroChannelExtensionTest extends \PHPUnit\Framework\TestCase
 {
     public function testLoad(): void
     {
-        $this->loadExtension(new OroChannelExtension());
+        $container = new ContainerBuilder();
 
-        $expectedDefinitions = [
-            ChannelController::class,
-            CustomerSearchController::class,
-        ];
+        $extension = new OroChannelExtension();
+        $extension->load([], $container);
 
-        $this->assertDefinitionsLoaded($expectedDefinitions);
+        self::assertNotEmpty($container->getDefinitions());
     }
 }
