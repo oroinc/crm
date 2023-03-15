@@ -3,8 +3,11 @@
 namespace Oro\Bundle\SalesBundle\Handler;
 
 use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApiHandler;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 
+/**
+ * Opportunity api handler.
+ */
 class OpportunityApiHandler extends AbstractEntityApiHandler
 {
     const ENTITY_CLASS = 'Oro\Bundle\SalesBundle\Entity\Opportunity';

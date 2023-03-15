@@ -11,15 +11,18 @@ use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use Oro\Bundle\ActivityContactBundle\Tools\ActivityListenerChangedTargetsBag;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * Recalculates and updates contact information, depends on 'activity' actions.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ActivityListener
 {
@@ -38,6 +41,8 @@ class ActivityListener
     /** @var ConfigManager */
     protected $configManager;
 
+    protected ?ActivityListenerChangedTargetsBag $changedTargetsBag = null;
+
     public function __construct(
         ActivityContactProvider $activityContactProvider,
         DoctrineHelper $doctrineHelper,
@@ -46,6 +51,11 @@ class ActivityListener
         $this->activityContactProvider = $activityContactProvider;
         $this->doctrineHelper          = $doctrineHelper;
         $this->configManager           = $configManager;
+    }
+
+    public function setChangedTargetsBag(ActivityListenerChangedTargetsBag $changedTargetsBag): void
+    {
+        $this->changedTargetsBag = $changedTargetsBag;
     }
 
     /**
@@ -178,6 +188,8 @@ class ActivityListener
                 }
             }
 
+            $this->changedTargetsBag->add($entitiesToUpdate, $args->getEntityManager()->getUnitOfWork());
+
             foreach ($entitiesToUpdate as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
                 if (!$this->isSupportedClass($class)) {
@@ -197,6 +209,10 @@ class ActivityListener
                     $targets     = $entity->getActivityTargets();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
+                        if (!$this->changedTargetsBag->isChanged($target)) {
+                            continue;
+                        }
+
                         $targetClassName = ClassUtils::getClass($target);
                         if (!TargetExcludeList::isExcluded($targetClassName) &&
                             $extendProvider->getConfig($targetClassName)->is('is_extend')) {
@@ -204,7 +220,6 @@ class ActivityListener
                                 'class' => $this->doctrineHelper->getEntityClass($target),
                                 'id' => $this->doctrineHelper->getSingleEntityIdentifier($target),
                                 'direction' => $this->activityContactProvider->getActivityDirection($entity, $target),
-                                'is_direction_changed' => $isDirectionChanged
                             ];
                         }
                     }
@@ -214,6 +229,10 @@ class ActivityListener
                         'contactDate' => $this->activityContactProvider->getActivityDate($entity),
                         'targets'     => $targetsInfo
                     ];
+
+                    if ($isDirectionChanged) {
+                        $this->changeTargetsDirections($entity, $targets, $args->getEntityManager());
+                    }
                 }
             }
         }
@@ -294,7 +313,6 @@ class ActivityListener
         foreach ($this->updatedEntities as $activityData) {
             foreach ($activityData['targets'] as $targetInfo) {
                 $direction          = $targetInfo['direction'];
-                $isDirectionChanged = $targetInfo['is_direction_changed'];
                 $target             = $em->getRepository($targetInfo['class'])->find($targetInfo['id']);
                 /** process dates */
                 if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
@@ -323,26 +341,36 @@ class ActivityListener
                     );
                 }
 
-                /** process counts (in case direction was changed) */
-                if ($isDirectionChanged) {
-                    list($oldDirection, $newDirection) = $this->getDirectionProperties($direction, $isDirectionChanged);
-                    $accessor->setValue(
-                        $target,
-                        $newDirection,
-                        (int)$accessor->getValue($target, $newDirection) + 1
-                    );
-                    $accessor->setValue(
-                        $target,
-                        $oldDirection,
-                        (int)$accessor->getValue($target, $oldDirection) - 1
-                    );
-                }
-
                 $em->persist($target);
             }
         }
 
         $this->updatedEntities = [];
+        $this->changedTargetsBag->clear();
+    }
+
+    protected function changeTargetsDirections(object $activity, array $targets, EntityManager $em): void
+    {
+        $accessor = PropertyAccess::createPropertyAccessor();
+
+        /** process counts (in case direction was changed) */
+        foreach ($targets as $target) {
+            $activityDirection = $this->activityContactProvider->getActivityDirection($activity, $target);
+
+            list($oldDirection, $newDirection) = $this->getDirectionProperties($activityDirection, true);
+            $accessor->setValue(
+                $target,
+                $newDirection,
+                (int)$accessor->getValue($target, $newDirection) + 1
+            );
+            $accessor->setValue(
+                $target,
+                $oldDirection,
+                (int)$accessor->getValue($target, $oldDirection) - 1
+            );
+
+            $em->persist($target);
+        }
     }
 
     /**

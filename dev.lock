@@ -5249,7 +5249,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "8a70eae582bc64a3dccc1ff4611dddb51c0c8df6"
+                "reference": "69f108aa47e351ad13b2a991f8682f0b025b2e2b"
             },
             "require": {
                 "ass/xmlsecurity": "1.1.1",
@@ -5441,7 +5441,7 @@
                     "@oroinc/bootstrap": "4.3.1-oro2",
                     "popper.js": "1.16.1",
                     "asap": "2.0.6",
-                    "slick-carousel": "1.7.1",
+                    "@oroinc/slick-carousel": "1.7.1-oro1",
                     "xregexp": "^5.1.0",
                     "scriptjs": "2.5.9",
                     "focus-visible": "5.2.0",

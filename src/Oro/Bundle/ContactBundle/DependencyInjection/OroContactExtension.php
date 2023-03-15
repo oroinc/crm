@@ -9,18 +9,18 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class OroContactExtension extends Extension
 {
-    const PARAMETER_SOCIAL_URL_FORMAT = 'oro_contact.social_url_format';
+    private const PARAMETER_SOCIAL_URL_FORMAT = 'oro_contact.social_url_format';
 
     /**
      * {@inheritDoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
-        $config = $this->processConfiguration(new Configuration(), $configs);
+        $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
         $container->setParameter(self::PARAMETER_SOCIAL_URL_FORMAT, $config['social_url_format']);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('services_api.yml');
         $loader->load('importexport.yml');

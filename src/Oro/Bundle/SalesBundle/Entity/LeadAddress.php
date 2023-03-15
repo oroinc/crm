@@ -3,10 +3,12 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\FormBundle\Entity\PrimaryItem;
-use Oro\Bundle\SalesBundle\Model\ExtendLeadAddress;
 
 /**
  * Lead address entity
@@ -27,8 +29,10 @@ use Oro\Bundle\SalesBundle\Model\ExtendLeadAddress;
  * )
  * @ORM\Entity
  */
-class LeadAddress extends ExtendLeadAddress implements PrimaryItem
+class LeadAddress extends AbstractAddress implements PrimaryItem, ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     /**
      * @ORM\ManyToOne(targetEntity="Lead", inversedBy="addresses", cascade={"persist"})
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
@@ -58,7 +62,6 @@ class LeadAddress extends ExtendLeadAddress implements PrimaryItem
 
     public function __construct()
     {
-        parent::__construct();
         $this->primary = false;
     }
 

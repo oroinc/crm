@@ -11,9 +11,11 @@ use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\SalesBundle\Model\ExtendLead;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
@@ -78,12 +80,18 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ *
+ * @method AbstractEnumValue getStatus()
+ * @method Opportunity setStatus(AbstractEnumValue $status)
  */
-class Lead extends ExtendLead implements
+class Lead implements
     FullNameInterface,
     EmailHolderInterface,
-    EmailOwnerInterface
+    EmailOwnerInterface,
+    ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     const INTERNAL_STATUS_CODE = 'lead_status';
 
     /**
@@ -482,8 +490,6 @@ class Lead extends ExtendLead implements
 
     public function __construct()
     {
-        parent::__construct();
-
         $this->opportunities = new ArrayCollection();
         $this->phones   = new ArrayCollection();
         $this->emails   = new ArrayCollection();

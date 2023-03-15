@@ -7,6 +7,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Entity\Factory\CustomerFactory;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
@@ -32,16 +33,23 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
     /** @var AccountCustomerManager */
     private $manager;
 
+    /** @var CustomerFactory|\PHPUnit\Framework\MockObject\MockObject */
+    private $customerFactory;
+
     protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->configProvider = $this->createMock(ConfigProvider::class);
         $this->accountProvider = $this->createMock(AccountProviderInterface::class);
+        $this->customerFactory = $this->getMockBuilder(CustomerFactory::class)
+            ->onlyMethods(['createCustomer'])
+            ->getMock();
 
         $this->manager = new AccountCustomerManager(
             $this->doctrineHelper,
             $this->configProvider,
-            $this->accountProvider
+            $this->accountProvider,
+            $this->customerFactory
         );
     }
 
@@ -95,10 +103,14 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerClasses');
         $this->doctrineHelper->expects(self::never())
             ->method('getEntityRepository');
+        $customerMock = $this->getMockBuilder(Customer::class)
+            ->onlyMethods(['setTarget'])
+            ->getMock();
+        $customerMock->expects($this->never())
+            ->method('setTarget');
 
         $customer = $this->manager->getAccountCustomerByTarget($target);
         self::assertNull($customer->getId());
-        self::assertEquals($target, $customer->getAccount());
     }
 
     public function testGetAccountCustomerByTargetWhenTargetIsExistingAccountAndAssociationDoesNotExist(): void
@@ -125,10 +137,18 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
                 [AccountCustomerManager::getCustomerTargetField(TargetEntity::class)]
             )
             ->willReturn(null);
+        $customerMock = $this->getMockBuilder(Customer::class)
+            ->onlyMethods(['setTarget'])
+            ->getMock();
+        $customerMock->expects($this->once())
+            ->method('setTarget')
+            ->with($target, null);
+        $this->customerFactory->expects($this->once())
+            ->method('createCustomer')
+            ->willReturn($customerMock);
 
         $customer = $this->manager->getAccountCustomerByTarget($target);
         self::assertNull($customer->getId());
-        self::assertEquals($target, $customer->getAccount());
     }
 
     public function testGetAccountCustomerByTargetWhenTargetIsExistingAccountAndAssociationExists(): void

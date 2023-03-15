@@ -7,7 +7,7 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\EventListener\ORM\RefreshChannelCacheListener;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
-use Oro\Component\TestUtils\ORM\OrmTestCase;
+use Oro\Component\Testing\Unit\ORM\OrmTestCase;
 
 class RefreshChannelCacheListenerTest extends OrmTestCase
 {

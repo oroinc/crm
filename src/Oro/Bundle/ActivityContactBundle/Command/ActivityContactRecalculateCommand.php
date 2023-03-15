@@ -17,14 +17,13 @@ use Oro\Bundle\ActivityListBundle\Tools\ActivityListEntityConfigDumperExtension;
 use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Component\Log\OutputLogger;
-use Oro\Component\PropertyAccess\PropertyAccessor;
 use Psr\Log\AbstractLogger;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Recalculates counters and last contact date for contact activities.
@@ -183,7 +182,6 @@ class ActivityContactRecalculateCommand extends Command
 
     protected function resetRecordStatistic(object $entity): void
     {
-        /** @var PropertyAccessor $accessor */
         $accessor = PropertyAccess::createPropertyAccessor();
 
         $accessor->setValue($entity, ActivityScope::CONTACT_COUNT, 0);

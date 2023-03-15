@@ -8,6 +8,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Entity\Factory\CustomerFactory;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Exception\Customer\InvalidCustomerRelationEntityException;
@@ -19,18 +20,12 @@ use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
  */
 class AccountCustomerManager
 {
-    private DoctrineHelper $doctrineHelper;
-    private ConfigProvider $provider;
-    private AccountProviderInterface $accountProvider;
-
     public function __construct(
-        DoctrineHelper $doctrineHelper,
-        ConfigProvider $provider,
-        AccountProviderInterface $accountProvider
+        private DoctrineHelper $doctrineHelper,
+        private ConfigProvider $provider,
+        private AccountProviderInterface $accountProvider,
+        private CustomerFactory $customerFactory,
     ) {
-        $this->doctrineHelper = $doctrineHelper;
-        $this->provider = $provider;
-        $this->accountProvider = $accountProvider;
     }
 
     /**
@@ -71,7 +66,7 @@ class AccountCustomerManager
                 );
             }
             if (null === $customer) {
-                $customer = new Customer();
+                $customer = $this->customerFactory->createCustomer();
                 $customer->setTarget($target, null);
             }
         } else {

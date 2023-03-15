@@ -7,8 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Oro\Bundle\ContactUsBundle\Model\ExtendContactReason;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\LocaleBundle\Entity\FallbackTrait;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 
@@ -40,11 +41,14 @@ use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
  *          },
  *      }
  * )
+ * @method LocalizedFallbackValue getDefaultTitle()
+ * @method setDefaultTitle(string $value)
  */
-class ContactReason extends ExtendContactReason
+class ContactReason implements ExtendEntityInterface
 {
     use SoftDeleteableEntity;
     use FallbackTrait;
+    use ExtendEntityTrait;
 
     /**
      * @var integer
@@ -79,7 +83,6 @@ class ContactReason extends ExtendContactReason
      */
     public function __construct($defaultTitle = null)
     {
-        parent::__construct();
         $this->titles = new ArrayCollection();
         $this->setDefaultTitle((string)$defaultTitle);
     }

@@ -32,7 +32,8 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
 Oro\Bundle\SalesBundle\Entity\Customer:
   customer{1..16}:
     account: '@account<current()>'
-    customerTarget: '@b2bcustomer<current()>'
+    __calls:
+      - setCustomerTarget: [ '@b2bcustomer<current()>' ]
 
 Oro\Bundle\SalesBundle\Entity\Lead:
   lead1:

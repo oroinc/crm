@@ -6,10 +6,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
-use Oro\Bundle\ChannelBundle\Model\ExtendCustomerIdentity;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
@@ -32,9 +33,9 @@ use Oro\Bundle\UserBundle\Entity\User;
  *  }
  * )
  */
-class CustomerIdentity extends ExtendCustomerIdentity implements ChannelAwareInterface
+class CustomerIdentity implements ChannelAwareInterface, ExtendEntityInterface
 {
-    use ChannelEntityTrait;
+    use ChannelEntityTrait, ExtendEntityTrait;
 
     /**
      * @var integer

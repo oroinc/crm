@@ -339,3 +339,4 @@ services:
         arguments:
             - '@oro_entity.entity_reference_to_string_transformer'
             - '@oro_sales.manager.account_customer'
+            - '@oro_sales.factory.customer_factory'

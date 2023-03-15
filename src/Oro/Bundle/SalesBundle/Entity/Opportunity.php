@@ -9,8 +9,10 @@ use Oro\Bundle\CurrencyBundle\Entity\MultiCurrencyHolderInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\SalesBundle\Model\ExtendOpportunity;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
@@ -71,11 +73,17 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ *
+ * @method AbstractEnumValue getStatus()
+ * @method Opportunity setStatus(AbstractEnumValue $status)
  */
-class Opportunity extends ExtendOpportunity implements
+class Opportunity implements
     EmailHolderInterface,
-    MultiCurrencyHolderInterface
+    MultiCurrencyHolderInterface,
+    ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     const INTERNAL_STATUS_CODE = 'opportunity_status';
 
     const STATUS_LOST = 'lost';
@@ -492,7 +500,6 @@ class Opportunity extends ExtendOpportunity implements
      */
     public function __construct()
     {
-        parent::__construct();
         $this->loadMultiCurrencyFields();
     }
 

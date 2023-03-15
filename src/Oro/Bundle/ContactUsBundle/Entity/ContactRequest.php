@@ -3,13 +3,16 @@
 namespace Oro\Bundle\ContactUsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\ContactUsBundle\Model\ExtendContactRequest;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
+ * Entity are used to track contact with individuals who are requesting information.
+ *
  * @ORM\Entity
  * @ORM\Table(
  *      name="orocrm_contactus_request",
@@ -39,9 +42,15 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
  *          }
  *      }
  * )
+ * @codingStandardsIgnoreStart
+ * @method null|\Oro\Bundle\CustomerBundle\Entity\CustomerUser getCustomerUser() This method is available only in OroCommerce.
+ * @method void setCustomerUser(\Oro\Bundle\CustomerBundle\Entity\CustomerUser $customerUser) This method is available only in OroCommerce.
+ * @codingStandardsIgnoreEnd
  */
-class ContactRequest extends ExtendContactRequest
+class ContactRequest extends AbstractContactRequest implements ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     const CONTACT_METHOD_BOTH  = 'oro.contactus.contactrequest.method.both';
     const CONTACT_METHOD_PHONE = 'oro.contactus.contactrequest.method.phone';
     const CONTACT_METHOD_EMAIL = 'oro.contactus.contactrequest.method.email';

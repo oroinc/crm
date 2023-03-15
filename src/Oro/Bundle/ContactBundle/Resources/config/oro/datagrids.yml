@@ -236,6 +236,7 @@ datagrids:
                 label:         oro.contact.gender.label
                 frontend_type: select
                 choices: "@oro_user.gender_provider->getChoices"
+                translatable_options: false
                 renderable: false
             email:
                 label:         oro.contact.email.label
@@ -419,6 +420,7 @@ datagrids:
                     options:
                         field_options:
                             choices: "@oro_user.gender_provider->getChoices"
+                            translatable_options: false
                     renderable: false
                 email:
                     type: string

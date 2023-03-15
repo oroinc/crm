@@ -88,7 +88,8 @@
     "config": {
         "allow-plugins": {
             "symfony/runtime": false,
-            "php-http/discovery": false
+            "php-http/discovery": false,
+            "symfony/flex": false
         }
     }
 }

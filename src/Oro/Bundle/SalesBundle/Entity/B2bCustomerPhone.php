@@ -3,8 +3,10 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomerPhone;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
  * Entity holds one phone of Business Customer. Will be used in collection of phones and can be marked as primary.
@@ -34,8 +36,10 @@ use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomerPhone;
  *      }
  * )
  */
-class B2bCustomerPhone extends ExtendB2bCustomerPhone
+class B2bCustomerPhone extends AbstractPhone implements ExtendEntityInterface
 {
+    use ExtendEntityTrait;
+
     /**
      * @ORM\ManyToOne(targetEntity="B2bCustomer", inversedBy="phones")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
