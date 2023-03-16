@@ -2,6 +2,10 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\EventListener;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
@@ -10,20 +14,30 @@ use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestTarget;
+use Oro\Bundle\ActivityContactBundle\Tests\Unit\Stub\AccountStub as Account;
+use Oro\Bundle\ActivityContactBundle\Tests\Unit\Stub\EmailStub as Email;
+use Oro\Bundle\ActivityContactBundle\Tools\ActivityListenerChangedTargetsBag;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Oro\Component\Testing\Unit\EntityTrait;
 use Oro\Component\Testing\Unit\TestContainerBuilder;
+use Oro\Component\TestUtils\ORM\Mocks\UnitOfWork;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ActivityListenerTest extends \PHPUnit\Framework\TestCase
 {
+    use EntityTrait;
+
     /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $doctrineHelper;
 
     /** @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $config;
+
+    /** @var ActivityListenerChangedTargetsBag|\PHPUnit\Framework\MockObject\MockObject */
+    private $changedTargets;
 
     /** @var TestTarget */
     private $testTarget;
@@ -38,9 +52,11 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->config = $this->createMock(ConfigInterface::class);
+        $this->changedTargets = new ActivityListenerChangedTargetsBag($this->doctrineHelper);
 
         $providers = TestContainerBuilder::create()
             ->add(TestActivity::class, new TestDirectionProvider())
+            ->add(Email::class, new TestDirectionProvider())
             ->getContainer($this);
 
         $configProvider = $this->createMock(ConfigProvider::class);
@@ -54,10 +70,12 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($configProvider);
 
         $this->listener = new ActivityListener(
-            new ActivityContactProvider([TestActivity::class], $providers),
+            new ActivityContactProvider([TestActivity::class, Email::class], $providers),
             $this->doctrineHelper,
             $configManager
         );
+
+        $this->listener->setChangedTargetsBag($this->changedTargets);
     }
 
     /**
@@ -190,5 +208,79 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
                 DirectionProviderInterface::DIRECTION_UNKNOWN
             ]
         ];
+    }
+
+    public function testFlushEvents()
+    {
+        $targets = [
+            $this->getEntity(Account::class, ['id' => 2, 'createdAt' => new \DateTime()]),
+            $this->getEntity(Account::class, ['id' => 3, 'createdAt' => new \DateTime()]),
+            $this->getEntity(Account::class, ['id' => 4, 'createdAt' => new \DateTime()]),
+        ];
+
+        $changedTarget = $targets[2];
+
+        $changeSets = [
+            2 => ['ac_last_contact_date' => [new \DateTime(), new \DateTime()]],
+            3 => ['ac_last_contact_date' => [new \DateTime(), new \DateTime()]],
+            4 => [
+                'ac_last_contact_date' => [new \DateTime(), new \DateTime()],
+                'ac_contact_count' => [1, 2],
+                'ac_contact_count_in' => [0, 1],
+            ],
+        ];
+
+        $activity = $this->getEntity(Email::class, ['id' => 1]);
+        $activity->setActivityTargets($targets);
+        $activity->setCreated(new \DateTime());
+        $em = $this->createMock(EntityManager::class);
+        $uow = $this->createMock(UnitOfWork::class);
+
+        $onFlushEvent = $this->createMock(OnFlushEventArgs::class);
+        $onFlushEvent->method('getEntityManager')
+            ->willReturn($em);
+        $em->method('getUnitOfWork')
+            ->willReturn($uow);
+        $uow->expects(self::once())
+            ->method('getScheduledEntityUpdates')
+            ->willReturn(array_merge([$activity], $targets));
+        $uow->expects(self::once())
+            ->method('getScheduledEntityDeletions')
+            ->willReturn([]);
+        $uow->method('getEntityChangeSet')
+            ->willReturnCallback(function ($entity) use ($changeSets) {
+                return $changeSets[$entity->getId()] ?? [];
+            });
+        $this->doctrineHelper
+            ->method('getEntityIdentifierFieldNamesForClass')
+            ->willReturnCallback(fn ($class) => Email::class === $class ? [true] : []);
+        $this->doctrineHelper->method('getEntityClass')
+            ->willReturnCallback(fn ($entity) => $entity::class);
+        $this->doctrineHelper->method('getSingleEntityIdentifier')
+            ->willReturnCallback(fn ($entity) => $entity->getId());
+        $this->config->expects(self::once())
+            ->method('is')
+            ->with('is_extend', true)
+            ->willReturn(true);
+
+        $em2 = $this->createMock(EntityManager::class);
+        $accountRepository = $this->createMock(ServiceEntityRepository::class);
+        $postFlushEvent = $this->createMock(PostFlushEventArgs::class);
+        $postFlushEvent->method('getEntityManager')
+            ->willReturn($em2);
+        $em2->expects(self::once())
+            ->method('persist')
+            ->with($changedTarget);
+        $em2->expects(self::once())
+            ->method('getRepository')
+            ->with(Account::class)
+            ->willReturn($accountRepository);
+        $accountRepository->expects(self::once())
+            ->method('find')
+            ->with($changedTarget->getId())
+            ->willReturn($changedTarget);
+
+        $this->listener->onFlush($onFlushEvent);
+        $this->listener->postFlush($postFlushEvent);
     }
 }
