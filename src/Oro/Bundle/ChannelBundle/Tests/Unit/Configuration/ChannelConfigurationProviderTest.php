@@ -3,8 +3,10 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Configuration;
 
 use Oro\Bundle\ChannelBundle\Configuration\ChannelConfigurationProvider;
+use Oro\Bundle\ChannelBundle\Entity\CustomerIdentity;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle1\TestBundle1;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle2\TestBundle2;
+use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer;
 use Oro\Component\Config\CumulativeResourceManager;
 use Oro\Component\Config\Resolver\ResolverInterface;
 use Oro\Component\Testing\TempDirExtension;
@@ -13,29 +15,18 @@ class ChannelConfigurationProviderTest extends \PHPUnit\Framework\TestCase
 {
     use TempDirExtension;
 
-    /** @var ChannelConfigurationProvider */
-    private $configurationProvider;
+    private ChannelConfigurationProvider $configurationProvider;
 
-    /** @var string */
-    private $cacheFile;
-
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
-        $this->cacheFile = $this->getTempFile('ChannelConfigurationProvider');
+        $cacheFile = $this->getTempFile('ChannelConfigurationProvider');
 
         $resolver = $this->createMock(ResolverInterface::class);
         $resolver->expects(self::any())
             ->method('resolve')
             ->willReturnArgument(0);
 
-        $this->configurationProvider = new ChannelConfigurationProvider(
-            $this->cacheFile,
-            false,
-            $resolver
-        );
+        $this->configurationProvider = new ChannelConfigurationProvider($cacheFile, false, $resolver);
 
         $bundle1 = new TestBundle1();
         $bundle2 = new TestBundle2();
@@ -115,7 +106,7 @@ class ChannelConfigurationProviderTest extends \PHPUnit\Framework\TestCase
                         'Oro\Bundle\TestBundle1\Entity\Entity3'
                     ],
                     'integration_type'  => 'test',
-                    'customer_identity' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer',
+                    'customer_identity' => Customer::class,
                     'lifetime_value'    => 'some_field',
                     'priority'          => 0,
                     'system'            => false
@@ -123,7 +114,7 @@ class ChannelConfigurationProviderTest extends \PHPUnit\Framework\TestCase
                 'test2' => [
                     'label'             => 'test2 type',
                     'entities'          => [],
-                    'customer_identity' => 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity',
+                    'customer_identity' => CustomerIdentity::class,
                     'priority'          => 0,
                     'system'            => false
                 ]
@@ -135,10 +126,7 @@ class ChannelConfigurationProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetCustomerEntities()
     {
         $this->assertEquals(
-            [
-                'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer',
-                'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity'
-            ],
+            [Customer::class, CustomerIdentity::class],
             $this->configurationProvider->getCustomerEntities()
         );
     }
