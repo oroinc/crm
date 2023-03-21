@@ -85,5 +85,10 @@
         "branch-alias": {
             "dev-master": "4.2-dev"
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": false
+        }
     }
 }
