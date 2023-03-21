@@ -18,8 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LeadTypeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var LeadType */
-    private $type;
+    private LeadType $type;
 
     protected function setUp(): void
     {
@@ -71,7 +70,7 @@ class LeadTypeTest extends \PHPUnit\Framework\TestCase
         $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())
             ->method('setDefaults')
-            ->with(['data_class' => Lead::class,]);
+            ->with(['data_class' => Lead::class]);
 
         $this->type->configureOptions($resolver);
     }
