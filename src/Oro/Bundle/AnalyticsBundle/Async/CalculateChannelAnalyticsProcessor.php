@@ -68,12 +68,9 @@ class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, T
             return self::REJECT;
         }
 
-        $jobName = 'oro_analytics:calculate_channel_analytics:' . $messageBody['channel_id'];
-        $ownerId = $message->getMessageId();
-
         $entityManager?->getConnection()?->getConfiguration()?->setSQLLogger(null);
 
-        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($channel, $messageBody) {
+        $result = $this->jobRunner->runUniqueByMessage($message, function () use ($channel, $messageBody) {
             $this->analyticsBuilder->build($channel, $messageBody['customer_ids']);
 
             return true;

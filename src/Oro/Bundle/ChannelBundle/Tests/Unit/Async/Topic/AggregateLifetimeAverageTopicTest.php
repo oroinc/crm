@@ -61,4 +61,12 @@ class AggregateLifetimeAverageTopicTest extends AbstractTopicTestCase
     {
         self::assertEquals(MessagePriority::VERY_LOW, $this->getTopic()->getDefaultPriority('queueName'));
     }
+
+    public function testCreateJobName(): void
+    {
+        self::assertSame(
+            'oro_channel:aggregate_lifetime_average',
+            $this->getTopic()->createJobName([])
+        );
+    }
 }

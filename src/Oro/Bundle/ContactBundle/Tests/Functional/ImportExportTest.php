@@ -7,6 +7,8 @@ use Oro\Bundle\ContactBundle\Entity\Repository\ContactRepository;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\ImportExportBundle\Async\Topic\ImportTopic;
+use Oro\Bundle\ImportExportBundle\Async\Topic\PreImportTopic;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
 use Oro\Bundle\ImportExportBundle\Tests\Functional\AbstractImportExportTestCase;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -107,16 +109,25 @@ class ImportExportTest extends AbstractImportExportTestCase
 
     public function testUpdateIfNoneEmptyStrategyOnLastName(): void
     {
+        $configuration = $this->getExportImportConfiguration();
+        $importFilePath = $this->getFullPathToDataFile('update_name_prefix.csv');
+
+        $this->assertPreImportActionExecuted($configuration, $importFilePath);
+        $preImportMessageData = $this->getOneSentMessageWithTopic(PreImportTopic::getName());
+        $this->assertMessageProcessorExecuted();
+
         $configManager = $this->getConfigManager();
         $importExportFieldConfig = $configManager
             ->getFieldConfig('importexport', Contact::class, 'lastName');
         $importExportFieldConfig->set('identity', FieldHelper::IDENTITY_ONLY_WHEN_NOT_EMPTY);
         $configManager->flush();
 
-        $this->assertImportWorks(
-            $this->getExportImportConfiguration(),
-            $this->getFullPathToDataFile('update_name_prefix.csv')
-        );
+        self::assertMessageSent(ImportTopic::getName());
+        $importMessageData = $this->getOneSentMessageWithTopic(ImportTopic::getName());
+        $this->assertMessageProcessorExecuted();
+
+        $this->assertTmpFileRemoved($preImportMessageData['fileName']);
+        $this->assertTmpFileRemoved($importMessageData['fileName']);
 
         self::assertCount(4, $this->getContactRepository()->findAll());
 
