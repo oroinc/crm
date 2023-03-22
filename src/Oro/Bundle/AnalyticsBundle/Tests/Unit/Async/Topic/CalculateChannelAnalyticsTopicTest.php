@@ -85,4 +85,12 @@ class CalculateChannelAnalyticsTopicTest extends AbstractTopicTestCase
     {
         self::assertEquals(MessagePriority::VERY_LOW, $this->getTopic()->getDefaultPriority('queueName'));
     }
+
+    public function testCreateJobName(): void
+    {
+        self::assertSame(
+            'oro_analytics:calculate_channel_analytics:42',
+            $this->getTopic()->createJobName(['channel_id' => 42])
+        );
+    }
 }

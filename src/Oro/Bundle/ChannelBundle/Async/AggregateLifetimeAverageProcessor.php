@@ -37,10 +37,7 @@ class AggregateLifetimeAverageProcessor implements MessageProcessorInterface, To
     {
         $messageBody = $message->getBody();
 
-        $ownerId = $message->getMessageId();
-        $jobName = 'oro_channel:aggregate_lifetime_average';
-
-        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($messageBody) {
+        $result = $this->jobRunner->runUniqueByMessage($message, function () use ($messageBody) {
             /** @var LifetimeValueAverageAggregationRepository $repository */
             $repository  = $this->registry->getRepository(LifetimeValueAverageAggregation::class);
             if ($messageBody['force']) {
