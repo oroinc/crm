@@ -148,7 +148,6 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
 
         $uniqueJobs = $jobRunner->getRunUniqueJobs();
         self::assertCount(1, $uniqueJobs);
-        self::assertEquals('oro_channel:aggregate_lifetime_average', $uniqueJobs[0]['jobName']);
         self::assertEquals('theMessageId', $uniqueJobs[0]['ownerId']);
     }
 

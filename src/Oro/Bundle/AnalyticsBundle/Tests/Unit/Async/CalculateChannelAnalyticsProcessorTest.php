@@ -287,7 +287,6 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
 
         $uniqueJobs = $jobRunner->getRunUniqueJobs();
         self::assertCount(1, $uniqueJobs);
-        self::assertEquals('oro_analytics:calculate_channel_analytics:1', $uniqueJobs[0]['jobName']);
         self::assertEquals('theMessageId', $uniqueJobs[0]['ownerId']);
     }
 

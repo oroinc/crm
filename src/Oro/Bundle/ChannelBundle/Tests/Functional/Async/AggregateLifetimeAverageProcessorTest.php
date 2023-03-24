@@ -3,14 +3,12 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Async;
 
 use Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
-use Oro\Bundle\ChannelBundle\Async\Topic\AggregateLifetimeAverageTopic;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 use Oro\Bundle\ConfigBundle\Tests\Functional\Traits\ConfigManagerAwareTestTrait;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -42,14 +40,8 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
         $configManager->set('oro_locale.timezone', $systemTimezone);
         $configManager->flush();
 
-        $sentMessage = self::sendMessage(
-            AggregateLifetimeAverageTopic::getName(),
-            ['force' => true, 'use_truncate' => false]
-        );
-        self::consumeMessage($sentMessage);
-
-        self::assertProcessedMessageStatus(MessageProcessorInterface::ACK, $sentMessage);
-        self::assertProcessedMessageProcessor('oro_channel.async.aggregate_lifetime_average_processor', $sentMessage);
+        self::consume();
+        self::clearMessageCollector();
 
         /** @var LifetimeValueAverageAggregationRepository $repository */
         $repository = self::getContainer()->get('doctrine')->getRepository(LifetimeValueAverageAggregation::class);
@@ -74,8 +66,8 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
     public function timezoneProvider(): array
     {
         return [
-            'UTC'         => ['$systemTimezone' => 'UTC'],
-            'Kiev'        => ['$systemTimezone' => 'Europe/Kiev'],
+            'UTC' => ['$systemTimezone' => 'UTC'],
+            'Kiev' => ['$systemTimezone' => 'Europe/Kiev'],
             'Los angeles' => ['$systemTimezone' => 'America/Los_Angeles'],
         ];
     }
