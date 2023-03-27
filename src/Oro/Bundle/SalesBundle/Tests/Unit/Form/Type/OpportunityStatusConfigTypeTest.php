@@ -15,6 +15,7 @@ use Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber;
 use Oro\Bundle\EntityExtendBundle\Tools\EnumSynchronizer;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendDbIdentifierNameGenerator;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
@@ -140,14 +141,26 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit\Framework\TestCase
         $modelManager = $this->createMock(ConfigModelManager::class);
         $auditManager = $this->createMock(AuditManager::class);
         $configCache = $this->createMock(ConfigCache::class);
-
+        $serviceProvider = new ServiceLocator([
+            'annotation_metadata_factory' => function () use ($metadataFactory) {
+                return $metadataFactory;
+            },
+            'configuration_handler' => function () {
+                return ConfigurationHandlerMock::getInstance();
+            },
+            'event_dispatcher' => function () use ($eventDispatcher) {
+                return $eventDispatcher;
+            },
+            'audit_manager' => function () use ($auditManager) {
+                return $auditManager;
+            },
+            'config_model_manager' => function () use ($modelManager) {
+                return $modelManager;
+            }
+        ]);
         $entityConfigManager = new EntityConfigManager(
-            $eventDispatcher,
-            $metadataFactory,
-            $modelManager,
-            $auditManager,
             $configCache,
-            ConfigurationHandlerMock::getInstance()
+            $serviceProvider
         );
         $entityConfigManager->setProviderBag($configProviderBag);
 
