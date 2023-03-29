@@ -82,5 +82,5 @@ Feature: Opportunity crud
     And there is no records in grid
 
   Scenario: Check Opportunities by Status widget
-    When I go to Dashboards/Dashboard
+    When I login as administrator
     Then I should see "Opportunities by Status" widget on dashboard
