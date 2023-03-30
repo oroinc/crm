@@ -3,12 +3,17 @@
     {% set gridName = 'account-contacts-update-grid' %}
 
     {% set params = {
-        'account': account ? account.id : null,
         '_parameters' : {
             'data_in':     app.request.get('added') ? app.request.get('added')|split(',') : [],
             'data_not_in': app.request.get('removed') ? app.request.get('removed')|split(','): []
         }
     } %}
+
+    {% if account %}
+        {% set params = params|merge({
+            'account': account.id
+        }) %}
+    {% endif %}
 
     {% block content %}
         {{ dataGrid.renderGrid(gridName, params) }}
