@@ -4,7 +4,7 @@ The current file describes significant changes in the code that may affect the u
 
 ## Changes in the СRM package versions
 
-- [5.1.0](#510-unreleased)
+- [5.1.0](#510-2023-03-31)
 - [5.0.0](#500-2022-01-26)
 - [4.2.0](#420-2020-01-29)
 - [4.1.0](#410-2020-01-31)
@@ -33,9 +33,9 @@ The current file describes significant changes in the code that may affect the u
 
 
 
-## 5.1.0 (UNRELEASED)
+## 5.1.0 (2023-03-31)
 
-[Show detailed list of changes](incompatibilities-5-1-rc-2.md)
+[Show detailed list of changes](incompatibilities-5-1.md)
 
 ## 5.0.0 (2022-01-26)
 
