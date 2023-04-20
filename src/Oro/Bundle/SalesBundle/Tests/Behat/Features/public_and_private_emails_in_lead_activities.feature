@@ -1,5 +1,4 @@
 @ticket-CRM-9384
-@skip
 @regression
 Feature: Public and private emails in lead activities
   In order to protect private conversation between users
