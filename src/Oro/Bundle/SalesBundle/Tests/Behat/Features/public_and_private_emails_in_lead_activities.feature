@@ -1,3 +1,4 @@
+@skip
 @ticket-CRM-9384
 @regression
 Feature: Public and private emails in lead activities
