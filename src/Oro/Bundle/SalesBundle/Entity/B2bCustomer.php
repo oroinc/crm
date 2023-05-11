@@ -122,7 +122,7 @@ class B2bCustomer implements
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
-     *              "auditable"=true
+     *              "auditable"=false
      *          },
      *          "importexport"={
      *              "full"=true,
