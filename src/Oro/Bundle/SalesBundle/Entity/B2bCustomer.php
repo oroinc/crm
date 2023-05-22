@@ -119,7 +119,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
-     *              "auditable"=true
+     *              "auditable"=false
      *          },
      *          "importexport"={
      *              "full"=true,
