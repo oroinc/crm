@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Functional\Api\Rest;
+namespace Oro\Bundle\ContactBundle\Tests\Functional\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\AccountBundle\Entity\Account;
