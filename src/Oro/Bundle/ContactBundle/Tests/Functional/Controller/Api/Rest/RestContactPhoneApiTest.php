@@ -1,99 +1,99 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Functional\Api\Rest;
+namespace Oro\Bundle\ContactBundle\Tests\Functional\Controller\Api\Rest;
 
-use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEmailData;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
+use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactPhoneData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class RestContactEmailApiTest extends WebTestCase
+class RestContactPhoneApiTest extends WebTestCase
 {
     protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());
-        $this->loadFixtures([LoadContactEmailData::class]);
+        $this->loadFixtures([LoadContactPhoneData::class]);
     }
 
-    public function testCreateContactEmail()
+    public function testCreateContactPhone()
     {
-        $contact = $this->getReference('Contact_' . LoadContactEntitiesData::THIRD_ENTITY_NAME);
-        $content = json_encode([
+        $contact = $this->getReference('Contact_'. LoadContactEntitiesData::THIRD_ENTITY_NAME);
+        $payload = [
             'contactId' => $contact->getId(),
-            'email' =>'test@test.test',
+            'phone' => '111',
             'primary' => true
-        ], JSON_THROW_ON_ERROR);
-
-        $this->client->request('POST', $this->getUrl('oro_api_post_contact_email'), [], [], [], $content);
+        ];
+        $this->client->jsonRequest('POST', $this->getUrl('oro_api_post_contact_phone'), $payload);
         $contact = $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_CREATED);
 
         $this->assertArrayHasKey('id', $contact);
         $this->assertNotEmpty($contact['id']);
     }
 
-    public function testCreateSecondPrimaryEmail()
+    public function testCreateSecondPrimaryPhone()
     {
-        $contact = $this->getReference('Contact_Brenda');
+        $contact = $this->getReference('Contact_'. LoadContactEntitiesData::THIRD_ENTITY_NAME);
+
         $payload = [
             'contactId' => $contact->getId(),
-            'email' =>'test1@test.test',
+            'phone' =>'test1@test.test',
             'primary' => true
         ];
 
-        $this->client->jsonRequest('POST', $this->getUrl('oro_api_post_contact_email'), $payload);
+        $this->client->jsonRequest('POST', $this->getUrl('oro_api_post_contact_phone'), $payload);
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
     public function testEmptyContactId()
     {
         $payload = [
-            'email' =>'test@test.test',
+            'phone' =>'test@test.test',
             'primary' => true
         ];
 
-        $this->client->jsonRequest('POST', $this->getUrl('oro_api_post_contact_email'), $payload);
+        $this->client->jsonRequest('POST', $this->getUrl('oro_api_post_contact_phone'), $payload);
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
-    public function testEmptyEmail()
+    public function testEmptyPhone()
     {
-        $contact = $this->getReference('Contact_Brenda');
+        $contact = $this->getReference('Contact_'. LoadContactEntitiesData::THIRD_ENTITY_NAME);
         $payload = [
             'contactId' => $contact->getId(),
             'primary' => true
         ];
 
-        $this->client->jsonRequest('POST', $this->getUrl('oro_api_post_contact_email'), $payload);
+        $this->client->jsonRequest('POST', $this->getUrl('oro_api_post_contact_phone'), $payload);
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_BAD_REQUEST);
     }
 
-    public function testDeleteEmailForbidden()
+    public function testDeletePhoneForbidden()
     {
-        $contactEmail = $this->getReference('ContactEmail_Several_'. LoadContactEmailData::FIRST_ENTITY_NAME);
+        $contactPhone = $this->getReference('ContactPhone_Several_'. LoadContactPhoneData::FIRST_ENTITY_NAME);
         $routeParams = [
-            'id' => $contactEmail->getId()
+            'id' => $contactPhone->getId()
         ];
-        $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact_email', $routeParams));
+        $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
 
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_FORBIDDEN);
-
         $realResponse = json_decode($this->client->getResponse()->getContent(), false, 512, JSON_THROW_ON_ERROR);
         $this->assertEquals(403, $realResponse->code);
         $this->assertEquals(
             'The delete operation is forbidden. Reason: '
-            . 'Email address was not deleted, the contact '
-            . 'has more than one email addresses, can\'t set the new primary.',
+            . 'Phone number was not deleted, the contact has '
+            . 'more than one phone number, can\'t set the new primary.',
             $realResponse->message
         );
+        $this->assertNotEmpty($realResponse->errors->errors);
     }
 
-    public function testCanDeleteNonPrimaryEmail()
+    public function testCanDeleteNonPrimaryPhone()
     {
-        $contactEmail = $this->getReference('ContactEmail_Several_'. LoadContactEmailData::THIRD_ENTITY_NAME);
+        $contactPhone = $this->getReference('ContactPhone_Several_'. LoadContactPhoneData::THIRD_ENTITY_NAME);
         $routeParams = [
-            'id' => $contactEmail->getId()
+            'id' => $contactPhone->getId()
         ];
-        $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact_email', $routeParams));
+        $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
 
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_OK);
         $this->assertEquals('{"id":""}', $this->client->getResponse()->getContent());
@@ -111,11 +111,11 @@ class RestContactEmailApiTest extends WebTestCase
             ['firstName' => '', 'lastName' => '']
         );
 
-        $contactEmail = $this->getReference('ContactEmail_Single_'. LoadContactEmailData::FOURTH_ENTITY_NAME);
+        $contactEmail = $this->getReference('ContactPhone_Single_'. LoadContactPhoneData::FOURTH_ENTITY_NAME);
         $routeParams = [
             'id' => $contactEmail->getId()
         ];
-        $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact_email', $routeParams));
+        $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_FORBIDDEN);
         $realResponse = json_decode($this->client->getResponse()->getContent(), false, 512, JSON_THROW_ON_ERROR);
         $this->assertEquals(403, $realResponse->code);
@@ -127,13 +127,13 @@ class RestContactEmailApiTest extends WebTestCase
         $this->assertNotEmpty($realResponse->errors->errors);
     }
 
-    public function testDeleteEmailSuccess()
+    public function testDeletePhoneSuccess()
     {
-        $contactEmail = $this->getReference('ContactEmail_Single_'. LoadContactEmailData::FIRST_ENTITY_NAME);
+        $contactPhone = $this->getReference('ContactPhone_Single_'. LoadContactPhoneData::FIRST_ENTITY_NAME);
         $routeParams = [
-            'id' => $contactEmail->getId()
+            'id' => $contactPhone->getId()
         ];
-        $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact_email', $routeParams));
+        $this->client->jsonRequest('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
 
         $this->getJsonResponseContent($this->client->getResponse(), Response::HTTP_OK);
         $this->assertEquals('{"id":""}', $this->client->getResponse()->getContent());

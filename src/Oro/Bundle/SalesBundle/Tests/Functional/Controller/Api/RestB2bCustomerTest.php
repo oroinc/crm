@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\Api;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
