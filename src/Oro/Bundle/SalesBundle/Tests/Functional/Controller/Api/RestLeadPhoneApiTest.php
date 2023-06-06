@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\Api;
 
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadLeadPhoneData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
