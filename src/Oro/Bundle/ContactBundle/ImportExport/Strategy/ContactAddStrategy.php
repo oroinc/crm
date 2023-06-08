@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\ContactBundle\ImportExport\Strategy;
 
-use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\AbstractImportStrategy;
@@ -15,15 +14,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 class ContactAddStrategy extends AbstractImportStrategy
 {
-    /**
-     * @var ContactImportHelper
-     */
-    protected $contactImportHelper;
+    protected ContactImportHelper $contactImportHelper;
 
-    /**
-     * @var TokenStorageInterface
-     */
-    protected $tokenStorage;
+    protected TokenStorageInterface $tokenStorage;
 
     public function setContactImportHelper(ContactImportHelper $contactImportHelper)
     {
@@ -105,38 +98,11 @@ class ContactAddStrategy extends AbstractImportStrategy
     protected function processMultipleRelations(Contact $entity)
     {
         // update groups
-        foreach ($entity->getGroups() as $group) {
-            $entity->removeGroup($group);
-            if ($group = $this->findExistingEntity($group)) {
-                $entity->addGroup($group);
-            }
-        }
+        $this->processGroups($entity);
 
-        // update accounts
-        foreach ($entity->getAccounts() as $account) {
-            $entity->removeAccount($account);
-            if ($account = $this->findExistingEntity($account)) {
-                $entity->addAccount($account);
-            }
-        }
+        $this->processAccounts($entity);
 
-        // update addresses
-        /** @var ContactAddress $contactAddress */
-        foreach ($entity->getAddresses() as $contactAddress) {
-            $existingCountry = $this->findExistingEntity($contactAddress->getCountry());
-            if ($existingCountry instanceof Country) {
-                $contactAddress->setCountry($existingCountry);
-            }
-
-            // update address types
-            foreach ($contactAddress->getTypes() as $addressType) {
-                $contactAddress->removeType($addressType);
-                $existingAddressType = $this->findExistingEntity($addressType);
-                if ($existingAddressType) {
-                    $contactAddress->addType($existingAddressType);
-                }
-            }
-        }
+        $this->processContactAddresses($entity);
     }
 
     /**
@@ -200,5 +166,50 @@ class ContactAddStrategy extends AbstractImportStrategy
         $this->context->incrementAddCount();
 
         return $entity;
+    }
+
+    private function processGroups(Contact $entity): void
+    {
+        foreach ($entity->getGroups() as $group) {
+            $entity->removeGroup($group);
+            if ($group = $this->findExistingEntity($group)) {
+                $entity->addGroup($group);
+            }
+        }
+    }
+
+    private function processAccounts(Contact $entity): void
+    {
+        foreach ($entity->getAccounts() as $account) {
+            $entity->removeAccount($account);
+            if ($account = $this->findExistingEntity($account)) {
+                $entity->addAccount($account);
+            }
+        }
+    }
+
+    private function processContactAddresses(Contact $entity): void
+    {
+        /** @var ContactAddress $contactAddress */
+        foreach ($entity->getAddresses() as $contactAddress) {
+            $country = $contactAddress->getCountry();
+            if ($country) {
+                $contactAddress->setCountry($this->findExistingEntity($country));
+            }
+
+            $region = $contactAddress->getRegion();
+            if ($region) {
+                $contactAddress->setRegion($this->findExistingEntity($region));
+            }
+
+            // update address types
+            foreach ($contactAddress->getTypes() as $addressType) {
+                $contactAddress->removeType($addressType);
+                $existingAddressType = $this->findExistingEntity($addressType);
+                if ($existingAddressType) {
+                    $contactAddress->addType($existingAddressType);
+                }
+            }
+        }
     }
 }
