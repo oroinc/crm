@@ -12,6 +12,7 @@ oro_behat_extension:
         - Oro\Bundle\SecurityBundle\Tests\Behat\Context\ACLContext
         - Oro\Bundle\EmailBundle\Tests\Behat\Context\EmailContext
         - Oro\Bundle\NavigationBundle\Tests\Behat\Context\TabContext
+        - Oro\Bundle\NavigationBundle\Tests\Behat\Context\ScrollspyContext
         - Oro\Bundle\ConfigBundle\Tests\Behat\Context\FeatureContext
         - Oro\Bundle\ImportExportBundle\Tests\Behat\Context\ImportExportContext
       paths:
