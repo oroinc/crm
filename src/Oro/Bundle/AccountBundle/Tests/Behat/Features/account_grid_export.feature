@@ -42,6 +42,7 @@ Feature: Account grid export
     Then I should not see "Export Grid"
     When I proceed as the Admin
     And I check "Export Grid View" entity permission
+    And I click "Entity" in scrollspy
     And select following permissions:
       | Import/Export result | View:None |
     And I save form
@@ -52,6 +53,7 @@ Feature: Account grid export
 
   Scenario: "Export Entity" button should be inaccessible if user has not enough privileges
     Given I proceed as the Admin
+    And I click "Entity" in scrollspy
     And select following permissions:
       | Import/Export result | View:Global |
     And I save form
@@ -68,6 +70,7 @@ Feature: Account grid export
     Then I should not see "Export Products"
     When I proceed as the Admin
     And I check "Export Entity Records" entity permission
+    And I click "Entity" in scrollspy
     And select following permissions:
       | Import/Export result | View:None |
     And I save form
