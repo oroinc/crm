@@ -46,7 +46,7 @@ class CallDirectionProvider implements DirectionProviderInterface
      */
     public function getDate($activity)
     {
-        return $activity->getCallDateTime() ? : new \DateTime('now', new \DateTimeZone('UTC'));
+        return $activity->getCallDateTime() ?: new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

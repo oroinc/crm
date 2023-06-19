@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Dashboard;
 
 use Oro\Bundle\DashboardBundle\Entity\Widget;

@@ -10,7 +10,8 @@ use Oro\Component\Testing\Command\CommandTestingTrait;
 
 abstract class AbstractRecalculateLifetimeCommandTest extends WebTestCase
 {
-    use CommandTestingTrait, MessageQueueExtension;
+    use CommandTestingTrait;
+    use MessageQueueExtension;
 
     protected function setUp(): void
     {

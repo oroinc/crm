@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\ChannelBundle\Async;
 
 use Doctrine\Persistence\ManagerRegistry;
