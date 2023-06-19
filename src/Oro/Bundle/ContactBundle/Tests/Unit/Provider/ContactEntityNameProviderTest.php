@@ -3,16 +3,18 @@
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Provider\ContactEntityNameProvider;
 use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
+use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 use Oro\Component\DependencyInjection\ServiceLink;
 
 class ContactEntityNameProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ContactNameFormatter|\PHPUnit\Framework\MockObject\MockObject */
-    private $contactNameFormatter;
+    /** @var NameFormatter|\PHPUnit\Framework\MockObject\MockObject */
+    private $nameFormatter;
 
     /** @var DQLNameFormatter|\PHPUnit\Framework\MockObject\MockObject */
     private $dqlNameFormatter;
@@ -22,116 +24,151 @@ class ContactEntityNameProviderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->contactNameFormatter = $this->createMock(ContactNameFormatter::class);
+        $this->nameFormatter = $this->createMock(NameFormatter::class);
         $this->dqlNameFormatter = $this->createMock(DQLNameFormatter::class);
 
         $nameFormatterLink = $this->createMock(ServiceLink::class);
-        $nameFormatterLink->expects($this->any())
+        $nameFormatterLink->expects(self::any())
             ->method('getService')
-            ->willReturn($this->contactNameFormatter);
+            ->willReturn($this->nameFormatter);
 
         $dqlNameFormatterLink = $this->createMock(ServiceLink::class);
-        $dqlNameFormatterLink->expects($this->any())
+        $dqlNameFormatterLink->expects(self::any())
             ->method('getService')
             ->willReturn($this->dqlNameFormatter);
 
         $this->provider = new ContactEntityNameProvider($nameFormatterLink, $dqlNameFormatterLink);
     }
 
-    /**
-     * @dataProvider getNameDataProvider
-     */
-    public function testGetName(string $format, ?string $locale, object $entity, string|false $expected)
+    private function createContactEmail(string $email, bool $primary = false): ContactEmail
     {
-        if ($expected) {
-            $this->contactNameFormatter->expects($this->once())
-                ->method('format')
-                ->willReturn('Contact');
-        }
+        $contactEmail = new ContactEmail();
+        $contactEmail->setEmail($email);
+        $contactEmail->setPrimary($primary);
 
-        $result = $this->provider->getName($format, $locale, $entity);
-        $this->assertSame($expected, $result);
+        return $contactEmail;
     }
 
-    /**
-     * @dataProvider getNameDQLDataProvider
-     */
-    public function testGetNameDQL(
-        string $format,
-        ?string $locale,
-        string $className,
-        string $alias,
-        string|false $expected
-    ) {
-        if ($expected) {
-            $this->dqlNameFormatter->expects($this->once())
-                ->method('getFormattedNameDQL')
-                ->willReturn('Contact');
-        }
+    private function createContactPhone(string $phone, bool $primary = false): ContactPhone
+    {
+        $contactPhone = new ContactPhone();
+        $contactPhone->setPhone($phone);
+        $contactPhone->setPrimary($primary);
 
-        $result = $this->provider->getNameDQL($format, $locale, $className, $alias);
-        $this->assertSame($expected, $result);
+        return $contactPhone;
     }
 
-    public function getNameDataProvider(): array
+    public function testGetNameForUnsupportedEntity(): void
     {
-        return [
-            'test unsupported class' => [
-                'format' => '',
-                'locale' => null,
-                'entity' => new \stdClass(),
-                'expected' => false
-            ],
-            'test unsupported format' => [
-                'format' => '',
-                'locale' => null,
-                'entity' => new Contact(),
-                'expected' => false
-            ],
-            'correct data' => [
-                'format' => EntityNameProviderInterface::FULL,
-                'locale' => '',
-                'entity' => new Contact(),
-                'expected' => 'Contact'
-            ]
-        ];
+        self::assertFalse(
+            $this->provider->getName(EntityNameProviderInterface::FULL, 'en', new \stdClass())
+        );
     }
 
-    public function getNameDQLDataProvider(): array
+    public function testGetNameForUnsupportedFormat(): void
     {
-        return [
-            'test unsupported class Name' => [
-                'format' => '',
-                'locale' => null,
-                'className' => '',
-                'alias' => '',
-                'expected' => false
-            ],
-            'test unsupported format' => [
-                'format' => '',
-                'locale' => null,
-                'className' => Contact::class,
-                'alias' => '',
-                'expected' => false
-            ],
-            'correct data' => [
-                'format' => EntityNameProviderInterface::FULL,
-                'locale' => null,
-                'className' => Contact::class,
-                'alias' => 'test',
-                'expected' => 'COALESCE(' .
-                              'NULLIF(Contact, \'\'), ' .
-                              'CAST((SELECT test_emails.email' .
-                              ' FROM Oro\Bundle\ContactBundle\Entity\Contact test_emails_base' .
-                              ' LEFT JOIN test_emails_base.emails test_emails' .
-                              ' WHERE test_emails.primary = true AND test_emails_base = test) ' .
-                              'AS string), ' .
-                              'CAST((SELECT test_phones.phone' .
-                              ' FROM Oro\Bundle\ContactBundle\Entity\Contact test_phones_base' .
-                              ' LEFT JOIN test_phones_base.phones test_phones' .
-                              ' WHERE test_phones.primary = true AND test_phones_base = test) ' .
-                              'AS string))'
-            ]
-        ];
+        self::assertFalse(
+            $this->provider->getName(EntityNameProviderInterface::SHORT, 'en', new Contact())
+        );
+    }
+
+    public function testGetNameWhenContactHasName(): void
+    {
+        $contact = new Contact();
+        $contact->setFirstName('John');
+        $contact->setLastName('Doo');
+        $contact->addEmail($this->createContactEmail('c11@example.com', true));
+        $contact->addEmail($this->createContactEmail('c12@example.com'));
+        $contact->addPhone($this->createContactPhone('123-456', true));
+        $contact->addPhone($this->createContactPhone('123-457'));
+
+        $this->nameFormatter->expects(self::once())
+            ->method('format')
+            ->willReturn('John Doo');
+
+        self::assertSame(
+            'John Doo',
+            $this->provider->getName(EntityNameProviderInterface::FULL, 'en', $contact)
+        );
+    }
+
+    public function testGetNameForContactWithoutName(): void
+    {
+        $contact = new Contact();
+        $contact->addEmail($this->createContactEmail('c11@example.com', true));
+        $contact->addEmail($this->createContactEmail('c12@example.com'));
+        $contact->addPhone($this->createContactPhone('123-456', true));
+        $contact->addPhone($this->createContactPhone('123-457'));
+
+        $this->nameFormatter->expects(self::once())
+            ->method('format')
+            ->willReturn('');
+
+        self::assertSame(
+            'c11@example.com',
+            $this->provider->getName(EntityNameProviderInterface::FULL, 'en', $contact)
+        );
+    }
+
+    public function testGetNameForContactWithoutNameAndEmail(): void
+    {
+        $contact = new Contact();
+        $contact->addPhone($this->createContactPhone('123-456', true));
+        $contact->addPhone($this->createContactPhone('123-457'));
+
+        $this->nameFormatter->expects(self::once())
+            ->method('format')
+            ->willReturn('');
+
+        self::assertSame(
+            '123-456',
+            $this->provider->getName(EntityNameProviderInterface::FULL, 'en', $contact)
+        );
+    }
+
+    public function testGetNameForContactWithoutNameAndEmailAndPhone(): void
+    {
+        $contact = new Contact();
+
+        $this->nameFormatter->expects(self::once())
+            ->method('format')
+            ->willReturn('');
+
+        self::assertSame(
+            '',
+            $this->provider->getName(EntityNameProviderInterface::FULL, 'en', $contact)
+        );
+    }
+
+    public function testGetNameDQLForUnsupportedEntity(): void
+    {
+        self::assertFalse(
+            $this->provider->getNameDQL(EntityNameProviderInterface::FULL, 'en', \stdClass::class, 'entity')
+        );
+    }
+
+    public function testGetNameDQLForUnsupportedFormat(): void
+    {
+        self::assertFalse(
+            $this->provider->getNameDQL(EntityNameProviderInterface::SHORT, 'en', Contact::class, 'contact')
+        );
+    }
+
+    public function testGetNameDQL(): void
+    {
+        $this->dqlNameFormatter->expects(self::once())
+            ->method('getFormattedNameDQL')
+            ->willReturn('Contact');
+
+        self::assertEquals(
+            'COALESCE(NULLIF(Contact, \'\'),'
+            . ' CAST((SELECT contact_emails.email FROM Oro\Bundle\ContactBundle\Entity\Contact contact_emails_base'
+            . ' LEFT JOIN contact_emails_base.emails contact_emails'
+            . ' WHERE contact_emails.primary = true AND contact_emails_base = contact) AS string),'
+            . ' CAST((SELECT contact_phones.phone FROM Oro\Bundle\ContactBundle\Entity\Contact contact_phones_base'
+            . ' LEFT JOIN contact_phones_base.phones contact_phones'
+            . ' WHERE contact_phones.primary = true AND contact_phones_base = contact) AS string), \'\')',
+            $this->provider->getNameDQL(EntityNameProviderInterface::FULL, 'en', Contact::class, 'contact')
+        );
     }
 }

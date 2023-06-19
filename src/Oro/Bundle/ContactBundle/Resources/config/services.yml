@@ -265,23 +265,13 @@ services:
         tags:
             - { name: oro_entity.delete_handler_extension, entity: Oro\Bundle\ContactBundle\Entity\ContactPhone }
 
-    oro_contact.formatter.contact_entity_name:
-        class: Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter
-        arguments:
-            - '@oro_locale.formatter.name'
-
-    oro_contact.formatter.contact_entity_name.link:
-        tags:
-            - { name: oro_service_link, service: oro_contact.formatter.contact_entity_name }
-
     oro_contact.provider.contact_entity_name:
         class: Oro\Bundle\ContactBundle\Provider\ContactEntityNameProvider
         arguments:
-            - '@oro_contact.formatter.contact_entity_name.link'
+            - '@oro_locale.formatter.name.link'
             - '@oro_locale.dql.formatter.name.link'
-        public: false
         tags:
-            - { name: oro_entity.name_provider, priority: -50 }
+            - { name: oro_entity.name_provider, priority: 100 }
 
     oro_contact.event_listener.datagrid.my_contacts_activity:
         class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener

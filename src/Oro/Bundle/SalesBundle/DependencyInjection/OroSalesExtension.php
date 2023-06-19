@@ -27,6 +27,10 @@ class OroSalesExtension extends Extension
         $loader->load('controllers.yml');
         $loader->load('controllers_api.yml');
 
+        if ('test' === $container->getParameter('kernel.environment')) {
+            $loader->load('services_test.yml');
+        }
+
         $container->getDefinition('oro_sales.api.account_customer_association_provider')
             ->setArgument('$customerAssociationNames', $config['api']['customer_association_names']);
     }

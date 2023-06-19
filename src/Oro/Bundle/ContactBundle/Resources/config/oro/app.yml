@@ -1,3 +1,9 @@
+oro_entity:
+    entity_name_representation:
+        Oro\Bundle\ContactBundle\Entity\Group:
+            full: [ label ]
+            short: [ label ]
+
 oro_email:
-  public_email_owners:
-    - Oro\Bundle\ContactBundle\Entity\Contact
+    public_email_owners:
+        - Oro\Bundle\ContactBundle\Entity\Contact

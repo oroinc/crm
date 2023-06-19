@@ -1,0 +1,5 @@
+oro_entity:
+    entity_name_representation:
+        Oro\Bundle\ChannelBundle\Entity\Channel:
+            full: [ name ]
+            short: [ name ]
