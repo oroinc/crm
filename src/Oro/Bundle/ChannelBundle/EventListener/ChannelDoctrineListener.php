@@ -179,7 +179,7 @@ class ChannelDoctrineListener
             $oldChannel = $this->getOldValue($changeSet, 'dataChannel');
             $oldAccount = $this->getOldValue($changeSet, 'account');
             if ($oldChannel || $oldAccount) {
-                $this->scheduleUpdate($oldAccount ? : $account, $oldChannel ? : $channel);
+                $this->scheduleUpdate($oldAccount ?: $account, $oldChannel ?: $channel);
             }
         }
     }
@@ -211,8 +211,8 @@ class ChannelDoctrineListener
             $key = sprintf('%s__%s', spl_object_hash($account), spl_object_hash($channel));
 
             $this->queued[$key] = [
-                'account' => $account->getId() ? : $account,
-                'channel' => $channel->getId() ? : $channel
+                'account' => $account->getId() ?: $account,
+                'channel' => $channel->getId() ?: $channel
             ];
         }
     }

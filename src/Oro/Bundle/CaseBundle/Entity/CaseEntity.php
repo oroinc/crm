@@ -647,7 +647,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
     public function prePersist()
     {
         $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->reportedAt = $this->reportedAt? $this->reportedAt : new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->reportedAt = $this->reportedAt ? $this->reportedAt : new \DateTime('now', new \DateTimeZone('UTC'));
         if ($this->updateClosedAt && !$this->closedAt) {
             $this->setClosedAt(new \DateTime('now', new \DateTimeZone('UTC')));
         }

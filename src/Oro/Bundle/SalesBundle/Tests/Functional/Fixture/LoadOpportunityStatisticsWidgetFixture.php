@@ -26,7 +26,7 @@ class LoadOpportunityStatisticsWidgetFixture extends AbstractFixture
 
     protected function createOpportunities()
     {
-        $owner = new User;
+        $owner = new User();
         $owner->setId(18);
         $owner->setUsername('owner');
         $owner->setEmail('owner@example.com');

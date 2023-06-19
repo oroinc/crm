@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;

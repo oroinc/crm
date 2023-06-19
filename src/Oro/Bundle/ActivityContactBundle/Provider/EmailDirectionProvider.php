@@ -111,7 +111,7 @@ class EmailDirectionProvider implements DirectionProviderInterface
      */
     public function getDate($activity)
     {
-        return $activity->getSentAt() ? : new \DateTime('now', new \DateTimeZone('UTC'));
+        return $activity->getSentAt() ?: new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

@@ -1,10 +1,14 @@
 <?php
+
 namespace Oro\Bundle\AccountBundle\Form\Type;
 
 use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Form type for selecting Account entity
+ */
 class AccountSelectType extends AbstractType
 {
     /**

@@ -35,7 +35,8 @@ use Oro\Bundle\UserBundle\Entity\User;
  */
 class CustomerIdentity implements ChannelAwareInterface, ExtendEntityInterface
 {
-    use ChannelEntityTrait, ExtendEntityTrait;
+    use ChannelEntityTrait;
+    use ExtendEntityTrait;
 
     /**
      * @var integer

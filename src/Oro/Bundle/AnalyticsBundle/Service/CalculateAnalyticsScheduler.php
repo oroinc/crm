@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\AnalyticsBundle\Service;
 
 use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateAllChannelsAnalyticsTopic;
