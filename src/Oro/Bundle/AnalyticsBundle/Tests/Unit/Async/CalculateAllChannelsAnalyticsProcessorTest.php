@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Async;
 
 use Oro\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor;

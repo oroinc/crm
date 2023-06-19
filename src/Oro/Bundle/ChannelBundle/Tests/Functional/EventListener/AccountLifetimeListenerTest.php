@@ -190,7 +190,7 @@ class AccountLifetimeListenerTest extends WebTestCase
 
                     $opportunities['op1']
                         ->setCustomerAssociation(
-                            (new Customer)
+                            (new Customer())
                                 ->setTarget($account2)
                         );
                     $em->flush();

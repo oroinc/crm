@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\ContactUsBundle\Form\Type;
 
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
@@ -10,6 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Contact request form type
+ */
 class ContactRequestType extends AbstractType implements EmbeddedFormInterface
 {
     /**

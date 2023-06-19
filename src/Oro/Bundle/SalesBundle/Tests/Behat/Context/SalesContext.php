@@ -17,7 +17,8 @@ class SalesContext extends OroFeatureContext implements
     FixtureLoaderAwareInterface,
     OroPageObjectAware
 {
-    use FixtureLoaderDictionary, PageObjectDictionary;
+    use FixtureLoaderDictionary;
+    use PageObjectDictionary;
 
     /**
      * @Given /^two users (charlie) and (samantha) exists in the system$/

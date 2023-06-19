@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -9,6 +10,9 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Loads contact group demo data
+ */
 class LoadContactGroupData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /** @var ContainerInterface */

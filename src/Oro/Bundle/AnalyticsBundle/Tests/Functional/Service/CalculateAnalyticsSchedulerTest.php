@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Service;
 
 use Doctrine\ORM\EntityManagerInterface;

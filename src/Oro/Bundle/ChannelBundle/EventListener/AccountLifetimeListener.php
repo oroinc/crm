@@ -72,7 +72,7 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
         foreach ($this->accounts as $account) {
             $lifetimeAmountQb->setParameter('account', $account->getId());
 
-            $lifetimeAmount = (double)$lifetimeAmountQb->getQuery()->getSingleScalarResult();
+            $lifetimeAmount = (float)$lifetimeAmountQb->getQuery()->getSingleScalarResult();
 
             $history = new LifetimeValueHistory();
             $history->setAmount($lifetimeAmount);
