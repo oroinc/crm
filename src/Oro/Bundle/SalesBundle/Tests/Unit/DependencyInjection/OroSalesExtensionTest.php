@@ -10,6 +10,7 @@ class OroSalesExtensionTest extends \PHPUnit\Framework\TestCase
     public function testLoad(): void
     {
         $container = new ContainerBuilder();
+        $container->setParameter('kernel.environment', 'prod');
 
         $extension = new OroSalesExtension();
         $extension->load([], $container);
@@ -51,6 +52,7 @@ class OroSalesExtensionTest extends \PHPUnit\Framework\TestCase
     public function testLoadWithCustomConfigs(): void
     {
         $container = new ContainerBuilder();
+        $container->setParameter('kernel.environment', 'prod');
 
         $configs = [
             ['api' => ['customer_association_names' => ['Test\Entity1' => 'testField1']]],

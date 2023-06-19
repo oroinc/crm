@@ -5,6 +5,9 @@ namespace Oro\Bundle\ContactBundle\Provider;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\LocaleBundle\Provider\EntityNameProvider;
 
+/**
+ * Provides a text representation of Contact entity.
+ */
 class ContactEntityNameProvider extends EntityNameProvider
 {
     /**
@@ -13,15 +16,19 @@ class ContactEntityNameProvider extends EntityNameProvider
     public static $contactCollectionsMap = ['emails' => 'email', 'phones' => 'phone'];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getName($format, $locale, $entity)
     {
-        return is_a($entity, Contact::class, true) ? parent::getName($format, $locale, $entity) : false;
+        if (!$entity instanceof Contact) {
+            return false;
+        }
+
+        return parent::getName($format, $locale, $entity);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getNameDQL($format, $locale, $className, $alias)
     {
@@ -30,7 +37,6 @@ class ContactEntityNameProvider extends EntityNameProvider
         }
 
         $nameDQL = parent::getNameDQL($format, $locale, $className, $alias);
-
         if (!$nameDQL) {
             // unsupported format
             return false;
@@ -38,7 +44,6 @@ class ContactEntityNameProvider extends EntityNameProvider
 
         // fallback to email and phone if Contact name fields are empty
         $subSelects = [];
-
         foreach (self::$contactCollectionsMap as $property => $field) {
             // SubSelect to get the primary element from the collection
             $subSelects[] = sprintf(
@@ -55,6 +60,6 @@ class ContactEntityNameProvider extends EntityNameProvider
         }
         $subQuery = implode(', ', $subSelects);
 
-        return sprintf('COALESCE(NULLIF(%s, \'\'), %s)', $nameDQL, $subQuery);
+        return sprintf('COALESCE(NULLIF(%s, \'\'), %s, \'\')', $nameDQL, $subQuery);
     }
 }

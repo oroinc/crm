@@ -2,6 +2,7 @@ api:
     entities:
         Oro\Bundle\CaseBundle\Entity\CaseComment:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case_comment.md'
+            disable_meta_properties: [ title ]
 
         Oro\Bundle\CaseBundle\Entity\CaseEntity:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case.md'

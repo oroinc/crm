@@ -130,7 +130,7 @@ class ContactEntityNameProviderTest extends \PHPUnit\Framework\TestCase
                               ' FROM Oro\Bundle\ContactBundle\Entity\Contact test_phones_base' .
                               ' LEFT JOIN test_phones_base.phones test_phones' .
                               ' WHERE test_phones.primary = true AND test_phones_base = test) ' .
-                              'AS string))'
+                              'AS string), \'\')'
             ]
         ];
     }

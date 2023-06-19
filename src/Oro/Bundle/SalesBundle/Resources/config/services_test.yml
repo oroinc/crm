@@ -1,0 +1,6 @@
+services:
+    oro_sales.tests.entity_name_resolver.data_loader:
+        class: Oro\Bundle\SalesBundle\Tests\Functional\Environment\TestEntityNameResolverDataLoader
+        decorates: oro_entity.tests.entity_name_resolver.data_loader
+        arguments:
+            - '@.inner'
