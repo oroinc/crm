@@ -3,58 +3,82 @@
 namespace Oro\Bundle\ContactBundle\Provider;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\LocaleBundle\Provider\EntityNameProvider;
+use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
+use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
+use Oro\Bundle\LocaleBundle\Entity\Localization;
+use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
+use Oro\Component\DependencyInjection\ServiceLink;
 
-class ContactEntityNameProvider extends EntityNameProvider
+/**
+ * Provides a text representation of Contact entity.
+ */
+class ContactEntityNameProvider implements EntityNameProviderInterface
 {
-    /**
-     * @var array Map of entity collection property and field name
-     */
-    public static $contactCollectionsMap = ['emails' => 'email', 'phones' => 'phone'];
+    private ServiceLink $nameFormatterLink;
+    private ServiceLink $dqlNameFormatterLink;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName($format, $locale, $entity)
+    public function __construct(ServiceLink $nameFormatterLink, ServiceLink $dqlNameFormatterLink)
     {
-        return is_a($entity, Contact::class, true) ? parent::getName($format, $locale, $entity) : false;
+        $this->nameFormatterLink = $nameFormatterLink;
+        $this->dqlNameFormatterLink = $dqlNameFormatterLink;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     */
+    public function getName($format, $locale, $entity)
+    {
+        if (!$entity instanceof Contact || self::FULL !== $format) {
+            return false;
+        }
+
+        /** @var NameFormatter $nameFormatter */
+        $nameFormatter = $this->nameFormatterLink->getService();
+        $name = $nameFormatter->format(
+            $entity,
+            $locale instanceof Localization ? $locale->getLanguageCode() : $locale
+        );
+        if ($name) {
+            return $name;
+        }
+
+        return (string)($entity->getPrimaryEmail() ?: $entity->getPrimaryPhone());
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getNameDQL($format, $locale, $className, $alias)
     {
-        if (!is_a($className, Contact::class, true)) {
+        if (!is_a($className, Contact::class, true) || self::FULL !== $format) {
             return false;
         }
 
-        $nameDQL = parent::getNameDQL($format, $locale, $className, $alias);
+        /** @var DQLNameFormatter $dqlNameFormatter */
+        $dqlNameFormatter = $this->dqlNameFormatterLink->getService();
+        $nameDQL = $dqlNameFormatter->getFormattedNameDQL(
+            $alias,
+            $className,
+            $locale instanceof Localization ? $locale->getLanguageCode() : $locale
+        );
 
-        if (!$nameDQL) {
-            // unsupported format
-            return false;
-        }
+        return sprintf(
+            'COALESCE(NULLIF(%s, \'\'), %s, %s, \'\')',
+            $nameDQL,
+            $this->getPrimaryEntitySubSelect($alias, 'emails', 'email'),
+            $this->getPrimaryEntitySubSelect($alias, 'phones', 'phone')
+        );
+    }
 
-        // fallback to email and phone if Contact name fields are empty
-        $subSelects = [];
-
-        foreach (self::$contactCollectionsMap as $property => $field) {
-            // SubSelect to get the primary element from the collection
-            $subSelects[] = sprintf(
-                'CAST((' .
-                'SELECT %1$s_%3$s.%4$s FROM %2$s %1$s_%3$s_base' .
-                ' LEFT JOIN %1$s_%3$s_base.%3$s %1$s_%3$s' .
-                ' WHERE %1$s_%3$s.primary = true AND %1$s_%3$s_base = %1$s' .
-                ') AS string)',
-                $alias,
-                $className,
-                $property,
-                $field
-            );
-        }
-        $subQuery = implode(', ', $subSelects);
-
-        return sprintf('COALESCE(NULLIF(%s, \'\'), %s)', $nameDQL, $subQuery);
+    private function getPrimaryEntitySubSelect(string $alias, string $property, string $field): string
+    {
+        return sprintf(
+            'CAST((SELECT %1$s_%3$s.%4$s FROM %2$s %1$s_%3$s_base LEFT JOIN %1$s_%3$s_base.%3$s %1$s_%3$s'
+            . ' WHERE %1$s_%3$s.primary = true AND %1$s_%3$s_base = %1$s) AS string)',
+            $alias,
+            Contact::class,
+            $property,
+            $field
+        );
     }
 }

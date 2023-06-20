@@ -10,6 +10,7 @@ class OroChannelExtensionTest extends \PHPUnit\Framework\TestCase
     public function testLoad(): void
     {
         $container = new ContainerBuilder();
+        $container->setParameter('kernel.environment', 'prod');
 
         $extension = new OroChannelExtension();
         $extension->load([], $container);
