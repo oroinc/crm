@@ -163,7 +163,8 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
                 )
                 ->innerJoin('e.' . $this->getChannelFieldName($customerClass), 'channel')
                 ->leftJoin('e.account', 'account');
-            $subQb->where($subQb->expr()->in('e.id', $customerIds));
+            $subQb->where($subQb->expr()->in('e.id', ':ids'))
+                ->setParameter('ids', $customerIds);
             $qb->addSubQuery($subQb->getQuery());
         }
 
