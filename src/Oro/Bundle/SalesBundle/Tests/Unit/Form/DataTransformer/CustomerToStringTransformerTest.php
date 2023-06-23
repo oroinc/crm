@@ -22,7 +22,7 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerToStringTransformer */
     private $transformer;
 
-    /** @var CustomerFactory|\PHPUnit\Framework\MockObject\MockObject  */
+    /** @var CustomerFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $customerFactory;
 
     protected function setUp(): void
