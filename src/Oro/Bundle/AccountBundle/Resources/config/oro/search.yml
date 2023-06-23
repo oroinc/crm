@@ -51,7 +51,7 @@ search:
                             -
                                 name: phone
                                 target_type: text
-                                target_fields: [contactPhones]
+                                target_fields: [phone]
                     -
                         name: emails
                         relation_type: one-to-many
@@ -99,7 +99,7 @@ search:
                             -
                                 name: phone
                                 target_type: text
-                                target_fields: [contactPhones]
+                                target_fields: [phone]
                     -
                         name: emails
                         relation_type: one-to-many

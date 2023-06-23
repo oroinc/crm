@@ -5,7 +5,7 @@ search:
             name:                       oro_contactus_request_view
             parameters:
                 id:                     id
-        search_template:                '@OroContactUs/Search/result.html.twig'
+        search_template:                '@OroContactUs/ContactRequest/searchResult.html.twig'
         fields:
             -
                 name:                   contactReason
@@ -24,9 +24,13 @@ search:
                 target_type:            text
                 target_fields:          [lastName]
             -
+                name:                   organizationName
+                target_type:            text
+                target_fields:          [organizationName]
+            -
                 name:                   emailAddress
                 target_type:            text
-                target_fields:          [emailAddress]
+                target_fields:          [email]
             -
                 name:                   phone
                 target_type:            text
