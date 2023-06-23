@@ -25,3 +25,4 @@ oro:
         info_title_times: 'Times Contacted: {{ total_contacted }}'
         info_title_last:  'Last Contacted: {{ direction }} {{ last_datetime }}'
         info_title_no_data: Not contacted yet
+        last_contacted: Last Contacted
