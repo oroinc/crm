@@ -55,6 +55,7 @@ Oro\Bundle\ContactBundle\Entity\Contact:
         birthday: '<(new \DateTime("2000-01-02", new \DateTimeZone("UTC")))>'
         firstName: 'TestContact2'
         lastName: 'TestContact2'
+        assignedTo: '@admin'
         __calls:
             - addEmail: ['@contact_email_2']
             - addPhone: ['@contact_phone_2']
