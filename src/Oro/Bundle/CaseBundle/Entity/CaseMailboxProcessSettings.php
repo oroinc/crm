@@ -5,6 +5,7 @@ namespace Oro\Bundle\CaseBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroCaseBundle_Entity_CaseMailboxProcessSettings;
 use Oro\Bundle\EmailBundle\Entity\MailboxProcessSettings;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
@@ -19,6 +20,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @Config(
  *      mode="hidden"
  * )
+ * @mixin OroCaseBundle_Entity_CaseMailboxProcessSettings
  */
 class CaseMailboxProcessSettings extends MailboxProcessSettings implements Taggable, ExtendEntityInterface
 {

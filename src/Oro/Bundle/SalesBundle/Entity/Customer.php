@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroSalesBundle_Entity_Customer;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -22,6 +23,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
  * @method Customer supportCustomerTarget($targetClass)
  * @method Customer getCustomerTarget()
  * @method Customer setCustomerTarget()
+ * @mixin OroSalesBundle_Entity_Customer
  */
 class Customer implements ExtendEntityInterface
 {

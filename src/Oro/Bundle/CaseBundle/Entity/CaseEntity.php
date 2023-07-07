@@ -5,6 +5,7 @@ namespace Oro\Bundle\CaseBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroCaseBundle_Entity_CaseEntity;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
@@ -57,6 +58,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  * )
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @mixin OroCaseBundle_Entity_CaseEntity
  */
 class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
 {

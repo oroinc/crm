@@ -4,6 +4,7 @@ namespace Oro\Bundle\ContactBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroContactBundle_Entity_ContactAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -31,6 +32,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
  *      }
  * )
  * @ORM\Entity
+ * @mixin OroContactBundle_Entity_ContactAddress
  */
 class ContactAddress extends AbstractTypedAddress implements ExtendEntityInterface
 {

@@ -5,6 +5,7 @@ namespace Oro\Bundle\SalesBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroSalesBundle_Entity_Lead;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
@@ -83,6 +84,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *
  * @method AbstractEnumValue getStatus()
  * @method Opportunity setStatus(AbstractEnumValue $status)
+ * @mixin OroSalesBundle_Entity_Lead
  */
 class Lead implements
     FullNameInterface,

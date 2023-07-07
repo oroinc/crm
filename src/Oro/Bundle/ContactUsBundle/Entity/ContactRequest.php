@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ContactUsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroContactUsBundle_Entity_ContactRequest;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
@@ -46,6 +47,7 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
  * @method null|\Oro\Bundle\CustomerBundle\Entity\CustomerUser getCustomerUser() This method is available only in OroCommerce.
  * @method void setCustomerUser(\Oro\Bundle\CustomerBundle\Entity\CustomerUser $customerUser) This method is available only in OroCommerce.
  * @codingStandardsIgnoreEnd
+ * @mixin OroContactUsBundle_Entity_ContactRequest
  */
 class ContactRequest extends AbstractContactRequest implements ExtendEntityInterface
 {

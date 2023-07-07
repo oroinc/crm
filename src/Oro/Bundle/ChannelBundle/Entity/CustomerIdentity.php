@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroChannelBundle_Entity_CustomerIdentity;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
@@ -32,6 +33,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      }
  *  }
  * )
+ * @mixin OroChannelBundle_Entity_CustomerIdentity
  */
 class CustomerIdentity implements ChannelAwareInterface, ExtendEntityInterface
 {

@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroSalesBundle_Entity_LeadAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -28,6 +29,7 @@ use Oro\Bundle\FormBundle\Entity\PrimaryItem;
  *      }
  * )
  * @ORM\Entity
+ * @mixin OroSalesBundle_Entity_LeadAddress
  */
 class LeadAddress extends AbstractAddress implements PrimaryItem, ExtendEntityInterface
 {

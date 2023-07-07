@@ -5,6 +5,7 @@ namespace Oro\Bundle\ContactUsBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroContactUsBundle_Entity_ContactReason;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -43,6 +44,7 @@ use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
  * )
  * @method LocalizedFallbackValue getDefaultTitle()
  * @method setDefaultTitle(string $value)
+ * @mixin OroContactUsBundle_Entity_ContactReason
  */
 class ContactReason implements ExtendEntityInterface
 {
