@@ -5,6 +5,7 @@ namespace Oro\Bundle\AccountBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroAccountBundle_Entity_Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -68,6 +69,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *          }
  *      }
  * )
+ * @mixin OroAccountBundle_Entity_Account
  */
 class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterface
 {

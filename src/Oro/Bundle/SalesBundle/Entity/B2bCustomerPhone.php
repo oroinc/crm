@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroSalesBundle_Entity_B2bCustomerPhone;
 use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
@@ -35,6 +36,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
  *          }
  *      }
  * )
+ * @mixin OroSalesBundle_Entity_B2bCustomerPhone
  */
 class B2bCustomerPhone extends AbstractPhone implements ExtendEntityInterface
 {

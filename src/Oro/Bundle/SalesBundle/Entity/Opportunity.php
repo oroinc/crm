@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroSalesBundle_Entity_Opportunity;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrencyHolderInterface;
@@ -76,6 +77,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *
  * @method AbstractEnumValue getStatus()
  * @method Opportunity setStatus(AbstractEnumValue $status)
+ * @mixin OroSalesBundle_Entity_Opportunity
  */
 class Opportunity implements
     EmailHolderInterface,

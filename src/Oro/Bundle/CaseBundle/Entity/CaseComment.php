@@ -3,6 +3,7 @@
 namespace Oro\Bundle\CaseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroCaseBundle_Entity_CaseComment;
 use Oro\Bundle\CommentBundle\Entity\BaseComment;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -37,6 +38,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
  *          }
  *      }
  * )
+ * @mixin OroCaseBundle_Entity_CaseComment
  */
 class CaseComment extends BaseComment implements ExtendEntityInterface
 {

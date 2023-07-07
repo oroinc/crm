@@ -21,7 +21,7 @@ Oro\Bundle\EmailBundle\Entity\Email:
     subject: 'Merry Christmas'
     emailBody: '@emailBody'
     sentAt: '<dateTimeBetween("2015-12-25", "2015-12-25")>'
-    fromName: '"Charlie Sheen" <charlie@sheen.com>'
+    fromName: '"Charlie Sheen" \<charlie@sheen.com\>'
     fromEmailAddress: '@charlieAddress'
     internalDate: '<dateTimeBetween("-200 days", "now")>'
     messageId: fsdfasdf
@@ -47,6 +47,7 @@ Oro\Bundle\NoteBundle\Entity\Note:
 Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
   calendarEvent:
     title: 'Contract sign in'
+    calendar: '@first_calendar'
     __calls:
       - addActivityTarget: ['@contactCharlie']
     createdAt: '<dateTimeBetween("-200 days", "now")>'

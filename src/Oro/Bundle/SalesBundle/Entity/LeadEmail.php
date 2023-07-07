@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Extend\Entity\Autocomplete\OroSalesBundle_Entity_LeadEmail;
 use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
 use Oro\Bundle\EmailBundle\Entity\EmailInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -34,6 +35,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
  *          }
  *      }
  * )
+ * @mixin OroSalesBundle_Entity_LeadEmail
  */
 class LeadEmail extends AbstractEmail implements ExtendEntityInterface, EmailInterface
 {
