@@ -39,6 +39,8 @@ class ContactAddress extends AbstractTypedAddress implements ExtendEntityInterfa
     use ExtendEntityTrait;
 
     /**
+     * @var Contact|null
+     *
      * @ORM\ManyToOne(targetEntity="Contact", inversedBy="addresses", cascade={"persist"})
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
      * @ConfigField(
@@ -73,12 +75,16 @@ class ContactAddress extends AbstractTypedAddress implements ExtendEntityInterfa
 
     /**
      * Set contact as owner.
-     *
-     * @param Contact $owner
      */
     public function setOwner(Contact $owner = null)
     {
+        if (null === $owner && null !== $this->owner) {
+            $this->owner->removeAddress($this);
+        }
         $this->owner = $owner;
+        if (null !== $this->owner) {
+            $this->owner->addAddress($this);
+        }
     }
 
     /**

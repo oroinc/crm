@@ -7,11 +7,23 @@ use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 
 class ContactAddressTest extends \PHPUnit\Framework\TestCase
 {
-    public function testOwner()
+    public function testOwner(): void
     {
-        $contact = $this->createMock(Contact::class);
+        $contact = new Contact();
         $address = new ContactAddress();
+
         $address->setOwner($contact);
-        $this->assertSame($contact, $address->getOwner());
+        self::assertSame($contact, $address->getOwner());
+        self::assertCount(1, $contact->getAddresses());
+        self::assertSame($address, $contact->getAddresses()->first());
+
+        $address->setOwner($contact);
+        self::assertSame($contact, $address->getOwner());
+        self::assertCount(1, $contact->getAddresses());
+        self::assertSame($address, $contact->getAddresses()->first());
+
+        $address->setOwner(null);
+        self::assertNull($address->getOwner());
+        self::assertCount(0, $contact->getAddresses());
     }
 }
