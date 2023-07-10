@@ -197,7 +197,6 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
         $date = \DateTime::createFromFormat('m/d/Y', $data['Birthday']);
         $contact->setBirthday($date);
 
-        /** @var ContactAddress $address */
         $address = new ContactAddress();
         $address->setLabel('Primary Address');
         $address->setCity($data['City']);

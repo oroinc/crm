@@ -1,0 +1,10 @@
+dependencies:
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+    contact1:
+        firstName: 'Contact 1'
+        organization: '@organization'
+        owner: '@user'
+        createdBy: '@user'

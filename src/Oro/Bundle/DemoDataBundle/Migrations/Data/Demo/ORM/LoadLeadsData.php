@@ -203,7 +203,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setOrganization($this->organization);
         $lead->setTwitter($data['Twitter']);
 
-        /** @var LeadAddress $address */
         $address = new LeadAddress();
         $address->setLabel('Primary Address');
         $address->setCity($data['City']);

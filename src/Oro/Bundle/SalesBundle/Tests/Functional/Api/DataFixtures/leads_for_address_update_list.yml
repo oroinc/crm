@@ -1,0 +1,9 @@
+dependencies:
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization
+    - Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+    lead1:
+        name: 'Lead 1'
+        organization: '@organization'
+        owner: '@user'

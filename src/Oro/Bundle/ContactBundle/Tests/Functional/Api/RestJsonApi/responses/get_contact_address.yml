@@ -23,10 +23,10 @@ data:
                 type: contacts
                 id: '<toString(@contact1->id)>'
         types:
-                data:
-                    -
-                        type: addresstypes
-                        id: '<toString(@shipping->name)>'
+            data:
+                -
+                    type: addresstypes
+                    id: '<toString(@shipping->name)>'
         country:
             data:
                 type: countries
