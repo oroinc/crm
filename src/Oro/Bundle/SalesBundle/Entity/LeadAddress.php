@@ -34,6 +34,8 @@ class LeadAddress extends AbstractAddress implements PrimaryItem, ExtendEntityIn
     use ExtendEntityTrait;
 
     /**
+     * @var Lead|null
+     *
      * @ORM\ManyToOne(targetEntity="Lead", inversedBy="addresses", cascade={"persist"})
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
      * @ConfigField(
@@ -67,12 +69,16 @@ class LeadAddress extends AbstractAddress implements PrimaryItem, ExtendEntityIn
 
     /**
      * Set lead as owner.
-     *
-     * @param Lead $owner
      */
     public function setOwner(Lead $owner = null)
     {
+        if (null === $owner && null !== $this->owner) {
+            $this->owner->removeAddress($this);
+        }
         $this->owner = $owner;
+        if (null !== $this->owner) {
+            $this->owner->addAddress($this);
+        }
     }
 
     /**

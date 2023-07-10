@@ -79,6 +79,7 @@ api:
                         owner:
                             form_options:
                                 mapped: false
+                update_list: true
             subresources:
                 owner:
                     actions:

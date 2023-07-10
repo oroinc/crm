@@ -1,6 +1,77 @@
 data:
     -
         type: contactaddresses
+        id: '<toString(@another_contact_address1->id)>'
+        attributes:
+            primary: true
+            label: 'Another Contact Address 1'
+            street: 'Street 1'
+            street2: null
+            city: 'Los Angeles'
+            postalCode: '90001'
+            organization: Acme
+            namePrefix: null
+            firstName: null
+            middleName: null
+            lastName: null
+            nameSuffix: null
+            createdAt: '@another_contact_address1->created->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@another_contact_address1->updated->format("Y-m-d\TH:i:s\Z")'
+            customRegion: null
+        relationships:
+            owner:
+                data:
+                    type: contacts
+                    id: '<toString(@another_contact->id)>'
+            types:
+                data:
+                    -
+                        type: addresstypes
+                        id: '<toString(@billing->name)>'
+            country:
+                data:
+                    type: countries
+                    id: '<toString(@country_usa->iso2Code)>'
+            region:
+                data:
+                    type: regions
+                    id: '<toString(@region_usa_california->combinedCode)>'
+    -
+        type: contactaddresses
+        id: '<toString(@another_contact_address2->id)>'
+        attributes:
+            primary: false
+            label: 'Another Contact Address 2'
+            street: 'Street 2'
+            street2: null
+            city: 'Los Angeles'
+            postalCode: '90001'
+            organization: Acme
+            namePrefix: null
+            firstName: null
+            middleName: null
+            lastName: null
+            nameSuffix: null
+            createdAt: '@another_contact_address2->created->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@another_contact_address2->updated->format("Y-m-d\TH:i:s\Z")'
+            customRegion: null
+        relationships:
+            owner:
+                data:
+                    type: contacts
+                    id: '<toString(@another_contact->id)>'
+            types:
+                data: []
+            country:
+                data:
+                    type: countries
+                    id: '<toString(@country_usa->iso2Code)>'
+            region:
+                data:
+                    type: regions
+                    id: '<toString(@region_usa_california->combinedCode)>'
+    -
+        type: contactaddresses
         id: '<toString(@contact_address1->id)>'
         attributes:
             primary: true
@@ -109,74 +180,3 @@ data:
                 data:
                     type: regions
                     id: '<toString(@region_israel_telaviv->combinedCode)>'
-    -
-        type: contactaddresses
-        id: '<toString(@another_contact_address1->id)>'
-        attributes:
-            primary: true
-            label: 'Another Contact Address 1'
-            street: 'Street 1'
-            street2: null
-            city: 'Los Angeles'
-            postalCode: '90001'
-            organization: Acme
-            namePrefix: null
-            firstName: null
-            middleName: null
-            lastName: null
-            nameSuffix: null
-            createdAt: '@another_contact_address1->created->format("Y-m-d\TH:i:s\Z")'
-            updatedAt: '@another_contact_address1->updated->format("Y-m-d\TH:i:s\Z")'
-            customRegion: null
-        relationships:
-            owner:
-                data:
-                    type: contacts
-                    id: '<toString(@another_contact->id)>'
-            types:
-                data:
-                    -
-                        type: addresstypes
-                        id: '<toString(@billing->name)>'
-            country:
-                data:
-                    type: countries
-                    id: '<toString(@country_usa->iso2Code)>'
-            region:
-                data:
-                    type: regions
-                    id: '<toString(@region_usa_california->combinedCode)>'
-    -
-        type: contactaddresses
-        id: '<toString(@another_contact_address2->id)>'
-        attributes:
-            primary: false
-            label: 'Another Contact Address 2'
-            street: 'Street 2'
-            street2: null
-            city: 'Los Angeles'
-            postalCode: '90001'
-            organization: Acme
-            namePrefix: null
-            firstName: null
-            middleName: null
-            lastName: null
-            nameSuffix: null
-            createdAt: '@another_contact_address2->created->format("Y-m-d\TH:i:s\Z")'
-            updatedAt: '@another_contact_address2->updated->format("Y-m-d\TH:i:s\Z")'
-            customRegion: null
-        relationships:
-            owner:
-                data:
-                    type: contacts
-                    id: '<toString(@another_contact->id)>'
-            types:
-                data: []
-            country:
-                data:
-                    type: countries
-                    id: '<toString(@country_usa->iso2Code)>'
-            region:
-                data:
-                    type: regions
-                    id: '<toString(@region_usa_california->combinedCode)>'
