@@ -55,7 +55,6 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
         $this->setUpLoggerMock($this->processor);
     }
 
-
     public function testShouldImplementMessageProcessorInterface(): void
     {
         $this->assertClassImplements(MessageProcessorInterface::class, ChangeIntegrationStatusProcessor::class);

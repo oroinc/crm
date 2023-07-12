@@ -142,9 +142,6 @@ class ContactRequest extends AbstractContactRequest implements ExtendEntityInter
         return $this->preferredContactMethod;
     }
 
-    /**
-     * @param ContactReason $contactReason
-     */
     public function setContactReason(ContactReason $contactReason = null)
     {
         $this->contactReason = $contactReason;

@@ -24,7 +24,7 @@ interface ChannelRepositoryInterface
     /**
      * @param array     $entities
      * @param bool      $status
-     * @param AclHelper $aclHelper
+     * @param AclHelper|null $aclHelper
      *
      * @return array
      */

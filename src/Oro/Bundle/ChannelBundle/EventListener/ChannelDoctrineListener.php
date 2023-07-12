@@ -25,7 +25,6 @@ class ChannelDoctrineListener
     public const MAX_UPDATE_CHUNK_SIZE = 50;
     protected LifetimeHistoryStatusUpdateManager $statusUpdateManager;
 
-    /** @var UnitOfWork */
     protected ?UnitOfWork $uow = null;
     protected ?EntityManager $em = null;
     protected ?LifetimeHistoryRepository $lifetimeRepo = null;
@@ -196,10 +195,6 @@ class ChannelDoctrineListener
         || array_key_exists($this->customerIdentities[$className], $changeSet);
     }
 
-    /**
-     * @param Account $account
-     * @param Channel $channel
-     */
     protected function scheduleUpdate(Account $account = null, Channel $channel = null)
     {
         if ($account && $channel) {

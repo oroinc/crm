@@ -94,7 +94,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
     }
 
     /**
-     * @param Channel $dataChannel
+     * @param Channel|null $dataChannel
      *
      * remove null after BAP-5248
      */

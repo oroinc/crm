@@ -229,7 +229,7 @@ class RFMMetricCategory
     /**
      * Set channel
      *
-     * @param Channel $channel
+     * @param Channel|null $channel
      * @return RFMMetricCategory
      */
     public function setChannel(Channel $channel = null)

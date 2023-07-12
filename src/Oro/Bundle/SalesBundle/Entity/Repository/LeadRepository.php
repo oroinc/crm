@@ -12,8 +12,8 @@ use Doctrine\ORM\QueryBuilder;
 class LeadRepository extends EntityRepository
 {
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
      *
      * @return QueryBuilder
      */
@@ -25,8 +25,8 @@ class LeadRepository extends EntityRepository
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
      *
      * @return QueryBuilder
      */
@@ -51,8 +51,8 @@ class LeadRepository extends EntityRepository
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
      *
      * @return QueryBuilder
      */

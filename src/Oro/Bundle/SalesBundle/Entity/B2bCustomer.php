@@ -446,7 +446,7 @@ class B2bCustomer implements
     }
 
     /**
-     * @param User $owner
+     * @param User|null $owner
      *
      * @return $this
      */
@@ -529,7 +529,7 @@ class B2bCustomer implements
     /**
      * Set organization
      *
-     * @param Organization $organization
+     * @param Organization|null $organization
      * @return B2bCustomer
      */
     public function setOrganization(Organization $organization = null)
