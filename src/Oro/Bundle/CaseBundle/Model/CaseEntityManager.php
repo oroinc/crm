@@ -69,7 +69,7 @@ class CaseEntityManager
     }
 
     /**
-     * @param CaseEntity $case
+     * @param CaseEntity|null $case
      *
      * @return CaseComment
      */

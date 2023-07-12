@@ -49,8 +49,6 @@ class LeadPhone extends AbstractPhone implements ExtendEntityInterface
 
     /**
      * Set Lead as owner.
-     *
-     * @param Lead $owner
      */
     public function setOwner(Lead $owner = null)
     {

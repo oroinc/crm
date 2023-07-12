@@ -47,9 +47,6 @@ class B2bCustomerEmail extends AbstractEmail implements ExtendEntityInterface
      */
     protected $owner;
 
-    /**
-     * @param B2bCustomer $owner
-     */
     public function setOwner(B2bCustomer $owner = null)
     {
         $this->owner = $owner;

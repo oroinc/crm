@@ -35,9 +35,6 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider testBuildFormDataProvider
-     * @param array $entities
-     * @param array $channels
-     * @param callable $callback
      */
     public function testBuildForm(array $entities, array $channels, callable $callback = null)
     {

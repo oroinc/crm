@@ -28,7 +28,7 @@ class CommentApiEntityManager extends ApiEntityManager
     }
 
     /**
-     * @param CaseEntity $case
+     * @param CaseEntity|null $case
      * @return CaseComment
      */
     public function createEntity(CaseEntity $case = null)

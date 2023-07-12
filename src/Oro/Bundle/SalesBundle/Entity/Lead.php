@@ -1037,7 +1037,7 @@ class Lead implements
     /**
      * Set organization
      *
-     * @param Organization $organization
+     * @param Organization|null $organization
      * @return Lead
      */
     public function setOrganization(Organization $organization = null)

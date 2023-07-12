@@ -307,7 +307,7 @@ class Channel
     }
 
     /**
-     * @param Integration $dataSource
+     * @param Integration|null $dataSource
      *
      * @return Channel
      */
@@ -406,7 +406,7 @@ class Channel
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param \DateTime|null $createdAt
      *
      * @return Channel
      */

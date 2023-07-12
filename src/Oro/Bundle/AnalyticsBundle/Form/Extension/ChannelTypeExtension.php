@@ -221,7 +221,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
     }
 
     /**
-     * @param Channel $channel
+     * @param Channel|null $channel
      *
      * @return bool
      */

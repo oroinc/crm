@@ -47,8 +47,8 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param \DateTime  $start
-     * @param \DateTime  $end
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
      *
      * @return QueryBuilder
      */

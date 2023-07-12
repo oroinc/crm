@@ -65,7 +65,6 @@ class ImportExportTest extends AbstractImportExportTestCase
         self::assertCount(5, $this->getContactRepository()->findAll());
     }
 
-
     public function testImportDuplicatedAddressPhoneWithAddStrategy(): void
     {
         $this->assertImportWorks(
