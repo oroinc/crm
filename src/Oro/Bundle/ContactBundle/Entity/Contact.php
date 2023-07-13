@@ -1524,7 +1524,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
     }
 
     /**
-     * @param \Oro\Bundle\UserBundle\Entity\User $createdBy
+     * @param User $createdBy
      *
      * @return Contact
      */
@@ -1536,7 +1536,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
     }
 
     /**
-     * @return \Oro\Bundle\UserBundle\Entity\User
+     * @return User
      */
     public function getCreatedBy()
     {
@@ -1544,7 +1544,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
     }
 
     /**
-     * @param \Oro\Bundle\UserBundle\Entity\User $updatedBy
+     * @param User $updatedBy
      *
      * @return Contact
      */
@@ -1556,7 +1556,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
     }
 
     /**
-     * @return \Oro\Bundle\UserBundle\Entity\User
+     * @return User
      */
     public function getUpdatedBy()
     {
@@ -1581,7 +1581,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
     /**
      * Set organization
      *
-     * @param Organization $organization
+     * @param Organization|null $organization
      * @return Contact
      */
     public function setOrganization(Organization $organization = null)

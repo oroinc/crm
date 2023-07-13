@@ -92,9 +92,6 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
         $this->loadContacts();
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
     protected function initSupportingEntities(ObjectManager $manager = null)
     {
         if ($manager) {

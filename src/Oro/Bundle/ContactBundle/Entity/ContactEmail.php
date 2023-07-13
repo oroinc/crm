@@ -65,8 +65,6 @@ class ContactEmail extends AbstractEmail implements
 
     /**
      * Set contact as owner.
-     *
-     * @param Contact $owner
      */
     public function setOwner(Contact $owner = null)
     {

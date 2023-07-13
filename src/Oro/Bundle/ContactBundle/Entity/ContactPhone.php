@@ -48,8 +48,6 @@ class ContactPhone extends AbstractPhone implements ExtendEntityInterface
 
     /**
      * Set contact as owner.
-     *
-     * @param Contact $owner
      */
     public function setOwner(Contact $owner = null)
     {

@@ -47,8 +47,6 @@ class LeadEmail extends AbstractEmail implements ExtendEntityInterface, EmailInt
 
     /**
      * Set lead as owner.
-     *
-     * @param Lead $owner
      */
     public function setOwner(Lead $owner = null)
     {

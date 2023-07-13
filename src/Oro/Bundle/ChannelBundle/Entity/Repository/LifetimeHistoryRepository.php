@@ -20,7 +20,7 @@ class LifetimeHistoryRepository extends EntityRepository
      *
      * @param array $customerIdentities [customerClass => lifetimeField, ...]
      * @param Account $account
-     * @param Channel $channel
+     * @param Channel|null $channel
      *
      * @return double
      */

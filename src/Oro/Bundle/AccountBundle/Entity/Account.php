@@ -480,7 +480,7 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
     /**
      * Set organization
      *
-     * @param Organization $organization
+     * @param Organization|null $organization
      *
      * @return Account
      */
@@ -510,7 +510,7 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
     }
 
     /**
-     * @param Account $referredBy
+     * @param Account|null $referredBy
      *
      * @return Account
      */

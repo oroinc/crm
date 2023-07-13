@@ -10,7 +10,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 
 /**
- * The builder for a {@see \Oro\Bundle\ChannelBundle\Entity\Channel} object.
+ * The builder for a {@see Channel} object.
  */
 class ChannelObjectBuilder
 {
@@ -100,7 +100,7 @@ class ChannelObjectBuilder
     }
 
     /**
-     * @param array $entities
+     * @param array|null $entities
      *
      * @return ChannelObjectBuilder
      */
@@ -119,7 +119,7 @@ class ChannelObjectBuilder
     }
 
     /**
-     * @param Organization $organization
+     * @param Organization|null $organization
      *
      * @return ChannelObjectBuilder
      */

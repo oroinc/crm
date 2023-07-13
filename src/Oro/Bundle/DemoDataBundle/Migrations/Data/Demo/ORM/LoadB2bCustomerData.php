@@ -72,7 +72,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
     /**
      * @param Organization $organization
      * @param array        $data
-     * @param Channel      $channel
+     * @param Channel|null $channel
      *
      * @return B2bCustomer
      */

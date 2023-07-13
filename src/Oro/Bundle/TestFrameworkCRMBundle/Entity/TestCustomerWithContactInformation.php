@@ -104,9 +104,6 @@ class TestCustomerWithContactInformation implements
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
@@ -123,9 +120,6 @@ class TestCustomerWithContactInformation implements
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPhone(): string
     {
         return $this->phone;

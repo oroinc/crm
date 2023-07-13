@@ -46,9 +46,6 @@ class B2bCustomerPhone extends AbstractPhone implements ExtendEntityInterface
      */
     protected $owner;
 
-    /**
-     * @param B2bCustomer $owner
-     */
     public function setOwner(B2bCustomer $owner = null)
     {
         $this->owner = $owner;

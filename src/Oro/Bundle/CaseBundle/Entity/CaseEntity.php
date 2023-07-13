@@ -585,7 +585,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
     }
 
     /**
-     * @param \DateTime $reportedAt
+     * @param \DateTime|null $reportedAt
      * @return CaseEntity
      */
     public function setReportedAt(\DateTime $reportedAt = null)
@@ -604,7 +604,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
     }
 
     /**
-     * @param \DateTime $closedAt
+     * @param \DateTime|null $closedAt
      * @return CaseEntity
      */
     public function setClosedAt(\DateTime $closedAt = null)
@@ -675,7 +675,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
     /**
      * Set organization
      *
-     * @param Organization $organization
+     * @param Organization|null $organization
      * @return CaseEntity
      */
     public function setOrganization(Organization $organization = null)

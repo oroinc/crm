@@ -107,8 +107,8 @@ class ForecastProvider
 
     /**
      * @param WidgetOptionBag $widgetOptions
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
      *
      * @return array
      */
@@ -161,11 +161,6 @@ class ForecastProvider
         return $this->getAggregatedResult($result);
     }
 
-    /**
-     * @param QueryBuilder $qb
-     * @param \DateTime    $start
-     * @param \DateTime    $end
-     */
     protected function applyHistoryDateFiltering(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
         if (!$start && !$end) {
@@ -263,7 +258,7 @@ class ForecastProvider
     /**
      * @param  WidgetOptionBag $widgetOptions
      *
-     * @param \DateTime $moment
+     * @param \DateTime|null $moment
      * @return string
      */
     protected function getDataHashKey(WidgetOptionBag $widgetOptions, \DateTime $moment = null)

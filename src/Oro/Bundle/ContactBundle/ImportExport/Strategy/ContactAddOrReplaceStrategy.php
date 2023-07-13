@@ -86,7 +86,6 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
             }
         }
 
-
         return parent::findEntityByIdentityValues($entityName, $identityValues);
     }
 

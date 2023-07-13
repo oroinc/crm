@@ -969,7 +969,7 @@ class Opportunity implements
     /**
      * Set organization
      *
-     * @param Organization $organization
+     * @param Organization|null $organization
      * @return Opportunity
      */
     public function setOrganization(Organization $organization = null)
@@ -989,9 +989,6 @@ class Opportunity implements
         return $this->organization;
     }
 
-    /**
-     * @param \DateTime $closedAt
-     */
     public function setClosedAt(\DateTime $closedAt = null)
     {
         $this->closedAt = $closedAt;

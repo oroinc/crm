@@ -82,9 +82,6 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
         $tokenStorage->setToken(null);
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
     protected function initSupportingEntities(ObjectManager $manager = null)
     {
         if ($manager) {
