@@ -19,6 +19,7 @@ oro:
             calls.label:                    Calls
             emails.label:                   Emails
             organization_name.label:        Organization name
+            customer_name.label:            Company Name
             preferred_contact_method.label: Preferred contact method
             owner.label:                    Organization
 

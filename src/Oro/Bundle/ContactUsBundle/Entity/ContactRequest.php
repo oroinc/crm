@@ -58,78 +58,64 @@ class ContactRequest extends AbstractContactRequest implements ExtendEntityInter
     const CONTACT_METHOD_EMAIL = 'oro.contactus.contactrequest.method.email';
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="organization_name", type="string", nullable=true)
+     * @ORM\Column(name="customer_name", type="string", nullable=true)
      */
-    protected $organizationName;
+    protected ?string $customerName = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="preferred_contact_method", type="string", length=100)
      */
-    protected $preferredContactMethod = self::CONTACT_METHOD_EMAIL;
+    protected string $preferredContactMethod = self::CONTACT_METHOD_EMAIL;
 
     /**
-     * @var ContactReason
-     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactUsBundle\Entity\ContactReason")
      * @ORM\JoinColumn(name="contact_reason_id", referencedColumnName="id", nullable=true)
      **/
-    protected $contactReason;
+    protected ?ContactReason $contactReason = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback", type="text", nullable=true)
      */
-    protected $feedback;
+    protected ?string $feedback = null;
 
     /**
-     * @var Opportunity
-     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Opportunity")
      * @ORM\JoinColumn(name="opportunity_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $opportunity;
+    protected ?Opportunity $opportunity = null;
 
     /**
-     * @var Lead
-     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Lead")
      * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $lead;
+    protected ?Lead $lead = null;
 
     /**
-     * @var Organization
-     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $owner;
+    protected ?Organization $owner = null;
 
     /**
-     * @param string $organizationName
+     * @param string $customerName
      */
-    public function setOrganizationName($organizationName)
+    public function setCustomerName(string $customerName): void
     {
-        $this->organizationName = $organizationName;
+        $this->customerName = $customerName;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getOrganizationName()
+    public function getCustomerName(): ?string
     {
-        return $this->organizationName;
+        return $this->customerName;
     }
 
     /**
      * @param string $preferredContactMethod
      */
-    public function setPreferredContactMethod($preferredContactMethod)
+    public function setPreferredContactMethod(string $preferredContactMethod): void
     {
         $this->preferredContactMethod = $preferredContactMethod;
     }
@@ -137,20 +123,23 @@ class ContactRequest extends AbstractContactRequest implements ExtendEntityInter
     /**
      * @return string
      */
-    public function getPreferredContactMethod()
+    public function getPreferredContactMethod(): string
     {
         return $this->preferredContactMethod;
     }
 
-    public function setContactReason(ContactReason $contactReason = null)
+    /**
+     * @param ContactReason|null $contactReason
+     */
+    public function setContactReason(?ContactReason $contactReason = null): void
     {
         $this->contactReason = $contactReason;
     }
 
     /**
-     * @return ContactReason
+     * @return ContactReason|null
      */
-    public function getContactReason()
+    public function getContactReason(): ?ContactReason
     {
         return $this->contactReason;
     }
@@ -158,54 +147,54 @@ class ContactRequest extends AbstractContactRequest implements ExtendEntityInter
     /**
      * @param string $feedback
      */
-    public function setFeedback($feedback)
+    public function setFeedback(?string $feedback): void
     {
         $this->feedback = $feedback;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFeedback()
+    public function getFeedback(): ?string
     {
         return $this->feedback;
     }
 
-    public function setLead(Lead $lead)
+    public function setLead(?Lead $lead): void
     {
         $this->lead = $lead;
     }
 
     /**
-     * @return Lead
+     * @return Lead|null
      */
-    public function getLead()
+    public function getLead(): ?Lead
     {
         return $this->lead;
     }
 
-    public function setOpportunity(Opportunity $opportunity)
+    public function setOpportunity(?Opportunity $opportunity): void
     {
         $this->opportunity = $opportunity;
     }
 
     /**
-     * @return Opportunity
+     * @return Opportunity|null
      */
-    public function getOpportunity()
+    public function getOpportunity(): ?Opportunity
     {
         return $this->opportunity;
     }
 
     /**
-     * @return Organization
+     * @return Organization|null
      */
-    public function getOwner()
+    public function getOwner(): ?Organization
     {
         return $this->owner;
     }
 
-    public function setOwner(Organization $organization)
+    public function setOwner(?Organization $organization): void
     {
         $this->owner = $organization;
     }

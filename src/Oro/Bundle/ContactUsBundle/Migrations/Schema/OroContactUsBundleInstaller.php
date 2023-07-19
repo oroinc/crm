@@ -33,7 +33,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
      */
     public function getMigrationVersion()
     {
-        return 'v1_18';
+        return 'v1_19';
     }
 
     /**
@@ -90,7 +90,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
         $table->addColumn('contact_reason_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_id', 'integer', ['notnull' => false]);
         $table->addColumn('opportunity_id', 'integer', ['notnull' => false]);
-        $table->addColumn('organization_name', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('customer_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('preferred_contact_method', 'string', ['length' => 100]);
         $table->addColumn('feedback', 'text', ['notnull' => false]);
         $table->addColumn('first_name', 'string', ['length' => 100]);

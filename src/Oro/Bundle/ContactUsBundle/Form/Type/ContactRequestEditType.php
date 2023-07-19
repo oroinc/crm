@@ -37,9 +37,9 @@ class ContactRequestEditType extends AbstractType
         $builder->add('firstName', TextType::class, ['label' => 'oro.contactus.contactrequest.first_name.label']);
         $builder->add('lastName', TextType::class, ['label' => 'oro.contactus.contactrequest.last_name.label']);
         $builder->add(
-            'organizationName',
+            'customerName',
             TextType::class,
-            ['required' => false, 'label' => 'oro.contactus.contactrequest.organization_name.label']
+            ['required' => false, 'label' => 'oro.contactus.contactrequest.customer_name.label']
         );
         $builder->add(
             'preferredContactMethod',

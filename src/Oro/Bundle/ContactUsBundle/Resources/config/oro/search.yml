@@ -24,9 +24,9 @@ search:
                 target_type:            text
                 target_fields:          [lastName]
             -
-                name:                   organizationName
+                name:                   customerName
                 target_type:            text
-                target_fields:          [organizationName]
+                target_fields:          [customerName]
             -
                 name:                   emailAddress
                 target_type:            text

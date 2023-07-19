@@ -29,7 +29,7 @@ class TestEntityNameResolverDataLoader implements TestEntityNameResolverDataLoad
         if (ContactRequest::class === $entityClass) {
             $request = new ContactRequest();
             $request->setOwner($repository->getReference('organization'));
-            $request->setOrganizationName('Test Org');
+            $request->setCustomerName('Test Company');
             $request->setFirstName('John');
             $request->setLastName('Smith');
             $request->setPhone('123-123');

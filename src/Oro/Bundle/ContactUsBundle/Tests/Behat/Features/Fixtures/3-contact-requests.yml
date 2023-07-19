@@ -6,7 +6,7 @@ Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
     contactRequestArthur:
         firstName: 'Arthur'
         lastName: 'Doe'
-        organizationName: 'Company A'
+        customerName: 'Company A'
         preferredContactMethod: 'oro.contactus.contactrequest.method.phone'
         phone: '(123) 456-7890'
         contactReason: '@contactReason'
@@ -15,7 +15,7 @@ Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
     contactRequestBen:
         firstName: 'Ben'
         lastName: 'Doe'
-        organizationName: 'Company A'
+        customerName: 'Company A'
         preferredContactMethod: 'oro.contactus.contactrequest.method.both'
         phone: '(234) 567-8901'
         emailAddress: 'ben@example.org'
@@ -25,7 +25,7 @@ Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
     contactRequestCharlie:
         firstName: 'Charlie'
         lastName: 'Doe'
-        organizationName: 'Company A'
+        customerName: 'Company A'
         preferredContactMethod: 'oro.contactus.contactrequest.method.email'
         emailAddress: 'charlie@example.org'
         contactReason: '@contactReason'
