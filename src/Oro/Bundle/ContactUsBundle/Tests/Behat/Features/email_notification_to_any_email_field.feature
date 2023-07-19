@@ -13,9 +13,9 @@ Feature: Email notification to any email field
     When click edit "emailAddress" in grid
     Then I should see "Contact Information Email"
 
-Scenario: Administrator marks as "Email" organization name field
+Scenario: Administrator marks as "Email" customer name field
     Given I click "Cancel"
-    And I click edit "organizationName" in grid
+    And I click edit "customerName" in grid
     And I fill form with:
       | Contact Information | Email |
     When I save and close form
@@ -69,7 +69,7 @@ Scenario: Administrator creates contact request and fills "Email" fields
     And I fill form with:
       | First Name               | Albert         |
       | Last Name                | Bobel          |
-      | Organization Name        | test2@test.com |
+      | Company Name             | test2@test.com |
       | Preferred Contact Method | Email          |
       | Email                    | test1@test.com |
       | Comment                  | test3@test.com |
@@ -92,7 +92,7 @@ Scenario: Administrator removes "Email" item from used fields
     And I fill form with:
       | Contact Information ||
     And I save and close form
-    And click edit "organizationName" in grid
+    And click edit "customerName" in grid
     And I fill form with:
       | Contact Information ||
     And I save and close form
