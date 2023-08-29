@@ -64,3 +64,9 @@ services:
         public: false
         tags:
             - { name: oro_email.emailtemplate.variable_provider, scope: entity }
+
+    oro_contact_us.cache.page_request_provider:
+        class: Oro\Bundle\ContactUsBundle\Provider\ContactUsPageRequestProvider
+        parent: oro_platform.cache.provider.page_request_provider.abstract
+        tags:
+            - { name: warmup_page_request_provider }
