@@ -30,37 +30,22 @@ class ActivityContactProvider
 
     /**
      * Gets a direction of the given activity.
-     *
-     * @param object $activity
-     * @param object $target
-     *
-     * @return string
      */
-    public function getActivityDirection($activity, $target)
+    public function getActivityDirection(object $activity, object $target): string
     {
         $provider = $this->getActivityDirectionProvider($activity);
-        if ($provider) {
-            return $provider->getDirection($activity, $target);
-        }
 
-        return DirectionProviderInterface::DIRECTION_UNKNOWN;
+        return null !== $provider
+            ? $provider->getDirection($activity, $target)
+            : DirectionProviderInterface::DIRECTION_UNKNOWN;
     }
 
     /**
      * Gets a contact date for the given activity.
-     *
-     * @param object $activity
-     *
-     * @return \DateTime|null
      */
-    public function getActivityDate($activity)
+    public function getActivityDate(object $activity): ?\DateTimeInterface
     {
-        $provider = $this->getActivityDirectionProvider($activity);
-        if ($provider) {
-            return $provider->getDate($activity);
-        }
-
-        return null;
+        return $this->getActivityDirectionProvider($activity)?->getDate($activity);
     }
 
     /**
@@ -68,21 +53,17 @@ class ActivityContactProvider
      *
      * @return string[]
      */
-    public function getSupportedActivityClasses()
+    public function getSupportedActivityClasses(): array
     {
         return $this->supportedClasses;
     }
 
     /**
      * Checks if the given entity class supports a direction information.
-     *
-     * @param string $activityClass
-     *
-     * @return bool
      */
-    public function isSupportedEntity($activityClass)
+    public function isSupportedEntity(string $activityClass): bool
     {
-        return in_array($activityClass, $this->supportedClasses, true);
+        return \in_array($activityClass, $this->supportedClasses, true);
     }
 
     /**
@@ -91,8 +72,8 @@ class ActivityContactProvider
      * @param EntityManager $em
      * @param object        $targetEntity
      * @param string        $direction
-     * @param integer       $skippedId
-     * @param string        $class
+     * @param int|null      $skippedId
+     * @param string|null   $class
      *
      * @return array ['all' => date, 'direction' => date]
      *   - all: Last activity date without regard to the direction
@@ -100,11 +81,11 @@ class ActivityContactProvider
      */
     public function getLastContactActivityDate(
         EntityManager $em,
-        $targetEntity,
-        $direction,
-        $skippedId = null,
-        $class = null
-    ) {
+        object $targetEntity,
+        string $direction,
+        int $skippedId = null,
+        string $class = null
+    ): array {
         $allDate = null;
         $directionDate  = null;
         $allDates = [];
@@ -135,34 +116,28 @@ class ActivityContactProvider
 
     /**
      * Gets a direction provider for the given contact activity.
-     *
-     * @param object $activity
-     *
-     * @return DirectionProviderInterface|null
      */
-    public function getActivityDirectionProvider($activity)
+    public function getActivityDirectionProvider(object $activity): ?DirectionProviderInterface
     {
         $activityClass = ClassUtils::getClass($activity);
-        if (!in_array($activityClass, $this->supportedClasses, true)) {
-            return null;
-        }
 
-        return $this->providers->get($activityClass);
+        return \in_array($activityClass, $this->supportedClasses, true)
+            ? $this->providers->get($activityClass)
+            : null;
     }
 
     /**
      * Extracts the max date from the array of dates.
-     *
-     * @param \DateTime[] $datesArray
-     *
-     * @return \DateTime
      */
-    private function getMaxDate($datesArray)
+    private function getMaxDate(array $dates): \DateTimeInterface
     {
-        if (count($datesArray) > 1) {
-            usort($datesArray, static fn (\DateTime $a, \DateTime $b) => $b->getTimestamp() <=> $a->getTimestamp());
+        $result = null;
+        foreach ($dates as $date) {
+            if (null === $result || $date->getTimestamp() > $result->getTimestamp()) {
+                $result = $date;
+            }
         }
 
-        return array_shift($datesArray);
+        return $result;
     }
 }

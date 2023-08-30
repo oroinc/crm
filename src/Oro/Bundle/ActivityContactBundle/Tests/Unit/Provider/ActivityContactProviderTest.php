@@ -2,68 +2,187 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
+use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
-use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
+use Oro\Bundle\ActivityContactBundle\Tests\Unit\Stub\EmailStub as TestActivity1;
 use Oro\Component\Testing\Unit\TestContainerBuilder;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var DirectionProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $directionProvider;
+
+    /** @var DirectionProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $directionProvider1;
+
     /** @var ActivityContactProvider */
     private $provider;
 
-    /** @var TestDirectionProvider */
-    private $directionProvider;
-
     protected function setUp(): void
     {
-        $this->directionProvider = new TestDirectionProvider();
+        $this->directionProvider = $this->createMock(DirectionProviderInterface::class);
+        $this->directionProvider1 = $this->createMock(DirectionProviderInterface::class);
 
         $providers = TestContainerBuilder::create()
             ->add(TestActivity::class, $this->directionProvider)
+            ->add(TestActivity1::class, $this->directionProvider1)
             ->getContainer($this);
 
         $this->provider = new ActivityContactProvider(
-            [TestActivity::class],
+            [TestActivity::class, TestActivity1::class],
             $providers
         );
     }
 
-    public function testGetActivityDirection()
+    public function testGetActivityDirection(): void
     {
+        $this->directionProvider->expects(self::once())
+            ->method('getDirection')
+            ->willReturnCallback(function (TestActivity $activity) {
+                return $activity->getDirection();
+            });
+
         $activity = new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, new \DateTime());
-        $this->assertEquals(
+        self::assertEquals(
             DirectionProviderInterface::DIRECTION_INCOMING,
             $this->provider->getActivityDirection($activity, new \stdClass())
         );
+    }
 
-        $activity = new TestActivity(DirectionProviderInterface::DIRECTION_OUTGOING, new \DateTime());
-        $this->assertEquals(
-            DirectionProviderInterface::DIRECTION_OUTGOING,
-            $this->provider->getActivityDirection($activity, new \stdClass())
-        );
+    public function testGetActivityDirectionForNotSupportedActivity(): void
+    {
+        $this->directionProvider->expects(self::never())
+            ->method('getDirection');
 
-        $this->assertEquals(
+        self::assertEquals(
             DirectionProviderInterface::DIRECTION_UNKNOWN,
             $this->provider->getActivityDirection(new \stdClass(), new \stdClass())
         );
     }
 
-    public function testGetActivityDate()
+    public function testGetActivityDate(): void
     {
-        $date     = new \DateTime('2015-01-01');
-        $activity = new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, $date);
-        $this->assertEquals($date, $this->provider->getActivityDate($activity));
+        $this->directionProvider->expects(self::once())
+            ->method('getDate')
+            ->willReturnCallback(function (TestActivity $activity) {
+                return $activity->getCreated();
+            });
 
-        $this->assertNull($this->provider->getActivityDate(new \stdClass()));
+        $date = new \DateTime('2015-01-01');
+        $activity = new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, $date);
+        self::assertSame($date, $this->provider->getActivityDate($activity));
     }
 
-    public function testGetSupportedActivityClasses()
+    public function testGetActivityDateForNotSupportedActivity(): void
     {
-        $this->assertEquals(
-            ['Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity'],
+        $this->directionProvider->expects(self::never())
+            ->method('getDate');
+
+        self::assertNull($this->provider->getActivityDate(new \stdClass()));
+    }
+
+    public function testGetSupportedActivityClasses(): void
+    {
+        self::assertEquals(
+            [TestActivity::class, TestActivity1::class],
             $this->provider->getSupportedActivityClasses()
         );
+    }
+
+    public function testIsSupportedEntity(): void
+    {
+        self::assertTrue($this->provider->isSupportedEntity(TestActivity::class));
+    }
+
+    public function testIsSupportedEntityForNotSupportedActivity(): void
+    {
+        self::assertFalse($this->provider->isSupportedEntity(\stdClass::class));
+    }
+
+    public function testGetLastContactActivityDate(): void
+    {
+        $em = $this->createMock(EntityManager::class);
+        $targetEntity = new \stdClass();
+        $direction = DirectionProviderInterface::DIRECTION_INCOMING;
+        $allDate1 = new \DateTime('2015-01-01');
+        $directionDate1 = new \DateTime('2015-01-01');
+        $allDate2 = new \DateTime('2015-01-02');
+        $directionDate2 = new \DateTime('2015-01-02');
+
+        $this->directionProvider->expects(self::once())
+            ->method('getLastActivitiesDateForTarget')
+            ->with(self::identicalTo($em), self::identicalTo($targetEntity), $direction, self::isNull())
+            ->willReturn(['all' => $allDate1, 'direction' => $directionDate1]);
+        $this->directionProvider1->expects(self::once())
+            ->method('getLastActivitiesDateForTarget')
+            ->with(self::identicalTo($em), self::identicalTo($targetEntity), $direction, self::isNull())
+            ->willReturn(['all' => $allDate2, 'direction' => $directionDate2]);
+
+        self::assertSame(
+            ['all' => $allDate2, 'direction' => $directionDate2],
+            $this->provider->getLastContactActivityDate($em, $targetEntity, $direction)
+        );
+    }
+
+    public function testGetLastContactActivityDateWithImmutableDates(): void
+    {
+        $em = $this->createMock(EntityManager::class);
+        $targetEntity = new \stdClass();
+        $direction = DirectionProviderInterface::DIRECTION_INCOMING;
+        $allDate1 = new \DateTimeImmutable('2015-01-01');
+        $directionDate1 = new \DateTimeImmutable('2015-01-01');
+        $allDate2 = new \DateTimeImmutable('2015-01-02');
+        $directionDate2 = new \DateTimeImmutable('2015-01-02');
+
+        $this->directionProvider->expects(self::once())
+            ->method('getLastActivitiesDateForTarget')
+            ->with(self::identicalTo($em), self::identicalTo($targetEntity), $direction, self::isNull())
+            ->willReturn(['all' => $allDate1, 'direction' => $directionDate1]);
+        $this->directionProvider1->expects(self::once())
+            ->method('getLastActivitiesDateForTarget')
+            ->with(self::identicalTo($em), self::identicalTo($targetEntity), $direction, self::isNull())
+            ->willReturn(['all' => $allDate2, 'direction' => $directionDate2]);
+
+        self::assertSame(
+            ['all' => $allDate2, 'direction' => $directionDate2],
+            $this->provider->getLastContactActivityDate($em, $targetEntity, $direction)
+        );
+    }
+
+    public function testGetLastContactActivityDateWhenNoDates(): void
+    {
+        $em = $this->createMock(EntityManager::class);
+        $targetEntity = new \stdClass();
+        $direction = DirectionProviderInterface::DIRECTION_INCOMING;
+
+        $this->directionProvider->expects(self::once())
+            ->method('getLastActivitiesDateForTarget')
+            ->with(self::identicalTo($em), self::identicalTo($targetEntity), $direction, self::isNull())
+            ->willReturn([]);
+
+        self::assertSame(
+            ['all' => null, 'direction' => null],
+            $this->provider->getLastContactActivityDate($em, $targetEntity, $direction)
+        );
+    }
+
+    public function testGetActivityDirectionProvider(): void
+    {
+        self::assertSame(
+            $this->directionProvider,
+            $this->provider->getActivityDirectionProvider(
+                new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, new \DateTime())
+            )
+        );
+    }
+
+    public function testGetActivityDirectionProviderForNotSupportedActivity(): void
+    {
+        self::assertNull($this->provider->getActivityDirectionProvider(new \stdClass()));
     }
 }

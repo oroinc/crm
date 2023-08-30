@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Stub;
 
+use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\EmailBundle\Entity\Email;
 
 /**
@@ -23,6 +24,6 @@ class EmailStub extends Email
 
     public function getDirection()
     {
-        return null;
+        return DirectionProviderInterface::DIRECTION_INCOMING;
     }
 }

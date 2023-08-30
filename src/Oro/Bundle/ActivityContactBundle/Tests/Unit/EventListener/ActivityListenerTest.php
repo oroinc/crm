@@ -13,7 +13,6 @@ use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\ActivityContactBundle\EventListener\ActivityListener;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
-use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestTarget;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Stub\AccountStub as Account;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Stub\EmailStub as Email;
@@ -23,24 +22,16 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\PropertyAccess;
-use Oro\Component\Testing\Unit\EntityTrait;
+use Oro\Component\Testing\ReflectionUtil;
 use Oro\Component\Testing\Unit\TestContainerBuilder;
 
 class ActivityListenerTest extends \PHPUnit\Framework\TestCase
 {
-    use EntityTrait;
-
     /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $doctrineHelper;
 
     /** @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $config;
-
-    /** @var TestTarget */
-    private $testTarget;
-
-    /** @var \DateTime */
-    private $testDate;
 
     /** @var ActivityListener */
     private $listener;
@@ -50,9 +41,49 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->config = $this->createMock(ConfigInterface::class);
 
+        $testActivityDirectionProvider = $this->createMock(DirectionProviderInterface::class);
+        $testActivityDirectionProvider->expects(self::any())
+            ->method('getDirection')
+            ->willReturnCallback(function (TestActivity $activity) {
+                return $activity->getDirection();
+            });
+        $testActivityDirectionProvider->expects(self::any())
+            ->method('getDate')
+            ->willReturnCallback(function (TestActivity $activity) {
+                return $activity->getCreated();
+            });
+        $testActivityDirectionProvider->expects(self::any())
+            ->method('getLastActivitiesDateForTarget')
+            ->willReturnCallback(function (EntityManager $em, Account $target) {
+                return [
+                    'all'       => $target->getCreated(),
+                    'direction' => $target->getCreated()
+                ];
+            });
+
+        $emailDirectionProvider = $this->createMock(DirectionProviderInterface::class);
+        $emailDirectionProvider->expects(self::any())
+            ->method('getDirection')
+            ->willReturnCallback(function (Email $activity) {
+                return $activity->getDirection();
+            });
+        $emailDirectionProvider->expects(self::any())
+            ->method('getDate')
+            ->willReturnCallback(function (Email $activity) {
+                return $activity->getCreated();
+            });
+        $emailDirectionProvider->expects(self::any())
+            ->method('getLastActivitiesDateForTarget')
+            ->willReturnCallback(function (EntityManager $em, Account $target) {
+                return [
+                    'all'       => $target->getCreated(),
+                    'direction' => $target->getCreated()
+                ];
+            });
+
         $providers = TestContainerBuilder::create()
-            ->add(TestActivity::class, new TestDirectionProvider())
-            ->add(Email::class, new TestDirectionProvider())
+            ->add(TestActivity::class, $testActivityDirectionProvider)
+            ->add(Email::class, $emailDirectionProvider)
             ->getContainer($this);
 
         $configProvider = $this->createMock(ConfigProvider::class);
@@ -118,8 +149,8 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
      */
     public function testOnAddActivity(object $object, string $expectedDirection)
     {
-        $this->testTarget = new TestTarget();
-        $event = new ActivityEvent($object, $this->testTarget);
+        $target = new TestTarget();
+        $event = new ActivityEvent($object, $target);
 
         $this->config->expects($this->once())
             ->method('is')
@@ -131,50 +162,49 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
         $accessor = PropertyAccess::createPropertyAccessor();
         switch ($expectedDirection) {
             case DirectionProviderInterface::DIRECTION_INCOMING:
-                $this->assertEquals(1, $accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT));
-                $this->assertEquals(1, $accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT_IN));
-                $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT_OUT));
+                $this->assertEquals(1, $accessor->getValue($target, ActivityScope::CONTACT_COUNT));
+                $this->assertEquals(1, $accessor->getValue($target, ActivityScope::CONTACT_COUNT_IN));
+                $this->assertNull($accessor->getValue($target, ActivityScope::CONTACT_COUNT_OUT));
                 $this->assertInstanceOf(
                     \DateTime::class,
-                    $accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE)
+                    $accessor->getValue($target, ActivityScope::LAST_CONTACT_DATE)
                 );
                 $this->assertInstanceOf(
                     \DateTime::class,
-                    $accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE_IN)
+                    $accessor->getValue($target, ActivityScope::LAST_CONTACT_DATE_IN)
                 );
-                $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE_OUT));
+                $this->assertNull($accessor->getValue($target, ActivityScope::LAST_CONTACT_DATE_OUT));
                 break;
             case DirectionProviderInterface::DIRECTION_OUTGOING:
-                $this->assertEquals(1, $accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT));
-                $this->assertEquals(1, $accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT_OUT));
-                $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT_IN));
+                $this->assertEquals(1, $accessor->getValue($target, ActivityScope::CONTACT_COUNT));
+                $this->assertEquals(1, $accessor->getValue($target, ActivityScope::CONTACT_COUNT_OUT));
+                $this->assertNull($accessor->getValue($target, ActivityScope::CONTACT_COUNT_IN));
                 $this->assertInstanceOf(
                     \DateTime::class,
-                    $accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE)
+                    $accessor->getValue($target, ActivityScope::LAST_CONTACT_DATE)
                 );
                 $this->assertInstanceOf(
                     \DateTime::class,
-                    $accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE_OUT)
+                    $accessor->getValue($target, ActivityScope::LAST_CONTACT_DATE_OUT)
                 );
-                $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE_IN));
+                $this->assertNull($accessor->getValue($target, ActivityScope::LAST_CONTACT_DATE_IN));
                 break;
             default:
-                $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT));
-                $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT_OUT));
-                $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT_IN));
-                $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE));
-                $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE_OUT));
-                $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE));
+                $this->assertNull($accessor->getValue($target, ActivityScope::CONTACT_COUNT));
+                $this->assertNull($accessor->getValue($target, ActivityScope::CONTACT_COUNT_OUT));
+                $this->assertNull($accessor->getValue($target, ActivityScope::CONTACT_COUNT_IN));
+                $this->assertNull($accessor->getValue($target, ActivityScope::LAST_CONTACT_DATE));
+                $this->assertNull($accessor->getValue($target, ActivityScope::LAST_CONTACT_DATE_OUT));
+                $this->assertNull($accessor->getValue($target, ActivityScope::LAST_CONTACT_DATE));
         }
     }
 
     public function testOnAddActivityWithNonExtendedEntity()
     {
         $accessor = PropertyAccess::createPropertyAccessor();
-        $this->testTarget = new TestTarget();
-        $this->testDate = new \DateTime();
-        $object = new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, $this->testDate);
-        $event = new ActivityEvent($object, $this->testTarget);
+        $target = new TestTarget();
+        $object = new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, new \DateTime());
+        $event = new ActivityEvent($object, $target);
 
         $this->config->expects($this->once())
             ->method('is')
@@ -182,20 +212,18 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->listener->onAddActivity($event);
-        $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT));
+        $this->assertNull($accessor->getValue($target, ActivityScope::CONTACT_COUNT));
     }
 
     public function onAddActivityProvider(): array
     {
-        $this->testDate = new \DateTime();
-
         return [
             'incoming'    => [
-                new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, $this->testDate),
+                new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, new \DateTime()),
                 DirectionProviderInterface::DIRECTION_INCOMING
             ],
             'outgoing'    => [
-                new TestActivity(DirectionProviderInterface::DIRECTION_OUTGOING, $this->testDate),
+                new TestActivity(DirectionProviderInterface::DIRECTION_OUTGOING, new \DateTime()),
                 DirectionProviderInterface::DIRECTION_OUTGOING
             ],
             'badActivity' => [
@@ -208,9 +236,9 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
     public function testFlushEvents()
     {
         $targets = [
-            $this->getEntity(Account::class, ['id' => 2, 'createdAt' => new \DateTime()]),
-            $this->getEntity(Account::class, ['id' => 3, 'createdAt' => new \DateTime()]),
-            $this->getEntity(Account::class, ['id' => 4, 'createdAt' => new \DateTime()]),
+            (new Account())->setId(2)->setCreatedAt(new \DateTime()),
+            (new Account())->setId(3)->setCreatedAt(new \DateTime()),
+            (new Account())->setId(4)->setCreatedAt(new \DateTime())
         ];
 
         $changedTarget = $targets[2];
@@ -225,16 +253,13 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $activity = $this->getEntity(Email::class, ['id' => 1]);
+        $activity = new Email();
+        ReflectionUtil::setId($activity, 1);
         $activity->setActivityTargets($targets);
         $activity->setCreated(new \DateTime());
         $em = $this->createMock(EntityManager::class);
         $uow = $this->createMock(UnitOfWork::class);
 
-        $onFlushEvent = $this->createMock(OnFlushEventArgs::class);
-        $onFlushEvent->expects($this->any())
-            ->method('getEntityManager')
-            ->willReturn($em);
         $em->expects($this->any())
             ->method('getUnitOfWork')
             ->willReturn($uow);
@@ -265,10 +290,6 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
 
         $em2 = $this->createMock(EntityManager::class);
         $accountRepository = $this->createMock(ServiceEntityRepository::class);
-        $postFlushEvent = $this->createMock(PostFlushEventArgs::class);
-        $postFlushEvent->expects($this->any())
-            ->method('getEntityManager')
-            ->willReturn($em2);
         $em2->expects(self::once())
             ->method('persist')
             ->with($changedTarget);
@@ -281,7 +302,7 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
             ->with($changedTarget->getId())
             ->willReturn($changedTarget);
 
-        $this->listener->onFlush($onFlushEvent);
-        $this->listener->postFlush($postFlushEvent);
+        $this->listener->onFlush(new OnFlushEventArgs($em));
+        $this->listener->postFlush(new PostFlushEventArgs($em2));
     }
 }
