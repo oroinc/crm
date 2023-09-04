@@ -57,7 +57,7 @@ oro:
                 description:                The account that is related to the case.
             source:
                 label:                      Source
-                description:                How the information about the issue was recieved.
+                description:                How the information about the issue was received.
             status:
                 label:                      Status
                 description:                The current phase of work on the case.
@@ -135,7 +135,7 @@ oro:
             entity_label:                   Case Source
             entity_plural_label:            Case Sources
             entity_grid_all_view_label: All %entity_plural_label%
-            entity_description:             How the information about the issue was recieved.
+            entity_description:             How the information about the issue was received.
             name:
                 label:                      Name
                 description:                The unique identifier of the case source record.

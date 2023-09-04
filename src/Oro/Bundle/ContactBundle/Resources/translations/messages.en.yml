@@ -283,7 +283,7 @@ oro:
         # Entity Oro\Bundle\ContactBundle\Entity\Source
         #
         source:
-            entity_description:  How the information about the contact was recieved.
+            entity_description:  How the information about the contact was received.
             entity_label:        Contact Source
             entity_plural_label: Contact Sources
             entity_grid_all_view_label: All %entity_plural_label%
