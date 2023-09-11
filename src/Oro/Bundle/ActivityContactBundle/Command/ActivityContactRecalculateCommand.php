@@ -31,7 +31,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ActivityContactRecalculateCommand extends Command
 {
-    private const STATUS_SUCCESS = 0;
     private const BATCH_SIZE     = 100;
 
     /** @var string */
@@ -74,7 +73,7 @@ class ActivityContactRecalculateCommand extends Command
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @noinspection PhpMissingParentCallCommonInspection
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $logger = new OutputLogger($output);
 
@@ -167,7 +166,7 @@ class ActivityContactRecalculateCommand extends Command
         }
         $logger->info(sprintf('<info>Processing finished at %s</info>', date('Y-m-d H:i:s')));
 
-        return self::STATUS_SUCCESS;
+        return self::SUCCESS;
     }
 
     protected function resetRecordsWithoutActivities(string $entityClassName, array $recordIdsWithActivities): void

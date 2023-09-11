@@ -36,7 +36,7 @@ class ChannelDatasourceType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_channel_datasource_form';
     }

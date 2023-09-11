@@ -37,7 +37,7 @@ class MultipleEntityChannelAwareType extends AbstractChannelAwareType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_multiple_entity_channel_aware';
     }
@@ -45,7 +45,7 @@ class MultipleEntityChannelAwareType extends AbstractChannelAwareType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return MultipleEntityType::class;
     }

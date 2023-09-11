@@ -23,7 +23,7 @@ class EmailCollectionTypeStub extends EmailCollectionType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return EmailCollectionTypeParent::class;
     }

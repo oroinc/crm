@@ -46,7 +46,7 @@ class ContactPhoneType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_contact_phone';
     }

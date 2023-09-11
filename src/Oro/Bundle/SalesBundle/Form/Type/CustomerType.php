@@ -173,7 +173,7 @@ class CustomerType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return Select2HiddenType::class;
     }
@@ -189,7 +189,7 @@ class CustomerType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_sales_customer';
     }

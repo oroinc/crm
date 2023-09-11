@@ -27,7 +27,7 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_contactus_contact_request';
     }

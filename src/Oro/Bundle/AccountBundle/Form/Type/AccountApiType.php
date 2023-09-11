@@ -42,7 +42,7 @@ class AccountApiType extends AccountType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'account';
     }

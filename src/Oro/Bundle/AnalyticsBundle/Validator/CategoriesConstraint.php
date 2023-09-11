@@ -36,7 +36,7 @@ class CategoriesConstraint extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return 'oro_analytics.categories_validator';
     }

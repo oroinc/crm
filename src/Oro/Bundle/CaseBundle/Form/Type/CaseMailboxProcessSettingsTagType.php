@@ -33,7 +33,7 @@ class CaseMailboxProcessSettingsTagType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return TagSelectType::class;
     }
@@ -49,7 +49,7 @@ class CaseMailboxProcessSettingsTagType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'case_mailbox_process_settings_tag';
     }

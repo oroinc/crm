@@ -32,7 +32,7 @@ class ContactSelectType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return OroEntitySelectOrCreateInlineType::class;
     }
@@ -48,7 +48,7 @@ class ContactSelectType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_contact_select';
     }

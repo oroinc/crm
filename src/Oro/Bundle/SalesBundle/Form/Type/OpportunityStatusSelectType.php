@@ -56,7 +56,7 @@ class OpportunityStatusSelectType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return EnumSelectType::class;
     }
@@ -72,7 +72,7 @@ class OpportunityStatusSelectType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_sales_opportunity_status_select';
     }

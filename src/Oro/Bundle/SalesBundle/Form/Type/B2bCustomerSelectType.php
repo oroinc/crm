@@ -29,7 +29,7 @@ class B2bCustomerSelectType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return CreateOrSelectInlineChannelAwareType::class;
     }
@@ -45,7 +45,7 @@ class B2bCustomerSelectType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_sales_b2bcustomer_select';
     }

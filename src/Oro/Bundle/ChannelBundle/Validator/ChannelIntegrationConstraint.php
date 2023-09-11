@@ -9,7 +9,7 @@ class ChannelIntegrationConstraint extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function getTargets()
+    public function getTargets(): string|array
     {
         return self::CLASS_CONSTRAINT;
     }
@@ -17,7 +17,7 @@ class ChannelIntegrationConstraint extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return 'oro_channel.validator.channel_integration';
     }

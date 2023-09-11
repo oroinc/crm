@@ -22,7 +22,7 @@ class PhoneCollectionTypeStub extends PhoneCollectionType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return PhoneCollectionTypeParent::class;
     }

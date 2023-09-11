@@ -49,7 +49,7 @@ class WidgetOpportunityStatusSelectType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return self::NAME;
     }
@@ -57,7 +57,7 @@ class WidgetOpportunityStatusSelectType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return Select2ChoiceType::class;
     }

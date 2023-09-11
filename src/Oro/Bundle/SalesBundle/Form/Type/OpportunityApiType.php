@@ -44,7 +44,7 @@ class OpportunityApiType extends OpportunityType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return self::NAME;
     }

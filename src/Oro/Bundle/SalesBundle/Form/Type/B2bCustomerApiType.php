@@ -42,7 +42,7 @@ class B2bCustomerApiType extends B2bCustomerType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_sales_b2bcustomer_api';
     }

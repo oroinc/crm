@@ -14,7 +14,7 @@ class CaseMailboxProcessSettingsTagSubscriber extends TagSubscriber
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array_merge(
             parent::getSubscribedEvents(),
