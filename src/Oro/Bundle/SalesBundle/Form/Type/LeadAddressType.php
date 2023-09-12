@@ -42,7 +42,7 @@ class LeadAddressType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return AddressType::class;
     }
@@ -58,7 +58,7 @@ class LeadAddressType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_sales_lead_address';
     }

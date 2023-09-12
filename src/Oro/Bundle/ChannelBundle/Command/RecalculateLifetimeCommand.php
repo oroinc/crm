@@ -51,14 +51,14 @@ abstract class RecalculateLifetimeCommand extends Command
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->progressBar = new ProgressBar($output);
         $channelSettings = $this->getChannelSettings($this->getChannelType());
         if (false === $channelSettings) {
             $output->writeln(sprintf('The "%s" channel does not exist.', $this->getChannelType()));
 
-            return 1;
+            return Command::FAILURE;
         }
 
         if (true === $input->getOption('force')) {
@@ -71,7 +71,7 @@ abstract class RecalculateLifetimeCommand extends Command
             );
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     abstract protected function getChannelType(): string;

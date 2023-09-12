@@ -37,7 +37,7 @@ class ExtendEntityCacheWarmer implements CacheWarmerInterface
         $this->applicationState = $applicationState;
     }
 
-    public function isOptional()
+    public function isOptional(): bool
     {
         return false;
     }
@@ -45,27 +45,28 @@ class ExtendEntityCacheWarmer implements CacheWarmerInterface
     /**
      * @throws ReflectionException
      */
-    public function warmUp($cacheDir)
+    public function warmUp($cacheDir): array
     {
         if (\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
-            return;
+            return [];
         }
 
         if (!$this->applicationState->isInstalled()) {
-            return;
+            return [];
         }
 
         /** @var Connection $configConnection */
         $configConnection = $this->managerRegistry->getConnection('config');
 
         if (!SafeDatabaseChecker::tablesExist($configConnection, 'oro_entity_config')) {
-            return;
+            return [];
         }
 
         foreach ($this->getImplementedQueriesToCleanup($configConnection) as $query) {
             $query->setConnection($configConnection);
             $query->execute($this->logger);
         }
+        return [];
     }
 
     private function getImplementedQueriesToCleanup(Connection $connection): \Generator

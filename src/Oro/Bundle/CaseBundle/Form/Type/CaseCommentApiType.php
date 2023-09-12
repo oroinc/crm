@@ -61,7 +61,7 @@ class CaseCommentApiType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_case_comment_api';
     }
@@ -69,7 +69,7 @@ class CaseCommentApiType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return CaseCommentType::class;
     }

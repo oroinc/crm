@@ -33,7 +33,7 @@ class RemoveSalesFunnelEntityConfigWarmer implements CacheWarmerInterface
     /**
      * {@inheritDoc}
      */
-    public function isOptional()
+    public function isOptional(): bool
     {
         return false;
     }
@@ -41,22 +41,22 @@ class RemoveSalesFunnelEntityConfigWarmer implements CacheWarmerInterface
     /**
      * {@inheritDoc}
      */
-    public function warmUp($cacheDir)
+    public function warmUp($cacheDir): array
     {
         if (!$this->applicationState->isInstalled()) {
-            return;
+            return [];
         }
 
         /** @var Connection $configConnection */
         $configConnection = $this->managerRegistry->getConnection('config');
 
         if (!SafeDatabaseChecker::tablesExist($configConnection, 'oro_entity_config')) {
-            return;
+            return [];
         }
 
         $className = 'Oro\Bundle\SalesBundle\Entity\SalesFunnel';
         if (class_exists($className, false)) {
-            return;
+            return [];
         }
 
         $query = new ParametrizedSqlMigrationQuery(
@@ -67,5 +67,6 @@ class RemoveSalesFunnelEntityConfigWarmer implements CacheWarmerInterface
 
         $query->setConnection($configConnection);
         $query->execute($this->logger);
+        return [];
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d2914fbc68ea61ed2129cc52e73c91f",
+    "content-hash": "4dc0f952dea015f99ca920152e039762",
     "packages": [
         {
             "name": "ass/xmlsecurity",
@@ -3646,16 +3646,16 @@
         },
         {
             "name": "laminas/laminas-code",
-            "version": "4.11.0",
+            "version": "4.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-code.git",
-                "reference": "169123b3ede20a9193480c53de2a8194f8c073ec"
+                "reference": "36cbee228b427446419dd51944bdfb6bb8ddbcd0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/169123b3ede20a9193480c53de2a8194f8c073ec",
-                "reference": "169123b3ede20a9193480c53de2a8194f8c073ec",
+                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/36cbee228b427446419dd51944bdfb6bb8ddbcd0",
+                "reference": "36cbee228b427446419dd51944bdfb6bb8ddbcd0",
                 "shasum": ""
             },
             "require": {
@@ -3705,7 +3705,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-05-14T12:05:38+00:00"
+            "time": "2023-09-06T14:56:25+00:00"
         },
         {
             "name": "laminas/laminas-loader",
@@ -4053,22 +4053,22 @@
         },
         {
             "name": "laminas/laminas-validator",
-            "version": "2.38.0",
+            "version": "2.39.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-validator.git",
-                "reference": "5fafe1ec4cc23e4bb4dfe6b4cd96c28e1c7f48a3"
+                "reference": "cec22e6f55fa68ec24e21c4f021fc1b2c3783c49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/5fafe1ec4cc23e4bb4dfe6b4cd96c28e1c7f48a3",
-                "reference": "5fafe1ec4cc23e4bb4dfe6b4cd96c28e1c7f48a3",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/cec22e6f55fa68ec24e21c4f021fc1b2c3783c49",
+                "reference": "cec22e6f55fa68ec24e21c4f021fc1b2c3783c49",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-servicemanager": "^3.21.0",
                 "laminas/laminas-stdlib": "^3.13",
-                "php": "~8.1.0 || ~8.2.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
                 "psr/http-message": "^1.0.1 || ^2.0.0"
             },
             "conflict": {
@@ -4081,11 +4081,11 @@
                 "laminas/laminas-i18n": "^2.23",
                 "laminas/laminas-session": "^2.16",
                 "laminas/laminas-uri": "^2.10.0",
-                "phpunit/phpunit": "^10.1.3",
+                "phpunit/phpunit": "^10.3.3",
                 "psalm/plugin-phpunit": "^0.18.4",
                 "psr/http-client": "^1.0.2",
                 "psr/http-factory": "^1.0.2",
-                "vimeo/psalm": "^5.12"
+                "vimeo/psalm": "^5.15"
             },
             "suggest": {
                 "laminas/laminas-db": "Laminas\\Db component, required by the (No)RecordExists validator",
@@ -4133,7 +4133,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-08-14T07:19:58+00:00"
+            "time": "2023-09-06T20:51:34+00:00"
         },
         {
             "name": "liip/imagine-bundle",
@@ -4998,10 +4998,10 @@
             "dist": {
                 "type": "path",
                 "url": "../calendar",
-                "reference": "959515b451c985d20353f5f7f00cf3bf451bd3cd"
+                "reference": "678754ea8401cbca5d637b9f4d02101709d83d15"
             },
             "require": {
-                "oro/platform": "5.1.*"
+                "oro/platform": "6.0.*"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -5009,7 +5009,7 @@
                     "fullcalendar": "3.4.0"
                 },
                 "branch-alias": {
-                    "dev-master": "5.1-dev"
+                    "dev-master": "6.0-dev"
                 }
             },
             "autoload": {
@@ -5047,15 +5047,15 @@
             "dist": {
                 "type": "path",
                 "url": "../call",
-                "reference": "69224320c07677b9949f83b5e20c0e4de8554957"
+                "reference": "dad9636d7f80836917e9ab78c1ee6da79345e4f3"
             },
             "require": {
-                "oro/platform": "5.1.*"
+                "oro/platform": "6.0.*"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.1-dev"
+                    "dev-master": "6.0-dev"
                 }
             },
             "autoload": {
@@ -5091,15 +5091,15 @@
             "dist": {
                 "type": "path",
                 "url": "../task",
-                "reference": "3cdc482e341cfc923535887571d770b48f4aaecd"
+                "reference": "7072cc091dbbd190efefa5ed69a1ceb28d21e081"
             },
             "require": {
-                "oro/platform": "5.1.*"
+                "oro/platform": "6.0.*"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.1-dev"
+                    "dev-master": "6.0-dev"
                 }
             },
             "autoload": {
@@ -5193,16 +5193,16 @@
             "dist": {
                 "type": "path",
                 "url": "../marketing",
-                "reference": "384268dbdcb0649251ca8b2ecb60ef685e10ab3a"
+                "reference": "dd478e6680964fbae33338f8909ab10995e4ec02"
             },
             "require": {
                 "ext-curl": "*",
-                "oro/platform": "5.1.*"
+                "oro/platform": "6.0.*"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.1-dev"
+                    "dev-master": "6.0-dev"
                 }
             },
             "autoload": {
@@ -5243,7 +5243,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "3e51cac4b063e92756ed1d068fb5f734b62e3ab6"
+                "reference": "e3debc348ed89d10135d0ed250adf4213773a68e"
             },
             "require": {
                 "ass/xmlsecurity": "1.1.1",
@@ -5297,7 +5297,7 @@
                 "ocramius/proxy-manager": "~2.11.1",
                 "oro/api-doc-bundle": "2.0.0",
                 "oro/doctrine-extensions": "~2.0.2",
-                "oro/platform-serialised-fields": "5.1.*",
+                "oro/platform-serialised-fields": "6.0.*",
                 "php": "~8.2.0",
                 "php-http/httplug-bundle": "~1.27.0",
                 "phpdocumentor/reflection-docblock": "5.3.*",
@@ -5453,7 +5453,7 @@
                     "require": "~5.4.0"
                 },
                 "branch-alias": {
-                    "dev-master": "5.1-dev"
+                    "dev-master": "6.0-dev"
                 }
             },
             "autoload": {
@@ -5575,15 +5575,15 @@
             "dist": {
                 "type": "path",
                 "url": "../serialized-fields",
-                "reference": "06290d23c2467c3d43d55ed2ac84a8bf5d9c729d"
+                "reference": "26995f4e406e22c5a026bac13550ffe15b284389"
             },
             "require": {
-                "oro/platform": "5.1.*"
+                "oro/platform": "6.0.*"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.1-dev"
+                    "dev-master": "6.0-dev"
                 }
             },
             "autoload": {
@@ -6388,16 +6388,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.23.1",
+            "version": "1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "846ae76eef31c6d7790fac9bc399ecee45160b26"
+                "reference": "3510b0a6274cc42f7219367cb3abfc123ffa09d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/846ae76eef31c6d7790fac9bc399ecee45160b26",
-                "reference": "846ae76eef31c6d7790fac9bc399ecee45160b26",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/3510b0a6274cc42f7219367cb3abfc123ffa09d6",
+                "reference": "3510b0a6274cc42f7219367cb3abfc123ffa09d6",
                 "shasum": ""
             },
             "require": {
@@ -6429,9 +6429,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.23.1"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.24.0"
             },
-            "time": "2023-08-03T16:32:59+00:00"
+            "time": "2023-09-07T20:46:32+00:00"
         },
         {
             "name": "predis/predis",

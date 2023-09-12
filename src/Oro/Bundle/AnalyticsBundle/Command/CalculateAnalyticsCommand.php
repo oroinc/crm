@@ -50,7 +50,7 @@ class CalculateAnalyticsCommand extends Command implements CronCommandScheduleDe
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $channelId = $input->getOption('channel');
         $customerIds = $input->getOption('ids');
@@ -68,7 +68,7 @@ class CalculateAnalyticsCommand extends Command implements CronCommandScheduleDe
             if (Channel::STATUS_ACTIVE != $channel->getStatus()) {
                 $output->writeln(sprintf('Channel not active: %s', $channelId));
 
-                return 1;
+                return Command::FAILURE;
             }
 
             // check if the channel's customer supports analytics.
@@ -77,7 +77,7 @@ class CalculateAnalyticsCommand extends Command implements CronCommandScheduleDe
                     sprintf('Channel is not supposed to calculate analytics: %s', $channelId)
                 );
 
-                return 1;
+                return Command::FAILURE;
             }
 
             $this->calculateAnalyticsScheduler->scheduleForChannel($channelId, $customerIds);
@@ -89,6 +89,6 @@ class CalculateAnalyticsCommand extends Command implements CronCommandScheduleDe
 
         $output->writeln('Completed');
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

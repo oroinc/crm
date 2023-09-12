@@ -71,7 +71,7 @@ HELP
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->messageProducer->send(
             AggregateLifetimeAverageTopic::getName(),
@@ -83,6 +83,6 @@ HELP
 
         $output->writeln('<info>Completed!</info>');
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

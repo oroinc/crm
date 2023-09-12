@@ -14,7 +14,7 @@ class OpportunityProbabilitySubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             Events::BEFORE_NORMALIZE_ENTITY => 'beforeNormalize',

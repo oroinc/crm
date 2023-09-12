@@ -29,7 +29,7 @@ class CaseMailboxProcessSettingsType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'oro_case_mailbox_process_settings';
     }
