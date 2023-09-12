@@ -5,14 +5,16 @@ namespace Oro\Bundle\SalesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EmailBundle\Entity\MailboxProcessSettings;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
- * Store load mailbox settings in database.
+ * Store load mailbox settings in a database.
  *
  * @ORM\Entity
+ * @Config()
  */
 class LeadMailboxProcessSettings extends MailboxProcessSettings implements ExtendEntityInterface
 {
