@@ -31,7 +31,7 @@ class ChannelVoter extends AbstractEntityVoter implements ServiceSubscriberInter
     /**
      * {@inheritDoc}
      */
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return [
             'oro_channel.provider.settings_provider' => SettingsProvider::class

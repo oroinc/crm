@@ -58,7 +58,7 @@ class ContactExtension extends AbstractExtension implements ServiceSubscriberInt
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return [
             'oro_contact.social_url_formatter' => SocialUrlFormatter::class,

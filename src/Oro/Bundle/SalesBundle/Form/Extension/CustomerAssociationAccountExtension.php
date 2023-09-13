@@ -36,7 +36,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
     /**
      * {@inheritDoc}
      */
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return [
             'oro_sales.customer.config_provider' => ConfigProvider::class,
