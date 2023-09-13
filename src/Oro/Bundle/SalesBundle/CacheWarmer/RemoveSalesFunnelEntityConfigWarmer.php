@@ -41,7 +41,7 @@ class RemoveSalesFunnelEntityConfigWarmer implements CacheWarmerInterface
     /**
      * {@inheritDoc}
      */
-    public function warmUp($cacheDir): array
+    public function warmUp(string $cacheDir): array
     {
         if (!$this->applicationState->isInstalled()) {
             return [];

@@ -37,7 +37,7 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
     /**
      * {@inheritDoc}
      */
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return [
             'oro_currency.query.currency_transformer' => CurrencyQueryBuilderTransformerInterface::class,
