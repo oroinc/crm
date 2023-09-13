@@ -31,11 +31,11 @@
         "exclude-from-classmap": ["/Tests/"]
     },
     "require": {
-        "oro/platform": "5.1.*",
-        "oro/crm-task-bundle": "5.1.*",
-        "oro/crm-call-bundle": "5.1.*",
-        "oro/calendar-bundle": "5.1.*",
-        "oro/marketing": "5.1.*"
+        "oro/platform": "6.0.*",
+        "oro/crm-task-bundle": "6.0.*",
+        "oro/crm-call-bundle": "6.0.*",
+        "oro/calendar-bundle": "6.0.*",
+        "oro/marketing": "6.0.*"
     },
     "require-dev": {
         "behat/behat": "~3.12.0",
@@ -76,7 +76,7 @@
             "require": "~5.4.0"
         },
         "branch-alias": {
-            "dev-master": "5.1-dev"
+            "dev-master": "6.0-dev"
         }
     },
     "config": {

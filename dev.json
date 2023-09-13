@@ -33,11 +33,11 @@
         ]
     },
     "require": {
-        "oro/platform": "5.1.x-dev",
-        "oro/crm-task-bundle": "5.1.x-dev",
-        "oro/crm-call-bundle": "5.1.x-dev",
-        "oro/calendar-bundle": "5.1.x-dev",
-        "oro/marketing": "5.1.x-dev"
+        "oro/platform": "6.0.x-dev",
+        "oro/crm-task-bundle": "6.0.x-dev",
+        "oro/crm-call-bundle": "6.0.x-dev",
+        "oro/calendar-bundle": "6.0.x-dev",
+        "oro/marketing": "6.0.x-dev"
     },
     "require-dev": {
         "behat/behat": "~3.12.0",
@@ -82,7 +82,7 @@
             "require": "~5.4.0"
         },
         "branch-alias": {
-            "dev-master": "5.1-dev"
+            "dev-master": "6.0-dev"
         }
     },
     "config": {
