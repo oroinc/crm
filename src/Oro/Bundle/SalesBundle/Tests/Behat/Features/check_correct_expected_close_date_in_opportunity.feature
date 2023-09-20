@@ -19,7 +19,7 @@ Feature: Check correct expected close date in opportunity
     Given I go to Sales / Opportunities
     When I click edit "Opportunity 1" in grid
     And I fill "Opportunity Form" with:
-      | Expected Close Date | <Date:Sep 30, 2019>|
+      | Expected close date | <Date:Sep 30, 2019>|
     And I save and close form
     Then I go to Sales / Opportunities
     And I should see Opportunity 1 in grid with following data:
