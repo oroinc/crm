@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_42;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_42_1;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -10,7 +10,7 @@ use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 /**
- * Removes all data associated with deprecated feature "Sales Process".
+ * Removes all data associated with outdated feature "Sales Process".
  */
 class RemoveSalesFunnelData implements Migration
 {
