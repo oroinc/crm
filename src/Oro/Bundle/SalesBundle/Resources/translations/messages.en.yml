@@ -612,6 +612,7 @@ oro:
         mailbox.process:
             lead.label:              Convert To Lead
         leadmailboxprocesssettings:
+            mailbox.label:           Lead Mailbox Process Settings
             entity_label:            Lead Mailbox Process Settings
             entity_plural_label:     Lead Mailbox Process Settings
             entity_grid_all_view_label: All %entity_plural_label%
