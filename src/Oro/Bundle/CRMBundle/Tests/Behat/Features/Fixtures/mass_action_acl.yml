@@ -7,15 +7,13 @@ Oro\Bundle\UserBundle\Entity\User:
     lastName: <lastName()>
     username (unique): <username()>
     email (unique): <email()>
-    password: xWDhRLrhauLm8TxT16NguuRAyFmsYf/Qxbe9B5gBcI5sC26gO/qExjVwUE0Ol/+6z8fS0Ae5X2sTP0hVgBYYIg==
-    salt: ioazi9tx61sk8c4k088c0kwk0sg00s4
+    password: <userPassword(@user-1->username)>
   user-2:
     firstName: <firstName()>
     lastName: <lastName()>
     username (unique): <username()>
     email (unique): <email()>
-    password: xWDhRLrhauLm8TxT16NguuRAyFmsYf/Qxbe9B5gBcI5sC26gO/qExjVwUE0Ol/+6z8fS0Ae5X2sTP0hVgBYYIg==
-    salt: ioazi9tx61sk8c4k088c0kwk0sg00s4
+    password: <userPassword(@user-2->username)>
 
 Oro\Bundle\CalendarBundle\Entity\Calendar:
   calendar-1:

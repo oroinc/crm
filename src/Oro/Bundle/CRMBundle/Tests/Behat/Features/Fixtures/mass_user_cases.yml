@@ -21,8 +21,7 @@ Oro\Bundle\UserBundle\Entity\User:
         email: 'case.test@example.com'
         firstName: 'Case'
         lastName: 'Test'
-        salt: '5ejjb5y9va4g4co8kco4o8wgkgcc48k'
-        password: 'fhUh+Xk/mjDUR5xLb93SIL/QF/lEK3RcGE3l9dRh4+N4rQCNrOaOYyVtqWajPOBHQDqFGwl+Ran2HTdpbniEUQ=='
+        password: <userPassword(@case_user->username)>
         enabled: true
         owner: '@business_unit'
         organization: '@organization'
