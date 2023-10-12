@@ -40,8 +40,7 @@ Oro\Bundle\UserBundle\Entity\User:
     businessUnits: ['@business_unit']
     userRoles: ['@userRole']
     email: john@example.com
-    password: ocINyrtG+M0qn76WdvdD945WYGYD6VS8+Wrlgfarc9QkERva9zW0yU1+nnJPOb76ophDg60Wgzpj0VzZVW4tXg==
-    salt: budomlxfmrs4k4c44o0co4skgwk88s
+    password: <userPassword(@johnConnor->username)>
 
 Oro\Bundle\ContactBundle\Entity\Contact:
   contactCharlie:

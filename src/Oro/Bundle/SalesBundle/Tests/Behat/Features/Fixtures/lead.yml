@@ -25,5 +25,4 @@ Oro\Bundle\UserBundle\Entity\User:
     owner: '@business_unit'
     businessUnits: ['@business_unit']
     email: marge@example.com
-    password: 3X+qGs+/6Ic/iL+5/t6C5C3C0hYEbhYLtZ/nwJDn5QUYArHkBy90HT220LVErWvKyVH7XoId15dv/uF2+pExiQ==
-    salt: eexx2a8mtsg8o4c8k4w08wo04ccsw8
+    password: <userPassword(@charlie->username)>
