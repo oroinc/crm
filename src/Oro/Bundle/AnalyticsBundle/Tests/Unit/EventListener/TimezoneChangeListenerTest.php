@@ -34,25 +34,11 @@ class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
         $this->scheduler->expects($this->never())
             ->method('scheduleForAllChannels');
 
-        $event = $this->createMock(ConfigUpdateEvent::class);
-
-        $event->expects($this->once())
-            ->method('isChanged')
-            ->with('oro_locale.timezone')
-            ->willReturn(false);
-
-        $this->listener->onConfigUpdate($event);
+        $this->listener->onConfigUpdate(new ConfigUpdateEvent([], 'global', 0));
     }
 
     public function testSuccessChange()
     {
-        $event = $this->createMock(ConfigUpdateEvent::class);
-
-        $event->expects($this->once())
-            ->method('isChanged')
-            ->with('oro_locale.timezone')
-            ->willReturn(true);
-
         $this->manager->expects($this->once())
             ->method('resetMetrics');
 
@@ -62,6 +48,8 @@ class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
         $this->manager->expects($this->once())
             ->method('resetMetrics');
 
-        $this->listener->onConfigUpdate($event);
+        $this->listener->onConfigUpdate(
+            new ConfigUpdateEvent(['oro_locale.timezone' => ['old' => 1, 'new' => 2]], 'global', 0)
+        );
     }
 }
