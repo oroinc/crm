@@ -7,8 +7,6 @@ use Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\UIBundle\Route\Router;
-use Oro\Component\MessageQueue\Client\MessageProducer;
-use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -120,14 +118,6 @@ class ChannelController extends AbstractController
     }
 
     /**
-     * @return MessageProducer
-     */
-    protected function getMessageProducer()
-    {
-        return $this->get(MessageProducerInterface::class);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public static function getSubscribedServices(): array
@@ -137,7 +127,6 @@ class ChannelController extends AbstractController
             [
                 TranslatorInterface::class,
                 Router::class,
-                MessageProducerInterface::class,
                 ChannelHandler::class,
             ]
         );
