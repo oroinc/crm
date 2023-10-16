@@ -15,7 +15,7 @@ class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
     {
         $listener = new TimezoneChangeListener(self::getMessageProducer());
 
-        $listener->onConfigUpdate(new ConfigUpdateEvent([]));
+        $listener->onConfigUpdate(new ConfigUpdateEvent([], 'global', 0));
 
         self::assertMessagesEmpty(AggregateLifetimeAverageTopic::getName());
     }
@@ -24,7 +24,9 @@ class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
     {
         $listener = new TimezoneChangeListener(self::getMessageProducer());
 
-        $listener->onConfigUpdate(new ConfigUpdateEvent(['oro_locale.timezone' => ['old' => 1, 'new' => 2]]));
+        $listener->onConfigUpdate(
+            new ConfigUpdateEvent(['oro_locale.timezone' => ['old' => 1, 'new' => 2]], 'global', 0)
+        );
 
         self::assertMessageSent(
             AggregateLifetimeAverageTopic::getName(),
