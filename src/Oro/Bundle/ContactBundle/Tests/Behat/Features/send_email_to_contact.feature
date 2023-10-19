@@ -1,5 +1,6 @@
 @ticket-BAP-15902
 @ticket-BAP-21309
+@ticket-BAP-22197
 @fixture-OroContactBundle:contacts.yml
 @fixture-OroEmailBundle:templates.yml
 
@@ -26,6 +27,11 @@ Feature: Send email to contact
     Then the email containing the following was sent:
       | Subject | Test Subject |
       | Body    | Test Content |
+
+  Scenario: Check context of sent email
+    Given I click My Emails in user menu
+    When I click view Test Subject 1 in grid
+    Then I should see "Aadi AABERG" in the "Email Page Contexts" element
 
   Scenario: Add duplicated emails
     Given I go to Customers/Contacts
