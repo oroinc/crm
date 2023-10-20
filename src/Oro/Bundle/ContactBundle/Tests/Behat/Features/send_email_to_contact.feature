@@ -30,7 +30,7 @@ Feature: Send email to contact
 
   Scenario: Check context of sent email
     Given I click My Emails in user menu
-    When I click view Test Subject 1 in grid
+    When I click view "Test Subject" in grid
     Then I should see "Aadi AABERG" in the "Email Page Contexts" element
 
   Scenario: Add duplicated emails
