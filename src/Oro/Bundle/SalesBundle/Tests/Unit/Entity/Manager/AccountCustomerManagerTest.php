@@ -5,9 +5,9 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity\Manager;
 use Doctrine\ORM\EntityNotFoundException;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\EntityExtendBundle\Test\ExtendedEntityTestTrait;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\Entity\Factory\CustomerFactory;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
@@ -21,6 +21,8 @@ use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub as TargetEntity;
  */
 class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
 {
+    use ExtendedEntityTestTrait;
+
     /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $doctrineHelper;
 
@@ -33,23 +35,16 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
     /** @var AccountCustomerManager */
     private $manager;
 
-    /** @var CustomerFactory|\PHPUnit\Framework\MockObject\MockObject */
-    private $customerFactory;
-
     protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->configProvider = $this->createMock(ConfigProvider::class);
         $this->accountProvider = $this->createMock(AccountProviderInterface::class);
-        $this->customerFactory = $this->getMockBuilder(CustomerFactory::class)
-            ->onlyMethods(['createCustomer'])
-            ->getMock();
 
         $this->manager = new AccountCustomerManager(
             $this->doctrineHelper,
             $this->configProvider,
-            $this->accountProvider,
-            $this->customerFactory
+            $this->accountProvider
         );
     }
 
@@ -103,11 +98,16 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerClasses');
         $this->doctrineHelper->expects(self::never())
             ->method('getEntityRepository');
-        $customerMock = $this->getMockBuilder(Customer::class)
-            ->onlyMethods(['setTarget'])
-            ->getMock();
-        $customerMock->expects($this->never())
-            ->method('setTarget');
+
+        $this->entityFieldTestExtension->addExpectation(
+            Customer::class,
+            'setCustomerTarget',
+            function (array $arguments) {
+                self::assertSame([null], $arguments);
+
+                return true;
+            }
+        );
 
         $customer = $this->manager->getAccountCustomerByTarget($target);
         self::assertNull($customer->getId());
@@ -137,15 +137,16 @@ class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
                 [AccountCustomerManager::getCustomerTargetField(TargetEntity::class)]
             )
             ->willReturn(null);
-        $customerMock = $this->getMockBuilder(Customer::class)
-            ->onlyMethods(['setTarget'])
-            ->getMock();
-        $customerMock->expects($this->once())
-            ->method('setTarget')
-            ->with($target, null);
-        $this->customerFactory->expects($this->once())
-            ->method('createCustomer')
-            ->willReturn($customerMock);
+
+        $this->entityFieldTestExtension->addExpectation(
+            Customer::class,
+            'setCustomerTarget',
+            function (array $arguments) {
+                self::assertSame([null], $arguments);
+
+                return true;
+            }
+        );
 
         $customer = $this->manager->getAccountCustomerByTarget($target);
         self::assertNull($customer->getId());

@@ -4,7 +4,6 @@ namespace Oro\Bundle\SalesBundle\Form\DataTransformer;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\Entity\Factory\CustomerFactory;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -16,8 +15,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
 {
     public function __construct(
         private DataTransformerInterface $entityToStringTransformer,
-        private AccountCustomerManager $accountCustomerManager,
-        private CustomerFactory $customerFactory,
+        private AccountCustomerManager $accountCustomerManager
     ) {
     }
 
@@ -42,7 +40,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
         if (!empty($data['value'])) {
             $account = new Account();
             $account->setName($data['value']);
-            $customer = $this->customerFactory->createCustomer();
+            $customer = new Customer();
             $customer->setTarget($account, null);
 
             return $customer;
