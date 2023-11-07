@@ -78,6 +78,7 @@ services:
 
     # Strategy
     oro_sales.importexport.strategy.lead.add_or_replace:
+        class: 'Oro\Bundle\SalesBundle\ImportExport\Strategy\LeadAddOrReplaceStrategy'
         parent: oro_importexport.strategy.configurable_add_or_replace
 
     oro_sales.importexport.strategy.opportunity.add_or_replace:
