@@ -25,7 +25,6 @@ Feature: Country and region translations for lead
       | testlead1 | ContactFN1 | ContactLN1 | testLead1@test.com | 5556668888   | GermanyZulu       | BerlinZulu  | 10003       |
     When I show filter "Country" in "Leads Grid" grid
     And I show filter "State" in "Leads Grid" grid
-    And I reload the page
     And I check "United StatesZulu" in Country filter
     Then should see following grid:
       | Lead name | First name | Last name  | Email              | Phone number | Country           | State       | Postal Code |
