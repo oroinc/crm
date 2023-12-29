@@ -6,12 +6,12 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\AccountBundle\Migrations\Schema\v1_10\InheritanceActivityTargets;
 use Oro\Bundle\AccountBundle\Migrations\Schema\v1_11\AccountNameExprIndexQuery;
 use Oro\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
-use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareTrait;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
@@ -28,38 +28,9 @@ class OroAccountBundleInstaller implements
     ActivityListExtensionAwareInterface,
     AttachmentExtensionAwareInterface
 {
-    /** @var ActivityExtension */
-    protected $activityExtension;
-
-    /** @var AttachmentExtension */
-    protected $attachmentExtension;
-
-    /** @var ActivityListExtension */
-    protected $activityListExtension;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityListExtension(ActivityListExtension $activityListExtension)
-    {
-        $this->activityListExtension = $activityListExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityExtension(ActivityExtension $activityExtension)
-    {
-        $this->activityExtension = $activityExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAttachmentExtension(AttachmentExtension $attachmentExtension)
-    {
-        $this->attachmentExtension = $attachmentExtension;
-    }
+    use ActivityExtensionAwareTrait;
+    use ActivityListExtensionAwareTrait;
+    use AttachmentExtensionAwareTrait;
 
     /**
      * {@inheritdoc}

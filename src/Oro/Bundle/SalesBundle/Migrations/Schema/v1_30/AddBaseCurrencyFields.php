@@ -10,9 +10,9 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class AddBaseCurrencyFields implements Migration, OrderedMigrationInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queryBag)
+    public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_sales_opportunity');
 
@@ -29,6 +29,9 @@ class AddBaseCurrencyFields implements Migration, OrderedMigrationInterface
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getOrder()
     {
         return 1;

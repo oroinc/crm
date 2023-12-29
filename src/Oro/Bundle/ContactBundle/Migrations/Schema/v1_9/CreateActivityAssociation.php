@@ -5,21 +5,13 @@ namespace Oro\Bundle\ContactBundle\Migrations\Schema\v1_9;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class CreateActivityAssociation implements Migration, ActivityExtensionAwareInterface
 {
-    /** @var ActivityExtension */
-    protected $activityExtension;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityExtension(ActivityExtension $activityExtension)
-    {
-        $this->activityExtension = $activityExtension;
-    }
+    use ActivityExtensionAwareTrait;
 
     /**
      * {@inheritdoc}

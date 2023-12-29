@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_25_4;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
@@ -43,14 +42,6 @@ class FixReportsQuery extends ParametrizedMigrationQuery
         $this->doExecute($logger, true);
 
         return $logger->getMessages();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setConnection(Connection $connection)
-    {
-        $this->connection = $connection;
     }
 
     /**

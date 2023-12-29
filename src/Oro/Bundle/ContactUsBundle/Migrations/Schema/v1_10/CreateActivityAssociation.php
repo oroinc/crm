@@ -5,8 +5,10 @@ namespace Oro\Bundle\ContactUsBundle\Migrations\Schema\v1_10;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
@@ -18,11 +20,8 @@ class CreateActivityAssociation implements
     ActivityExtensionAwareInterface,
     ActivityListExtensionAwareInterface
 {
-    /** @var ActivityExtension */
-    protected $activityExtension;
-
-    /** @var ActivityListExtension */
-    protected $activityListExtension;
+    use ActivityExtensionAwareTrait;
+    use ActivityListExtensionAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -30,22 +29,6 @@ class CreateActivityAssociation implements
     public function getOrder()
     {
         return 1;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityExtension(ActivityExtension $activityExtension)
-    {
-        $this->activityExtension = $activityExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityListExtension(ActivityListExtension $activityListExtension)
-    {
-        $this->activityListExtension = $activityListExtension;
     }
 
     /**

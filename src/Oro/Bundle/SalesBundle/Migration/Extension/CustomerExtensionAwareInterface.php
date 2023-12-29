@@ -3,12 +3,9 @@
 namespace Oro\Bundle\SalesBundle\Migration\Extension;
 
 /**
- * CustomerExtensionAwareInterface should be implemented by migrations that depends on CustomerExtension
+ * This interface should be implemented by migrations that depend on {@see CustomerExtension}.
  */
 interface CustomerExtensionAwareInterface
 {
-    /**
-     * Sets the LeadExtension
-     */
     public function setCustomerExtension(CustomerExtension $leadExtension);
 }

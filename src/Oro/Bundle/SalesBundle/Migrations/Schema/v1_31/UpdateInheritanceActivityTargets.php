@@ -5,8 +5,8 @@ namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_31;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ActivityListBundle\Helper\ActivityInheritanceTargetsHelper;
-use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigEntityValueQuery;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
@@ -16,15 +16,13 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class UpdateInheritanceActivityTargets implements
+    Migration,
     ActivityListExtensionAwareInterface,
     ContainerAwareInterface,
-    Migration,
     OrderedMigrationInterface
 {
+    use ActivityListExtensionAwareTrait;
     use ContainerAwareTrait;
-
-    /** @var ActivityListExtension */
-    protected $activityListExtension;
 
     /**
      * {@inheritdoc}
@@ -32,14 +30,6 @@ class UpdateInheritanceActivityTargets implements
     public function getOrder()
     {
         return 4;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityListExtension(ActivityListExtension $activityListExtension)
-    {
-        $this->activityListExtension = $activityListExtension;
     }
 
     /**

@@ -8,8 +8,10 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\CurrencyBundle\DependencyInjection\Configuration as CurrencyConfiguration;
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
+use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
+use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
@@ -21,18 +23,8 @@ class AddMultiCurrencyFields implements
     RenameExtensionAwareInterface,
     DatabasePlatformAwareInterface
 {
-    /** @var AbstractPlatform */
-    protected $platform;
-
-    public function setDatabasePlatform(AbstractPlatform $platform)
-    {
-        $this->platform = $platform;
-    }
-
-    /**
-     * @var RenameExtension
-     */
-    protected $renameExtension;
+    use DatabasePlatformAwareTrait;
+    use RenameExtensionAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -40,14 +32,6 @@ class AddMultiCurrencyFields implements
     public function getOrder()
     {
         return 1;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setRenameExtension(RenameExtension $renameExtension)
-    {
-        $this->renameExtension = $renameExtension;
     }
 
     /**

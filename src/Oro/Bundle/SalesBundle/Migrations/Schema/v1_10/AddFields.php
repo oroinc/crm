@@ -10,7 +10,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class AddFields implements Migration, OrderedMigrationInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function getOrder()
     {
@@ -18,7 +18,7 @@ class AddFields implements Migration, OrderedMigrationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {

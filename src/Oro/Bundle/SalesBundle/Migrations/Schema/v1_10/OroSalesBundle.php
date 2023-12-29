@@ -12,7 +12,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class OroSalesBundle implements Migration, OrderedMigrationInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function getOrder()
     {
@@ -20,7 +20,7 @@ class OroSalesBundle implements Migration, OrderedMigrationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
