@@ -4,25 +4,14 @@ namespace Oro\Bundle\ContactUsBundle\Migrations\Schema\v1_5;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
-use Oro\Bundle\EntityBundle\Migrations\Extension\ChangeTypeExtension;
 use Oro\Bundle\EntityBundle\Migrations\Extension\ChangeTypeExtensionAwareInterface;
+use Oro\Bundle\EntityBundle\Migrations\Extension\ChangeTypeExtensionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroContactUsBundle implements Migration, ChangeTypeExtensionAwareInterface
 {
-    /**
-     * @var ChangeTypeExtension
-     */
-    protected $changeTypeExtension;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setChangeTypeExtension(ChangeTypeExtension $changeTypeExtension)
-    {
-        $this->changeTypeExtension = $changeTypeExtension;
-    }
+    use ChangeTypeExtensionAwareTrait;
 
     /**
      * {@inheritdoc}

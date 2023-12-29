@@ -8,7 +8,6 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\SalesBundle\Entity\Lead;
 use Psr\Log\LoggerInterface;
 
 class UpdateReport extends ParametrizedMigrationQuery implements Migration, OrderedMigrationInterface

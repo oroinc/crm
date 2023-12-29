@@ -3,12 +3,12 @@
 namespace Oro\Bundle\CaseBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
-use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareTrait;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
 use Oro\Bundle\CaseBundle\Migrations\Schema\v1_7\InheritanceActivityTargets;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
@@ -19,14 +19,9 @@ class OroCaseBundleInstaller implements
     ActivityExtensionAwareInterface,
     ActivityListExtensionAwareInterface
 {
-    /** @var AttachmentExtension */
-    protected $attachmentExtension;
-
-    /** @var ActivityExtension */
-    protected $activityExtension;
-
-    /** @var ActivityListExtension */
-    protected $activityListExtension;
+    use AttachmentExtensionAwareTrait;
+    use ActivityExtensionAwareTrait;
+    use ActivityListExtensionAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -34,30 +29,6 @@ class OroCaseBundleInstaller implements
     public function getMigrationVersion()
     {
         return 'v1_12';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityListExtension(ActivityListExtension $activityListExtension)
-    {
-        $this->activityListExtension = $activityListExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAttachmentExtension(AttachmentExtension $attachmentExtension)
-    {
-        $this->attachmentExtension = $attachmentExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityExtension(ActivityExtension $activityExtension)
-    {
-        $this->activityExtension = $activityExtension;
     }
 
     /**

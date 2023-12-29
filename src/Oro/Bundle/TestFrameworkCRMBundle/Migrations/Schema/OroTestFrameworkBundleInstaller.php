@@ -3,8 +3,8 @@
 namespace Oro\Bundle\TestFrameworkCRMBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
@@ -22,12 +22,8 @@ class OroTestFrameworkBundleInstaller implements
     CustomerExtensionAwareInterface,
     ExtendExtensionAwareInterface
 {
+    use ExtendExtensionAwareTrait;
     use CustomerExtensionTrait;
-
-    /**
-     * @var ExtendExtension
-     */
-    private $extendExtension;
 
     /**
      * {@inheritdoc}
@@ -35,14 +31,6 @@ class OroTestFrameworkBundleInstaller implements
     public function getMigrationVersion()
     {
         return 'v1_0';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setExtendExtension(ExtendExtension $extendExtension)
-    {
-        $this->extendExtension = $extendExtension;
     }
 
     /**

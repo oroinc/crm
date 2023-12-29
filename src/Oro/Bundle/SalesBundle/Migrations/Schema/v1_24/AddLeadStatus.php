@@ -9,6 +9,7 @@ use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
@@ -16,7 +17,7 @@ use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class AddLeadStatus implements
     Migration,
@@ -24,11 +25,8 @@ class AddLeadStatus implements
     ContainerAwareInterface,
     OrderedMigrationInterface
 {
-    /** @var ContainerInterface */
-    protected $container;
-
-    /** @var ExtendExtension */
-    protected $extendExtension;
+    use ExtendExtensionAwareTrait;
+    use ContainerAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -36,19 +34,6 @@ class AddLeadStatus implements
     public function getOrder()
     {
         return 1;
-    }
-
-    public function setExtendExtension(ExtendExtension $extendExtension)
-    {
-        $this->extendExtension = $extendExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 
     /**

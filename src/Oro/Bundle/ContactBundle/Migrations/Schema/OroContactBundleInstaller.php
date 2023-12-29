@@ -4,10 +4,10 @@ namespace Oro\Bundle\ContactBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_5\OroContactBundle as AttachmentMigration;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_6\OroContactBundle as ActivityMigration;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_8\OroContactBundle as ContactOrganizations;
@@ -28,28 +28,8 @@ class OroContactBundleInstaller implements
     ActivityExtensionAwareInterface
 {
     use DatabasePlatformAwareTrait;
-
-    /** @var ActivityExtension */
-    protected $activityExtension;
-
-    /** @var AttachmentExtension */
-    protected $attachmentExtension;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityExtension(ActivityExtension $activityExtension)
-    {
-        $this->activityExtension = $activityExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAttachmentExtension(AttachmentExtension $attachmentExtension)
-    {
-        $this->attachmentExtension = $attachmentExtension;
-    }
+    use AttachmentExtensionAwareTrait;
+    use ActivityExtensionAwareTrait;
 
     /**
      * {@inheritdoc}

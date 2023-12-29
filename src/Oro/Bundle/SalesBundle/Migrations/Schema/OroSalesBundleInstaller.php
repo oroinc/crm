@@ -4,21 +4,21 @@ namespace Oro\Bundle\SalesBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
-use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareTrait;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareTrait;
-use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
+use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
@@ -50,53 +50,12 @@ class OroSalesBundleInstaller implements
     CustomerExtensionAwareInterface
 {
     use DatabasePlatformAwareTrait;
+    use ExtendExtensionAwareTrait;
+    use ActivityExtensionAwareTrait;
+    use AttachmentExtensionAwareTrait;
+    use ActivityListExtensionAwareTrait;
+    use RenameExtensionAwareTrait;
     use CustomerExtensionTrait;
-
-    protected ExtendExtension $extendExtension;
-    protected ActivityExtension $activityExtension;
-    protected AttachmentExtension $attachmentExtension;
-    protected ActivityListExtension $activityListExtension;
-    protected RenameExtension $renameExtension;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setActivityListExtension(ActivityListExtension $activityListExtension): void
-    {
-        $this->activityListExtension = $activityListExtension;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setExtendExtension(ExtendExtension $extendExtension)
-    {
-        $this->extendExtension = $extendExtension;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setActivityExtension(ActivityExtension $activityExtension)
-    {
-        $this->activityExtension = $activityExtension;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setAttachmentExtension(AttachmentExtension $attachmentExtension)
-    {
-        $this->attachmentExtension = $attachmentExtension;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setRenameExtension(RenameExtension $renameExtension)
-    {
-        $this->renameExtension = $renameExtension;
-    }
 
     /**
      * {@inheritDoc}

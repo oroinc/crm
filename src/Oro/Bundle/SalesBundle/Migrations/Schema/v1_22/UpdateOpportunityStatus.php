@@ -9,15 +9,14 @@ use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class UpdateOpportunityStatus implements
     Migration,
     ContainerAwareInterface,
     OrderedMigrationInterface
 {
-    /** @var ContainerInterface */
-    protected $container;
+    use ContainerAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -25,14 +24,6 @@ class UpdateOpportunityStatus implements
     public function getOrder()
     {
         return 2;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 
     /**

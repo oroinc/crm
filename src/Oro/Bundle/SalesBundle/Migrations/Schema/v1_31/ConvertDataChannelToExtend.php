@@ -6,8 +6,8 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ConvertToExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ConvertToExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ConvertToExtendExtensionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\SalesBundle\Entity\Lead;
@@ -15,15 +15,7 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionAwareInterface
 {
-    protected ConvertToExtendExtension $convertToExtendExtension;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setConvertToExtendExtension(ConvertToExtendExtension $convertToExtendExtension)
-    {
-        $this->convertToExtendExtension = $convertToExtendExtension;
-    }
+    use ConvertToExtendExtensionAwareTrait;
 
     /**
      * Changes account_id to onDelete=CASCADE

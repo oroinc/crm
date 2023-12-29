@@ -3,8 +3,8 @@
 namespace Oro\Bridge\CalendarCRM\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -12,16 +12,7 @@ class OroCalendarCRMBridgeBundleInstaller implements
     Installation,
     ActivityExtensionAwareInterface
 {
-    /** @var ActivityExtension */
-    private $activityExtension;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityExtension(ActivityExtension $activityExtension)
-    {
-        $this->activityExtension = $activityExtension;
-    }
+    use ActivityExtensionAwareTrait;
 
     /**
      * {@inheritdoc}

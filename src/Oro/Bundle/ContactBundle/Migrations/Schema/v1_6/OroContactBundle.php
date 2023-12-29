@@ -6,14 +6,14 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendDbIdentifierNameGenerator;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareTrait;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendNameGeneratorAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MigrationBundle\Migration\Extension\NameGeneratorAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
 
 class OroContactBundle implements
     Migration,
@@ -21,42 +21,9 @@ class OroContactBundle implements
     ExtendExtensionAwareInterface,
     ActivityExtensionAwareInterface
 {
-    /** @var ActivityExtension */
-    protected $activityExtension;
-
-    /**
-     * @var ExtendDbIdentifierNameGenerator
-     */
-    protected $nameGenerator;
-
-    /**
-     * @var ExtendExtension
-     */
-    protected $extendExtension;
-
-    /**
-     * @inheritdoc
-     */
-    public function setExtendExtension(ExtendExtension $extendExtension)
-    {
-        $this->extendExtension = $extendExtension;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setNameGenerator(DbIdentifierNameGenerator $nameGenerator)
-    {
-        $this->nameGenerator = $nameGenerator;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityExtension(ActivityExtension $activityExtension)
-    {
-        $this->activityExtension = $activityExtension;
-    }
+    use ExtendNameGeneratorAwareTrait;
+    use ExtendExtensionAwareTrait;
+    use ActivityExtensionAwareTrait;
 
     /**
      * {@inheritdoc}
