@@ -3,111 +3,75 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_22;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManagerAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManagerAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
+use Oro\Bundle\EntityExtendBundle\Migration\Query\EnumDataValue;
+use Oro\Bundle\EntityExtendBundle\Migration\Query\InsertEnumValuesQuery;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
-use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class AddOpportunityStatus implements
     Migration,
     ExtendExtensionAwareInterface,
-    ContainerAwareInterface,
+    ExtendOptionsManagerAwareInterface,
     OrderedMigrationInterface
 {
     use ExtendExtensionAwareTrait;
-    use ContainerAwareTrait;
+    use ExtendOptionsManagerAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getOrder()
+    public function getOrder(): int
     {
         return 1;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        /** @var ExtendOptionsManager $extendOptionsManager */
-        $extendOptionsManager = $this->container->get('oro_entity_extend.migration.options_manager');
-        $extendOptionsManager->removeColumnOptions('orocrm_sales_opportunity', 'status');
+        $this->extendOptionsManager->removeColumnOptions('orocrm_sales_opportunity', 'status');
 
-        $immutableCodes = ['in_progress', 'won', 'lost'];
-
-        self::addStatusField($schema, $this->extendExtension, $immutableCodes);
-
-        $statuses = [
-            'in_progress' => 'In Progress',
-            'identification_alignment' => 'Identification & Alignment',
-            'needs_analysis' => 'Needs Analysis',
-            'solution_development' => 'Solution Development',
-            'negotiation' => 'Negotiation',
-            'won' => 'Closed Won',
-            'lost' => 'Closed Lost',
-        ];
-
-        self::addEnumValues($queries, $statuses);
+        $this->addOpportunityStatusField($schema, $queries);
     }
 
-    public static function addStatusField(Schema $schema, ExtendExtension $extendExtension, array $immutableCodes)
+    private function addOpportunityStatusField(Schema $schema, QueryBag $queries): void
     {
-        $enumTable = $extendExtension->addEnumField(
+        $enumTable = $this->extendExtension->addEnumField(
             $schema,
             'orocrm_sales_opportunity',
             'status',
-            Opportunity::INTERNAL_STATUS_CODE,
+            'opportunity_status',
             false,
             false,
             [
                 'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
                 'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
                 'dataaudit' => ['auditable' => true],
-                'importexport' => ["order" => 90, "short" => true]
+                'importexport' => ['order' => 90, 'short' => true]
             ]
         );
 
         $options = new OroOptions();
-        $options->set(
-            'enum',
-            'immutable_codes',
-            $immutableCodes
-        );
-
+        $options->set('enum', 'immutable_codes', ['in_progress', 'won', 'lost']);
         $enumTable->addOption(OroOptions::KEY, $options);
-    }
 
-    public static function addEnumValues(QueryBag $queries, array $statuses, $defaultValue = 'in_progress')
-    {
-        $query = 'INSERT INTO oro_enum_opportunity_status (id, name, priority, is_default)
-                  VALUES (:id, :name, :priority, :is_default)';
-        $i = 1;
-        foreach ($statuses as $key => $value) {
-            $dropFieldsQuery = new ParametrizedSqlMigrationQuery();
-            $dropFieldsQuery->addSql(
-                $query,
-                ['id' => $key, 'name' => $value, 'priority' => $i, 'is_default' => $defaultValue === $key],
-                [
-                    'id' => Types::STRING,
-                    'name' => Types::STRING,
-                    'priority' => Types::INTEGER,
-                    'is_default' => Types::BOOLEAN
-                ]
-            );
-            $queries->addQuery($dropFieldsQuery);
-            $i++;
-        }
+        $queries->addPostQuery(new InsertEnumValuesQuery($this->extendExtension, 'opportunity_status', [
+            new EnumDataValue('in_progress', 'In Progress', 1, true),
+            new EnumDataValue('identification_alignment', 'Identification & Alignment', 2),
+            new EnumDataValue('needs_analysis', 'Needs Analysis', 3),
+            new EnumDataValue('solution_development', 'Solution Development', 4),
+            new EnumDataValue('negotiation', 'Negotiation', 5),
+            new EnumDataValue('won', 'Closed Won', 6),
+            new EnumDataValue('lost', 'Closed Lost', 7)
+        ]));
     }
 }

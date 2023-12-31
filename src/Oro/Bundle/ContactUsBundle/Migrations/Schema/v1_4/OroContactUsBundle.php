@@ -10,23 +10,13 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class OroContactUsBundle implements Migration
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        self::disableActivityAssociations($schema);
-    }
-
-    /**
-     * Prohibits to enable any activity to ContactRequest entity
-     *
-     * This is temporary solution till workflows cannot use system wide actions
-     */
-    public static function disableActivityAssociations(Schema $schema)
-    {
+        // prohibits to enable any activity to ContactRequest entity
         $options = new OroOptions();
         $options->set('activity', 'immutable', true);
-
         $schema->getTable('orocrm_contactus_request')->addOption(OroOptions::KEY, $options);
     }
 }

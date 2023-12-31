@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ContactBundle\Migrations\Schema\v1_5;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -14,23 +13,10 @@ class OroContactBundle implements Migration, AttachmentExtensionAwareInterface
     use AttachmentExtensionAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        self::addPhotoToContact($schema, $this->attachmentExtension);
-    }
-
-    public static function addPhotoToContact(Schema $schema, AttachmentExtension $attachmentExtension)
-    {
-        $attachmentExtension->addImageRelation(
-            $schema,
-            'orocrm_contact',
-            'picture',
-            [],
-            2,
-            58,
-            58
-        );
+        $this->attachmentExtension->addImageRelation($schema, 'orocrm_contact', 'picture', [], 2, 58, 58);
     }
 }

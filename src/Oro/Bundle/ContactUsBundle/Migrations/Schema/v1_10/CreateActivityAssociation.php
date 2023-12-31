@@ -3,10 +3,8 @@
 namespace Oro\Bundle\ContactUsBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
-use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
@@ -24,49 +22,29 @@ class CreateActivityAssociation implements
     use ActivityListExtensionAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getOrder()
+    public function getOrder(): int
     {
         return 1;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        self::enableActivityAssociations($schema);
-        self::addEmailAssociations($schema, $this->activityExtension);
-        self::addCallAssociations($schema, $this->activityExtension);
-        self::addActivityListAssociationTable($schema, $this->activityListExtension);
+        $this->enableActivityAssociations($schema);
+
+        $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contactus_request');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_call', 'orocrm_contactus_request');
+        $this->activityListExtension->addActivityListAssociation($schema, 'orocrm_contactus_request');
     }
 
-    public static function enableActivityAssociations(Schema $schema)
+    private function enableActivityAssociations(Schema $schema): void
     {
         $options = new OroOptions();
         $options->set('activity', 'immutable', false);
-
         $schema->getTable('orocrm_contactus_request')->addOption(OroOptions::KEY, $options);
-    }
-
-    public static function addEmailAssociations(Schema $schema, ActivityExtension $activityExtension)
-    {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contactus_request');
-    }
-
-    public static function addCallAssociations(Schema $schema, ActivityExtension $activityExtension)
-    {
-        $activityExtension->addActivityAssociation($schema, 'oro_call', 'orocrm_contactus_request');
-    }
-
-    /**
-     * Manually create activitylist association table for further filling.
-     */
-    public static function addActivityListAssociationTable(
-        Schema $schema,
-        ActivityListExtension $activityListExtension
-    ) {
-        $activityListExtension->addActivityListAssociation($schema, 'orocrm_contactus_request');
     }
 }

@@ -3,7 +3,6 @@
 namespace Oro\Bundle\AccountBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -14,15 +13,10 @@ class InheritanceActivityTargets implements Migration, ActivityListExtensionAwar
     use ActivityListExtensionAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        self::addInheritanceTargets($schema, $this->activityListExtension);
-    }
-
-    public static function addInheritanceTargets(Schema $schema, ActivityListExtension $activityListExtension)
-    {
-        $activityListExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_contact', ['accounts']);
+        $this->activityListExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_contact', ['accounts']);
     }
 }
