@@ -11,26 +11,26 @@ use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 class AddLeadAddressTable implements Migration, OrderedMigrationInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getOrder()
+    public function getOrder(): int
     {
         return 1;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
+        $this->createLeadAddressTable($schema);
         $this->addMigrationQueries($queries);
-        self::createLeadAddressTable($schema);
     }
 
     /**
-     * Create oro_sales_lead_address table
+     * Create orocrm_sales_lead_address table
      */
-    public static function createLeadAddressTable(Schema $schema)
+    private function createLeadAddressTable(Schema $schema): void
     {
         $table = $schema->createTable('orocrm_sales_lead_address');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -50,12 +50,12 @@ class AddLeadAddressTable implements Migration, OrderedMigrationInterface
         $table->addColumn('middle_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('name_suffix', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('created', 'datetime', []);
-        $table->addColumn('updated', 'datetime', []);
+        $table->addColumn('created', 'datetime');
+        $table->addColumn('updated', 'datetime');
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['owner_id'], 'IDX_LEAD_ADDRESS_OWNER', []);
-        $table->addIndex(['country_code'], 'IDX_LEAD_ADDRESS_COUNTRY', []);
-        $table->addIndex(['region_code'], 'IDX_LEAD_ADDRESS_REGION', []);
+        $table->addIndex(['owner_id'], 'IDX_LEAD_ADDRESS_OWNER');
+        $table->addIndex(['country_code'], 'IDX_LEAD_ADDRESS_COUNTRY');
+        $table->addIndex(['region_code'], 'IDX_LEAD_ADDRESS_REGION');
 
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_lead'),

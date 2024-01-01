@@ -6,15 +6,15 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroContactBundle implements migration
+class OroContactBundle implements Migration
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         $table = $schema->getTable('orocrm_contact');
         $table->dropIndex('contact_name_idx');
-        $table->addIndex(array('last_name', 'first_name'), 'contact_name_idx');
+        $table->addIndex(['last_name', 'first_name'], 'contact_name_idx');
     }
 }

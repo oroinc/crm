@@ -9,7 +9,6 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\SalesBundle\Entity\Lead;
 use Psr\Log\LoggerInterface;
 
 class UpdateReport extends ParametrizedMigrationQuery implements Migration, OrderedMigrationInterface
@@ -253,7 +252,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
     protected function fixFilterCriterion($def, $field, $key)
     {
         $paramOldClassName = 'Oro\Bundle\SalesBundle\Entity\LeadStatus';
-        $paramNewClassName = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
+        $paramNewClassName = ExtendHelper::buildEnumValueClassName('lead_status');
         if (isset($field['criterion']['data']['params']['class'])
             && $field['criterion']['data']['params']['class'] === $paramOldClassName
             && $field['criterion']['filter'] === 'dictionary'

@@ -7,14 +7,15 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\SecurityBundle\Migrations\Schema\UpdateOwnershipTypeQuery;
 
-class OroContactBundle implements migration
+class OroContactBundle implements Migration
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        self::addOrganization($schema);
+        $this->addOrganization($schema);
+
         //Add organization fields to ownership entity config
         $queries->addQuery(
             new UpdateOwnershipTypeQuery(
@@ -25,7 +26,6 @@ class OroContactBundle implements migration
                 ]
             )
         );
-        //Add organization fields to ownership entity config
         $queries->addQuery(
             new UpdateOwnershipTypeQuery(
                 'Oro\Bundle\ContactBundle\Entity\Group',
@@ -37,14 +37,11 @@ class OroContactBundle implements migration
         );
     }
 
-    /**
-     * Adds organization_id field
-     */
-    public static function addOrganization(Schema $schema)
+    private function addOrganization(Schema $schema): void
     {
         $table = $schema->getTable('orocrm_contact');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['organization_id'], 'IDX_403263ED32C8A3DE', []);
+        $table->addIndex(['organization_id'], 'IDX_403263ED32C8A3DE');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
@@ -54,7 +51,7 @@ class OroContactBundle implements migration
 
         $table = $schema->getTable('orocrm_contact_group');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['organization_id'], 'IDX_B908107232C8A3DE', []);
+        $table->addIndex(['organization_id'], 'IDX_B908107232C8A3DE');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],

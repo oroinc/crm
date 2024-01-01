@@ -9,48 +9,51 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class AddCustomersTable implements Migration
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        self::addCustomersTable($schema);
-        self::addCustomersTableForeignKeys($schema);
-
-        $opportunityTable = $schema->getTable('orocrm_sales_opportunity');
-        $opportunityTable->addColumn('customer_association_id', 'integer', ['notnull' => false]);
-        $opportunityTable->addIndex(['customer_association_id'], 'IDX_C0FE4AAC76D4FC6F', []);
-        $opportunityTable->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_customer'),
-            ['customer_association_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
-        );
-
-        $leadTable = $schema->getTable('orocrm_sales_lead');
-        $leadTable->addColumn('customer_association_id', 'integer', ['notnull' => false]);
-        $leadTable->addIndex(['customer_association_id'], 'IDX_73DB463376D4FC6F', []);
-        $leadTable->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_customer'),
-            ['customer_association_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
-        );
+        $this->addCustomerTable($schema);
+        $this->updateOpportunityTable($schema);
+        $this->updateLeadTable($schema);
     }
 
-    public static function addCustomersTable(Schema $schema)
+    private function addCustomerTable(Schema $schema): void
     {
         $table = $schema->createTable('orocrm_sales_customer');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('account_id', 'integer', ['notnull' => true]);
         $table->setPrimaryKey(['id']);
-    }
 
-    public static function addCustomersTableForeignKeys(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_sales_customer');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_account'),
             ['account_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+    }
+
+    private function updateOpportunityTable(Schema $schema): void
+    {
+        $table = $schema->getTable('orocrm_sales_opportunity');
+        $table->addColumn('customer_association_id', 'integer', ['notnull' => false]);
+        $table->addIndex(['customer_association_id'], 'IDX_C0FE4AAC76D4FC6F');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_sales_customer'),
+            ['customer_association_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+    }
+
+    private function updateLeadTable(Schema $schema): void
+    {
+        $table = $schema->getTable('orocrm_sales_lead');
+        $table->addColumn('customer_association_id', 'integer', ['notnull' => false]);
+        $table->addIndex(['customer_association_id'], 'IDX_73DB463376D4FC6F');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_sales_customer'),
+            ['customer_association_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );

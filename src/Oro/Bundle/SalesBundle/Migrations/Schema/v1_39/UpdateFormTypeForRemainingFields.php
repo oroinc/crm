@@ -4,25 +4,24 @@ namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_39;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
-use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManagerAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManagerAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * This migration updates data_channel and customer fields which could remain after
  * upgrade process.
  */
-class UpdateFormTypeForRemainingFields implements Migration, ContainerAwareInterface
+class UpdateFormTypeForRemainingFields implements Migration, ExtendOptionsManagerAwareInterface
 {
-    use ContainerAwareTrait;
+    use ExtendOptionsManagerAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         $this->updateFieldFormType(
             'orocrm_sales_lead',
@@ -30,14 +29,12 @@ class UpdateFormTypeForRemainingFields implements Migration, ContainerAwareInter
             ChannelSelectType::class,
             'oro_channel_select_type'
         );
-
         $this->updateFieldFormType(
             'orocrm_sales_opportunity',
             'data_channel',
             ChannelSelectType::class,
             'oro_channel_select_type'
         );
-
         $this->updateFieldFormType(
             'orocrm_sales_opportunity',
             'customer',
@@ -46,25 +43,17 @@ class UpdateFormTypeForRemainingFields implements Migration, ContainerAwareInter
         );
     }
 
-    private function updateFieldFormType(string $table, string $field, string $formType, string $replaceFormType)
+    private function updateFieldFormType(string $table, string $field, string $formType, string $replaceFormType): void
     {
-        /** @var ExtendOptionsManager $extendOptionsManager */
-        $extendOptionsManager = $this->container->get('oro_entity_extend.migration.options_manager');
-
-        if (!$extendOptionsManager->hasColumnOptions($table, $field)) {
+        if (!$this->extendOptionsManager->hasColumnOptions($table, $field)) {
             return;
         }
 
-        $options = $extendOptionsManager->getColumnOptions($table, $field);
-
+        $options = $this->extendOptionsManager->getColumnOptions($table, $field);
         if ($options['form']['form_type'] !== $replaceFormType) {
             return;
         }
 
-        $extendOptionsManager->mergeColumnOptions($table, $field, [
-            'form' => [
-                'form_type' => $formType
-            ]
-        ]);
+        $this->extendOptionsManager->mergeColumnOptions($table, $field, ['form' => ['form_type' => $formType]]);
     }
 }

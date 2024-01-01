@@ -2,14 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_27;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\CurrencyBundle\DependencyInjection\Configuration as CurrencyConfiguration;
-use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareTrait;
-use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -20,59 +16,44 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class AddMultiCurrencyFields implements
     Migration,
     OrderedMigrationInterface,
-    RenameExtensionAwareInterface,
-    DatabasePlatformAwareInterface
+    RenameExtensionAwareInterface
 {
-    use DatabasePlatformAwareTrait;
     use RenameExtensionAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getOrder()
+    public function getOrder(): int
     {
         return 1;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queryBag)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        self::addColumnsForMultiCurrency($schema, $queryBag, $this->renameExtension, $this->platform);
-    }
-
-    public static function addColumnsForMultiCurrency(
-        Schema $schema,
-        QueryBag $queryBag,
-        RenameExtension $renameExtension,
-        AbstractPlatform $platform
-    ) {
         $table = $schema->getTable('orocrm_sales_opportunity');
 
-        //Rename columns for new type
-        self::renameOpportunityFields($schema, $queryBag, $renameExtension);
+        $this->renameOpportunityFields($schema, $queries);
 
         //Add columns for new type
-        $table->addColumn(
-            'budget_amount_currency',
-            'currency',
-            ['length' => 3, 'notnull' => false, 'comment' => '(DC2Type:currency)']
-        );
-        $table->addColumn(
-            'close_revenue_currency',
-            'currency',
-            ['length' => 3, 'notnull' => false, 'comment' => '(DC2Type:currency)']
-        );
+        $table->addColumn('budget_amount_currency', 'currency', [
+            'length' => 3,
+            'notnull' => false,
+            'comment' => '(DC2Type:currency)'
+        ]);
+        $table->addColumn('close_revenue_currency', 'currency', [
+            'length' => 3,
+            'notnull' => false,
+            'comment' => '(DC2Type:currency)'
+        ]);
 
-        self::fillCurrencyFieldsWithDefaultValue($queryBag);
+        $this->fillCurrencyFieldsWithDefaultValue($queries);
     }
 
-    public static function renameOpportunityFields(
-        Schema $schema,
-        QueryBag $queries,
-        RenameExtension $renameExtension
-    ) {
+    private function renameOpportunityFields(Schema $schema, QueryBag $queries): void
+    {
         $table = $schema->getTable('orocrm_sales_opportunity');
 
         /**
@@ -89,24 +70,11 @@ class AddMultiCurrencyFields implements
             ['type' => $type, 'notnull' => false, 'comment' => '(DC2Type:money_value)']
         );
 
-        $renameExtension->renameColumn(
-            $schema,
-            $queries,
-            $table,
-            'budget_amount',
-            'budget_amount_value'
-        );
-
-        $renameExtension->renameColumn(
-            $schema,
-            $queries,
-            $table,
-            'close_revenue',
-            'close_revenue_value'
-        );
+        $this->renameExtension->renameColumn($schema, $queries, $table, 'budget_amount', 'budget_amount_value');
+        $this->renameExtension->renameColumn($schema, $queries, $table, 'close_revenue', 'close_revenue_value');
     }
 
-    public static function fillCurrencyFieldsWithDefaultValue(QueryBag $queries)
+    private function fillCurrencyFieldsWithDefaultValue(QueryBag $queries): void
     {
         $queries->addPostQuery(
             new ParametrizedSqlMigrationQuery(

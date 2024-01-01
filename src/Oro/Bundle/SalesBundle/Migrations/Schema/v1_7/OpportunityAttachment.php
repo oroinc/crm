@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_7;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -14,19 +13,11 @@ class OpportunityAttachment implements Migration, AttachmentExtensionAwareInterf
     use AttachmentExtensionAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        self::addOpportunityAttachment($schema, $this->attachmentExtension);
-    }
-
-    /**
-     * Add Attachment for Opportunity.
-     */
-    public static function addOpportunityAttachment(Schema $schema, AttachmentExtension $attachmentExtension)
-    {
-        $attachmentExtension->addAttachmentAssociation(
+        $this->attachmentExtension->addAttachmentAssociation(
             $schema,
             'orocrm_sales_opportunity',
             [

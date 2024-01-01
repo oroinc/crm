@@ -2,10 +2,8 @@
 
 namespace Oro\Bundle\AccountBundle\Migrations\Schema;
 
+use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\AccountBundle\Migrations\Schema\v1_10\InheritanceActivityTargets;
-use Oro\Bundle\AccountBundle\Migrations\Schema\v1_11\AccountNameExprIndexQuery;
-use Oro\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
@@ -15,8 +13,11 @@ use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrai
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
+use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
+use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -24,26 +25,28 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
  */
 class OroAccountBundleInstaller implements
     Installation,
+    DatabasePlatformAwareInterface,
     ActivityExtensionAwareInterface,
     ActivityListExtensionAwareInterface,
     AttachmentExtensionAwareInterface
 {
+    use DatabasePlatformAwareTrait;
     use ActivityExtensionAwareTrait;
     use ActivityListExtensionAwareTrait;
     use AttachmentExtensionAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getMigrationVersion()
+    public function getMigrationVersion(): string
     {
         return 'v1_14_1';
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         /** Tables generation **/
         $this->createOrocrmAccountTable($schema, $queries);
@@ -72,17 +75,13 @@ class OroAccountBundleInstaller implements
             ],
             2
         );
-        InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
-
-        // update to 1.8
-        $addReferredBy = new AddReferredBy();
-        $addReferredBy->up($schema, $queries);
+        $this->activityListExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_contact', ['accounts']);
     }
 
     /**
      * Create oro_account table
      */
-    protected function createOrocrmAccountTable(Schema $schema, QueryBag $queries)
+    private function createOrocrmAccountTable(Schema $schema, QueryBag $queries): void
     {
         $table = $schema->createTable('orocrm_account');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -90,8 +89,8 @@ class OroAccountBundleInstaller implements
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('default_contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
-        $table->addColumn('createdAt', 'datetime', []);
-        $table->addColumn('updatedAt', 'datetime', []);
+        $table->addColumn('createdAt', 'datetime');
+        $table->addColumn('updatedAt', 'datetime');
         $table->addColumn(
             'extend_description',
             'text',
@@ -106,32 +105,38 @@ class OroAccountBundleInstaller implements
                 ]
             ]
         );
+        $table->addColumn('referred_by_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['user_owner_id'], 'IDX_7166D3719EB185F9', []);
-        $table->addIndex(['organization_id'], 'IDX_7166D37132C8A3DE', []);
-        $table->addIndex(['default_contact_id'], 'IDX_7166D371AF827129', []);
-        $table->addIndex(['name', 'id'], 'account_name_idx', []);
+        $table->addIndex(['user_owner_id'], 'IDX_7166D3719EB185F9');
+        $table->addIndex(['organization_id'], 'IDX_7166D37132C8A3DE');
+        $table->addIndex(['default_contact_id'], 'IDX_7166D371AF827129');
+        $table->addIndex(['name', 'id'], 'account_name_idx');
+        $table->addIndex(['referred_by_id'], 'IDX_7166D371758C8114');
 
-        $queries->addPostQuery(new AccountNameExprIndexQuery());
+        if ($this->platform instanceof PostgreSqlPlatform) {
+            $queries->addPostQuery(new SqlMigrationQuery(
+                'CREATE INDEX account_name_expr_idx ON orocrm_account (LOWER(name))'
+            ));
+        }
     }
 
     /**
      * Create oro_account_to_contact table
      */
-    protected function createOrocrmAccountToContactTable(Schema $schema)
+    private function createOrocrmAccountToContactTable(Schema $schema): void
     {
         $table = $schema->createTable('orocrm_account_to_contact');
-        $table->addColumn('account_id', 'integer', []);
-        $table->addColumn('contact_id', 'integer', []);
+        $table->addColumn('account_id', 'integer');
+        $table->addColumn('contact_id', 'integer');
         $table->setPrimaryKey(['account_id', 'contact_id']);
-        $table->addIndex(['account_id'], 'IDX_65B8FBEC9B6B5FBA', []);
-        $table->addIndex(['contact_id'], 'IDX_65B8FBECE7A1254A', []);
+        $table->addIndex(['account_id'], 'IDX_65B8FBEC9B6B5FBA');
+        $table->addIndex(['contact_id'], 'IDX_65B8FBECE7A1254A');
     }
 
     /**
      * Add oro_account foreign keys.
      */
-    protected function addOrocrmAccountForeignKeys(Schema $schema)
+    private function addOrocrmAccountForeignKeys(Schema $schema): void
     {
         $table = $schema->getTable('orocrm_account');
         $table->addForeignKeyConstraint(
@@ -152,12 +157,18 @@ class OroAccountBundleInstaller implements
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_account'),
+            ['referred_by_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
     }
 
     /**
      * Add oro_account_to_contact foreign keys.
      */
-    protected function addOrocrmAccountToContactForeignKeys(Schema $schema)
+    private function addOrocrmAccountToContactForeignKeys(Schema $schema): void
     {
         $table = $schema->getTable('orocrm_account_to_contact');
         $table->addForeignKeyConstraint(

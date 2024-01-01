@@ -10,11 +10,12 @@ use Oro\Bundle\SecurityBundle\Migrations\Schema\UpdateOwnershipTypeQuery;
 class OroSalesBundle implements Migration
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        self::addOrganization($schema);
+        $this->addOrganization($schema);
+
         //Add organization fields to ownership entity config
         $queries->addQuery(
             new UpdateOwnershipTypeQuery(
@@ -25,7 +26,6 @@ class OroSalesBundle implements Migration
                 ]
             )
         );
-        //Add organization fields to ownership entity config
         $queries->addQuery(
             new UpdateOwnershipTypeQuery(
                 'Oro\Bundle\SalesBundle\Entity\Opportunity',
@@ -35,7 +35,6 @@ class OroSalesBundle implements Migration
                 ]
             )
         );
-        //Add organization fields to ownership entity config
         $queries->addQuery(
             new UpdateOwnershipTypeQuery(
                 'Oro\Bundle\SalesBundle\Entity\B2bCustomer',
@@ -47,14 +46,11 @@ class OroSalesBundle implements Migration
         );
     }
 
-    /**
-     * Adds organization_id field
-     */
-    public static function addOrganization(Schema $schema)
+    private function addOrganization(Schema $schema): void
     {
         $table = $schema->getTable('orocrm_sales_lead');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['organization_id'], 'IDX_73DB463332C8A3DE', []);
+        $table->addIndex(['organization_id'], 'IDX_73DB463332C8A3DE');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
@@ -64,7 +60,7 @@ class OroSalesBundle implements Migration
 
         $table = $schema->getTable('orocrm_sales_opportunity');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['organization_id'], 'IDX_C0FE4AAC32C8A3DE', []);
+        $table->addIndex(['organization_id'], 'IDX_C0FE4AAC32C8A3DE');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],

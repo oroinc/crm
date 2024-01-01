@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ContactBundle\Migrations\Schema\v1_9;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -14,15 +13,10 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
     use ActivityExtensionAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        self::addActivityAssociations($schema, $this->activityExtension);
-    }
-
-    public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
-    {
-        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_contact');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_contact');
     }
 }

@@ -9,34 +9,16 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class OroSalesBundle implements Migration
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
-    {
-        self::addOroEmailMailboxProcessorColumns($schema);
-        self::addOroEmailMailboxProcessorForeignKeys($schema);
-    }
-
-    /**
-     * Create oro_email_mailbox_processor table
-     */
-    public static function addOroEmailMailboxProcessorColumns(Schema $schema)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         $table = $schema->getTable('oro_email_mailbox_process');
-
         $table->addColumn('lead_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_source_id', 'string', ['notnull' => false, 'length' => 32]);
-        $table->addIndex(['lead_owner_id'], 'IDX_CE8602A3D46FE3FA', []);
-        $table->addIndex(['lead_channel_id'], 'IDX_CE8602A35A6EBA36', []);
-    }
-
-    /**
-     * Add oro_email_mailbox_processor foreign keys.
-     */
-    public static function addOroEmailMailboxProcessorForeignKeys(Schema $schema)
-    {
-        $table = $schema->getTable('oro_email_mailbox_process');
+        $table->addIndex(['lead_owner_id'], 'IDX_CE8602A3D46FE3FA');
+        $table->addIndex(['lead_channel_id'], 'IDX_CE8602A35A6EBA36');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_channel'),
             ['lead_channel_id'],

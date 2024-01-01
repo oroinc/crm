@@ -4,7 +4,6 @@ namespace Oro\Bundle\ContactBundle\Migrations\Schema\v1_6;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
@@ -26,35 +25,21 @@ class OroContactBundle implements
     use ActivityExtensionAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
-        self::addActivityAssociations($schema, $this->activityExtension);
+        $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contact');
 
         $this->assignActivities('oro_email', 'orocrm_contact', 'owner_contact_id', $queries);
     }
 
-    /**
-     * Enables Email activity for Contact entity
-     */
-    public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
-    {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contact');
-    }
-
-    /**
-     * @param string   $sourceTableName
-     * @param string   $targetTableName
-     * @param string   $ownerColumnName
-     * @param QueryBag $queries
-     */
-    public function assignActivities(
-        $sourceTableName,
-        $targetTableName,
-        $ownerColumnName,
+    private function assignActivities(
+        string $sourceTableName,
+        string $targetTableName,
+        string $ownerColumnName,
         QueryBag $queries
-    ) {
+    ): void {
         // prepare select email_id:contact_id sql
         $fromAndRecipients = '
             SELECT DISTINCT email_id, owner_id FROM (
@@ -69,8 +54,8 @@ class OroContactBundle implements
                 WHERE ea.{owner} IS NOT NULL
             ) as subq';
 
-        $sourceClassName   = $this->extendExtension->getEntityClassByTableName($sourceTableName);
-        $targetClassName   = $this->extendExtension->getEntityClassByTableName($targetTableName);
+        $sourceClassName = $this->extendExtension->getEntityClassByTableName($sourceTableName);
+        $targetClassName = $this->extendExtension->getEntityClassByTableName($targetTableName);
         $fromAndRecipients = str_replace('{owner}', $ownerColumnName, $fromAndRecipients);
 
         $associationName = ExtendHelper::buildAssociationName(
@@ -84,6 +69,6 @@ class OroContactBundle implements
             $targetClassName
         );
 
-        $queries->addQuery(sprintf("INSERT INTO %s %s", $tableName, $fromAndRecipients));
+        $queries->addQuery(sprintf('INSERT INTO %s %s', $tableName, $fromAndRecipients));
     }
 }
