@@ -15,22 +15,22 @@ class OroCallCRMBridgeBundleInstaller implements
     use ActivityExtensionAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getMigrationVersion()
+    public function getMigrationVersion(): string
     {
         return 'v1_0';
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         $this->addCallActivityRelations($schema);
     }
 
-    private function addCallActivityRelations(Schema $schema)
+    private function addCallActivityRelations(Schema $schema): void
     {
         $associationTables = [
             'orocrm_account',
@@ -41,9 +41,11 @@ class OroCallCRMBridgeBundleInstaller implements
             'orocrm_sales_opportunity',
             'orocrm_sales_b2bcustomer'
         ];
-
         foreach ($associationTables as $tableName) {
-            $associationTableName = $this->activityExtension->getAssociationTableName('orocrm_call', $tableName);
+            $associationTableName = $this->activityExtension->getAssociationTableName(
+                'orocrm_call',
+                $tableName
+            );
             if (!$schema->hasTable($associationTableName)) {
                 $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', $tableName);
             }
