@@ -15,22 +15,22 @@ class OroCalendarCRMBridgeBundleInstaller implements
     use ActivityExtensionAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getMigrationVersion()
+    public function getMigrationVersion(): string
     {
         return 'v1_0';
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         $this->addCalendarActivityAssociations($schema);
     }
 
-    private function addCalendarActivityAssociations(Schema $schema)
+    private function addCalendarActivityAssociations(Schema $schema): void
     {
         $associationTables = [
             'orocrm_contact',
@@ -40,7 +40,6 @@ class OroCalendarCRMBridgeBundleInstaller implements
             'orocrm_sales_opportunity',
             'orocrm_sales_b2bcustomer',
         ];
-
         foreach ($associationTables as $tableName) {
             $associationTableName = $this->activityExtension->getAssociationTableName(
                 'oro_calendar_event',

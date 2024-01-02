@@ -15,22 +15,22 @@ class OroTaskCRMBundleInstaller implements
     use ActivityExtensionAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getMigrationVersion()
+    public function getMigrationVersion(): string
     {
         return 'v1_0';
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         $this->addTaskActivityRelations($schema);
     }
 
-    private function addTaskActivityRelations(Schema $schema)
+    private function addTaskActivityRelations(Schema $schema): void
     {
         $targetTables = [
             'orocrm_account',

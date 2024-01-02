@@ -26,24 +26,24 @@ class OroTestFrameworkBundleInstaller implements
     use CustomerExtensionTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getMigrationVersion()
+    public function getMigrationVersion(): string
     {
         return 'v1_0';
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         $this->addTestCustomerTargetTables($schema);
         $this->addCustomerAssociations($schema);
         $this->addTestEnumFieldToContact($schema);
     }
 
-    public function addTestCustomerTargetTables(Schema $schema)
+    private function addTestCustomerTargetTables(Schema $schema): void
     {
         $table = $schema->createTable('test_customer1');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -63,13 +63,13 @@ class OroTestFrameworkBundleInstaller implements
         $table->setPrimaryKey(['id']);
     }
 
-    public function addCustomerAssociations(Schema $schema)
+    private function addCustomerAssociations(Schema $schema): void
     {
         $this->customerExtension->addCustomerAssociation($schema, 'test_customer1');
         $this->customerExtension->addCustomerAssociation($schema, 'test_customer2');
     }
 
-    public function addTestEnumFieldToContact(Schema $schema)
+    private function addTestEnumFieldToContact(Schema $schema): void
     {
         $contactTable = $schema->getTable('orocrm_contact');
         $this->extendExtension->addEnumField(

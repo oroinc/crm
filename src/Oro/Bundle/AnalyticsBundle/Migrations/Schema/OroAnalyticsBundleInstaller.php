@@ -9,17 +9,17 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class OroAnalyticsBundleInstaller implements Installation
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getMigrationVersion()
+    public function getMigrationVersion(): string
     {
         return 'v1_0';
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         /** Tables generation **/
         $this->createOrocrmAnalyticsRfmCategoryTable($schema);
@@ -31,25 +31,25 @@ class OroAnalyticsBundleInstaller implements Installation
     /**
      * Create oro_analytics_rfm_category table
      */
-    protected function createOrocrmAnalyticsRfmCategoryTable(Schema $schema)
+    private function createOrocrmAnalyticsRfmCategoryTable(Schema $schema): void
     {
         $table = $schema->createTable('orocrm_analytics_rfm_category');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('category_type', 'string', ['length' => 16]);
-        $table->addColumn('category_index', 'integer', []);
+        $table->addColumn('category_index', 'integer');
         $table->addColumn('min_value', 'float', ['notnull' => false]);
         $table->addColumn('max_value', 'float', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['owner_id'], 'idx_user_owner', []);
-        $table->addIndex(['channel_id'], 'idx_channel', []);
+        $table->addIndex(['owner_id'], 'idx_user_owner');
+        $table->addIndex(['channel_id'], 'idx_channel');
     }
 
     /**
      * Add oro_analytics_rfm_category foreign keys.
      */
-    protected function addOrocrmAnalyticsRfmCategoryForeignKeys(Schema $schema)
+    private function addOrocrmAnalyticsRfmCategoryForeignKeys(Schema $schema): void
     {
         $table = $schema->getTable('orocrm_analytics_rfm_category');
         $table->addForeignKeyConstraint(

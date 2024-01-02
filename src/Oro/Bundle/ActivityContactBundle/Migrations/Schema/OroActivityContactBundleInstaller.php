@@ -10,17 +10,17 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class OroActivityContactBundleInstaller implements Installation
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getMigrationVersion()
+    public function getMigrationVersion(): string
     {
         return 'v1_1';
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         OroActivityContactBundle::removeUserACFields($schema, $queries);
     }
