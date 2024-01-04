@@ -9,9 +9,9 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 class LoadFullOpportunityFixtures extends AbstractOpportunityFixtures
 {
     /**
-     * @return void
+     * {@inheritDoc}
      */
-    protected function createOpportunity()
+    protected function createOpportunity(): void
     {
         $opportunity = new Opportunity();
 

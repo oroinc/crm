@@ -16,70 +16,57 @@ abstract class AbstractOpportunityFixtures extends AbstractFixture implements Co
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var Organization
-     */
-    protected $organization;
+    private ?User $user = null;
+    private ?Organization $organization = null;
+    protected ObjectManager $em;
 
     /**
-     * @var User
+     * {@inheritDoc}
      */
-    protected $user;
-
-    /**
-     * @var ObjectManager
-     */
-    protected $em;
-
-    /**
-     * @return User
-     */
-    protected function getUser()
+    public function load(ObjectManager $manager): void
     {
-        if (empty($this->user)) {
-            $this->user = $this->em->getRepository('OroUserBundle:User')->findOneBy(['username' => 'admin']);
+        $this->em = $manager;
+        $this->createChannel();
+        $this->createAccount();
+        $this->createB2bCustomer();
+        $this->createOpportunity();
+    }
+
+    protected function getUser(): User
+    {
+        if (null === $this->user) {
+            $this->user = $this->em->getRepository(User::class)->findOneBy(['username' => 'admin']);
         }
 
         return $this->user;
     }
 
-    /**
-     * @return Organization
-     */
-    protected function getOrganization()
+    protected function getOrganization(): Organization
     {
-        if (empty($this->organization)) {
-            $this->organization = $this->em->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        if (null === $this->organization) {
+            $this->organization = $this->em->getRepository(Organization::class)->getFirst();
         }
+
         return $this->organization;
     }
 
-    /**
-     * @return void
-     */
-    protected function createChannel()
+    protected function createChannel(): void
     {
         $factory = $this->container->get('oro_channel.builder.factory');
-
-        $channel = $factory
-            ->createBuilder()
+        $channel = $factory->createBuilder()
             ->setName('Default channel')
             ->setChannelType('b2b')
             ->setStatus(Channel::STATUS_ACTIVE)
             ->setOwner($this->organization)
             ->setEntities()
             ->getChannel();
-
         $this->em->persist($channel);
         $this->em->flush();
 
         $this->setReference('default_channel', $channel);
     }
 
-    /**
-     * @return void
-     */
-    protected function createB2bCustomer()
+    protected function createB2bCustomer(): void
     {
         $customer = new B2bCustomer();
         $account  = $this->getReference('default_account');
@@ -87,46 +74,24 @@ abstract class AbstractOpportunityFixtures extends AbstractFixture implements Co
         $customer->setName('Default customer');
         $customer->setOrganization($this->getOrganization());
         $customer->setDataChannel($this->getReference('default_channel'));
-
         $this->em->persist($customer);
         $this->em->flush();
 
         $accountManager = $this->container->get('oro_sales.manager.account_customer');
-
         $accountCustomer = $accountManager->getAccountCustomerByTarget($customer);
         $this->setReference('default_account_customer', $accountCustomer);
     }
 
-    /**
-     * @return void
-     */
-    protected function createAccount()
+    protected function createAccount(): void
     {
         $account = new Account();
         $account->setName('Default account');
         $account->setOrganization($this->getOrganization());
-
         $this->em->persist($account);
         $this->em->flush();
 
         $this->setReference('default_account', $account);
     }
 
-    /**
-     * @return void
-     */
-    abstract protected function createOpportunity();
-
-    /**
-     * {@inheritDoc}
-     */
-    public function load(ObjectManager $manager)
-    {
-        $this->em = $manager;
-        $this->createChannel();
-        $this->createAccount();
-        $this->createB2bCustomer();
-
-        $this->createOpportunity();
-    }
+    abstract protected function createOpportunity(): void;
 }
