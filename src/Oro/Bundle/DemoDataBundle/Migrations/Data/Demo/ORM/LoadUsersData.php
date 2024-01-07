@@ -58,7 +58,7 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         }
         $this->organization = $this->getReference('default_organization');
         $this->userManager  = $this->container->get('oro_user.manager');
-        $this->role = $this->em->getRepository('OroUserBundle:Role')->findOneBy(
+        $this->role = $this->em->getRepository(Role::class)->findOneBy(
             ['role' => LoadRolesData::ROLE_MANAGER]
         );
     }
@@ -193,6 +193,6 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
 
     private function getBusinessUnit(string $name): BusinessUnit
     {
-        return $this->em->getRepository('OroOrganizationBundle:BusinessUnit')->findOneBy(['name' => $name]);
+        return $this->em->getRepository(BusinessUnit::class)->findOneBy(['name' => $name]);
     }
 }

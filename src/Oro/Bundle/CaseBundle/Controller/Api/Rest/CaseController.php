@@ -120,7 +120,7 @@ class CaseController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_case.manager.api');
+        return $this->container->get('oro_case.manager.api');
     }
 
     /**
@@ -128,7 +128,7 @@ class CaseController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_case.form.entity.api');
+        return $this->container->get('oro_case.form.entity.api');
     }
 
     /**
@@ -136,7 +136,7 @@ class CaseController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_case.form.handler.entity.api');
+        return $this->container->get('oro_case.form.handler.entity.api');
     }
 
     /**

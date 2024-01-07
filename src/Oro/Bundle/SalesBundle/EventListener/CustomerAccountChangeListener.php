@@ -21,7 +21,7 @@ class CustomerAccountChangeListener
      */
     public function onFlush(OnFlushEventArgs $args)
     {
-        $uow = $args->getEntityManager()->getUnitOfWork();
+        $uow = $args->getObjectManager()->getUnitOfWork();
 
         $this->prepareChangedCustomers($uow, $uow->getScheduledEntityInsertions());
         $this->prepareChangedCustomers($uow, $uow->getScheduledEntityUpdates());
@@ -47,7 +47,7 @@ class CustomerAccountChangeListener
 
         $this->changedCustomers = [];
         if ($needFlush) {
-            $args->getEntityManager()->flush();
+            $args->getObjectManager()->flush();
         }
     }
 

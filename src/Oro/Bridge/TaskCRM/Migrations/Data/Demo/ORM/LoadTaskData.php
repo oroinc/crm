@@ -5,6 +5,8 @@ namespace Oro\Bridge\TaskCRM\Migrations\Data\Demo\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\TaskBundle\Entity\Task;
@@ -118,16 +120,16 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
     {
         $organization = $this->getReference('default_organization');
 
-        $priorities = $om->getRepository('OroTaskBundle:TaskPriority')->findAll();
+        $priorities = $om->getRepository(TaskPriority::class)->findAll();
         if (empty($priorities)) {
             return;
         }
-        $users = $om->getRepository('OroUserBundle:User')->findBy(['organization' => $organization]);
+        $users = $om->getRepository(User::class)->findBy(['organization' => $organization]);
         if (empty($users)) {
             return;
         }
-        $accounts = $om->getRepository('OroAccountBundle:Account')->findAll();
-        $contacts = $om->getRepository('OroContactBundle:Contact')->findAll();
+        $accounts = $om->getRepository(Account::class)->findAll();
+        $contacts = $om->getRepository(Contact::class)->findAll();
         $status = $om->getRepository(ExtendHelper::buildEnumValueClassName('task_status'))->find('open');
 
         for ($i = 0; $i < self::FIXTURES_COUNT; ++$i) {
@@ -136,7 +138,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
             /** @var TaskPriority $taskPriority */
             $taskPriority = $this->getRandomEntity($priorities);
 
-            if ($om->getRepository('OroTaskBundle:Task')->findOneBySubject(self::$fixtureSubjects[$i])) {
+            if ($om->getRepository(Task::class)->findOneBySubject(self::$fixtureSubjects[$i])) {
                 // Task with this title is already exist
                 continue;
             }
@@ -205,7 +207,6 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
             $user = $task->getOwner();
             $token = new UsernamePasswordOrganizationToken(
                 $user,
-                $user->getUsername(),
                 'main',
                 $this->getReference('default_organization'),
                 $user->getUserRoles()

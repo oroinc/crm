@@ -50,7 +50,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         $companies          = [];
         $customersPersisted = 0;
         $channel            = $this->getChannel();
-        $organization       = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization       = $manager->getRepository(Organization::class)->getFirst();
 
         while (($data = fgetcsv($handle, 1000, ",")) !== false && $customersPersisted < 25) {
             $data = array_combine($headers, array_values($data));
@@ -120,7 +120,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
      */
     protected function getAccountReference($identifier)
     {
-        return $this->em->getReference('OroAccountBundle:Account', $identifier);
+        return $this->em->getReference(Account::class, $identifier);
     }
 
     /**
@@ -131,7 +131,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         if ($this->hasReference('default_channel')) {
             return $this->getReference('default_channel');
         } else {
-            return $this->em->getRepository('OroChannelBundle:Channel')->createQueryBuilder('c')
+            return $this->em->getRepository(Channel::class)->createQueryBuilder('c')
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getResult();
@@ -162,7 +162,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
     private function loadAccountsIds(Organization $organization)
     {
         $items = $this->em->createQueryBuilder()
-            ->from('OroAccountBundle:Account', 'a')
+            ->from(Account::class, 'a')
             ->select('a.id')
             ->andWhere('a.organization = :organization')
             ->setParameter('organization', $organization)

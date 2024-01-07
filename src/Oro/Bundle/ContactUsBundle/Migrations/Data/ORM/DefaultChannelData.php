@@ -9,6 +9,9 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
 
+/**
+ * Loads default channel data
+ */
 class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
     const PREFERABLE_CHANNEL_TYPE = 'custom';
@@ -20,14 +23,14 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
     {
         $entity = 'Oro\Bundle\ContactUsBundle\Entity\ContactRequest';
 
-        $forms = $this->em->getRepository('OroEmbeddedFormBundle:EmbeddedForm')
+        $forms = $this->em->getRepository(EmbeddedForm::class)
             ->findBy(['formType' => ContactRequestType::class]);
 
         $existingRecords =  $this->getRowCount($entity);
         $shouldBeCreated =  $existingRecords || !empty($forms);
         if ($shouldBeCreated) {
             /** @var Channel|null $channel */
-            $channel = $this->em->getRepository('OroChannelBundle:Channel')
+            $channel = $this->em->getRepository(Channel::class)
                 ->findOneBy(['channelType' => self::PREFERABLE_CHANNEL_TYPE]);
 
             if (!$channel) {

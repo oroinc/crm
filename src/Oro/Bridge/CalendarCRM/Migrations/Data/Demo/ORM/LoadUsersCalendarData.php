@@ -71,8 +71,8 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $this->em = $container->get('doctrine')->getManager();
         $this->tokenStorage = $container->get('security.token_storage');
 
-        $this->user = $this->em->getRepository('OroUserBundle:User');
-        $this->calendar = $this->em->getRepository('OroCalendarBundle:Calendar');
+        $this->user = $this->em->getRepository(User::class);
+        $this->calendar = $this->em->getRepository(Calendar::class);
     }
 
     /**
@@ -200,8 +200,8 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     protected function connectCalendars()
     {
         // first user is admin, often
-        /** @var \Oro\Bundle\UserBundle\Entity\User $admin */
-        $admin = $this->em->getRepository('OroUserBundle:User')
+        /** @var User $admin */
+        $admin = $this->em->getRepository(User::class)
             ->createQueryBuilder('u')
             ->select('u')
             ->orderBy('u.id')
@@ -211,12 +211,12 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         /** @var Calendar $calendarAdmin */
         $calendarAdmin = $this->calendar->findDefaultCalendar($admin->getId(), $admin->getOrganization()->getId());
 
-        /** @var \Oro\Bundle\UserBundle\Entity\User $sale */
+        /** @var User $sale */
         $sale = $this->user->findOneBy(['username' => 'sale']);
         /** @var Calendar $calendarSale */
         $calendarSale = $this->calendar->findDefaultCalendar($sale->getId(), $sale->getOrganization()->getId());
 
-        /** @var \Oro\Bundle\UserBundle\Entity\User $market */
+        /** @var User $market */
         $market = $this->user->findOneBy(['username' => 'marketing']);
         /** @var Calendar $calendarMarket */
         $calendarMarket = $this->calendar->findDefaultCalendar($market->getId(), $market->getOrganization()->getId());
@@ -331,7 +331,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     {
         $token = new UsernamePasswordOrganizationToken(
             $user,
-            $user->getUsername(),
             'main',
             $this->organization,
             $user->getUserRoles()
@@ -475,7 +474,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
      */
     protected function addRecurringEventExceptions()
     {
-        $event = $this->em->getRepository('OroCalendarBundle:CalendarEvent')->findOneBy(['title' => 'Standup meeting']);
+        $event = $this->em->getRepository(CalendarEvent::class)->findOneBy(['title' => 'Standup meeting']);
         $day = new \DateTime('next friday', $this->getTimeZone());
         $day->setTime(10, 0, 0);
         $exception = new CalendarEvent();

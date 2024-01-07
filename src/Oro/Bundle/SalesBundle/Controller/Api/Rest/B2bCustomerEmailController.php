@@ -57,7 +57,7 @@ class B2bCustomerEmailController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_sales.b2bcustomer_email.manager.api');
+        return $this->container->get('oro_sales.b2bcustomer_email.manager.api');
     }
 
     /**
@@ -65,7 +65,7 @@ class B2bCustomerEmailController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_sales.form.type.b2bcustomer_email.handler');
+        return $this->container->get('oro_sales.form.type.b2bcustomer_email.handler');
     }
 
     /**
@@ -73,6 +73,6 @@ class B2bCustomerEmailController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_sales.form.type.b2bcustomer_email.type');
+        return $this->container->get('oro_sales.form.type.b2bcustomer_email.type');
     }
 }

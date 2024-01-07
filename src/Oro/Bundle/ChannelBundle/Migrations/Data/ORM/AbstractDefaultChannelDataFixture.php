@@ -8,6 +8,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\BatchBundle\ORM\Query\QueryCountCalculator;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
@@ -121,7 +122,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
             return;
         }
         $lifetimeFieldName = $lifetimeFields[$customerIdentity];
-        $accountRepo       = $this->em->getRepository('OroAccountBundle:Account');
+        $accountRepo       = $this->em->getRepository(Account::class);
 
         $accountIterator = new BufferedIdentityQueryResultIterator(
             $accountRepo->createQueryBuilder('a')->select('a.id')

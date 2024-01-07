@@ -64,7 +64,7 @@ class B2bCustomerEmailHandler
             $b2bCustomerId = $request->request->get('entityId');
             if ($this->form->isValid() && $b2bCustomerId) {
                 $customer = $this->manager->find(
-                    'OroSalesBundle:B2bCustomer',
+                    B2bCustomer::class,
                     $b2bCustomerId
                 );
                 if (!$this->authorizationChecker->isGranted('EDIT', $customer)) {

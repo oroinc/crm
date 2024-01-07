@@ -24,7 +24,7 @@ processes:
                             html: $bodyContent
                         - '@find_entity':
                             attribute: $.caseSource
-                            class: OroCaseBundle:CaseSource
+                            class: Oro\Bundle\CaseBundle\Entity\CaseSource
                             identifier: 'email'
                         - '@assign_value':
                             attribute: $.caseSubject

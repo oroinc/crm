@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
@@ -49,7 +50,7 @@ class B2bCustomerController extends AbstractController
      *      id="oro_sales_b2bcustomer_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroSalesBundle:B2bCustomer"
+     *      class="Oro\Bundle\SalesBundle\Entity\B2bCustomer"
      * )
      */
     public function viewAction(B2bCustomer $customer): array
@@ -91,7 +92,7 @@ class B2bCustomerController extends AbstractController
      *      id="oro_sales_b2bcustomer_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroSalesBundle:B2bCustomer"
+     *      class="Oro\Bundle\SalesBundle\Entity\B2bCustomer"
      * )
      * @Template("@OroSales/B2bCustomer/update.html.twig")
      */
@@ -102,12 +103,12 @@ class B2bCustomerController extends AbstractController
 
     protected function update(B2bCustomer $entity = null): array|RedirectResponse
     {
-        return $this->get(UpdateHandlerFacade::class)->update(
+        return $this->container->get(UpdateHandlerFacade::class)->update(
             $entity,
             $this->createForm(B2bCustomerType::class, $entity),
-            $this->get(TranslatorInterface::class)->trans('oro.sales.controller.b2bcustomer.saved.message'),
+            $this->container->get(TranslatorInterface::class)->trans('oro.sales.controller.b2bcustomer.saved.message'),
             null,
-            $this->get(B2bCustomerHandler::class)
+            $this->container->get(B2bCustomerHandler::class)
         );
     }
 
@@ -119,7 +120,7 @@ class B2bCustomerController extends AbstractController
      *      id="oro_sales_b2bcustomer_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroSalesBundle:B2bCustomer"
+     *      class="Oro\Bundle\SalesBundle\Entity\B2bCustomer"
      * )
      */
     public function updateAction(B2bCustomer $entity): array|RedirectResponse
@@ -149,15 +150,15 @@ class B2bCustomerController extends AbstractController
      *      name="oro_sales_widget_account_b2bcustomers_info",
      *      requirements={"accountId"="\d+", "channelId"="\d+"}
      * )
-     * @ParamConverter("account", class="OroAccountBundle:Account", options={"id" = "accountId"})
-     * @ParamConverter("channel", class="OroChannelBundle:Channel", options={"id" = "channelId"})
+     * @ParamConverter("account", class="Oro\Bundle\AccountBundle\Entity\Account", options={"id" = "accountId"})
+     * @ParamConverter("channel", class="Oro\Bundle\ChannelBundle\Entity\Channel", options={"id" = "channelId"})
      * @AclAncestor("oro_sales_b2bcustomer_view")
      * @Template
      */
     public function accountCustomersInfoAction(Account $account, Channel $channel): array
     {
-        $customers = $this->getDoctrine()
-            ->getRepository('OroSalesBundle:B2bCustomer')
+        $customers = $this->container->get('doctrine')
+            ->getRepository(B2bCustomer::class)
             ->findBy(['account' => $account, 'dataChannel' => $channel]);
 
         return ['account' => $account, 'customers' => $customers, 'channel' => $channel];
@@ -169,7 +170,7 @@ class B2bCustomerController extends AbstractController
      *        name="oro_sales_widget_b2bcustomer_info",
      *        requirements={"id"="\d+", "channelId"="\d+"}
      * )
-     * @ParamConverter("channel", class="OroChannelBundle:Channel", options={"id" = "channelId"})
+     * @ParamConverter("channel", class="Oro\Bundle\ChannelBundle\Entity\Channel", options={"id" = "channelId"})
      * @AclAncestor("oro_sales_b2bcustomer_view")
      * @Template
      */
@@ -193,7 +194,8 @@ class B2bCustomerController extends AbstractController
             [
                 TranslatorInterface::class,
                 B2bCustomerHandler::class,
-                UpdateHandlerFacade::class
+                UpdateHandlerFacade::class,
+                'doctrine' => ManagerRegistry::class
             ]
         );
     }

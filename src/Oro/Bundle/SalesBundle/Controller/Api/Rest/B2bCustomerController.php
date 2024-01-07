@@ -108,7 +108,7 @@ class B2bCustomerController extends RestController
      *      id="oro_sales_b2bcustomer_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroSalesBundle:B2bCustomer"
+     *      class="Oro\Bundle\SalesBundle\Entity\B2bCustomer"
      * )
      * @return Response
      */
@@ -124,7 +124,7 @@ class B2bCustomerController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_sales.b2bcustomer.manager.api');
+        return $this->container->get('oro_sales.b2bcustomer.manager.api');
     }
 
     /**
@@ -132,7 +132,7 @@ class B2bCustomerController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_sales.b2bcustomer.form.api');
+        return $this->container->get('oro_sales.b2bcustomer.form.api');
     }
 
     /**
@@ -140,7 +140,7 @@ class B2bCustomerController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_sales.b2bcustomer.form.handler.api');
+        return $this->container->get('oro_sales.b2bcustomer.form.handler.api');
     }
 
     /**
@@ -155,7 +155,7 @@ class B2bCustomerController extends RestController
         $result = $this->getFormHandler()->process(
             $entity,
             $this->getForm(),
-            $this->get('request_stack')->getCurrentRequest()
+            $this->container->get('request_stack')->getCurrentRequest()
         );
         if (\is_object($result) || null === $result) {
             return $result;
@@ -171,19 +171,25 @@ class B2bCustomerController extends RestController
     protected function fixRequestAttributes($entity)
     {
         $formAlias = 'b2bcustomer';
-        $request = $this->get('request_stack')->getCurrentRequest();
-        $customerData = $request->request->get($formAlias);
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $customerData = $request->request->all($formAlias);
 
         // - convert country name to country code (as result we accept both the code and the name)
         //   also it will be good to accept ISO3 code in future, need to be discussed with product owners
         // - convert region name to region code (as result we accept the combined code, code and name)
         // - move region name to region_text field for unknown region
         if (array_key_exists('shippingAddress', $customerData)) {
-            AddressApiUtils::fixAddress($customerData['shippingAddress'], $this->get('doctrine.orm.entity_manager'));
+            AddressApiUtils::fixAddress(
+                $customerData['shippingAddress'],
+                $this->container->get('doctrine.orm.entity_manager')
+            );
             $request->request->set($formAlias, $customerData);
         }
         if (array_key_exists('billingAddress', $customerData)) {
-            AddressApiUtils::fixAddress($customerData['billingAddress'], $this->get('doctrine.orm.entity_manager'));
+            AddressApiUtils::fixAddress(
+                $customerData['billingAddress'],
+                $this->container->get('doctrine.orm.entity_manager')
+            );
             $request->request->set($formAlias, $customerData);
         }
 

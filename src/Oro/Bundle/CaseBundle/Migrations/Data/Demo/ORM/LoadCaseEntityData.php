@@ -6,9 +6,15 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CaseSource;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -79,8 +85,8 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
      * @var array
      */
     protected static $relatedEntities = array(
-        'OroContactBundle:Contact'   => 'setRelatedContact',
-        'OroAccountBundle:Account'   => 'setRelatedAccount',
+        Contact::class   => 'setRelatedContact',
+        Account::class   => 'setRelatedAccount',
     );
 
     /**
@@ -121,7 +127,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         for ($i = 0; $i < self::CASES_COUNT; ++$i) {
             $subject = self::$fixtureSubjects[$i];
 
-            if ($manager->getRepository('OroCaseBundle:CaseEntity')->findOneBySubject($subject)) {
+            if ($manager->getRepository(CaseEntity::class)->findOneBySubject($subject)) {
                 // Case with this title is already exist
                 continue;
             }
@@ -139,11 +145,11 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
      */
     protected function createCaseEntity($subject)
     {
-        $owner = $this->getRandomEntity('OroUserBundle:User');
-        $assignedTo = $this->getRandomEntity('OroUserBundle:User');
-        $source = $this->getRandomEntity('OroCaseBundle:CaseSource');
-        $status = $this->getRandomEntity('OroCaseBundle:CaseStatus');
-        $priority = $this->getRandomEntity('OroCaseBundle:CasePriority');
+        $owner = $this->getRandomEntity(User::class);
+        $assignedTo = $this->getRandomEntity(User::class);
+        $source = $this->getRandomEntity(CaseSource::class);
+        $status = $this->getRandomEntity(CaseStatus::class);
+        $priority = $this->getRandomEntity(CasePriority::class);
 
         if (!$owner || !$assignedTo || !$source || !$status) {
             // If we don't have users, sources and status we cannot load fixture cases
@@ -164,12 +170,12 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
 
         switch (rand(0, 1)) {
             case 0:
-                $contact = $this->getRandomEntity('OroContactBundle:Contact');
+                $contact = $this->getRandomEntity(Contact::class);
                 $case->setRelatedContact($contact);
                 break;
             case 1:
             default:
-                $account = $this->getRandomEntity('OroAccountBundle:Account');
+                $account = $this->getRandomEntity(Account::class);
                 $case->setRelatedAccount($account);
                 break;
         }
@@ -192,15 +198,15 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     {
         $comment = $this->container->get('oro_case.manager')->createComment();
         $comment->setMessage($text);
-        $comment->setOwner($this->getRandomEntity('OroUserBundle:User'));
+        $comment->setOwner($this->getRandomEntity(User::class));
         $comment->setPublic(rand(0, 5));
         $comment->setCreatedAt($this->getRandomDate());
         if (rand(0, 3) == 3) {
-            $contact = $this->getRandomEntity('OroContactBundle:Contact');
+            $contact = $this->getRandomEntity(Contact::class);
             $comment->setContact($contact);
         }
         if (rand(0, 5) == 5) {
-            $updatedBy = $this->getRandomEntity('OroUserBundle:User');
+            $updatedBy = $this->getRandomEntity(User::class);
             $comment->setUpdatedBy($updatedBy);
             $comment->setUpdatedAt($this->getRandomDate());
         }
@@ -222,7 +228,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
                 ->setFirstResult(rand(0, $count - 1))
                 ->setMaxResults(1)
                 ->orderBy('e.' . $this->entityManager->getClassMetadata($entityName)->getSingleIdentifierFieldName());
-            if ('OroUserBundle:User' === $entityName) {
+            if (User::class === $entityName) {
                 $qb->where('e.organization = :organization')->setParameter('organization', $this->organization);
             }
 
@@ -242,7 +248,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
             $qb = $this->entityManager->createQueryBuilder()
                 ->select('COUNT(e)')
                 ->from($entityName, 'e');
-            if ('OroUserBundle:User' === $entityName) {
+            if (User::class === $entityName) {
                 $qb->where('e.organization = :organization')->setParameter('organization', $this->organization);
             }
 

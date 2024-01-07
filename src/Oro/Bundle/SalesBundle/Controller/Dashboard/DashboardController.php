@@ -45,21 +45,21 @@ class DashboardController extends AbstractController
      */
     public function opportunitiesByLeadSourceAction(Request $request, mixed $widget): array
     {
-        $options = $this->get(WidgetConfigs::class)->getWidgetOptions(
+        $options = $this->container->get(WidgetConfigs::class)->getWidgetOptions(
             $request->query->get('_widgetId', null)
         );
 
         $byAmount = (bool) $options->get('byAmount', false);
 
-        $data = $this->get(WidgetOpportunityByLeadSourceProvider::class)->getChartData(
+        $data = $this->container->get(WidgetOpportunityByLeadSourceProvider::class)->getChartData(
             $options->get('dateRange', []),
-            $this->get(OwnerHelper::class)->getOwnerIds($options),
+            $this->container->get(OwnerHelper::class)->getOwnerIds($options),
             (array) $options->get('excludedSources'),
             $byAmount
         );
 
-        $widgetAttr = $this->get(WidgetConfigs::class)->getWidgetAttributesForTwig($widget);
-        $widgetAttr['chartView'] = $this->get(ChartViewBuilder::class)
+        $widgetAttr = $this->container->get(WidgetConfigs::class)->getWidgetAttributesForTwig($widget);
+        $widgetAttr['chartView'] = $this->container->get(ChartViewBuilder::class)
             ->setArrayData($data)
             ->setOptions(
                 [
@@ -90,7 +90,7 @@ class DashboardController extends AbstractController
      */
     public function opportunityByStatusAction(Request $request, mixed $widget): array
     {
-        $options = $this->get(WidgetConfigs::class)->getWidgetOptions($request->query->get('_widgetId', null));
+        $options = $this->container->get(WidgetConfigs::class)->getWidgetOptions($request->query->get('_widgetId'));
         if ($options->get('useQuantityAsData')) {
             $valueOptions = [
                 'field_name' => 'quantity'
@@ -102,9 +102,9 @@ class DashboardController extends AbstractController
                 'formatter'  => 'formatCurrency'
             ];
         }
-        $items = $this->get(OpportunityByStatusProvider::class)->getOpportunitiesGroupedByStatus($options);
-        $widgetAttr = $this->get(WidgetConfigs::class)->getWidgetAttributesForTwig($widget);
-        $widgetAttr['chartView'] = $this->get(ChartViewBuilder::class)
+        $items = $this->container->get(OpportunityByStatusProvider::class)->getOpportunitiesGroupedByStatus($options);
+        $widgetAttr = $this->container->get(WidgetConfigs::class)->getWidgetAttributesForTwig($widget);
+        $widgetAttr['chartView'] = $this->container->get(ChartViewBuilder::class)
             ->setArrayData($items)
             ->setOptions(
                 [

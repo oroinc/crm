@@ -6,6 +6,9 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\TranslationBundle\DataFixtures\AbstractTranslatableEntityFixture;
 
+/**
+ * Loads case source data
+ */
 class LoadSourceData extends AbstractTranslatableEntityFixture
 {
     const CASE_SOURCE_PREFIX = 'case_source';
@@ -25,7 +28,7 @@ class LoadSourceData extends AbstractTranslatableEntityFixture
      */
     protected function loadEntities(ObjectManager $manager)
     {
-        $sourceRepository = $manager->getRepository('OroCaseBundle:CaseSource');
+        $sourceRepository = $manager->getRepository(CaseSource::class);
 
         $translationLocales = $this->getTranslationLocales();
 

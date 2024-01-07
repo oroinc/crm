@@ -10,6 +10,9 @@ use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
+/**
+ * Handles changes in RFM category entities and resets metrics for related channels.
+ */
 class RFMCategoryListener
 {
     /**
@@ -62,7 +65,7 @@ class RFMCategoryListener
 
     public function onFlush(OnFlushEventArgs $args)
     {
-        $uow = $args->getEntityManager()->getUnitOfWork();
+        $uow = $args->getObjectManager()->getUnitOfWork();
 
         foreach ($uow->getScheduledEntityInsertions() as $entity) {
             $this->handleEntity($entity);

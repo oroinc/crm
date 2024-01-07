@@ -6,6 +6,9 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 use Oro\Bundle\TranslationBundle\DataFixtures\AbstractTranslatableEntityFixture;
 
+/**
+ * Loads case status data
+ */
 class LoadStatusData extends AbstractTranslatableEntityFixture
 {
     const CASE_STATUS_PREFIX = 'case_status';
@@ -25,7 +28,7 @@ class LoadStatusData extends AbstractTranslatableEntityFixture
      */
     protected function loadEntities(ObjectManager $manager)
     {
-        $statusRepository = $manager->getRepository('OroCaseBundle:CaseStatus');
+        $statusRepository = $manager->getRepository(CaseStatus::class);
 
         $translationLocales = $this->getTranslationLocales();
 

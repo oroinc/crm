@@ -15,8 +15,10 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
+class OpportunityByStatusProviderTest extends TestCase
 {
     private array $opportunityStatuses = [
         ['id' => 'won', 'name' => 'Won'],
@@ -28,10 +30,10 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
         ['id' => 'lost', 'name' => 'Lost']
     ];
 
-    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ManagerRegistry|MockObject */
     private $doctrine;
 
-    /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AclHelper|MockObject */
     private $aclHelper;
 
     /** @var OpportunityByStatusProvider */
@@ -81,7 +83,7 @@ class OpportunityByStatusProviderTest extends \PHPUnit\Framework\TestCase
         $this->doctrine->expects($this->exactly(2))
             ->method('getRepository')
             ->withConsecutive(
-                ['OroSalesBundle:Opportunity'],
+                [Opportunity::class],
                 [ExtendHelper::buildEnumValueClassName('opportunity_status')]
             )
             ->willReturn($repository);
@@ -195,7 +197,7 @@ DQL
         $this->doctrine->expects($this->exactly(2))
             ->method('getRepository')
             ->withConsecutive(
-                ['OroSalesBundle:Opportunity'],
+                [Opportunity::class],
                 [ExtendHelper::buildEnumValueClassName('opportunity_status')]
             )
             ->willReturn($repository);

@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactUsBundle\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactReasonType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
@@ -27,7 +28,7 @@ class ContactReasonController extends AbstractController
      * @Acl(
      *      id="oro_contactus_reason_view",
      *      type="entity",
-     *      class="OroContactUsBundle:ContactReason",
+     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactReason",
      *      permission="VIEW"
      * )
      */
@@ -44,7 +45,7 @@ class ContactReasonController extends AbstractController
      * @Acl(
      *      id="oro_contactus_reason_create",
      *      type="entity",
-     *      class="OroContactUsBundle:ContactReason",
+     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactReason",
      *      permission="CREATE"
      * )
      */
@@ -60,7 +61,7 @@ class ContactReasonController extends AbstractController
      * @Acl(
      *      id="oro_contactus_reason_update",
      *      type="entity",
-     *      class="OroContactUsBundle:ContactReason",
+     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactReason",
      *      permission="EDIT"
      * )
      */
@@ -71,10 +72,10 @@ class ContactReasonController extends AbstractController
 
     protected function update(ContactReason $contactReason): array|RedirectResponse
     {
-        return $this->get(UpdateHandlerFacade::class)->update(
+        return $this->container->get(UpdateHandlerFacade::class)->update(
             $contactReason,
             $this->createForm(ContactReasonType::class, $contactReason),
-            $this->get(TranslatorInterface::class)->trans('oro.contactus.contactreason.saved')
+            $this->container->get(TranslatorInterface::class)->trans('oro.contactus.contactreason.saved')
         );
     }
 
@@ -85,13 +86,13 @@ class ContactReasonController extends AbstractController
      *      id="oro_contactus_reason_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroContactUsBundle:ContactReason"
+     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactReason"
      * )
      * @CsrfProtection()
      */
     public function deleteAction(ContactReason $contactReason): JsonResponse
     {
-        $em = $this->get('doctrine')->getManagerForClass(ContactReason::class);
+        $em = $this->container->get('doctrine')->getManagerForClass(ContactReason::class);
         $em->remove($contactReason);
         $em->flush();
 
@@ -107,7 +108,8 @@ class ContactReasonController extends AbstractController
             parent::getSubscribedServices(),
             [
                 TranslatorInterface::class,
-                UpdateHandlerFacade::class
+                UpdateHandlerFacade::class,
+                'doctrine' => ManagerRegistry::class,
             ]
         );
     }

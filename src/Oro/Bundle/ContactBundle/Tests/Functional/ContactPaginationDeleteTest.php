@@ -26,7 +26,7 @@ class ContactPaginationDeleteTest extends AbstractContactPaginationTestCase
         $em->flush();
 
         // click next link
-        $next = $crawler->filter('#entity-pagination a .fa-chevron-right')->parents()->link();
+        $next = $crawler->filter('#entity-pagination a .fa-chevron-right')->ancestors()->link();
         $this->client->click($next);
         $crawler = $this->redirectViaFrontend(
             'Some of the records are no longer available. You are now viewing 3 records.'

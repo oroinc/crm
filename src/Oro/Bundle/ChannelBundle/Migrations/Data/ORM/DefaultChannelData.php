@@ -7,6 +7,9 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
+/**
+ * Loads default channel data
+ */
 class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
     /**
@@ -23,7 +26,7 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
     {
         // create channels for integrations
         $types        = $settingsProvider->getSourceIntegrationTypes();
-        $integrations = $this->em->getRepository('OroIntegrationBundle:Channel')
+        $integrations = $this->em->getRepository(Integration::class)
             ->findBy(['type' => $types]);
 
         /** @var Integration $integration */

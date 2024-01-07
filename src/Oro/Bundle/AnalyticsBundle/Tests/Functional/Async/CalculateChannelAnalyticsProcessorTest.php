@@ -5,6 +5,7 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Async;
 use Oro\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor;
 use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateChannelAnalyticsTopic;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
@@ -161,8 +162,8 @@ class CalculateChannelAnalyticsProcessorTest extends WebTestCase
         }, array_keys($expectedData)), array_values($expectedData));
 
         $repository = self::getContainer()->get('doctrine')
-            ->getManagerForClass('Oro\Bundle\MagentoBundle\Entity\Customer')
-            ->getRepository('Oro\Bundle\MagentoBundle\Entity\Customer');
+            ->getManagerForClass(Customer::class)
+            ->getRepository(Customer::class);
 
         $actualData = array_reduce(
             $repository->findBy(['dataChannel' => $channel]),

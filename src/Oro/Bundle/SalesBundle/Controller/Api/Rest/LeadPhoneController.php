@@ -55,7 +55,7 @@ class LeadPhoneController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_sales.lead_phone.manager.api');
+        return $this->container->get('oro_sales.lead_phone.manager.api');
     }
 
     /**
@@ -63,7 +63,7 @@ class LeadPhoneController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_sales.form.type.lead_phone.handler');
+        return $this->container->get('oro_sales.form.type.lead_phone.handler');
     }
 
     /**
@@ -71,6 +71,6 @@ class LeadPhoneController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_sales.form.type.lead_phone.type');
+        return $this->container->get('oro_sales.form.type.lead_phone.type');
     }
 }

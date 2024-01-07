@@ -3,11 +3,16 @@
 namespace Oro\Bundle\ChannelBundle\Provider\Lifetime;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+/**
+ * Provides data for Average Lifetime Value chart
+ */
 class AverageLifetimeWidgetProvider
 {
     /** @var ManagerRegistry */
@@ -63,9 +68,9 @@ class AverageLifetimeWidgetProvider
             ];
         }
 
-        $channelNames = $this->registry->getRepository('OroChannelBundle:Channel')
+        $channelNames = $this->registry->getRepository(Channel::class)
             ->getAvailableChannelNames($this->aclHelper);
-        $data         = $this->registry->getRepository('OroChannelBundle:LifetimeValueAverageAggregation')
+        $data         = $this->registry->getRepository(LifetimeValueAverageAggregation::class)
             ->findForPeriod($start, $end, array_keys($channelNames));
 
         foreach ($data as $row) {

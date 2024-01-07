@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Type;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Oro\Bundle\FormBundle\Form\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -9,7 +10,9 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class ChannelSelectType
+ * Form type for selecting a Channel entity.
+ * Provides a custom form field type that extends Select2EntityType for selecting channels,
+ * with specific configurations and normalization based on provided entities.
  *
  * @see Resourses\Doc\ChannelSelectType.md
  */
@@ -59,7 +62,7 @@ class ChannelSelectType extends AbstractType
         $resolver->setDefaults(
             [
                 'label'                => 'oro.channel.entity_label',
-                'class'                => 'OroChannelBundle:Channel',
+                'class'                => Channel::class,
                 'choice_label'         => 'name',
                 'random_id'            => true,
                 'choices'              => [],

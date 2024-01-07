@@ -61,6 +61,6 @@ class LoadContactGroupData extends AbstractFixture implements ContainerAwareInte
      */
     protected function getUser(ObjectManager $manager, $userName)
     {
-        return $manager->getRepository('OroUserBundle:User')->findOneBy(['username' => $userName]);
+        return $manager->getRepository(User::class)->findOneBy(['username' => $userName]);
     }
 }

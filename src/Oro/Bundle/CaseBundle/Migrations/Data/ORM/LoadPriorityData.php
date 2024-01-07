@@ -6,6 +6,9 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CaseBundle\Entity\CasePriority;
 use Oro\Bundle\TranslationBundle\DataFixtures\AbstractTranslatableEntityFixture;
 
+/**
+ * Loads case priority data
+ */
 class LoadPriorityData extends AbstractTranslatableEntityFixture
 {
     const CASE_PRIORITY_PREFIX = 'case_priority';
@@ -24,7 +27,7 @@ class LoadPriorityData extends AbstractTranslatableEntityFixture
      */
     protected function loadEntities(ObjectManager $manager)
     {
-        $priorityRepository = $manager->getRepository('OroCaseBundle:CasePriority');
+        $priorityRepository = $manager->getRepository(CasePriority::class);
 
         $translationLocales = $this->getTranslationLocales();
 

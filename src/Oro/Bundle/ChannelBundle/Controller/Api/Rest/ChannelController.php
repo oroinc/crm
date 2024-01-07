@@ -69,7 +69,7 @@ class ChannelController extends RestController
             'entity' => new ChainParameterFilter(
                 [
                     new StringToArrayParameterFilter(),
-                    new EntityClassParameterFilter($this->get('oro_entity.entity_class_name_helper'))
+                    new EntityClassParameterFilter($this->container->get('oro_entity.entity_class_name_helper'))
                 ]
             ),
             'active' => new BooleanParameterFilter(),
@@ -84,7 +84,11 @@ class ChannelController extends RestController
             $joins[] = 'entities';
         }
 
-        $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters, $map);
+        $criteria = $this->getFilterCriteria(
+            $this->getSupportedQueryParameters('cgetAction'),
+            $filterParameters,
+            $map
+        );
 
         return $this->handleGetListRequest($page, $limit, $criteria, $joins);
     }
@@ -102,7 +106,7 @@ class ChannelController extends RestController
      *      id="oro_channel_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroChannelBundle:Channel"
+     *      class="Oro\Bundle\ChannelBundle\Entity\Channel"
      * )
      * @return Response
      */
@@ -111,13 +115,16 @@ class ChannelController extends RestController
         try {
             $channel = $this->getManager()->find($id);
 
-            $this->get('event_dispatcher')->dispatch(
+            $this->container->get('event_dispatcher')->dispatch(
                 new ChannelBeforeDeleteEvent($channel),
                 ChannelBeforeDeleteEvent::EVENT_NAME
             );
 
             $this->getDeleteHandler()->handleDelete($id, $this->getManager());
-            $this->get('event_dispatcher')->dispatch(new ChannelDeleteEvent($channel), ChannelDeleteEvent::EVENT_NAME);
+            $this->container->get('event_dispatcher')->dispatch(
+                new ChannelDeleteEvent($channel),
+                ChannelDeleteEvent::EVENT_NAME
+            );
         } catch (EntityNotFoundException $e) {
             return $this->handleView($this->view(null, Response::HTTP_NOT_FOUND));
         } catch (AccessDeniedException $e) {
@@ -140,7 +147,7 @@ class ChannelController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_channel.manager.channel.api');
+        return $this->container->get('oro_channel.manager.channel.api');
     }
 
     /**

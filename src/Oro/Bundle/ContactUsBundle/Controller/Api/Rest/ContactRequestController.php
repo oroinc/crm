@@ -35,7 +35,7 @@ class ContactRequestController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_contact_us.contact_request.manager.api');
+        return $this->container->get('oro_contact_us.contact_request.manager.api');
     }
 
     /**
@@ -43,7 +43,7 @@ class ContactRequestController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_contact_us.contact_request.form.handler');
+        return $this->container->get('oro_contact_us.contact_request.form.handler');
     }
 
     /**
@@ -51,6 +51,6 @@ class ContactRequestController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_contact_us.embedded_form');
+        return $this->container->get('oro_contact_us.embedded_form');
     }
 }

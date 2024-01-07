@@ -48,7 +48,7 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
 
     public function onFlush(OnFlushEventArgs $args): void
     {
-        $em = $args->getEntityManager();
+        $em = $args->getObjectManager();
         $uow = $em->getUnitOfWork();
 
         foreach ($this->getChangedEntities($uow) as $entity) {
@@ -66,7 +66,7 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
             return;
         }
 
-        $em = $args->getEntityManager();
+        $em = $args->getObjectManager();
         $lifetimeAmountQb = $this->getLifetimeAmountQueryBuilder($em);
         $historyUpdates = [];
         foreach ($this->accounts as $account) {

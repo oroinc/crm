@@ -124,7 +124,7 @@ class ContactPhoneController extends RestController
 
     protected function getContactManager()
     {
-        return $this->get('oro_contact.contact.manager.api');
+        return $this->container->get('oro_contact.contact.manager.api');
     }
 
     /**
@@ -132,7 +132,7 @@ class ContactPhoneController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_contact.contact_phone.manager.api');
+        return $this->container->get('oro_contact.contact_phone.manager.api');
     }
 
     /**
@@ -153,7 +153,7 @@ class ContactPhoneController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_contact.form.type.contact_phone.handler');
+        return $this->container->get('oro_contact.form.type.contact_phone.handler');
     }
 
     /**
@@ -161,6 +161,6 @@ class ContactPhoneController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_contact.form.type.contact_phone.type');
+        return $this->container->get('oro_contact.form.type.contact_phone.type');
     }
 }

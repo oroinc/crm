@@ -112,7 +112,7 @@ class AccountController extends RestController
      *      id="oro_account_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroAccountBundle:Account"
+     *      class="Oro\Bundle\AccountBundle\Entity\Account"
      * )
      * @return Response
      */
@@ -128,7 +128,7 @@ class AccountController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_account.account.manager.api');
+        return $this->container->get('oro_account.account.manager.api');
     }
 
     /**
@@ -136,7 +136,7 @@ class AccountController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_account.form.account.api');
+        return $this->container->get('oro_account.form.account.api');
     }
 
     /**
@@ -144,7 +144,7 @@ class AccountController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_account.form.handler.account.api');
+        return $this->container->get('oro_account.form.handler.account.api');
     }
 
     /**
@@ -159,7 +159,7 @@ class AccountController extends RestController
         $result = $this->getFormHandler()->process(
             $entity,
             $this->getForm(),
-            $this->get('request_stack')->getCurrentRequest()
+            $this->container->get('request_stack')->getCurrentRequest()
         );
         if (\is_object($result) || null === $result) {
             return $result;
@@ -174,7 +174,7 @@ class AccountController extends RestController
         $result = parent::getPreparedItem($entity, $resultFields);
 
         /** @var AmountProvider $amountProvider  */
-        $amountProvider = $this->get('oro_channel.provider.lifetime.amount_provider');
+        $amountProvider = $this->container->get('oro_channel.provider.lifetime.amount_provider');
 
         $result['lifetimeValue'] = $amountProvider->getAccountLifeTimeValue($entity);
 
@@ -194,7 +194,7 @@ class AccountController extends RestController
             $entities
         );
 
-        $ap = $this->get('oro_channel.provider.lifetime.amount_provider');
+        $ap = $this->container->get('oro_channel.provider.lifetime.amount_provider');
         $lifetimeValues = $ap->getAccountsLifetimeQueryBuilder($ids)
             ->getQuery()
             ->getArrayResult();

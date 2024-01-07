@@ -9,6 +9,9 @@ use Oro\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixtu
 use Oro\Bundle\MigrationBundle\Fixture\LoadedFixtureVersionAwareInterface;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
+/**
+ * Loads default channel data
+ */
 class DefaultChannelData extends AbstractDefaultChannelDataFixture implements
     VersionedFixtureInterface,
     LoadedFixtureVersionAwareInterface
@@ -66,7 +69,7 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture implements
         } elseif ('0.0' === $this->version) {
             $em = $this->container->get('doctrine')->getManager();
 
-            $channels = $em->getRepository('OroChannelBundle:Channel')
+            $channels = $em->getRepository(Channel::class)
                 ->findBy(['channelType' => self::B2B_CHANNEL_TYPE]);
 
             foreach ($channels as $channel) {

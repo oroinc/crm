@@ -109,7 +109,7 @@ class LeadController extends RestController
      *      id="oro_sales_lead_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroSalesBundle:Lead"
+     *      class="Oro\Bundle\SalesBundle\Entity\Lead"
      * )
      * @return Response
      */
@@ -125,7 +125,7 @@ class LeadController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_sales.lead.manager.api');
+        return $this->container->get('oro_sales.lead.manager.api');
     }
 
     /**
@@ -133,7 +133,7 @@ class LeadController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_sales.lead.form.api');
+        return $this->container->get('oro_sales.lead.form.api');
     }
 
     /**
@@ -141,7 +141,7 @@ class LeadController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_sales.lead.form.handler.api');
+        return $this->container->get('oro_sales.lead.form.handler.api');
     }
 
     /**
@@ -156,7 +156,7 @@ class LeadController extends RestController
         $result = $this->getFormHandler()->process(
             $entity,
             $this->getForm(),
-            $this->get('request_stack')->getCurrentRequest()
+            $this->container->get('request_stack')->getCurrentRequest()
         );
         if (\is_object($result) || null === $result) {
             return $result;

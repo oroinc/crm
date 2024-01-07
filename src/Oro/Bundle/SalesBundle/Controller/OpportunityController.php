@@ -49,7 +49,7 @@ class OpportunityController extends AbstractController
      *      id="oro_sales_opportunity_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroSalesBundle:Opportunity"
+     *      class="Oro\Bundle\SalesBundle\Entity\Opportunity"
      * )
      */
     public function viewAction(Opportunity $entity): array
@@ -78,7 +78,7 @@ class OpportunityController extends AbstractController
      *      id="oro_sales_opportunity_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroSalesBundle:Opportunity"
+     *      class="Oro\Bundle\SalesBundle\Entity\Opportunity"
      * )
      */
     public function createAction(): array|RedirectResponse
@@ -93,7 +93,7 @@ class OpportunityController extends AbstractController
      *      id="oro_sales_opportunity_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroSalesBundle:Opportunity"
+     *      class="Oro\Bundle\SalesBundle\Entity\Opportunity"
      * )
      */
     public function updateAction(Opportunity $entity): array|RedirectResponse
@@ -127,7 +127,7 @@ class OpportunityController extends AbstractController
      *
      * @ParamConverter(
      *      "channel",
-     *      class="OroChannelBundle:Channel",
+     *      class="Oro\Bundle\ChannelBundle\Entity\Channel",
      *      options={"id" = "channelIds"}
      * )
      */
@@ -149,17 +149,18 @@ class OpportunityController extends AbstractController
      */
     public function opportunityWithCustomerCreateAction($targetClass, $targetId): array|RedirectResponse
     {
-        $target = $this->get(EntityRoutingHelper::class)->getEntity($targetClass, $targetId);
+        $target = $this->container->get(EntityRoutingHelper::class)->getEntity($targetClass, $targetId);
         if (!$this->isGranted('VIEW', $target)) {
             throw $this->createAccessDeniedException();
         }
 
-        $customer = $this->get(AccountCustomerManager::class)->getAccountCustomerByTarget($target);
+        $customer = $this->container->get(AccountCustomerManager::class)->getAccountCustomerByTarget($target);
 
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($customer);
 
-        $saveAndReturnActionFormTemplateDataProvider = $this->get(SaveAndReturnActionFormTemplateDataProvider::class);
+        $saveAndReturnActionFormTemplateDataProvider = $this->container
+            ->get(SaveAndReturnActionFormTemplateDataProvider::class);
         $saveAndReturnActionFormTemplateDataProvider
             ->setSaveFormActionRoute(
                 'oro_sales_opportunity_customer_aware_create',
@@ -183,12 +184,12 @@ class OpportunityController extends AbstractController
         Opportunity $entity,
         FormTemplateDataProviderInterface|null $resultProvider = null
     ): array|RedirectResponse {
-        return $this->get(UpdateHandlerFacade::class)->update(
+        return $this->container->get(UpdateHandlerFacade::class)->update(
             $entity,
-            $this->get('oro_sales.opportunity.form'),
-            $this->get(TranslatorInterface::class)->trans('oro.sales.controller.opportunity.saved.message'),
+            $this->container->get('oro_sales.opportunity.form'),
+            $this->container->get(TranslatorInterface::class)->trans('oro.sales.controller.opportunity.saved.message'),
             null,
-            $this->get(OpportunityHandler::class),
+            $this->container->get(OpportunityHandler::class),
             $resultProvider
         );
     }

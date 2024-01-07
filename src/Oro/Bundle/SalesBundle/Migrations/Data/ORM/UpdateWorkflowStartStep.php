@@ -6,7 +6,11 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\WorkflowBundle\Entity\Repository\WorkflowItemRepository;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowDefinition;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 
+/**
+ * Update workflow start step for default lead and opportunity workflows
+ */
 class UpdateWorkflowStartStep extends AbstractFixture
 {
     /**
@@ -15,8 +19,8 @@ class UpdateWorkflowStartStep extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         /** @var WorkflowItemRepository $workflowItemRepository */
-        $workflowItemRepository = $manager->getRepository('OroWorkflowBundle:WorkflowItem');
-        $workflowDefinitionRepository = $manager->getRepository('OroWorkflowBundle:WorkflowDefinition');
+        $workflowItemRepository = $manager->getRepository(WorkflowItem::class);
+        $workflowDefinitionRepository = $manager->getRepository(WorkflowDefinition::class);
 
         // update start step for default lead workflow
         /** @var WorkflowDefinition $leadWorkflowDefinition */

@@ -73,12 +73,12 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
             $report->setEntity($values['entity']);
             /** @var ReportType $type */
             $type = $this->em
-                ->getRepository('OroReportBundle:ReportType')
+                ->getRepository(ReportType::class)
                 ->findOneBy(array('name' => $values['type']));
             $report->setType($type);
             /** @var BusinessUnit $owner */
             $owner = $this->em
-                ->getRepository('OroOrganizationBundle:BusinessUnit')
+                ->getRepository(BusinessUnit::class)
                 ->findOneBy(array('name' => $values['owner']));
             $report->setOwner($owner);
             $report->setDefinition($values['definition']);

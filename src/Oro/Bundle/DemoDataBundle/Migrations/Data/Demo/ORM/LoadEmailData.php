@@ -98,7 +98,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
 
     protected function loadEmailsDemo(ObjectManager $om)
     {
-        $contacts = $om->getRepository('OroContactBundle:Contact')->findAll();
+        $contacts = $om->getRepository(Contact::class)->findAll();
         $contactCount = count($contacts);
 
         for ($i = 0; $i < 100; ++$i) {
@@ -136,7 +136,6 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
         $tokenStorage = $this->container->get('security.token_storage');
         $token = new UsernamePasswordOrganizationToken(
             $user,
-            $user->getUsername(),
             'main',
             $this->getReference('default_organization'),
             $user->getUserRoles()

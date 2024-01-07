@@ -4,8 +4,12 @@ namespace Oro\Bundle\AccountBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\UpdateWithOrganization;
 
+/**
+ * Updates account with organization.
+ */
 class UpdateAccountWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
     /**
@@ -21,6 +25,6 @@ class UpdateAccountWithOrganization extends UpdateWithOrganization implements De
      */
     public function load(ObjectManager $manager)
     {
-        $this->update($manager, 'OroAccountBundle:Account');
+        $this->update($manager, Account::class);
     }
 }

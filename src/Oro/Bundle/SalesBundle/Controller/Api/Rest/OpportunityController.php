@@ -2,8 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
+use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
@@ -53,7 +55,7 @@ class OpportunityController extends RestController
         $page  = (int) $request->get('page', 1);
         $limit = (int) $request->get('limit', self::ITEMS_PER_PAGE);
 
-        $contactIdFilter  = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroContactBundle:Contact');
+        $contactIdFilter = new IdentifierToReferenceFilter($this->container->get('doctrine'), Contact::class);
         $filterParameters = [
             'contactId' => $contactIdFilter,
         ];
@@ -127,7 +129,7 @@ class OpportunityController extends RestController
      *      id="oro_sales_opportunity_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroSalesBundle:Opportunity"
+     *      class="Oro\Bundle\SalesBundle\Entity\Opportunity"
      * )
      * @return Response
      */
@@ -143,7 +145,7 @@ class OpportunityController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_sales.opportunity.manager.api');
+        return $this->container->get('oro_sales.opportunity.manager.api');
     }
 
     /**
@@ -151,7 +153,7 @@ class OpportunityController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_sales.opportunity.form.api');
+        return $this->container->get('oro_sales.opportunity.form.api');
     }
 
     /**
@@ -159,7 +161,7 @@ class OpportunityController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_sales.opportunity.form.handler.api');
+        return $this->container->get('oro_sales.opportunity.form.handler.api');
     }
 
     /**
@@ -174,7 +176,7 @@ class OpportunityController extends RestController
         $result = $this->getFormHandler()->process(
             $entity,
             $this->getForm(),
-            $this->get('request_stack')->getCurrentRequest()
+            $this->container->get('request_stack')->getCurrentRequest()
         );
         if (\is_object($result) || null === $result) {
             return $result;
@@ -182,5 +184,13 @@ class OpportunityController extends RestController
 
         // some form handlers may return true/false rather than saved entity
         return $result ? $entity : null;
+    }
+
+    public static function getSubscribedServices(): array
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            ['doctrine' => ManagerRegistry::class]
+        );
     }
 }

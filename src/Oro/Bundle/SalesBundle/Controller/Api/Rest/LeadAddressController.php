@@ -112,7 +112,7 @@ class LeadAddressController extends RestController
      */
     protected function getLeadManager()
     {
-        return $this->get('oro_sales.lead.manager.api');
+        return $this->container->get('oro_sales.lead.manager.api');
     }
 
     /**
@@ -120,7 +120,7 @@ class LeadAddressController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_sales.lead_address.manager.api');
+        return $this->container->get('oro_sales.lead_address.manager.api');
     }
 
     /**

@@ -9,6 +9,7 @@ use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -63,7 +64,7 @@ class OpportunityByStatusProvider
         $orderBy          = $widgetOptions->get('useQuantityAsData') ? 'quantity' : 'budget';
 
         /** @var OpportunityRepository $opportunityRepository */
-        $opportunityRepository = $this->registry->getRepository('OroSalesBundle:Opportunity');
+        $opportunityRepository = $this->registry->getRepository(Opportunity::class);
         $qb = $opportunityRepository->createQueryBuilder('o')
             ->select('IDENTITY (o.status) status')
             ->groupBy('status')

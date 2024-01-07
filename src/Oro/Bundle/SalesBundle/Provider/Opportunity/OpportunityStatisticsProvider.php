@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SalesBundle\Provider\B2bBigNumberProvider;
 
@@ -26,7 +27,7 @@ class OpportunityStatisticsProvider extends B2bBigNumberProvider
      */
     public function getNewOpportunitiesCount($dateRange, WidgetOptionBag $widgetOptions)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, Opportunity::class, 'createdAt');
 
         $queryBuilder = $this->getOpportunityRepository()->getOpportunitiesCountQB($start, $end);
 
@@ -41,7 +42,7 @@ class OpportunityStatisticsProvider extends B2bBigNumberProvider
      */
     public function getOpportunitiesCount(array $dateRange, WidgetOptionBag $widgetOptions)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, Opportunity::class, 'createdAt');
 
         $queryBuilder = $this->getOpportunityRepository()->getOpportunitiesCountQB($start, $end);
 
@@ -56,7 +57,7 @@ class OpportunityStatisticsProvider extends B2bBigNumberProvider
      */
     public function getNewOpportunitiesAmount($dateRange, WidgetOptionBag $widgetOptions)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, Opportunity::class, 'createdAt');
 
         $queryBuilder = $this->getOpportunityRepository()->getOpportunitiesByPeriodQB($start, $end);
         $select = sprintf('SUM(%s)', $this->qbTransformer->getTransformSelectQuery('budgetAmount', $queryBuilder));
@@ -73,7 +74,7 @@ class OpportunityStatisticsProvider extends B2bBigNumberProvider
      */
     public function getWonOpportunitiesToDateCount($dateRange, WidgetOptionBag $widgetOptions)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, Opportunity::class, 'createdAt');
         $queryBuilder = $this->getOpportunityRepository()->getWonOpportunitiesCountByPeriodQB($start, $end);
 
         return $this->processDataQueryBuilder($queryBuilder, $widgetOptions)->getSingleScalarResult();
@@ -87,7 +88,7 @@ class OpportunityStatisticsProvider extends B2bBigNumberProvider
      */
     public function getWonOpportunitiesToDateAmount($dateRange, WidgetOptionBag $widgetOptions)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, Opportunity::class, 'createdAt');
 
         $queryBuilder = $this->getOpportunityRepository()->getWonOpportunitiesByPeriodQB($start, $end);
         $select = sprintf('SUM(%s)', $this->qbTransformer->getTransformSelectQuery('closeRevenue', $queryBuilder));
@@ -107,7 +108,7 @@ class OpportunityStatisticsProvider extends B2bBigNumberProvider
     protected function getOpportunityRepository()
     {
         if (null === $this->opportunityRepository) {
-            $this->opportunityRepository = $this->doctrine->getRepository('OroSalesBundle:Opportunity');
+            $this->opportunityRepository = $this->doctrine->getRepository(Opportunity::class);
         }
 
         return $this->opportunityRepository;

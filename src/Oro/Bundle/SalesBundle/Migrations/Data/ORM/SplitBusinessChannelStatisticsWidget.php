@@ -6,6 +6,9 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 
+/**
+ * Split business_sales_channel_statistics widget into lead_statistics and opportunity_statistics widgets
+ */
 class SplitBusinessChannelStatisticsWidget extends AbstractFixture
 {
     /**
@@ -13,7 +16,7 @@ class SplitBusinessChannelStatisticsWidget extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        $widgetRepository = $manager->getRepository('OroDashboardBundle:Widget');
+        $widgetRepository = $manager->getRepository(Widget::class);
         /** @var Widget $oldWidget */
         $oldWidget = $widgetRepository->findOneBy(['name' => 'business_sales_channel_statistics']);
 

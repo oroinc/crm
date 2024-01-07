@@ -98,12 +98,12 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
             $this->em = $manager;
         }
 
-        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
+        $this->users = $this->em->getRepository(User::class)->findAll();
+        $this->countries = $this->em->getRepository(Country::class)->findAll();
 
-        $this->accounts = $this->em->getRepository('OroAccountBundle:Account')->findAll();
-        $this->contactGroups = $this->em->getRepository('OroContactBundle:Group')->findAll();
-        $this->contactSources = $this->em->getRepository('OroContactBundle:Source')->findAll();
+        $this->accounts = $this->em->getRepository(Account::class)->findAll();
+        $this->contactGroups = $this->em->getRepository(Group::class)->findAll();
+        $this->contactSources = $this->em->getRepository(Source::class)->findAll();
         $this->organization = $this->getReference('default_organization');
     }
 

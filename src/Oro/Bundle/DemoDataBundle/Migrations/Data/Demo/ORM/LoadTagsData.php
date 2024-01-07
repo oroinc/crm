@@ -8,6 +8,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\TagBundle\Entity\Tag;
@@ -90,15 +92,15 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
             $this->em = $this->container->get('doctrine.orm.entity_manager');
         }
 
-        $this->usersRepository    = $this->em->getRepository('OroUserBundle:User')->findAll();
-        $this->accountsRepository = $this->em->getRepository('OroAccountBundle:Account')->findAll();
-        $this->contactsRepository = $this->em->getRepository('OroContactBundle:Contact')->findAll();
+        $this->usersRepository    = $this->em->getRepository(User::class)->findAll();
+        $this->accountsRepository = $this->em->getRepository(Account::class)->findAll();
+        $this->contactsRepository = $this->em->getRepository(Contact::class)->findAll();
 
         $this->tagManager   = $this->container->get('oro_tag.tag.manager');
         $this->organization = $this->getReference('default_organization');
 
         /** @var User $adminUser */
-        $adminUser = $this->em->getRepository('OroUserBundle:User')
+        $adminUser = $this->em->getRepository(User::class)
             ->createQueryBuilder('u')
             ->select('u')
             ->orderBy('u.id')
@@ -107,7 +109,6 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
             ->getSingleResult();
         $token        = new UsernamePasswordOrganizationToken(
             $adminUser,
-            $adminUser->getUsername(),
             'main',
             $this->organization,
             $adminUser->getUserRoles()

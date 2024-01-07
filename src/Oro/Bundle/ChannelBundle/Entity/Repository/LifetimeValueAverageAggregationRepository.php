@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Symfony\Component\Security\Acl\Util\ClassUtils;
 
 /**
@@ -31,7 +32,7 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
     {
         $em       = $this->getEntityManager();
         $now      = new \DateTime('now', new \DateTimeZone($timeZone));
-        $channels = $em->getRepository('OroChannelBundle:Channel')->findAll();
+        $channels = $em->getRepository(Channel::class)->findAll();
 
         /** @var Channel $channel */
         foreach ($channels as $channel) {
@@ -199,7 +200,7 @@ SQL;
     private function getSQLColumnNamesArray()
     {
         $em       = $this->getEntityManager();
-        $metadata = $em->getClassMetadata('OroChannelBundle:LifetimeValueHistory');
+        $metadata = $em->getClassMetadata(LifetimeValueHistory::class);
 
         $sqlNames = ['tableName' => $metadata->getTableName()];
         foreach ($metadata->getFieldNames() as $fieldName) {

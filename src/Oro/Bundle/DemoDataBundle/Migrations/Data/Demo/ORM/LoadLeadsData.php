@@ -91,8 +91,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             $this->em = $manager;
         }
 
-        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
+        $this->users = $this->em->getRepository(User::class)->findAll();
+        $this->countries = $this->em->getRepository(Country::class)->findAll();
         $this->organization = $this->getReference('default_organization');
     }
 
@@ -107,7 +107,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $sources = $enumRepo->findAll();
         $randomSource = count($sources)-1;
 
-        $leads = $this->em->getRepository('OroSalesBundle:Lead')->findAll();
+        $leads = $this->em->getRepository(Lead::class)->findAll();
 
         foreach ($leads as $lead) {
             /** @var Lead $lead */
@@ -161,7 +161,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $tokenStorage = $this->container->get('security.token_storage');
         $token = new UsernamePasswordOrganizationToken(
             $user,
-            $user->getUsername(),
             'main',
             $this->organization,
             $user->getUserRoles()

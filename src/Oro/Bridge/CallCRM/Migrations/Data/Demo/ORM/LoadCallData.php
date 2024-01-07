@@ -7,6 +7,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\CallBundle\Entity\Call;
+use Oro\Bundle\CallBundle\Entity\CallDirection;
+use Oro\Bundle\CallBundle\Entity\CallStatus;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
@@ -70,14 +72,14 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
     protected function persistDemoCalls(
         ObjectManager $om
     ) {
-        $accounts = $om->getRepository('OroAccountBundle:Account')->findBy(['organization' => $this->organization]);
-        $contacts = $om->getRepository('OroContactBundle:Contact')->findBy(['organization' => $this->organization]);
-        $callStatus = $om->getRepository('OroCallBundle:CallStatus')->findOneBy([
+        $accounts = $om->getRepository(Account::class)->findBy(['organization' => $this->organization]);
+        $contacts = $om->getRepository(Contact::class)->findBy(['organization' => $this->organization]);
+        $callStatus = $om->getRepository(CallStatus::class)->findOneBy([
             'name' => 'completed',
         ]);
         $directions = [
-            'incoming' => $om->getRepository('OroCallBundle:CallDirection')->findOneBy(['name' => 'incoming']),
-            'outgoing' => $om->getRepository('OroCallBundle:CallDirection')->findOneBy(['name' => 'outgoing'])
+            'incoming' => $om->getRepository(CallDirection::class)->findOneBy(['name' => 'incoming']),
+            'outgoing' => $om->getRepository(CallDirection::class)->findOneBy(['name' => 'outgoing'])
         ];
         $contactCount = count($contacts);
         $accountCount = count($accounts);
@@ -170,7 +172,6 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
         $tokenStorage = $this->container->get('security.token_storage');
         $token = new UsernamePasswordOrganizationToken(
             $user,
-            $user->getUsername(),
             'main',
             $this->organization,
             $user->getUserRoles()

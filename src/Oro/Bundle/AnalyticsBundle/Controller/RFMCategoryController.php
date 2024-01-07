@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
@@ -32,7 +33,7 @@ class RFMCategoryController extends AbstractController
      * )
      * @ParamConverter(
      *      "channel",
-     *      class="OroChannelBundle:Channel",
+     *      class="Oro\Bundle\ChannelBundle\Entity\Channel",
      *      options={"id" = "entity"}
      * )
      * @AclAncestor("oro_channel_view")
@@ -64,7 +65,7 @@ class RFMCategoryController extends AbstractController
     protected function getCategories(Channel $channel, $type)
     {
         return $this->getRFMMetricCategoryRepository()
-            ->getCategoriesByChannel($this->get(AclHelper::class), $channel, $type);
+            ->getCategoriesByChannel($this->container->get(AclHelper::class), $channel, $type);
     }
 
     /**
@@ -73,7 +74,8 @@ class RFMCategoryController extends AbstractController
     protected function getRFMMetricCategoryRepository()
     {
         if (!$this->rfmMetricCategoryRepository) {
-            $this->rfmMetricCategoryRepository = $this->getDoctrine()->getRepository(RFMMetricCategory::class);
+            $this->rfmMetricCategoryRepository = $this->container->get('doctrine')
+                ->getRepository(RFMMetricCategory::class);
         }
 
         return $this->rfmMetricCategoryRepository;
@@ -88,6 +90,7 @@ class RFMCategoryController extends AbstractController
             parent::getSubscribedServices(),
             [
                 AclHelper::class,
+                'doctrine' => ManagerRegistry::class,
             ]
         );
     }

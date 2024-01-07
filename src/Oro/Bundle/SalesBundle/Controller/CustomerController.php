@@ -39,14 +39,14 @@ class CustomerController extends AbstractController
      */
     public function gridDialogAction($entityClass)
     {
-        $resolvedClass = $this->get(EntityRoutingHelper::class)->resolveEntityClass($entityClass);
-        $entityClassAlias = $this->get(EntityAliasResolver::class)
+        $resolvedClass = $this->container->get(EntityRoutingHelper::class)->resolveEntityClass($entityClass);
+        $entityClassAlias = $this->container->get(EntityAliasResolver::class)
             ->getPluralAlias($resolvedClass);
-        $entityTargets = $this->get(MultiGridProvider::class)->getEntitiesData(
-            $this->get('oro_sales.customer.account_config_provider')->getCustomerClasses()
+        $entityTargets = $this->container->get(MultiGridProvider::class)->getEntitiesData(
+            $this->container->get('oro_sales.customer.account_config_provider')->getCustomerClasses()
         );
 
-        $request = $this->get('request_stack')->getCurrentRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
         $params = [
             'params' => $request->get('params', [])
         ];

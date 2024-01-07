@@ -2,9 +2,11 @@
 
 namespace Oro\Bundle\AccountBundle\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AccountBundle\Event\CollectAccountWebsiteActivityCustomersEvent;
 use Oro\Bundle\AccountBundle\Form\Handler\AccountHandler;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -28,18 +30,18 @@ class AccountController extends AbstractController
      *      id="oro_account_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroAccountBundle:Account"
+     *      class="Oro\Bundle\AccountBundle\Entity\Account"
      * )
      * @Template()
      */
     public function viewAction(Account $account): array
     {
-        $channels = $this->getDoctrine()
-            ->getRepository('OroChannelBundle:Channel')
+        $channels = $this->container->get('doctrine')
+            ->getRepository(Channel::class)
             ->findBy([], ['channelType' => 'ASC', 'name' => 'ASC']);
 
         $event = new CollectAccountWebsiteActivityCustomersEvent($account->getId());
-        $this->get(EventDispatcherInterface::class)->dispatch($event);
+        $this->container->get(EventDispatcherInterface::class)->dispatch($event);
 
         return [
             'entity' => $account,
@@ -56,7 +58,7 @@ class AccountController extends AbstractController
      *      id="oro_account_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroAccountBundle:Account"
+     *      class="Oro\Bundle\AccountBundle\Entity\Account"
      * )
      * @Template("@OroAccount/Account/update.html.twig")
      */
@@ -73,7 +75,7 @@ class AccountController extends AbstractController
      *      id="oro_account_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroAccountBundle:Account"
+     *      class="Oro\Bundle\AccountBundle\Entity\Account"
      * )
      * @Template()
      */
@@ -101,7 +103,7 @@ class AccountController extends AbstractController
 
     protected function getManager(): ApiEntityManager
     {
-        return $this->get(ApiEntityManager::class);
+        return $this->container->get(ApiEntityManager::class);
     }
 
     protected function update(Account $entity = null): array|RedirectResponse
@@ -110,12 +112,12 @@ class AccountController extends AbstractController
             $entity = $this->getManager()->createEntity();
         }
 
-        return $this->get(UpdateHandlerFacade::class)->update(
+        return $this->container->get(UpdateHandlerFacade::class)->update(
             $entity,
-            $this->get('oro_account.form.account'),
-            $this->get(TranslatorInterface::class)->trans('oro.account.controller.account.saved.message'),
+            $this->container->get('oro_account.form.account'),
+            $this->container->get(TranslatorInterface::class)->trans('oro.account.controller.account.saved.message'),
             null,
-            $this->get(AccountHandler::class)
+            $this->container->get(AccountHandler::class)
         );
     }
 
@@ -161,7 +163,8 @@ class AccountController extends AbstractController
                 ApiEntityManager::class,
                 'oro_account.form.account' => Form::class,
                 AccountHandler::class,
-                UpdateHandlerFacade::class
+                UpdateHandlerFacade::class,
+                'doctrine' => ManagerRegistry::class
             ]
         );
     }

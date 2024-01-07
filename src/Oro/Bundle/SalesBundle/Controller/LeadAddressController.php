@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AddressBundle\Form\Handler\AddressHandler;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadAddress;
@@ -90,13 +91,13 @@ class LeadAddressController extends AbstractController
 
         // Update lead's modification date when an address is changed
         $lead->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-        $form = $this->get('oro_sales.lead_address.form');
-        if ($this->get(AddressHandler::class)->process(
+        $form = $this->container->get('oro_sales.lead_address.form');
+        if ($this->container->get(AddressHandler::class)->process(
             $address,
             $form,
             $request
         )) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->container->get('doctrine')->getManager()->flush();
             $responseData['entity'] = $address;
             $responseData['saved'] = true;
         }
@@ -116,6 +117,7 @@ class LeadAddressController extends AbstractController
             [
                 'oro_sales.lead_address.form' => Form::class,
                 AddressHandler::class,
+                'doctrine' => ManagerRegistry::class,
             ]
         );
     }

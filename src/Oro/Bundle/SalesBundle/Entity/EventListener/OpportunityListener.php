@@ -36,7 +36,7 @@ class OpportunityListener
 
     public function onFlush(OnFlushEventArgs $event): void
     {
-        $em = $event->getEntityManager();
+        $em = $event->getObjectManager();
         $uow = $em->getUnitOfWork();
         $this->processEntities($uow->getScheduledEntityInsertions(), $em, $uow);
         $this->processEntities($uow->getScheduledEntityUpdates(), $em, $uow);

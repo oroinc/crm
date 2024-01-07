@@ -48,10 +48,13 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
     {
         $fields = [];
 
-        $this->builder->expects($this->exactly(4))
+        $builder = $this->builder;
+        $builder->expects($this->exactly(4))
             ->method('add')
-            ->willReturnCallback(function ($filedName, $fieldType) use (&$fields) {
+            ->willReturnCallback(function ($filedName, $fieldType) use (&$fields, $builder) {
                 $fields[$filedName] = $fieldType;
+
+                return $builder;
             });
 
         $this->type->buildForm($this->builder, []);

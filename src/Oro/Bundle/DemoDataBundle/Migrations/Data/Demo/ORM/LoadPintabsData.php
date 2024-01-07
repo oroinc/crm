@@ -79,7 +79,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
-        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->organization = $manager->getRepository(Organization::class)->getFirst();
         $this->initSupportingEntities();
         $this->loadUsersTags();
     }
@@ -87,7 +87,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
     protected function initSupportingEntities()
     {
         $this->em = $this->container->get('doctrine')->getManager();
-        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
+        $this->users = $this->em->getRepository(User::class)->findAll();
     }
 
     public function loadUsersTags()
@@ -99,7 +99,6 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
 
             $token = new UsernamePasswordOrganizationToken(
                 $user,
-                $user->getUsername(),
                 'main',
                 $this->organization,
                 $user->getUserRoles()

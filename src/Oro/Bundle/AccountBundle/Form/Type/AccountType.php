@@ -61,7 +61,7 @@ class AccountType extends AbstractType
                 'default_contact',
                 EntityIdentifierType::class,
                 array(
-                    'class'    => 'OroContactBundle:Contact',
+                    'class'    => Contact::class,
                     'multiple' => false
                 )
             );
@@ -72,7 +72,7 @@ class AccountType extends AbstractType
                 MultipleEntityType::class,
                 array(
                     'add_acl_resource'      => 'oro_contact_view',
-                    'class'                 => 'OroContactBundle:Contact',
+                    'class'                 => Contact::class,
                     'default_element'       => 'default_contact',
                     'required'              => false,
                     'selector_window_title' => 'oro.account.form.select_contacts',

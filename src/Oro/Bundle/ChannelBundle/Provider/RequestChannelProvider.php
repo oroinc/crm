@@ -8,6 +8,9 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Provides channel for ChannelAwareInterface entities
+ */
 class RequestChannelProvider
 {
     /** @var ManagerRegistry */
@@ -45,7 +48,7 @@ class RequestChannelProvider
             /** @var EntityManager $em */
             $em = $this->registry->getManager();
 
-            return $em->getReference('OroChannelBundle:Channel', $channelId);
+            return $em->getReference(Channel::class, $channelId);
         }
 
         return false;

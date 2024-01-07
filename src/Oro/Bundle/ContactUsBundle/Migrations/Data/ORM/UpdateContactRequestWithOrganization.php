@@ -4,8 +4,12 @@ namespace Oro\Bundle\ContactUsBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\UpdateWithOrganization;
 
+/**
+ * Updates contact request entities with organization.
+ */
 class UpdateContactRequestWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
     /**
@@ -24,6 +28,6 @@ class UpdateContactRequestWithOrganization extends UpdateWithOrganization implem
      */
     public function load(ObjectManager $manager)
     {
-        $this->update($manager, 'OroContactUsBundle:ContactRequest', 'owner');
+        $this->update($manager, ContactRequest::class, 'owner');
     }
 }

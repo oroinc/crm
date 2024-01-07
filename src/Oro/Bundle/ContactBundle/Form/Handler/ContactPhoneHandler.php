@@ -63,7 +63,7 @@ class ContactPhoneHandler
 
             if ($this->form->isValid() && $request->request->get('contactId')) {
                 $contact = $this->manager->find(
-                    'OroContactBundle:Contact',
+                    Contact::class,
                     $request->request->get('contactId')
                 );
                 if (!$this->authorizationChecker->isGranted('EDIT', $contact)) {

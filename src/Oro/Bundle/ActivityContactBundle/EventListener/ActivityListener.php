@@ -151,8 +151,8 @@ class ActivityListener
      */
     public function onFlush(OnFlushEventArgs $args)
     {
-        $entitiesToDelete = $args->getEntityManager()->getUnitOfWork()->getScheduledEntityDeletions();
-        $entitiesToUpdate = $args->getEntityManager()->getUnitOfWork()->getScheduledEntityUpdates();
+        $entitiesToDelete = $args->getObjectManager()->getUnitOfWork()->getScheduledEntityDeletions();
+        $entitiesToUpdate = $args->getObjectManager()->getUnitOfWork()->getScheduledEntityUpdates();
         $extendProvider   = $this->configManager->getProvider('extend');
         if (!empty($entitiesToDelete) || !empty($entitiesToUpdate)) {
             foreach ($entitiesToDelete as $entity) {
@@ -188,7 +188,7 @@ class ActivityListener
                 }
             }
 
-            $this->changedTargetsBag->add($entitiesToUpdate, $args->getEntityManager()->getUnitOfWork());
+            $this->changedTargetsBag->add($entitiesToUpdate, $args->getObjectManager()->getUnitOfWork());
 
             foreach ($entitiesToUpdate as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
@@ -201,7 +201,7 @@ class ActivityListener
                 if (!isset($this->updatedEntities[$key])
                     && $this->activityContactProvider->isSupportedEntity($class)
                 ) {
-                    $changes            = $args->getEntityManager()->getUnitOfWork()->getEntityChangeSet($entity);
+                    $changes            = $args->getObjectManager()->getUnitOfWork()->getEntityChangeSet($entity);
                     $isDirectionChanged = $this->activityContactProvider
                         ->getActivityDirectionProvider($entity)
                         ->isDirectionChanged($changes);
@@ -231,7 +231,7 @@ class ActivityListener
                     ];
 
                     if ($isDirectionChanged) {
-                        $this->changeTargetsDirections($entity, $targets, $args->getEntityManager());
+                        $this->changeTargetsDirections($entity, $targets, $args->getObjectManager());
                     }
                 }
             }
@@ -245,7 +245,7 @@ class ActivityListener
      */
     public function postFlush(PostFlushEventArgs $args)
     {
-        $entityManager = $args->getEntityManager();
+        $entityManager = $args->getObjectManager();
         if (empty($this->deletedEntities) && empty($this->updatedEntities)) {
             return;
         }

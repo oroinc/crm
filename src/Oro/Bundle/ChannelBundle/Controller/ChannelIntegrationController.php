@@ -23,7 +23,7 @@ class ChannelIntegrationController extends AbstractController
      */
     public function createAction($type, $channelName = null)
     {
-        $translator      = $this->get(TranslatorInterface::class);
+        $translator      = $this->container->get(TranslatorInterface::class);
         $integrationName = urldecode($channelName) . ' ' . $translator->trans('oro.channel.data_source.label');
         $integration     = new Integration();
         $integration->setType(urldecode($type));
@@ -49,7 +49,7 @@ class ChannelIntegrationController extends AbstractController
      */
     protected function update(Integration $integration)
     {
-        $handler = $this->get(ChannelIntegrationHandler::class);
+        $handler = $this->container->get(ChannelIntegrationHandler::class);
 
         $data = null;
         if ($handler->process($integration)) {

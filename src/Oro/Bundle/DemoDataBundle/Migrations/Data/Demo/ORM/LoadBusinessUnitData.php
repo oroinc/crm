@@ -20,9 +20,9 @@ class LoadBusinessUnitData extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         /** @var OrganizationRepository $organizationRepository */
-        $organizationRepository = $manager->getRepository('OroOrganizationBundle:Organization');
+        $organizationRepository = $manager->getRepository(Organization::class);
         /** @var BusinessUnitRepository $businessUnitRepository */
-        $businessUnitRepository = $manager->getRepository('OroOrganizationBundle:BusinessUnit');
+        $businessUnitRepository = $manager->getRepository(BusinessUnit::class);
 
         /** @var Organization $organization */
         $organization = $organizationRepository->getFirst();

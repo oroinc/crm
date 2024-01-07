@@ -65,7 +65,7 @@ class ContactEmailController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_contact.contact_email.manager.api');
+        return $this->container->get('oro_contact.contact_email.manager.api');
     }
 
     /**
@@ -73,7 +73,7 @@ class ContactEmailController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_contact.form.type.contact_email.handler');
+        return $this->container->get('oro_contact.form.type.contact_email.handler');
     }
 
     /**
@@ -81,6 +81,6 @@ class ContactEmailController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_contact.form.type.contact_email.type');
+        return $this->container->get('oro_contact.form.type.contact_email.type');
     }
 }

@@ -5,7 +5,11 @@ namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\UpdateWithOrganization;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
+/**
+ * Updates B2bCustomer entities with organization.
+ */
 class UpdateB2bCustomerWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
     /**
@@ -21,6 +25,6 @@ class UpdateB2bCustomerWithOrganization extends UpdateWithOrganization implement
      */
     public function load(ObjectManager $manager)
     {
-        $this->update($manager, 'OroSalesBundle:B2bCustomer');
+        $this->update($manager, B2bCustomer::class);
     }
 }

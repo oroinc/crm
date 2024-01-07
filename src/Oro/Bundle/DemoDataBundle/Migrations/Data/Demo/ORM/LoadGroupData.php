@@ -72,6 +72,6 @@ class LoadGroupData extends AbstractFixture implements ContainerAwareInterface, 
      */
     protected function getBusinessUnit(ObjectManager $manager, $name)
     {
-        return $manager->getRepository('OroOrganizationBundle:BusinessUnit')->findOneBy(['name' => $name]);
+        return $manager->getRepository(BusinessUnit::class)->findOneBy(['name' => $name]);
     }
 }

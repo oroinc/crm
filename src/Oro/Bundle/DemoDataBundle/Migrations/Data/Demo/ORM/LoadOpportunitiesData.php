@@ -69,8 +69,8 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
     protected function initSupportingEntities()
     {
         $this->organization = $this->getReference('default_organization');
-        $this->contacts     = $this->em->getRepository('OroContactBundle:Contact')->findAll();
-        $this->b2bCustomers = $this->em->getRepository('OroSalesBundle:B2bCustomer')->findAll();
+        $this->contacts     = $this->em->getRepository(Contact::class)->findAll();
+        $this->b2bCustomers = $this->em->getRepository(B2bCustomer::class)->findAll();
     }
 
     public function loadOpportunities()
@@ -96,7 +96,6 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
         $tokenStorage = $this->container->get('security.token_storage');
         $token = new UsernamePasswordOrganizationToken(
             $user,
-            $user->getUsername(),
             'main',
             $this->organization,
             $user->getUserRoles()

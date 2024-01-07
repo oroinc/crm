@@ -9,12 +9,15 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\EventListener\ContactListener;
 use Oro\Bundle\UserBundle\Entity\User;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 
-class ContactListenerTest extends \PHPUnit\Framework\TestCase
+class ContactListenerTest extends TestCase
 {
-    /** @var TokenStorageInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var TokenStorageInterface|MockObject */
     private $tokenStorage;
 
     /** @var ContactListener */
@@ -113,7 +116,7 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
         if ($reloadUser) {
             $em->expects($this->once())
                 ->method('find')
-                ->with('OroUserBundle:User')
+                ->with(User::class)
                 ->willReturn($newUser);
         } else {
             $em->expects($this->never())
@@ -184,7 +187,7 @@ class ContactListenerTest extends \PHPUnit\Framework\TestCase
         $token = $this->createMock(TokenInterface::class);
         $token->expects($this->once())
             ->method('getUser')
-            ->willReturn(new \stdClass());
+            ->willReturn(new InMemoryUser('test', null));
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn($token);

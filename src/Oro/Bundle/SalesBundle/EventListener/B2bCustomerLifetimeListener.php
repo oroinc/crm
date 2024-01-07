@@ -47,7 +47,7 @@ class B2bCustomerLifetimeListener implements ServiceSubscriberInterface
      */
     public function onFlush(OnFlushEventArgs $args): void
     {
-        $uow = $args->getEntityManager()->getUnitOfWork();
+        $uow = $args->getObjectManager()->getUnitOfWork();
 
         $entities = $this->getChangedOpportunityEntities($uow);
         /** @var Opportunity $entity */
@@ -92,7 +92,7 @@ class B2bCustomerLifetimeListener implements ServiceSubscriberInterface
             return;
         }
 
-        $em = $args->getEntityManager();
+        $em = $args->getObjectManager();
         $repo = $em->getRepository(B2bCustomer::class);
 
         $flushRequired = false;

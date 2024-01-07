@@ -12,6 +12,7 @@ use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
 use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason;
 use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
 use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
 use Symfony\Component\Form\AbstractType;
@@ -66,7 +67,7 @@ class OpportunityType extends AbstractType
                 TranslatableEntityType::class,
                 [
                     'label'        => 'oro.sales.opportunity.close_reason.label',
-                    'class'        => 'OroSalesBundle:OpportunityCloseReason',
+                    'class'        => OpportunityCloseReason::class,
                     'choice_label' => 'label',
                     'required'     => false,
                     'disabled'     => false,

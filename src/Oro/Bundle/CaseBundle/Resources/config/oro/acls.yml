@@ -1,56 +1,56 @@
 acls:
     oro_case_view:
         type: entity
-        class: OroCaseBundle:CaseEntity
+        class: Oro\Bundle\CaseBundle\Entity\CaseEntity
         permission: VIEW
         group_name: ""
         bindings: ~
 
     oro_case_create:
         type: entity
-        class: OroCaseBundle:CaseEntity
+        class: Oro\Bundle\CaseBundle\Entity\CaseEntity
         permission: CREATE
         group_name: ""
         bindings: ~
 
     oro_case_update:
         type: entity
-        class: OroCaseBundle:CaseEntity
+        class: Oro\Bundle\CaseBundle\Entity\CaseEntity
         permission: EDIT
         group_name: ""
         bindings: ~
 
     oro_case_delete:
         type: entity
-        class: OroCaseBundle:CaseEntity
+        class: Oro\Bundle\CaseBundle\Entity\CaseEntity
         permission: DELETE
         group_name: ""
         bindings: ~
 
     oro_case_comment_view:
         type: entity
-        class: OroCaseBundle:CaseComment
+        class: Oro\Bundle\CaseBundle\Entity\CaseComment
         permission: VIEW
         group_name: ""
         bindings: ~
 
     oro_case_comment_create:
         type: entity
-        class: OroCaseBundle:CaseComment
+        class: Oro\Bundle\CaseBundle\Entity\CaseComment
         permission: CREATE
         group_name: ""
         bindings: ~
 
     oro_case_comment_update:
         type: entity
-        class: OroCaseBundle:CaseComment
+        class: Oro\Bundle\CaseBundle\Entity\CaseComment
         permission: EDIT
         group_name: ""
         bindings: ~
 
     oro_case_comment_delete:
         type: entity
-        class: OroCaseBundle:CaseComment
+        class: Oro\Bundle\CaseBundle\Entity\CaseComment
         permission: DELETE
         group_name: ""
         bindings: ~
