@@ -6,7 +6,6 @@ namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -15,7 +14,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadRolesData;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Loads users into the default_organization and assigns them to ROLE_MANAGER.
@@ -25,20 +24,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class LoadUsersData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     private const FLUSH_MAX = 10;
 
-    protected ?ContainerInterface $container;
+    private Organization $organization;
+    private BusinessUnit $businessUnit;
+    private Role $role;
 
-    protected UserManager $userManager;
-
-    protected Role $role;
-
-    /** @var  EntityManager */
-    protected $em;
-
-    protected Organization $organization;
-
-    public function getDependencies()
+    /**
+     * {@inheritDoc}
+     */
+    public function getDependencies(): array
     {
         return [
             LoadBusinessUnitData::class,
@@ -46,31 +43,13 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         ];
     }
 
-    public function setContainer(ContainerInterface $container = null)
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $manager): void
     {
-        $this->container = $container;
-    }
-
-    private function initSupportingEntities(ObjectManager $manager = null)
-    {
-        if ($manager) {
-            $this->em = $manager;
-        }
-        $this->organization = $this->getReference('default_organization');
-        $this->userManager  = $this->container->get('oro_user.manager');
-        $this->role = $this->em->getRepository(Role::class)->findOneBy(
-            ['role' => LoadRolesData::ROLE_MANAGER]
-        );
-    }
-
-    public function load(ObjectManager $manager)
-    {
+        $userManager = $this->container->get('oro_user.manager');
         $this->initSupportingEntities($manager);
-        $this->loadUsers();
-    }
-
-    private function loadUsers(): void
-    {
         for ($i = 0; $i < 50; ++$i) {
             $firstName = $this->generateFirstName();
             $lastName = $this->generateLastName();
@@ -78,47 +57,45 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
             $username = $this->generateUsername($firstName, $lastName);
             $email = $this->generateEmail($firstName, $lastName);
 
-            $user = $this->createUser(
-                $username,
-                $email,
-                $firstName,
-                $lastName,
-                $birthday,
-                $this->role
-            );
-
+            $user = $this->createUser($userManager, $username, $email, $firstName, $lastName, $birthday);
             $user->setPlainPassword($username);
-            $this->userManager->updatePassword($user);
-            $this->userManager->updateUser($user);
+            $userManager->updatePassword($user);
+            $userManager->updateUser($user);
 
             if (0 === $i % self::FLUSH_MAX) {
-                $this->em->flush();
-                $this->em->clear();
-                $this->initSupportingEntities();
+                $manager->flush();
+                $manager->clear();
+                $this->initSupportingEntities($manager);
             }
         }
-        $this->em->flush();
+        $manager->flush();
+    }
+
+    private function initSupportingEntities(ObjectManager $manager): void
+    {
+        $this->organization = $this->getReference('default_organization');
+        $this->businessUnit = $manager->getRepository(BusinessUnit::class)->findOneBy(['name' => 'Acme, General']);
+        $this->role = $manager->getRepository(Role::class)->findOneBy(['role' => LoadRolesData::ROLE_MANAGER]);
     }
 
     private function createUser(
+        UserManager $userManager,
         string $username,
         string $email,
         string $firstName,
         string $lastName,
-        \DateTime $birthday,
-        $role
+        \DateTime $birthday
     ): User {
         /** @var User $user */
-        $user = $this->userManager->createUser();
-
+        $user = $userManager->createUser();
         $user->setEmail($email);
         $user->setUsername($username);
         $user->setFirstName($firstName);
         $user->setLastName($lastName);
         $user->setBirthday($birthday);
-        $user->setOwner($this->getBusinessUnit('Acme, General'));
-        $user->addBusinessUnit($this->getBusinessUnit('Acme, General'));
-        $user->addUserRole($role);
+        $user->setOwner($this->businessUnit);
+        $user->addBusinessUnit($this->businessUnit);
+        $user->addUserRole($this->role);
         $user->setOrganization($this->organization);
         $user->addOrganization($this->organization);
 
@@ -189,10 +166,5 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
 
         // Convert back to desired date format
         return new \DateTime(date('Y-m-d', $val), new \DateTimeZone('UTC'));
-    }
-
-    private function getBusinessUnit(string $name): BusinessUnit
-    {
-        return $this->em->getRepository(BusinessUnit::class)->findOneBy(['name' => $name]);
     }
 }

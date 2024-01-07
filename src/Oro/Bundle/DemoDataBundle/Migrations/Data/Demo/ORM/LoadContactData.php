@@ -5,7 +5,6 @@ namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\Country;
@@ -19,161 +18,88 @@ use Oro\Bundle\ContactBundle\Entity\Source;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Loads contact demo data
  */
 class LoadContactData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    use ContainerAwareTrait;
 
     /**
-     * @var Account[]
+     * {@inheritDoc}
      */
-    protected $accounts;
-
-    /**
-     * @var User[]
-     */
-    protected $users;
-
-    /**
-     * @var Country[]
-     */
-    protected $countries;
-
-    /**
-     * @var Group[]
-     */
-    protected $contactGroups;
-
-    /**
-     * @var Source[]
-     */
-    protected $contactSources;
-
-    /** @var  EntityManager */
-    protected $em;
-
-    /**
-     * @var Organization
-     */
-    protected $organization;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactGroupData',
+            LoadAccountData::class,
+            LoadContactGroupData::class
         ];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function load(ObjectManager $manager): void
     {
-        $this->container = $container;
-    }
+        $users = $manager->getRepository(User::class)->findAll();
+        $accounts = $manager->getRepository(Account::class)->findAll();
+        $contactGroups = $manager->getRepository(Group::class)->findAll();
+        $contactSources = $manager->getRepository(Source::class)->findAll();
+        $organization = $this->getReference('default_organization');
+        $countries = $manager->getRepository(Country::class)->findAll();
 
-    /**
-     * {@inheritDoc}
-     */
-    public function load(ObjectManager $manager)
-    {
-        $this->initSupportingEntities($manager);
-        $this->loadContacts();
-    }
-
-    protected function initSupportingEntities(ObjectManager $manager = null)
-    {
-        if ($manager) {
-            $this->em = $manager;
-        }
-
-        $this->users = $this->em->getRepository(User::class)->findAll();
-        $this->countries = $this->em->getRepository(Country::class)->findAll();
-
-        $this->accounts = $this->em->getRepository(Account::class)->findAll();
-        $this->contactGroups = $this->em->getRepository(Group::class)->findAll();
-        $this->contactSources = $this->em->getRepository(Source::class)->findAll();
-        $this->organization = $this->getReference('default_organization');
-    }
-
-    /**
-     * Load Contacts
-     *
-     * @return void
-     */
-    public function loadContacts()
-    {
         $dictionaryDir = $this->container
             ->get('kernel')
             ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
 
         $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "accounts.csv", "r");
         if ($handle) {
-            $headers = array();
+            $headers = [];
             if (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 //read headers
                 $headers = $data;
             }
-            $randomUser = count($this->users)-1;
-            $randomContactGroup = count($this->contactGroups)-1;
-            $randomContactSource = count($this->contactSources)-1;
+            $randomUser = \count($users)-1;
+            $randomContactGroup = \count($contactGroups)-1;
+            $randomContactSource = \count($contactSources)-1;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 $data = array_combine($headers, array_values($data));
-                //find accounts
-                $company = $data['Company'];
+                $contact = $this->createContact($data, $organization, $countries);
 
+                $company = $data['Company'];
                 $account = array_filter(
-                    $this->accounts,
+                    $accounts,
                     function (Account $a) use ($company) {
                         return $a->getName() == $company;
                     }
                 );
                 $account = reset($account);
-                $contact = $this->createContact($data);
-
-                /** @var Account $account */
                 $contact->addAccount($account);
 
-                $group = $this->contactGroups[rand(0, $randomContactGroup)];
+                $group = $contactGroups[rand(0, $randomContactGroup)];
                 $contact->addGroup($group);
 
-                $user = $this->users[rand(0, $randomUser)];
-
+                $user = $users[rand(0, $randomUser)];
                 $contact->setAssignedTo($user);
                 $contact->setReportsTo($contact);
                 $contact->setOwner($user);
 
-                $source = $this->contactSources[rand(0, $randomContactSource)];
+                $source = $contactSources[rand(0, $randomContactSource)];
                 $contact->setSource($source);
                 $account->setDefaultContact($contact);
 
-                $this->persist($this->em, $contact);
-                $this->persist($this->em, $account);
+                $manager->persist($contact);
+                $manager->persist($account);
             }
 
-            $this->flush($this->em);
+            $manager->flush();
             fclose($handle);
         }
     }
 
-    /**
-     * Create a Contact
-     *
-     * @param  array   $data
-     * @return Contact
-     */
-    private function createContact(array $data)
+    private function createContact(array $data, Organization $organization, array $countries): Contact
     {
         $contact = new Contact();
 
@@ -181,7 +107,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
         $contact->setLastName($data['Surname']);
         $contact->setNamePrefix($data['Title']);
         $contact->setGender($data['Gender']);
-        $contact->setOrganization($this->organization);
+        $contact->setOrganization($organization);
 
         $phone = new ContactPhone($data['TelephoneNumber']);
         $phone->setPrimary(true);
@@ -206,7 +132,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
 
         $isoCode = $data['Country'];
         $country = array_filter(
-            $this->countries,
+            $countries,
             function (Country $a) use ($isoCode) {
                 return $a->getIso2Code() == $isoCode;
             }
@@ -234,26 +160,5 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
         $contact->addAddress($address);
 
         return $contact;
-    }
-
-    /**
-     * Persist object
-     *
-     * @param mixed $manager
-     * @param mixed $object
-     */
-    private function persist($manager, $object)
-    {
-        $manager->persist($object);
-    }
-
-    /**
-     * Flush objects
-     *
-     * @param mixed $manager
-     */
-    private function flush($manager)
-    {
-        $manager->flush();
     }
 }

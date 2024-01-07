@@ -5,8 +5,6 @@ namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
@@ -16,146 +14,108 @@ use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
  * Loads new Tag entities.
  */
 class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /** @var ContainerInterface */
-    protected $container;
-
-    /** @var EntityRepository */
-    protected $accountsRepository;
-
-    /** @var EntityRepository */
-    protected $usersRepository;
-
-    /* @var EntityRepository */
-    protected $contactsRepository;
-
-    /** @var TagManager */
-    protected $tagManager;
-
-    /** @var Tag[] */
-    protected $tagsUser;
-
-    /** @var Tag[] */
-    protected $tagsAccount;
-
-    /** @var EntityManager */
-    protected $em;
-
-    /** @var Organization */
-    protected $organization;
+    use ContainerAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData'
+            LoadUsersData::class,
+            LoadAccountData::class,
+            LoadContactData::class
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function load(ObjectManager $manager): void
     {
-        $this->container = $container;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function load(ObjectManager $manager)
-    {
-        $this->initSupportingEntities($manager);
-        $this->loadUsersTags();
-        $this->loadAccountsTags();
-        $this->loadContactsTags();
-
+        $organization = $this->getReference('default_organization');
         $tokenStorage = $this->container->get('security.token_storage');
+        $tokenStorage->setToken($this->getUserToken($manager, $organization));
+
+        $tagManager = $this->container->get('oro_tag.tag.manager');
+        $userTags = $this->loadUsersTags($manager, $tagManager, $organization);
+        $accountTags = $this->loadAccountsTags($manager, $tagManager, $organization, $userTags);
+        $this->loadContactsTags($manager, $tagManager, $userTags, $accountTags);
+
         $tokenStorage->setToken(null);
     }
 
-    protected function initSupportingEntities(ObjectManager $manager = null)
+    private function getUserToken(ObjectManager $manager, Organization $organization): TokenInterface
     {
-        if ($manager) {
-            $this->em = $manager;
-        } else {
-            $this->em = $this->container->get('doctrine.orm.entity_manager');
-        }
-
-        $this->usersRepository    = $this->em->getRepository(User::class)->findAll();
-        $this->accountsRepository = $this->em->getRepository(Account::class)->findAll();
-        $this->contactsRepository = $this->em->getRepository(Contact::class)->findAll();
-
-        $this->tagManager   = $this->container->get('oro_tag.tag.manager');
-        $this->organization = $this->getReference('default_organization');
-
         /** @var User $adminUser */
-        $adminUser = $this->em->getRepository(User::class)
+        $adminUser = $manager->getRepository(User::class)
             ->createQueryBuilder('u')
             ->select('u')
             ->orderBy('u.id')
             ->getQuery()
             ->setMaxResults(1)
             ->getSingleResult();
-        $token        = new UsernamePasswordOrganizationToken(
+
+        return new UsernamePasswordOrganizationToken(
             $adminUser,
             'main',
-            $this->organization,
+            $organization,
             $adminUser->getUserRoles()
         );
-        $tokenStorage = $this->container->get('security.token_storage');
-        $tokenStorage->setToken($token);
     }
 
     /**
-     * @param $tagsNames
+     * @param string[] $tagsNames
      *
      * @return Tag[]
      */
-    protected function createTags($tagsNames)
+    private function createTags(array $tagsNames, Organization $organization): array
     {
         $tags = [];
         foreach ($tagsNames as $tagName) {
             $tag = new Tag($tagName);
-            $tag->setOrganization($this->organization);
+            $tag->setOrganization($organization);
             $tags[] = $tag;
         }
 
         return $tags;
     }
 
-    public function loadUsersTags()
+    private function loadUsersTags(ObjectManager $manager, TagManager $tagManager, Organization $organization): array
     {
-        $this->tagsUser = $this->createTags(['Friends', 'Developer', 'Wholesale']);
-        $userTagsCount  = count($this->tagsUser);
+        $userTags = $this->createTags(['Friends', 'Developer', 'Wholesale'], $organization);
+        $userTagsCount = \count($userTags);
 
-        foreach ($this->usersRepository as $user) {
-            $this->tagManager->setTags(
+        $users = $manager->getRepository(User::class)->findAll();
+        foreach ($users as $user) {
+            $tagManager->setTags(
                 $user,
-                new ArrayCollection(
-                    [
-                        $this->tagsUser[rand(0, $userTagsCount - 1)]
-                    ]
-                )
+                new ArrayCollection([
+                    $userTags[rand(0, $userTagsCount - 1)]
+                ])
             );
-            $this->tagManager->saveTagging($user, false);
+            $tagManager->saveTagging($user, false);
         }
-        $this->flush($this->em);
+        $manager->flush();
+
+        return $userTags;
     }
 
-    public function loadAccountsTags()
-    {
-        $this->tagsAccount = $this->createTags(
+    private function loadAccountsTags(
+        ObjectManager $manager,
+        TagManager $tagManager,
+        Organization $organization,
+        array $userTags
+    ): array {
+        $accountTags = $this->createTags(
             [
                 'Commercial',
                 'Business',
@@ -168,54 +128,49 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
                 '#call',
                 '#discontinued',
                 'Premium'
-            ]
+            ],
+            $organization
         );
-        $userTagsCount     = count($this->tagsUser);
-        $accountTagsCount  = count($this->tagsAccount);
+        $userTagsCount = \count($userTags);
+        $accountTagsCount = \count($accountTags);
 
-        foreach ($this->accountsRepository as $account) {
-            $this->tagManager->setTags(
+        $accounts = $manager->getRepository(Account::class)->findAll();
+        foreach ($accounts as $account) {
+            $tagManager->setTags(
                 $account,
-                new ArrayCollection(
-                    [
-                        $this->tagsUser[rand(0, $userTagsCount - 1)],
-                        $this->tagsAccount[rand(0, $accountTagsCount - 1)]
-                    ]
-                )
+                new ArrayCollection([
+                    $userTags[rand(0, $userTagsCount - 1)],
+                    $accountTags[rand(0, $accountTagsCount - 1)]
+                ])
             );
-            $this->tagManager->saveTagging($account, false);
+            $tagManager->saveTagging($account, false);
         }
-        $this->flush($this->em);
+        $manager->flush();
+
+        return $accountTags;
     }
 
-    public function loadContactsTags()
-    {
-        $userTagsCount    = count($this->tagsUser);
-        $accountTagsCount = count($this->tagsAccount);
+    private function loadContactsTags(
+        ObjectManager $manager,
+        TagManager $tagManager,
+        array $userTags,
+        array $accountTags
+    ): void {
+        $userTagsCount = \count($userTags);
+        $accountTagsCount = \count($accountTags);
 
-        foreach ($this->contactsRepository as $contact) {
-            $this->tagManager->setTags(
+        $contacts = $manager->getRepository(Contact::class)->findAll();
+        foreach ($contacts as $contact) {
+            $tagManager->setTags(
                 $contact,
-                new ArrayCollection(
-                    [
-                        $this->tagsUser[rand(0, $userTagsCount - 1)],
-                        $this->tagsAccount[rand(0, $accountTagsCount - 1)]
-                    ]
-                )
+                new ArrayCollection([
+                    $userTags[rand(0, $userTagsCount - 1)],
+                    $accountTags[rand(0, $accountTagsCount - 1)]
+                ])
             );
 
-            $this->tagManager->saveTagging($contact, false);
+            $tagManager->saveTagging($contact, false);
         }
-        $this->flush($this->em);
-    }
-
-    /**
-     * Flush objects
-     *
-     * @param mixed $manager
-     */
-    private function flush($manager)
-    {
         $manager->flush();
     }
 }

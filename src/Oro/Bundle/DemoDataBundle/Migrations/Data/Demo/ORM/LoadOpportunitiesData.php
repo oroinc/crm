@@ -13,119 +13,83 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Loads new Opportunity entities.
  */
 class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixtureInterface
 {
-    /** @var Contact[] */
-    protected $contacts;
-
-    /** @var  B2bCustomer[] */
-    protected $b2bCustomers;
-
-    /** @var Organization */
-    protected $organization;
-
-    /** @var AccountCustomerManager */
-    protected $accountCustomerManager;
-
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        parent::setContainer($container);
-        $this->accountCustomerManager = $container->get('oro_sales.manager.account_customer');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadB2bCustomerData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
+            LoadContactData::class,
+            LoadLeadsData::class,
+            LoadB2bCustomerData::class,
+            LoadChannelData::class
         ];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $this->initSupportingEntities();
-        $this->loadOpportunities();
-
         $tokenStorage = $this->container->get('security.token_storage');
-        $tokenStorage->setToken(null);
-    }
+        $accountCustomerManager = $this->container->get('oro_sales.manager.account_customer');
+        $organization = $this->getReference('default_organization');
+        $contacts = $manager->getRepository(Contact::class)->findAll();
+        $customers = $manager->getRepository(B2bCustomer::class)->findAll();
 
-    protected function initSupportingEntities()
-    {
-        $this->organization = $this->getReference('default_organization');
-        $this->contacts     = $this->em->getRepository(Contact::class)->findAll();
-        $this->b2bCustomers = $this->em->getRepository(B2bCustomer::class)->findAll();
-    }
-
-    public function loadOpportunities()
-    {
         for ($i = 0; $i < 50; $i++) {
             $user = $this->getRandomUserReference();
 
-            $this->setSecurityContext($user);
-            $contact     = $this->contacts[array_rand($this->contacts)];
-            $customer    = $this->b2bCustomers[array_rand($this->b2bCustomers)];
-            $opportunity = $this->createOpportunity($contact, $customer, $user);
-            $this->em->persist($opportunity);
+            $tokenStorage->setToken(new UsernamePasswordOrganizationToken(
+                $user,
+                'main',
+                $organization,
+                $user->getUserRoles()
+            ));
+            $contact = $contacts[array_rand($contacts)];
+            $customer = $customers[array_rand($customers)];
+            $opportunity = $this->createOpportunity(
+                $manager,
+                $accountCustomerManager,
+                $contact,
+                $customer,
+                $user,
+                $organization
+            );
+            $manager->persist($opportunity);
         }
-
-        $this->em->flush();
+        $manager->flush();
+        $tokenStorage->setToken(null);
     }
 
-    /**
-     * @param User $user
-     */
-    protected function setSecurityContext($user)
-    {
-        $tokenStorage = $this->container->get('security.token_storage');
-        $token = new UsernamePasswordOrganizationToken(
-            $user,
-            'main',
-            $this->organization,
-            $user->getUserRoles()
-        );
-        $tokenStorage->setToken($token);
-    }
-
-    /**
-     * @param Contact     $contact
-     * @param B2bCustomer $customer
-     * @param User        $user
-     *
-     * @return Opportunity
-     */
-    protected function createOpportunity($contact, $customer, $user)
-    {
+    private function createOpportunity(
+        ObjectManager $manager,
+        AccountCustomerManager $accountCustomerManager,
+        Contact $contact,
+        B2bCustomer $customer,
+        User $user,
+        Organization $organization
+    ): Opportunity {
         $opportunity = new Opportunity();
         $opportunity->setName($contact->getFirstName() . ' ' . $contact->getLastName());
         $opportunity->setContact($contact);
         $opportunity->setOwner($user);
-        $opportunity->setOrganization($this->organization);
-        $opportunity->setCustomerAssociation($this->accountCustomerManager->getAccountCustomerByTarget($customer));
+        $opportunity->setOrganization($organization);
+        $opportunity->setCustomerAssociation($accountCustomerManager->getAccountCustomerByTarget($customer));
         $budgetAmountVal = mt_rand(10, 10000);
         $opportunity->setBudgetAmount(MultiCurrency::create($budgetAmountVal, 'USD'));
 
         $opportunityStatuses = ['in_progress', 'lost', 'needs_analysis', 'won'];
         $statusName = $opportunityStatuses[array_rand($opportunityStatuses)];
         $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
-        $opportunity->setStatus($this->em->getReference($enumClass, $statusName));
-        if ($statusName == Opportunity::STATUS_WON) {
+        $opportunity->setStatus($manager->getReference($enumClass, $statusName));
+        if (Opportunity::STATUS_WON === $statusName) {
             $closeRevenueVal = mt_rand(10, 10000);
             $opportunity->setCloseRevenue(MultiCurrency::create($closeRevenueVal, 'USD'));
             $opportunity->setBaseCloseRevenueValue($closeRevenueVal);

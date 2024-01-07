@@ -4,30 +4,21 @@ namespace Oro\Bundle\ChannelBundle\Migrations\Data\ORM;
 
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 /**
- * Loads default channel data
+ * Loads default channels.
  */
 class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
-    {
-        $settingsProvider = $this->container->get('oro_channel.provider.settings_provider');
-
-        $this->createChannelsForIntegrations($settingsProvider);
-    }
-
-    protected function createChannelsForIntegrations(SettingsProvider $settingsProvider)
+    public function load(ObjectManager $manager): void
     {
         // create channels for integrations
-        $types        = $settingsProvider->getSourceIntegrationTypes();
-        $integrations = $this->em->getRepository(Integration::class)
-            ->findBy(['type' => $types]);
+        $types = $this->container->get('oro_channel.provider.settings_provider')->getSourceIntegrationTypes();
+        $integrations = $manager->getRepository(Integration::class)->findBy(['type' => $types]);
 
         /** @var Integration $integration */
         foreach ($integrations as $integration) {
@@ -39,19 +30,14 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
             $builder->setName($integration->getName() . ' channel');
 
             $channel = $builder->getChannel();
-            $this->saveChannel($channel);
+            $manager->persist($channel);
+            $manager->flush();
 
             foreach ($channel->getEntities() as $entity) {
-                $this->fillChannelToEntity($channel, $entity, ['channel' => $integration]);
+                $this->fillChannelToEntity($manager, $channel, $entity, ['channel' => $integration]);
             }
 
-            $this->updateLifetimeForAccounts($channel);
+            $this->updateLifetimeForAccounts($manager, $channel);
         }
-    }
-
-    protected function saveChannel(Channel $channel)
-    {
-        $this->em->persist($channel);
-        $this->em->flush();
     }
 }

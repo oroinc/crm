@@ -7,25 +7,28 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData;
+use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData;
+use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\TaskBundle\Entity\Task;
 use Oro\Bundle\TaskBundle\Entity\TaskPriority;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Loads new Task entities.
  */
 class LoadTaskData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
-    const FIXTURES_COUNT = 20;
+    use ContainerAwareTrait;
 
-    /**
-     * @var array
-     */
-    protected static $fixtureSubjects = [
+    private const FIXTURES_COUNT = 20;
+
+    private static array $fixtureSubjects = [
         'Lorem ipsum dolor sit amet, consectetuer adipiscing elit',
         'Aenean commodo ligula eget dolor',
         'Aenean massa',
@@ -48,10 +51,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
         'Donec posuere vulputate'
     ];
 
-    /**
-     * @var array
-     */
-    protected static $fixtureDescriptions = [
+    private static array $fixtureDescriptions = [
         'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.',
         'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
         'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.',
@@ -75,40 +75,25 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
     ];
 
     /**
-     * @var ContainerInterface
+     * {@inheritDoc}
      */
-    protected $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
+            LoadContactData::class,
+            LoadAccountData::class,
+            LoadUsersData::class
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function load(ObjectManager $manager): void
     {
-        $this->container = $container;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function load(ObjectManager $om)
-    {
-        $this->persistDemoTasks($om);
-
-        $om->flush();
-
         $tokenStorage = $this->container->get('security.token_storage');
+        $this->persistDemoTasks($manager, $tokenStorage);
+        $manager->flush();
         $tokenStorage->setToken(null);
     }
 
@@ -116,21 +101,22 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function persistDemoTasks(ObjectManager $om)
+    private function persistDemoTasks(ObjectManager $manager, TokenStorageInterface $tokenStorage): void
     {
         $organization = $this->getReference('default_organization');
 
-        $priorities = $om->getRepository(TaskPriority::class)->findAll();
+        $priorities = $manager->getRepository(TaskPriority::class)->findAll();
         if (empty($priorities)) {
             return;
         }
-        $users = $om->getRepository(User::class)->findBy(['organization' => $organization]);
+        $users = $manager->getRepository(User::class)->findBy(['organization' => $organization]);
         if (empty($users)) {
             return;
         }
-        $accounts = $om->getRepository(Account::class)->findAll();
-        $contacts = $om->getRepository(Contact::class)->findAll();
-        $status = $om->getRepository(ExtendHelper::buildEnumValueClassName('task_status'))->find('open');
+
+        $accounts = $manager->getRepository(Account::class)->findAll();
+        $contacts = $manager->getRepository(Contact::class)->findAll();
+        $status = $manager->getRepository(ExtendHelper::buildEnumValueClassName('task_status'))->find('open');
 
         for ($i = 0; $i < self::FIXTURES_COUNT; ++$i) {
             /** @var User $assignedTo */
@@ -138,7 +124,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
             /** @var TaskPriority $taskPriority */
             $taskPriority = $this->getRandomEntity($priorities);
 
-            if ($om->getRepository(Task::class)->findOneBySubject(self::$fixtureSubjects[$i])) {
+            if ($manager->getRepository(Task::class)->findOneBySubject(self::$fixtureSubjects[$i])) {
                 // Task with this title is already exist
                 continue;
             }
@@ -160,58 +146,47 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
             if ($randomPath > 2) {
                 $contact = $this->getRandomEntity($contacts);
                 if ($contact) {
-                    $this->addActivityTarget($task, $contact);
+                    $this->addActivityTarget($task, $contact, $tokenStorage);
                 }
             }
 
             if ($randomPath > 3) {
                 $account = $this->getRandomEntity($accounts);
                 if ($account) {
-                    $this->addActivityTarget($task, $account);
+                    $this->addActivityTarget($task, $account, $tokenStorage);
                 }
             }
 
             if ($randomPath > 4) {
                 $user = $this->getRandomEntity($users);
                 if ($user) {
-                    $this->addActivityTarget($task, $user);
+                    $this->addActivityTarget($task, $user, $tokenStorage);
                 }
             }
 
-            $om->persist($task);
+            $manager->persist($task);
         }
     }
 
-    /**
-     * @param object[] $entities
-     *
-     * @return object|null
-     */
-    protected function getRandomEntity($entities)
+    private function getRandomEntity(array $entities): ?object
     {
         if (empty($entities)) {
             return null;
         }
 
-        return $entities[rand(0, count($entities) - 1)];
+        return $entities[rand(0, \count($entities) - 1)];
     }
 
-    /**
-     * @param Task   $task
-     * @param object $target
-     */
-    protected function addActivityTarget(Task $task, $target)
+    private function addActivityTarget(Task $task, object $target, TokenStorageInterface $tokenStorage): void
     {
-        if ($task->supportActivityTarget(get_class($target))) {
-            $tokenStorage = $this->container->get('security.token_storage');
+        if ($task->supportActivityTarget(\get_class($target))) {
             $user = $task->getOwner();
-            $token = new UsernamePasswordOrganizationToken(
+            $tokenStorage->setToken(new UsernamePasswordOrganizationToken(
                 $user,
                 'main',
                 $this->getReference('default_organization'),
                 $user->getUserRoles()
-            );
-            $tokenStorage->setToken($token);
+            ));
             $task->addActivityTarget($target);
         }
     }

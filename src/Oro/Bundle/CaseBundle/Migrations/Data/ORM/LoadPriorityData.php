@@ -7,48 +7,37 @@ use Oro\Bundle\CaseBundle\Entity\CasePriority;
 use Oro\Bundle\TranslationBundle\DataFixtures\AbstractTranslatableEntityFixture;
 
 /**
- * Loads case priority data
+ * Loads case priorities.
  */
 class LoadPriorityData extends AbstractTranslatableEntityFixture
 {
-    const CASE_PRIORITY_PREFIX = 'case_priority';
+    private const TRANSLATION_PREFIX = 'case_priority';
 
     /**
-     * @var array
+     * {@inheritDoc}
      */
-    protected $priorityNames = array(
-        1 => CasePriority::PRIORITY_LOW,
-        2 => CasePriority::PRIORITY_NORMAL,
-        3 => CasePriority::PRIORITY_HIGH,
-    );
-
-    /**
-     * Load entities to DB
-     */
-    protected function loadEntities(ObjectManager $manager)
+    protected function loadEntities(ObjectManager $manager): void
     {
-        $priorityRepository = $manager->getRepository(CasePriority::class);
-
+        $casePriorityRepository = $manager->getRepository(CasePriority::class);
         $translationLocales = $this->getTranslationLocales();
-
+        $names = [
+            CasePriority::PRIORITY_LOW => 1,
+            CasePriority::PRIORITY_NORMAL => 2,
+            CasePriority::PRIORITY_HIGH => 3
+        ];
         foreach ($translationLocales as $locale) {
-            foreach ($this->priorityNames as $order => $priorityName) {
+            foreach ($names as $priorityName => $order) {
                 /** @var CasePriority $casePriority */
-                $casePriority = $priorityRepository->findOneBy(array('name' => $priorityName));
+                $casePriority = $casePriorityRepository->findOneBy(['name' => $priorityName]);
                 if (!$casePriority) {
                     $casePriority = new CasePriority($priorityName);
                     $casePriority->setOrder($order);
                 }
 
-                // set locale and label
-                $priorityLabel = $this->translate($priorityName, static::CASE_PRIORITY_PREFIX, $locale);
-                $casePriority->setLocale($locale)
-                    ->setLabel($priorityLabel);
-
-                // save
+                $casePriority->setLocale($locale);
+                $casePriority->setLabel($this->translate($priorityName, self::TRANSLATION_PREFIX, $locale));
                 $manager->persist($casePriority);
             }
-
             $manager->flush();
         }
     }

@@ -8,44 +8,32 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\UserBundle\Entity\Group;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Load User groups for default organization
  */
 class LoadGroupData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /** @var ContainerInterface */
-    private $container;
+    use ContainerAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
-        return [
-            LoadBusinessUnitData::class
-        ];
+        return [LoadBusinessUnitData::class];
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function load(ObjectManager $manager): void
     {
-        $this->container = $container;
-    }
-
-    /**
-     * Load sample groups
-     */
-    public function load(ObjectManager $manager)
-    {
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
-        $organization   = $this->getReference('default_organization');
-        $defaultCrmBU   = $this->getBusinessUnit($manager, 'Acme, West');
-        $defaultCoreBU  = $this->getBusinessUnit($manager, 'Acme, East');
-        $defaultMainBU  = $this->getBusinessUnit($manager, 'Acme, General');
+        $organization = $this->getReference('default_organization');
+        $defaultCrmBU = $this->getBusinessUnit($manager, 'Acme, West');
+        $defaultCoreBU = $this->getBusinessUnit($manager, 'Acme, East');
+        $defaultMainBU = $this->getBusinessUnit($manager, 'Acme, General');
 
         $groups = [
             'Marketing Manager' =>  $defaultCrmBU,
@@ -55,22 +43,16 @@ class LoadGroupData extends AbstractFixture implements ContainerAwareInterface, 
             'Promotion Manager' => $defaultMainBU,
             'Executive Director' => $defaultMainBU,
         ];
-
         foreach ($groups as $group => $user) {
             $newGroup = new Group($group);
             $newGroup->setOwner($user);
             $newGroup->setOrganization($organization);
-            $entityManager->persist($newGroup);
+            $manager->persist($newGroup);
         }
-        $entityManager->flush();
+        $manager->flush();
     }
 
-    /**
-     * @param ObjectManager $manager
-     * @param $name
-     * @return BusinessUnit
-     */
-    protected function getBusinessUnit(ObjectManager $manager, $name)
+    private function getBusinessUnit(ObjectManager $manager, string $name): BusinessUnit
     {
         return $manager->getRepository(BusinessUnit::class)->findOneBy(['name' => $name]);
     }

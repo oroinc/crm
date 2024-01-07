@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Abstract class for demo data fixtures.
+ * The base class for demo data fixtures.
  */
 abstract class AbstractDemoFixture extends AbstractFixture implements ContainerAwareInterface
 {
@@ -87,11 +87,9 @@ abstract class AbstractDemoFixture extends AbstractFixture implements ContainerA
             $this->regionByCountryMap = $this->loadRegionByCountryMap();
         }
 
-        return isset($this->regionByCountryMap[$countryCode], $this->regionByCountryMap[$countryCode][$code])
-            ?
-            $this->em->getReference(Region::class, $this->regionByCountryMap[$countryCode][$code])
-            :
-            null;
+        return isset($this->regionByCountryMap[$countryCode][$code])
+            ? $this->em->getReference(Region::class, $this->regionByCountryMap[$countryCode][$code])
+            : null;
     }
 
     /**

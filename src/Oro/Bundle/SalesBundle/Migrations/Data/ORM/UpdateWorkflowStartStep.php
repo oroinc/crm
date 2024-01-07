@@ -9,14 +9,14 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowDefinition;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 
 /**
- * Update workflow start step for default lead and opportunity workflows
+ * Updates workflow start step for default lead and opportunity workflows.
  */
 class UpdateWorkflowStartStep extends AbstractFixture
 {
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         /** @var WorkflowItemRepository $workflowItemRepository */
         $workflowItemRepository = $manager->getRepository(WorkflowItem::class);

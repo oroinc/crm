@@ -11,95 +11,69 @@ use Oro\Bundle\EmailBundle\Entity\EmailOrigin;
 use Oro\Bundle\EmailBundle\Entity\EmailThread;
 use Oro\Bundle\EmailBundle\Entity\EmailUser;
 use Oro\Bundle\EmailBundle\Model\FolderType;
-use Oro\Bundle\EmailBundle\Tools\EmailOriginHelper;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Loads new Email entities.
  */
 class LoadEmailData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
-    /**
-     * @var string
-     */
-    protected $templates;
+    use ContainerAwareTrait;
 
     /**
-     * @var EmailEntityBuilder
+     * {@inheritDoc}
      */
-    protected $emailEntityBuilder;
-
-    /**
-     * @var EmailOriginHelper
-     */
-    protected $emailOriginHelper;
-
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
+    public function getDependencies(): array
     {
-        return ['Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        if (!$container) {
-            return;
-        }
-
-        $this->container = $container;
-        $this->emailEntityBuilder = $container->get('oro_email.email.entity.builder');
-        $this->emailOriginHelper = $container->get('oro_email.tools.email_origin_helper');
+        return [LoadContactData::class];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $om)
+    public function load(ObjectManager $manager): void
     {
-        $this->loadEmailTemplates();
-        $this->loadEmailsDemo($om);
-        $om->flush();
+        $templates = $this->loadEmailTemplates();
 
         $tokenStorage = $this->container->get('security.token_storage');
+        $this->loadEmailsDemo($manager, $tokenStorage, $templates);
         $tokenStorage->setToken(null);
     }
 
-    protected function loadEmailTemplates()
+    private function loadEmailTemplates(): array
     {
+        $templates = [];
         $dictionaryDir = $this->container
             ->get('kernel')
             ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
-
-        $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "emails.csv", "r");
+        $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. 'emails.csv', 'r');
         if ($handle) {
             $headers = [];
-            if (($data = fgetcsv($handle, 1000, ",")) !== false) {
+            if (($data = fgetcsv($handle, 1000, ',')) !== false) {
                 //read headers
                 $headers = $data;
             }
-            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                $this->templates[] = array_combine($headers, array_values($data));
+            while (($data = fgetcsv($handle, 1000, ',')) !== false) {
+                $templates[] = array_combine($headers, array_values($data));
             }
         }
+
+        return $templates;
     }
 
-    protected function loadEmailsDemo(ObjectManager $om)
-    {
-        $contacts = $om->getRepository(Contact::class)->findAll();
-        $contactCount = count($contacts);
+    private function loadEmailsDemo(
+        ObjectManager $manager,
+        TokenStorageInterface $tokenStorage,
+        array $templates
+    ): void {
+        $emailEntityBuilder = $this->container->get('oro_email.email.entity.builder');
+        $emailOriginHelper = $this->container->get('oro_email.tools.email_origin_helper');
+        $contacts = $manager->getRepository(Contact::class)->findAll();
+        $contactCount = \count($contacts);
 
         for ($i = 0; $i < 100; ++$i) {
             $contactRandom = rand(0, $contactCount - 1);
@@ -107,58 +81,59 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             /** @var Contact $contact */
             $contact = $contacts[$contactRandom];
             $owner = $contact->getOwner();
-            $origin = $this->emailOriginHelper->getEmailOrigin($owner->getEmail());
-            $randomTemplate = array_rand($this->templates);
+            $origin = $emailOriginHelper->getEmailOrigin($owner->getEmail());
+            $randomTemplate = array_rand($templates);
 
-            $emailUser = $this->addEmailUser($randomTemplate, $owner, $contact, $origin);
+            $emailUser = $this->addEmailUser(
+                $tokenStorage,
+                $emailEntityBuilder,
+                $templates,
+                $randomTemplate,
+                $owner,
+                $contact,
+                $origin
+            );
             if ($i % 7 == 0) {
                 $thread = new EmailThread();
-                $om->persist($thread);
+                $manager->persist($thread);
                 $emailUser->getEmail()->setThread($thread);
                 $randomNumber = rand(1, 7);
                 for ($j = 0; $j < $randomNumber; ++$j) {
-                    $eu = $this->addEmailUser($randomTemplate, $owner, $contact, $origin);
+                    $eu = $this->addEmailUser(
+                        $tokenStorage,
+                        $emailEntityBuilder,
+                        $templates,
+                        $randomTemplate,
+                        $owner,
+                        $contact,
+                        $origin
+                    );
                     $eu->getEmail()->setSubject('Re: ' . $emailUser->getEmail()->getSubject());
                     $eu->getEmail()->setThread($thread);
                     $eu->getEmail()->setHead(false);
                 }
             }
 
-            $this->emailEntityBuilder->getBatch()->persist($om);
+            $emailEntityBuilder->getBatch()->persist($manager);
         }
+        $manager->flush();
     }
 
-    /**
-     * @param User $user
-     */
-    protected function setSecurityContext($user)
-    {
-        $tokenStorage = $this->container->get('security.token_storage');
-        $token = new UsernamePasswordOrganizationToken(
-            $user,
-            'main',
-            $this->getReference('default_organization'),
-            $user->getUserRoles()
-        );
-        $tokenStorage->setToken($token);
-    }
-
-    /**
-     * @param $randomTemplate
-     * @param User $owner
-     * @param Contact $contact
-     * @param EmailOrigin $origin
-     *
-     * @return EmailUser
-     */
-    protected function addEmailUser($randomTemplate, $owner, $contact, $origin)
-    {
+    private function addEmailUser(
+        TokenStorageInterface $tokenStorage,
+        EmailEntityBuilder $emailEntityBuilder,
+        array $templates,
+        string $randomTemplate,
+        User $owner,
+        Contact $contact,
+        EmailOrigin $origin
+    ): EmailUser {
         $ownerEmail = $owner->getFullName() . ' <' . $owner->getEmail() . '>';
         $contactEmail
             = $contact->getFirstName() . ' ' . $contact->getLastName()
             . ' <' . $contact->getPrimaryEmail()->getEmail() . '>';
-        $emailUser = $this->emailEntityBuilder->emailUser(
-            $this->templates[$randomTemplate]['Subject'],
+        $emailUser = $emailEntityBuilder->emailUser(
+            $templates[$randomTemplate]['Subject'],
             $ownerEmail,
             $contactEmail,
             new \DateTime('now'),
@@ -166,15 +141,20 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             new \DateTime('now')
         );
 
-        $this->setSecurityContext($owner);
+        $tokenStorage->setToken(new UsernamePasswordOrganizationToken(
+            $owner,
+            'main',
+            $this->getReference('default_organization'),
+            $owner->getUserRoles()
+        ));
 
         $emailUser->addFolder($origin->getFolder(FolderType::SENT));
         $emailUser->setOrigin($origin);
         $emailUser->setOwner($owner);
         $emailUser->setOrganization($owner->getOrganization());
 
-        $emailBody = $this->emailEntityBuilder->body(
-            "Hi,\n" . $this->templates[$randomTemplate]['Text'],
+        $emailBody = $emailEntityBuilder->body(
+            "Hi,\n" . $templates[$randomTemplate]['Text'],
             false,
             true
         );

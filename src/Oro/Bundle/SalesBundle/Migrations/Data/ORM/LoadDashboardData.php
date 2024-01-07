@@ -8,25 +8,24 @@ use Oro\Bundle\DashboardBundle\Migrations\Data\ORM\AbstractDashboardFixture;
 use Oro\Bundle\DashboardBundle\Migrations\Data\ORM\LoadDashboardData as DependedLoadDashboardData;
 
 /**
- * Loads dashboard widgets data
+ * Adds widgets to "main" dashboard.
  */
 class LoadDashboardData extends AbstractDashboardFixture implements DependentFixtureInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [DependedLoadDashboardData::class];
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $mainDashboard = $this->findAdminDashboardModel($manager, 'main');
-
         if ($mainDashboard) {
             $mainDashboard
                 ->addWidget($this->createWidgetModel('opportunities_by_lead_source_chart', [1, 80]))
@@ -34,7 +33,6 @@ class LoadDashboardData extends AbstractDashboardFixture implements DependentFix
                 ->addWidget($this->createWidgetModel('campaigns_leads', [1, 130]))
                 ->addWidget($this->createWidgetModel('campaigns_opportunity', [0, 150]))
                 ->addWidget($this->createWidgetModel('campaigns_by_close_revenue', [1, 150]));
-
             $manager->flush();
         }
     }

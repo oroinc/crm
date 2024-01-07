@@ -10,14 +10,14 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
- * Updates sales entities with organization.
+ * Sets a default organization to Lead and Opportunity entities.
  */
 class UpdateSalesEntitiesWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [LoadOrganizationAndBusinessUnitData::class];
     }
@@ -25,7 +25,7 @@ class UpdateSalesEntitiesWithOrganization extends UpdateWithOrganization impleme
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $this->update($manager, Lead::class);
         $this->update($manager, Opportunity::class);

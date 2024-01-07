@@ -13,46 +13,42 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
 /**
- * Loads Business Customers
+ * Loads B2B customers.
  */
 class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtureInterface
 {
-    /** @var array */
-    protected $accountIds;
-
-    /** @var int */
-    protected $accountsCount;
+    private ?array $accountIds = null;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData',
+            LoadUsersData::class,
+            LoadAccountData::class,
+            LoadChannelData::class
         ];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $dictionaryDir = $this->container
             ->get('kernel')
             ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
 
-        $handle  = fopen($dictionaryDir . DIRECTORY_SEPARATOR . "accounts.csv", "r");
-        $headers = fgetcsv($handle, 1000, ",");
+        $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR . 'accounts.csv', 'r');
+        $headers = fgetcsv($handle, 1000, ',');
 
-        $companies          = [];
+        $companies = [];
         $customersPersisted = 0;
-        $channel            = $this->getChannel();
-        $organization       = $manager->getRepository(Organization::class)->getFirst();
+        $channel = $this->getChannel();
+        $organization = $manager->getRepository(Organization::class)->getFirst();
 
-        while (($data = fgetcsv($handle, 1000, ",")) !== false && $customersPersisted < 25) {
+        while (($data = fgetcsv($handle, 1000, ',')) !== false && $customersPersisted < 25) {
             $data = array_combine($headers, array_values($data));
 
             if (!isset($companies[$data['Company']])) {
@@ -69,16 +65,9 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         $this->em->flush();
     }
 
-    /**
-     * @param Organization $organization
-     * @param array        $data
-     * @param Channel|null $channel
-     *
-     * @return B2bCustomer
-     */
-    protected function createCustomer(Organization $organization, $data, Channel $channel = null)
+    private function createCustomer(Organization $organization, array $data, ?Channel $channel): B2bCustomer
     {
-        $address  = new Address();
+        $address = new Address();
         $customer = new B2bCustomer();
 
         $customer->setName($data['Company']);
@@ -113,53 +102,34 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         return $customer;
     }
 
-    /**
-     * @param int $identifier
-     *
-     * @return Account
-     */
-    protected function getAccountReference($identifier)
+    private function getAccountReference(int $id): Account
     {
-        return $this->em->getReference(Account::class, $identifier);
+        return $this->em->getReference(Account::class, $id);
     }
 
-    /**
-     * @return null|Channel
-     */
-    private function getChannel()
+    private function getChannel(): ?Channel
     {
         if ($this->hasReference('default_channel')) {
             return $this->getReference('default_channel');
-        } else {
-            return $this->em->getRepository(Channel::class)->createQueryBuilder('c')
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getResult();
         }
+
+        return $this->em->getRepository(Channel::class)->createQueryBuilder('c')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
     }
 
-    /**
-     * @param Organization $organization
-     * @return Account
-     */
-    private function getAccount(Organization $organization)
+    private function getAccount(Organization $organization): Account
     {
-        if (empty($this->accountIds)) {
+        if (null === $this->accountIds) {
             $this->accountIds = $this->loadAccountsIds($organization);
             shuffle($this->accountIds);
-            $this->accountsCount = count($this->accountIds) - 1;
         }
 
-        $random = rand(0, $this->accountsCount);
-
-        return $this->getAccountReference($this->accountIds[$random]);
+        return $this->getAccountReference($this->accountIds[rand(0, \count($this->accountIds) - 1)]);
     }
 
-    /**
-     * @param Organization $organization
-     * @return array
-     */
-    private function loadAccountsIds(Organization $organization)
+    private function loadAccountsIds(Organization $organization): array
     {
         $items = $this->em->createQueryBuilder()
             ->from(Account::class, 'a')
