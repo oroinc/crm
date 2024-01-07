@@ -3,112 +3,103 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
-use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
-use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SecurityBundle\Authentication\Token\OrganizationToken;
-use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareInterface
+class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
+    use ContainerAwareTrait;
+
     public const CUSTOMER_NAME = 'b2bCustomer name';
-    public const CHANNEL_TYPE  = 'b2b';
-    public const CHANNEL_NAME  = 'b2b Channel';
-    public const ACCOUNT_NAME  = 'some account name';
-
-    protected ObjectManager $em;
-    private BuilderFactory $factory;
-    private User $user;
-    private Organization $organization;
-    private AccountCustomerManager $accountCustomerManager;
-    private TokenStorageInterface $securityToken;
+    public const CHANNEL_TYPE = 'b2b';
+    public const CHANNEL_NAME = 'b2b Channel';
+    public const ACCOUNT_NAME = 'some account name';
 
     /**
      * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null): void
+    public function getDependencies(): array
     {
-        $this->factory = $container->get('oro_channel.builder.factory');
-        $this->accountCustomerManager = $container->get('oro_sales.manager.account_customer');
-        $this->securityToken = $container->get('security.token_storage');
+        return [LoadOrganization::class];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $this->em = $manager;
-        $this->organization = $manager->getRepository(Organization::class)->getFirst();
-        $this->securityToken->setToken(new OrganizationToken($this->organization));
-
-        $this->createChannel();
-        $this->createAccount();
-        $this->createContact();
-        $this->createB2bCustomer();
-        $this->createLead();
-        $this->createOpportunity();
+        $tokenStorage = $this->container->get('security.token_storage');
+        $tokenStorage->setToken(new OrganizationToken($this->getReference(LoadOrganization::ORGANIZATION)));
+        $this->createChannel($manager);
+        $this->createAccount($manager);
+        $this->createContact($manager);
+        $this->createB2bCustomer($manager);
+        $this->createLead($manager);
+        $this->createOpportunity($manager);
+        $tokenStorage->setToken(null);
     }
 
-    private function createAccount(): void
+    private function createAccount(ObjectManager $manager): void
     {
         $account = new Account();
         $account->setName(self::ACCOUNT_NAME);
-        $account->setOrganization($this->organization);
+        $account->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
 
-        $this->em->persist($account);
-        $this->em->flush();
+        $manager->persist($account);
+        $manager->flush();
 
         $this->setReference('default_account', $account);
     }
 
-    private function createContact(): void
+    private function createContact(ObjectManager $manager): void
     {
         $contact = new Contact();
         $contact->setFirstName('John');
         $contact->setLastName('Doe');
-        $contact->setOrganization($this->organization);
+        $contact->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
 
-        $this->em->persist($contact);
-        $this->em->flush();
+        $manager->persist($contact);
+        $manager->flush();
 
         $this->setReference('default_contact', $contact);
     }
 
-    private function createB2bCustomer(): void
+    private function createB2bCustomer(ObjectManager $manager): void
     {
         $customer = new B2bCustomer();
-        $account  = $this->getReference('default_account');
+        $account = $this->getReference('default_account');
         $customer->setAccount($account);
         $customer->setName(self::CUSTOMER_NAME);
         $customer->setDataChannel($this->getReference('default_channel'));
-        $customer->setOrganization($this->organization);
-        $customer->setBillingAddress($this->getBillingAddress());
-        $customer->setShippingAddress($this->getShippingAddress());
+        $customer->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
+        $customer->setBillingAddress($this->getBillingAddress($manager));
+        $customer->setShippingAddress($this->getShippingAddress($manager));
 
-        $this->em->persist($customer);
-        $this->em->flush();
+        $manager->persist($customer);
+        $manager->flush();
 
         $this->setReference('default_b2bcustomer', $customer);
-        $accountCustomer = $this->accountCustomerManager->getAccountCustomerByTarget($customer);
-        $this->setReference('default_account_customer', $accountCustomer);
+        $this->setReference(
+            'default_account_customer',
+            $this->container->get('oro_sales.manager.account_customer')->getAccountCustomerByTarget($customer)
+        );
     }
 
-    private function createLead(): void
+    private function createLead(ObjectManager $manager): void
     {
         $lead = new Lead();
         $lead->setName('Lead name');
@@ -118,7 +109,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $email = new LeadEmail('email@email.com');
         $email->setPrimary(true);
         $lead->addEmail($email);
-        $lead->setOrganization($this->organization);
+        $lead->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
 
         $lead2 = new Lead();
         $lead2->setName('Lead name 2');
@@ -128,7 +119,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $email = new LeadEmail('email2@email.com');
         $email->setPrimary(true);
         $lead2->addEmail($email);
-        $lead2->setOrganization($this->organization);
+        $lead2->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
 
         $lead3 = new Lead();
         $lead3->setName('Lead name 3');
@@ -138,19 +129,19 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $email = new LeadEmail('email3@email.com');
         $email->setPrimary(true);
         $lead3->addEmail($email);
-        $lead3->setOrganization($this->organization);
+        $lead3->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
 
-        $this->em->persist($lead);
-        $this->em->persist($lead2);
-        $this->em->persist($lead3);
-        $this->em->flush();
+        $manager->persist($lead);
+        $manager->persist($lead2);
+        $manager->persist($lead3);
+        $manager->flush();
 
         $this->setReference('default_lead', $lead);
         $this->setReference('second_lead', $lead2);
         $this->setReference('third_lead', $lead3);
     }
 
-    private function createOpportunity(): void
+    private function createOpportunity(ObjectManager $manager): void
     {
         $opportunity = new Opportunity();
         $opportunity->setName('opname');
@@ -158,69 +149,59 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $budgetAmount = MultiCurrency::create(50.00, 'USD');
         $opportunity->setBudgetAmount($budgetAmount);
         $opportunity->setProbability(0.1);
-        $opportunity->setOrganization($this->organization);
+        $opportunity->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
 
-        $this->em->persist($opportunity);
-        $this->em->flush();
+        $manager->persist($opportunity);
+        $manager->flush();
 
         $this->setReference('default_opportunity', $opportunity);
     }
 
-    private function createChannel(): void
+    private function createChannel(ObjectManager $manager): void
     {
-        $channel = $this
-            ->factory
+        $channel = $this->container->get('oro_channel.builder.factory')
             ->createBuilder()
             ->setName(self::CHANNEL_NAME)
             ->setChannelType(self::CHANNEL_TYPE)
             ->setStatus(Channel::STATUS_ACTIVE)
-            ->setOwner($this->organization)
+            ->setOwner($this->getReference(LoadOrganization::ORGANIZATION))
             ->setEntities()
             ->getChannel();
 
-        $this->em->persist($channel);
-        $this->em->flush();
+        $manager->persist($channel);
+        $manager->flush();
 
         $this->setReference('default_channel', $channel);
     }
 
-    private function getUser(): User
-    {
-        if (empty($this->user)) {
-            $this->user = $this->em->getRepository(User::class)->findOneBy(['username' => 'admin']);
-        }
-
-        return $this->user;
-    }
-
-    private function getBillingAddress(): Address
+    private function getBillingAddress(ObjectManager $manager): Address
     {
         $address = new Address();
-        $address->setCountry($this->getCounty())
-            ->setStreet('1215 Caldwell Road')
-            ->setCity('Rochester')
-            ->setPostalCode('14608')
-            ->setRegionText('Arizona1')
-            ->setOrganization('Test Org');
+        $address->setCountry($this->getCounty($manager));
+        $address->setStreet('1215 Caldwell Road');
+        $address->setCity('Rochester');
+        $address->setPostalCode('14608');
+        $address->setRegionText('Arizona1');
+        $address->setOrganization('Test Org');
 
         return $address;
     }
 
-    private function getShippingAddress(): Address
+    private function getShippingAddress(ObjectManager $manager): Address
     {
         $address = new Address();
-        $address->setCountry($this->getCounty())
-            ->setStreet('1215 Caldwell Road')
-            ->setCity('Rochester')
-            ->setPostalCode('14608')
-            ->setRegionText('Arizona1')
-            ->setOrganization('Test Org');
+        $address->setCountry($this->getCounty($manager));
+        $address->setStreet('1215 Caldwell Road');
+        $address->setCity('Rochester');
+        $address->setPostalCode('14608');
+        $address->setRegionText('Arizona1');
+        $address->setOrganization('Test Org');
 
         return $address;
     }
 
-    private function getCounty(): Country
+    private function getCounty(ObjectManager $manager): Country
     {
-        return $this->em->find(Country::class, 'IM');
+        return $manager->find(Country::class, 'IM');
     }
 }

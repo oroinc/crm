@@ -3,68 +3,69 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 
-class LoadOpportunityByStatusWidgetFixture extends AbstractFixture
+class LoadOpportunityByStatusWidgetFixture extends AbstractFixture implements DependentFixtureInterface
 {
     /**
-     * @var Organization
+     * {@inheritDoc}
      */
-    protected $organization;
-    /**
-     * @var ObjectManager
-     */
-    protected $em;
-    protected function createOpportunities()
+    public function getDependencies(): array
     {
-        $createdAt = new \DateTime('2016-12-28 12:03:10', new \DateTimeZone('UTC'));
-        for ($i = 1; $i < 4; $i++) {
-            $this->createOpportunity($createdAt, $i);
-            $createdAt->add(new \DateInterval('P1D'));
-        }
-
-        //insert one opportunity for previous months
-        $createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->createOpportunity($createdAt, ++$i);
+        return [LoadOrganization::class];
     }
 
-    public function createOpportunity($createdAt, $id)
-    {
-        $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
-        $openStatus = $this->em->getRepository($className)->find(ExtendHelper::buildEnumValueId('in_progress'));
-        $opportunity = new Opportunity();
-        $opportunity->setName('name '.$id);
-        $opportunity->setStatus($openStatus);
-        $opportunity->setOrganization($this->organization);
-        $this->em->persist($opportunity);
-        $opportunity->setCreatedAt($createdAt);
-        $this->em->flush();
-    }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $this->organization = $manager->getRepository(Organization::class)->getFirst();
-        $this->em = $manager;
-        $this->createOpportunities();
+        $this->createOpportunities($manager);
+
         $dashboard = new Dashboard();
         $dashboard->setName('dashboard');
         $opportunityByStatusWidget = new Widget();
-        $opportunityByStatusWidget
-            ->setDashboard($dashboard)
-            ->setName('opportunities_by_state')
-            ->setLayoutPosition([1, 1]);
+        $opportunityByStatusWidget->setDashboard($dashboard);
+        $opportunityByStatusWidget->setName('opportunities_by_state');
+        $opportunityByStatusWidget->setLayoutPosition([1, 1]);
         $dashboard->addWidget($opportunityByStatusWidget);
         if (!$this->hasReference('widget_opportunity_by_status')) {
             $this->setReference('widget_opportunity_by_status', $opportunityByStatusWidget);
         }
         $manager->persist($dashboard);
+        $manager->flush();
+    }
+
+    private function createOpportunities(ObjectManager $manager): void
+    {
+        $createdAt = new \DateTime('2016-12-28 12:03:10', new \DateTimeZone('UTC'));
+        for ($i = 1; $i < 4; $i++) {
+            $this->createOpportunity($manager, $createdAt, $i);
+            $createdAt->add(new \DateInterval('P1D'));
+        }
+
+        //insert one opportunity for previous months
+        $createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->createOpportunity($manager, $createdAt, ++$i);
+    }
+
+    private function createOpportunity(ObjectManager $manager, \DateTime $createdAt, int $id): void
+    {
+        $opportunity = new Opportunity();
+        $opportunity->setName('name '.$id);
+        $opportunity->setStatus(
+            $manager->getRepository(ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE))
+                ->find(ExtendHelper::buildEnumValueId('in_progress'))
+        );
+        $opportunity->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
+        $manager->persist($opportunity);
+        $opportunity->setCreatedAt($createdAt);
         $manager->flush();
     }
 }

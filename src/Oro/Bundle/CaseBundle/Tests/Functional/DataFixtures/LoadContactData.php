@@ -3,46 +3,45 @@
 namespace Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser;
 
-class LoadContactData extends AbstractFixture
+class LoadContactData extends AbstractFixture implements DependentFixtureInterface
 {
-    /**
-     * @var array
-     */
-    protected $contactsData = array(
-        array(
+    private array $contactsData = [
+        'oro_case_contact' => [
             'firstName' => 'Daniel',
             'lastName'  => 'Case',
-            'email'     => 'daniel.case@example.com',
-            'reference' => 'oro_case_contact'
-        )
-    );
+            'email'     => 'daniel.case@example.com'
+        ]
+    ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function getDependencies(): array
     {
-        $adminUser = $manager->getRepository(User::class)->findOneByUsername('admin');
-        $organization = $manager->getRepository(Organization::class)->getFirst();
+        return [LoadOrganization::class, LoadUser::class];
+    }
 
-        foreach ($this->contactsData as $contactData) {
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $manager): void
+    {
+        foreach ($this->contactsData as $reference => $contactData) {
             $contact = new Contact();
-            $contact->setOwner($adminUser);
-            $contact->setOrganization($organization);
+            $contact->setOwner($this->getReference(LoadUser::USER));
+            $contact->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
             $contact->setFirstName($contactData['firstName']);
             $contact->setLastName($contactData['lastName']);
             $contact->setEmail($contactData['email']);
-
             $manager->persist($contact);
-
-            $this->setReference($contactData['reference'], $contact);
+            $this->setReference($reference, $contact);
         }
-
         $manager->flush();
     }
 }

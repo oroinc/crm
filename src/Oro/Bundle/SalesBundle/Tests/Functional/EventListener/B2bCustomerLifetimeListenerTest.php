@@ -5,20 +5,24 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\EventListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 
 class B2bCustomerLifetimeListenerTest extends WebTestCase
 {
     protected function setUp(): void
     {
         $this->initClient();
-        $this->loadFixtures([LoadSalesBundleFixtures::class]);
+        $this->loadFixtures([LoadSalesBundleFixtures::class, LoadOrganization::class]);
+    }
+
+    private function getEntityManager(): EntityManagerInterface
+    {
+        return self::getContainer()->get('doctrine')->getManager();
     }
 
     public function testCreateAffectsLifetimeIfValuable(): Opportunity
@@ -42,8 +46,10 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
         $this->assertEquals(0, $b2bCustomer->getLifetime());
 
-        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
-        $opportunity2->setStatus($em->getReference($enumClass, 'won'));
+        $opportunity2->setStatus($em->getReference(
+            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
+            'won'
+        ));
         $em->persist($opportunity2);
         $em->flush();
         $em->refresh($b2bCustomer);
@@ -60,8 +66,10 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     {
         $em = $this->getEntityManager();
         $b2bCustomer = $opportunity->getCustomerAssociation()->getTarget();
-        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
-        $opportunity->setStatus($em->getReference($enumClass, 'lost'));
+        $opportunity->setStatus($em->getReference(
+            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
+            'lost'
+        ));
 
         $em->persist($opportunity);
         $em->flush();
@@ -69,7 +77,10 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
         $this->assertEquals(0, $b2bCustomer->getLifetime());
 
-        $opportunity->setStatus($em->getReference($enumClass, 'won'));
+        $opportunity->setStatus($em->getReference(
+            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
+            'won'
+        ));
         $closeRevenue = MultiCurrency::create(100, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
 
@@ -100,8 +111,9 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
         $this->assertEquals(0, $newCustomer->getLifetime());
 
-        $accountCustomer = $this->getAccountCustomerManager()->getAccountCustomerByTarget($newCustomer);
-        $opportunity->setCustomerAssociation($accountCustomer);
+        $opportunity->setCustomerAssociation(
+            self::getContainer()->get('oro_sales.manager.account_customer')->getAccountCustomerByTarget($newCustomer)
+        );
         $em->persist($opportunity);
         $em->flush();
         $em->refresh($b2bCustomer);
@@ -133,13 +145,15 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     public function testRemoveOpportunityFromB2bCustomer()
     {
         $em = $this->getEntityManager();
-        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         // add an opportunity to the database
         $opportunity = new Opportunity();
         $opportunity->setName('unset_b2bcustomer_test');
         $closeRevenue = MultiCurrency::create(50, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
-        $opportunity->setStatus($em->getReference($enumClass, 'won'));
+        $opportunity->setStatus($em->getReference(
+            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
+            'won'
+        ));
         $opportunity->setCustomerAssociation($this->getReference('default_account_customer'));
 
         /** @var B2bCustomer $b2bCustomer */
@@ -167,8 +181,9 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     public function testRemovedB2bCustomer()
     {
         $em = $this->getEntityManager();
-        $organization = $em->getRepository(Organization::class)->getFirst();
-        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
+
+        /** @var Customer $customer */
+        $customer = $this->getReference('default_account_customer');
 
         $opportunity = new Opportunity();
         $opportunity->setName('remove_b2bcustomer_test');
@@ -177,11 +192,11 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $opportunity->setCloseRevenue($closeRevenue);
         $opportunity->setBudgetAmount($budgetAmount);
         $opportunity->setProbability(0.1);
-        $opportunity->setStatus($em->getReference($enumClass, 'won'));
-        $opportunity->setOrganization($organization);
-        /** @var Customer $customer */
-        $customer = $this->getReference('default_account_customer');
-
+        $opportunity->setStatus($em->getReference(
+            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
+            'won'
+        ));
+        $opportunity->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
         $opportunity->setCustomerAssociation($customer);
 
         /** @var B2bCustomer $b2bCustomer */
@@ -192,15 +207,5 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
         $em->remove($b2bCustomer);
         $em->flush();
-    }
-
-    private function getEntityManager(): EntityManagerInterface
-    {
-        return $this->getContainer()->get('doctrine')->getManager();
-    }
-
-    private function getAccountCustomerManager(): AccountCustomerManager
-    {
-        return $this->getContainer()->get('oro_sales.manager.account_customer');
     }
 }

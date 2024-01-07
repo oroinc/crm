@@ -3,45 +3,39 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 
-class LoadChannel extends AbstractFixture
+class LoadChannel extends AbstractFixture implements DependentFixtureInterface
 {
-    /** @var ObjectManager */
-    protected $em;
-
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function getDependencies(): array
     {
-        $this->em = $manager;
-        $date = new \DateTime('now');
-
-        $channel = new Channel();
-        $channel
-            ->setName('some name')
-            ->setOwner($this->loadOwner())
-            ->setChannelType('testType')
-            ->setCreatedAt($date)
-            ->setUpdatedAt($date)
-            ->setCustomerIdentity('test1')
-            ->setEntities(['test1', 'test2']);
-
-        $manager->persist($channel);
-
-        $this->setReference('default_channel', $channel);
-
-        $manager->flush();
+        return [LoadOrganization::class];
     }
 
     /**
-     * @return Organization|null
+     * {@inheritDoc}
      */
-    protected function loadOwner()
+    public function load(ObjectManager $manager): void
     {
-        return $this->em->getRepository(Organization::class)->getFirst();
+        $date = new \DateTime('now');
+
+        $channel = new Channel();
+        $channel->setName('some name');
+        $channel->setOwner($this->getReference(LoadOrganization::ORGANIZATION));
+        $channel->setChannelType('testType');
+        $channel->setCreatedAt($date);
+        $channel->setUpdatedAt($date);
+        $channel->setCustomerIdentity('test1');
+        $channel->setEntities(['test1', 'test2']);
+        $manager->persist($channel);
+        $this->setReference('default_channel', $channel);
+
+        $manager->flush();
     }
 }

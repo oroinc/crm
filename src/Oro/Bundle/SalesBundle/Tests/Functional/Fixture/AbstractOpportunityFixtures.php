@@ -3,39 +3,50 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-abstract class AbstractOpportunityFixtures extends AbstractFixture implements ContainerAwareInterface
+abstract class AbstractOpportunityFixtures extends AbstractFixture implements
+    ContainerAwareInterface,
+    DependentFixtureInterface
 {
     use ContainerAwareTrait;
 
     private ?User $user = null;
     private ?Organization $organization = null;
-    protected ObjectManager $em;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDependencies(): array
+    {
+        return [LoadOrganization::class, LoadUser::class];
+    }
 
     /**
      * {@inheritDoc}
      */
     public function load(ObjectManager $manager): void
     {
-        $this->em = $manager;
-        $this->createChannel();
-        $this->createAccount();
-        $this->createB2bCustomer();
-        $this->createOpportunity();
+        $this->createChannel($manager);
+        $this->createAccount($manager);
+        $this->createB2bCustomer($manager);
+        $this->createOpportunity($manager);
     }
 
     protected function getUser(): User
     {
         if (null === $this->user) {
-            $this->user = $this->em->getRepository(User::class)->findOneBy(['username' => 'admin']);
+            $this->user = $this->getReference(LoadUser::USER);
         }
 
         return $this->user;
@@ -44,54 +55,57 @@ abstract class AbstractOpportunityFixtures extends AbstractFixture implements Co
     protected function getOrganization(): Organization
     {
         if (null === $this->organization) {
-            $this->organization = $this->em->getRepository(Organization::class)->getFirst();
+            $this->organization = $this->getReference(LoadOrganization::ORGANIZATION);
         }
 
         return $this->organization;
     }
 
-    protected function createChannel(): void
+    protected function createChannel(ObjectManager $manager): void
     {
-        $factory = $this->container->get('oro_channel.builder.factory');
-        $channel = $factory->createBuilder()
+        $channel = $this->container->get('oro_channel.builder.factory')
+            ->createBuilder()
             ->setName('Default channel')
             ->setChannelType('b2b')
             ->setStatus(Channel::STATUS_ACTIVE)
             ->setOwner($this->organization)
             ->setEntities()
             ->getChannel();
-        $this->em->persist($channel);
-        $this->em->flush();
+
+        $manager->persist($channel);
+        $manager->flush();
 
         $this->setReference('default_channel', $channel);
     }
 
-    protected function createB2bCustomer(): void
+    protected function createB2bCustomer(ObjectManager $manager): void
     {
         $customer = new B2bCustomer();
-        $account  = $this->getReference('default_account');
-        $customer->setAccount($account);
+        $customer->setAccount($this->getReference('default_account'));
         $customer->setName('Default customer');
         $customer->setOrganization($this->getOrganization());
         $customer->setDataChannel($this->getReference('default_channel'));
-        $this->em->persist($customer);
-        $this->em->flush();
 
-        $accountManager = $this->container->get('oro_sales.manager.account_customer');
-        $accountCustomer = $accountManager->getAccountCustomerByTarget($customer);
-        $this->setReference('default_account_customer', $accountCustomer);
+        $manager->persist($customer);
+        $manager->flush();
+
+        $this->setReference(
+            'default_account_customer',
+            $this->container->get('oro_sales.manager.account_customer')->getAccountCustomerByTarget($customer)
+        );
     }
 
-    protected function createAccount(): void
+    protected function createAccount(ObjectManager $manager): void
     {
         $account = new Account();
         $account->setName('Default account');
         $account->setOrganization($this->getOrganization());
-        $this->em->persist($account);
-        $this->em->flush();
+
+        $manager->persist($account);
+        $manager->flush();
 
         $this->setReference('default_account', $account);
     }
 
-    abstract protected function createOpportunity(): void;
+    abstract protected function createOpportunity(ObjectManager $manager): void;
 }

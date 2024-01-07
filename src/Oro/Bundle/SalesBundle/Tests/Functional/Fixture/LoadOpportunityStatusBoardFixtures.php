@@ -3,56 +3,48 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 
 /**
  * Fixtures for opportunity status board test
  */
-class LoadOpportunityStatusBoardFixtures extends AbstractFixture
+class LoadOpportunityStatusBoardFixtures extends AbstractFixture implements DependentFixtureInterface
 {
-    const OPPORTUNITY_COUNT = 25;
-    const STATUSES_COUNT = 4;
-
-    /** @var ObjectManager */
-    protected $em;
-
-    /** @var Organization */
-    protected $organization;
+    private const OPPORTUNITY_COUNT = 25;
+    private const STATUSES_COUNT = 4;
 
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function getDependencies(): array
     {
-        $this->em = $manager;
-        $this->organization = $manager->getRepository(Organization::class)->getFirst();
-        $this->createOpportunities();
+        return [LoadOrganization::class];
     }
 
     /**
-     * @return $this
+     * {@inheritDoc}
      */
-    protected function createOpportunities()
+    public function load(ObjectManager $manager): void
     {
         $opportunityStatuses = ['in_progress', 'lost', 'needs_analysis', 'won'];
         for ($i = 0; $i < self::OPPORTUNITY_COUNT; $i++) {
             $opportunity = new Opportunity();
             $opportunity->setName('opname_' . $i);
-            $budgetAmount = MultiCurrency::create(50.00, 'USD');
-            $opportunity->setBudgetAmount($budgetAmount);
+            $opportunity->setBudgetAmount(MultiCurrency::create(50.00, 'USD'));
             $opportunity->setProbability(0.1);
-            $opportunity->setOrganization($this->organization);
+            $opportunity->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
             $statusName = $opportunityStatuses[$i % self::STATUSES_COUNT];
-            $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
-            $opportunity->setStatus($this->em->getReference($enumClass, $statusName));
-            $this->em->persist($opportunity);
-            $this->em->flush();
+            $opportunity->setStatus($manager->getReference(
+                ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
+                $statusName
+            ));
+            $manager->persist($opportunity);
+            $manager->flush();
         }
-
-        return $this;
     }
 }

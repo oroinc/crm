@@ -23,11 +23,9 @@ class LoadCampaignByCloseRevenueWidgetFixture extends AbstractFixture implements
             ->setName('campaigns_by_close_revenue')
             ->setLayoutPosition([1, 1]);
         $dashboard->addWidget($closeRevenueWidget);
-
         if (!$this->hasReference('widget_campaigns_by_close_revenue')) {
             $this->setReference('widget_campaigns_by_close_revenue', $closeRevenueWidget);
         }
-
         $manager->persist($closeRevenueWidget);
         $manager->flush();
     }
