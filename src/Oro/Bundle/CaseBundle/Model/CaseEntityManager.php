@@ -11,6 +11,9 @@ use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+/**
+ * Simplifies work with CaseEntity and CaseComment entities
+ */
 class CaseEntityManager
 {
     /** @var ManagerRegistry */
@@ -49,7 +52,7 @@ class CaseEntityManager
      */
     protected function getDefaultCaseStatus()
     {
-        return $this->registry->getManager()->find('OroCaseBundle:CaseStatus', CaseStatus::STATUS_OPEN);
+        return $this->registry->getManager()->find(CaseStatus::class, CaseStatus::STATUS_OPEN);
     }
 
     /**
@@ -57,7 +60,7 @@ class CaseEntityManager
      */
     protected function getDefaultCasePriority()
     {
-        return $this->registry->getManager()->find('OroCaseBundle:CasePriority', CasePriority::PRIORITY_NORMAL);
+        return $this->registry->getManager()->find(CasePriority::class, CasePriority::PRIORITY_NORMAL);
     }
 
     /**
@@ -65,7 +68,7 @@ class CaseEntityManager
      */
     protected function getDefaultCaseSource()
     {
-        return $this->registry->getManager()->find('OroCaseBundle:CaseSource', CaseSource::SOURCE_OTHER);
+        return $this->registry->getManager()->find(CaseSource::class, CaseSource::SOURCE_OTHER);
     }
 
     /**
@@ -104,7 +107,7 @@ class CaseEntityManager
     {
         $order = (strtoupper($order) === 'ASC') ? 'ASC' : 'DESC';
         /** @var EntityRepository $repository */
-        $repository   = $this->registry->getRepository('OroCaseBundle:CaseComment');
+        $repository   = $this->registry->getRepository(CaseComment::class);
         $queryBuilder = $repository->createQueryBuilder('comment')
             ->where('comment.case = :case')
             ->orderBy('comment.createdAt', $order)

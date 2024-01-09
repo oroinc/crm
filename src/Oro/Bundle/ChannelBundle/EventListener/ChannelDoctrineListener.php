@@ -14,6 +14,7 @@ use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\ChannelBundle\Entity\Manager\LifetimeHistoryStatusUpdateManager;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 
@@ -75,12 +76,12 @@ class ChannelDoctrineListener
                 /** @var Account $account */
                 $account = is_object($data['account'])
                     ? $data['account']
-                    : $this->em->getReference('OroAccountBundle:Account', $data['account']);
+                    : $this->em->getReference(Account::class, $data['account']);
 
                 /** @var Channel $channel */
                 $channel = is_object($data['channel'])
                     ? $data['channel']
-                    : $this->em->getReference('OroChannelBundle:Channel', $data['channel']);
+                    : $this->em->getReference(Channel::class, $data['channel']);
 
                 $entity      = $this->createHistoryEntry($account, $channel);
                 $toOutDate[] = [$account, $channel, $entity];
@@ -120,7 +121,7 @@ class ChannelDoctrineListener
      */
     public function initializeFromEventArgs($args)
     {
-        $this->em  = $args->getEntityManager();
+        $this->em  = $args->getObjectManager();
         $this->uow = $this->em->getUnitOfWork();
     }
 
@@ -265,7 +266,7 @@ class ChannelDoctrineListener
     protected function getCustomerRepository()
     {
         if (null === $this->customerRepo) {
-            $this->customerRepo = $this->em->getRepository('OroSalesBundle:Customer');
+            $this->customerRepo = $this->em->getRepository(Customer::class);
         }
 
         return $this->customerRepo;

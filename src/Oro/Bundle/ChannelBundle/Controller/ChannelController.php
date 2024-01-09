@@ -29,7 +29,7 @@ class ChannelController extends AbstractController
      *      id="oro_channel_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroChannelBundle:Channel"
+     *      class="Oro\Bundle\ChannelBundle\Entity\Channel"
      * )
      * @Template()
      */
@@ -44,7 +44,7 @@ class ChannelController extends AbstractController
      *      id="oro_channel_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroChannelBundle:Channel"
+     *      class="Oro\Bundle\ChannelBundle\Entity\Channel"
      * )
      * @Template("@OroChannel/Channel/update.html.twig")
      */
@@ -59,7 +59,7 @@ class ChannelController extends AbstractController
      *      id="oro_channel_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroChannelBundle:Channel"
+     *      class="Oro\Bundle\ChannelBundle\Entity\Channel"
      * )
      * @Template()
      */
@@ -76,15 +76,15 @@ class ChannelController extends AbstractController
      */
     protected function update(Channel $channel, Request $request)
     {
-        $handler = $this->get(ChannelHandler::class);
+        $handler = $this->container->get(ChannelHandler::class);
 
         if ($handler->process($channel)) {
             $request->getSession()->getFlashBag()->add(
                 'success',
-                $this->get(TranslatorInterface::class)->trans('oro.channel.controller.message.saved')
+                $this->container->get(TranslatorInterface::class)->trans('oro.channel.controller.message.saved')
             );
 
-            return $this->get(Router::class)->redirect($channel);
+            return $this->container->get(Router::class)->redirect($channel);
         }
 
         return [

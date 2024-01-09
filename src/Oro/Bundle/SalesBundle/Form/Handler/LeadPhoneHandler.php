@@ -65,7 +65,7 @@ class LeadPhoneHandler
             $leadId = $request->request->get('entityId');
             if ($form->isValid() && $leadId) {
                 $lead = $this->manager->find(
-                    'OroSalesBundle:Lead',
+                    Lead::class,
                     $leadId
                 );
                 if (!$this->authorizationChecker->isGranted('EDIT', $lead)) {

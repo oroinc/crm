@@ -6,24 +6,26 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 
+/**
+ * Split business_sales_channel_statistics widget into lead_statistics and opportunity_statistics widgets
+ */
 class SplitBusinessChannelStatisticsWidget extends AbstractFixture
 {
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $widgetRepository = $manager->getRepository('OroDashboardBundle:Widget');
-        /** @var Widget $oldWidget */
-        $oldWidget = $widgetRepository->findOneBy(['name' => 'business_sales_channel_statistics']);
-
+        /** @var Widget|null $oldWidget */
+        $oldWidget = $manager->getRepository(Widget::class)
+            ->findOneBy(['name' => 'business_sales_channel_statistics']);
         if (!$oldWidget) {
             return;
         }
 
-        $options   = $oldWidget->getOptions();
+        $options = $oldWidget->getOptions();
         $dashboard = $oldWidget->getDashboard();
-        $position  = $oldWidget->getLayoutPosition();
+        $position = $oldWidget->getLayoutPosition();
 
         $leadStatsWidget = new Widget();
         $leadStatsWidget->setName('lead_statistics');
@@ -69,16 +71,9 @@ class SplitBusinessChannelStatisticsWidget extends AbstractFixture
         $manager->flush();
     }
 
-    /**
-     * @param array $option
-     * @param array $subwidgetIds
-     *
-     * @return array
-     */
-    protected function getSubwidgets(array $option, array $subwidgetIds)
+    private function getSubwidgets(array $option, array $subwidgetIds): array
     {
         $items = [];
-
         if (isset($option['items'])) {
             foreach ($option['items'] as $item) {
                 if (isset($item['id']) && in_array($item['id'], $subwidgetIds)) {

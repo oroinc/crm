@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AddressBundle\Form\Handler\AddressHandler;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
@@ -90,13 +91,13 @@ class ContactAddressController extends AbstractController
         // Update contact's modification date when an address is changed
         $contact->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
 
-        $form = $this->get('oro_contact.contact_address.form');
-        if ($this->get(AddressHandler::class)->process(
+        $form = $this->container->get('oro_contact.contact_address.form');
+        if ($this->container->get(AddressHandler::class)->process(
             $address,
             $form,
             $request
         )) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->container->get('doctrine')->getManager()->flush();
             $responseData['entity'] = $address;
             $responseData['saved'] = true;
         }
@@ -116,6 +117,7 @@ class ContactAddressController extends AbstractController
             [
                 AddressHandler::class,
                 'oro_contact.contact_address.form' => Form::class,
+                'doctrine' => ManagerRegistry::class,
             ]
         );
     }

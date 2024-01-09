@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Form\Handler\ContactHandler;
@@ -32,7 +33,7 @@ class ContactController extends AbstractController
      *      id="oro_contact_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroContactBundle:Contact"
+     *      class="Oro\Bundle\ContactBundle\Entity\Contact"
      * )
      */
     public function viewAction(Contact $contact): array
@@ -51,7 +52,7 @@ class ContactController extends AbstractController
     {
         if (!$request->get('_wid')) {
             return $this->redirect(
-                $this->get(RouterInterface::class)->generate('oro_contact_view', ['id' => $contact->getId()])
+                $this->container->get(RouterInterface::class)->generate('oro_contact_view', ['id' => $contact->getId()])
             );
         }
 
@@ -68,7 +69,7 @@ class ContactController extends AbstractController
      *      id="oro_contact_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroContactBundle:Contact"
+     *      class="Oro\Bundle\ContactBundle\Entity\Contact"
      * )
      */
     public function createAction(Request $request): array|RedirectResponse
@@ -77,10 +78,10 @@ class ContactController extends AbstractController
         $contact = null;
         $entityClass = $request->get('entityClass');
         if ($entityClass) {
-            $entityClass = $this->get(EntityRoutingHelper::class)->resolveEntityClass($entityClass);
+            $entityClass = $this->container->get(EntityRoutingHelper::class)->resolveEntityClass($entityClass);
             $entityId = $request->get('entityId');
             if ($entityId && $entityClass === Account::class) {
-                $repository = $this->getDoctrine()->getRepository($entityClass);
+                $repository = $this->container->get('doctrine')->getRepository($entityClass);
                 /** @var Account $account */
                 $account = $repository->find($entityId);
                 if ($account) {
@@ -104,7 +105,7 @@ class ContactController extends AbstractController
      *      id="oro_contact_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroContactBundle:Contact"
+     *      class="Oro\Bundle\ContactBundle\Entity\Contact"
      * )
      */
     public function updateAction(Contact $entity): array|RedirectResponse
@@ -132,7 +133,7 @@ class ContactController extends AbstractController
 
     protected function getManager(): ApiEntityManager
     {
-        return $this->get(ApiEntityManager::class);
+        return $this->container->get(ApiEntityManager::class);
     }
 
     protected function update(Contact $entity = null): array|RedirectResponse
@@ -141,12 +142,12 @@ class ContactController extends AbstractController
             $entity = $this->getManager()->createEntity();
         }
 
-        return $this->get(UpdateHandlerFacade::class)->update(
+        return $this->container->get(UpdateHandlerFacade::class)->update(
             $entity,
-            $this->get(ContactType::class),
-            $this->get(TranslatorInterface::class)->trans('oro.contact.controller.contact.saved.message'),
+            $this->container->get(ContactType::class),
+            $this->container->get(TranslatorInterface::class)->trans('oro.contact.controller.contact.saved.message'),
             null,
-            $this->get(ContactHandler::class)
+            $this->container->get(ContactHandler::class)
         );
     }
 
@@ -208,7 +209,8 @@ class ContactController extends AbstractController
                 ContactType::class,
                 TranslatorInterface::class,
                 ContactHandler::class,
-                UpdateHandlerFacade::class
+                UpdateHandlerFacade::class,
+                'doctrine' => ManagerRegistry::class
             ]
         );
     }

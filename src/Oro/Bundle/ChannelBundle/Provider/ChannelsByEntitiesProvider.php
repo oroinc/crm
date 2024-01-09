@@ -8,6 +8,9 @@ use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+/**
+ * Provides channels by entities
+ */
 class ChannelsByEntitiesProvider
 {
     /**
@@ -72,7 +75,7 @@ class ChannelsByEntitiesProvider
     {
         if (null === $this->channelRepository) {
             $this->channelRepository = $this->doctrineHelper
-                ->getEntityRepositoryForClass('OroChannelBundle:Channel');
+                ->getEntityRepositoryForClass(Channel::class);
         }
 
         return $this->channelRepository;

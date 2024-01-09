@@ -3,42 +3,43 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 
-class LoadForecastWidgetFixtures extends AbstractFixture
+class LoadForecastWidgetFixtures extends AbstractFixture implements DependentFixtureInterface
 {
-    private $organization;
+    /**
+     * {@inheritDoc}
+     */
+    public function getDependencies(): array
+    {
+        return [LoadOrganization::class];
+    }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $this->organization = $manager->getRepository(Organization::class)->getFirst();
-
         $this->addWidget($manager);
         $this->createOpportunity($manager);
     }
 
-    private function addWidget(ObjectManager $manager)
+    private function addWidget(ObjectManager $manager): void
     {
         $dashboard = new Dashboard();
         $dashboard->setName('Test dashboard');
-
         $leadStaticsWidget = new Widget();
-        $leadStaticsWidget
-            ->setDashboard($dashboard)
-            ->setName('forecast_of_opportunities')
-            ->setLayoutPosition([1, 1]);
-
+        $leadStaticsWidget->setDashboard($dashboard);
+        $leadStaticsWidget->setName('forecast_of_opportunities');
+        $leadStaticsWidget->setLayoutPosition([1, 1]);
         $dashboard->addWidget($leadStaticsWidget);
-
         if (!$this->hasReference('widget_forecast')) {
             $this->setReference('widget_forecast', $leadStaticsWidget);
         }
@@ -46,11 +47,10 @@ class LoadForecastWidgetFixtures extends AbstractFixture
         $manager->flush();
     }
 
-    private function createOpportunity(ObjectManager $manager)
+    private function createOpportunity(ObjectManager $manager): void
     {
         $today = new \DateTime('now', new \DateTimeZone('UTC'));
         $firstOfCurrentMonth = new \DateTime('first day of this month midnight', new \DateTimeZone('UTC'));
-
         $opportunityList = [
             [
                 'status' => 'in_progress',
@@ -71,23 +71,19 @@ class LoadForecastWidgetFixtures extends AbstractFixture
                 'budget_amount' => 100, //USD
             ],
         ];
-
-        foreach ($opportunityList as $opportunityName => $opportunityData) {
+        foreach ($opportunityList as $i => $opportunityData) {
             $opportunity = new Opportunity();
-            $opportunity->setName(sprintf('test_opportunity_%s', $opportunityName));
-            $budgetAmount = MultiCurrency::create($opportunityData['budget_amount'], 'USD');
-            $opportunity->setBudgetAmount($budgetAmount);
-
+            $opportunity->setName(sprintf('test_opportunity_%s', $i));
+            $opportunity->setBudgetAmount(MultiCurrency::create($opportunityData['budget_amount'], 'USD'));
             $opportunity->setProbability($opportunityData['probability']);
-            $opportunity->setOrganization($this->organization);
+            $opportunity->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
             $opportunity->setCloseDate($opportunityData['close_date']);
-
-            $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
-            $opportunity->setStatus($manager->getReference($enumClass, $opportunityData['status']));
-
+            $opportunity->setStatus($manager->getReference(
+                ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
+                $opportunityData['status']
+            ));
             $manager->persist($opportunity);
         }
-
         $manager->flush();
     }
 }

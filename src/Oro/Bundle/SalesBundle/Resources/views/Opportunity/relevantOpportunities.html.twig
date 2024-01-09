@@ -2,7 +2,7 @@
 
 {% set gridName = 'sales-customers-opportunities-grid' %}
 
-{% if app.request.query.get('grid') and app.request.query.get('grid')[gridName] is defined %}
+{% if app.request.query.all('grid') and app.request.query.all('grid')[gridName] is defined %}
     {% set gridName = 'sales-customers-opportunities-alternate-grid' %}
 {% endif %}
 

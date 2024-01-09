@@ -164,7 +164,7 @@ class ContactAddressController extends RestController
 
     protected function getContactManager()
     {
-        return $this->get('oro_contact.contact.manager.api');
+        return $this->container->get('oro_contact.contact.manager.api');
     }
 
     /**
@@ -172,7 +172,7 @@ class ContactAddressController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_contact.contact_address.manager.api');
+        return $this->container->get('oro_contact.contact_address.manager.api');
     }
 
     /**

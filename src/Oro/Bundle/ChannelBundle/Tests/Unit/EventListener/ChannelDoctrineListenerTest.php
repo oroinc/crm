@@ -102,8 +102,8 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         $this->em->expects(self::any())
             ->method('getRepository')
             ->withConsecutive(
-                ['OroSalesBundle:Customer'],
-                ['OroChannelBundle:LifetimeValueHistory']
+                [\Oro\Bundle\SalesBundle\Entity\Customer::class],
+                [LifetimeValueHistory::class]
             )->willReturnOnConsecutiveCalls(
                 $this->customerRepo,
                 $this->lifetimeRepo

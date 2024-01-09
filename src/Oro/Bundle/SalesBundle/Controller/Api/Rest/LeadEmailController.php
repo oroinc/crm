@@ -55,7 +55,7 @@ class LeadEmailController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_sales.lead_email.manager.api');
+        return $this->container->get('oro_sales.lead_email.manager.api');
     }
 
     /**
@@ -63,7 +63,7 @@ class LeadEmailController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_sales.form.type.lead_email.handler');
+        return $this->container->get('oro_sales.form.type.lead_email.handler');
     }
 
     /**
@@ -71,6 +71,6 @@ class LeadEmailController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_sales.form.type.lead_email.type');
+        return $this->container->get('oro_sales.form.type.lead_email.type');
     }
 }

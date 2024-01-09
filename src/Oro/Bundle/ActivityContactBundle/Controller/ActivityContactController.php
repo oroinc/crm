@@ -28,8 +28,8 @@ class ActivityContactController extends AbstractController
      */
     public function metricsAction($entityClass, $entityId)
     {
-        $entity       = $this->get(EntityRoutingHelper::class)->getEntity($entityClass, $entityId);
-        $dataProvider = $this->get(EntityActivityContactDataProvider::class);
+        $entity       = $this->container->get(EntityRoutingHelper::class)->getEntity($entityClass, $entityId);
+        $dataProvider = $this->container->get(EntityActivityContactDataProvider::class);
         $data         = $dataProvider->getEntityContactData($entity);
 
         return $data

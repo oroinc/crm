@@ -6,7 +6,11 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * Doctrine repository for B2bCustomer entity
+ */
 class B2bCustomerRepository extends EntityRepository
 {
     const VALUABLE_STATUS = 'won';
@@ -25,7 +29,7 @@ class B2bCustomerRepository extends EntityRepository
     ) {
         $associationName = AccountCustomerManager::getCustomerTargetField(B2bCustomer::class);
 
-        $qb = $this->getEntityManager()->getRepository('OroSalesBundle:Opportunity')
+        $qb = $this->getEntityManager()->getRepository(Opportunity::class)
             ->createQueryBuilder('o');
         $closeRevenueQuery = $qbTransformer->getTransformSelectQuery('closeRevenue', $qb);
         $qb->select(sprintf('SUM(%s)', $closeRevenueQuery));

@@ -33,7 +33,7 @@ class ContactReasonSelectTypeTest extends TypeTestCase
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with($this->isType('array'))
-            ->willReturnCallback(function (array $options) {
+            ->willReturnCallback(function (array $options) use ($resolver) {
                 $this->assertArrayHasKey('autocomplete_alias', $options);
                 $this->assertArrayHasKey('create_form_route', $options);
                 $this->assertArrayHasKey('configs', $options);
@@ -45,6 +45,8 @@ class ContactReasonSelectTypeTest extends TypeTestCase
                     ],
                     $options['configs']
                 );
+
+                return $resolver;
             });
 
         $this->formType->configureOptions($resolver);

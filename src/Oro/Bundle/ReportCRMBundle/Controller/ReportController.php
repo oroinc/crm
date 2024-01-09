@@ -32,7 +32,7 @@ class ReportController extends AbstractController
     public function indexAction($reportGroupName, $reportName)
     {
         $gridName  = implode('-', ['oro_reportcrm', $reportGroupName, $reportName]);
-        $gridConfig = $this->get(Manager::class)->getConfigurationForGrid($gridName);
+        $gridConfig = $this->container->get(Manager::class)->getConfigurationForGrid($gridName);
         $pageTitle = (string) ($gridConfig['pageTitle'] ?? '');
 
         $requiredFeatures = $gridConfig['requiredFeatures'] ?? [];
@@ -44,7 +44,7 @@ class ReportController extends AbstractController
         }
 
         return [
-            'pageTitle' => $this->get(TranslatorInterface::class)->trans($pageTitle),
+            'pageTitle' => $this->container->get(TranslatorInterface::class)->trans($pageTitle),
             'gridName'  => $gridName,
             'params'    => [
                 'reportGroupName' => $reportGroupName,
@@ -58,7 +58,7 @@ class ReportController extends AbstractController
      */
     protected function getFeatureChecker()
     {
-        return $this->get(FeatureChecker::class);
+        return $this->container->get(FeatureChecker::class);
     }
 
     /**

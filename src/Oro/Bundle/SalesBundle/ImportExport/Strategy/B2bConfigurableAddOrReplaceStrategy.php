@@ -3,9 +3,13 @@
 namespace Oro\Bundle\SalesBundle\ImportExport\Strategy;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
+/**
+ * Configurable import-export strategy to import B2bCustomer entities.
+ */
 class B2bConfigurableAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {
     /**
@@ -31,7 +35,7 @@ class B2bConfigurableAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrate
             && !$address->getRegion()
         ) {
             $region = $this->doctrineHelper
-                ->getEntityRepository('OroAddressBundle:Region')
+                ->getEntityRepository(Region::class)
                 ->findOneBy(
                     [
                         'country' => $address->getCountry(),

@@ -53,7 +53,7 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
     protected function calculateCustomerLifetime(EntityManager $em, object $customer): float
     {
         /** @var B2bCustomerRepository $customerRepo */
-        $customerRepo  = $em->getRepository('OroSalesBundle:B2bCustomer');
+        $customerRepo  = $em->getRepository(B2bCustomer::class);
 
         return $customerRepo->calculateLifetimeValue($customer, $this->currencyTransformer);
     }

@@ -43,19 +43,19 @@ class DashboardController extends AbstractController
      */
     public function averageLifetimeSalesAction(Request $request, $widget)
     {
-        $widgetConfigs = $this->get(WidgetConfigs::class);
+        $widgetConfigs = $this->container->get(WidgetConfigs::class);
         $dateRange = $widgetConfigs
             ->getWidgetOptions($request->query->get('_widgetId', null))
             ->get('dateRange');
 
-        $data = $this->get(AverageLifetimeWidgetProvider::class)->getChartData($dateRange);
+        $data = $this->container->get(AverageLifetimeWidgetProvider::class)->getChartData($dateRange);
         $widgetAttr = $widgetConfigs->getWidgetAttributesForTwig($widget);
         $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],
-            $this->get(ConfigProvider::class)->getChartConfig('average_lifetime_sales')
+            $this->container->get(ConfigProvider::class)->getChartConfig('average_lifetime_sales')
         );
 
-        $widgetAttr['chartView'] = $this->get(ChartViewBuilder::class)
+        $widgetAttr['chartView'] = $this->container->get(ChartViewBuilder::class)
             ->setArrayData($data)
             ->setOptions($chartOptions)
             ->getView();

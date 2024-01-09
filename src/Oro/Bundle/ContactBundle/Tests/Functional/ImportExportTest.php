@@ -12,6 +12,7 @@ use Oro\Bundle\ImportExportBundle\Async\Topic\PreImportTopic;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
 use Oro\Bundle\ImportExportBundle\Tests\Functional\AbstractImportExportTestCase;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 
 /**
  * @dbIsolationPerTest
@@ -21,7 +22,7 @@ class ImportExportTest extends AbstractImportExportTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtures([LoadContactEntitiesData::class]);
+        $this->loadFixtures([LoadContactEntitiesData::class, LoadOrganization::class]);
     }
 
     public function testExportTemplate(): void
@@ -174,10 +175,8 @@ class ImportExportTest extends AbstractImportExportTestCase
 
     private function getExportTemplateFileName(): string
     {
-        $organizationRepository = $this->getContainer()->get('doctrine')->getRepository(Organization::class);
-
         /** @var Organization $organization */
-        $organization = $organizationRepository->getFirst();
+        $organization = $this->getReference(LoadOrganization::ORGANIZATION);
 
         return sprintf(
             'export_template_with_%s_org.csv',

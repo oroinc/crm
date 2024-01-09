@@ -32,7 +32,7 @@ class LoadRestrictedUser extends AbstractFixture implements ContainerAwareInterf
         $userManager = $this->container->get('oro_user.manager');
 
         $role = $manager->getRepository(Role::class)
-            ->findBy(['role' => 'IS_AUTHENTICATED_ANONYMOUSLY']);
+            ->findBy(['role' => 'PUBLIC_ACCESS']);
 
         $org = $this->getReference('organization');
 

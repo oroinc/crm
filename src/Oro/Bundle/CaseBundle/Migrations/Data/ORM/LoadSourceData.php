@@ -6,47 +6,38 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\TranslationBundle\DataFixtures\AbstractTranslatableEntityFixture;
 
+/**
+ * Loads case sources.
+ */
 class LoadSourceData extends AbstractTranslatableEntityFixture
 {
-    const CASE_SOURCE_PREFIX = 'case_source';
+    private const TRANSLATION_PREFIX = 'case_source';
 
     /**
-     * @var array
+     * {@inheritDoc}
      */
-    protected $sourceNames = array(
-        CaseSource::SOURCE_PHONE,
-        CaseSource::SOURCE_EMAIL,
-        CaseSource::SOURCE_WEB,
-        CaseSource::SOURCE_OTHER
-    );
-
-    /**
-     * Load entities to DB
-     */
-    protected function loadEntities(ObjectManager $manager)
+    protected function loadEntities(ObjectManager $manager): void
     {
-        $sourceRepository = $manager->getRepository('OroCaseBundle:CaseSource');
-
+        $caseSourceRepository = $manager->getRepository(CaseSource::class);
         $translationLocales = $this->getTranslationLocales();
-
+        $names = [
+            CaseSource::SOURCE_PHONE,
+            CaseSource::SOURCE_EMAIL,
+            CaseSource::SOURCE_WEB,
+            CaseSource::SOURCE_OTHER
+        ];
         foreach ($translationLocales as $locale) {
-            foreach ($this->sourceNames as $sourceName) {
-                // get case source entity
+            foreach ($names as $sourceName) {
                 /** @var CaseSource $caseSource */
-                $caseSource = $sourceRepository->findOneBy(array('name' => $sourceName));
+                $caseSource = $caseSourceRepository->findOneBy(['name' => $sourceName]);
                 if (!$caseSource) {
                     $caseSource = new CaseSource($sourceName);
                 }
 
-                // set locale and label
-                $sourceLabel = $this->translate($sourceName, static::CASE_SOURCE_PREFIX, $locale);
-                $caseSource->setLocale($locale)
-                    ->setLabel($sourceLabel);
-
-                // save
+                $caseSource->setLocale($locale);
+                $caseSource->setLabel($this->translate($sourceName, self::TRANSLATION_PREFIX, $locale));
                 $manager->persist($caseSource);
             }
-
             $manager->flush();
         }
     }

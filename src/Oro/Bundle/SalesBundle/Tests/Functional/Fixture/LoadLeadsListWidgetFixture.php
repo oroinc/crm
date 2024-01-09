@@ -16,19 +16,15 @@ class LoadLeadsListWidgetFixture extends AbstractFixture
     {
         $dashboard = new Dashboard();
         $dashboard->setName('dashboard');
-
         $leadStaticsWidget = new Widget();
         $leadStaticsWidget
             ->setDashboard($dashboard)
             ->setName('leads_list')
             ->setLayoutPosition([1, 1]);
-
         $dashboard->addWidget($leadStaticsWidget);
-
         if (!$this->hasReference('widget_leads_list')) {
             $this->setReference('widget_leads_list', $leadStaticsWidget);
         }
-
         $manager->persist($dashboard);
         $manager->flush();
     }

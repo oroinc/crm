@@ -66,7 +66,7 @@ class LifetimeHistoryRepository extends EntityRepository
     /**
      * Update status of history entries based on data given
      * Generates following DQL for each channel passed:
-     *      UPDATE OroChannelBundle:LifetimeValueHistory l SET status = :status
+     *      UPDATE Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory l SET status = :status
      *      WHERE l.dataChannel = :dataChannel
      *              AND (
      *                  (l.id <> :exclusionEntityId1 and l.account = :account1)
@@ -92,7 +92,7 @@ class LifetimeHistoryRepository extends EntityRepository
             $qb   = $this->getEntityManager()->createQueryBuilder();
             $expr = $qb->expr();
 
-            $qb->update('OroChannelBundle:LifetimeValueHistory', 'l');
+            $qb->update(LifetimeValueHistory::class, 'l');
             $qb->set('l.status', ':status');
             $qb->setParameter('status', $qb->expr()->literal($status));
 

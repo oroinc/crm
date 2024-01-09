@@ -3,94 +3,86 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 use Oro\Bundle\UserBundle\Entity\User;
 
-class LoadOpportunityStatisticsWidgetFixture extends AbstractFixture
+class LoadOpportunityStatisticsWidgetFixture extends AbstractFixture implements DependentFixtureInterface
 {
     /**
-     * @var Organization
+     * {@inheritDoc}
      */
-    protected $organization;
+    public function getDependencies(): array
+    {
+        return [LoadOrganization::class];
+    }
 
     /**
-     * @var ObjectManager
+     * {@inheritDoc}
      */
-    protected $em;
+    public function load(ObjectManager $manager): void
+    {
+        $this->createOpportunities($manager);
 
-    protected function createOpportunities()
+        $dashboard = new Dashboard();
+        $dashboard->setName('dashboard');
+        $opportunityStaticsWidget = new Widget();
+        $opportunityStaticsWidget->setDashboard($dashboard);
+        $opportunityStaticsWidget->setName('opportunity_statistics');
+        $opportunityStaticsWidget->setLayoutPosition([1, 1]);
+        $dashboard->addWidget($opportunityStaticsWidget);
+        if (!$this->hasReference('widget_opportunity_statistics')) {
+            $this->setReference('widget_opportunity_statistics', $opportunityStaticsWidget);
+        }
+        $manager->persist($dashboard);
+        $manager->flush();
+    }
+
+    private function createOpportunities(ObjectManager $manager): void
     {
         $owner = new User();
         $owner->setId(18);
         $owner->setUsername('owner');
         $owner->setEmail('owner@example.com');
         $owner->setPassword('secrecy');
+        $manager->persist($owner);
 
-        $this->em->persist($owner);
-
-        $firstOppo  = $this->createOpportunity('Opportunity one', $owner, 40000, 'in progress', $this->organization);
-        /** @var Opportunity $secondOppo */
-        $secondOppo = $this->createOpportunity('Opportunity two', $owner, 20000, 'won', $this->organization);
+        $firstOppo  = $this->createOpportunity($manager, 'Opportunity one', $owner, 40000, 'in progress');
+        $secondOppo = $this->createOpportunity($manager, 'Opportunity two', $owner, 20000, 'won');
 
         $closeDate = new \DateTime('now', new \DateTimeZone('UTC'));
         $closeDate->modify('-1 day');
         $secondOppo->setCloseDate($closeDate);
         $secondOppo->setCloseRevenue(MultiCurrency::create('10000', 'USD'));
 
-        $this->em->persist($firstOppo);
-        $this->em->persist($secondOppo);
-        $this->em->flush();
+        $manager->persist($firstOppo);
+        $manager->persist($secondOppo);
+        $manager->flush();
     }
 
-    protected function createOpportunity($name, $owner, $amount, $statusName, $organization)
-    {
+    private function createOpportunity(
+        ObjectManager $manager,
+        string $name,
+        User $owner,
+        int $amount,
+        string $statusName
+    ): Opportunity {
         $opportunity = new Opportunity();
         $opportunity->setName($name);
         $opportunity->setOwner($owner);
-
-        $budgetAmount = MultiCurrency::create($amount, 'USD');
-        $opportunity->setBudgetAmount($budgetAmount);
-
-        $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
-        $statusId = $this->em->getRepository($className)->find(ExtendHelper::buildEnumValueId($statusName));
-
-        $opportunity->setStatus($statusId);
-        $opportunity->setOrganization($organization);
+        $opportunity->setBudgetAmount(MultiCurrency::create($amount, 'USD'));
+        $opportunity->setStatus(
+            $manager->getRepository(ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE))
+                ->find(ExtendHelper::buildEnumValueId($statusName))
+        );
+        $opportunity->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
 
         return $opportunity;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function load(ObjectManager $manager)
-    {
-        $this->organization = $manager->getRepository(Organization::class)->getFirst();
-        $this->em = $manager;
-        $this->createOpportunities($manager);
-
-        $dashboard = new Dashboard();
-        $dashboard->setName('dashboard');
-
-        $opportunityStaticsWidget = new Widget();
-        $opportunityStaticsWidget
-            ->setDashboard($dashboard)
-            ->setName('opportunity_statistics')
-            ->setLayoutPosition([1, 1]);
-
-        $dashboard->addWidget($opportunityStaticsWidget);
-
-        if (!$this->hasReference('widget_opportunity_statistics')) {
-            $this->setReference('widget_opportunity_statistics', $opportunityStaticsWidget);
-        }
-
-        $manager->persist($dashboard);
-        $manager->flush();
     }
 }

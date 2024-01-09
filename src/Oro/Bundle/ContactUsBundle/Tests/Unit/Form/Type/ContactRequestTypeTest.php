@@ -44,10 +44,10 @@ class ContactRequestTypeTest extends TypeTestCase
         $fields = [];
         $builder->expects($this->exactly(7))
             ->method('add')
-            ->willReturnCallback(function ($fieldName, $fieldType) use (&$fields) {
+            ->willReturnCallback(function ($fieldName, $fieldType) use (&$fields, $builder) {
                 $fields[$fieldName] = $fieldType;
 
-                return new \PHPUnit\Framework\MockObject\Stub\ReturnSelf();
+                return $builder;
             });
 
         $this->formType->buildForm($builder, ['dataChannelField' => true]);

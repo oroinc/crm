@@ -59,7 +59,6 @@ Oro\Bundle\ContactBundle\Entity\Group:
             - Length:
                 min: 3
                 max: 255
-                allowEmptyString: false
 
 Oro\Bundle\ContactBundle\Entity\ContactAddress:
     constraints:

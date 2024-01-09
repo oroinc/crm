@@ -30,7 +30,7 @@ class GroupController extends AbstractController
      *      id="oro_contact_group_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroContactBundle:Group"
+     *      class="Oro\Bundle\ContactBundle\Entity\Group"
      * )
      * @param Request $request
      * @return array|RedirectResponse
@@ -49,7 +49,7 @@ class GroupController extends AbstractController
      *      id="oro_contact_group_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroContactBundle:Group"
+     *      class="Oro\Bundle\ContactBundle\Entity\Group"
      * )
      * @param Request $request
      * @param Group $entity
@@ -71,7 +71,7 @@ class GroupController extends AbstractController
      *      id="oro_contact_group_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroContactBundle:Group"
+     *      class="Oro\Bundle\ContactBundle\Entity\Group"
      * )
      * @Template()
      */
@@ -90,21 +90,22 @@ class GroupController extends AbstractController
      */
     protected function update(Request $request, Group $entity)
     {
-        if ($this->get(GroupHandler::class)->process($entity)) {
+        if ($this->container->get(GroupHandler::class)->process($entity)) {
             $request->getSession()->getFlashBag()->add(
                 'success',
-                $this->get(TranslatorInterface::class)->trans('oro.contact.controller.contact_group.saved.message')
+                $this->container->get(TranslatorInterface::class)
+                    ->trans('oro.contact.controller.contact_group.saved.message')
             );
 
             if (!$request->get('_widgetContainer')) {
-                return $this->get(Router::class)->redirect($entity);
+                return $this->container->get(Router::class)->redirect($entity);
             }
         }
 
         return [
             'entity'           => $entity,
-            'form'             => $this->get('oro_contact.form.group')->createView(),
-            'showContactsGrid' => count($this->get(ApiEntityManager::class)->getList()) ? true : false
+            'form'             => $this->container->get('oro_contact.form.group')->createView(),
+            'showContactsGrid' => count($this->container->get(ApiEntityManager::class)->getList()) ? true : false
         ];
     }
 

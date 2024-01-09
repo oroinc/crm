@@ -4,26 +4,24 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 use Oro\Bundle\UserBundle\Entity\User;
 
-class LoadContactEntitiesData extends AbstractFixture
+class LoadContactEntitiesData extends AbstractFixture implements DependentFixtureInterface
 {
-    const FIRST_ENTITY_NAME  = 'Brenda';
-    const SECOND_ENTITY_NAME = 'Richard';
-    const THIRD_ENTITY_NAME  = 'Shawn';
-    const FOURTH_ENTITY_NAME = 'Faye';
+    public const FIRST_ENTITY_NAME  = 'Brenda';
+    public const SECOND_ENTITY_NAME = 'Richard';
+    public const THIRD_ENTITY_NAME  = 'Shawn';
+    public const FOURTH_ENTITY_NAME = 'Faye';
 
     public static $owner = 'admin';
 
-    /**
-     * @var array
-     */
-    protected $contactsData = [
+    private array $contactsData = [
         [
             'firstName' => self::FIRST_ENTITY_NAME,
             'lastName'  => 'Bradley',
@@ -45,17 +43,23 @@ class LoadContactEntitiesData extends AbstractFixture
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function getDependencies(): array
+    {
+        return [LoadOrganization::class];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $manager): void
     {
         $user = $manager->getRepository(User::class)->findOneByUsername(self::$owner);
-        $organization = $manager->getRepository(Organization::class)->getFirst();
-
         foreach ($this->contactsData as $contactData) {
             $contact = new Contact();
             $contact->setOwner($user);
-            $contact->setOrganization($organization);
+            $contact->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
             $contact->setFirstName($contactData['firstName']);
             $contact->setLastName($contactData['lastName']);
 
@@ -66,23 +70,14 @@ class LoadContactEntitiesData extends AbstractFixture
             }
 
             if (isset($contactData['testMultiEnum'])) {
-                $testMultiEnumValue = $manager->getRepository(
-                    ExtendHelper::buildEnumValueClassName('test_multi_enum')
-                )->find($contactData['testMultiEnum']);
-
-                $contact->setTestMultiEnum(
-                    new ArrayCollection(
-                        [
-                            $testMultiEnumValue,
-                        ]
-                    )
-                );
+                $multiEnumValue = $manager->getRepository(ExtendHelper::buildEnumValueClassName('test_multi_enum'))
+                    ->find($contactData['testMultiEnum']);
+                $contact->setTestMultiEnum(new ArrayCollection([$multiEnumValue]));
             }
 
             $this->setReference('Contact_' . $contactData['firstName'], $contact);
             $manager->persist($contact);
         }
-
         $manager->flush();
     }
 }

@@ -129,7 +129,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
         $this->assertPositionEntity($crawler, 1, 4);
 
         // click next link
-        $next = $crawler->filter('#entity-pagination a .fa-chevron-right')->parents()->link();
+        $next = $crawler->filter('#entity-pagination a .fa-chevron-right')->ancestors()->link();
         $this->client->click($next);
         $crawler = $this->redirectViaFrontend();
 
@@ -147,7 +147,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
         $this->assertPositionEntity($crawler, 4, 4);
 
         // click previous link
-        $previous = $crawler->filter('#entity-pagination a .fa-chevron-left')->parents()->link();
+        $previous = $crawler->filter('#entity-pagination a .fa-chevron-left')->ancestors()->link();
         $this->client->click($previous);
         $crawler = $this->redirectViaFrontend();
 

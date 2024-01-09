@@ -7,7 +7,7 @@ use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Test\FormInterface;
 
@@ -105,32 +105,32 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
         $integration = new Integration();
 
         return [
-            'should return null if empty data given'          => [
-                '$data'           => null,
-                '$expectedResult' => null
+            'should return null if empty data given' => [
+                'data' => null,
+                'expectedResult' => null
             ],
-            'should throw exception if bad data given'        => [
-                '$data'              => new \stdClass(),
-                '$expectedResult'    => null,
-                '$expectedSubmit'    => false,
-                '$expectedException' => UnexpectedTypeException::class
+            'should throw exception if bad data given' => [
+                'data' => new \stdClass(),
+                'expectedResult' => null,
+                'expectedSubmit' => false,
+                'expectedException' => UnexpectedTypeException::class
             ],
             'should thor exception if invalid data submitted' => [
-                '$data'              => ['data' => new \stdClass(), 'identifier' => null],
-                '$expectedResult'    => null,
-                '$expectedSubmit'    => true,
-                '$expectedException' => \LogicException::class
+                'data' => ['data' => new \stdClass(), 'identifier' => null],
+                'expectedResult' => null,
+                'expectedSubmit' => true,
+                'expectedException' => \LogicException::class
             ],
-            'should bind on data that comes form setData'     => [
-                '$data'           => [
-                    'data'       => [
+            'should bind on data that comes form setData' => [
+                'data' => [
+                    'data' => [
                         'name' => self::TEST_NAME,
                         'type' => self::TEST_TYPE
                     ],
                     'identifier' => $integration
                 ],
-                '$expectedResult' => $integration,
-                '$expectedSubmit' => true,
+                'expectedResult' => $integration,
+                'expectedSubmit' => true,
             ]
         ];
     }
@@ -145,7 +145,7 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
             $formMock = $this->createMock(FormInterface::class);
 
             $data = null;
-            $this->formFactory->expects($this->once())
+            $this->formFactory->expects($this->any())
                 ->method('create')
                 ->with(
                     ChannelType::class,
@@ -159,25 +159,26 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
                     return $formMock;
                 });
 
-            $formMock->expects($this->once())
+            $formMock->expects($this->any())
                 ->method('submit')
-                ->willReturnCallback(function ($submitted) use (&$data) {
+                ->willReturnCallback(function ($submitted) use (&$data, $formMock) {
                     // emulate submit
                     $accessor = PropertyAccess::createPropertyAccessor();
-
                     foreach ($submitted as $key => $value) {
                         $accessor->setValue($data, $key, $value);
                     }
+
+                    return $formMock;
                 });
             $invalid = null !== $expectedException;
-            $formMock->expects($this->once())
+            $formMock->expects($this->any())
                 ->method('isValid')
                 ->willReturn(!$invalid);
 
             if ($invalid) {
-                $formMock->expects($this->once())
+                $formMock->expects($this->any())
                     ->method('getErrors')
-                    ->willReturn([new FormError('message')]);
+                    ->willReturn(new FormErrorIterator($formMock, ['message']));
             }
         } else {
             $this->formFactory->expects($this->never())

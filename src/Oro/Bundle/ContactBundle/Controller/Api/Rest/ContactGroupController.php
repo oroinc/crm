@@ -109,7 +109,7 @@ class ContactGroupController extends RestController
      *      id="oro_contact_group_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroContactBundle:Group"
+     *      class="Oro\Bundle\ContactBundle\Entity\Group"
      * )
      * @return Response
      */
@@ -125,7 +125,7 @@ class ContactGroupController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_contact.group.manager.api');
+        return $this->container->get('oro_contact.group.manager.api');
     }
 
     /**
@@ -133,7 +133,7 @@ class ContactGroupController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_contact.form.group.api');
+        return $this->container->get('oro_contact.form.group.api');
     }
 
     /**
@@ -141,6 +141,6 @@ class ContactGroupController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_contact.form.handler.group.api');
+        return $this->container->get('oro_contact.form.handler.group.api');
     }
 }

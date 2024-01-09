@@ -3,37 +3,35 @@
 namespace Oro\Bundle\ContactUsBundle\Tests\Functional\Fixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 
-class LoadContactUsBundleFixtures extends AbstractFixture
+class LoadContactUsBundleFixtures extends AbstractFixture implements DependentFixtureInterface
 {
-    const CHANNEL_TYPE = 'custom';
-    const CHANNEL_NAME = 'custom Channel';
-
-    /** @var ObjectManager */
-    protected $em;
+    /**
+     * {@inheritDoc}
+     */
+    public function getDependencies(): array
+    {
+        return [LoadOrganization::class];
+    }
 
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $this->em = $manager;
-        $organization = $manager->getRepository(Organization::class)->getFirst();
-
         $contactUsRequest = new ContactRequest();
         $contactUsRequest->setFirstName('fname');
         $contactUsRequest->setLastName('lname');
         $contactUsRequest->setPhone('123123123');
         $contactUsRequest->setEmailAddress('email@email.com');
         $contactUsRequest->setComment('some comment');
-        $contactUsRequest->setOwner($organization);
-
-        $this->em->persist($contactUsRequest);
-        $this->em->flush();
-
+        $contactUsRequest->setOwner($this->getReference(LoadOrganization::ORGANIZATION));
         $this->setReference('default_contact_us_request', $contactUsRequest);
+        $manager->persist($contactUsRequest);
+        $manager->flush();
     }
 }

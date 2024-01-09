@@ -51,7 +51,7 @@ class CustomerAssociationListener
             return;
         }
 
-        $uow = $args->getEntityManager()->getUnitOfWork();
+        $uow = $args->getObjectManager()->getUnitOfWork();
         $this->prepareCreatedCustomers($uow->getScheduledEntityInsertions());
     }
 

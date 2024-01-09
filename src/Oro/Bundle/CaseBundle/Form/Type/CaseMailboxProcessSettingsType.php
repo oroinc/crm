@@ -16,6 +16,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
 
+/**
+ * Case mailbox process settings form type
+ */
 class CaseMailboxProcessSettingsType extends AbstractType
 {
     /**
@@ -71,34 +74,28 @@ class CaseMailboxProcessSettingsType extends AbstractType
             EntityType::class,
             [
                 'label'         => 'oro.case.caseentity.status.label',
-                'class'         => 'OroCaseBundle:CaseStatus',
+                'class'         => CaseStatus::class,
                 'query_builder' => function (EntityRepository $entityRepository) {
                     return $entityRepository->createQueryBuilder('status')
                         ->orderBy('status.order', 'ASC');
                 },
                 'constraints'   => [
                     new NotNull(),
-                ],
-                'preferred_choices' => function (CaseStatus $entity) {
-                    return $entity->getName() === CaseStatus::STATUS_OPEN;
-                },
+                ]
             ]
         )->add(
             'priority',
             EntityType::class,
             [
                 'label'         => 'oro.case.caseentity.priority.label',
-                'class'         => 'OroCaseBundle:CasePriority',
+                'class'         => CasePriority::class,
                 'query_builder' => function (EntityRepository $entityRepository) {
                     return $entityRepository->createQueryBuilder('priority')
                         ->orderBy('priority.order', 'ASC');
                 },
                 'constraints'   => [
                     new NotNull(),
-                ],
-                'preferred_choices' => function (CasePriority $entity) {
-                    return $entity->getName() === CasePriority::PRIORITY_LOW;
-                },
+                ]
             ]
         )->add(
             'tags',

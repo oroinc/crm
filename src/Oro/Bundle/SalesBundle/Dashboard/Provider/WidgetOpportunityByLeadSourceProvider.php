@@ -6,6 +6,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -208,6 +209,6 @@ class WidgetOpportunityByLeadSourceProvider
      */
     protected function getOpportunityRepository()
     {
-        return $this->registry->getRepository('OroSalesBundle:Opportunity');
+        return $this->registry->getRepository(Opportunity::class);
     }
 }

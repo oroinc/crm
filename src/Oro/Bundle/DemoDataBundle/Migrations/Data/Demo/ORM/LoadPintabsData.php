@@ -4,7 +4,6 @@ namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\DataGridBundle\Extension\Appearance\AppearanceExtension;
 use Oro\Bundle\DataGridBundle\Extension\Columns\ColumnsExtension;
@@ -13,162 +12,87 @@ use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
 use Oro\Bundle\DataGridBundle\Extension\Sorter\AbstractSorterExtension;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\EnumFilterType;
 use Oro\Bundle\FilterBundle\Grid\Extension\AbstractFilterExtension;
-use Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\UserBundle\Entity\UserManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Loads pin tabs.
  */
 class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    use ContainerAwareTrait;
 
     /**
-     * @var UserManager
+     * {@inheritDoc}
      */
-    protected $userManager;
-
-    /**
-     * @var User[]
-     */
-    protected $users;
-
-    /** @var  ItemFactory */
-    protected $navigationFactory;
-
-    /** @var  EntityManager */
-    protected $em;
-
-    /**
-     * @var Organization
-     */
-    protected $organization;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
+    public function getDependencies(): array
     {
-        return [
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUserData'
-        ];
+        return [LoadUserData::class];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function load(ObjectManager $manager): void
     {
-        $this->container = $container;
-        $this->navigationFactory = $container->get('oro_navigation.item.factory');
-        $this->userManager = $container->get('oro_user.manager');
-    }
+        $navigationFactory = $this->container->get('oro_navigation.item.factory');
+        $tokenStorage = $this->container->get('security.token_storage');
+        $userOrganization = $manager->getRepository(Organization::class)->getFirst();
+        $pinTabOrganization = $this->getReference('default_organization');
 
-    /**
-     * {@inheritDoc}
-     */
-    public function load(ObjectManager $manager)
-    {
-        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
-        $this->initSupportingEntities();
-        $this->loadUsersTags();
-    }
-
-    protected function initSupportingEntities()
-    {
-        $this->em = $this->container->get('doctrine')->getManager();
-        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
-    }
-
-    public function loadUsersTags()
-    {
+        $users = $manager->getRepository(User::class)->findAll();
         $params = $this->getPintabsParams();
-        $organization = $this->getReference('default_organization');
-        foreach ($this->users as $user) {
-            $tokenStorage = $this->container->get('security.token_storage');
-
-            $token = new UsernamePasswordOrganizationToken(
+        foreach ($users as $user) {
+            $tokenStorage->setToken(new UsernamePasswordOrganizationToken(
                 $user,
-                $user->getUsername(),
                 'main',
-                $this->organization,
+                $userOrganization,
                 $user->getUserRoles()
-            );
-
-            $tokenStorage->setToken($token);
+            ));
             foreach ($params as $param) {
                 $param['user'] = $user;
-                $pinTab = $this->navigationFactory->createItem($param['type'], $param);
-                $pinTab->getItem()->setOrganization($organization);
-                $this->persist($this->em, $pinTab);
+                $pinTab = $navigationFactory->createItem($param['type'], $param);
+                $pinTab->getItem()->setOrganization($pinTabOrganization);
+                $manager->persist($pinTab);
             }
             $tokenStorage->setToken(null);
         }
-        $this->flush($this->em);
-    }
-
-    /**
-     * Persist object
-     *
-     * @param mixed $manager
-     * @param mixed $object
-     */
-    private function persist($manager, $object)
-    {
-        $manager->persist($object);
-    }
-
-    /**
-     * Flush objects
-     *
-     * @param mixed $manager
-     */
-    private function flush($manager)
-    {
         $manager->flush();
     }
 
-    /**
-     * @return array
-     */
-    private function getPintabsParams()
+    private function getPintabsParams(): array
     {
         $router = $this->container->get('router');
         $datagridRouter = $this->container->get('oro_datagrid.helper.route');
 
-        $params = array(
-            'account' => array(
-                "url" => $router->generate('oro_account_index'),
-                "title_rendered" => "Accounts - Customers",
-                "title" => "{\"template\":\"Accounts - Customers\",\"short_template\":\"Accounts\",\"params\":[]}",
-                "position" => 0,
-                "type" => "pinbar",
-                "display_type" => "list",
-                "maximized" => false,
-                "remove" => false
-            ),
-            'contact' => array(
-                "url" => $router->generate('oro_contact_index'),
-                "title_rendered" => "Contacts - Customers",
-                "title" => "{\"template\":\"Contacts - Customers\",\"short_template\":\"Contacts\",\"params\":[]}",
-                "position" => 1,
-                "type" => "pinbar",
-                "display_type" => "list",
-                "maximized" => false,
-                "remove" => false
-            ),
-            'leads' => array(
-                "url" => $datagridRouter->generate(
+        return [
+            'account' => [
+                'url' => $router->generate('oro_account_index'),
+                'title_rendered' => 'Accounts - Customers',
+                'title' => '{"template":"Accounts - Customers","short_template":"Accounts","params":[]}',
+                'position' => 0,
+                'type' => 'pinbar',
+                'display_type' => 'list',
+                'maximized' => false,
+                'remove' => false
+            ],
+            'contact' => [
+                'url' => $router->generate('oro_contact_index'),
+                'title_rendered' => 'Contacts - Customers',
+                'title' => '{"template":"Contacts - Customers","short_template":"Contacts","params":[]}',
+                'position' => 1,
+                'type' => 'pinbar',
+                'display_type' => 'list',
+                'maximized' => false,
+                'remove' => false
+            ],
+            'leads' => [
+                'url' => $datagridRouter->generate(
                     'oro_sales_lead_index',
                     'sales-lead-grid',
                     [
@@ -191,16 +115,16 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                         AppearanceExtension::MINIFIED_APPEARANCE_TYPE_PARAM => 'grid'
                     ]
                 ),
-                "title_rendered" => "Leads - Sales",
-                "title" => "{\"template\":\"Leads - Sales\",\"short_template\":\"Leads\",\"params\":[]}",
-                "position" => 2,
-                "type" => "pinbar",
-                "display_type" => "list",
-                "maximized" => false,
-                "remove" => false
-            ),
-            'opportunities' => array(
-                "url" => $datagridRouter->generate(
+                'title_rendered' => 'Leads - Sales',
+                'title' => '{"template":"Leads - Sales","short_template":"Leads","params":[]}',
+                'position' => 2,
+                'type' => 'pinbar',
+                'display_type' => 'list',
+                'maximized' => false,
+                'remove' => false
+            ],
+            'opportunities' => [
+                'url' => $datagridRouter->generate(
                     'oro_sales_opportunity_index',
                     'sales-opportunity-grid',
                     [
@@ -222,16 +146,14 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                         AppearanceExtension::MINIFIED_APPEARANCE_TYPE_PARAM => 'grid'
                     ]
                 ),
-                "title_rendered" => "Opportunities - Sales",
-                "title"
-                    => "{\"template\":\"Opportunities - Sales\",\"short_template\":\"Opportunities\",\"params\":[]}",
-                "position" => 3,
-                "type" => "pinbar",
-                "display_type" => "list",
-                "maximized" => false,
-                "remove" => false
-            )
-        );
-        return $params;
+                'title_rendered' => 'Opportunities - Sales',
+                'title' => '{"template":"Opportunities - Sales","short_template":"Opportunities","params":[]}',
+                'position' => 3,
+                'type' => 'pinbar',
+                'display_type' => 'list',
+                'maximized' => false,
+                'remove' => false
+            ]
+        ];
     }
 }

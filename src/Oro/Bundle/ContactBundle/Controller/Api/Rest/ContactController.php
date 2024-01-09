@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
+use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
@@ -14,6 +15,7 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\HttpDateTimeParameterFilter;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\IdentifierToReferenceFilter;
+use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,8 +94,8 @@ class ContactController extends RestController
         $limit = (int)$request->get('limit', self::ITEMS_PER_PAGE);
 
         $dateParamFilter  = new HttpDateTimeParameterFilter();
-        $userIdFilter     = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User');
-        $userNameFilter   = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User', 'username');
+        $userIdFilter = new IdentifierToReferenceFilter($this->container->get('doctrine'), User::class);
+        $userNameFilter = new IdentifierToReferenceFilter($this->container->get('doctrine'), User::class, 'username');
 
         $filterParameters = [
             'createdAt'        => $dateParamFilter,
@@ -179,7 +181,7 @@ class ContactController extends RestController
      *      id="oro_contact_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroContactBundle:Contact"
+     *      class="Oro\Bundle\ContactBundle\Entity\Contact"
      * )
      * @return Response
      */
@@ -195,7 +197,7 @@ class ContactController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_contact.contact.manager.api');
+        return $this->container->get('oro_contact.contact.manager.api');
     }
 
     /**
@@ -203,7 +205,7 @@ class ContactController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_contact.form.contact.api');
+        return $this->container->get('oro_contact.form.contact.api');
     }
 
     /**
@@ -211,7 +213,7 @@ class ContactController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_contact.form.handler.contact.api');
+        return $this->container->get('oro_contact.form.handler.contact.api');
     }
 
     /**
@@ -226,7 +228,7 @@ class ContactController extends RestController
         $result = $this->getFormHandler()->process(
             $entity,
             $this->getForm(),
-            $this->get('request_stack')->getCurrentRequest()
+            $this->container->get('request_stack')->getCurrentRequest()
         );
         if (\is_object($result) || null === $result) {
             return $result;
@@ -244,8 +246,8 @@ class ContactController extends RestController
     protected function fixRequestAttributes($entity)
     {
         $formAlias = $this->getFormAlias();
-        $request = $this->get('request_stack')->getCurrentRequest();
-        $contactData = $request->request->get($formAlias);
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $contactData = $request->request->all($formAlias);
 
         if (array_key_exists('accounts', $contactData)) {
             $accounts = $contactData['accounts'];
@@ -277,7 +279,7 @@ class ContactController extends RestController
         // - move region name to region_text field for unknown region
         if (array_key_exists('addresses', $contactData)) {
             foreach ($contactData['addresses'] as &$address) {
-                AddressApiUtils::fixAddress($address, $this->get('doctrine.orm.entity_manager'));
+                AddressApiUtils::fixAddress($address, $this->container->get('doctrine.orm.entity_manager'));
             }
             $request->request->set($formAlias, $contactData);
         }
@@ -308,5 +310,13 @@ class ContactController extends RestController
         unset($data['updatedBy']);
 
         return true;
+    }
+
+    public static function getSubscribedServices(): array
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            ['doctrine' => ManagerRegistry::class]
+        );
     }
 }

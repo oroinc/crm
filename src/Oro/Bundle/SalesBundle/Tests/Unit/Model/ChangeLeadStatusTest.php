@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
+use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
@@ -33,7 +34,7 @@ class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
         $validator = $this->createMock(ValidatorInterface::class);
         $validator->expects($this->any())
             ->method('validate')
-            ->willReturn($this->createMock(\Countable::class));
+            ->willReturn(new ConstraintViolationList());
 
         $this->model = new ChangeLeadStatus($this->entityManager, $validator);
     }

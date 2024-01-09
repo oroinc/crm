@@ -4,6 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -50,7 +51,7 @@ class StateProvider
     public function isEntitiesEnabledInSomeChannel(array $entities): bool
     {
         $qb = $this->getManager()->createQueryBuilder('c');
-        $qb->from('OroChannelBundle:Channel', 'c');
+        $qb->from(Channel::class, 'c');
         $qb->select('c.id');
 
         if (!empty($entities)) {
@@ -103,7 +104,7 @@ class StateProvider
             $qb = $this->getManager()->createQueryBuilder();
             $qb->distinct(true);
             $qb->select('e.name')
-                ->from('OroChannelBundle:Channel', 'c')
+                ->from(Channel::class, 'c')
                 ->innerJoin('c.entities', 'e');
 
             $organizationId = $this->tokenAccessor->getOrganizationId();

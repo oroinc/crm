@@ -9,6 +9,7 @@ use Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadRestrictedUser;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
+use Oro\Bundle\UserBundle\Entity\AbstractUser;
 
 class StateProviderTest extends WebTestCase
 {
@@ -53,8 +54,7 @@ class StateProviderTest extends WebTestCase
 
         $this->stateProvider->clearOrganizationCache($organization->getId());
         $adminToken = new UsernamePasswordOrganizationToken(
-            'admin',
-            'admin',
+            $this->createMock(AbstractUser::class),
             'key',
             $organization
         );
@@ -69,8 +69,7 @@ class StateProviderTest extends WebTestCase
 
         $this->stateProvider->clearOrganizationCache($organization->getId());
         $restrictedUserToken = new UsernamePasswordOrganizationToken(
-            $restrictedUser->getUserName(),
-            'test',
+            $restrictedUser,
             'key',
             $organization
         );
@@ -84,8 +83,7 @@ class StateProviderTest extends WebTestCase
         $organization = $this->getReference('organization');
 
         $adminToken = new UsernamePasswordOrganizationToken(
-            'admin',
-            'admin',
+            $this->createMock(AbstractUser::class),
             'key',
             $organization
         );

@@ -4,27 +4,33 @@ namespace Oro\Bundle\ContactBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\UpdateWithOrganization;
 
+/**
+ * Sets a default organization to Contact and Group entities.
+ */
 class UpdateContactEntitiesWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
-            'Oro\Bundle\ContactBundle\Migrations\Data\ORM\LoadGroupData',
-            'Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData'
+            LoadGroupData::class,
+            LoadOrganizationAndBusinessUnitData::class
         ];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $this->update($manager, 'OroContactBundle:Group');
-        $this->update($manager, 'OroContactBundle:Contact');
+        $this->update($manager, Group::class);
+        $this->update($manager, Contact::class);
     }
 }

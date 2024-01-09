@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactUsBundle\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestEditType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
@@ -31,7 +32,7 @@ class ContactRequestController extends AbstractController
      *      id="oro_contactus_request_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroContactUsBundle:ContactRequest"
+     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactRequest"
      * )
      */
     public function viewAction(ContactRequest $contactRequest)
@@ -72,7 +73,7 @@ class ContactRequestController extends AbstractController
      *      id="oro_contactus_request_edit",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroContactUsBundle:ContactRequest"
+     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactRequest"
      * )
      */
     public function updateAction(
@@ -90,7 +91,7 @@ class ContactRequestController extends AbstractController
      *      id="oro_contactus_request_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroContactUsBundle:ContactRequest"
+     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactRequest"
      * )
      */
     public function createAction(
@@ -106,13 +107,13 @@ class ContactRequestController extends AbstractController
      *      id="oro_contactus_request_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroContactUsBundle:ContactRequest"
+     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactRequest"
      * )
      * @CsrfProtection()
      */
     public function deleteAction(ContactRequest $contactRequest): JsonResponse
     {
-        $em = $this->get('doctrine')->getManagerForClass(ContactRequest::class);
+        $em = $this->container->get('doctrine')->getManagerForClass(ContactRequest::class);
 
         $em->remove($contactRequest);
         $em->flush();
@@ -141,7 +142,8 @@ class ContactRequestController extends AbstractController
             parent::getSubscribedServices(),
             [
                 UpdateHandlerFacade::class,
-                TranslatorInterface::class
+                TranslatorInterface::class,
+                'doctrine' => ManagerRegistry::class,
             ]
         );
     }

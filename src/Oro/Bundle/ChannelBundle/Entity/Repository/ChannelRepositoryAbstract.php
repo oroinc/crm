@@ -18,7 +18,7 @@ abstract class ChannelRepositoryAbstract extends EntityRepository implements Cha
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('c.id', 'c.name');
-        $qb->from('OroChannelBundle:Channel', 'c', 'c.id');
+        $qb->from(Channel::class, 'c', 'c.id');
 
         if (null !== $type) {
             $qb->andWhere($qb->expr()->eq('c.channelType', ':type'));

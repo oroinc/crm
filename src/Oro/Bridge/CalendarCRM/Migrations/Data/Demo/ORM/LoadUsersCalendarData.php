@@ -5,20 +5,20 @@ namespace Oro\Bridge\CalendarCRM\Migrations\Data\Demo\ORM;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
+use Oro\Bundle\ActivityListBundle\Entity\ActivityOwner;
 use Oro\Bundle\CalendarBundle\Entity\Calendar;
 use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
 use Oro\Bundle\CalendarBundle\Entity\CalendarProperty;
 use Oro\Bundle\CalendarBundle\Entity\Recurrence;
-use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
 use Oro\Bundle\CalendarBundle\Model;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUserData;
+use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
@@ -26,76 +26,37 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /** @var ContainerInterface */
-    private $container;
+    use ContainerAwareTrait;
 
-    /** @var User[] */
-    private $users;
-
-    /** @var EntityRepository */
-    protected $user;
-
-    /** @var CalendarRepository */
-    protected $calendar;
-
-    /** @var Organization */
-    protected $organization;
-
-    /** @var EntityManager */
-    protected $em;
-
-    /** @var TokenStorageInterface */
-    protected $tokenStorage;
-
-    /** @var \DateTimeZone */
-    protected $timeZone;
+    private ?\DateTimeZone $timeZone = null;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
-        return [
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUserData'
-        ];
+        return [LoadUsersData::class, LoadUserData::class];
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function load(ObjectManager $manager): void
     {
-        $this->container = $container;
-
-        $this->em = $container->get('doctrine')->getManager();
-        $this->tokenStorage = $container->get('security.token_storage');
-
-        $this->user = $this->em->getRepository('OroUserBundle:User');
-        $this->calendar = $this->em->getRepository('OroCalendarBundle:Calendar');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function load(ObjectManager $manager)
-    {
-        $this->users = $this->user->findAll();
-        $this->organization = $this->getReference('default_organization');
-
-        $this->loadCalendars();
-        $this->connectCalendars();
-
-        $this->tokenStorage->setToken(null);
+        $tokenStorage = $this->container->get('security.token_storage');
+        $users = $manager->getRepository(User::class)->findAll();
+        $this->loadCalendars($manager, $tokenStorage, $users);
+        $this->connectCalendars($manager, $users);
+        $tokenStorage->setToken(null);
     }
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function loadCalendars()
+    private function loadCalendars(ObjectManager $manager, TokenStorageInterface $tokenStorage, array $users): void
     {
-        $days   = $this->getDatePeriod();
+        $days = $this->getDatePeriod();
         $events = [];
         foreach ($days as $day) {
             /** @var \DateTime $day */
@@ -103,45 +64,45 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 //work day
                 $event = new CalendarEvent();
                 $event->setTitle('Work Reminder');
-                $day->setTime(8, 0, 0);
+                $day->setTime(8, 0);
                 $event->setStart(clone $day);
-                $day->setTime(18, 0, 0);
+                $day->setTime(18, 0);
                 $event->setEnd(clone $day);
                 $event->setAllDay(true);
                 $events['workday'][] = $event;
                 //call
                 $event = new CalendarEvent();
                 $event->setTitle('Client Call');
-                $day->setTime(11, 0, 0);
+                $day->setTime(11, 0);
                 $event->setStart(clone $day);
-                $day->setTime(12, 0, 0);
+                $day->setTime(12, 0);
                 $event->setEnd(clone $day);
                 $event->setAllDay(false);
                 $events['call'][] = $event;
                 //meeting
                 $event = new CalendarEvent();
                 $event->setTitle('Meeting');
-                $day->setTime(16, 0, 0);
+                $day->setTime(16, 0);
                 $event->setStart(clone $day);
-                $day->setTime(18, 0, 0);
+                $day->setTime(18, 0);
                 $event->setEnd(clone $day);
                 $event->setAllDay(false);
                 $events['meeting'][] = $event;
                 //lunch
                 $event = new CalendarEvent();
                 $event->setTitle('Lunch');
-                $day->setTime(12, 0, 0);
+                $day->setTime(12, 0);
                 $event->setStart(clone $day);
-                $day->setTime(12, 30, 0);
+                $day->setTime(12, 30);
                 $event->setEnd(clone $day);
                 $event->setAllDay(false);
                 $events['lunch'][] = $event;
                 //business trip
                 $event = new CalendarEvent();
                 $event->setTitle('Business trip');
-                $day->setTime(0, 0, 0);
+                $day->setTime(0, 0);
                 $event->setStart(clone $day);
-                $day->setTime(0, 0, 0);
+                $day->setTime(0, 0);
                 $day->add(\DateInterval::createFromDateString('+3 days'));
                 $event->setEnd(clone $day);
                 $event->setAllDay(true);
@@ -149,59 +110,70 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             } else {
                 $event = new CalendarEvent();
                 $event->setTitle('Weekend');
-                $day->setTime(8, 0, 0);
+                $day->setTime(8, 0);
                 $event->setStart(clone $day);
-                $day->setTime(18, 0, 0);
+                $day->setTime(18, 0);
                 $event->setEnd(clone $day);
                 $event->setAllDay(true);
                 $events['weekend'][] = $event;
             }
         }
 
-        foreach ($this->users as $index => $user) {
+        $calendarRepository = $manager->getRepository(Calendar::class);
+        $organization = $this->getReference('default_organization');
+        foreach ($users as $index => $user) {
             //get default calendar, each user has default calendar after creation
-            $calendar = $this->calendar->findDefaultCalendar($user->getId(), $this->organization->getId());
+            $calendar = $calendarRepository->findDefaultCalendar($user->getId(), $organization->getId());
             if (!$calendar) {
                 continue;
             }
-            $this->setSecurityContext($calendar->getOwner());
+            $calendarOwner = $calendar->getOwner();
+            $tokenStorage->setToken(new UsernamePasswordOrganizationToken(
+                $calendarOwner,
+                'main',
+                $organization,
+                $calendarOwner->getUserRoles()
+            ));
             $events['recurring_events'] = $this->getRecurringEvents();
             foreach ($events as $typeEvents) {
                 if (mt_rand(0, 1)) {
                     foreach ($typeEvents as $typeEvent) {
                         $event = clone $typeEvent;
-                        $event->setIsOrganizer(true)->setOrganizerEmail($calendar->getOwner()->getEmail())
+                        $event->setIsOrganizer(true)->setOrganizerEmail($calendarOwner->getEmail())
                             ->setOrganizerDisplayName(sprintf(
                                 '%s %s',
-                                $calendar->getOwner()->getFirstName(),
-                                $calendar->getOwner()->getLastName()
-                            ))->setOrganizerUser($calendar->getOwner());
+                                $calendarOwner->getFirstName(),
+                                $calendarOwner->getLastName()
+                            ))->setOrganizerUser($calendarOwner);
                         $calendar->addEvent($event);
                     }
                 }
             }
-            $this->em->persist($calendar);
+            $manager->persist($calendar);
             if ($index > 0 && $index % 5 === 0) {
-                $this->em->flush();
-                $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityOwner');
-                $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityList');
-                $this->em->clear('Oro\Bundle\CalendarBundle\Entity\CalendarEvent');
-                $this->em->clear('Oro\Bundle\CalendarBundle\Entity\Calendar');
+                $manager->flush();
+                $manager->clear(ActivityOwner::class);
+                $manager->clear(ActivityList::class);
+                $manager->clear(CalendarEvent::class);
+                $manager->clear(Calendar::class);
             }
         }
-        $this->em->flush();
-        $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityOwner');
-        $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityList');
-        $this->em->clear('Oro\Bundle\CalendarBundle\Entity\CalendarEvent');
-        $this->em->clear('Oro\Bundle\CalendarBundle\Entity\Calendar');
-        $this->addRecurringEventExceptions();
+        $manager->flush();
+        $manager->clear(ActivityOwner::class);
+        $manager->clear(ActivityList::class);
+        $manager->clear(CalendarEvent::class);
+        $manager->clear(Calendar::class);
+        $this->addRecurringEventExceptions($manager);
     }
 
-    protected function connectCalendars()
+    private function connectCalendars(ObjectManager $manager, array $users): void
     {
+        $userRepository = $manager->getRepository(User::class);
+        $calendarRepository = $manager->getRepository(Calendar::class);
+
         // first user is admin, often
-        /** @var \Oro\Bundle\UserBundle\Entity\User $admin */
-        $admin = $this->em->getRepository('OroUserBundle:User')
+        /** @var User $admin */
+        $admin = $userRepository
             ->createQueryBuilder('u')
             ->select('u')
             ->orderBy('u.id')
@@ -209,28 +181,38 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             ->setMaxResults(1)
             ->getSingleResult();
         /** @var Calendar $calendarAdmin */
-        $calendarAdmin = $this->calendar->findDefaultCalendar($admin->getId(), $admin->getOrganization()->getId());
+        $calendarAdmin = $calendarRepository->findDefaultCalendar(
+            $admin->getId(),
+            $admin->getOrganization()->getId()
+        );
 
-        /** @var \Oro\Bundle\UserBundle\Entity\User $sale */
-        $sale = $this->user->findOneBy(['username' => 'sale']);
+        /** @var User $sale */
+        $sale = $userRepository->findOneBy(['username' => 'sale']);
         /** @var Calendar $calendarSale */
-        $calendarSale = $this->calendar->findDefaultCalendar($sale->getId(), $sale->getOrganization()->getId());
+        $calendarSale = $calendarRepository->findDefaultCalendar(
+            $sale->getId(),
+            $sale->getOrganization()->getId()
+        );
 
-        /** @var \Oro\Bundle\UserBundle\Entity\User $market */
-        $market = $this->user->findOneBy(['username' => 'marketing']);
+        /** @var User $market */
+        $market = $userRepository->findOneBy(['username' => 'marketing']);
         /** @var Calendar $calendarMarket */
-        $calendarMarket = $this->calendar->findDefaultCalendar($market->getId(), $market->getOrganization()->getId());
+        $calendarMarket = $calendarRepository->findDefaultCalendar(
+            $market->getId(),
+            $market->getOrganization()->getId()
+        );
 
-        /** @var User[] $users */
-        $users = $this->getRandomUsers();
-
+        $users = $this->getRandomUsers($manager, $users);
         foreach ($users as $user) {
             if (in_array($user->getId(), [$admin->getId(), $sale->getId(), $market->getId()])) {
                 //to prevent self assignment
                 continue;
             }
             /** @var Calendar $calendar */
-            $calendar = $this->calendar->findDefaultCalendar($user->getId(), $user->getOrganization()->getId());
+            $calendar = $calendarRepository->findDefaultCalendar(
+                $user->getId(),
+                $user->getOrganization()->getId()
+            );
 
             if (mt_rand(0, 1)) {
                 $calendarProperty = new CalendarProperty();
@@ -239,7 +221,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                     ->setCalendarAlias('user')
                     ->setCalendar($calendar->getId());
 
-                $this->em->persist($calendarProperty);
+                $manager->persist($calendarProperty);
             }
 
             if (mt_rand(0, 1)) {
@@ -249,7 +231,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                     ->setCalendarAlias('user')
                     ->setCalendar($calendar->getId());
 
-                $this->em->persist($calendarProperty);
+                $manager->persist($calendarProperty);
             }
 
             if (mt_rand(0, 1)) {
@@ -259,94 +241,67 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                     ->setCalendarAlias('user')
                     ->setCalendar($calendar->getId());
 
-                $this->em->persist($calendarProperty);
+                $manager->persist($calendarProperty);
             }
 
-            $this->em->persist($calendar);
+            $manager->persist($calendar);
         }
 
-        $this->em->flush();
+        $manager->flush();
     }
 
     /**
-     * @param int $limit
+     * @param ObjectManager $manager
+     * @param User[]        $users
      *
      * @return User[]
      */
-    protected function getRandomUsers($limit = 5)
+    private function getRandomUsers(ObjectManager $manager, array $users): array
     {
-        $userIds = $this->user->createQueryBuilder('u')
+        $userRepository = $manager->getRepository(User::class);
+        $userIds = $userRepository->createQueryBuilder('u')
             ->select('u.id')
             ->getQuery()
             ->getScalarResult();
 
-        if (count($userIds) > $limit) {
+        $limit = 5;
+        if (\count($userIds) > $limit) {
             $rawList = array_column($userIds, 'id', 'id');
             $keyList = array_rand($rawList, $limit);
 
             $criteria = new Criteria();
             $criteria->where(Criteria::expr()->in('id', $keyList));
 
-            $result = $this->user->createQueryBuilder('u')
+            $result = $userRepository->createQueryBuilder('u')
                 ->addCriteria($criteria)
                 ->getQuery()
                 ->getResult();
         } else {
-            $result = $this->users;
+            $result = $users;
         }
 
         return $result;
     }
 
-    /**
-     * @return \DatePeriod
-     */
-    protected function getDatePeriod()
+    private function getDatePeriod(): \DatePeriod
     {
-        $month = new \DatePeriod(
+        return new \DatePeriod(
             new \DateTime('now'),
             \DateInterval::createFromDateString('+1 day'),
             new \DateTime('now +1 month'),
             \DatePeriod::EXCLUDE_START_DATE
         );
-
-        return $month;
     }
 
-    /**
-     * @param \DateTime $date
-     * @return bool
-     */
-    protected function isWeekend($date)
+    private function isWeekend(\DateTime $dateTime): bool
     {
-        $day = date('w', $date->getTimestamp());
-        if ($day == 0 || $day == 6) {
-            return true;
-        }
-
-        return false;
-    }
-
-    protected function setSecurityContext(User $user)
-    {
-        $token = new UsernamePasswordOrganizationToken(
-            $user,
-            $user->getUsername(),
-            'main',
-            $this->organization,
-            $user->getUserRoles()
-        );
-        $this->tokenStorage->setToken($token);
+        return \in_array((int)$dateTime->format('w'), [0, 6], true);
     }
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     *
-     * Returns the list of recurring events.
-     *
-     * @return array
      */
-    protected function getRecurringEvents()
+    private function getRecurringEvents(): array
     {
         $baseEvent = new CalendarEvent();
         $baseRecurrence = new Recurrence();
@@ -356,9 +311,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $day = new \DateTime('+2 day', $this->getTimeZone());
         $event = clone $baseEvent;
         $event->setTitle('Gym Visiting');
-        $day->setTime(19, 0, 0);
+        $day->setTime(19, 0);
         $event->setEnd(clone $day);
-        $day->setTime(18, 0, 0);
+        $day->setTime(18, 0);
         $event->setStart(clone $day);
         $event->setAllDay(true);
         $recurrence = clone $baseRecurrence;
@@ -373,9 +328,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $day = new \DateTime('+1 day', $this->getTimeZone());
         $event = clone $baseEvent;
         $event->setTitle('Standup meeting');
-        $day->setTime(10, 15, 0);
+        $day->setTime(10, 15);
         $event->setEnd(clone $day);
-        $day->setTime(10, 0, 0);
+        $day->setTime(10, 0);
         $event->setStart(clone $day);
         $event->setAllDay(false);
         $recurrence = clone $baseRecurrence;
@@ -396,9 +351,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $day = new \DateTime('-3 day', $this->getTimeZone());
         $event = clone $baseEvent;
         $event->setTitle('Monthly Team Meeting');
-        $day->setTime(18, 0, 0);
+        $day->setTime(18, 0);
         $event->setEnd(clone $day);
-        $day->setTime(16, 0, 0);
+        $day->setTime(16, 0);
         $event->setStart(clone $day);
         $event->setAllDay(false);
         $recurrence = clone $baseRecurrence;
@@ -414,9 +369,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $day = new \DateTime('+5 day', $this->getTimeZone());
         $event = clone $baseEvent;
         $event->setTitle('Update News');
-        $day->setTime(14, 0, 0);
+        $day->setTime(14, 0);
         $event->setEnd(clone $day);
-        $day->setTime(10, 0, 0);
+        $day->setTime(10, 0);
         $event->setStart(clone $day);
         $event->setAllDay(true);
         $recurrence = clone $baseRecurrence;
@@ -433,9 +388,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $day = new \DateTime('now', $this->getTimeZone());
         $event = clone $baseEvent;
         $event->setTitle('Yearly Conference');
-        $day->setTime(19, 0, 0);
+        $day->setTime(19, 0);
         $event->setEnd(clone $day);
-        $day->setTime(10, 0, 0);
+        $day->setTime(10, 0);
         $event->setStart(clone $day);
         $event->setAllDay(true);
         $recurrence = clone $baseRecurrence;
@@ -451,9 +406,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $day = new \DateTime('-2 day', $this->getTimeZone());
         $event = clone $baseEvent;
         $event->setTitle('New Year Party');
-        $day->setTime(23, 0, 0);
+        $day->setTime(23, 0);
         $event->setEnd(clone $day);
-        $day->setTime(18, 0, 0);
+        $day->setTime(18, 0);
         $event->setStart(clone $day);
         $event->setAllDay(true);
         $recurrence = clone $baseRecurrence;
@@ -473,59 +428,56 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     /**
      * Adds exceptions to recurring events.
      */
-    protected function addRecurringEventExceptions()
+    private function addRecurringEventExceptions(ObjectManager $manager): void
     {
-        $event = $this->em->getRepository('OroCalendarBundle:CalendarEvent')->findOneBy(['title' => 'Standup meeting']);
+        $event = $manager->getRepository(CalendarEvent::class)->findOneBy(['title' => 'Standup meeting']);
         $day = new \DateTime('next friday', $this->getTimeZone());
-        $day->setTime(10, 0, 0);
+        $day->setTime(10, 0);
         $exception = new CalendarEvent();
         $exception->setTitle('Changed Standup meeting');
         $exception->setOriginalStart(clone $day);
-        $day->setTime(9, 15, 0);
+        $day->setTime(9, 15);
         $exception->setEnd(clone $day);
-        $day->setTime(9, 0, 0);
+        $day->setTime(9, 0);
         $exception->setStart(clone $day)
             ->setCalendar($event->getCalendar())
             ->setAllDay(true);
         $event->addRecurringEventException($exception);
 
         $day = new \DateTime('next monday', $this->getTimeZone());
-        $day->setTime(10, 0, 0);
+        $day->setTime(10, 0);
         $exception = new CalendarEvent();
         $exception->setTitle('Evening Standup meeting');
         $exception->setOriginalStart(clone $day);
-        $day->setTime(19, 15, 0);
+        $day->setTime(19, 15);
         $exception->setEnd(clone $day);
-        $day->setTime(19, 0, 0);
+        $day->setTime(19, 0);
         $exception->setStart(clone $day)
             ->setCalendar($event->getCalendar())
             ->setAllDay(false);
         $event->addRecurringEventException($exception);
 
         $day = new \DateTime('first wednesday of next month', $this->getTimeZone());
-        $day->setTime(10, 0, 0);
+        $day->setTime(10, 0);
         $exception = new CalendarEvent();
         $exception->setTitle('Late meeting');
         $exception->setOriginalStart(clone $day);
-        $day->setTime(23, 15, 0);
+        $day->setTime(23, 15);
         $exception->setEnd(clone $day);
-        $day->setTime(23, 0, 0);
+        $day->setTime(23, 0);
         $exception->setStart(clone $day)
             ->setCalendar($event->getCalendar())
             ->setAllDay(false);
         $event->addRecurringEventException($exception);
 
-        $this->em->persist($event);
+        $manager->persist($event);
 
-        $this->em->flush();
+        $manager->flush();
     }
 
-    /**
-     * @return \DateTimeZone
-     */
-    protected function getTimeZone()
+    private function getTimeZone(): \DateTimeZone
     {
-        if ($this->timeZone === null) {
+        if (null === $this->timeZone) {
             $this->timeZone = new \DateTimeZone('UTC');
         }
 

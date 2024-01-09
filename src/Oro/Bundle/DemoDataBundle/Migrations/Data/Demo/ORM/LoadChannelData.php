@@ -9,36 +9,31 @@ use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
+/**
+ * Load default "b2b" channel.
+ */
 class LoadChannelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /** @var BuilderFactory */
-    protected $factory;
+    use ContainerAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
-        return ['Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData'];
+        return [LoadBusinessUnitData::class];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function load(ObjectManager $manager)
     {
-        $this->factory = $container->get('oro_channel.builder.factory');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function load(ObjectManager $om)
-    {
-        $channel = $this
-            ->factory
+        /** @var BuilderFactory $factory */
+        $factory = $this->container->get('oro_channel.builder.factory');
+        $channel = $factory
             ->createBuilder()
             ->setStatus(Channel::STATUS_ACTIVE)
             ->setEntities()
@@ -46,8 +41,8 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
             ->setName('Sales channel')
             ->getChannel();
 
-        $om->persist($channel);
-        $om->flush();
+        $manager->persist($channel);
+        $manager->flush();
 
         $this->addReference('default_channel', $channel);
     }

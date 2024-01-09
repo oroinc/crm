@@ -38,10 +38,10 @@ class CommentController extends AbstractController
     public function commentsListAction(Request $request, CaseEntity $case)
     {
         $order = $request->get('sorting', 'DESC');
-        $comments = $this->get(CaseEntityManager::class)->getCaseComments($case, $order);
+        $comments = $this->container->get(CaseEntityManager::class)->getCaseComments($case, $order);
 
         return new JsonResponse(
-            $this->get(ViewFactory::class)->createCommentViewList($comments)
+            $this->container->get(ViewFactory::class)->createCommentViewList($comments)
         );
     }
 
@@ -76,10 +76,10 @@ class CommentController extends AbstractController
      */
     public function createAction(Request $request, CaseEntity $case)
     {
-        $comment = $this->get(CaseEntityManager::class)->createComment($case);
+        $comment = $this->container->get(CaseEntityManager::class)->createComment($case);
         $comment->setOwner($this->getUser());
 
-        $formAction = $this->get(EntityRoutingHelper::class)
+        $formAction = $this->container->get(EntityRoutingHelper::class)
             ->generateUrlByRequest('oro_case_comment_create', $request, ['caseId' => $case->getId()]);
 
         return $this->update($comment, $formAction);
@@ -96,7 +96,7 @@ class CommentController extends AbstractController
      */
     public function updateAction(CaseComment $comment)
     {
-        $formAction = $this->get('router')->generate('oro_case_comment_update', ['id' => $comment->getId()]);
+        $formAction = $this->container->get('router')->generate('oro_case_comment_update', ['id' => $comment->getId()]);
 
         $user = $this->getUser();
         if ($user instanceof User) {
@@ -113,13 +113,13 @@ class CommentController extends AbstractController
      */
     protected function update(CaseComment $comment, $formAction)
     {
-        $saved = $this->get(CaseEntityHandler::class)->process($comment);
+        $saved = $this->container->get(CaseEntityHandler::class)->process($comment);
 
         return [
             'saved'      => $saved,
             'entity'     => $comment,
-            'data'       => $saved ? $this->get(ViewFactory::class)->createCommentView($comment) : null,
-            'form'       => $this->get('oro_case.form.comment')->createView(),
+            'data'       => $saved ? $this->container->get(ViewFactory::class)->createCommentView($comment) : null,
+            'form'       => $this->container->get('oro_case.form.comment')->createView(),
             'formAction' => $formAction,
         ];
     }

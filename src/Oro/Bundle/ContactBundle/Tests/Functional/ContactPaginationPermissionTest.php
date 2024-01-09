@@ -4,13 +4,13 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
-use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser;
 
 class ContactPaginationPermissionTest extends AbstractContactPaginationTestCase
 {
-    public function testViewChangePermissions()
+    public function testViewChangePermissions(): void
     {
-        $this->client->followRedirects(true);
+        $this->client->followRedirects();
 
         // open first contact prepare entity pagination set
         $crawler = $this->openEntity(
@@ -23,18 +23,15 @@ class ContactPaginationPermissionTest extends AbstractContactPaginationTestCase
         $this->checkPaginationLinks($crawler);
 
         // change owner to second contact
-        $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+        $this->loadFixtures([LoadUser::class]);
+        $em = self::getContainer()->get('doctrine')->getManager();
         $contact = $this->getContainer()->get('doctrine')->getRepository(Contact::class)
             ->findOneBy(['firstName' => LoadContactEntitiesData::SECOND_ENTITY_NAME]);
-
-        $admin = $this->getContainer()->get('doctrine')->getRepository(User::class)
-            ->findOneByUsername('admin');
-
-        $contact->setOwner($admin);
+        $contact->setOwner($this->getReference(LoadUser::USER));
         $em->flush();
 
         // click next link
-        $next = $crawler->filter('#entity-pagination a .fa-chevron-right')->parents()->link();
+        $next = $crawler->filter('#entity-pagination a .fa-chevron-right')->ancestors()->link();
         $this->client->click($next);
         $crawler = $this->redirectViaFrontend(
             'You do not have sufficient permissions to access records. You are now viewing 3 records.'

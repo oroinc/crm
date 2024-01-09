@@ -71,11 +71,11 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     private function initSupportingEntities()
     {
-        $this->contactGroups = $this->em->getRepository('OroContactBundle:Group')->findAll();
-        $this->contactSources = $this->em->getRepository('OroContactBundle:Source')->findAll();
-        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
-        $this->organization = $this->em->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->contactGroups = $this->em->getRepository(Group::class)->findAll();
+        $this->contactSources = $this->em->getRepository(Source::class)->findAll();
+        $this->users = $this->em->getRepository(User::class)->findAll();
+        $this->countries = $this->em->getRepository(Country::class)->findAll();
+        $this->organization = $this->em->getRepository(Organization::class)->getFirst();
     }
 
     /**

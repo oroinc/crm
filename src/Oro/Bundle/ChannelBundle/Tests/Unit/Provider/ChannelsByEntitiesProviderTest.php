@@ -7,16 +7,18 @@ use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ChannelsByEntitiesProviderTest extends \PHPUnit\Framework\TestCase
+class ChannelsByEntitiesProviderTest extends TestCase
 {
     /** @var ChannelsByEntitiesProvider */
     private $provider;
 
-    /** @var ChannelRepository|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ChannelRepository|MockObject */
     private $repo;
 
-    /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AclHelper|MockObject */
     private $aclHelper;
 
     protected function setUp(): void
@@ -27,7 +29,7 @@ class ChannelsByEntitiesProviderTest extends \PHPUnit\Framework\TestCase
         $doctrineHelper = $this->createMock(DoctrineHelper::class);
         $doctrineHelper->expects($this->once())
             ->method('getEntityRepositoryForClass')
-            ->with('OroChannelBundle:Channel')
+            ->with(Channel::class)
             ->willReturn($this->repo);
 
         $this->aclHelper->expects($this->any())

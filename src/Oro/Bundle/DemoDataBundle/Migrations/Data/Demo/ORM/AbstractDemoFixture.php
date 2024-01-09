@@ -10,6 +10,9 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * The base class for demo data fixtures.
+ */
 abstract class AbstractDemoFixture extends AbstractFixture implements ContainerAwareInterface
 {
     /** @var  EntityManager */
@@ -59,7 +62,7 @@ abstract class AbstractDemoFixture extends AbstractFixture implements ContainerA
      */
     protected function getUserReference($id)
     {
-        return $this->em->getReference('OroUserBundle:User', $id);
+        return $this->em->getReference(User::class, $id);
     }
 
     /**
@@ -69,7 +72,7 @@ abstract class AbstractDemoFixture extends AbstractFixture implements ContainerA
      */
     protected function getCountryReference($code)
     {
-        return $this->em->getReference('OroAddressBundle:Country', $code);
+        return $this->em->getReference(Country::class, $code);
     }
 
     /**
@@ -84,11 +87,9 @@ abstract class AbstractDemoFixture extends AbstractFixture implements ContainerA
             $this->regionByCountryMap = $this->loadRegionByCountryMap();
         }
 
-        return isset($this->regionByCountryMap[$countryCode], $this->regionByCountryMap[$countryCode][$code])
-            ?
-            $this->em->getReference('OroAddressBundle:Region', $this->regionByCountryMap[$countryCode][$code])
-            :
-            null;
+        return isset($this->regionByCountryMap[$countryCode][$code])
+            ? $this->em->getReference(Region::class, $this->regionByCountryMap[$countryCode][$code])
+            : null;
     }
 
     /**
@@ -97,7 +98,7 @@ abstract class AbstractDemoFixture extends AbstractFixture implements ContainerA
     private function loadUserIds()
     {
         $items = $this->em->createQueryBuilder()
-            ->from('OroUserBundle:User', 'u')
+            ->from(User::class, 'u')
             ->select('u.id')
             ->getQuery()
             ->getArrayResult();
@@ -116,7 +117,7 @@ abstract class AbstractDemoFixture extends AbstractFixture implements ContainerA
     private function loadRegionByCountryMap()
     {
         $items = $this->em->createQueryBuilder()
-            ->from('OroAddressBundle:Country', 'c')
+            ->from(Country::class, 'c')
             ->leftJoin('c.regions', 'r')
             ->select(['c.iso2Code', 'r.code', 'r.combinedCode'])
             ->getQuery()

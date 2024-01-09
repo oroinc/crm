@@ -3,27 +3,31 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AverageLifetimeWidgetProviderTest extends \PHPUnit\Framework\TestCase
+class AverageLifetimeWidgetProviderTest extends TestCase
 {
     private const TEST_TZ = 'UTC';
 
-    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ManagerRegistry|MockObject */
     private $registry;
 
-    /** @var AclHelper|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AclHelper|MockObject */
     private $aclHelper;
 
-    /** @var LocaleSettings|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var LocaleSettings|MockObject */
     private $localeSettings;
 
-    /** @var DateFilterProcessor|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var DateFilterProcessor|MockObject */
     private $dateFilterProcessor;
 
     /** @var AverageLifetimeWidgetProvider */
@@ -68,8 +72,8 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit\Framework\TestCase
         $this->registry->expects($this->any())
             ->method('getRepository')
             ->willReturnMap([
-                ['OroChannelBundle:Channel', null, $channelRepo],
-                ['OroChannelBundle:LifetimeValueAverageAggregation', null, $averageRepo]
+                [Channel::class, null, $channelRepo],
+                [LifetimeValueAverageAggregation::class, null, $averageRepo]
             ]);
 
         $this->dateFilterProcessor->expects($this->once())

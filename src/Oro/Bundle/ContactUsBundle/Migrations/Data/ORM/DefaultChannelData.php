@@ -6,38 +6,38 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
 
+/**
+ * Loads "custom" default channel.
+ */
 class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
-    const PREFERABLE_CHANNEL_TYPE = 'custom';
+    public const PREFERABLE_CHANNEL_TYPE = 'custom';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $entity = 'Oro\Bundle\ContactUsBundle\Entity\ContactRequest';
-
-        $forms = $this->em->getRepository('OroEmbeddedFormBundle:EmbeddedForm')
+        $forms = $manager->getRepository(EmbeddedForm::class)
             ->findBy(['formType' => ContactRequestType::class]);
 
-        $existingRecords =  $this->getRowCount($entity);
-        $shouldBeCreated =  $existingRecords || !empty($forms);
+        $existingRecords = $this->getRowCount($manager, ContactRequest::class);
+        $shouldBeCreated = $existingRecords || !empty($forms);
         if ($shouldBeCreated) {
             /** @var Channel|null $channel */
-            $channel = $this->em->getRepository('OroChannelBundle:Channel')
+            $channel = $manager->getRepository(Channel::class)
                 ->findOneBy(['channelType' => self::PREFERABLE_CHANNEL_TYPE]);
 
-            if (!$channel) {
-                $builder = $this->container->get('oro_channel.builder.factory')->createBuilder();
-            } else {
-                $builder = $this->container->get('oro_channel.builder.factory')->createBuilderForChannel($channel);
-            }
-
+            $factory = $this->container->get('oro_channel.builder.factory');
+            $builder = $channel
+                ? $factory->createBuilderForChannel($channel)
+                : $factory->createBuilder();
             $builder->setStatus(Channel::STATUS_ACTIVE);
-            $builder->addEntity($entity);
+            $builder->addEntity(ContactRequest::class);
 
             $channel = $builder->getChannel();
 
@@ -48,11 +48,11 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
                 }
             }
 
-            $this->em->persist($channel);
-            $this->em->flush();
+            $manager->persist($channel);
+            $manager->flush();
 
             if ($existingRecords) {
-                $this->fillChannelToEntity($channel, $entity);
+                $this->fillChannelToEntity($manager, $channel, ContactRequest::class);
             }
         }
     }

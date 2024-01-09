@@ -6,16 +6,18 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\UpdateWithOrganization;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
- * Updates sales entities with organization.
+ * Sets a default organization to Lead and Opportunity entities.
  */
 class UpdateSalesEntitiesWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [LoadOrganizationAndBusinessUnitData::class];
     }
@@ -23,9 +25,9 @@ class UpdateSalesEntitiesWithOrganization extends UpdateWithOrganization impleme
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $this->update($manager, 'OroSalesBundle:Lead');
-        $this->update($manager, 'OroSalesBundle:Opportunity');
+        $this->update($manager, Lead::class);
+        $this->update($manager, Opportunity::class);
     }
 }

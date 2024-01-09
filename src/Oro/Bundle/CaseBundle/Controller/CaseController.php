@@ -76,7 +76,7 @@ class CaseController extends AbstractController
      */
     public function createAction(Request $request)
     {
-        $case = $this->get(CaseEntityManager::class)->createCase();
+        $case = $this->container->get(CaseEntityManager::class)->createCase();
 
         return $this->update($case, $request);
     }
@@ -98,18 +98,18 @@ class CaseController extends AbstractController
      */
     protected function update(CaseEntity $case, Request $request)
     {
-        if ($this->get(CaseEntityHandler::class)->process($case)) {
+        if ($this->container->get(CaseEntityHandler::class)->process($case)) {
             $request->getSession()->getFlashBag()->add(
                 'success',
-                $this->get(TranslatorInterface::class)->trans('oro.case.message.saved')
+                $this->container->get(TranslatorInterface::class)->trans('oro.case.message.saved')
             );
 
-            return $this->get(Router::class)->redirect($case);
+            return $this->container->get(Router::class)->redirect($case);
         }
 
         return [
             'entity' => $case,
-            'form'   => $this->get('oro_case.form.entity')->createView()
+            'form'   => $this->container->get('oro_case.form.entity')->createView()
         ];
     }
 

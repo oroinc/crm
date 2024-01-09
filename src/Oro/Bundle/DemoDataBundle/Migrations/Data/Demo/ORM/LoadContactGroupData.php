@@ -8,59 +8,47 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Loads contact group demo data
  */
 class LoadContactGroupData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /** @var ContainerInterface */
-    private $container;
+    use ContainerAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
-        return ['Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUserData'];
+        return [LoadUserData::class];
     }
 
-    public function setContainer(ContainerInterface $container = null)
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $manager): void
     {
-        $this->container = $container;
-    }
-
-    public function load(ObjectManager $manager)
-    {
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
-
         $saleUser = $this->getUser($manager, 'sale');
-
-        $groups = array(
+        $groups = [
             'Behavioural Segmentation' =>  $saleUser,
             'Demographic Segmentation' =>  $this->getUser($manager, 'marketing'),
             'Geographic Segmentation' => $saleUser,
             'Segmentation by occasions' => $saleUser,
             'Segmentation by benefits'  => $saleUser,
-        );
-
+        ];
         foreach ($groups as $group => $user) {
             $contactGroup = new Group($group);
             $contactGroup->setOwner($user);
             $contactGroup->setOrganization($this->getReference('default_organization'));
-            $entityManager->persist($contactGroup);
+            $manager->persist($contactGroup);
         }
-        $entityManager->flush();
+        $manager->flush();
     }
 
-    /**
-     * @param ObjectManager $manager
-     * @param $userName
-     * @return User
-     */
-    protected function getUser(ObjectManager $manager, $userName)
+    private function getUser(ObjectManager $manager, string $userName): User
     {
-        return $manager->getRepository('OroUserBundle:User')->findOneBy(['username' => $userName]);
+        return $manager->getRepository(User::class)->findOneBy(['username' => $userName]);
     }
 }

@@ -11,12 +11,16 @@ use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\DataAuditBundle\Entity\Audit;
+use Oro\Bundle\DataAuditBundle\Entity\AuditField;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\SegmentBundle\Query\FilterProcessor;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 /**
@@ -152,7 +156,7 @@ class ForecastProvider
             $this->addOwnersToDataAuditQB($qb, $ownerIds);
         }
         // need to join opportunity to properly apply acl permissions
-        $qb->join('OroSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
+        $qb->join(Opportunity::class, 'o', Join::WITH, 'a.objectId = o.id');
 
         $this->applyQueryFilter($qb, $widgetOptions);
 
@@ -214,7 +218,7 @@ class ForecastProvider
      */
     protected function getOpportunityRepository()
     {
-        return $this->doctrine->getRepository('OroSalesBundle:Opportunity');
+        return $this->doctrine->getRepository(Opportunity::class);
     }
 
     /**
@@ -222,7 +226,7 @@ class ForecastProvider
      */
     protected function getAuditFieldRepository()
     {
-        return $this->doctrine->getRepository('OroDataAuditBundle:AuditField');
+        return $this->doctrine->getRepository(AuditField::class);
     }
 
     /**
@@ -230,7 +234,7 @@ class ForecastProvider
      */
     protected function getAuditRepository()
     {
-        return $this->doctrine->getRepository('OroDataAuditBundle:Audit');
+        return $this->doctrine->getRepository(Audit::class);
     }
 
     /**
@@ -238,7 +242,7 @@ class ForecastProvider
      */
     protected function getUserRepository()
     {
-        return $this->doctrine->getRepository('OroUserBundle:User');
+        return $this->doctrine->getRepository(User::class);
     }
 
     /**
@@ -278,8 +282,10 @@ class ForecastProvider
         $qb
             ->select(
                 <<<SELECT
-(SELECT afps.newFloat FROM OroDataAuditBundle:AuditField afps WHERE afps.id = MAX(afp.id)) AS probability,
-(SELECT afpb.newFloat FROM OroDataAuditBundle:AuditField afpb WHERE afpb.id = MAX(afb.id)) AS budgetAmount
+(SELECT afps.newFloat FROM Oro\Bundle\DataAuditBundle\Entity\AuditField afps 
+WHERE afps.id = MAX(afp.id)) AS probability,
+(SELECT afpb.newFloat FROM Oro\Bundle\DataAuditBundle\Entity\AuditField afpb 
+WHERE afpb.id = MAX(afb.id)) AS budgetAmount
 SELECT
             )
             ->leftJoin('a.fields', 'afca', Join::WITH, 'afca.field = :closedAtField')
@@ -293,7 +299,7 @@ SELECT
 NOT EXISTS(
     SELECT
         afcah.newDatetime
-    FROM OroDataAuditBundle:AuditField afcah
+    FROM Oro\Bundle\DataAuditBundle\Entity\AuditField afcah
     WHERE
         afcah.id = MAX(afca.id)
         AND afcah.newDatetime IS NOT NULL
@@ -301,7 +307,7 @@ NOT EXISTS(
 AND EXISTS(
     SELECT
         afph.newFloat
-    FROM OroDataAuditBundle:AuditField afph
+    FROM Oro\Bundle\DataAuditBundle\Entity\AuditField afph
     WHERE
         afph.id = MAX(afp.id)
 )
@@ -328,10 +334,11 @@ HAVING
 EXISTS(
     SELECT
         afoh.newText
-    FROM OroDataAuditBundle:AuditField afoh
+    FROM Oro\Bundle\DataAuditBundle\Entity\AuditField afoh
     WHERE
         afoh.id = MAX(afo.id)
-        AND afoh.newText IN (SELECT afohu.username FROM OroUserBundle:User afohu WHERE afohu.id IN (:ownerIds))
+        AND afoh.newText IN (SELECT afohu.username FROM Oro\Bundle\UserBundle\Entity\User afohu
+        WHERE afohu.id IN (:ownerIds))
 )
 HAVING
             )
@@ -382,7 +389,12 @@ HAVING
             : [];
         if ($filters) {
             $this->filterProcessor
-                ->process($queryBuilder, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
+                ->process(
+                    $queryBuilder,
+                    'Oro\Bundle\SalesBundle\Entity\Opportunity',
+                    $filters,
+                    'o'
+                );
         }
     }
 }

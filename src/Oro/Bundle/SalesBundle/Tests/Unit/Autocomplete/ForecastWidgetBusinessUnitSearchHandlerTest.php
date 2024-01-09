@@ -10,19 +10,23 @@ use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\OrganizationBundle\Provider\BusinessUnitAclProvider;
 use Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SearchBundle\Engine\Indexer;
 use Oro\Bundle\SearchBundle\Provider\SearchMappingProvider;
 use Oro\Bundle\SearchBundle\Query\Result;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\TestCase
+class ForecastWidgetBusinessUnitSearchHandlerTest extends TestCase
 {
     private const TEST_ID_FIELD = 'id';
-    private const TEST_ENTITY_NAME = 'OroOrganizationBundle:BusinessUnit';
+    private const TEST_ENTITY_NAME = BusinessUnit::class;
     private const TEST_ENTITY_ALIAS = 'business_alias';
 
-    /** @var BusinessUnitAclProvider|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var BusinessUnitAclProvider|MockObject */
     private $businessAclProvider;
 
     /** @var ForecastWidgetBusinessUnitSearchHandler */
@@ -36,7 +40,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit\Framework\Tes
             self::TEST_ENTITY_NAME,
             [],
             $this->businessAclProvider,
-            'OroSalesBundle:Opportunity'
+            Opportunity::class
         );
     }
 

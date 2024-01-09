@@ -8,6 +8,7 @@ use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\SegmentBundle\Query\FilterProcessor;
@@ -99,7 +100,7 @@ class IndeterminateForecastProvider
      */
     protected function getOpportunityRepository()
     {
-        return $this->doctrine->getRepository('OroSalesBundle:Opportunity');
+        return $this->doctrine->getRepository(Opportunity::class);
     }
 
     /**

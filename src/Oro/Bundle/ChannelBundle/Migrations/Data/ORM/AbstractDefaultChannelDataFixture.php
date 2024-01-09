@@ -6,105 +6,78 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\BatchBundle\ORM\Query\QueryCountCalculator;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
- * Abstract implementation of Default channel ORM data fixture.
+ * The base class for fixtures that load default channels.
  * Provides logic for lifetime value updating and filling channel to entity.
  */
 abstract class AbstractDefaultChannelDataFixture extends AbstractFixture implements
     ContainerAwareInterface,
     DependentFixtureInterface
 {
-    const UPDATE_LIFETIME_READ_BATCH_SIZE = 1000;
-    const UPDATE_LIFETIME_WRITE_BATCH_SIZE = 200;
+    use ContainerAwareTrait;
 
-    /** @var ContainerInterface */
-    protected $container;
-
-    /** @var EntityManager */
-    protected $em;
+    private const UPDATE_LIFETIME_READ_BATCH_SIZE = 1000;
+    private const UPDATE_LIFETIME_WRITE_BATCH_SIZE = 200;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function getDependencies(): array
     {
-        $this->container = $container;
-        $this->em        = $container->get('doctrine')->getManager();
+        return [LoadOrganizationAndBusinessUnitData::class];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
+    protected function getRowCount(ObjectManager $manager, string $entityClass): int
     {
-        return ['Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData'];
+        return QueryCountCalculator::calculateCount(
+            $manager->getRepository($entityClass)->createQueryBuilder('e')->getQuery()
+        );
     }
 
-    /**
-     * @param string $entity
-     *
-     * @return int
-     */
-    protected function getRowCount($entity)
-    {
-        /** @var QueryBuilder $qb */
-        $qb = $this->em->getRepository($entity)
-            ->createQueryBuilder('e');
-
-        return QueryCountCalculator::calculateCount($qb->getQuery());
-    }
-
-    /**
-     * @param Channel $channel
-     * @param string  $entity
-     * @param array   $additionalParameters
-     */
-    protected function fillChannelToEntity(Channel $channel, $entity, $additionalParameters = [])
-    {
-        $interfaces = class_implements($entity) ?: [];
-        if (!in_array('Oro\\Bundle\\ChannelBundle\\Model\\ChannelAwareInterface', $interfaces)) {
+    protected function fillChannelToEntity(
+        ObjectManager $manager,
+        Channel $channel,
+        string $entityClass,
+        array $additionalParameters = []
+    ): void {
+        $interfaces = class_implements($entityClass) ?: [];
+        if (!\in_array(ChannelAwareInterface::class, $interfaces, true)) {
             return;
         }
 
         /** @var QueryBuilder $qb */
-        $qb = $this->em->createQueryBuilder()
-            ->update($entity, 'e')
+        $qb = $manager->createQueryBuilder()
+            ->update($entityClass, 'e')
             ->set('e.dataChannel', $channel->getId())
             ->where('e.dataChannel IS NULL');
         if (!empty($additionalParameters)) {
             foreach ($additionalParameters as $parameterName => $value) {
-                $qb->andWhere(
-                    sprintf(
-                        'e.%s = :%s',
-                        $parameterName,
-                        $parameterName
-                    )
-                )->setParameter($parameterName, $value);
+                $qb
+                    ->andWhere(sprintf('e.%s = :%s', $parameterName, $parameterName))
+                    ->setParameter($parameterName, $value);
             }
         }
-        $qb->getQuery()
-            ->execute();
+        $qb->getQuery()->execute();
     }
 
     /**
      * Returns map of lifetime fields per customer identity
-     *
-     * @return array
      */
-    protected function getLifetimeFieldsMap()
+    protected function getLifetimeFieldsMap(): array
     {
-        $settingsProvider = $this->container->get('oro_channel.provider.settings_provider');
-
         $lifetimeFields = [];
-        $settings       = $settingsProvider->getLifetimeValueSettings();
+        $settings = $this->container->get('oro_channel.provider.settings_provider')->getLifetimeValueSettings();
         foreach ($settings as $singleChannelTypeData) {
             $lifetimeFields[$singleChannelTypeData['entity']] = $singleChannelTypeData['field'];
         }
@@ -112,7 +85,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
         return $lifetimeFields;
     }
 
-    protected function updateLifetimeForAccounts(Channel $channel)
+    protected function updateLifetimeForAccounts(ObjectManager $manager, Channel $channel): void
     {
         $lifetimeFields = $this->getLifetimeFieldsMap();
 
@@ -121,10 +94,9 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
             return;
         }
         $lifetimeFieldName = $lifetimeFields[$customerIdentity];
-        $accountRepo       = $this->em->getRepository('OroAccountBundle:Account');
 
         $accountIterator = new BufferedIdentityQueryResultIterator(
-            $accountRepo->createQueryBuilder('a')->select('a.id')
+            $manager->getRepository(Account::class)->createQueryBuilder('a')->select('a.id')
         );
         $accountIterator->setBufferSize(self::UPDATE_LIFETIME_READ_BATCH_SIZE);
 
@@ -133,34 +105,33 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
             $accountIds[] = $accountRow['id'];
 
             if (count($accountIds) === self::UPDATE_LIFETIME_WRITE_BATCH_SIZE) {
-                $this->updateLifetime($accountIds, $channel, $customerIdentity, $lifetimeFieldName);
+                $this->updateLifetime($manager, $accountIds, $channel, $customerIdentity, $lifetimeFieldName);
                 $accountIds = [];
             }
         }
 
         if (count($accountIds) > 0) {
-            $this->updateLifetime($accountIds, $channel, $customerIdentity, $lifetimeFieldName);
+            $this->updateLifetime($manager, $accountIds, $channel, $customerIdentity, $lifetimeFieldName);
         }
     }
 
-    /**
-     * @param int[]   $accountIds
-     * @param Channel $channel
-     * @param string  $customerIdentity
-     * @param string  $lifetimeFieldName
-     */
-    protected function updateLifetime(array $accountIds, Channel $channel, $customerIdentity, $lifetimeFieldName)
-    {
-        $customerMetadata   = $this->em->getClassMetadata($customerIdentity);
+    protected function updateLifetime(
+        ObjectManager $manager,
+        array $accountIds,
+        Channel $channel,
+        string $customerIdentity,
+        string $lifetimeFieldName
+    ): void {
+        $customerMetadata = $manager->getClassMetadata($customerIdentity);
         $lifetimeColumnName = $customerMetadata->getColumnName($lifetimeFieldName);
 
-        $this->em->getConnection()->executeStatement(
+        $manager->getConnection()->executeStatement(
             'UPDATE orocrm_channel_lifetime_hist SET status = :status
              WHERE data_channel_id = :channel_id AND account_id IN (:account_ids)',
             ['status' => false, 'channel_id' => $channel->getId(), 'account_ids' => $accountIds],
             ['status' => Types::BOOLEAN, 'channel_id' => Types::INTEGER, 'account_ids' => Connection::PARAM_INT_ARRAY]
         );
-        $this->em->getConnection()->executeStatement(
+        $manager->getConnection()->executeStatement(
             'INSERT INTO orocrm_channel_lifetime_hist'
             . ' (account_id, data_channel_id, status, amount, created_at)'
             . sprintf(

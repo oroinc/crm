@@ -7,80 +7,64 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\CallBundle\Entity\Call;
+use Oro\Bundle\CallBundle\Entity\CallDirection;
+use Oro\Bundle\CallBundle\Entity\CallStatus;
 use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
-use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Loads new Call entities.
  */
 class LoadCallData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
-    protected $subjects = [
+    use ContainerAwareTrait;
+
+    private array $subjects = [
         'Cold Call', 'Reminder of our scheduled meeting', 'Happy Birthday', 'The lease of office space'
     ];
 
-    protected $notes = [
+    private array $notes = [
         'note1', 'note2'
     ];
 
     /**
-     * @var Organization
+     * {@inheritDoc}
      */
-    protected $organization;
-
-    /** @var ContainerInterface */
-    protected $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
+    public function getDependencies(): array
     {
-        return ['Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',];
+        return [LoadContactData::class];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function load(ObjectManager $manager): void
     {
-        $this->container = $container;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function load(ObjectManager $om)
-    {
-        $this->organization = $this->getReference('default_organization');
-        $this->persistDemoCalls($om);
-        $om->flush();
-
         $tokenStorage = $this->container->get('security.token_storage');
+        $this->persistDemoCalls($manager, $tokenStorage);
+        $manager->flush();
         $tokenStorage->setToken(null);
     }
 
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function persistDemoCalls(
-        ObjectManager $om
-    ) {
-        $accounts = $om->getRepository('OroAccountBundle:Account')->findBy(['organization' => $this->organization]);
-        $contacts = $om->getRepository('OroContactBundle:Contact')->findBy(['organization' => $this->organization]);
-        $callStatus = $om->getRepository('OroCallBundle:CallStatus')->findOneBy([
-            'name' => 'completed',
-        ]);
+    private function persistDemoCalls(ObjectManager $manager, TokenStorageInterface $tokenStorage): void
+    {
+        $organization = $this->getReference('default_organization');
+        $accounts = $manager->getRepository(Account::class)->findBy(['organization' => $organization]);
+        $contacts = $manager->getRepository(Contact::class)->findBy(['organization' => $organization]);
+        $callStatus = $manager->getRepository(CallStatus::class)->findOneBy(['name' => 'completed']);
         $directions = [
-            'incoming' => $om->getRepository('OroCallBundle:CallDirection')->findOneBy(['name' => 'incoming']),
-            'outgoing' => $om->getRepository('OroCallBundle:CallDirection')->findOneBy(['name' => 'outgoing'])
+            'incoming' => $manager->getRepository(CallDirection::class)->findOneBy(['name' => 'incoming']),
+            'outgoing' => $manager->getRepository(CallDirection::class)->findOneBy(['name' => 'outgoing'])
         ];
-        $contactCount = count($contacts);
-        $accountCount = count($accounts);
+        $contactCount = \count($contacts);
+        $accountCount = \count($accounts);
         for ($i = 0; $i < 100; ++$i) {
             $contactRandom = rand(0, $contactCount - 1);
             $accountRandom = rand(0, $accountCount - 1);
@@ -90,22 +74,19 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
             $account = $accounts[$accountRandom];
             $call = new Call();
             $call->setCallStatus($callStatus);
-            $call->setOrganization($this->organization);
+            $call->setOrganization($organization);
             $call->setOwner($contact->getOwner());
             $call->setSubject($this->subjects[array_rand($this->subjects)]);
             $call->setDuration(rand(0, 4800));
 
-            if ($call->supportActivityTarget(get_class($contact->getOwner()))) {
+            if ($call->supportActivityTarget(\get_class($contact->getOwner()))) {
                 $call->addActivityTarget($contact->getOwner());
             }
 
             $randomPath = rand(1, 10);
 
             if ($randomPath > 2) {
-                if ($call->supportActivityTarget(get_class($contact))) {
-                    $this->setSecurityContext($contact->getOwner());
-                    $call->addActivityTarget($contact);
-                }
+                $this->addActivityTarget($call, $contact, $tokenStorage);
                 $contactPrimaryPhone = $contact->getPrimaryPhone();
                 if ($contactPrimaryPhone) {
                     $call->setPhoneNumber($contactPrimaryPhone->getPhone());
@@ -115,13 +96,13 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
 
             if ($randomPath > 3) {
                 /** @var Contact[] $relatedContacts */
-                $relatedContacts = $call->getActivityTargets('Oro\Bundle\ContactBundle\Entity\Contact');
+                $relatedContacts = $call->getActivityTargets(Contact::class);
                 if ($relatedContacts) {
-                    if ($call->supportActivityTarget(get_class($relatedContacts[0]->getAccounts()[0]))) {
+                    if ($call->supportActivityTarget(\get_class($relatedContacts[0]->getAccounts()[0]))) {
                         $call->addActivityTarget($relatedContacts[0]->getAccounts()[0]);
                     }
                 } else {
-                    if ($call->supportActivityTarget(get_class($account))) {
+                    if ($call->supportActivityTarget(\get_class($account))) {
                         $call->addActivityTarget($account);
                     }
                 }
@@ -131,7 +112,7 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
             if (empty($phone)) {
                 $phone = rand(1000000000, 9999999999);
                 $phone = sprintf(
-                    "%s-%s-%s",
+                    '%s-%s-%s',
                     substr($phone, 0, 3),
                     substr($phone, 3, 3),
                     substr($phone, 6)
@@ -139,42 +120,21 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
                 $call->setPhoneNumber($phone);
                 $call->setDirection($directions['incoming']);
             }
-            $om->persist($call);
+            $manager->persist($call);
         }
     }
 
-    /**
-     * @param string $startDate
-     * @param string $endDate
-     *
-     * @return bool|string
-     */
-    protected function randomDate($startDate, $endDate)
+    private function addActivityTarget(Call $call, object $target, TokenStorageInterface $tokenStorage): void
     {
-        // Convert to timestamps
-        $min = strtotime($startDate);
-        $max = strtotime($endDate);
-
-        // Generate random number using above bounds
-        $val = rand($min, $max);
-
-        // Convert back to desired date format
-        return date('Y-m-d H:i:s', $val);
-    }
-
-    /**
-     * @param User $user
-     */
-    protected function setSecurityContext($user)
-    {
-        $tokenStorage = $this->container->get('security.token_storage');
-        $token = new UsernamePasswordOrganizationToken(
-            $user,
-            $user->getUsername(),
-            'main',
-            $this->organization,
-            $user->getUserRoles()
-        );
-        $tokenStorage->setToken($token);
+        if ($call->supportActivityTarget(\get_class($target))) {
+            $user = $target->getOwner();
+            $tokenStorage->setToken(new UsernamePasswordOrganizationToken(
+                $user,
+                'main',
+                $this->getReference('default_organization'),
+                $user->getUserRoles()
+            ));
+            $call->addActivityTarget($target);
+        }
     }
 }

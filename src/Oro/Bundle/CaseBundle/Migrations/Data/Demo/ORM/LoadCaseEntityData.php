@@ -4,11 +4,19 @@ namespace Oro\Bundle\CaseBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CaseSource;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\CaseBundle\Model\CaseEntityManager;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData;
+use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData;
+use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData;
+use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -19,14 +27,11 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
 {
     use ContainerAwareTrait;
 
-    const CASES_COUNT = 20;
-    const MIN_COMMENTS_PER_CASE = 0;
-    const MAX_COMMENTS_PER_CASE = 20;
+    public const CASES_COUNT = 20;
+    private const MIN_COMMENTS_PER_CASE = 0;
+    private const MAX_COMMENTS_PER_CASE = 20;
 
-    /**
-     * @var array
-     */
-    protected static $fixtureSubjects = array(
+    private static array $fixtureSubjects = [
         'Lorem ipsum dolor sit amet, consectetuer adipiscing elit',
         'Aenean commodo ligula eget dolor',
         'Aenean massa',
@@ -47,12 +52,9 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         'Integer ante arcu',
         'Curabitur ligula sapien',
         'Donec posuere vulputate'
-    );
+    ];
 
-    /**
-     * @var array
-     */
-    protected static $fixtureText = array(
+    private static array $fixtureText = [
         'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.',
         'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
         'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.',
@@ -73,84 +75,63 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         'Sed lectus. Donec mollis hendrerit risus. Phasellus nec sem in justo pellentesque facilisis. Etiam imperdiet.',
         'Phasellus leo dolor, tempus non, auctor et, hendrerit quis, nisi. Curabitur ligula sapien, tincidunt non.',
         'Praesent congue erat at massa. Sed cursus turpis vitae tortor. Donec posuere vulputate arcu.',
-    );
+    ];
+
+    private static array $relatedEntities = [
+        Contact::class => 'setRelatedContact',
+        Account::class => 'setRelatedAccount',
+    ];
+
+    private array $entitiesCount = [];
 
     /**
-     * @var array
+     * {@inheritDoc}
      */
-    protected static $relatedEntities = array(
-        'OroContactBundle:Contact'   => 'setRelatedContact',
-        'OroAccountBundle:Account'   => 'setRelatedAccount',
-    );
-
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
-     * @var array
-     */
-    protected $entitiesCount;
-
-    /**
-     * @var Organization
-     */
-    protected $organization;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
+    public function getDependencies(): array
     {
-        return array(
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
-        );
+        return [
+            LoadContactData::class,
+            LoadAccountData::class,
+            LoadUsersData::class
+        ];
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $this->entityManager = $manager;
-        $this->organization = $this->getReference('default_organization');
-
+        $caseManager = $this->container->get('oro_case.manager');
         for ($i = 0; $i < self::CASES_COUNT; ++$i) {
             $subject = self::$fixtureSubjects[$i];
-
-            if ($manager->getRepository('OroCaseBundle:CaseEntity')->findOneBySubject($subject)) {
+            if ($manager->getRepository(CaseEntity::class)->findOneBySubject($subject)) {
                 // Case with this title is already exist
                 continue;
             }
 
-            $case = $this->createCaseEntity($subject);
-            $this->entityManager->persist($case);
+            $case = $this->createCaseEntity($manager, $caseManager, $subject);
+            $manager->persist($case);
         }
-
         $manager->flush();
     }
 
-    /**
-     * @param string $subject
-     * @return CaseEntity|null
-     */
-    protected function createCaseEntity($subject)
-    {
-        $owner = $this->getRandomEntity('OroUserBundle:User');
-        $assignedTo = $this->getRandomEntity('OroUserBundle:User');
-        $source = $this->getRandomEntity('OroCaseBundle:CaseSource');
-        $status = $this->getRandomEntity('OroCaseBundle:CaseStatus');
-        $priority = $this->getRandomEntity('OroCaseBundle:CasePriority');
+    private function createCaseEntity(
+        ObjectManager $manager,
+        CaseEntityManager $caseManager,
+        string $subject
+    ): ?CaseEntity {
+        $owner = $this->getRandomEntity($manager, User::class);
+        $assignedTo = $this->getRandomEntity($manager, User::class);
+        $source = $this->getRandomEntity($manager, CaseSource::class);
+        $status = $this->getRandomEntity($manager, CaseStatus::class);
+        $priority = $this->getRandomEntity($manager, CasePriority::class);
 
         if (!$owner || !$assignedTo || !$source || !$status) {
             // If we don't have users, sources and status we cannot load fixture cases
             return null;
         }
 
-        $case = $this->container->get('oro_case.manager')->createCase();
+        $case = $caseManager->createCase();
         $case->setSubject($subject);
         $case->setDescription($this->getRandomText());
         $case->setReportedAt($this->getRandomDate());
@@ -160,70 +141,62 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         $case->setSource($source);
         $case->setStatus($status);
         $case->setPriority($priority);
-        $case->setOrganization($this->organization);
+        $case->setOrganization($this->getReference('default_organization'));
 
         switch (rand(0, 1)) {
             case 0:
-                $contact = $this->getRandomEntity('OroContactBundle:Contact');
+                $contact = $this->getRandomEntity($manager, Contact::class);
                 $case->setRelatedContact($contact);
                 break;
             case 1:
             default:
-                $account = $this->getRandomEntity('OroAccountBundle:Account');
+                $account = $this->getRandomEntity($manager, Account::class);
                 $case->setRelatedAccount($account);
                 break;
         }
 
         $commentsCount = rand(self::MIN_COMMENTS_PER_CASE, self::MAX_COMMENTS_PER_CASE);
         for ($i = 0; $i < $commentsCount; ++$i) {
-            $comment = $this->createComment($this->getRandomText());
-            $comment->setOrganization($this->organization);
+            $comment = $this->createComment($manager, $caseManager, $this->getRandomText());
+            $comment->setOrganization($this->getReference('default_organization'));
             $case->addComment($comment);
         }
 
         return $case;
     }
 
-    /**
-     * @param string $text
-     * @return CaseComment
-     */
-    protected function createComment($text)
+    private function createComment(ObjectManager $manager, CaseEntityManager $caseManager, string $text): CaseComment
     {
-        $comment = $this->container->get('oro_case.manager')->createComment();
+        $comment = $caseManager->createComment();
         $comment->setMessage($text);
-        $comment->setOwner($this->getRandomEntity('OroUserBundle:User'));
+        $comment->setOwner($this->getRandomEntity($manager, User::class));
         $comment->setPublic(rand(0, 5));
         $comment->setCreatedAt($this->getRandomDate());
-        if (rand(0, 3) == 3) {
-            $contact = $this->getRandomEntity('OroContactBundle:Contact');
+        if (rand(0, 3) === 3) {
+            $contact = $this->getRandomEntity($manager, Contact::class);
             $comment->setContact($contact);
         }
-        if (rand(0, 5) == 5) {
-            $updatedBy = $this->getRandomEntity('OroUserBundle:User');
+        if (rand(0, 5) === 5) {
+            $updatedBy = $this->getRandomEntity($manager, User::class);
             $comment->setUpdatedBy($updatedBy);
             $comment->setUpdatedAt($this->getRandomDate());
         }
         return $comment;
     }
 
-    /**
-     * @param string $entityName
-     * @return object|null
-     */
-    protected function getRandomEntity($entityName)
+    private function getRandomEntity(ObjectManager $manager, string $entityClass): ?object
     {
-        $count = $this->getEntityCount($entityName);
-
+        $count = $this->getEntityCount($manager, $entityClass);
         if ($count) {
-            $qb = $this->entityManager->createQueryBuilder()
+            $qb = $manager->createQueryBuilder()
                 ->select('e')
-                ->from($entityName, 'e')
+                ->from($entityClass, 'e')
                 ->setFirstResult(rand(0, $count - 1))
                 ->setMaxResults(1)
-                ->orderBy('e.' . $this->entityManager->getClassMetadata($entityName)->getSingleIdentifierFieldName());
-            if ('OroUserBundle:User' === $entityName) {
-                $qb->where('e.organization = :organization')->setParameter('organization', $this->organization);
+                ->orderBy('e.' . $manager->getClassMetadata($entityClass)->getSingleIdentifierFieldName());
+            if (User::class === $entityClass) {
+                $qb->where('e.organization = :organization')
+                    ->setParameter('organization', $this->getReference('default_organization'));
             }
 
             return $qb->getQuery()->getSingleResult();
@@ -232,30 +205,24 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         return null;
     }
 
-    /**
-     * @param string $entityName
-     * @return int
-     */
-    protected function getEntityCount($entityName)
+    private function getEntityCount(ObjectManager $manager, string $entityClass): int
     {
-        if (!isset($this->entitiesCount[$entityName])) {
-            $qb = $this->entityManager->createQueryBuilder()
+        if (!isset($this->entitiesCount[$entityClass])) {
+            $qb = $manager->createQueryBuilder()
                 ->select('COUNT(e)')
-                ->from($entityName, 'e');
-            if ('OroUserBundle:User' === $entityName) {
-                $qb->where('e.organization = :organization')->setParameter('organization', $this->organization);
+                ->from($entityClass, 'e');
+            if (User::class === $entityClass) {
+                $qb->where('e.organization = :organization')
+                    ->setParameter('organization', $this->getReference('default_organization'));
             }
 
-            $this->entitiesCount[$entityName] = (int)$qb->getQuery()->getSingleScalarResult();
+            $this->entitiesCount[$entityClass] = (int)$qb->getQuery()->getSingleScalarResult();
         }
 
-        return $this->entitiesCount[$entityName];
+        return $this->entitiesCount[$entityClass];
     }
 
-    /**
-     * @return \DateTime
-     */
-    protected function getRandomDate()
+    private function getRandomDate(): \DateTime
     {
         $result = new \DateTime();
         $result->sub(new \DateInterval(sprintf('P%dDT%dM', rand(0, 30), rand(0, 1440))));
@@ -263,11 +230,8 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    protected function getRandomText()
+    private function getRandomText(): string
     {
-        return self::$fixtureText[rand(0, count(self::$fixtureText) - 1)];
+        return self::$fixtureText[random_int(0, \count(self::$fixtureText) - 1)];
     }
 }

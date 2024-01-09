@@ -35,7 +35,7 @@ class CommentController extends RestController
      */
     public function cgetAction(Request $request, CaseEntity $case)
     {
-        $comments = $this->get('oro_case.manager')
+        $comments = $this->container->get('oro_case.manager')
             ->getCaseComments(
                 $case,
                 $request->get('order', 'DESC')
@@ -115,7 +115,7 @@ class CommentController extends RestController
      */
     public function getManager()
     {
-        return $this->get('oro_case.manager.comment.api');
+        return $this->container->get('oro_case.manager.comment.api');
     }
 
     /**
@@ -123,7 +123,7 @@ class CommentController extends RestController
      */
     public function getForm()
     {
-        return $this->get('oro_case.form.comment.api');
+        return $this->container->get('oro_case.form.comment.api');
     }
 
     /**
@@ -131,7 +131,7 @@ class CommentController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('oro_case.form.handler.comment.api');
+        return $this->container->get('oro_case.form.handler.comment.api');
     }
 
     /**

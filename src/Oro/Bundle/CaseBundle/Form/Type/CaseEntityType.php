@@ -4,6 +4,9 @@ namespace Oro\Bundle\CaseBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CaseSource;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
 use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
@@ -13,6 +16,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Case entity form type
+ */
 class CaseEntityType extends AbstractType
 {
     /**
@@ -49,7 +55,7 @@ class CaseEntityType extends AbstractType
                 EntityType::class,
                 [
                     'label'        => 'oro.case.caseentity.source.label',
-                    'class'        => 'OroCaseBundle:CaseSource',
+                    'class'        => CaseSource::class,
                 ]
             )
             ->add(
@@ -57,7 +63,7 @@ class CaseEntityType extends AbstractType
                 EntityType::class,
                 [
                     'label'         => 'oro.case.caseentity.status.label',
-                    'class'         => 'OroCaseBundle:CaseStatus',
+                    'class'         => CaseStatus::class,
                     'query_builder' => function (EntityRepository $entityRepository) {
                         return $entityRepository->createQueryBuilder('status')
                             ->orderBy('status.order', 'ASC');
@@ -69,7 +75,7 @@ class CaseEntityType extends AbstractType
                 EntityType::class,
                 [
                     'label'         => 'oro.case.caseentity.priority.label',
-                    'class'         => 'OroCaseBundle:CasePriority',
+                    'class'         => CasePriority::class,
                     'query_builder' => function (EntityRepository $entityRepository) {
                         return $entityRepository->createQueryBuilder('priority')
                             ->orderBy('priority.order', 'ASC');

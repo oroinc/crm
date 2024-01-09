@@ -9,33 +9,42 @@ use Oro\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixtu
 use Oro\Bundle\MigrationBundle\Fixture\LoadedFixtureVersionAwareInterface;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
+/**
+ * Loads "b2b" default channel.
+ */
 class DefaultChannelData extends AbstractDefaultChannelDataFixture implements
     VersionedFixtureInterface,
     LoadedFixtureVersionAwareInterface
 {
-    /** @var string */
-    private $version;
+    public const B2B_CHANNEL_TYPE = 'b2b';
 
-    const B2B_CHANNEL_TYPE = 'b2b';
+    private ?string $alreadyLoadedVersion = null;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return '1.0';
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function setLoadedVersion($version = null): void
     {
-        if (!$this->version) {
+        $this->alreadyLoadedVersion = $version;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $manager): void
+    {
+        if (!$this->alreadyLoadedVersion) {
             /** @var BuilderFactory $builderFactory */
             $builderFactory = $this->container->get('oro_channel.builder.factory');
-            $channel        = $builderFactory
-                ->createBuilder()
+            $channel = $builderFactory->createBuilder()
                 ->setChannelType(self::B2B_CHANNEL_TYPE)
                 ->setStatus(Channel::STATUS_ACTIVE)
                 ->setEntities()
@@ -45,41 +54,29 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture implements
 
             $shouldBeCreated = false;
             foreach ($entities as $entity) {
-                $shouldBeCreated |= $this->getRowCount($entity);
-
+                $shouldBeCreated |= $this->getRowCount($manager, $entity);
                 if ($shouldBeCreated) {
                     break;
                 }
             }
 
             if ($shouldBeCreated) {
-                $this->em->persist($channel);
-                $this->em->flush();
+                $manager->persist($channel);
+                $manager->flush();
 
                 // fill channel to all existing entities
                 foreach ($entities as $entity) {
-                    $this->fillChannelToEntity($channel, $entity);
+                    $this->fillChannelToEntity($manager, $channel, $entity);
                 }
 
-                $this->updateLifetimeForAccounts($channel);
+                $this->updateLifetimeForAccounts($manager, $channel);
             }
-        } elseif ('0.0' === $this->version) {
-            $em = $this->container->get('doctrine')->getManager();
-
-            $channels = $em->getRepository('OroChannelBundle:Channel')
+        } elseif ('0.0' === $this->alreadyLoadedVersion) {
+            $channels = $manager->getRepository(Channel::class)
                 ->findBy(['channelType' => self::B2B_CHANNEL_TYPE]);
-
             foreach ($channels as $channel) {
-                $this->updateLifetimeForAccounts($channel);
+                $this->updateLifetimeForAccounts($manager, $channel);
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setLoadedVersion($version = null)
-    {
-        $this->version = $version;
     }
 }

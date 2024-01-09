@@ -81,7 +81,7 @@ class ContactListener
         }
 
         if ($entityManager->getUnitOfWork()->getEntityState($user) == UnitOfWork::STATE_DETACHED) {
-            $user = $entityManager->find('OroUserBundle:User', $user->getId());
+            $user = $entityManager->find(User::class, $user->getId());
         }
 
         return $user;
