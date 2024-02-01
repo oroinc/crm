@@ -4726,16 +4726,16 @@
         },
         {
             "name": "nette/php-generator",
-            "version": "v4.0.9",
+            "version": "v4.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/php-generator.git",
-                "reference": "72cf9e20686904678d9c1de664c6f7a8c9d676ed"
+                "reference": "08ab9bff22ae34fe4e1d2fe8ba16b3770ea2459f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/php-generator/zipball/72cf9e20686904678d9c1de664c6f7a8c9d676ed",
-                "reference": "72cf9e20686904678d9c1de664c6f7a8c9d676ed",
+                "url": "https://api.github.com/repos/nette/php-generator/zipball/08ab9bff22ae34fe4e1d2fe8ba16b3770ea2459f",
+                "reference": "08ab9bff22ae34fe4e1d2fe8ba16b3770ea2459f",
                 "shasum": ""
             },
             "require": {
@@ -4745,7 +4745,7 @@
             "require-dev": {
                 "jetbrains/phpstorm-attributes": "dev-master",
                 "nette/tester": "^2.4",
-                "nikic/php-parser": "^4.15",
+                "nikic/php-parser": "^4.18 || ^5.0",
                 "phpstan/phpstan": "^1.0",
                 "tracy/tracy": "^2.8"
             },
@@ -4755,7 +4755,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -4789,9 +4789,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/php-generator/issues",
-                "source": "https://github.com/nette/php-generator/tree/v4.0.9"
+                "source": "https://github.com/nette/php-generator/tree/v4.1.3"
             },
-            "time": "2023-08-29T19:09:26+00:00"
+            "time": "2024-01-18T17:44:20+00:00"
         },
         {
             "name": "nette/utils",
@@ -5207,7 +5207,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "0e63c733108283bbe216cbb01d9aede8b77decba"
+                "reference": "6b81624c903523b76f49a41bad8c7885b64ab03b"
             },
             "require": {
                 "ass/xmlsecurity": "1.1.1",
@@ -5257,7 +5257,7 @@
                 "myclabs/deep-copy": "1.11.*",
                 "nelmio/security-bundle": "~3.0.0",
                 "nesbot/carbon": "~2.65.0",
-                "nette/php-generator": "~4.0.5",
+                "nette/php-generator": "~4.1.3",
                 "ocramius/proxy-manager": "~2.11.1",
                 "oro/api-doc-bundle": "dev-ticket/BAP-22238",
                 "oro/doctrine-extensions": "~2.0.2",
