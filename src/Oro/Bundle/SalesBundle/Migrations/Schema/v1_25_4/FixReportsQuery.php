@@ -80,7 +80,7 @@ class FixReportsQuery extends ParametrizedMigrationQuery
             $rows = $reportQb
                 ->setFirstResult($i * static::LIMIT)
                 ->execute()
-                ->fetchAll(\PDO::FETCH_ASSOC);
+                ->fetchAllAssociative();
 
             foreach ($rows as $row) {
                 if ($this->processRow($row)) {
@@ -347,7 +347,7 @@ SQL;
         return $this->createQb($table)
             ->select('COUNT(1)')
             ->execute()
-            ->fetchColumn();
+            ->fetchOne();
     }
 
     /**

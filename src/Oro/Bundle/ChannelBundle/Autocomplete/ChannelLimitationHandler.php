@@ -12,11 +12,9 @@ use Oro\Bundle\SearchBundle\Query\Query;
  */
 class ChannelLimitationHandler extends SearchHandler
 {
-    /** @var string */
-    protected $channelPropertyName;
+    protected string  $channelRelationName;
 
-    /** @var string */
-    protected $channelSearchPropertyName;
+    protected string $channelSearchPropertyName;
 
     /**
      * @param string $entityName

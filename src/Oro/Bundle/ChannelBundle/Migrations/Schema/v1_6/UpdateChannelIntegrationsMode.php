@@ -67,7 +67,7 @@ class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
                ' INNER JOIN orocrm_channel c ON c.data_source_id = i.id';
 
         $this->logQuery($logger, $sql);
-        $integrations = $this->connection->fetchAll($sql);
+        $integrations = $this->connection->fetchAllAssociative($sql);
 
         return array_reduce(
             $integrations,

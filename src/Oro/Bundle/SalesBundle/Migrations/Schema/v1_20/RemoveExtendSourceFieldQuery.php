@@ -88,7 +88,7 @@ class RemoveExtendSourceFieldQuery extends ParametrizedMigrationQuery
      */
     protected function cleanUpEntity(LoggerInterface $logger, $dryRun = false)
     {
-        $rows = $this->connection->fetchAll(
+        $rows = $this->connection->fetchAllAssociative(
             'SELECT id, data FROM oro_entity_config WHERE class_name = :class',
             ['class' => 'Oro\Bundle\SalesBundle\Entity\Lead']
         );

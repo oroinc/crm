@@ -45,7 +45,7 @@ class UpdateEntityConfigEntityValueQuery extends BaseQuery
     {
         $sql        = 'SELECT data FROM oro_entity_config WHERE class_name = ? LIMIT 1';
         $parameters = [$this->entityName];
-        $data       = $this->connection->fetchColumn($sql, $parameters);
+        $data       = $this->connection->fetchOne($sql, $parameters);
         $this->logQuery($logger, $sql, $parameters);
 
         $data = $data ? $this->connection->convertToPHPValue($data, Types::ARRAY) : [];

@@ -34,7 +34,7 @@ class EmailOwnerProviderTest extends WebTestCase
         $em = $this->getEntityManager();
         $conn = $em->getConnection();
         if ($conn->getDatabasePlatform() instanceof MySqlPlatform) {
-            $supported = (bool)$conn->fetchAll(
+            $supported = (bool)$conn->fetchAllAssociative(
                 'SELECT 1 FROM information_schema.columns WHERE '
                 . 'TABLE_SCHEMA = ? AND TABLE_NAME = ? AND COLUMN_NAME = ? AND COLLATION_NAME LIKE ? LIMIT 1;',
                 [$conn->getDatabase(), $em->getClassMetadata(ContactEmail::class)->getTableName(), 'email', '%_ci']

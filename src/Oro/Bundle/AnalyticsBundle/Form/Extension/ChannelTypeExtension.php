@@ -20,28 +20,21 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Channel Form Type Extension for managing RFMMetricCategory
+ */
 class ChannelTypeExtension extends AbstractTypeExtension
 {
-    /**
-     * @var DoctrineHelper
-     */
-    protected $doctrineHelper;
-
-    /**
-     * @var string
-     */
-    protected $interface;
-
     /**
      * @param DoctrineHelper $doctrineHelper
      * @param string $interface
      * @param string $rfmCategoryClass
      */
-    public function __construct(DoctrineHelper $doctrineHelper, $interface, $rfmCategoryClass)
-    {
-        $this->doctrineHelper = $doctrineHelper;
-        $this->interface = $interface;
-        $this->rfmCategoryClass = $rfmCategoryClass;
+    public function __construct(
+        protected DoctrineHelper $doctrineHelper,
+        protected string $interface,
+        protected string $rfmCategoryClass
+    ) {
     }
 
     /**
@@ -58,8 +51,8 @@ class ChannelTypeExtension extends AbstractTypeExtension
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'loadCategories']);
-        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'handleState'], 10);
-        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'manageCategories'], 20);
+        $builder->addEventListener(FormEvents::SUBMIT, [$this, 'handleState'], 10);
+        $builder->addEventListener(FormEvents::SUBMIT, [$this, 'manageCategories'], 20);
     }
 
     /**

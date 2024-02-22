@@ -71,7 +71,7 @@ SQL;
 
         $entities = $this->getConnection()
             ->executeQuery($query, $params, $types)
-            ->fetchAll(\PDO::FETCH_NUM);
+            ->fetchNumeric();
 
         return array_map('current', $entities);
     }

@@ -129,7 +129,7 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
         $types  = [Types::STRING];
 
         $this->logQuery($logger, $sql, $params, $types);
-        $rows = $this->connection->fetchAll($sql, $params, $types);
+        $rows = $this->connection->fetchAllAssociative($sql, $params, $types);
         foreach ($rows as $row) {
             $result[$row['class_name']] = $this->connection->convertToPHPValue($row['data'], Types::ARRAY);
         }
@@ -181,7 +181,7 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
             foreach ($schemaDiff->toSql($platform) as $query) {
                 $this->logQuery($logger, $query);
                 if (!$dryRun) {
-                    $this->connection->query($query);
+                    $this->connection->executeQuery($query);
                 }
             }
         }

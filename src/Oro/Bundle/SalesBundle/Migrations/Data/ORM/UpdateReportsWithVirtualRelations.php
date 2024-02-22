@@ -48,7 +48,7 @@ class UpdateReportsWithVirtualRelations extends AbstractFixture implements Conta
                     'SELECT id FROM oro_entity_config WHERE class_name = :class',
                     ['class' => 'Oro\Bundle\SalesBundle\Entity\Opportunity'],
                     ['class' => Types::STRING]
-                )->fetchColumn();
+                )->fetchOne();
 
                 $connection->executeQuery(
                     'DELETE FROM oro_entity_config_field WHERE field_name IN (:fields)
