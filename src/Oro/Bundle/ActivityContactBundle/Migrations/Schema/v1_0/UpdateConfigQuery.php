@@ -40,7 +40,7 @@ class UpdateConfigQuery extends ParametrizedMigrationQuery
         $className = 'Oro\Bundle\UserBundle\Entity\User';
         if ($className) {
             $sql = 'SELECT e.data FROM oro_entity_config as e WHERE e.class_name = ? LIMIT 1';
-            $entityRow = $this->connection->fetchAssoc($sql, [$className]);
+            $entityRow = $this->connection->fetchAssociative($sql, [$className]);
             if ($entityRow) {
                 $this->updateEntityData($className, $entityRow['data'], $logger);
             }
@@ -81,7 +81,7 @@ class UpdateConfigQuery extends ParametrizedMigrationQuery
     protected function executeQuery(LoggerInterface $logger, $sql, array $parameters = [])
     {
         $statement = $this->connection->prepare($sql);
-        $statement->execute($parameters);
+        $statement->executeQuery($parameters);
         $this->logQuery($logger, $sql, $parameters);
     }
 }

@@ -10,6 +10,9 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Root normalizer for contact with plain data
+ */
 class ContactNormalizer extends ConfigurableEntityNormalizer
 {
     const CONTACT_TYPE = Contact::class;
@@ -86,5 +89,12 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
     public function supportsDenormalization($data, string $type, string $format = null, array $context = []): bool
     {
         return is_array($data) && $type === static::CONTACT_TYPE;
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+            Contact::class => false
+        ];
     }
 }

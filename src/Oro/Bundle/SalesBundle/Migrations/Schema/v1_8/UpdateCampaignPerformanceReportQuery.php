@@ -40,7 +40,7 @@ class UpdateCampaignPerformanceReportQuery extends ParametrizedMigrationQuery
         $types  = ['name' => 'string'];
         $this->logQuery($logger, $sql, $params, $types);
 
-        $rows = $this->connection->fetchAll($sql, $params, $types);
+        $rows = $this->connection->fetchAllAssociative($sql, $params, $types);
         foreach ($rows as $row) {
             $def = json_decode($row['definition'], true);
             if (isset($def['grouping_columns'])

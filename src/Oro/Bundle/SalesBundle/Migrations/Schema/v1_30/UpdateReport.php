@@ -87,7 +87,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
         ];
 
         $this->logQuery($logger, $fetchQuery);
-        $rows = $this->connection->fetchAll($fetchQuery);
+        $rows = $this->connection->fetchAllAssociative($fetchQuery);
 
         foreach ($rows as $row) {
             $def = json_decode($row['definition'], true);

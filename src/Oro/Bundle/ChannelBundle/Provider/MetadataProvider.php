@@ -16,14 +16,13 @@ class MetadataProvider implements MetadataProviderInterface
     const ENTITY_EDIT_ROUTE = 'oro_entityconfig_update';
     const ENTITY_VIEW_ROUTE = 'oro_entityconfig_view';
 
-    /** @var SettingsProvider */
-    protected $settings;
+    protected SettingsProvider $settings;
 
-    /** @var EntityProvider */
-    protected $entityProvider;
+    protected EntityProvider $entityProvider;
 
-    /** @var ConfigManager */
-    protected $configManager;
+    protected ConfigManager $configManager;
+
+    protected RouterInterface $router;
 
     public function __construct(
         SettingsProvider $settings,

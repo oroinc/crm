@@ -86,7 +86,7 @@ class ImportExportTest extends AbstractImportExportTestCase
         $results = $this->getContactRepository()->findAll();
         self::assertCount(8, $results);
         foreach ($results as $contact) {
-            if (!in_array($contact->getFirstName(), ['Andrea', 'Matteo', 'Roberto', 'Stefano'])) {
+            if (!in_array($contact->getFirstName(), ['Andrea', 'Matteo', 'Roberto', 'Stefano'], true)) {
                 continue;
             }
 

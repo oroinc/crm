@@ -18,6 +18,8 @@ class LifetimeHistoryStatusUpdateProcessorTest extends \PHPUnit\Framework\TestCa
     private ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject $doctrine;
     private LifetimeHistoryStatusUpdateProcessor $processor;
     private MessageProducerInterface $messageProducer;
+    private StateProvider|\PHPUnit\Framework\MockObject\MockObject $stateProvider;
+    private EntityManager|\PHPUnit\Framework\MockObject\MockObject $entityManager;
 
     protected function setUp(): void
     {

@@ -191,7 +191,7 @@ SQL;
                 ['channelId' => $channel->getId(), 'endDate' => $calculationPeriodEnd],
                 ['channelId' => Types::INTEGER, 'endDate' => Types::DATETIME_MUTABLE]
             )
-            ->fetchColumn(0);
+            ->fetchOne();
     }
 
     /**

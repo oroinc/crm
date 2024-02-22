@@ -35,7 +35,7 @@ class UpdateOpportunityCurrency implements
     {
         /** @var Connection $connection */
         $connection = $this->container->get('doctrine')->getConnection();
-        $currencies = $connection->fetchAll('
+        $currencies = $connection->fetchAllAssociative('
                                               SELECT 
                                                 oro_organization.id as organization_id,
                                                 oro_config_value.text_value
@@ -55,7 +55,7 @@ class UpdateOpportunityCurrency implements
 
         $currencies = array_column($currencies, 'text_value', 'organization_id');
 
-        $defaultCurrency = $connection->fetchColumn('
+        $defaultCurrency = $connection->fetchOne('
                                               SELECT 
                                                 oro_config_value.text_value 
                                               FROM 
@@ -68,7 +68,7 @@ class UpdateOpportunityCurrency implements
                                                 oro_config.entity = ?
                                               AND 
                                                 oro_config_value.name = \'default_currency\'
-                                              ', ['app'], 0);
+                                              ', ['app']);
 
         if (!$defaultCurrency) {
             $defaultCurrency = Configuration::DEFAULT_CURRENCY;

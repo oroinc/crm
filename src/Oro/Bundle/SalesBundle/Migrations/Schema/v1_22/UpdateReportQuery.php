@@ -65,7 +65,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
         $newField = 'status';
         $this->logQuery($logger, $sql);
 
-        $rows = $this->connection->fetchAll($sql);
+        $rows = $this->connection->fetchAllAssociative($sql);
         foreach ($rows as $row) {
             $def = json_decode($row['definition'], true);
             $this->fixReportDefs($logger, $dryRun, $def, $row, $className, $oldField, $newField);
@@ -81,7 +81,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
         $newField = 'status';
         $this->logQuery($logger, $sql);
 
-        $rows = $this->connection->fetchAll($sql);
+        $rows = $this->connection->fetchAllAssociative($sql);
         foreach ($rows as $row) {
             $def = json_decode($row['definition'], true);
             $this->fixSegmentDefs($logger, $dryRun, $def, $row, $className, $oldField, $newField);

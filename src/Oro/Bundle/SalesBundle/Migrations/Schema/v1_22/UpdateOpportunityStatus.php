@@ -38,8 +38,8 @@ class UpdateOpportunityStatus implements
     public function up(Schema $schema, QueryBag $queries): void
     {
         $defaultStatuses = ['in_progress', 'won', 'lost'];
-        $oldStatuses = $this->connection->fetchAll('SELECT name, label FROM orocrm_sales_opport_status');
-        $newStatuses = $this->connection->fetchAll(sprintf(
+        $oldStatuses = $this->connection->fetchAllAssociative('SELECT name, label FROM orocrm_sales_opport_status');
+        $newStatuses = $this->connection->fetchAllAssociative(sprintf(
             'SELECT id, priority FROM %s',
             $this->extendExtension->getNameGenerator()->generateEnumTableName('opportunity_status')
         ));

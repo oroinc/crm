@@ -344,7 +344,7 @@ SQL;
         $sql    = 'SELECT s.id, s.name FROM oro_workflow_step s WHERE s.workflow_name = :workflow_name';
         $this->logQuery($logger, $sql, $params, $types);
 
-        return $this->connection->fetchAll($sql, $params, $types);
+        return $this->connection->fetchAllAssociative($sql, $params, $types);
     }
 
     /**
@@ -361,7 +361,7 @@ SQL;
         $sql = 'SELECT * FROM oro_workflow_definition WHERE name = :workflow_name LIMIT 1';
         $this->logQuery($logger, $sql, $params, $types);
 
-        $fields = $this->connection->executeQuery($sql, $params, $types)->fetch();
+        $fields = $this->connection->executeQuery($sql, $params, $types)->fetchAssociative();
 
         foreach ($exclude as $field) {
             unset($fields[$field]);

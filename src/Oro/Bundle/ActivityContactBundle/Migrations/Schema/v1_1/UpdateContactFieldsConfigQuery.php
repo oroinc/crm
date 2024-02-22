@@ -74,7 +74,7 @@ class UpdateContactFieldsConfigQuery extends ParametrizedMigrationQuery
         $sql = 'SELECT id, data FROM oro_entity_config_field WHERE field_name in (:fields)';
         $this->logQuery($logger, $sql, $params, $types);
 
-        $rows = $this->connection->fetchAll($sql, $params, $types);
+        $rows = $this->connection->fetchAllAssociative($sql, $params, $types);
         $result = [];
         foreach ($rows as $row) {
             $result[$row['id']] = $this->connection->convertToPHPValue($row['data'], 'array');
