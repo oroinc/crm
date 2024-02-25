@@ -6,8 +6,8 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
@@ -23,26 +23,26 @@ class AccountController extends RestController
     /**
      * REST GET list
      *
-     * @QueryParam(
-     *      name="page",
-     *      requirements="\d+",
-     *      nullable=true,
-     *      description="Page number, starting from 1. Defaults to 1."
-     * )
-     * @QueryParam(
-     *      name="limit",
-     *      requirements="\d+",
-     *      nullable=true,
-     *      description="Number of items per page. defaults to 10."
-     * )
      * @ApiDoc(
      *      description="Get all account items",
      *      resource=true
      * )
-     * @AclAncestor("oro_account_view")
      * @param Request $request
      * @return Response
      */
+    #[QueryParam(
+        name: 'page',
+        requirements: '\d+',
+        description: 'Page number, starting from 1. Defaults to 1.',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'limit',
+        requirements: '\d+',
+        description: 'Number of items per page. defaults to 10.',
+        nullable: true
+    )]
+    #[AclAncestor('oro_account_view')]
     public function cgetAction(Request $request)
     {
         $page = (int)$request->get('page', 1);
@@ -60,9 +60,9 @@ class AccountController extends RestController
      *      description="Get account item",
      *      resource=true
      * )
-     * @AclAncestor("oro_account_view")
      * @return Response
      */
+    #[AclAncestor('oro_account_view')]
     public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
@@ -77,9 +77,9 @@ class AccountController extends RestController
      *      description="Update account",
      *      resource=true
      * )
-     * @AclAncestor("oro_account_update")
      * @return Response
      */
+    #[AclAncestor('oro_account_update')]
     public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
@@ -92,8 +92,8 @@ class AccountController extends RestController
      *      description="Create new account",
      *      resource=true
      * )
-     * @AclAncestor("oro_account_create")
      */
+    #[AclAncestor('oro_account_create')]
     public function postAction()
     {
         return $this->handleCreateRequest();
@@ -108,14 +108,9 @@ class AccountController extends RestController
      *      description="Delete Account",
      *      resource=true
      * )
-     * @Acl(
-     *      id="oro_account_delete",
-     *      type="entity",
-     *      permission="DELETE",
-     *      class="Oro\Bundle\AccountBundle\Entity\Account"
-     * )
      * @return Response
      */
+    #[Acl(id: 'oro_account_delete', type: 'entity', class: Account::class, permission: 'DELETE')]
     public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);

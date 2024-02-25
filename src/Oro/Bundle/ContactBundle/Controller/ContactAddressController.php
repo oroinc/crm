@@ -6,7 +6,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AddressBundle\Form\Handler\AddressHandler;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,11 +21,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ContactAddressController extends AbstractController
 {
-    /**
-     * @Route("/address-book/{id}", name="oro_contact_address_book", requirements={"id"="\d+"})
-     * @Template
-     * @AclAncestor("oro_contact_view")
-     */
+    #[Route(path: '/address-book/{id}', name: 'oro_contact_address_book', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_contact_view')]
     public function addressBookAction(Contact $contact): array
     {
         return [
@@ -34,31 +32,28 @@ class ContactAddressController extends AbstractController
         ];
     }
 
-    /**
-     * @Route(
-     *      "/{contactId}/address-create",
-     *      name="oro_contact_address_create",
-     *      requirements={"contactId"="\d+"}
-     * )
-     * @Template("@OroContact/ContactAddress/update.html.twig")
-     * @AclAncestor("oro_contact_create")
-     * @ParamConverter("contact", options={"id" = "contactId"})
-     */
+    #[Route(
+        path: '/{contactId}/address-create',
+        name: 'oro_contact_address_create',
+        requirements: ['contactId' => '\d+']
+    )]
+    #[Template('@OroContact/ContactAddress/update.html.twig')]
+    #[ParamConverter('contact', options: ['id' => 'contactId'])]
+    #[AclAncestor('oro_contact_create')]
     public function createAction(Request $request, Contact $contact): array|RedirectResponse
     {
         return $this->update($request, $contact, new ContactAddress());
     }
 
-    /**
-     * @Route(
-     *      "/{contactId}/address-update/{id}",
-     *      name="oro_contact_address_update",
-     *      requirements={"contactId"="\d+","id"="\d+"},defaults={"id"=0}
-     * )
-     * @Template
-     * @AclAncestor("oro_contact_update")
-     * @ParamConverter("contact", options={"id" = "contactId"})
-     */
+    #[Route(
+        path: '/{contactId}/address-update/{id}',
+        name: 'oro_contact_address_update',
+        requirements: ['contactId' => '\d+', 'id' => '\d+'],
+        defaults: ['id' => 0]
+    )]
+    #[Template]
+    #[ParamConverter('contact', options: ['id' => 'contactId'])]
+    #[AclAncestor('oro_contact_update')]
     public function updateAction(Request $request, Contact $contact, ContactAddress $address): array|RedirectResponse
     {
         return $this->update($request, $contact, $address);

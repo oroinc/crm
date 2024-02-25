@@ -5,7 +5,7 @@ namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,10 +22,10 @@ class ContactPhoneController extends RestController
      *      description="Get all phones items",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_view")
      * @param int $contactId
      * @return Response
      */
+    #[AclAncestor('oro_contact_view')]
     public function cgetAction($contactId)
     {
         /** @var Contact $contact */
@@ -54,9 +54,9 @@ class ContactPhoneController extends RestController
      *      description="Get contact primary phone",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_view")
      * @return Response
      */
+    #[AclAncestor('oro_contact_view')]
     public function getPrimaryAction(int $contactId)
     {
         /** @var Contact $contact */

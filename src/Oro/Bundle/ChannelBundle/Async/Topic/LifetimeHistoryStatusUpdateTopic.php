@@ -28,7 +28,7 @@ class LifetimeHistoryStatusUpdateTopic extends AbstractTopic
     {
         $resolver
             ->define(self::STATUS_FIELD)
-            ->allowedTypes('int')
+            ->allowedTypes('bool')
             ->allowedValues(LifetimeValueHistory::STATUS_OLD, LifetimeValueHistory::STATUS_NEW)
             ->default(LifetimeValueHistory::STATUS_OLD);
 
@@ -37,7 +37,7 @@ class LifetimeHistoryStatusUpdateTopic extends AbstractTopic
             ->allowedTypes('array');
     }
 
-    public static function createMessage(array $records, int $status = LifetimeValueHistory::STATUS_OLD): array
+    public static function createMessage(array $records, bool $status = LifetimeValueHistory::STATUS_OLD): array
     {
         return [
             self::RECORDS_FIELD => $records,

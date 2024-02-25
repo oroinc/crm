@@ -6,8 +6,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactReasonType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,16 +22,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ContactReasonController extends AbstractController
 {
-    /**
-     * @Route("/", name="oro_contactus_reason_index")
-     * @Template
-     * @Acl(
-     *      id="oro_contactus_reason_view",
-     *      type="entity",
-     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactReason",
-     *      permission="VIEW"
-     * )
-     */
+    #[Route(path: '/', name: 'oro_contactus_reason_index')]
+    #[Template]
+    #[Acl(id: 'oro_contactus_reason_view', type: 'entity', class: ContactReason::class, permission: 'VIEW')]
     public function indexAction(): array
     {
         return [
@@ -39,32 +32,18 @@ class ContactReasonController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/create", name="oro_contactus_reason_create")
-     * @Template("@OroContactUs/ContactReason/update.html.twig")
-     * @Acl(
-     *      id="oro_contactus_reason_create",
-     *      type="entity",
-     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactReason",
-     *      permission="CREATE"
-     * )
-     */
+    #[Route(path: '/create', name: 'oro_contactus_reason_create')]
+    #[Template('@OroContactUs/ContactReason/update.html.twig')]
+    #[Acl(id: 'oro_contactus_reason_create', type: 'entity', class: ContactReason::class, permission: 'CREATE')]
     public function createAction(): array|RedirectResponse
     {
         return $this->update(new ContactReason());
     }
 
-    /**
-     * @ParamConverter("contactReason", options={"repository_method" = "getContactReason"})
-     * @Route("/update/{id}", name="oro_contactus_reason_update", requirements={"id"="\d+"})
-     * @Template
-     * @Acl(
-     *      id="oro_contactus_reason_update",
-     *      type="entity",
-     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactReason",
-     *      permission="EDIT"
-     * )
-     */
+    #[Route(path: '/update/{id}', name: 'oro_contactus_reason_update', requirements: ['id' => '\d+'])]
+    #[ParamConverter('contactReason', options: ['repository_method' => 'getContactReason'])]
+    #[Template]
+    #[Acl(id: 'oro_contactus_reason_update', type: 'entity', class: ContactReason::class, permission: 'EDIT')]
     public function updateAction(ContactReason $contactReason): array|RedirectResponse
     {
         return $this->update($contactReason);
@@ -79,17 +58,15 @@ class ContactReasonController extends AbstractController
         );
     }
 
-    /**
-     * @ParamConverter("contactReason", options={"repository_method" = "getContactReason"})
-     * @Route("/delete/{id}", name="oro_contactus_reason_delete", requirements={"id"="\d+"}, methods={"DELETE"})
-     * @Acl(
-     *      id="oro_contactus_reason_delete",
-     *      type="entity",
-     *      permission="DELETE",
-     *      class="Oro\Bundle\ContactUsBundle\Entity\ContactReason"
-     * )
-     * @CsrfProtection()
-     */
+    #[Route(
+        path: '/delete/{id}',
+        name: 'oro_contactus_reason_delete',
+        requirements: ['id' => '\d+'],
+        methods: ['DELETE']
+    )]
+    #[ParamConverter('contactReason', options: ['repository_method' => 'getContactReason'])]
+    #[Acl(id: 'oro_contactus_reason_delete', type: 'entity', class: ContactReason::class, permission: 'DELETE')]
+    #[CsrfProtection()]
     public function deleteAction(ContactReason $contactReason): JsonResponse
     {
         $em = $this->container->get('doctrine')->getManagerForClass(ContactReason::class);

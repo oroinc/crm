@@ -6,7 +6,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -15,9 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Displays RFM categories settings for an entity.
- *
- * @Route("/analytics")
  */
+#[Route(path: '/analytics')]
 class RFMCategoryController extends AbstractController
 {
     /**
@@ -26,22 +25,18 @@ class RFMCategoryController extends AbstractController
     protected $rfmMetricCategoryRepository;
 
     /**
-     * @Route(
-     *      "/rfm-category/view/channel/{entity}",
-     *      name="oro_analytics_rfm_category_channel_view",
-     *      requirements={"entity"="\d+"}
-     * )
-     * @ParamConverter(
-     *      "channel",
-     *      class="Oro\Bundle\ChannelBundle\Entity\Channel",
-     *      options={"id" = "entity"}
-     * )
-     * @AclAncestor("oro_channel_view")
-     * @Template
      *
      * @param Channel $channel
      * @return array
      */
+    #[Route(
+        path: '/rfm-category/view/channel/{entity}',
+        name: 'oro_analytics_rfm_category_channel_view',
+        requirements: ['entity' => '\d+']
+    )]
+    #[ParamConverter('channel', class: Channel::class, options: ['id' => 'entity'])]
+    #[Template]
+    #[AclAncestor('oro_channel_view')]
     public function channelViewAction(Channel $channel)
     {
         $rfmCategories = [

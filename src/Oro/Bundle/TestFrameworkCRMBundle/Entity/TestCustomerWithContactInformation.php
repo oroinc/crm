@@ -2,67 +2,47 @@
 
 namespace Oro\Bundle\TestFrameworkCRMBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\TestFrameworkBundle\Entity\TestFrameworkEntityInterface;
 
 /**
  * TestCustomerWithContactInformation ORM entity.
- *
- * @ORM\Table(name="test_customer_with_contact_info")
- * @ORM\Entity
- * @Config(
- *     defaultValues={
- *          "entity"={
- *              "contact_information"={
- *                  "email"={
- *                      {"fieldName"="email"}
- *                  },
- *                  "phone"={
- *                      {"fieldName"="phone"}
- *                  }
- *              }
- *          }
- *     }
- * )
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'test_customer_with_contact_info')]
+#[Config(
+    defaultValues: [
+        'entity' => [
+            'contact_information' => [
+                'email' => [['fieldName' => 'email']],
+                'phone' => [['fieldName' => 'phone']]
+            ]
+        ]
+    ]
+)]
 class TestCustomerWithContactInformation implements
     TestFrameworkEntityInterface,
     ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255)
-     */
-    protected $name;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    protected ?string $name = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $email;
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    protected ?string $email = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $phone;
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    protected ?string $phone = null;
 
     /**
      * @return int

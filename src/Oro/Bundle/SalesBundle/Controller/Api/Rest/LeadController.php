@@ -4,8 +4,9 @@ namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
@@ -21,25 +22,26 @@ class LeadController extends RestController
     /**
      * REST GET list
      *
-     * @QueryParam(
-     *      name="page",
-     *      requirements="\d+",
-     *      nullable=true,
-     *      description="Page number, starting from 1. Defaults to 1."
-     * )
-     * @QueryParam(
-     *      name="limit",
-     *      requirements="\d+", nullable=true,
-     *      description="Number of items per page. defaults to 10."
-     * )
      * @ApiDoc(
      *      description="Get all lead items",
      *      resource=true
      * )
-     * @AclAncestor("oro_sales_lead_view")
      * @param Request $request
      * @return Response
      */
+    #[QueryParam(
+        name: 'page',
+        requirements: '\d+',
+        description: 'Page number, starting from 1. Defaults to 1.',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'limit',
+        requirements: '\d+',
+        description: 'Number of items per page. defaults to 10.',
+        nullable: true
+    )]
+    #[AclAncestor('oro_sales_lead_view')]
     public function cgetAction(Request $request)
     {
         $page = (int) $request->get('page', 1);
@@ -57,9 +59,9 @@ class LeadController extends RestController
      *      description="Get contact item",
      *      resource=true
      * )
-     * @AclAncestor("oro_sales_lead_view")
      * @return Response
      */
+    #[AclAncestor('oro_sales_lead_view')]
     public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
@@ -74,9 +76,9 @@ class LeadController extends RestController
      *      description="Update lead",
      *      resource=true
      * )
-     * @AclAncestor("oro_sales_lead_update")
      * @return Response
      */
+    #[AclAncestor('oro_sales_lead_update')]
     public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
@@ -89,8 +91,8 @@ class LeadController extends RestController
      *      description="Create new lead",
      *      resource=true
      * )
-     * @AclAncestor("oro_sales_lead_create")
      */
+    #[AclAncestor('oro_sales_lead_create')]
     public function postAction()
     {
         return $this->handleCreateRequest();
@@ -105,14 +107,9 @@ class LeadController extends RestController
      *      description="Delete lead",
      *      resource=true
      * )
-     * @Acl(
-     *      id="oro_sales_lead_delete",
-     *      type="entity",
-     *      permission="DELETE",
-     *      class="Oro\Bundle\SalesBundle\Entity\Lead"
-     * )
      * @return Response
      */
+    #[Acl(id: 'oro_sales_lead_delete', type: 'entity', class: Lead::class, permission: 'DELETE')]
     public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);

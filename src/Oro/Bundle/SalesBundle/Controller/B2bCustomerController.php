@@ -11,8 +11,8 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler;
 use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,20 +22,18 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for B2bCustomer entity.
- * @Route("/b2bcustomer")
  */
+#[Route(path: '/b2bcustomer')]
 class B2bCustomerController extends AbstractController
 {
-    /**
-     * @Route(
-     *      "/{_format}",
-     *      name="oro_sales_b2bcustomer_index",
-     *      requirements={"_format"="html|json"},
-     *      defaults={"_format"="html"}
-     * )
-     * @Template
-     * @AclAncestor("oro_sales_b2bcustomer_view")
-     */
+    #[Route(
+        path: '/{_format}',
+        name: 'oro_sales_b2bcustomer_index',
+        requirements: ['_format' => 'html|json'],
+        defaults: ['_format' => 'html']
+    )]
+    #[Template]
+    #[AclAncestor('oro_sales_b2bcustomer_view')]
     public function indexAction(): array
     {
         return [
@@ -43,16 +41,9 @@ class B2bCustomerController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/view/{id}", name="oro_sales_b2bcustomer_view", requirements={"id"="\d+"})
-     * @Template
-     * @Acl(
-     *      id="oro_sales_b2bcustomer_view",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="Oro\Bundle\SalesBundle\Entity\B2bCustomer"
-     * )
-     */
+    #[Route(path: '/view/{id}', name: 'oro_sales_b2bcustomer_view', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[Acl(id: 'oro_sales_b2bcustomer_view', type: 'entity', class: B2bCustomer::class, permission: 'VIEW')]
     public function viewAction(B2bCustomer $customer): array
     {
         return [
@@ -60,11 +51,9 @@ class B2bCustomerController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/widget/info/{id}", name="oro_sales_b2bcustomer_widget_info", requirements={"id"="\d+"})
-     * @AclAncestor("oro_sales_b2bcustomer_view")
-     * @Template
-     */
+    #[Route(path: '/widget/info/{id}', name: 'oro_sales_b2bcustomer_widget_info', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_sales_b2bcustomer_view')]
     public function infoAction(B2bCustomer $customer): array
     {
         return [
@@ -72,11 +61,13 @@ class B2bCustomerController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/widget/b2bcustomer-leads/{id}", name="oro_sales_b2bcustomer_widget_leads", requirements={"id"="\d+"})
-     * @AclAncestor("oro_sales_lead_view")
-     * @Template
-     */
+    #[Route(
+        path: '/widget/b2bcustomer-leads/{id}',
+        name: 'oro_sales_b2bcustomer_widget_leads',
+        requirements: ['id' => '\d+']
+    )]
+    #[Template]
+    #[AclAncestor('oro_sales_lead_view')]
     public function b2bCustomerLeadsAction(B2bCustomer $customer): array
     {
         return [
@@ -86,16 +77,10 @@ class B2bCustomerController extends AbstractController
 
     /**
      * Create b2bcustomer form
-     *
-     * @Route("/create", name="oro_sales_b2bcustomer_create")
-     * @Acl(
-     *      id="oro_sales_b2bcustomer_create",
-     *      type="entity",
-     *      permission="CREATE",
-     *      class="Oro\Bundle\SalesBundle\Entity\B2bCustomer"
-     * )
-     * @Template("@OroSales/B2bCustomer/update.html.twig")
      */
+    #[Route(path: '/create', name: 'oro_sales_b2bcustomer_create')]
+    #[Template('@OroSales/B2bCustomer/update.html.twig')]
+    #[Acl(id: 'oro_sales_b2bcustomer_create', type: 'entity', class: B2bCustomer::class, permission: 'CREATE')]
     public function createAction(): array|RedirectResponse
     {
         return $this->update(new B2bCustomer());
@@ -114,29 +99,27 @@ class B2bCustomerController extends AbstractController
 
     /**
      * Update user form
-     * @Route("/update/{id}", name="oro_sales_b2bcustomer_update", requirements={"id"="\d+"}, defaults={"id"=0})
-     * @Template
-     * @Acl(
-     *      id="oro_sales_b2bcustomer_update",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="Oro\Bundle\SalesBundle\Entity\B2bCustomer"
-     * )
      */
+    #[Route(
+        path: '/update/{id}',
+        name: 'oro_sales_b2bcustomer_update',
+        requirements: ['id' => '\d+'],
+        defaults: ['id' => 0]
+    )]
+    #[Template]
+    #[Acl(id: 'oro_sales_b2bcustomer_update', type: 'entity', class: B2bCustomer::class, permission: 'EDIT')]
     public function updateAction(B2bCustomer $entity): array|RedirectResponse
     {
         return $this->update($entity);
     }
 
-    /**
-     * @Route(
-     *      "/widget/b2bcustomer-opportunities/{id}",
-     *      name="oro_sales_b2bcustomer_widget_opportunities",
-     *      requirements={"id"="\d+"}
-     * )
-     * @AclAncestor("oro_sales_opportunity_view")
-     * @Template
-     */
+    #[Route(
+        path: '/widget/b2bcustomer-opportunities/{id}',
+        name: 'oro_sales_b2bcustomer_widget_opportunities',
+        requirements: ['id' => '\d+']
+    )]
+    #[Template]
+    #[AclAncestor('oro_sales_opportunity_view')]
     public function b2bCustomerOpportunitiesAction(B2bCustomer $customer): array
     {
         return [
@@ -144,17 +127,15 @@ class B2bCustomerController extends AbstractController
         ];
     }
 
-    /**
-     * @Route(
-     *      "/widget/b2bcustomers-info/account/{accountId}/channel/{channelId}",
-     *      name="oro_sales_widget_account_b2bcustomers_info",
-     *      requirements={"accountId"="\d+", "channelId"="\d+"}
-     * )
-     * @ParamConverter("account", class="Oro\Bundle\AccountBundle\Entity\Account", options={"id" = "accountId"})
-     * @ParamConverter("channel", class="Oro\Bundle\ChannelBundle\Entity\Channel", options={"id" = "channelId"})
-     * @AclAncestor("oro_sales_b2bcustomer_view")
-     * @Template
-     */
+    #[Route(
+        path: '/widget/b2bcustomers-info/account/{accountId}/channel/{channelId}',
+        name: 'oro_sales_widget_account_b2bcustomers_info',
+        requirements: ['accountId' => '\d+', 'channelId' => '\d+']
+    )]
+    #[ParamConverter('account', class: Account::class, options: ['id' => 'accountId'])]
+    #[ParamConverter('channel', class: Channel::class, options: ['id' => 'channelId'])]
+    #[Template]
+    #[AclAncestor('oro_sales_b2bcustomer_view')]
     public function accountCustomersInfoAction(Account $account, Channel $channel): array
     {
         $customers = $this->container->get('doctrine')
@@ -164,16 +145,14 @@ class B2bCustomerController extends AbstractController
         return ['account' => $account, 'customers' => $customers, 'channel' => $channel];
     }
 
-    /**
-     * @Route(
-     *        "/widget/b2bcustomer-info/{id}/channel/{channelId}",
-     *        name="oro_sales_widget_b2bcustomer_info",
-     *        requirements={"id"="\d+", "channelId"="\d+"}
-     * )
-     * @ParamConverter("channel", class="Oro\Bundle\ChannelBundle\Entity\Channel", options={"id" = "channelId"})
-     * @AclAncestor("oro_sales_b2bcustomer_view")
-     * @Template
-     */
+    #[Route(
+        path: '/widget/b2bcustomer-info/{id}/channel/{channelId}',
+        name: 'oro_sales_widget_b2bcustomer_info',
+        requirements: ['id' => '\d+', 'channelId' => '\d+']
+    )]
+    #[ParamConverter('channel', class: Channel::class, options: ['id' => 'channelId'])]
+    #[Template]
+    #[AclAncestor('oro_sales_b2bcustomer_view')]
     public function customerInfoAction(B2bCustomer $customer, Channel $channel): array
     {
         return [

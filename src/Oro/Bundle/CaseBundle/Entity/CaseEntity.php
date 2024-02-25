@@ -4,283 +4,127 @@ namespace Oro\Bundle\CaseBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Extend\Entity\Autocomplete\OroCaseBundle_Entity_CaseEntity;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * Holds case details.
  *
- * @ORM\Entity
- * @ORM\Table(
- *      name="orocrm_case",
- *      indexes={@ORM\Index(name="case_reported_at_idx",columns={"reportedAt", "id"})}
- * )
- * @ORM\HasLifecycleCallbacks()
- * @Config(
- *      routeName="oro_case_index",
- *      routeView="oro_case_view",
- *      defaultValues={
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "entity"={
- *              "icon"="fa-list-alt"
- *          },
- *          "ownership"={
- *              "owner_type"="USER",
- *              "owner_field_name"="owner",
- *              "owner_column_name"="owner_id",
- *              "organization_field_name"="organization",
- *              "organization_column_name"="organization_id"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "category"="account_management"
- *          },
- *          "grid"={
- *              "default"="cases-grid",
- *              "context"="cases-for-context-grid"
- *          },
- *          "tag"={
- *              "enabled"=true,
- *              "immutable"=true
- *          }
- *      }
- * )
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @mixin OroCaseBundle_Entity_CaseEntity
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'orocrm_case')]
+#[ORM\Index(columns: ['reportedAt', 'id'], name: 'case_reported_at_idx')]
+#[ORM\HasLifecycleCallbacks]
+#[Config(
+    routeName: 'oro_case_index',
+    routeView: 'oro_case_view',
+    defaultValues: [
+    'dataaudit' => ['auditable' => true],
+    'entity' => ['icon' => 'fa-list-alt'],
+    'ownership' => [
+        'owner_type' => 'USER',
+        'owner_field_name' => 'owner',
+        'owner_column_name' => 'owner_id',
+        'organization_field_name' => 'organization',
+        'organization_column_name' => 'organization_id'
+    ],
+    'security' => ['type' => 'ACL', 'category' => 'account_management'],
+    'grid' => ['default' => 'cases-grid', 'context' => 'cases-for-context-grid'],
+    'tag' => ['enabled' => true, 'immutable' => true]
+    ]
+)]
 class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?int $id = null;
+
+    #[ORM\Column(name: 'subject', type: Types::STRING, length: 255)]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $subject = null;
+
+    #[ORM\Column(name: 'description', type: Types::TEXT, nullable: true)]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $description = null;
+
+    #[ORM\Column(name: 'resolution', type: Types::TEXT, nullable: true)]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $resolution = null;
+
+    #[ORM\ManyToOne(targetEntity: CaseSource::class)]
+    #[ORM\JoinColumn(name: 'source_name', referencedColumnName: 'name', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?CaseSource $source = null;
+
+    #[ORM\ManyToOne(targetEntity: CaseStatus::class)]
+    #[ORM\JoinColumn(name: 'status_name', referencedColumnName: 'name', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?CaseStatus $status = null;
+
+    #[ORM\ManyToOne(targetEntity: CasePriority::class)]
+    #[ORM\JoinColumn(name: 'priority_name', referencedColumnName: 'name', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?CasePriority $priority = null;
+
+    #[ORM\ManyToOne(targetEntity: Contact::class)]
+    #[ORM\JoinColumn(name: 'related_contact_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?Contact $relatedContact = null;
+
+    #[ORM\ManyToOne(targetEntity: Account::class)]
+    #[ORM\JoinColumn(name: 'related_account_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?Account $relatedAccount = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'assigned_to_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?User $assignedTo = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?User $owner = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="subject", type="string", length=255)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
+     * @var Collection<int, CaseComment>
      */
-    protected $subject;
+    #[ORM\OneToMany(mappedBy: 'case', targetEntity: CaseComment::class, cascade: ['ALL'], orphanRemoval: true)]
+    #[ORM\OrderBy(['createdAt' => Criteria::DESC])]
+    protected ?Collection $comments = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $description;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.created_at']])]
+    protected ?\DateTimeInterface $createdAt = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="resolution", type="text", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $resolution;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.updated_at']])]
+    protected ?\DateTimeInterface $updatedAt = null;
 
-    /**
-     * @var CaseSource
-     *
-     * @ORM\ManyToOne(targetEntity="CaseSource")
-     * @ORM\JoinColumn(name="source_name", referencedColumnName="name", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $source;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    protected ?\DateTimeInterface $reportedAt = null;
 
-    /**
-     * @var CaseStatus
-     *
-     * @ORM\ManyToOne(targetEntity="CaseStatus")
-     * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $status;
-
-    /**
-     * @var CasePriority
-     *
-     * @ORM\ManyToOne(targetEntity="CasePriority")
-     * @ORM\JoinColumn(name="priority_name", referencedColumnName="name", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $priority;
-
-    /**
-     * @var Contact
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $relatedContact;
-
-    /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $relatedAccount;
-
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="assigned_to_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $assignedTo;
-
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $owner;
-
-    /**
-     * @var Collection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="CaseComment",
-     *     mappedBy="case",
-     *     cascade={"ALL"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"createdAt"="DESC"})
-     */
-    protected $comments;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $updatedAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     */
-    protected $reportedAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $closedAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    protected ?\DateTimeInterface $closedAt = null;
 
     /**
      * Flag to update closedAt field when status is set to closed.
@@ -289,13 +133,9 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
      */
     private $updateClosedAt = null;
 
-    /**
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $organization;
+    #[ORM\ManyToOne(targetEntity: Organization::class)]
+    #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?OrganizationInterface $organization = null;
 
     public function __construct()
     {
@@ -643,9 +483,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
         return $contact->getEmail();
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
@@ -655,9 +493,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
         }
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));

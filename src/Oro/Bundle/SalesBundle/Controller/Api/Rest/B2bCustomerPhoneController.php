@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,10 +22,10 @@ class B2bCustomerPhoneController extends RestController
      *      description="Get all phones items",
      *      resource=true
      * )
-     * @AclAncestor("oro_b2bcustomer_view")
      * @param int $customerId
      * @return Response
      */
+    #[AclAncestor('oro_b2bcustomer_view')]
     public function cgetAction(int $customerId)
     {
         /** @var B2bCustomer $customer */
@@ -54,9 +54,9 @@ class B2bCustomerPhoneController extends RestController
      *      description="Get customer primary phone",
      *      resource=true
      * )
-     * @AclAncestor("oro_b2bcustomer_view")
      * @return Response
      */
+    #[AclAncestor('oro_b2bcustomer_view')]
     public function getPrimaryAction(int $customerId)
     {
         /** @var B2bCustomer $customer */

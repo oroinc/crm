@@ -4,7 +4,7 @@ namespace Oro\Bundle\ContactUsBundle\Controller\Api\Rest;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,9 +22,9 @@ class ContactRequestController extends RestController
      *      description="Get contact request item",
      *      resource=true
      * )
-     * @AclAncestor("oro_contactus_request_view")
      * @return Response
      */
+    #[AclAncestor('oro_contactus_request_view')]
     public function getAction(int $id)
     {
         return $this->handleGetRequest($id);

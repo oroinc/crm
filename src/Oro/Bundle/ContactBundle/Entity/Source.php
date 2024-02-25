@@ -2,44 +2,27 @@
 
 namespace Oro\Bundle\ContactBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="orocrm_contact_source")
- * @Config(
- *      defaultValues={
- *          "grouping"={
- *              "groups"={"dictionary"}
- *          }
- *      }
- * )
- */
+* Entity that represents Source
+*
+*/
+#[ORM\Entity]
+#[ORM\Table(name: 'orocrm_contact_source')]
+#[Config(defaultValues: ['grouping' => ['groups' => ['dictionary']]])]
 class Source
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=32)
-     * @ORM\Id
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "identity"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $name;
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 32)]
+    #[ORM\Id]
+    #[ConfigField(defaultValues: ['importexport' => ['identity' => true]])]
+    protected ?string $name = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="label", type="string", length=255, unique=true)
-     */
-    protected $label;
+    #[ORM\Column(name: 'label', type: Types::STRING, length: 255, unique: true)]
+    protected ?string $label = null;
 
     /**
      * @param string $name

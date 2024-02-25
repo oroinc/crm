@@ -9,8 +9,8 @@ use Oro\Bundle\ContactBundle\Form\Handler\ContactHandler;
 use Oro\Bundle\ContactBundle\Form\Type\ContactType;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,16 +26,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ContactController extends AbstractController
 {
-    /**
-     * @Route("/view/{id}", name="oro_contact_view", requirements={"id"="\d+"})
-     * @Template
-     * @Acl(
-     *      id="oro_contact_view",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="Oro\Bundle\ContactBundle\Entity\Contact"
-     * )
-     */
+    #[Route(path: '/view/{id}', name: 'oro_contact_view', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[Acl(id: 'oro_contact_view', type: 'entity', class: Contact::class, permission: 'VIEW')]
     public function viewAction(Contact $contact): array
     {
         return [
@@ -43,11 +36,9 @@ class ContactController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/info/{id}", name="oro_contact_info", requirements={"id"="\d+"})
-     * @Template
-     * @AclAncestor("oro_contact_view")
-     */
+    #[Route(path: '/info/{id}', name: 'oro_contact_info', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_contact_view')]
     public function infoAction(Request $request, Contact $contact): array|RedirectResponse
     {
         if (!$request->get('_wid')) {
@@ -63,15 +54,10 @@ class ContactController extends AbstractController
 
     /**
      * Create contact form
-     * @Route("/create", name="oro_contact_create")
-     * @Template("@OroContact/Contact/update.html.twig")
-     * @Acl(
-     *      id="oro_contact_create",
-     *      type="entity",
-     *      permission="CREATE",
-     *      class="Oro\Bundle\ContactBundle\Entity\Contact"
-     * )
      */
+    #[Route(path: '/create', name: 'oro_contact_create')]
+    #[Template('@OroContact/Contact/update.html.twig')]
+    #[Acl(id: 'oro_contact_create', type: 'entity', class: Contact::class, permission: 'CREATE')]
     public function createAction(Request $request): array|RedirectResponse
     {
         // add predefined account to contact
@@ -99,31 +85,23 @@ class ContactController extends AbstractController
 
     /**
      * Update user form
-     * @Route("/update/{id}", name="oro_contact_update", requirements={"id"="\d+"})
-     * @Template
-     * @Acl(
-     *      id="oro_contact_update",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="Oro\Bundle\ContactBundle\Entity\Contact"
-     * )
      */
+    #[Route(path: '/update/{id}', name: 'oro_contact_update', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[Acl(id: 'oro_contact_update', type: 'entity', class: Contact::class, permission: 'EDIT')]
     public function updateAction(Contact $entity): array|RedirectResponse
     {
         return $this->update($entity);
     }
 
-    /**
-     * @Route(
-     *      "/{_format}",
-     *      name="oro_contact_index",
-     *      requirements={"_format"="html|json"},
-     *      defaults={"_format" = "html"}
-     * )
-     *
-     * @Template
-     * @AclAncestor("oro_contact_view")
-     */
+    #[Route(
+        path: '/{_format}',
+        name: 'oro_contact_index',
+        requirements: ['_format' => 'html|json'],
+        defaults: ['_format' => 'html']
+    )]
+    #[Template]
+    #[AclAncestor('oro_contact_view')]
     public function indexAction(): array
     {
         return [
@@ -151,11 +129,9 @@ class ContactController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/widget/account-contacts/{id}", name="oro_account_widget_contacts", requirements={"id"="\d+"})
-     * @AclAncestor("oro_contact_view")
-     * @Template()
-     */
+    #[Route(path: '/widget/account-contacts/{id}', name: 'oro_account_widget_contacts', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_contact_view')]
     public function accountContactsAction(Account $account): array
     {
         $defaultContact = $account->getDefaultContact();

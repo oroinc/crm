@@ -2,8 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
@@ -27,7 +26,7 @@ class ChannelSelectTypeTest extends OrmTestCase
         $registry = $this->createMock(ManagerRegistry::class);
 
         $em = $this->getTestEntityManager();
-        $em->getConfiguration()->setMetadataDriverImpl(new AnnotationDriver(new AnnotationReader()));
+        $em->getConfiguration()->setMetadataDriverImpl(new AttributeDriver([]));
 
         $registry->expects($this->any())
             ->method('getManagerForClass')

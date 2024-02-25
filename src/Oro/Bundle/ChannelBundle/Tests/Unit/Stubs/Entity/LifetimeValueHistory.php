@@ -2,57 +2,35 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AccountBundle\Entity\Account;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class LifetimeValueHistory
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="status", type="boolean", nullable=false)
-     */
-    protected $status;
+    #[ORM\Column(name: 'status', type: Types::BOOLEAN, nullable: false)]
+    protected ?bool $status = null;
 
-    /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Channel")
-     * @ORM\JoinColumn(name="data_channel_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $dataChannel;
+    #[ORM\ManyToOne(targetEntity: Channel::class)]
+    #[ORM\JoinColumn(name: 'data_channel_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    protected ?Channel $dataChannel = null;
 
-    /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $account;
+    #[ORM\ManyToOne(targetEntity: Account::class)]
+    #[ORM\JoinColumn(name: 'account_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    protected ?Account $account = null;
 
     /**
      * @var double
-     *
-     * @ORM\Column(name="amount", type="money", nullable=false)
      */
+    #[ORM\Column(name: 'amount', type: 'money', nullable: false)]
     protected $amount;
 
-    /**
-     * @var \DateTime $createdAt
-     *
-     * @ORM\Column(type="datetime", name="created_at")
-     */
-    protected $createdAt;
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
+    protected ?\DateTimeInterface $createdAt = null;
 }

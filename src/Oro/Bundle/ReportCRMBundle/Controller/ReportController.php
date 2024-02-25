@@ -4,7 +4,7 @@ namespace Oro\Bundle\ReportCRMBundle\Controller;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Manager;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,19 +16,19 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ReportController extends AbstractController
 {
     /**
-     * @Route(
-     *      "/static/{reportGroupName}/{reportName}/{_format}",
-     *      name="oro_reportcrm_index",
-     *      requirements={"reportGroupName"="\w+", "reportName"="\w+", "_format"="html|json"},
-     *      defaults={"_format" = "html"}
-     * )
-     * @Template
-     * @AclAncestor("oro_report_view")
      *
      * @param string $reportGroupName
      * @param string $reportName
      * @return array
      */
+    #[Route(
+        path: '/static/{reportGroupName}/{reportName}/{_format}',
+        name: 'oro_reportcrm_index',
+        requirements: ['reportGroupName' => '\w+', 'reportName' => '\w+', '_format' => 'html|json'],
+        defaults: ['_format' => 'html']
+    )]
+    #[Template]
+    #[AclAncestor('oro_report_view')]
     public function indexAction($reportGroupName, $reportName)
     {
         $gridName  = implode('-', ['oro_reportcrm', $reportGroupName, $reportName]);

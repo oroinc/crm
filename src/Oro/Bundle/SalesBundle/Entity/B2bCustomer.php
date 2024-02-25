@@ -4,6 +4,8 @@ namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Extend\Entity\Autocomplete\OroSalesBundle_Entity_B2bCustomer;
 use Oro\Bundle\AccountBundle\Entity\Account;
@@ -11,71 +13,54 @@ use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
+use Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
+use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * Entity holds information of Business Customer.
  *
- * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
- * @ORM\Table(name="orocrm_sales_b2bcustomer", indexes={
- *      @ORM\Index(
- *          name="orocrm_b2bcustomer_name_idx", columns={"name", "id"}
- *      )
- * })
- * @ORM\HasLifecycleCallbacks()
- * @Config(
- *      routeName="oro_sales_b2bcustomer_index",
- *      routeCreate="oro_sales_b2bcustomer_create",
- *      routeView="oro_sales_b2bcustomer_view",
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-user-md",
- *              "contact_information"={
- *                  "email"={
- *                      {"fieldName"="primaryEmail"}
- *                  },
- *                  "phone"={
- *                      {"fieldName"="primaryPhone"}
- *                  }
- *              }
- *          },
- *          "ownership"={
- *              "owner_type"="USER",
- *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id",
- *              "organization_field_name"="organization",
- *              "organization_column_name"="organization_id"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"="",
- *              "category"="sales_data"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "form"={
- *              "form_type"="Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType"
- *          },
- *          "grid"={
- *              "default"="oro-sales-b2bcustomers-grid",
- *              "context"="oro-sales-b2bcustomers-for-context-grid"
- *          },
- *         "tag"={
- *              "enabled"=true
- *          }
- *      }
- * )
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @mixin OroSalesBundle_Entity_B2bCustomer
  */
+#[ORM\Entity(repositoryClass: B2bCustomerRepository::class)]
+#[ORM\Table(name: 'orocrm_sales_b2bcustomer')]
+#[ORM\Index(columns: ['name', 'id'], name: 'orocrm_b2bcustomer_name_idx')]
+#[ORM\HasLifecycleCallbacks]
+#[Config(
+    routeName: 'oro_sales_b2bcustomer_index',
+    routeCreate: 'oro_sales_b2bcustomer_create',
+    routeView: 'oro_sales_b2bcustomer_view',
+    defaultValues: [
+        'entity' => [
+            'icon' => 'fa-user-md',
+            'contact_information' => [
+                'email' => [['fieldName' => 'primaryEmail']],
+                'phone' => [['fieldName' => 'primaryPhone']]
+            ]
+        ],
+        'ownership' => [
+            'owner_type' => 'USER',
+            'owner_field_name' => 'owner',
+            'owner_column_name' => 'user_owner_id',
+            'organization_field_name' => 'organization',
+            'organization_column_name' => 'organization_id'
+        ],
+        'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'sales_data'],
+        'dataaudit' => ['auditable' => true],
+        'form' => ['form_type' => B2bCustomerSelectType::class],
+        'grid' => ['default' => 'oro-sales-b2bcustomers-grid', 'context' => 'oro-sales-b2bcustomers-for-context-grid'],
+        'tag' => ['enabled' => true]
+    ]
+)]
 class B2bCustomer implements
     ChannelAwareInterface,
     ExtendEntityInterface
@@ -83,222 +68,88 @@ class B2bCustomer implements
     use ChannelEntityTrait;
     use ExtendEntityTrait;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "order"=0
-     *      }
-     *  }
-     * )
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 0]])]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "identity"=true,
-     *              "order"=10
-     *          }
-     *      }
-     * )
-     */
-    protected $name;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true, 'order' => 10]]
+    )]
+    protected ?string $name = null;
 
     /**
      * @var double
-     *
-     * @ORM\Column(name="lifetime", type="money", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          },
-     *          "importexport"={
-     *              "full"=true,
-     *              "order"=15
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'lifetime', type: 'money', nullable: true)]
+    #[ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => false], 'importexport' => ['full' => true, 'order' => 15]]
+    )]
     protected $lifetime = 0;
 
-    /**
-     * @var Address $shippingAddress
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true,
-     *              "order"=20
-     *          }
-     *      }
-     * )
-     */
-    protected $shippingAddress;
+    #[ORM\ManyToOne(targetEntity: Address::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['importexport' => ['full' => true, 'order' => 20]])]
+    protected ?Address $shippingAddress = null;
+
+    #[ORM\ManyToOne(targetEntity: Address::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'billing_address_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['importexport' => ['full' => true, 'order' => 30]])]
+    protected ?Address $billingAddress = null;
+
+    #[ORM\ManyToOne(targetEntity: Account::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'account_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 40, 'short' => true]]
+    )]
+    protected ?Account $account = null;
+
+    #[ORM\ManyToOne(targetEntity: Contact::class)]
+    #[ORM\JoinColumn(name: 'contact_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 50, 'short' => true]]
+    )]
+    protected ?Contact $contact = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 70, 'short' => true]]
+    )]
+    protected ?User $owner = null;
+
+    #[ORM\ManyToOne(targetEntity: Organization::class)]
+    #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?OrganizationInterface $organization = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ConfigField(
+        defaultValues: ['entity' => ['label' => 'oro.ui.created_at'], 'importexport' => ['excluded' => true]]
+    )]
+    protected ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ConfigField(
+        defaultValues: ['entity' => ['label' => 'oro.ui.updated_at'], 'importexport' => ['excluded' => true]]
+    )]
+    protected ?\DateTimeInterface $updatedAt = null;
 
     /**
-     * @var Address $billingAddress
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true,
-     *              "order"=30
-     *          }
-     *      }
-     * )
+     * @var Collection<int, B2bCustomerPhone>
      */
-    protected $billingAddress;
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: B2bCustomerPhone::class, cascade: ['all'], orphanRemoval: true)]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 80], 'dataaudit' => ['auditable' => true]])]
+    protected ?Collection $phones = null;
 
     /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"persist"})
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=40,
-     *          "short"=true
-     *      }
-     *  }
-     * )
+     * @var Collection<int, B2bCustomerEmail>
      */
-    protected $account;
-
-    /**
-     * @var Contact
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=50,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $contact;
-
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=70,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $owner;
-
-    /**
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $organization;
-
-    /**
-     * @var \DateTime $created
-     *
-     * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime $updated
-     *
-     * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $updatedAt;
-
-    /**
-     * @var Collection
-     *
-     * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone", mappedBy="owner",
-     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
-     * ))
-     * @ORM\OrderBy({"primary" = "DESC"})
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=80
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $phones;
-
-    /**
-     * @var Collection
-     *
-     * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail",
-     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"primary" = "DESC"})
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=90
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $emails;
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: B2bCustomerEmail::class, cascade: ['all'], orphanRemoval: true)]
+    #[ORM\OrderBy(['primary' => Criteria::DESC])]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 90], 'dataaudit' => ['auditable' => true]])]
+    protected ?Collection $emails = null;
 
     /**
      * {@inheritdoc}
@@ -499,9 +350,8 @@ class B2bCustomer implements
 
     /**
      * Pre persist event listener
-     *
-     * @ORM\PrePersist
      */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -510,9 +360,8 @@ class B2bCustomer implements
 
     /**
      * Pre update event handler
-     *
-     * @ORM\PreUpdate
      */
+    #[ORM\PreUpdate]
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));

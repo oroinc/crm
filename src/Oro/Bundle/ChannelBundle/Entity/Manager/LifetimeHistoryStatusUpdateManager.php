@@ -30,7 +30,7 @@ class LifetimeHistoryStatusUpdateManager
         return $this;
     }
 
-    public function massUpdate(array $records, int $status = LifetimeValueHistory::STATUS_OLD): void
+    public function massUpdate(array $records, bool $status = LifetimeValueHistory::STATUS_OLD): void
     {
         if ($this->useQueue) {
             $this->messageProducer->send(

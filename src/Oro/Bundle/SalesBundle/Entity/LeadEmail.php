@@ -6,46 +6,33 @@ use Doctrine\ORM\Mapping as ORM;
 use Extend\Entity\Autocomplete\OroSalesBundle_Entity_LeadEmail;
 use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
 use Oro\Bundle\EmailBundle\Entity\EmailInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
  * Lead email entity
- * @ORM\Entity
- * @ORM\Table("orocrm_sales_lead_email", indexes={
- *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
- * })
- * @Config(
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-envelope"
- *          },
- *          "comment"={
- *              "immutable"=true
- *          },
- *          "activity"={
- *              "immutable"=true
- *          },
- *          "attachment"={
- *              "immutable"=true
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
  * @mixin OroSalesBundle_Entity_LeadEmail
  */
+#[ORM\Entity]
+#[ORM\Table('orocrm_sales_lead_email')]
+#[ORM\Index(columns: ['email', 'is_primary'], name: 'primary_email_idx')]
+#[Config(
+    defaultValues: [
+        'entity' => ['icon' => 'fa-envelope'],
+        'comment' => ['immutable' => true],
+        'activity' => ['immutable' => true],
+        'attachment' => ['immutable' => true],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class LeadEmail extends AbstractEmail implements ExtendEntityInterface, EmailInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Lead", inversedBy="emails")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $owner;
+    #[ORM\ManyToOne(targetEntity: Lead::class, inversedBy: 'emails')]
+    #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    protected ?Lead $owner = null;
 
     /**
      * Set lead as owner.

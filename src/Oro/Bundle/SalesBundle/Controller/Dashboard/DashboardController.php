@@ -35,14 +35,12 @@ class DashboardController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(
-     *      "/opportunities_by_lead_source/chart/{widget}",
-     *      name="oro_sales_dashboard_opportunities_by_lead_source_chart",
-     *      requirements={"widget"="[\w\-]+"}
-     * )
-     * @Template("@OroSales/Dashboard/opportunitiesByLeadSource.html.twig")
-     */
+    #[Route(
+        path: '/opportunities_by_lead_source/chart/{widget}',
+        name: 'oro_sales_dashboard_opportunities_by_lead_source_chart',
+        requirements: ['widget' => '[\w\-]+']
+    )]
+    #[Template('@OroSales/Dashboard/opportunitiesByLeadSource.html.twig')]
     public function opportunitiesByLeadSourceAction(Request $request, mixed $widget): array
     {
         $options = $this->container->get(WidgetConfigs::class)->getWidgetOptions(
@@ -80,14 +78,12 @@ class DashboardController extends AbstractController
         return $widgetAttr;
     }
 
-    /**
-     * @Route(
-     *      "/opportunity_state/chart/{widget}",
-     *      name="oro_sales_dashboard_opportunity_by_state_chart",
-     *      requirements={"widget"="[\w\-]+"}
-     * )
-     * @Template("@OroSales/Dashboard/opportunityByStatus.html.twig")
-     */
+    #[Route(
+        path: '/opportunity_state/chart/{widget}',
+        name: 'oro_sales_dashboard_opportunity_by_state_chart',
+        requirements: ['widget' => '[\w\-]+']
+    )]
+    #[Template('@OroSales/Dashboard/opportunityByStatus.html.twig')]
     public function opportunityByStatusAction(Request $request, mixed $widget): array
     {
         $options = $this->container->get(WidgetConfigs::class)->getWidgetOptions($request->query->get('_widgetId'));

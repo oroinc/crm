@@ -7,7 +7,7 @@ use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\Form\Handler\CaseEntityHandler;
 use Oro\Bundle\CaseBundle\Model\CaseEntityManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,21 +21,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CaseController extends AbstractController
 {
-    /**
-     * @Route(name="oro_case_index")
-     * @Template
-     * @AclAncestor("oro_case_view")
-     */
+    #[Route(name: 'oro_case_index')]
+    #[Template]
+    #[AclAncestor('oro_case_view')]
     public function indexAction()
     {
         return [];
     }
 
-    /**
-     * @Route("/view/{id}", name="oro_case_view", requirements={"id"="\d+"})
-     * @Template
-     * @AclAncestor("oro_case_view")
-     */
+    #[Route(path: '/view/{id}', name: 'oro_case_view', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_case_view')]
     public function viewAction(CaseEntity $case)
     {
         return [
@@ -43,11 +39,9 @@ class CaseController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/widget/account-cases/{id}", name="oro_case_account_widget_cases", requirements={"id"="\d+"})
-     * @AclAncestor("oro_case_view")
-     * @Template
-     */
+    #[Route(path: '/widget/account-cases/{id}', name: 'oro_case_account_widget_cases', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_case_view')]
     public function accountCasesAction(Account $account)
     {
         return [
@@ -55,11 +49,9 @@ class CaseController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/widget/contact-cases/{id}", name="oro_case_contact_widget_cases", requirements={"id"="\d+"})
-     * @AclAncestor("oro_case_view")
-     * @Template
-     */
+    #[Route(path: '/widget/contact-cases/{id}', name: 'oro_case_contact_widget_cases', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_case_view')]
     public function contactCasesAction(Contact $contact)
     {
         return [
@@ -69,11 +61,10 @@ class CaseController extends AbstractController
 
     /**
      * Create case form
-     *
-     * @Route("/create", name="oro_case_create")
-     * @AclAncestor("oro_case_create")
-     * @Template("@OroCase/Case/update.html.twig")
      */
+    #[Route(path: '/create', name: 'oro_case_create')]
+    #[Template('@OroCase/Case/update.html.twig')]
+    #[AclAncestor('oro_case_create')]
     public function createAction(Request $request)
     {
         $case = $this->container->get(CaseEntityManager::class)->createCase();
@@ -81,11 +72,9 @@ class CaseController extends AbstractController
         return $this->update($case, $request);
     }
 
-    /**
-     * @Route("/update/{id}", name="oro_case_update", requirements={"id"="\d+"})
-     * @Template
-     * @AclAncestor("oro_case_update")
-     */
+    #[Route(path: '/update/{id}', name: 'oro_case_update', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_case_update')]
     public function updateAction(CaseEntity $case, Request $request)
     {
         return $this->update($case, $request);

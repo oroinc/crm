@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadAddress;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,11 +23,10 @@ class LeadAddressController extends RestController
      *      description="Get all addresses items",
      *      resource=true
      * )
-     * @AclAncestor("oro_sales_lead_view")
      * @param int $leadId
-     *
      * @return JsonResponse
      */
+    #[AclAncestor('oro_sales_lead_view')]
     public function cgetAction(int $leadId)
     {
         /** @var Lead $lead */
@@ -57,9 +56,9 @@ class LeadAddressController extends RestController
      *      description="Get lead primary address",
      *      resource=true
      * )
-     * @AclAncestor("oro_sales_lead_view")
      * @return Response
      */
+    #[AclAncestor('oro_sales_lead_view')]
     public function getPrimaryAction(int $leadId)
     {
         /** @var Lead $lead */
@@ -83,12 +82,11 @@ class LeadAddressController extends RestController
      *      description="Delete address items",
      *      resource=true
      * )
-     * @AclAncestor("oro_sales_lead_delete")
      * @param int $leadId
      * @param int $addressId
-     *
      * @return Response
      */
+    #[AclAncestor('oro_sales_lead_delete')]
     public function deleteAction(int $leadId, int $addressId)
     {
         /** @var LeadAddress $address */

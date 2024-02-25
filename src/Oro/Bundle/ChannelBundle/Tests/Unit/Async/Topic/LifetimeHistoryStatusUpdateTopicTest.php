@@ -69,16 +69,9 @@ class LifetimeHistoryStatusUpdateTopicTest extends AbstractTopicTestCase
                     'status' => 'invalid',
                 ],
                 'exceptionClass' => InvalidOptionsException::class,
-                'exceptionMessage' => '/The option "status" with value "invalid"'.
-                    ' is expected to be of type "int"/',
+                'exceptionMessage' => '/The option "status" with value "invalid" is expected to be of type "bool", ' .
+                    'but is of type "string"./',
             ],
-            'invalid status value' => [
-                'body' => [
-                    'status' => 4,
-                ],
-                'exceptionClass' => InvalidOptionsException::class,
-                'exceptionMessage' => '/The option "status" with value 4 is invalid. Accepted values are: 0, 1./',
-            ]
         ];
     }
 

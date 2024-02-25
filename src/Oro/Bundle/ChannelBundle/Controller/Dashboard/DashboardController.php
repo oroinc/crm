@@ -13,8 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Adds action to work with average lifetime sales chart
- * @Route("/dashboard")
  */
+#[Route(path: '/dashboard')]
 class DashboardController extends AbstractController
 {
     /**
@@ -31,16 +31,16 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/chart/{widget}",
-     *      name="oro_channel_dashboard_average_lifetime_sales_chart",
-     *      requirements={"widget"="[\w_-]+"}
-     * )
-     * @Template("@OroChannel/Dashboard/averageLifetimeSales.html.twig")
      * @param Request $request
      * @param string $widget
      * @return array
      */
+    #[Route(
+        path: '/chart/{widget}',
+        name: 'oro_channel_dashboard_average_lifetime_sales_chart',
+        requirements: ['widget' => '[\w_-]+']
+    )]
+    #[Template('@OroChannel/Dashboard/averageLifetimeSales.html.twig')]
     public function averageLifetimeSalesAction(Request $request, $widget)
     {
         $widgetConfigs = $this->container->get(WidgetConfigs::class);

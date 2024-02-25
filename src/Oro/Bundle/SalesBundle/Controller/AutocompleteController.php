@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Controller;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Oro\Bundle\FormBundle\Model\AutocompleteRequest;
 use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,8 +17,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Autocomplete search controller for Sales.
- * @Route("/sales")
  */
+#[Route(path: '/sales')]
 class AutocompleteController extends AbstractController
 {
     /**
@@ -27,10 +27,12 @@ class AutocompleteController extends AbstractController
      *
      * @return JsonResponse
      * @throws HttpException|AccessDeniedHttpException
-     *
-     * @Route("/customers/{ownerClassAlias}/search/autocomplete", name="oro_sales_customers_form_autocomplete_search")
-     * @AclAncestor("oro_search")
      */
+    #[Route(
+        path: '/customers/{ownerClassAlias}/search/autocomplete',
+        name: 'oro_sales_customers_form_autocomplete_search'
+    )]
+    #[AclAncestor('oro_search')]
     public function autocompleteCustomersAction(Request $request, $ownerClassAlias)
     {
         $autocompleteRequest = new AutocompleteRequest($request);

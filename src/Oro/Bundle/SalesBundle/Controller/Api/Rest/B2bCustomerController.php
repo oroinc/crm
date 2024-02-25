@@ -5,8 +5,9 @@ namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,25 +21,26 @@ class B2bCustomerController extends RestController
     /**
      * Get B2B customers.
      *
-     * @QueryParam(
-     *      name="page",
-     *      requirements="\d+",
-     *      nullable=true,
-     *      description="Page number, starting from 1. Defaults to 1."
-     * )
-     * @QueryParam(
-     *      name="limit",
-     *      requirements="\d+", nullable=true,
-     *      description="Number of items per page. defaults to 10."
-     * )
      * @ApiDoc(
      *      description="Get business customers",
      *      resource=true
      * )
-     * @AclAncestor("oro_sales_b2bcustomer_view")
      * @param Request $request
      * @return Response
      */
+    #[QueryParam(
+        name: 'page',
+        requirements: '\d+',
+        description: 'Page number, starting from 1. Defaults to 1.',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'limit',
+        requirements: '\d+',
+        description: 'Number of items per page. defaults to 10.',
+        nullable: true
+    )]
+    #[AclAncestor('oro_sales_b2bcustomer_view')]
     public function cgetAction(Request $request)
     {
         $page = (int) $request->get('page', 1);
@@ -56,9 +58,9 @@ class B2bCustomerController extends RestController
      *      description="Get business customer",
      *      resource=true
      * )
-     * @AclAncestor("oro_sales_b2bcustomer_view")
      * @return Response
      */
+    #[AclAncestor('oro_sales_b2bcustomer_view')]
     public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
@@ -73,9 +75,9 @@ class B2bCustomerController extends RestController
      *      description="Update business customer",
      *      resource=true
      * )
-     * @AclAncestor("oro_sales_b2bcustomer_update")
      * @return Response
      */
+    #[AclAncestor('oro_sales_b2bcustomer_update')]
     public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
@@ -88,8 +90,8 @@ class B2bCustomerController extends RestController
      *      description="Create new business customer",
      *      resource=true
      * )
-     * @AclAncestor("oro_sales_b2bcustomer_create")
      */
+    #[AclAncestor('oro_sales_b2bcustomer_create')]
     public function postAction()
     {
         return $this->handleCreateRequest();
@@ -104,14 +106,9 @@ class B2bCustomerController extends RestController
      *      description="Delete business customer",
      *      resource=true
      * )
-     * @Acl(
-     *      id="oro_sales_b2bcustomer_delete",
-     *      type="entity",
-     *      permission="DELETE",
-     *      class="Oro\Bundle\SalesBundle\Entity\B2bCustomer"
-     * )
      * @return Response
      */
+    #[Acl(id: 'oro_sales_b2bcustomer_delete', type: 'entity', class: B2bCustomer::class, permission: 'DELETE')]
     public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);

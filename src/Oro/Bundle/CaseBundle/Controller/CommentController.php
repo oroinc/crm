@@ -8,7 +8,7 @@ use Oro\Bundle\CaseBundle\Form\Handler\CaseEntityHandler;
 use Oro\Bundle\CaseBundle\Model\CaseEntityManager;
 use Oro\Bundle\CaseBundle\Model\ViewFactory;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -25,16 +25,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class CommentController extends AbstractController
 {
     /**
-     * @Route(
-     *      "/{id}/comment/list.{_format}",
-     *      name="oro_case_comment_list",
-     *      requirements={"id"="\d+", "_format"="json"}, defaults={"_format"="json"}
-     * )
-     * @AclAncestor("oro_case_comment_view")
      * @param Request $request
      * @param CaseEntity $case
      * @return JsonResponse
      */
+    #[Route(
+        path: '/{id}/comment/list.{_format}',
+        name: 'oro_case_comment_list',
+        requirements: ['id' => '\d+', '_format' => 'json'],
+        defaults: ['_format' => 'json']
+    )]
+    #[AclAncestor('oro_case_comment_view')]
     public function commentsListAction(Request $request, CaseEntity $case)
     {
         $order = $request->get('sorting', 'DESC');
@@ -45,15 +46,9 @@ class CommentController extends AbstractController
         );
     }
 
-    /**
-     * @Route(
-     *      "/{id}/widget/comment",
-     *      name="oro_case_widget_comments",
-     *      requirements={"id"="\d+"}
-     * )
-     * @AclAncestor("oro_case_comment_view")
-     * @Template("@OroCase/Comment/comments.html.twig")
-     */
+    #[Route(path: '/{id}/widget/comment', name: 'oro_case_widget_comments', requirements: ['id' => '\d+'])]
+    #[Template('@OroCase/Comment/comments.html.twig')]
+    #[AclAncestor('oro_case_comment_view')]
     public function commentsWidgetAction(CaseEntity $case)
     {
         return [
@@ -62,18 +57,14 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/{caseId}/comment/create",
-     *      name="oro_case_comment_create",
-     *      requirements={"caseId"="\d+"}
-     * )
-     * @ParamConverter("case", options={"id"="caseId"})
-     * @AclAncestor("oro_case_comment_create")
-     * @Template("@OroCase/Comment/update.html.twig")
      * @param Request $request
      * @param CaseEntity $case
      * @return array|RedirectResponse
      */
+    #[Route(path: '/{caseId}/comment/create', name: 'oro_case_comment_create', requirements: ['caseId' => '\d+'])]
+    #[ParamConverter('case', options: ['id' => 'caseId'])]
+    #[Template('@OroCase/Comment/update.html.twig')]
+    #[AclAncestor('oro_case_comment_create')]
     public function createAction(Request $request, CaseEntity $case)
     {
         $comment = $this->container->get(CaseEntityManager::class)->createComment($case);
@@ -85,15 +76,9 @@ class CommentController extends AbstractController
         return $this->update($comment, $formAction);
     }
 
-    /**
-     * @Route(
-     *      "/comment/{id}/update",
-     *      name="oro_case_comment_update",
-     *      requirements={"id"="\d+"}
-     * )
-     * @AclAncestor("oro_case_comment_update")
-     * @Template
-     */
+    #[Route(path: '/comment/{id}/update', name: 'oro_case_comment_update', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_case_comment_update')]
     public function updateAction(CaseComment $comment)
     {
         $formAction = $this->container->get('router')->generate('oro_case_comment_update', ['id' => $comment->getId()]);

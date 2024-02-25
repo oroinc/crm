@@ -2,29 +2,29 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 /**
- * @ORM\Entity(repositoryClass="Oro\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository")
- * @ORM\Table(name="orocrm_analytics_rfm_category")
- * @Config(
- *  defaultValues={
- *      "ownership"={
- *          "owner_type"="ORGANIZATION",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"="",
- *          "category"="account_management"
- *      }
- *  }
- * )
- */
+* Entity that represents R F M Metric Category
+*
+*/
+#[ORM\Entity(repositoryClass: RFMMetricCategoryRepository::class)]
+#[ORM\Table(name: 'orocrm_analytics_rfm_category')]
+#[Config(
+    defaultValues: [
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'owner',
+            'owner_column_name' => 'owner_id'
+        ],
+        'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'account_management']
+    ]
+)]
 class RFMMetricCategory
 {
     const TYPE_RECENCY = 'recency';
@@ -40,58 +40,36 @@ class RFMMetricCategory
         self::TYPE_MONETARY
     ];
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
+
+    #[ORM\ManyToOne(targetEntity: Organization::class)]
+    #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?Organization $owner = null;
+
+    #[ORM\Column(name: 'category_type', type: Types::STRING, length: 16, nullable: false)]
+    protected ?string $categoryType = null;
+
+    #[ORM\Column(name: 'category_index', type: Types::INTEGER, nullable: false)]
+    protected ?int $categoryIndex = null;
 
     /**
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @return float|null
      */
-    protected $owner;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="category_type", type="string", length=16, nullable=false)
-     */
-    protected $categoryType;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="category_index", type="integer", nullable=false)
-     */
-    protected $categoryIndex;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="min_value", type="float", nullable=true)
-     */
+    #[ORM\Column(name: 'min_value', type: Types::FLOAT, nullable: true)]
     protected $minValue;
 
     /**
-     * @var float
-     *
-     * @ORM\Column(name="max_value", type="float", nullable=true)
+     * @return float|null
      */
+    #[ORM\Column(name: 'max_value', type: Types::FLOAT, nullable: true)]
     protected $maxValue;
 
-    /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $channel;
+    #[ORM\ManyToOne(targetEntity: Channel::class)]
+    #[ORM\JoinColumn(name: 'channel_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?Channel $channel = null;
 
     /**
      * Get id

@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
+use Oro\Bundle\ChannelBundle\Entity\CustomerIdentity;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\SearchBundle\Engine\Indexer as SearchIndexer;
 use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
@@ -242,7 +243,7 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
                 $this->getObjectManager()->getMetadataFactory()->getAllMetadata(),
                 function (ClassMetadata $metadata) {
                     // will be removed after refactoring in CRM-3263
-                    if ($metadata->name === 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity') {
+                    if ($metadata->name === CustomerIdentity::class) {
                         return false;
                     }
 

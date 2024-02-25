@@ -4,8 +4,8 @@ namespace Oro\Bundle\ChannelBundle\Controller;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,51 +18,30 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ChannelController extends AbstractController
 {
-    /**
-     * @Route(
-     *      "/{_format}",
-     *      name="oro_channel_index",
-     *      requirements={"_format"="html|json"},
-     *      defaults={"_format"="html"}
-     * )
-     * @Acl(
-     *      id="oro_channel_view",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="Oro\Bundle\ChannelBundle\Entity\Channel"
-     * )
-     * @Template()
-     */
+    #[Route(
+        path: '/{_format}',
+        name: 'oro_channel_index',
+        requirements: ['_format' => 'html|json'],
+        defaults: ['_format' => 'html']
+    )]
+    #[Template]
+    #[Acl(id: 'oro_channel_view', type: 'entity', class: Channel::class, permission: 'VIEW')]
     public function indexAction()
     {
         return [];
     }
 
-    /**
-     * @Route("/create", name="oro_channel_create")
-     * @Acl(
-     *      id="oro_channel_create",
-     *      type="entity",
-     *      permission="CREATE",
-     *      class="Oro\Bundle\ChannelBundle\Entity\Channel"
-     * )
-     * @Template("@OroChannel/Channel/update.html.twig")
-     */
+    #[Route(path: '/create', name: 'oro_channel_create')]
+    #[Template('@OroChannel/Channel/update.html.twig')]
+    #[Acl(id: 'oro_channel_create', type: 'entity', class: Channel::class, permission: 'CREATE')]
     public function createAction(Request $request)
     {
         return $this->update(new Channel(), $request);
     }
 
-    /**
-     * @Route("/update/{id}", requirements={"id"="\d+"}, name="oro_channel_update")
-     * @Acl(
-     *      id="oro_channel_update",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="Oro\Bundle\ChannelBundle\Entity\Channel"
-     * )
-     * @Template()
-     */
+    #[Route(path: '/update/{id}', name: 'oro_channel_update', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[Acl(id: 'oro_channel_update', type: 'entity', class: Channel::class, permission: 'EDIT')]
     public function updateAction(Channel $channel, Request $request)
     {
         return $this->update($channel, $request);
@@ -93,11 +72,9 @@ class ChannelController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/view/{id}", requirements={"id"="\d+"}, name="oro_channel_view")
-     * @AclAncestor("oro_channel_view")
-     * @Template()
-     */
+    #[Route(path: '/view/{id}', name: 'oro_channel_view', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_channel_view')]
     public function viewAction(Channel $channel)
     {
         return [
@@ -105,11 +82,9 @@ class ChannelController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/widget/info/{id}", name="oro_channel_widget_info", requirements={"id"="\d+"})
-     * @AclAncestor("oro_channel_view")
-     * @Template()
-     */
+    #[Route(path: '/widget/info/{id}', name: 'oro_channel_widget_info', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_channel_view')]
     public function infoAction(Channel $channel)
     {
         return [

@@ -2,37 +2,28 @@
 
 namespace Oro\Bundle\ChannelBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
- * @ORM\Table(name="orocrm_channel_entity_name")
- */
+* Entity that represents Entity Name
+*
+*/
+#[ORM\Entity]
+#[ORM\Table(name: 'orocrm_channel_entity_name')]
 class EntityName
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    protected $name;
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
+    protected ?string $name = null;
 
-    /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel", inversedBy="entities")
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $channel;
+    #[ORM\ManyToOne(targetEntity: Channel::class, inversedBy: 'entities')]
+    #[ORM\JoinColumn(name: 'channel_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    protected ?Channel $channel = null;
 
     /**
      * @param string $name

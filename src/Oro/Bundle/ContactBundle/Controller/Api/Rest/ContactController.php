@@ -8,8 +8,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Form\Type\ContactApiType;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
@@ -30,64 +30,45 @@ class ContactController extends RestController
     /**
      * REST GET list
      *
-     * @QueryParam(
-     *     name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1."
-     * )
-     * @QueryParam(
-     *     name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10."
-     * )
-     * @QueryParam(
-     *     name="createdAt",
-     *     requirements="\d{4}(-\d{2}(-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|([-+]\d{2}(:?\d{2})?))?)?)?)?",
-     *     nullable=true,
-     *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
-     * )
-     * @QueryParam(
-     *     name="updatedAt",
-     *     requirements="\d{4}(-\d{2}(-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|([-+]\d{2}(:?\d{2})?))?)?)?)?",
-     *     nullable=true,
-     *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
-     * )
-     * @QueryParam(
-     *     name="ownerId",
-     *     requirements="\d+",
-     *     nullable=true,
-     *     description="Id of owner user"
-     * )
-     * @QueryParam(
-     *     name="ownerUsername",
-     *     requirements=".+",
-     *     nullable=true,
-     *     description="Username of owner user"
-     * )
-     * @QueryParam(
-     *     name="phone",
-     *     requirements=".+",
-     *     nullable=true,
-     *     description="Phone number of contact"
-     * )
-     * @QueryParam(
-     *     name="assigneeId",
-     *     requirements="\d+",
-     *     nullable=true,
-     *     description="Id of assignee"
-     * )
-     * @QueryParam(
-     *     name="assigneeUsername",
-     *     requirements=".+",
-     *     nullable=true,
-     *     description="Username of assignee"
-     * )
      * @ApiDoc(
      *      description="Get all contacts items",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_view")
      *
      * @param Request $request
      * @throws \Exception
      * @return Response
      */
+    #[QueryParam(
+        name: 'page',
+        requirements: '\d+',
+        description: 'Page number, starting from 1. Defaults to 1.',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'limit',
+        requirements: '\d+',
+        description: 'Number of items per page. defaults to 10.',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'createdAt',
+        requirements: '\d{4}(-\d{2}(-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|([-+]\d{2}(:?\d{2})?))?)?)?)?',
+        description: 'Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'updatedAt',
+        requirements: '\d{4}(-\d{2}(-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|([-+]\d{2}(:?\d{2})?))?)?)?)?',
+        description: 'Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00',
+        nullable: true
+    )]
+    #[QueryParam(name: 'ownerId', requirements: '\d+', description: 'Id of owner user', nullable: true)]
+    #[QueryParam(name: 'ownerUsername', requirements: '.+', description: 'Username of owner user', nullable: true)]
+    #[QueryParam(name: 'phone', requirements: '.+', description: 'Phone number of contact', nullable: true)]
+    #[QueryParam(name: 'assigneeId', requirements: '\d+', description: 'Id of assignee', nullable: true)]
+    #[QueryParam(name: 'assigneeUsername', requirements: '.+', description: 'Username of assignee', nullable: true)]
+    #[AclAncestor('oro_contact_view')]
     public function cgetAction(Request $request)
     {
         $page  = (int)$request->get('page', 1);
@@ -129,9 +110,9 @@ class ContactController extends RestController
      *      description="Get contact item",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_view")
      * @return Response
      */
+    #[AclAncestor('oro_contact_view')]
     public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
@@ -146,9 +127,9 @@ class ContactController extends RestController
      *      description="Update contact",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_update")
      * @return Response
      */
+    #[AclAncestor('oro_contact_update')]
     public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
@@ -161,8 +142,8 @@ class ContactController extends RestController
      *      description="Create new contact",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_create")
      */
+    #[AclAncestor('oro_contact_create')]
     public function postAction()
     {
         return $this->handleCreateRequest();
@@ -177,14 +158,9 @@ class ContactController extends RestController
      *      description="Delete Contact",
      *      resource=true
      * )
-     * @Acl(
-     *      id="oro_contact_delete",
-     *      type="entity",
-     *      permission="DELETE",
-     *      class="Oro\Bundle\ContactBundle\Entity\Contact"
-     * )
      * @return Response
      */
+    #[Acl(id: 'oro_contact_delete', type: 'entity', class: Contact::class, permission: 'DELETE')]
     public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);

@@ -3,196 +3,100 @@
 namespace Oro\Bundle\ChannelBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 /**
  * Represents the source of customer data.
- *
- * @ORM\Entity(repositoryClass="Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository")
- * @ORM\Table(name="orocrm_channel", indexes={
- *     @ORM\Index(name="crm_channel_name_idx", columns={"name"}),
- *     @ORM\Index(name="crm_channel_status_idx", columns={"status"}),
- *     @ORM\Index(name="crm_channel_channel_type_idx", columns={"channel_type"})
- * })
- * @ORM\HasLifecycleCallbacks()
- * @Config(
- *  routeName="oro_channel_index",
- *  routeView="oro_channel_view",
- *  defaultValues={
- *      "entity"={
- *          "icon"="fa-sitemap"
- *      },
- *      "ownership"={
- *          "owner_type"="ORGANIZATION",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="organization_owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"="",
- *          "category"="account_management"
- *      },
- *      "form"={
- *            "form_type"="Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType"
- *      },
- *      "grid"={
- *          "default"="oro-channels-grid"
- *     }
- *  }
- * )
  */
+#[ORM\Entity(repositoryClass: ChannelRepository::class)]
+#[ORM\Table(name: 'orocrm_channel')]
+#[ORM\Index(columns: ['name'], name: 'crm_channel_name_idx')]
+#[ORM\Index(columns: ['status'], name: 'crm_channel_status_idx')]
+#[ORM\Index(columns: ['channel_type'], name: 'crm_channel_channel_type_idx')]
+#[ORM\HasLifecycleCallbacks]
+#[Config(
+    routeName: 'oro_channel_index',
+    routeView: 'oro_channel_view',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-sitemap'],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'owner',
+            'owner_column_name' => 'organization_owner_id'
+        ],
+        'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'account_management'],
+        'form' => ['form_type' => ChannelSelectType::class],
+        'grid' => ['default' => 'oro-channels-grid']
+    ]
+)]
 class Channel
 {
     const STATUS_ACTIVE = true;
     const STATUS_INACTIVE = false;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "order"=0
-     *      }
-     *  }
-     * )
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 0]])]
+    protected ?int $id = null;
+
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
+    #[ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true, 'order' => 10]]
+    )]
+    protected ?string $name = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "identity"=true,
-     *              "order"=10
-     *          }
-     *      }
-     * )
+     * @var Collection<int, EntityName>
      */
-    protected $name;
+    #[ORM\OneToMany(mappedBy: 'channel', targetEntity: EntityName::class, cascade: ['all'], orphanRemoval: true)]
+    protected ?Collection $entities = null;
 
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Oro\Bundle\ChannelBundle\Entity\EntityName",
-     *     cascade={"all"}, mappedBy="channel", orphanRemoval=true
-     * )
-     */
-    protected $entities;
+    #[ORM\ManyToOne(targetEntity: Organization::class)]
+    #[ORM\JoinColumn(name: 'organization_owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?Organization $owner = null;
 
-    /**
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $owner;
+    #[ORM\OneToOne(targetEntity: Integration::class, cascade: ['all'], orphanRemoval: true)]
+    #[ORM\JoinColumn(name: 'data_source_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?Integration $dataSource = null;
 
-    /**
-     * @var Integration
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel", cascade={"all"}, orphanRemoval=true)
-     * @ORM\JoinColumn(name="data_source_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $dataSource;
+    #[ORM\Column(name: 'status', type: Types::BOOLEAN, nullable: false)]
+    #[ConfigField(defaultValues: ['importexport' => ['full' => true, 'order' => 20]])]
+    protected ?bool $status = self::STATUS_INACTIVE;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="status", type="boolean", nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true,
-     *              "order"=20
-     *          }
-     *      }
-     * )
-     */
-    protected $status = self::STATUS_INACTIVE;
+    #[ORM\Column(name: 'customer_identity', type: Types::STRING, length: 255, nullable: false)]
+    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?string $customerIdentity = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="customer_identity", type="string", length=255, nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $customerIdentity;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="channel_type", type="string", nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $channelType;
+    #[ORM\Column(name: 'channel_type', type: Types::STRING, nullable: false)]
+    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?string $channelType = null;
 
     /**
      * @var array $data
-     *
-     * @ORM\Column(name="data", type="json_array", nullable=true)
      */
+    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
     protected $data;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $createdAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ConfigField(
+        defaultValues: ['entity' => ['label' => 'oro.ui.created_at'], 'importexport' => ['excluded' => true]]
+    )]
+    protected ?\DateTimeInterface $createdAt = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $updatedAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ConfigField(
+        defaultValues: ['entity' => ['label' => 'oro.ui.updated_at'], 'importexport' => ['excluded' => true]]
+    )]
+    protected ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -445,9 +349,7 @@ class Channel
         return $this->updatedAt;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -456,9 +358,7 @@ class Channel
         }
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));

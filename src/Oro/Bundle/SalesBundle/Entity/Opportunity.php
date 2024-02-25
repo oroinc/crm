@@ -2,83 +2,66 @@
 
 namespace Oro\Bundle\SalesBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Extend\Entity\Autocomplete\OroSalesBundle_Entity_Opportunity;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrencyHolderInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
+use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
+use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
+use Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
+ * Opportunity entity
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
- *
- * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
- * @ORM\Table(
- *  name="orocrm_sales_opportunity",
- *  indexes={
- *    @ORM\Index(name="opportunity_created_idx",columns={"created_at", "id"}),
- *    @ORM\Index(
- *      name="opportunities_by_status_idx",
- *      columns={"organization_id","status_id","close_revenue_value","budget_amount_value","created_at"}
- *    )
- *  }
- * )
- * @ORM\HasLifecycleCallbacks()
- * @Config(
- *      routeName="oro_sales_opportunity_index",
- *      routeView="oro_sales_opportunity_view",
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-line-chart"
- *          },
- *          "ownership"={
- *              "owner_type"="USER",
- *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id",
- *              "organization_field_name"="organization",
- *              "organization_column_name"="organization_id"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"="",
- *              "category"="sales_data",
- *              "field_acl_supported"=true
- *          },
- *          "form"={
- *              "form_type"="Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType",
- *              "grid_name"="sales-opportunity-grid",
- *          },
- *          "dataaudit"={
- *              "auditable"=true,
- *              "immutable"=true
- *          },
- *          "grid"={
- *              "default"="sales-opportunity-grid",
- *              "context"="sales-opportunity-for-context-grid"
- *          },
- *          "tag"={
- *              "enabled"=true,
- *              "enableDefaultRendering"=false
- *          }
- *     }
- * )
- *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- *
  * @method AbstractEnumValue getStatus()
  * @method Opportunity setStatus(AbstractEnumValue $status)
  * @mixin OroSalesBundle_Entity_Opportunity
  */
+#[ORM\Entity(repositoryClass: OpportunityRepository::class)]
+#[ORM\Table(name: 'orocrm_sales_opportunity')]
+#[ORM\Index(columns: ['created_at', 'id'], name: 'opportunity_created_idx')]
+#[ORM\Index(
+    columns: ['organization_id', 'status_id', 'close_revenue_value', 'budget_amount_value', 'created_at'],
+    name: 'opportunities_by_status_idx'
+)]
+#[ORM\HasLifecycleCallbacks]
+#[Config(
+    routeName: 'oro_sales_opportunity_index',
+    routeView: 'oro_sales_opportunity_view',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-line-chart'],
+        'ownership' => [
+            'owner_type' => 'USER',
+            'owner_field_name' => 'owner',
+            'owner_column_name' => 'user_owner_id',
+            'organization_field_name' => 'organization',
+            'organization_column_name' => 'organization_id'
+        ],
+        'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'sales_data', 'field_acl_supported' => true],
+        'form' => ['form_type' => OpportunitySelectType::class, 'grid_name' => 'sales-opportunity-grid'],
+        'dataaudit' => ['auditable' => true, 'immutable' => true],
+        'grid' => ['default' => 'sales-opportunity-grid', 'context' => 'sales-opportunity-for-context-grid'],
+        'tag' => ['enabled' => true, 'enableDefaultRendering' => false]
+    ]
+)]
 class Opportunity implements
     EmailHolderInterface,
     MultiCurrencyHolderInterface,
@@ -96,142 +79,73 @@ class Opportunity implements
      */
     const PROBABILITIES_CONFIG_KEY = 'oro_sales.default_opportunity_probabilities';
 
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "order"=0
-     *      }
-     *  }
-     * )
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 0]])]
+    protected ?int $id = null;
 
-    /**
-     * @var OpportunityCloseReason
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason")
-     * @ORM\JoinColumn(name="close_reason_name", referencedColumnName="name")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=100,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     **/
-    protected $closeReason;
+    #[ORM\ManyToOne(targetEntity: OpportunityCloseReason::class)]
+    #[ORM\JoinColumn(name: 'close_reason_name', referencedColumnName: 'name')]
+    #[ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 100, 'short' => true]]
+    )]
+    protected ?OpportunityCloseReason $closeReason = null;
 
-    /**
-     * @var Contact
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
-     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=120,
-     *          "short"=true
-     *      },
-     *      "form"={
-     *          "form_type"="Oro\Bundle\ContactBundle\Form\Type\ContactSelectType"
-     *      }
-     *  }
-     * )
-     **/
-    protected $contact;
+    #[ORM\ManyToOne(targetEntity: Contact::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'contact_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 120, 'short' => true],
+            'form' => ['form_type' => ContactSelectType::class]
+        ]
+    )]
+    protected ?Contact $contact = null;
 
-    /**
-     * @var Lead
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Lead", inversedBy="opportunities")
-     * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=130,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     **/
-    protected $lead;
+    #[ORM\ManyToOne(targetEntity: Lead::class, inversedBy: 'opportunities')]
+    #[ORM\JoinColumn(name: 'lead_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 130, 'short' => true]]
+    )]
+    protected ?Lead $lead = null;
 
-    /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true, "immutable"=true},
-     *      "importexport"={
-     *          "order"=140,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $owner;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true, 'immutable' => true],
+            'importexport' => ['order' => 140, 'short' => true]
+        ]
+    )]
+    protected ?User $owner = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=10,
-     *          "identity"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $name;
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
+    #[ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 10, 'identity' => true]]
+    )]
+    protected ?string $name = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="close_date", type="date", nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true, "immutable"=true},
-     *      "importexport"={
-     *          "order"=20
-     *      }
-     *  }
-     * )
-     */
-    protected $closeDate;
+    #[ORM\Column(name: 'close_date', type: Types::DATE_MUTABLE, nullable: true)]
+    #[ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true, 'immutable' => true], 'importexport' => ['order' => 20]]
+    )]
+    protected ?\DateTimeInterface $closeDate = null;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="probability", type="percent", nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "form"={
-     *          "form_type"="Oro\Bundle\FormBundle\Form\Type\OroPercentType",
-     *          "form_options"={
-     *              "constraints"={{"Range":{"min":0, "max":100}}},
-     *          }
-     *      },
-     *      "dataaudit"={"auditable"=true, "immutable"=true},
-     *      "importexport"={
-     *          "order"=30
-     *      }
-     *  }
-     * )
      */
+    #[ORM\Column(name: 'probability', type: 'percent', nullable: true)]
+    #[ConfigField(
+        defaultValues: [
+            'form' => [
+                'form_type' => OroPercentType::class,
+                'form_options' => ['constraints' => [['Range' => ['min' => 0, 'max' => 100]]]]
+            ],
+            'dataaudit' => ['auditable' => true, 'immutable' => true],
+            'importexport' => ['order' => 30]
+        ]
+    )]
     protected $probability;
 
     /**
@@ -244,67 +158,45 @@ class Opportunity implements
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="budget_amount_currency", type="currency", length=3, nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true, "immutable"=true},
-     *      "importexport"={
-     *          "order"=55
-     *      },
-     *      "multicurrency"={
-     *          "target"="budgetAmount"
-     *      }
-     *  }
-     * )
      */
+    #[ORM\Column(name: 'budget_amount_currency', type: 'currency', length: 3, nullable: true)]
+    #[ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true, 'immutable' => true],
+            'importexport' => ['order' => 55],
+            'multicurrency' => ['target' => 'budgetAmount']
+        ]
+    )]
     protected $budgetAmountCurrency;
 
     /**
      * @var double
-     *
-     * @ORM\Column(name="budget_amount_value", type="money_value", nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "form"={
-     *          "form_type"="Oro\Bundle\FormBundle\Form\Type\OroMoneyType",
-     *          "form_options"={
-     *              "constraints"={{"Range":{"min":0}}},
-     *          }
-     *      },
-     *      "dataaudit"={
-     *          "auditable"=true
-     *      },
-     *      "importexport"={
-     *          "order"=50
-     *      },
-     *      "multicurrency"={
-     *          "target"="budgetAmount",
-     *          "virtual_field"="budgetAmountBaseCurrency"
-     *      }
-     *  }
-     * )
      */
+    #[ORM\Column(name: 'budget_amount_value', type: 'money_value', nullable: true)]
+    #[ConfigField(
+        defaultValues: [
+            'form' => [
+                'form_type' => OroMoneyType::class,
+                'form_options' => ['constraints' => [['Range' => ['min' => 0]]]]
+            ],
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 50],
+            'multicurrency' => ['target' => 'budgetAmount', 'virtual_field' => 'budgetAmountBaseCurrency']
+        ]
+    )]
     protected $budgetAmountValue;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="base_budget_amount_value", type="money", nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={
-     *          "auditable"=true
-     *      },
-     *      "importexport"={
-     *          "order"=56
-     *      },
-     *      "multicurrency"={
-     *          "target"="budgetAmount"
-     *      }
-     *  }
-     * )
      */
+    #[ORM\Column(name: 'base_budget_amount_value', type: 'money', nullable: true)]
+    #[ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 56],
+            'multicurrency' => ['target' => 'budgetAmount']
+        ]
+    )]
     protected $baseBudgetAmountValue;
 
     /**
@@ -317,185 +209,88 @@ class Opportunity implements
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="close_revenue_currency", type="currency", length=3, nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true, "immutable"=true},
-     *      "importexport"={
-     *          "order"=65
-     *      },
-     *      "multicurrency"={
-     *          "target"="closeRevenue"
-     *      }
-     *  }
-     * )
      */
+    #[ORM\Column(name: 'close_revenue_currency', type: 'currency', length: 3, nullable: true)]
+    #[ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true, 'immutable' => true],
+            'importexport' => ['order' => 65],
+            'multicurrency' => ['target' => 'closeRevenue']
+        ]
+    )]
     protected $closeRevenueCurrency;
 
     /**
      * @var double
-     *
-     * @ORM\Column(name="close_revenue_value", type="money_value", nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "form"={
-     *          "form_type"="Oro\Bundle\FormBundle\Form\Type\OroMoneyType",
-     *          "form_options"={
-     *              "constraints"={{"Range":{"min":0}}},
-     *          }
-     *      },
-     *      "dataaudit"={
-     *          "auditable"=true
-     *      },
-     *      "importexport"={
-     *          "order"=60
-     *      },
-     *      "multicurrency"={
-     *          "target"="closeRevenue",
-     *          "virtual_field"="closeRevenueBaseCurrency"
-     *      }
-     *  }
-     * )
      */
+    #[ORM\Column(name: 'close_revenue_value', type: 'money_value', nullable: true)]
+    #[ConfigField(
+        defaultValues: [
+            'form' => [
+                'form_type' => OroMoneyType::class,
+                'form_options' => ['constraints' => [['Range' => ['min' => 0]]]]
+            ],
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 60],
+            'multicurrency' => ['target' => 'closeRevenue', 'virtual_field' => 'closeRevenueBaseCurrency']
+        ]
+    )]
     protected $closeRevenueValue;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="base_close_revenue_value", type="money", nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={
-     *          "auditable"=true
-     *      },
-     *      "importexport"={
-     *          "order"=66
-     *      },
-     *      "multicurrency"={
-     *          "target"="closeRevenue"
-     *      }
-     *  }
-     * )
      */
+    #[ORM\Column(name: 'base_close_revenue_value', type: 'money', nullable: true)]
+    #[ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 66],
+            'multicurrency' => ['target' => 'closeRevenue']
+        ]
+    )]
     protected $baseCloseRevenueValue;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="customer_need", type="text", nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=60
-     *      }
-     *  }
-     * )
-     */
-    protected $customerNeed;
+    #[ORM\Column(name: 'customer_need', type: Types::TEXT, nullable: true)]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 60]])]
+    protected ?string $customerNeed = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="proposed_solution", type="text", nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=70
-     *      }
-     *  }
-     * )
-     */
-    protected $proposedSolution;
+    #[ORM\Column(name: 'proposed_solution', type: Types::TEXT, nullable: true)]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 70]])]
+    protected ?string $proposedSolution = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $createdAt;
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
+    #[ConfigField(
+        defaultValues: ['entity' => ['label' => 'oro.ui.created_at'], 'importexport' => ['excluded' => true]]
+    )]
+    protected ?\DateTimeInterface $createdAt = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $updatedAt;
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE)]
+    #[ConfigField(
+        defaultValues: ['entity' => ['label' => 'oro.ui.updated_at'], 'importexport' => ['excluded' => true]]
+    )]
+    protected ?\DateTimeInterface $updatedAt = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="notes", type="text", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=80
-     *          }
-     *      }
-     * )
-     */
-    protected $notes;
+    #[ORM\Column(name: 'notes', type: Types::TEXT, nullable: true)]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 80]])]
+    protected ?string $notes = null;
 
-    /**
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $organization;
+    #[ORM\ManyToOne(targetEntity: Organization::class)]
+    #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?OrganizationInterface $organization = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="closed_at", nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true, "immutable"=true},
-     *      "importexport"={"excluded"=true, "immutable"=true}
-     *  }
-     * )
-     */
-    protected $closedAt;
+    #[ORM\Column(name: 'closed_at', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true, 'immutable' => true],
+            'importexport' => ['excluded' => true, 'immutable' => true]
+        ]
+    )]
+    protected ?\DateTimeInterface $closedAt = null;
 
-    /**
-     * @var Customer
-     *
-     * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
-     * @ORM\JoinColumn(name="customer_association_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true
-     *          }
-     *     }
-     * )
-     */
-    protected $customerAssociation;
+    #[ORM\ManyToOne(targetEntity: Customer::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'customer_association_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    #[ConfigField(defaultValues: ['importexport' => ['full' => true]])]
+    protected ?Customer $customerAssociation = null;
 
     /**
      * {@inheritdoc}
@@ -505,9 +300,7 @@ class Opportunity implements
         $this->loadMultiCurrencyFields();
     }
 
-    /**
-     * @ORM\PostLoad
-     */
+    #[ORM\PostLoad]
     public function loadMultiCurrencyFields()
     {
         $this->budgetAmount = MultiCurrency::create(
@@ -569,10 +362,9 @@ class Opportunity implements
     }
 
     /**
-     * @ORM\PreFlush
-     *
      * @return void
      */
+    #[ORM\PreFlush]
     public function updateMultiCurrencyFields()
     {
         $this->updateBudgetAmount();
@@ -913,18 +705,14 @@ class Opportunity implements
     {
         return (string) $this->getName();
     }
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function beforeSave()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->updatedAt = clone $this->createdAt;
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function beforeUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
