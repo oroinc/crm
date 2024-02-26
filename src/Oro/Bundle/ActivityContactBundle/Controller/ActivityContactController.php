@@ -19,13 +19,9 @@ class ActivityContactController extends AbstractController
      * @param integer $entityId    The entity object id which metrics should be rendered
      *
      * @return array|Response
-     *
-     * @Route(
-     *      "/metrics/{entityClass}/{entityId}",
-     *      name="oro_activity_contact_metrics"
-     * )
-     * @Template("@OroActivityContact/ActivityContact/widget/metrics.html.twig")
      */
+    #[Route(path: '/metrics/{entityClass}/{entityId}', name: 'oro_activity_contact_metrics')]
+    #[Template('@OroActivityContact/ActivityContact/widget/metrics.html.twig')]
     public function metricsAction($entityClass, $entityId)
     {
         $entity       = $this->container->get(EntityRoutingHelper::class)->getEntity($entityClass, $entityId);

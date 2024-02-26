@@ -6,48 +6,35 @@ use Doctrine\ORM\Mapping as ORM;
 use Extend\Entity\Autocomplete\OroContactBundle_Entity_ContactEmail;
 use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
 use Oro\Bundle\EmailBundle\Entity\EmailInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
  * Contact email entity
- * @ORM\Entity
- * @ORM\Table("orocrm_contact_email", indexes={
- *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
- * })
- * @Config(
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-envelope"
- *          },
- *          "comment"={
- *              "immutable"=true
- *          },
- *          "activity"={
- *              "immutable"=true
- *          },
- *          "attachment"={
- *              "immutable"=true
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
  * @mixin OroContactBundle_Entity_ContactEmail
  */
+#[ORM\Entity]
+#[ORM\Table('orocrm_contact_email')]
+#[ORM\Index(columns: ['email', 'is_primary'], name: 'primary_email_idx')]
+#[Config(
+    defaultValues: [
+        'entity' => ['icon' => 'fa-envelope'],
+        'comment' => ['immutable' => true],
+        'activity' => ['immutable' => true],
+        'attachment' => ['immutable' => true],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class ContactEmail extends AbstractEmail implements
     EmailInterface,
     ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Contact", inversedBy="emails")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $owner;
+    #[ORM\ManyToOne(targetEntity: Contact::class, inversedBy: 'emails')]
+    #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    protected ?Contact $owner = null;
 
     /**
      * {@inheritdoc}

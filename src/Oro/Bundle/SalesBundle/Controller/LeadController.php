@@ -11,9 +11,9 @@ use Oro\Bundle\SalesBundle\Form\Handler\LeadToOpportunityHandler;
 use Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,20 +28,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for Lead entity.
- * @Route("/lead")
  */
+#[Route(path: '/lead')]
 class LeadController extends AbstractController
 {
-    /**
-     * @Route("/view/{id}", name="oro_sales_lead_view", requirements={"id"="\d+"})
-     * @Template
-     * @Acl(
-     *      id="oro_sales_lead_view",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="Oro\Bundle\SalesBundle\Entity\Lead"
-     * )
-     */
+    #[Route(path: '/view/{id}', name: 'oro_sales_lead_view', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[Acl(id: 'oro_sales_lead_view', type: 'entity', class: Lead::class, permission: 'VIEW')]
     public function viewAction(Lead $lead): array
     {
         $leadActionsAccessProvider = $this->container->get(LeadActionsAccessProvider::class);
@@ -53,11 +46,9 @@ class LeadController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/info/{id}", name="oro_sales_lead_info", requirements={"id"="\d+"})
-     * @AclAncestor("oro_sales_lead_view")
-     * @Template()
-     */
+    #[Route(path: '/info/{id}', name: 'oro_sales_lead_info', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_sales_lead_view')]
     public function infoAction(Lead $lead): array
     {
         return array(
@@ -67,15 +58,10 @@ class LeadController extends AbstractController
 
     /**
      * Create lead form
-     * @Route("/create", name="oro_sales_lead_create")
-     * @Template("@OroSales/Lead/update.html.twig")
-     * @Acl(
-     *      id="oro_sales_lead_create",
-     *      type="entity",
-     *      permission="CREATE",
-     *      class="Oro\Bundle\SalesBundle\Entity\Lead"
-     * )
      */
+    #[Route(path: '/create', name: 'oro_sales_lead_create')]
+    #[Template('@OroSales/Lead/update.html.twig')]
+    #[Acl(id: 'oro_sales_lead_create', type: 'entity', class: Lead::class, permission: 'CREATE')]
     public function createAction(): array|RedirectResponse
     {
         return $this->update(new Lead());
@@ -83,30 +69,23 @@ class LeadController extends AbstractController
 
     /**
      * Update user form
-     * @Route("/update/{id}", name="oro_sales_lead_update", requirements={"id"="\d+"}, defaults={"id"=0})
-     * @Template
-     * @Acl(
-     *      id="oro_sales_lead_update",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="Oro\Bundle\SalesBundle\Entity\Lead"
-     * )
      */
+    #[Route(path: '/update/{id}', name: 'oro_sales_lead_update', requirements: ['id' => '\d+'], defaults: ['id' => 0])]
+    #[Template]
+    #[Acl(id: 'oro_sales_lead_update', type: 'entity', class: Lead::class, permission: 'EDIT')]
     public function updateAction(Lead $entity): array|RedirectResponse
     {
         return $this->update($entity);
     }
 
-    /**
-     * @Route(
-     *      "/{_format}",
-     *      name="oro_sales_lead_index",
-     *      requirements={"_format"="html|json"},
-     *      defaults={"_format" = "html"}
-     * )
-     * @Template
-     * @AclAncestor("oro_sales_lead_view")
-     */
+    #[Route(
+        path: '/{_format}',
+        name: 'oro_sales_lead_index',
+        requirements: ['_format' => 'html|json'],
+        defaults: ['_format' => 'html']
+    )]
+    #[Template]
+    #[AclAncestor('oro_sales_lead_view')]
     public function indexAction(): array
     {
         return [
@@ -114,11 +93,9 @@ class LeadController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/widget/account-leads/{id}", name="oro_sales_widget_account_leads", requirements={"id"="\d+"})
-     * @AclAncestor("oro_sales_lead_view")
-     * @Template()
-     */
+    #[Route(path: '/widget/account-leads/{id}', name: 'oro_sales_widget_account_leads', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_sales_lead_view')]
     public function accountLeadsAction(Account $account): array
     {
         return ['entity' => $account];
@@ -126,16 +103,11 @@ class LeadController extends AbstractController
 
     /**
      * Create lead form with data channel
-     *
-     * @Route("/create/{channelIds}", name="oro_sales_lead_data_channel_aware_create")
-     * @Template("@OroSales/Lead/update.html.twig")
-     * @AclAncestor("oro_sales_lead_view")
-     * @ParamConverter(
-     *      "channel",
-     *      class="Oro\Bundle\ChannelBundle\Entity\Channel",
-     *      options={"id" = "channelIds"}
-     * )
      */
+    #[Route(path: '/create/{channelIds}', name: 'oro_sales_lead_data_channel_aware_create')]
+    #[Template('@OroSales/Lead/update.html.twig')]
+    #[ParamConverter('channel', class: Channel::class, options: ['id' => 'channelIds'])]
+    #[AclAncestor('oro_sales_lead_view')]
     public function leadWithDataChannelCreateAction(Channel $channel): array|RedirectResponse
     {
         $lead = new Lead();
@@ -146,16 +118,15 @@ class LeadController extends AbstractController
 
     /**
      * Change status for lead
-     *
-     * @CsrfProtection
-     * @Route("/disqualify/{id}", name="oro_sales_lead_disqualify", requirements={"id"="\d+"}, methods={"POST"})
-     * @Acl(
-     *      id="oro_sales_lead_disqualify",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="Oro\Bundle\SalesBundle\Entity\Lead"
-     * )
      */
+    #[Route(
+        path: '/disqualify/{id}',
+        name: 'oro_sales_lead_disqualify',
+        requirements: ['id' => '\d+'],
+        methods: ['POST']
+    )]
+    #[Acl(id: 'oro_sales_lead_disqualify', type: 'entity', class: Lead::class, permission: 'EDIT')]
+    #[CsrfProtection()]
     public function disqualifyAction(Lead $lead, Request $request): JsonResponse
     {
         if (!$this->container->get(LeadActionsAccessProvider::class)->isDisqualifyAllowed($lead)) {
@@ -174,16 +145,9 @@ class LeadController extends AbstractController
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @Route("/convert/{id}", name="oro_sales_lead_convert_to_opportunity", requirements={"id"="\d+"})
-     * @Acl(
-     *      id="oro_sales_lead_convert_to_opportunity",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="Oro\Bundle\SalesBundle\Entity\Lead"
-     * )
-     * @Template()
-     */
+    #[Route(path: '/convert/{id}', name: 'oro_sales_lead_convert_to_opportunity', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[Acl(id: 'oro_sales_lead_convert_to_opportunity', type: 'entity', class: Lead::class, permission: 'EDIT')]
     public function convertToOpportunityAction(Lead $lead, Request $request): array|RedirectResponse
     {
         if (!$this->container->get(LeadActionsAccessProvider::class)->isConvertToOpportunityAllowed($lead)) {

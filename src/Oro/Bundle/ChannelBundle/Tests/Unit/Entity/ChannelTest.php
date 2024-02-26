@@ -21,7 +21,7 @@ class ChannelTest extends \PHPUnit\Framework\TestCase
             'dataSource'               => ['dataSource', $this->createMock(IntegrationChannel::class)],
             'dataSource nullable data' => ['dataSource', null],
             'status'                   => ['status', true],
-            'customerIdentity'         => ['customerIdentity', $this->createMock(EntityName::class)],
+            'customerIdentity'         => ['customerIdentity', 'customer_identity_value'],
             'channelType'              => ['channelType', 'Custom'],
             'createdAt'                => ['createdAt', new \DateTime()],
             'updatedAt'                => ['updatedAt', new \DateTime()],

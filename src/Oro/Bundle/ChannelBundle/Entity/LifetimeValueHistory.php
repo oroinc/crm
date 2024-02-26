@@ -2,72 +2,49 @@
 
 namespace Oro\Bundle\ChannelBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * Represents a record in lifetime history.
- *
- * @ORM\Entity(
- *     repositoryClass="Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository"
- * )
- * @ORM\Table(name="orocrm_channel_lifetime_hist", indexes={
- *      @ORM\Index(name="orocrm_chl_ltv_hist_idx", columns={"account_id", "data_channel_id", "status"}),
- *      @ORM\Index(name="orocrm_chl_ltv_hist_status_idx", columns={"status"})
- * })
- * @ORM\HasLifecycleCallbacks
  */
+#[ORM\Entity(repositoryClass: LifetimeHistoryRepository::class)]
+#[ORM\Table(name: 'orocrm_channel_lifetime_hist')]
+#[ORM\Index(columns: ['account_id', 'data_channel_id', 'status'], name: 'orocrm_chl_ltv_hist_idx')]
+#[ORM\Index(columns: ['status'], name: 'orocrm_chl_ltv_hist_status_idx')]
+#[ORM\HasLifecycleCallbacks]
 class LifetimeValueHistory implements ChannelAwareInterface
 {
-    const STATUS_NEW = 1;
-    const STATUS_OLD = 0;
+    const STATUS_NEW = true;
+    const STATUS_OLD = false;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="status", type="boolean", nullable=false)
-     */
-    protected $status = self::STATUS_NEW;
+    #[ORM\Column(name: 'status', type: Types::BOOLEAN, nullable: false)]
+    protected ?bool $status = self::STATUS_NEW;
 
-    /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="data_channel_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $dataChannel;
+    #[ORM\ManyToOne(targetEntity: Channel::class)]
+    #[ORM\JoinColumn(name: 'data_channel_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    protected ?Channel $dataChannel = null;
 
-    /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $account;
+    #[ORM\ManyToOne(targetEntity: Account::class)]
+    #[ORM\JoinColumn(name: 'account_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    protected ?Account $account = null;
 
     /**
      * @var double
-     *
-     * @ORM\Column(name="amount", type="money", nullable=false)
      */
+    #[ORM\Column(name: 'amount', type: 'money', nullable: false)]
     protected $amount = 0;
 
-    /**
-     * @var \DateTime $createdAt
-     *
-     * @ORM\Column(type="datetime", name="created_at")
-     */
-    protected $createdAt;
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
+    protected ?\DateTimeInterface $createdAt = null;
 
     /**
      * @return int
@@ -82,7 +59,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
      */
     public function setStatus($status)
     {
-        $this->status = $status;
+        $this->status = (bool) $status;
     }
 
     /**
@@ -153,9 +130,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
         return $this->createdAt;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         if (null === $this->createdAt) {

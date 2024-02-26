@@ -2,46 +2,32 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class Customer implements ChannelAwareInterface
 {
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="data_channel_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $dataChannel;
+    #[ORM\ManyToOne(targetEntity: Channel::class)]
+    #[ORM\JoinColumn(name: 'data_channel_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?Channel $dataChannel = null;
 
-    /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"persist"})
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $account;
+    #[ORM\ManyToOne(targetEntity: Account::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'account_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?Account $account = null;
 
     /**
      * @var double
-     *
-     * @ORM\Column(name="lifetime", type="money", nullable=true)
      */
+    #[ORM\Column(name: 'lifetime', type: 'money', nullable: true)]
     protected $lifetime = 0;
 
     /**

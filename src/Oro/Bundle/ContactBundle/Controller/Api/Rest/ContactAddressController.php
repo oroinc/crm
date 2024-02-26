@@ -5,7 +5,7 @@ namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,9 +25,9 @@ class ContactAddressController extends RestController
      *      description="Get contact address",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_view")
      * @return Response
      */
+    #[AclAncestor('oro_contact_view')]
     public function getAction(int $contactId, int $addressId)
     {
         /** @var Contact $contact */
@@ -51,11 +51,10 @@ class ContactAddressController extends RestController
      *      description="Get all addresses items",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_view")
      * @param int $contactId
-     *
      * @return JsonResponse
      */
+    #[AclAncestor('oro_contact_view')]
     public function cgetAction($contactId)
     {
         /** @var Contact $contact */
@@ -83,12 +82,11 @@ class ContactAddressController extends RestController
      *      description="Delete address items",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_delete")
      * @param int $contactId
      * @param int $addressId
-     *
      * @return Response
      */
+    #[AclAncestor('oro_contact_delete')]
     public function deleteAction(int $contactId, int $addressId)
     {
         /** @var ContactAddress $address */
@@ -115,9 +113,9 @@ class ContactAddressController extends RestController
      *      description="Get contact address by type",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_view")
      * @return Response
      */
+    #[AclAncestor('oro_contact_view')]
     public function getByTypeAction(int $contactId, $typeName)
     {
         /** @var Contact $contact */
@@ -143,9 +141,9 @@ class ContactAddressController extends RestController
      *      description="Get contact primary address",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_view")
      * @return Response
      */
+    #[AclAncestor('oro_contact_view')]
     public function getPrimaryAction(int $contactId)
     {
         /** @var Contact $contact */

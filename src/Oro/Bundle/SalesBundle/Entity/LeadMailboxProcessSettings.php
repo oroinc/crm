@@ -2,46 +2,34 @@
 
 namespace Oro\Bundle\SalesBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EmailBundle\Entity\MailboxProcessSettings;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * Store load mailbox settings in a database.
- *
- * @ORM\Entity
- * @Config()
  */
+#[ORM\Entity]
+#[Config]
 class LeadMailboxProcessSettings extends MailboxProcessSettings implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="lead_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $owner;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'lead_owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?User $owner = null;
 
-    /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="lead_channel_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $channel;
+    #[ORM\ManyToOne(targetEntity: Channel::class)]
+    #[ORM\JoinColumn(name: 'lead_channel_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?Channel $channel = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="lead_source_id", type="string", length=32)
-     */
-    protected $source;
+    #[ORM\Column(name: 'lead_source_id', type: Types::STRING, length: 32)]
+    protected ?string $source = null;
 
     /**
      * @return User

@@ -4,7 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Controller;
 
 use Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,15 +12,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * CRUD controller for Channel Integrations.
- * @Route("/integration")
  */
+#[Route(path: '/integration')]
 class ChannelIntegrationController extends AbstractController
 {
-    /**
-     * @Route("/create/{type}/{channelName}", requirements={"type"="\w+"}, name="oro_channel_integration_create")
-     * @AclAncestor("oro_integration_create")
-     * @Template("@OroChannel/ChannelIntegration/update.html.twig")
-     */
+    #[Route(
+        path: '/create/{type}/{channelName}',
+        requirements: ['type' => '\w+'],
+        name: 'oro_channel_integration_create'
+    )]
+    #[Template('@OroChannel/ChannelIntegration/update.html.twig')]
+    #[AclAncestor('oro_integration_create')]
     public function createAction($type, $channelName = null)
     {
         $translator      = $this->container->get(TranslatorInterface::class);
@@ -32,11 +34,9 @@ class ChannelIntegrationController extends AbstractController
         return $this->update($integration);
     }
 
-    /**
-     * @Route("/update/{id}", requirements={"id"="\d+"}, name="oro_channel_integration_update")
-     * @AclAncestor("oro_integration_update")
-     * @Template()
-     */
+    #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'oro_channel_integration_update')]
+    #[Template]
+    #[AclAncestor('oro_integration_update')]
     public function updateAction(Integration $integration)
     {
         return $this->update($integration);

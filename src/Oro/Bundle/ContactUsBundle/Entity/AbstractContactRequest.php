@@ -2,101 +2,51 @@
 
 namespace Oro\Bundle\ContactUsBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 
 /**
  * The base class for entities that are used to store different kind of contact requests.
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  */
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractContactRequest implements
     FirstNameInterface,
     LastNameInterface,
     EmailHolderInterface
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="first_name", type="string", length=100)
-     */
-    protected $firstName;
+    #[ORM\Column(name: 'first_name', type: Types::STRING, length: 100)]
+    protected ?string $firstName = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="last_name", type="string", length=100)
-     */
-    protected $lastName;
+    #[ORM\Column(name: 'last_name', type: Types::STRING, length: 100)]
+    protected ?string $lastName = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email_address", type="string", length=100, nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "contact_information"="email"
-     *          }
-     *      }
-     * )
-     */
-    protected $emailAddress;
+    #[ORM\Column(name: 'email_address', type: Types::STRING, length: 100, nullable: true)]
+    #[ConfigField(defaultValues: ['entity' => ['contact_information' => 'email']])]
+    protected ?string $emailAddress = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="phone", type="string", length=100, nullable=true)
-     */
-    protected $phone;
+    #[ORM\Column(name: 'phone', type: Types::STRING, length: 100, nullable: true)]
+    protected ?string $phone = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="comment", type="text")
-     */
-    protected $comment;
+    #[ORM\Column(name: 'comment', type: Types::TEXT)]
+    protected ?string $comment = null;
 
-    /**
-     * @var \DateTime $created
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $createdAt;
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
+    #[ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.created_at']])]
+    protected ?\DateTimeInterface $createdAt = null;
 
-    /**
-     * @var \DateTime $updated
-     *
-     * @ORM\Column(name="updated_at", type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $updatedAt;
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE)]
+    #[ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.updated_at']])]
+    protected ?\DateTimeInterface $updatedAt = null;
 
     /**
      * @return int
@@ -212,17 +162,13 @@ abstract class AbstractContactRequest implements
         return $this->updatedAt;
     }
 
-    /**
-     * @ORM\PreUpdate()
-     */
+    #[ORM\PreUpdate]
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
-    /**
-     * @ORM\PrePersist()
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));

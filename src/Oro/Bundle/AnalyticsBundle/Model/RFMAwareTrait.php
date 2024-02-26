@@ -2,27 +2,29 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Model;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Trait that implements {@see \Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface}
+ */
 trait RFMAwareTrait
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="rfm_recency", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'rfm_recency', type: 'integer', nullable: true)]
     protected $recency;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="rfm_frequency", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'rfm_frequency', type: 'integer', nullable: true)]
     protected $frequency;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="rfm_monetary", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'rfm_monetary', type: 'integer', nullable: true)]
     protected $monetary;
 
     /**

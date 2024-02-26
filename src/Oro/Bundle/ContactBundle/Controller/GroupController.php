@@ -4,7 +4,7 @@ namespace Oro\Bundle\ContactBundle\Controller;
 
 use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\ContactBundle\Form\Handler\GroupHandler;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -17,24 +17,19 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for Group entity.
- * @Route("/group")
  */
+#[Route(path: '/group')]
 class GroupController extends AbstractController
 {
     /**
      * Create group form
      *
-     * @Route("/create", name="oro_contact_group_create")
-     * @Template("@OroContact/Group/update.html.twig")
-     * @Acl(
-     *      id="oro_contact_group_create",
-     *      type="entity",
-     *      permission="CREATE",
-     *      class="Oro\Bundle\ContactBundle\Entity\Group"
-     * )
      * @param Request $request
      * @return array|RedirectResponse
      */
+    #[Route(path: '/create', name: 'oro_contact_group_create')]
+    #[Template('@OroContact/Group/update.html.twig')]
+    #[Acl(id: 'oro_contact_group_create', type: 'entity', class: Group::class, permission: 'CREATE')]
     public function createAction(Request $request)
     {
         return $this->update($request, new Group());
@@ -43,38 +38,31 @@ class GroupController extends AbstractController
     /**
      * Update group form
      *
-     * @Route("/update/{id}", name="oro_contact_group_update", requirements={"id"="\d+"}, defaults={"id"=0})
-     * @Template
-     * @Acl(
-     *      id="oro_contact_group_update",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="Oro\Bundle\ContactBundle\Entity\Group"
-     * )
      * @param Request $request
      * @param Group $entity
      * @return array|RedirectResponse
      */
+    #[Route(
+        path: '/update/{id}',
+        name: 'oro_contact_group_update',
+        requirements: ['id' => '\d+'],
+        defaults: ['id' => 0]
+    )]
+    #[Template]
+    #[Acl(id: 'oro_contact_group_update', type: 'entity', class: Group::class, permission: 'EDIT')]
     public function updateAction(Request $request, Group $entity)
     {
         return $this->update($request, $entity);
     }
 
-    /**
-     * @Route(
-     *      "/{_format}",
-     *      name="oro_contact_group_index",
-     *      requirements={"_format"="html|json"},
-     *      defaults={"_format" = "html"}
-     * )
-     * @Acl(
-     *      id="oro_contact_group_view",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="Oro\Bundle\ContactBundle\Entity\Group"
-     * )
-     * @Template()
-     */
+    #[Route(
+        path: '/{_format}',
+        name: 'oro_contact_group_index',
+        requirements: ['_format' => 'html|json'],
+        defaults: ['_format' => 'html']
+    )]
+    #[Template]
+    #[Acl(id: 'oro_contact_group_view', type: 'entity', class: Group::class, permission: 'VIEW')]
     public function indexAction()
     {
         return [

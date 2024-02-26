@@ -12,8 +12,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Provides grid dialog action
- * @Route("/customer")
  */
+#[Route(path: '/customer')]
 class CustomerController extends AbstractController
 {
     /**
@@ -30,13 +30,13 @@ class CustomerController extends AbstractController
     }
 
     /**
-     * @Route("/customer/grid-dialog/{entityClass}", name="oro_sales_customer_grid_dialog")
-     * @Template("@OroDataGrid/Grid/dialog/multi.html.twig")
      *
      * @param string $entityClass
      *
      * @return array
      */
+    #[Route(path: '/customer/grid-dialog/{entityClass}', name: 'oro_sales_customer_grid_dialog')]
+    #[Template('@OroDataGrid/Grid/dialog/multi.html.twig')]
     public function gridDialogAction($entityClass)
     {
         $resolvedClass = $this->container->get(EntityRoutingHelper::class)->resolveEntityClass($entityClass);

@@ -8,8 +8,8 @@ use Oro\Bundle\AccountBundle\Event\CollectAccountWebsiteActivityCustomersEvent;
 use Oro\Bundle\AccountBundle\Form\Handler\AccountHandler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,16 +24,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class AccountController extends AbstractController
 {
-    /**
-     * @Route("/view/{id}", name="oro_account_view", requirements={"id"="\d+"})
-     * @Acl(
-     *      id="oro_account_view",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="Oro\Bundle\AccountBundle\Entity\Account"
-     * )
-     * @Template()
-     */
+    #[Route(path: '/view/{id}', name: 'oro_account_view', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[Acl(id: 'oro_account_view', type: 'entity', class: Account::class, permission: 'VIEW')]
     public function viewAction(Account $account): array
     {
         $channels = $this->container->get('doctrine')
@@ -52,16 +45,10 @@ class AccountController extends AbstractController
 
     /**
      * Create account form
-     *
-     * @Route("/create", name="oro_account_create")
-     * @Acl(
-     *      id="oro_account_create",
-     *      type="entity",
-     *      permission="CREATE",
-     *      class="Oro\Bundle\AccountBundle\Entity\Account"
-     * )
-     * @Template("@OroAccount/Account/update.html.twig")
      */
+    #[Route(path: '/create', name: 'oro_account_create')]
+    #[Template('@OroAccount/Account/update.html.twig')]
+    #[Acl(id: 'oro_account_create', type: 'entity', class: Account::class, permission: 'CREATE')]
     public function createAction(): array|RedirectResponse
     {
         return $this->update();
@@ -69,31 +56,23 @@ class AccountController extends AbstractController
 
     /**
      * Edit user form
-     *
-     * @Route("/update/{id}", name="oro_account_update", requirements={"id"="\d+"})
-     * @Acl(
-     *      id="oro_account_update",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="Oro\Bundle\AccountBundle\Entity\Account"
-     * )
-     * @Template()
      */
+    #[Route(path: '/update/{id}', name: 'oro_account_update', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[Acl(id: 'oro_account_update', type: 'entity', class: Account::class, permission: 'EDIT')]
     public function updateAction(Account $entity): array|RedirectResponse
     {
         return $this->update($entity);
     }
 
-    /**
-     * @Route(
-     *      "/{_format}",
-     *      name="oro_account_index",
-     *      requirements={"_format"="html|json"},
-     *      defaults={"_format" = "html"}
-     * )
-     * @AclAncestor("oro_account_view")
-     * @Template
-     */
+    #[Route(
+        path: '/{_format}',
+        name: 'oro_account_index',
+        requirements: ['_format' => 'html|json'],
+        defaults: ['_format' => 'html']
+    )]
+    #[Template]
+    #[AclAncestor('oro_account_view')]
     public function indexAction(): array
     {
         return [
@@ -121,16 +100,14 @@ class AccountController extends AbstractController
         );
     }
 
-    /**
-     * @Route(
-     *      "/widget/contacts/{id}",
-     *      name="oro_account_widget_contacts_info",
-     *      requirements={"id"="\d+"},
-     *      defaults={"id"=0}
-     * )
-     * @AclAncestor("oro_contact_view")
-     * @Template()
-     */
+    #[Route(
+        path: '/widget/contacts/{id}',
+        name: 'oro_account_widget_contacts_info',
+        requirements: ['id' => '\d+'],
+        defaults: ['id' => 0]
+    )]
+    #[Template]
+    #[AclAncestor('oro_contact_view')]
     public function contactsInfoAction(Account $account = null): array
     {
         return [
@@ -138,11 +115,9 @@ class AccountController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/widget/info/{id}", name="oro_account_widget_info", requirements={"id"="\d+"})
-     * @AclAncestor("oro_account_view")
-     * @Template()
-     */
+    #[Route(path: '/widget/info/{id}', name: 'oro_account_widget_info', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_account_view')]
     public function infoAction(Account $account): array
     {
         return [

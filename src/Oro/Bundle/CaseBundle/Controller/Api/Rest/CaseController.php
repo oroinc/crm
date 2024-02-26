@@ -7,7 +7,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,26 +22,26 @@ class CaseController extends RestController
     /**
      * REST GET list
      *
-     * @QueryParam(
-     *     name="page",
-     *     requirements="\d+",
-     *     nullable=true,
-     *     description="Page number, starting from 1. Defaults to 1."
-     * )
-     * @QueryParam(
-     *     name="limit",
-     *     requirements="\d+",
-     *     nullable=true,
-     *     description="Number of items per page. defaults to 10."
-     * )
      * @ApiDoc(
      *     description="Get all CaseEntity items",
      *     resource=true
      * )
-     * @AclAncestor("oro_case_view")
      * @param Request $request
      * @return Response
      */
+    #[QueryParam(
+        name: 'page',
+        requirements: '\d+',
+        description: 'Page number, starting from 1. Defaults to 1.',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'limit',
+        requirements: '\d+',
+        description: 'Number of items per page. defaults to 10.',
+        nullable: true
+    )]
+    #[AclAncestor('oro_case_view')]
     public function cgetAction(Request $request)
     {
         $page  = (int)$request->get('page', 1);
@@ -59,9 +59,9 @@ class CaseController extends RestController
      *     description="Get CaseEntity item",
      *     resource=true
      * )
-     * @AclAncestor("oro_case_view")
      * @return Response
      */
+    #[AclAncestor('oro_case_view')]
     public function getAction(int $id)
     {
         return $this->handleGetRequest($id);
@@ -76,9 +76,9 @@ class CaseController extends RestController
      *     description="Update CaseEntity",
      *     resource=true
      * )
-     * @AclAncestor("oro_case_update")
      * @return Response
      */
+    #[AclAncestor('oro_case_update')]
     public function putAction(int $id)
     {
         return $this->handleUpdateRequest($id);
@@ -91,8 +91,8 @@ class CaseController extends RestController
      *     description="Create new CaseEntity",
      *     resource=true
      * )
-     * @AclAncestor("oro_case_create")
      */
+    #[AclAncestor('oro_case_create')]
     public function postAction()
     {
         return $this->handleCreateRequest();
@@ -107,9 +107,9 @@ class CaseController extends RestController
      *     description="Delete CaseEntity",
      *     resource=true
      * )
-     * @AclAncestor("oro_case_delete")
      * @return Response
      */
+    #[AclAncestor('oro_case_delete')]
     public function deleteAction(int $id)
     {
         return $this->handleDeleteRequest($id);

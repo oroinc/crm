@@ -2,73 +2,66 @@
 
 namespace Oro\Bundle\ChannelBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
- * @ORM\Entity(
- *     repositoryClass="Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository"
- * )
- * @ORM\Table(name="orocrm_channel_ltime_avg_aggr")
- * @ORM\HasLifecycleCallbacks
- */
+* Entity that represents Lifetime Value Average Aggregation
+*
+*/
+#[ORM\Entity(repositoryClass: LifetimeValueAverageAggregationRepository::class)]
+#[ORM\Table(name: 'orocrm_channel_ltime_avg_aggr')]
+#[ORM\HasLifecycleCallbacks]
 class LifetimeValueAverageAggregation implements ChannelAwareInterface
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: Types::INTEGER, options: ['unsigned' => true])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
     /**
      * @var double
-     *
-     * @ORM\Column(name="amount", type="money", nullable=false)
      */
+    #[ORM\Column(name: 'amount', type: 'money', nullable: false)]
     protected $amount;
 
-    /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="data_channel_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $dataChannel;
+    #[ORM\ManyToOne(targetEntity: Channel::class)]
+    #[ORM\JoinColumn(name: 'data_channel_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    protected ?Channel $dataChannel = null;
 
     /**
-     * @var \DateTime $aggregationDate
+     * @var \DateTimeInterface $aggregationDate
      *
      * NOTE: Always in LOCAL TZ
-     * @ORM\Column(type="datetime", name="aggregation_date", nullable=false)
      */
-    protected $aggregationDate;
+    #[ORM\Column(name: 'aggregation_date', type: Types::DATETIME_MUTABLE, nullable: false)]
+    protected ?\DateTimeInterface $aggregationDate = null;
 
     /**
      * @var int
      *
      * NOTE: denormalized value in LOCAL TZ
-     * @ORM\Column(name="month", type="smallint", options={"unsigned"=true}, nullable=false)
      */
-    protected $month;
+    #[ORM\Column(name: 'month', type: Types::SMALLINT, nullable: false, options: ['unsigned' => true])]
+    protected ?int $month = null;
 
     /**
      * @var int
      *
      * NOTE: denormalized value in LOCAL TZ
-     * @ORM\Column(name="quarter", type="smallint", options={"unsigned"=true}, nullable=false)
      */
-    protected $quarter;
+    #[ORM\Column(name: 'quarter', type: Types::SMALLINT, nullable: false, options: ['unsigned' => true])]
+    protected ?int $quarter = null;
 
     /**
      * @var int
      *
      * NOTE: denormalized value in LOCAL TZ
-     * @ORM\Column(name="year", type="smallint", options={"unsigned"=true}, nullable=false)
      */
-    protected $year;
+    #[ORM\Column(name: 'year', type: Types::SMALLINT, nullable: false, options: ['unsigned' => true])]
+    protected ?int $year = null;
 
     /**
      * @return int
@@ -94,9 +87,6 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
         return $this->amount;
     }
 
-    /**
-     * @TODO remove null after BAP-5248
-     */
     public function setDataChannel(Channel $dataChannel = null)
     {
         $this->dataChannel = $dataChannel;
@@ -174,9 +164,7 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
         return $this->aggregationDate;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         if (!$this->getAggregationDate()) {

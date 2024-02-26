@@ -2,67 +2,42 @@
 
 namespace Oro\Bundle\SalesBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Extend\Entity\Autocomplete\OroSalesBundle_Entity_LeadAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\FormBundle\Entity\PrimaryItem;
 
 /**
  * Lead address entity
- * @ORM\Table("orocrm_sales_lead_address")
- * @ORM\HasLifecycleCallbacks()
- * @Config(
- *       defaultValues={
- *          "entity"={
- *              "icon"="fa-map-marker"
- *          },
- *          "activity"={
- *              "immutable"=true
- *          },
- *          "attachment"={
- *              "immutable"=true
- *          }
- *      }
- * )
- * @ORM\Entity
  * @mixin OroSalesBundle_Entity_LeadAddress
  */
+#[ORM\Entity]
+#[ORM\Table('orocrm_sales_lead_address')]
+#[ORM\HasLifecycleCallbacks]
+#[Config(
+    defaultValues: [
+        'entity' => ['icon' => 'fa-map-marker'],
+        'activity' => ['immutable' => true],
+        'attachment' => ['immutable' => true]
+    ]
+)]
 class LeadAddress extends AbstractAddress implements PrimaryItem, ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @var Lead|null
-     *
-     * @ORM\ManyToOne(targetEntity="Lead", inversedBy="addresses", cascade={"persist"})
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $owner;
+    #[ORM\ManyToOne(targetEntity: Lead::class, cascade: ['persist'], inversedBy: 'addresses')]
+    #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?Lead $owner = null;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_primary", type="boolean", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $primary;
+    #[ORM\Column(name: 'is_primary', type: Types::BOOLEAN, nullable: true)]
+    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?bool $primary = null;
 
     public function __construct()
     {

@@ -2,27 +2,21 @@
 
 namespace Oro\Bundle\CaseBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="orocrm_case_source")
- * @Gedmo\TranslationEntity(class="Oro\Bundle\CaseBundle\Entity\CaseSourceTranslation")
- * @Config(
- *      defaultValues={
- *          "grouping"={
- *              "groups"={"dictionary"}
- *          },
- *          "dictionary"={
- *              "virtual_fields"={"label"}
- *          }
- *      }
- * )
- */
+* Entity that represents Case Source
+*
+*/
+#[ORM\Entity]
+#[ORM\Table(name: 'orocrm_case_source')]
+#[Gedmo\TranslationEntity(class: CaseSourceTranslation::class)]
+#[Config(defaultValues: ['grouping' => ['groups' => ['dictionary']], 'dictionary' => ['virtual_fields' => ['label']]])]
 class CaseSource implements Translatable
 {
     const SOURCE_EMAIL = 'email';
@@ -30,33 +24,17 @@ class CaseSource implements Translatable
     const SOURCE_WEB   = 'web';
     const SOURCE_OTHER = 'other';
 
-    /**
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(name="name", type="string", length=16)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "identity"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $name;
+    #[ORM\Id]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 16)]
+    #[ConfigField(defaultValues: ['importexport' => ['identity' => true]])]
+    protected ?string $name = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="label", type="string", length=255)
-     * @Gedmo\Translatable
-     */
-    protected $label;
+    #[ORM\Column(name: 'label', type: Types::STRING, length: 255)]
+    #[Gedmo\Translatable]
+    protected ?string $label = null;
 
-    /**
-     * @Gedmo\Locale
-     */
-    protected $locale;
+    #[Gedmo\Locale]
+    protected ?string $locale = null;
 
     /**
      * @param string $name

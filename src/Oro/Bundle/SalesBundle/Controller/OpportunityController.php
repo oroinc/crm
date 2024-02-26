@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Controller;
 
+use Doctrine\ORM\EntityNotFoundException;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
@@ -10,8 +11,8 @@ use Oro\Bundle\FormBundle\Provider\SaveAndReturnActionFormTemplateDataProvider;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,8 +23,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Handles opportunity entity CRUD and getting info actions
- * @Route("/opportunity")
  */
+#[Route(path: '/opportunity')]
 class OpportunityController extends AbstractController
 {
     /**
@@ -42,16 +43,9 @@ class OpportunityController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/view/{id}", name="oro_sales_opportunity_view", requirements={"id"="\d+"})
-     * @Template
-     * @Acl(
-     *      id="oro_sales_opportunity_view",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="Oro\Bundle\SalesBundle\Entity\Opportunity"
-     * )
-     */
+    #[Route(path: '/view/{id}', name: 'oro_sales_opportunity_view', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[Acl(id: 'oro_sales_opportunity_view', type: 'entity', class: Opportunity::class, permission: 'VIEW')]
     public function viewAction(Opportunity $entity): array
     {
         return [
@@ -59,11 +53,9 @@ class OpportunityController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/info/{id}", name="oro_sales_opportunity_info", requirements={"id"="\d+"})
-     * @Template
-     * @AclAncestor("oro_sales_opportunity_view")
-     */
+    #[Route(path: '/info/{id}', name: 'oro_sales_opportunity_info', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_sales_opportunity_view')]
     public function infoAction(Opportunity $entity): array
     {
         return [
@@ -71,46 +63,35 @@ class OpportunityController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/create", name="oro_sales_opportunity_create")
-     * @Template("@OroSales/Opportunity/update.html.twig")
-     * @Acl(
-     *      id="oro_sales_opportunity_create",
-     *      type="entity",
-     *      permission="CREATE",
-     *      class="Oro\Bundle\SalesBundle\Entity\Opportunity"
-     * )
-     */
+    #[Route(path: '/create', name: 'oro_sales_opportunity_create')]
+    #[Template('@OroSales/Opportunity/update.html.twig')]
+    #[Acl(id: 'oro_sales_opportunity_create', type: 'entity', class: Opportunity::class, permission: 'CREATE')]
     public function createAction(): array|RedirectResponse
     {
         return $this->update(new Opportunity());
     }
 
-    /**
-     * @Route("/update/{id}", name="oro_sales_opportunity_update", requirements={"id"="\d+"}, defaults={"id"=0})
-     * @Template
-     * @Acl(
-     *      id="oro_sales_opportunity_update",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="Oro\Bundle\SalesBundle\Entity\Opportunity"
-     * )
-     */
+    #[Route(
+        path: '/update/{id}',
+        name: 'oro_sales_opportunity_update',
+        requirements: ['id' => '\d+'],
+        defaults: ['id' => 0]
+    )]
+    #[Template]
+    #[Acl(id: 'oro_sales_opportunity_update', type: 'entity', class: Opportunity::class, permission: 'EDIT')]
     public function updateAction(Opportunity $entity): array|RedirectResponse
     {
         return $this->update($entity);
     }
 
-    /**
-     * @Route(
-     *      "/{_format}",
-     *      name="oro_sales_opportunity_index",
-     *      requirements={"_format"="html|json"},
-     *      defaults={"_format" = "html"}
-     * )
-     * @Template
-     * @AclAncestor("oro_sales_opportunity_view")
-     */
+    #[Route(
+        path: '/{_format}',
+        name: 'oro_sales_opportunity_index',
+        requirements: ['_format' => 'html|json'],
+        defaults: ['_format' => 'html']
+    )]
+    #[Template]
+    #[AclAncestor('oro_sales_opportunity_view')]
     public function indexAction(): array
     {
         return [
@@ -121,16 +102,12 @@ class OpportunityController extends AbstractController
     /**
      * Create opportunity form with data channel
      *
-     * @Route("/create/{channelIds}", name="oro_sales_opportunity_data_channel_aware_create")
-     * @Template("@OroSales/Opportunity/update.html.twig")
-     * @AclAncestor("oro_sales_opportunity_create")
      *
-     * @ParamConverter(
-     *      "channel",
-     *      class="Oro\Bundle\ChannelBundle\Entity\Channel",
-     *      options={"id" = "channelIds"}
-     * )
      */
+    #[Route(path: '/create/{channelIds}', name: 'oro_sales_opportunity_data_channel_aware_create')]
+    #[Template('@OroSales/Opportunity/update.html.twig')]
+    #[ParamConverter('channel', class: Channel::class, options: ['id' => 'channelIds'])]
+    #[AclAncestor('oro_sales_opportunity_create')]
     public function opportunityWithDataChannelCreateAction(Channel $channel): array|RedirectResponse
     {
         $opportunity = new Opportunity();
@@ -142,11 +119,11 @@ class OpportunityController extends AbstractController
     /**
      * Create opportunity form with customer association set
      *
-     * @Route("/create/{targetClass}/{targetId}", name="oro_sales_opportunity_customer_aware_create")
-     * @Template("@OroSales/Opportunity/update.html.twig")
-     * @AclAncestor("oro_sales_opportunity_create")
-     * @throws \Doctrine\ORM\EntityNotFoundException
+     * @throws EntityNotFoundException
      */
+    #[Route(path: '/create/{targetClass}/{targetId}', name: 'oro_sales_opportunity_customer_aware_create')]
+    #[Template('@OroSales/Opportunity/update.html.twig')]
+    #[AclAncestor('oro_sales_opportunity_create')]
     public function opportunityWithCustomerCreateAction($targetClass, $targetId): array|RedirectResponse
     {
         $target = $this->container->get(EntityRoutingHelper::class)->getEntity($targetClass, $targetId);

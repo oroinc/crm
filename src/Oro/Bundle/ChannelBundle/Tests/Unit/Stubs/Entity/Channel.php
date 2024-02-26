@@ -3,48 +3,33 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class Channel
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
+
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
+    protected ?string $name = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @var Collection<int, EntityName>
      */
-    protected $name;
+    #[ORM\OneToMany(mappedBy: 'channel', targetEntity: EntityName::class)]
+    protected ?Collection $entities = null;
 
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="EntityName", mappedBy="channel")
-     */
-    protected $entities;
+    #[ORM\OneToOne(targetEntity: Integration::class, cascade: ['all'], orphanRemoval: true)]
+    #[ORM\JoinColumn(name: 'data_source_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?Integration $dataSource = null;
 
-    /**
-     * @var Integration
-     *
-     * @ORM\OneToOne(targetEntity="Integration", cascade={"all"}, orphanRemoval=true)
-     * @ORM\JoinColumn(name="data_source_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $dataSource;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="status", type="boolean", nullable=false)
-     */
-    protected $status;
+    #[ORM\Column(name: 'status', type: Types::BOOLEAN, nullable: false)]
+    protected ?bool $status = null;
 
     public function __construct()
     {

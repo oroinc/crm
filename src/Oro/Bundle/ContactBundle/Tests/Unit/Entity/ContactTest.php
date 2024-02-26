@@ -450,7 +450,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
     {
         $now = new \DateTime('now');
         $user = $this->createMock(User::class);
-        $contact = $this->createMock(Source::class);
+        $contact = $this->createMock(Contact::class);
         $source = $this->createMock(Source::class);
         $method = $this->createMock(Method::class);
         $organization = $this->createMock(Organization::class);

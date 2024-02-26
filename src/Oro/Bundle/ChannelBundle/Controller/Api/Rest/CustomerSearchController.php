@@ -18,30 +18,6 @@ class CustomerSearchController extends RestGetController
     /**
      * Search customers.
      *
-     * @QueryParam(
-     *      name="page",
-     *      requirements="\d+",
-     *      nullable=true,
-     *      description="Page number, starting from 1. Defaults to 1."
-     * )
-     * @QueryParam(
-     *      name="limit",
-     *      requirements="\d+",
-     *      nullable=true,
-     *      description="Number of items per page. Defaults to 10."
-     * )
-     * @QueryParam(
-     *     name="search",
-     *     requirements=".+",
-     *     nullable=true,
-     *     description="The search string."
-     * )
-     * @QueryParam(
-     *     name="dataChannel",
-     *     requirements=".+",
-     *     nullable=true,
-     *     description="One or several channel ids separated by comma."
-     * )
      * @ApiDoc(
      *      description="Search customers",
      *      resource=true
@@ -50,6 +26,30 @@ class CustomerSearchController extends RestGetController
      * @param Request $request
      * @return Response
      */
+    #[QueryParam(
+        name: 'page',
+        requirements: '\d+',
+        description: 'Page number, starting from 1. Defaults to 1.',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'limit',
+        requirements: '\d+',
+        description: 'Number of items per page. Defaults to 10.',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'search',
+        requirements: '.+',
+        description: 'The search string.',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'dataChannel',
+        requirements: '.+',
+        description: 'One or several channel ids separated by comma.',
+        nullable: true
+    )]
     public function cgetAction(Request $request)
     {
         $page     = (int) $request->get('page', 1);

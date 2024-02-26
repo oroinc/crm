@@ -4,16 +4,19 @@ namespace Oro\Bundle\AccountBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Extend\Entity\Autocomplete\OroAccountBundle_Entity_Account;
+use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\LocaleBundle\Model\NameInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
@@ -21,207 +24,114 @@ use Oro\Bundle\UserBundle\Entity\User;
  * The account aggregates details of all the customer identities assigned to it,
  * providing for a 360-degree view of the customer activity.
  *
- * @ORM\Entity()
- * @ORM\Table(name="orocrm_account", indexes={@ORM\Index(name="account_name_idx", columns={"name", "id"})})
- * @ORM\HasLifecycleCallbacks()
- * @Config(
- *      routeName="oro_account_index",
- *      routeView="oro_account_view",
- *      routeCreate="oro_account_create",
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-suitcase",
- *              "contact_information"={
- *                  "email"={
- *                      {"fieldName"="contactInformation"}
- *                  }
- *              }
- *          },
- *          "ownership"={
- *              "owner_type"="USER",
- *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id",
- *              "organization_field_name"="organization",
- *              "organization_column_name"="organization_id"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"="",
- *              "category"="account_management",
- *              "field_acl_supported"=true
- *          },
- *          "merge"={
- *              "enable"=true
- *          },
- *          "form"={
- *              "form_type"="Oro\Bundle\AccountBundle\Form\Type\AccountSelectType",
- *              "grid_name"="accounts-select-grid",
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "grid"={
- *              "default"="accounts-grid",
- *              "context"="accounts-for-context-grid"
- *          },
- *          "tag"={
- *              "enabled"=true
- *          }
- *      }
- * )
  * @mixin OroAccountBundle_Entity_Account
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'orocrm_account')]
+#[ORM\Index(columns: ['name', 'id'], name: 'account_name_idx')]
+#[ORM\HasLifecycleCallbacks]
+#[Config(
+    routeName: 'oro_account_index',
+    routeView: 'oro_account_view',
+    routeCreate: 'oro_account_create',
+    defaultValues: [
+        'entity' => [
+            'icon' => 'fa-suitcase',
+            'contact_information' => ['email' => [['fieldName' => 'contactInformation']]]
+        ],
+        'ownership' => [
+            'owner_type' => 'USER',
+            'owner_field_name' => 'owner',
+            'owner_column_name' => 'user_owner_id',
+            'organization_field_name' => 'organization',
+            'organization_column_name' => 'organization_id'
+        ],
+        'security' => [
+            'type' => 'ACL',
+            'group_name' => '',
+            'category' => 'account_management',
+            'field_acl_supported' => true
+        ],
+        'merge' => ['enable' => true],
+        'form' => ['form_type' => AccountSelectType::class, 'grid_name' => 'accounts-select-grid'],
+        'dataaudit' => ['auditable' => true],
+        'grid' => ['default' => 'accounts-grid', 'context' => 'accounts-for-context-grid'],
+        'tag' => ['enabled' => true]
+    ]
+)]
 class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=10
-     *          }
-     *      }
-     * )
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 10]])]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255)
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={
-     *              "display"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "identity"=true,
-     *              "order"=20
-     *          }
-     *      }
-     * )
-     */
-    protected $name;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ConfigField(
+        defaultValues: [
+            'merge' => ['display' => true],
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['identity' => true, 'order' => 20]
+        ]
+    )]
+    protected ?string $name = null;
 
-    /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={
-     *              "display"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=30,
-     *              "short"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $owner;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(
+        defaultValues: [
+            'merge' => ['display' => true],
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 30, 'short' => true]
+        ]
+    )]
+    protected ?User $owner = null;
 
     /**
      * Contacts storage
      *
-     * @var ArrayCollection $contacts
-     *
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", inversedBy="accounts")
-     * @ORM\JoinTable(name="orocrm_account_to_contact")
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={
-     *              "display"=true
-     *          },
-     *          "importexport"={
-     *              "order"=50,
-     *              "short"=true
-     *          }
-     *      }
-     * )
+     * @var Collection<int, Contact> $contacts
      */
-    protected $contacts;
+    #[ORM\ManyToMany(targetEntity: Contact::class, inversedBy: 'accounts')]
+    #[ORM\JoinTable(name: 'orocrm_account_to_contact')]
+    #[ConfigField(defaultValues: ['merge' => ['display' => true], 'importexport' => ['order' => 50, 'short' => true]])]
+    protected ?Collection $contacts = null;
 
     /**
      * Default contact entity
-     *
-     * @var Contact
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", inversedBy="defaultInAccounts")
-     * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={
-     *              "display"=true,
-     *              "inverse_display"=false
-     *          },
-     *          "importexport"={
-     *              "order"=40,
-     *              "short"=true
-     *          }
-     *      }
-     * )
      */
-    protected $defaultContact;
+    #[ORM\ManyToOne(targetEntity: Contact::class, inversedBy: 'defaultInAccounts')]
+    #[ORM\JoinColumn(name: 'default_contact_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(
+        defaultValues: [
+            'merge' => ['display' => true, 'inverse_display' => false],
+            'importexport' => ['order' => 40, 'short' => true]
+        ]
+    )]
+    protected ?Contact $defaultContact = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $createdAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ConfigField(
+        defaultValues: ['entity' => ['label' => 'oro.ui.created_at'], 'importexport' => ['excluded' => true]]
+    )]
+    protected ?\DateTimeInterface $createdAt = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $updatedAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ConfigField(
+        defaultValues: ['entity' => ['label' => 'oro.ui.updated_at'], 'importexport' => ['excluded' => true]]
+    )]
+    protected ?\DateTimeInterface $updatedAt = null;
 
-    /**
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $organization;
+    #[ORM\ManyToOne(targetEntity: Organization::class)]
+    #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?OrganizationInterface $organization = null;
 
-    /**
-     * @var Account
-     * @ORM\ManyToOne(targetEntity="Account")
-     * @ORM\JoinColumn(name="referred_by_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $referredBy;
+    #[ORM\ManyToOne(targetEntity: Account::class)]
+    #[ORM\JoinColumn(name: 'referred_by_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?Account $referredBy = null;
 
     public function __construct()
     {
@@ -380,9 +290,8 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
 
     /**
      * Pre persist event listener
-     *
-     * @ORM\PrePersist
      */
+    #[ORM\PrePersist]
     public function beforeSave()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -391,9 +300,8 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
 
     /**
      * Pre update event handler
-     *
-     * @ORM\PreUpdate
      */
+    #[ORM\PreUpdate]
     public function doPreUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));

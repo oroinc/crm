@@ -5,10 +5,11 @@ namespace Oro\Bundle\ChannelBundle\Controller\Api\Rest;
 use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
 use Oro\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\BooleanParameterFilter;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\ChainParameterFilter;
@@ -26,39 +27,39 @@ class ChannelController extends RestController
     /**
      * Get channels.
      *
-     * @QueryParam(
-     *      name="page",
-     *      requirements="\d+",
-     *      nullable=true,
-     *      description="Page number, starting from 1. Defaults to 1."
-     * )
-     * @QueryParam(
-     *      name="limit",
-     *      requirements="\d+",
-     *      nullable=true,
-     *      description="Number of items per page. Defaults to 10."
-     * )
-     * @QueryParam(
-     *      name="entity",
-     *      requirements=".+",
-     *      nullable=true,
-     *      description="The entity alias. One or several aliases separated by comma. Defaults to all entities"
-     * )
-     * @QueryParam(
-     *      name="active",
-     *      requirements="true|false",
-     *      nullable=true,
-     *      strict=true,
-     *      description="The channel active status. Default for all(active, inactive) channel statuses"
-     * )
      * @ApiDoc(
      *      description="Get all channels",
      *      resource=true
      * )
-     * @AclAncestor("oro_channel_view")
      * @param Request $request
      * @return Response
      */
+    #[QueryParam(
+        name: 'page',
+        requirements: '\d+',
+        description: 'Page number, starting from 1. Defaults to 1.',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'limit',
+        requirements: '\d+',
+        description: 'Number of items per page. Defaults to 10.',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'entity',
+        requirements: '.+',
+        description: 'The entity alias. One or several aliases separated by comma. Defaults to all entities',
+        nullable: true
+    )]
+    #[QueryParam(
+        name: 'active',
+        requirements: 'true|false',
+        description: 'The channel active status. Default for all(active, inactive) channel statuses',
+        strict: true,
+        nullable: true
+    )]
+    #[AclAncestor('oro_channel_view')]
     public function cgetAction(Request $request)
     {
         $page     = (int)$request->get('page', 1);
@@ -102,14 +103,9 @@ class ChannelController extends RestController
      *      description="Delete Channel",
      *      resource=true
      * )
-     * @Acl(
-     *      id="oro_channel_delete",
-     *      type="entity",
-     *      permission="DELETE",
-     *      class="Oro\Bundle\ChannelBundle\Entity\Channel"
-     * )
      * @return Response
      */
+    #[Acl(id: 'oro_channel_delete', type: 'entity', class: Channel::class, permission: 'DELETE')]
     public function deleteAction(int $id)
     {
         try {

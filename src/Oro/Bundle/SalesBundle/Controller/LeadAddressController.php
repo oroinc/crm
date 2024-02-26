@@ -6,7 +6,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\AddressBundle\Form\Handler\AddressHandler;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadAddress;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,15 +18,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * The controller for LeadAddress entity.
- * @Route("/lead")
  */
+#[Route(path: '/lead')]
 class LeadAddressController extends AbstractController
 {
-    /**
-     * @Route("/address-book/{id}", name="oro_sales_lead_address_book", requirements={"id"="\d+"})
-     * @Template
-     * @AclAncestor("oro_sales_lead_view")
-     */
+    #[Route(path: '/address-book/{id}', name: 'oro_sales_lead_address_book', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('oro_sales_lead_view')]
     public function addressBookAction(Lead $lead): array
     {
         return [
@@ -35,31 +33,28 @@ class LeadAddressController extends AbstractController
         ];
     }
 
-    /**
-     * @Route(
-     *      "/{leadId}/address-create",
-     *      name="oro_sales_lead_address_create",
-     *      requirements={"leadId"="\d+"}
-     * )
-     * @Template("@OroSales/LeadAddress/update.html.twig")
-     * @AclAncestor("oro_sales_lead_update")
-     * @ParamConverter("lead", options={"id" = "leadId"})
-     */
+    #[Route(
+        path: '/{leadId}/address-create',
+        name: 'oro_sales_lead_address_create',
+        requirements: ['leadId' => '\d+']
+    )]
+    #[Template('@OroSales/LeadAddress/update.html.twig')]
+    #[ParamConverter('lead', options: ['id' => 'leadId'])]
+    #[AclAncestor('oro_sales_lead_update')]
     public function createAction(Request $request, Lead $lead): array|RedirectResponse
     {
         return $this->update($request, $lead, new LeadAddress());
     }
 
-    /**
-     * @Route(
-     *      "/{leadId}/address-update/{id}",
-     *      name="oro_sales_lead_address_update",
-     *      requirements={"leadId"="\d+","id"="\d+"},defaults={"id"=0}
-     * )
-     * @Template
-     * @AclAncestor("oro_sales_lead_update")
-     * @ParamConverter("lead", options={"id" = "leadId"})
-     */
+    #[Route(
+        path: '/{leadId}/address-update/{id}',
+        name: 'oro_sales_lead_address_update',
+        requirements: ['leadId' => '\d+', 'id' => '\d+'],
+        defaults: ['id' => 0]
+    )]
+    #[Template]
+    #[ParamConverter('lead', options: ['id' => 'leadId'])]
+    #[AclAncestor('oro_sales_lead_update')]
     public function updateAction(Request $request, Lead $lead, LeadAddress $address): array|RedirectResponse
     {
         return $this->update($request, $lead, $address);

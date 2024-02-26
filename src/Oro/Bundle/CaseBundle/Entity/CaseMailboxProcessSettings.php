@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Extend\Entity\Autocomplete\OroCaseBundle_Entity_CaseMailboxProcessSettings;
 use Oro\Bundle\EmailBundle\Entity\MailboxProcessSettings;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\TagBundle\Entity\Taggable;
@@ -16,47 +16,29 @@ use Oro\Bundle\UserBundle\Entity\User;
 /**
  * Store case mailbox settings in a database.
  *
- * @ORM\Entity
- * @Config(
- *      mode="hidden"
- * )
  * @mixin OroCaseBundle_Entity_CaseMailboxProcessSettings
  */
+#[ORM\Entity]
+#[Config(mode: 'hidden')]
 class CaseMailboxProcessSettings extends MailboxProcessSettings implements Taggable, ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="case_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $owner;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'case_owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?User $owner = null;
 
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="case_assign_to_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $assignTo;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'case_assign_to_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?User $assignTo = null;
 
-    /**
-     * @var CasePriority
-     *
-     * @ORM\ManyToOne(targetEntity="CasePriority")
-     * @ORM\JoinColumn(name="case_priority_name", referencedColumnName="name", onDelete="SET NULL")
-     */
-    protected $priority;
+    #[ORM\ManyToOne(targetEntity: CasePriority::class)]
+    #[ORM\JoinColumn(name: 'case_priority_name', referencedColumnName: 'name', onDelete: 'SET NULL')]
+    protected ?CasePriority $priority = null;
 
-    /**
-     * @var CaseStatus
-     *
-     * @ORM\ManyToOne(targetEntity="CaseStatus")
-     * @ORM\JoinColumn(name="case_status_name", referencedColumnName="name", onDelete="SET NULL")
-     */
-    protected $status;
+    #[ORM\ManyToOne(targetEntity: CaseStatus::class)]
+    #[ORM\JoinColumn(name: 'case_status_name', referencedColumnName: 'name', onDelete: 'SET NULL')]
+    protected ?CaseStatus $status = null;
 
     /**
      * @var Collection $tags
