@@ -1,0 +1,8 @@
+features:
+    reports:
+        routes:
+            - oro_reportcrm_index
+
+    manage_reports:
+        routes:
+            - oro_reportcrm_index
