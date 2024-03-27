@@ -1,0 +1,5 @@
+oro_sanitize:
+    entity:
+        orocrm_account:
+            fields:
+                name: md5

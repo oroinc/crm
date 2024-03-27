@@ -1,0 +1,32 @@
+oro_sanitize:
+    entity:
+        orocrm_contact:
+            fields:
+                email: email
+                last_name: md5
+                birthday: date
+                fax: md5
+                skype: md5
+                twitter: md5
+                facebook: md5
+                linkedin: md5
+        orocrm_contact_address:
+            fields:
+                street: md5
+                street2: md5
+                city: md5
+                postal_code: postal_code
+                label: md5
+                organization: md5
+                last_name: md5
+        orocrm_contactus_request:
+            fields:
+                email_address: email
+                last_name: md5
+                phone: generic_phone
+        orocrm_contact_phone:
+            fields:
+                phone: md5
+        orocrm_contact_email:
+            fields:
+                email: email

@@ -1,0 +1,33 @@
+oro_sanitize:
+    entity:
+        orocrm_sales_opportunity:
+            raw_sqls:
+                - |
+                    UPDATE orocrm_sales_opportunity SET budget_amount_value = 1000, close_revenue_value = 1000
+        orocrm_sales_b2bcustomer_email:
+            fields:
+                email: email
+        orocrm_sales_b2bcustomer_phone:
+            fields:
+                phone: md5
+        orocrm_sales_lead:
+            fields:
+                name: md5
+                last_name: md5
+                twitter: md5
+                linkedin: md5
+        orocrm_sales_lead_address:
+            fields:
+                street: md5
+                street2: md5
+                city: md5
+                postal_code: postal_code
+                label: md5
+                organization: md5
+                last_name: md5
+        orocrm_sales_lead_email:
+            fields:
+                email: email
+        orocrm_sales_lead_phone:
+            fields:
+                phone: md5
