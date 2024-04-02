@@ -39,7 +39,7 @@ The current file describes significant changes in the code that may affect the u
 
 #### ContactUsBundle
 
-* The `ContactRequest::$customerName`<sup>[[?]](https://github.com/oroinc/crm/blob/6.0.0/src/Oro/Bundle/ContactUsBundle/Entity/ContactRequest.php#L52 "Oro\Bundle\ContactUsBundle\Entity\ContactRequest::$customerName")</sup> property was added.
+* The `Oro\Bundle\ContactUsBundle\Entity\ContactRequest::$customerName` property was added.
 
 ## 5.1.0 (2023-03-31)
 
