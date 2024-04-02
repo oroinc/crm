@@ -68,7 +68,6 @@ ContactUsBundle
    - `getOrganizationName`<sup>[[?]](https://github.com/oroinc/crm/tree/5.1.0/src/Oro/Bundle/ContactUsBundle/Entity/ContactRequest.php#L122 "Oro\Bundle\ContactUsBundle\Entity\ContactRequest::getOrganizationName")</sup>
 * The `ContactRequest::setPreferredContactMethod($preferredContactMethod)`<sup>[[?]](https://github.com/oroinc/crm/tree/5.1.0/src/Oro/Bundle/ContactUsBundle/Entity/ContactRequest.php#L130 "Oro\Bundle\ContactUsBundle\Entity\ContactRequest")</sup> method was changed to `ContactRequest::setPreferredContactMethod($preferredContactMethod)`<sup>[[?]](https://github.com/oroinc/crm/tree/6.0.0-rc/src/Oro/Bundle/ContactUsBundle/Entity/ContactRequest.php#L86 "Oro\Bundle\ContactUsBundle\Entity\ContactRequest")</sup>
 * The `ContactRequest::$organizationName`<sup>[[?]](https://github.com/oroinc/crm/tree/5.1.0/src/Oro/Bundle/ContactUsBundle/Entity/ContactRequest.php#L63 "Oro\Bundle\ContactUsBundle\Entity\ContactRequest::$organizationName")</sup> property was removed.
-* The `ContactRequest::$customerName`<sup>[[?]](https://github.com/oroinc/crm/blob/6.0.0/src/Oro/Bundle/ContactUsBundle/Entity/ContactRequest.php#L52 "Oro\Bundle\ContactUsBundle\Entity\ContactRequest::$customerName")</sup> property was added.
 
 SalesBundle
 -----------
