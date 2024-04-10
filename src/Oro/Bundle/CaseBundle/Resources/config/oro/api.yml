@@ -9,9 +9,21 @@ api:
 
         Oro\Bundle\CaseBundle\Entity\CasePriority:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case.md'
+            filters:
+                fields:
+                    order: ~
+            sorters:
+                fields:
+                    order: ~
 
         Oro\Bundle\CaseBundle\Entity\CaseSource:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case.md'
 
         Oro\Bundle\CaseBundle\Entity\CaseStatus:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case.md'
+            filters:
+                fields:
+                    order: ~
+            sorters:
+                fields:
+                    order: ~
