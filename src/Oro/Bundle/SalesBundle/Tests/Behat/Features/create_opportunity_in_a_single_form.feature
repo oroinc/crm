@@ -1,3 +1,4 @@
+@regression
 @fixture-OroSalesBundle:OpportunityFixture.yml
 Feature: Create opportunity in a single form
   I order to create Opportunity
@@ -10,12 +11,6 @@ Feature: Create opportunity in a single form
     When I open Opportunity Create page
     Then Opportunity Name is a required field
     And click "Cancel"
-
-  @not-automated
-  Scenario: Renamed fields
-    Given I open Opportunity Create page
-    When Close Date is renamed to Expected Close Date
-    Then Customer Need and Proposed Solution have WYSIWYG editor
 
   Scenario: New Opportunity
     Given I open Opportunity Create page

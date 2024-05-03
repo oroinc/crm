@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-21510
 @fixture-OroSalesBundle:leads_data.yml
 Feature: Lead statistics dashboard widget

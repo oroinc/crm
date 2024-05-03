@@ -1,3 +1,4 @@
+@regression
 @fixture-OroSalesBundle:OpportunityFixture.yml
 @fixture-OroLocaleBundle:ZuluLocalization.yml
 @fixture-OroAddressBundle:CountryNameTranslation.yml

@@ -1,3 +1,4 @@
+@regression
 @fixture-OroSalesBundle:OpportunityWithBudgetFixture.yml
 @fixture-OroLocaleBundle:DutchLocalization.yml
 Feature: Check if Opportunity budget is correct after currency change

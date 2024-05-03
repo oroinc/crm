@@ -1,3 +1,4 @@
+@regression
 @fixture-OroAccountBundle:merge_accounts.yml
 @ticket-@BB-12444
 @ticket-@CRM-9023

@@ -1,3 +1,4 @@
+@regression
 @fix-CRM-8741
 @fixture-OroSalesBundle:OpportunityWithAdditionalCommentsFixture.yml
 Feature: Additional comments in report fields

@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-15156
 Feature: Opportunity Management Flow with role permissions
   In order to have roadmap for opportunity flow
