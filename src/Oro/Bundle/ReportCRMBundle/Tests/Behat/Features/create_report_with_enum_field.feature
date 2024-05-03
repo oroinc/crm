@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-17189
 @automatically-ticket-tagged
 @fixture-OroSalesBundle:OpportunityFixture.yml

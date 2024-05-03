@@ -1,3 +1,4 @@
+@regression
 # @TODO split this feature to smaller independent scenarios
 Feature: Contact call activity
   In order to have view all phone collaboration with contact

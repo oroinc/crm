@@ -1,3 +1,4 @@
+@regression
 @ticket-BB-16759
 @fixture-OroSalesBundle:LeadFixture.yml
 Feature: Lead activity list workflow

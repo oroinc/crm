@@ -1,3 +1,4 @@
+@regression
 @fixture-OroContactBundle:contact.yml
 
 Feature: Filters state view

@@ -1,3 +1,4 @@
+@regression
 @fixture-OroSalesBundle:OpportunityFixture.yml
 @ticket-BAP-14981
 Feature: Check if status filters works as expected

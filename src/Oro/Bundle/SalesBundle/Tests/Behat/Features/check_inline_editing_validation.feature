@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-20446
 
 Feature: Check inline editing validation
