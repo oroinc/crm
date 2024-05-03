@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-17495
 @fixture-OroCRMBundle:contacts.yml
 Feature: Email signature for send email to contact

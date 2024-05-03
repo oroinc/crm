@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-16787
 @fixture-OroContactBundle:SystemCalendarEventFixture.yml
 @fixture-OroCalendarBundle:ActivityListFixture.yml

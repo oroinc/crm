@@ -1,3 +1,4 @@
+@regression
 @fix-BAP-15754
 @fix-BAP-14578
 @fixture-OroAccountBundle:account-grid-export.yml

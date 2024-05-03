@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-21510
 
 Feature: Opportunity crud

@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-19218
 @fixture-OroSalesBundle:opportunities_data.yml
 Feature: Check correct expected close date in opportunity

@@ -1,3 +1,4 @@
+@regression
 @ticket-CRM-7540
 @automatically-ticket-tagged
 Feature: Opportunity workflow

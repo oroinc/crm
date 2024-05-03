@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-16828
 
 Feature: Lead report by date

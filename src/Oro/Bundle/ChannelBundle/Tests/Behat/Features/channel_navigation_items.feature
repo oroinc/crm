@@ -1,3 +1,4 @@
+@regression
 @ticket-CRM-9244
 
 Feature: Channel Navigation Items

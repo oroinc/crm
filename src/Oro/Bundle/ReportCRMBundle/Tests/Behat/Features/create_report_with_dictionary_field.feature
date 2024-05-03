@@ -1,3 +1,4 @@
+@regression
 @ticket-CRM-9055
 @ticket-BAP-18600
 @fixture-OroSalesBundle:OpportunityFixture.yml

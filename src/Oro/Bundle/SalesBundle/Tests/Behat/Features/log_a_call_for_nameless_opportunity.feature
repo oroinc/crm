@@ -1,3 +1,4 @@
+@regression
 @ticket-CRM-9070
 @fixture-OroSalesBundle:nameless_opportunity.yml
 

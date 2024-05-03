@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-16465
 @ticket-BB-21883
 @ticket-CRM-9400

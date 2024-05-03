@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-18004
 @fixture-OroContactBundle:LoadContactEntitiesFixture.yml
 @fixture-OroAccountBundle:LoadAccountEntitiesFixture.yml

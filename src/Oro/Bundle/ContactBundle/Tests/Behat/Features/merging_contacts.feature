@@ -1,3 +1,4 @@
+@regression
 @fixture-OroContactBundle:merge_contacts.yml
 
 Feature: Merging contacts
