@@ -1,3 +1,4 @@
+@regression
 @fixture-OroAccountBundle:crud-account.yml
 @ticket-BAP-15992
 Feature: CRUD Account

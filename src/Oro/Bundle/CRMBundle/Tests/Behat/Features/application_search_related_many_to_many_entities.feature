@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-15693
 @fixture-OroCRMBundle:searchManyToManyEntities.yml
 Feature: Application search related many to many entities

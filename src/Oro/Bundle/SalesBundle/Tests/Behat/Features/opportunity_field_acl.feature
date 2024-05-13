@@ -1,3 +1,4 @@
+@regression
 @fixture-OroSalesBundle:OpportunityFixture.yml
 
 Feature: Opportunity field ACL

@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-17563
 @fixture-OroAccountBundle:Accounts.yml
 Feature: Warning on edit form with unsaved data

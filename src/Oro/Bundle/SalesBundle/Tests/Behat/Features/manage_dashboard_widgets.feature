@@ -1,3 +1,4 @@
+@regression
 @ticket-CRM-9032
 @ticket-CRM-9079
 @ticket-BB-17275

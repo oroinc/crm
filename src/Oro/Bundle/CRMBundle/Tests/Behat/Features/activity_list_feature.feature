@@ -1,3 +1,4 @@
+@regression
 @fixture-OroCRMBundle:activities.yml
 Feature: Activity list feature
   In order to have ability manage contact activity
