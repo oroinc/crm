@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-18621
 
 Feature: Opportunity won report

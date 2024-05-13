@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-14903
 @fixture-OroContactBundle:contacts.yml
 @fixture-OroContactBundle:tags.yml

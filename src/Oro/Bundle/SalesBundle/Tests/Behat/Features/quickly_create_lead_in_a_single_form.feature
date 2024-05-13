@@ -1,3 +1,4 @@
+@regression
 @ticket-CRM-5308
 @ticket-BAP-21510
 @automatically-ticket-tagged

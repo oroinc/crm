@@ -1,3 +1,4 @@
+@regression
 @fixture-OroContactBundle:LoadContactEntitiesFixture.yml
 @fixture-OroAccountBundle:LoadAccountEntitiesFixture.yml
 @fixture-OroAccountBundle:LoadAccountEmailTemplate.yml

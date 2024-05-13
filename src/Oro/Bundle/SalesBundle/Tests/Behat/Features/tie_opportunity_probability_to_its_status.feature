@@ -1,3 +1,4 @@
+@regression
 Feature: Tie Opportunity probability to its status
   In order to improve sales forecasting
   As a Sales rep

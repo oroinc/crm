@@ -1,3 +1,4 @@
+@regression
 @fixture-OroUserBundle:user.yml
 @ticket-CRM-8708
 
