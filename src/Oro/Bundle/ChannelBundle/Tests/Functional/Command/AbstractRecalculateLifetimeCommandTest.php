@@ -21,6 +21,11 @@ abstract class AbstractRecalculateLifetimeCommandTest extends WebTestCase
     {
         $manager = self::getDataFixturesExecutorEntityManager();
 
+        self::consumeAllMessages();
+
+        $auditFieldCount = $manager->getRepository(AuditField::class)->count([]);
+        $auditCount = $manager->getRepository(Audit::class)->count([]);
+
         $this->getOptionalListenerManager()->enableListener(
             'oro_dataaudit.listener.send_changed_entities_to_message_queue'
         );
@@ -29,8 +34,8 @@ abstract class AbstractRecalculateLifetimeCommandTest extends WebTestCase
 
         self::consumeAllMessages();
 
-        $this->assertEmpty($manager->getRepository(Audit::class)->findAll());
-        $this->assertEmpty($manager->getRepository(AuditField::class)->findAll());
+        self::assertEquals($auditFieldCount, $manager->getRepository(AuditField::class)->count([]));
+        self::assertEquals($auditCount, $manager->getRepository(Audit::class)->count([]));
 
         $this->getOptionalListenerManager()->disableListener(
             'oro_dataaudit.listener.send_changed_entities_to_message_queue'
