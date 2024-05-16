@@ -2,7 +2,7 @@ The upgrade instructions are available at [Oro documentation website](https://do
 
 The current file describes significant changes in the code that may affect the upgrade of your customizations.
 
-## Changes in the СRM package versions
+## Changes in the CRM package versions
 
 - [6.0.0](#600-2024-03-30)
 - [5.1.0](#510-2023-03-31)
