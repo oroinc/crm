@@ -7,6 +7,3 @@ api:
                     fields:
                         owner:
                             exclude: true
-                        types:
-                            order_by:
-                                name: ASC
