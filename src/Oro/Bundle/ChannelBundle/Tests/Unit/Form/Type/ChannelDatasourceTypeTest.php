@@ -10,7 +10,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider as ChannelSettingsProvider;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
@@ -94,9 +93,9 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             ->method('isGranted')
             ->willReturn(true);
 
-        $em = $this->createMock(EntityManager::class);
+        $entityManager = $this->createMock(EntityManager::class);
         $metadata = $this->createMock(ClassMetadata::class);
-        $em->expects($this->once())
+        $entityManager->expects($this->once())
             ->method('getClassMetadata')
             ->with('OroUser:User')
             ->willReturn($metadata);
@@ -111,24 +110,6 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             TestContainerBuilder::create()->add('acl_users', $searchHandler)->getContainer($this)
         );
 
-        $config = $this->createMock(ConfigInterface::class);
-        $config->expects($this->any())
-            ->method('has')
-            ->with('grid_name')
-            ->willReturn(true);
-        $config->expects($this->any())
-            ->method('get')
-            ->with('grid_name')
-            ->willReturn('test_grid');
-        $cp = $this->createMock(ConfigProvider::class);
-        $cp->expects($this->any())
-            ->method('getConfig')
-            ->willReturn($config);
-        $cm = $this->createMock(ConfigManager::class);
-        $cm->expects($this->any())
-            ->method('getProvider')
-            ->willReturn($cp);
-
         return [
             new PreloadedExtension(
                 [
@@ -140,11 +121,15 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                     new OroEntitySelectOrCreateInlineType(
                         $authorizationChecker,
                         $this->createMock(FeatureChecker::class),
-                        $cm,
-                        $em,
+                        $this->createMock(ConfigManager::class),
+                        $entityManager,
                         $searchRegistry
                     ),
-                    new OroJquerySelect2HiddenType($em, $searchRegistry, $cp)
+                    new OroJquerySelect2HiddenType(
+                        $entityManager,
+                        $searchRegistry,
+                        $this->createMock(ConfigProvider::class)
+                    )
                 ],
                 [
                     FormType::class    => [
@@ -166,7 +151,32 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
 
     public function testFormSubmit()
     {
-        $this->prepareEmMock();
+        $entityManager = $this->createMock(EntityManager::class);
+        $metadata = $this->createMock(ClassMetadata::class);
+        $repo = $this->createMock(EntityRepository::class);
+        $entity = new Integration();
+        $entity->setName(self::TEST_NAME);
+        $entity->setType(self::TEST_TYPE);
+
+        $this->doctrine->expects($this->once())
+            ->method('getManagerForClass')
+            ->with(self::TEST_ENTITY_NAME)
+            ->willReturn($entityManager);
+        $entityManager->expects($this->once())
+            ->method('getClassMetadata')
+            ->with(self::TEST_ENTITY_NAME)
+            ->willReturn($metadata);
+        $metadata->expects($this->once())
+            ->method('getSingleIdentifierFieldName')
+            ->willReturn(self::TEST_ID_FIELD_NAME);
+        $entityManager->expects($this->once())
+            ->method('getRepository')
+            ->with(self::TEST_ENTITY_NAME)
+            ->willReturn($repo);
+        $repo->expects($this->once())
+            ->method('find')
+            ->with(self::TEST_ID)
+            ->willReturn($entity);
 
         $form = $this->factory->create(
             ChannelDatasourceType::class,
@@ -202,36 +212,6 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             ],
             $viewData
         );
-    }
-
-    private function prepareEmMock()
-    {
-        $em = $this->createMock(EntityManager::class);
-        $metadata = $this->createMock(ClassMetadata::class);
-        $repo = $this->createMock(EntityRepository::class);
-        $entity = new Integration();
-        $entity->setName(self::TEST_NAME);
-        $entity->setType(self::TEST_TYPE);
-
-        $this->doctrine->expects($this->once())
-            ->method('getManagerForClass')
-            ->with(self::TEST_ENTITY_NAME)
-            ->willReturn($em);
-        $em->expects($this->once())
-            ->method('getClassMetadata')
-            ->with(self::TEST_ENTITY_NAME)
-            ->willReturn($metadata);
-        $metadata->expects($this->once())
-            ->method('getSingleIdentifierFieldName')
-            ->willReturn(self::TEST_ID_FIELD_NAME);
-        $em->expects($this->once())
-            ->method('getRepository')
-            ->with(self::TEST_ENTITY_NAME)
-            ->willReturn($repo);
-        $repo->expects($this->once())
-            ->method('find')
-            ->with(self::TEST_ID)
-            ->willReturn($entity);
     }
 
     private function getChannelType(TypesRegistry $registry): ChannelType
