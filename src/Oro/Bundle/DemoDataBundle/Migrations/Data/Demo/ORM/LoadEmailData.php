@@ -75,7 +75,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
         $contacts = $manager->getRepository(Contact::class)->findAll();
         $contactCount = \count($contacts);
 
-        for ($i = 0; $i < 100; ++$i) {
+        for ($i = 0; $i < 50; ++$i) {
             $contactRandom = rand(0, $contactCount - 1);
 
             /** @var Contact $contact */
