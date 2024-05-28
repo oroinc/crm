@@ -288,7 +288,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         return new \DatePeriod(
             new \DateTime('now'),
             \DateInterval::createFromDateString('+1 day'),
-            new \DateTime('now +1 month'),
+            new \DateTime('now +14 day'),
             \DatePeriod::EXCLUDE_START_DATE
         );
     }
