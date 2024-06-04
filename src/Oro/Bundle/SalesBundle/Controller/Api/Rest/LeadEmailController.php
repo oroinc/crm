@@ -46,7 +46,7 @@ class LeadEmailController extends RestController
 
             return new JsonResponse(["id" => ""]);
         } catch (\Exception $e) {
-            return new JsonResponse(["code" => $e->getCode(), "message"=>$e->getMessage() ], $e->getCode());
+            return new JsonResponse(["code" => $e->getCode(), "message" => $e->getMessage() ], $e->getCode());
         }
     }
 
