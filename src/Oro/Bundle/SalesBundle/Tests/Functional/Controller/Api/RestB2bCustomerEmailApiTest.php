@@ -20,7 +20,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
         $customer = $this->getReference('B2bCustomer_' . LoadB2bCustomerEntitiesData::THIRD_ENTITY_NAME);
         $content = json_encode([
             'entityId' => $customer->getId(),
-            'email' =>'test@test.test',
+            'email' => 'test@test.test',
             'primary' => true
         ], JSON_THROW_ON_ERROR);
 
@@ -36,7 +36,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
         $customer = $this->getReference('B2bCustomer_' . LoadB2bCustomerEntitiesData::FIRST_ENTITY_NAME);
         $content = json_encode([
             'entityId' => $customer->getId(),
-            'email' =>'test1@test.test',
+            'email' => 'test1@test.test',
             'primary' => true
         ], JSON_THROW_ON_ERROR);
 
@@ -47,7 +47,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
     public function testEmptyB2bCustomerId()
     {
         $content = json_encode([
-            'email' =>'test@test.test',
+            'email' => 'test@test.test',
             'primary' => true
         ], JSON_THROW_ON_ERROR);
 

@@ -113,16 +113,16 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                     $contact->addAccount($account);
                     $account->setDefaultContact($contact);
 
-                    $group = $this->contactGroups[rand(0, count($this->contactGroups)-1)];
+                    $group = $this->contactGroups[rand(0, count($this->contactGroups) - 1)];
                     $contact->addGroup($group);
 
-                    $user = $this->users[rand(0, count($this->users)-1)];
+                    $user = $this->users[rand(0, count($this->users) - 1)];
                     $contact->setAssignedTo($user);
                     $contact->setReportsTo($contact);
                     $contact->setOwner($user);
                     $contact->setOrganization($this->organization);
 
-                    $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
+                    $source = $this->contactSources[rand(0, count($this->contactSources) - 1)];
                     $contact->setSource($source);
 
                     $account->setOwner($user);
@@ -139,8 +139,8 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                         $this->initSupportingEntities();
 
                         $e = microtime(true);
-                        echo ">> {$loadedRecords} " . ($e-$s) . "\n";
-                        $averageTime += ($e-$s);
+                        echo ">> {$loadedRecords} " . ($e - $s) . "\n";
+                        $averageTime += ($e - $s);
                     }
 
                     if ($loadedRecords == $this->maxRecords) {

@@ -18,7 +18,7 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
             'relation_type' => 'oneToMany',
             'related_entity_name' => Opportunity::class,
             'target_join_alias' => CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_TARGET_ALIAS,
-            'query' =>[
+            'query' => [
                 'join' => [
                     'left' => [
                         [
@@ -42,7 +42,7 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
             'relation_type' => 'oneToMany',
             'related_entity_name' => Lead::class,
             'target_join_alias' => CustomerAssignmentVirtualRelationProvider::LEAD_TARGET_ALIAS,
-            'query' =>[
+            'query' => [
                 'join' => [
                     'left' => [
                         [

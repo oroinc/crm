@@ -35,7 +35,7 @@ class RestLeadPhoneApiTest extends WebTestCase
 
         $content = json_encode([
             'leadId' => $lead->getId(),
-            'phone' =>'test1@test.test',
+            'phone' => 'test1@test.test',
             'primary' => true
         ], JSON_THROW_ON_ERROR);
 
@@ -46,7 +46,7 @@ class RestLeadPhoneApiTest extends WebTestCase
     public function testEmptyLeadId()
     {
         $lead = json_encode([
-            'phone' =>'test@test.test',
+            'phone' => 'test@test.test',
             'primary' => true
         ], JSON_THROW_ON_ERROR);
 
