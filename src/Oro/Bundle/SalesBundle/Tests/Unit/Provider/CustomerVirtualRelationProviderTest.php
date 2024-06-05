@@ -95,7 +95,7 @@ class CustomerVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
                     'relation_type' => 'manyToOne',
                     'related_entity_name' => CustomerStub::class,
                     'target_join_alias' => 'target_field',
-                    'query' =>[
+                    'query' => [
                         'join' => [
                             'left' => [
                                 [

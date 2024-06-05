@@ -61,9 +61,9 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
                 //read headers
                 $headers = $data;
             }
-            $randomUser = \count($users)-1;
-            $randomContactGroup = \count($contactGroups)-1;
-            $randomContactSource = \count($contactSources)-1;
+            $randomUser = \count($users) - 1;
+            $randomContactGroup = \count($contactGroups) - 1;
+            $randomContactSource = \count($contactSources) - 1;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 $data = array_combine($headers, array_values($data));
                 $contact = $this->createContact($data, $organization, $countries);

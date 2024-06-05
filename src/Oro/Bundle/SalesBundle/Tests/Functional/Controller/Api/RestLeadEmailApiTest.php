@@ -36,7 +36,7 @@ class RestLeadEmailApiTest extends WebTestCase
 
         $content = json_encode([
             'leadId' => $lead->getId(),
-            'email' =>'test1@test.test',
+            'email' => 'test1@test.test',
             'primary' => true
         ], JSON_THROW_ON_ERROR);
 
@@ -47,7 +47,7 @@ class RestLeadEmailApiTest extends WebTestCase
     public function testEmptyLeadId()
     {
         $lead = json_encode([
-            'email' =>'test@test.test',
+            'email' => 'test@test.test',
             'primary' => true
         ], JSON_THROW_ON_ERROR);
 
