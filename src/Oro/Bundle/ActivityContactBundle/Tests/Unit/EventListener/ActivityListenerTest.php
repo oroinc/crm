@@ -13,7 +13,6 @@ use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\ActivityContactBundle\EventListener\ActivityListener;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
-use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestTarget;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Stub\AccountStub as Account;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Stub\EmailStub as Email;
@@ -24,7 +23,6 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Component\Testing\Unit\EntityTrait;
-use Oro\Component\Testing\Unit\TestContainerBuilder;
 
 class ActivityListenerTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,15 +43,15 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
     /** @var ActivityListener */
     private $listener;
 
+    /** @var ActivityContactProvider */
+    private $activityContactProvider;
+
     protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->config = $this->createMock(ConfigInterface::class);
-
-        $providers = TestContainerBuilder::create()
-            ->add(TestActivity::class, new TestDirectionProvider())
-            ->add(Email::class, new TestDirectionProvider())
-            ->getContainer($this);
+        $this->activityContactProvider = $this->createMock(ActivityContactProvider::class);
+        $testActivityDirectionProvider = $this->createMock(DirectionProviderInterface::class);
 
         $configProvider = $this->createMock(ConfigProvider::class);
         $configProvider->expects($this->any())
@@ -65,8 +63,12 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
             ->method('getProvider')
             ->willReturn($configProvider);
 
+        $this->activityContactProvider->expects($this->any())
+            ->method('getActivityDirectionProvider')
+            ->willReturn($testActivityDirectionProvider);
+
         $this->listener = new ActivityListener(
-            new ActivityContactProvider([TestActivity::class, Email::class], $providers),
+            $this->activityContactProvider,
             $this->doctrineHelper,
             $configManager
         );
@@ -125,6 +127,14 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
             ->method('is')
             ->with('is_extend')
             ->willReturn(true);
+
+        $this->activityContactProvider->expects($this->any())
+            ->method('getActivityDirection')
+            ->willReturn($expectedDirection);
+
+        $this->activityContactProvider->expects($this->any())
+            ->method('getActivityDate')
+            ->willReturn(new \DateTime());
 
         $this->listener->onAddActivity($event);
 
@@ -280,6 +290,10 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
             ->method('find')
             ->with($changedTarget->getId())
             ->willReturn($changedTarget);
+
+        $this->activityContactProvider->expects($this->any())
+            ->method('isSupportedEntity')
+            ->willReturn(true);
 
         $this->listener->onFlush($onFlushEvent);
         $this->listener->postFlush($postFlushEvent);
