@@ -157,15 +157,13 @@ class ActivityListener
         if (!empty($entitiesToDelete) || !empty($entitiesToUpdate)) {
             foreach ($entitiesToDelete as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
-                if (!$this->isSupportedClass($class)) {
+                if (!$this->isSupportedClass($class) || !$this->activityContactProvider->isSupportedEntity($class)) {
                     continue;
                 }
 
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
                 $key   = $class . '_' . $id;
-                if (!isset($this->deletedEntities[$key])
-                    && $this->activityContactProvider->isSupportedEntity($class)
-                ) {
+                if (!isset($this->deletedEntities[$key])) {
                     $targets     = $entity->getActivityTargets();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
@@ -192,15 +190,13 @@ class ActivityListener
 
             foreach ($entitiesToUpdate as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
-                if (!$this->isSupportedClass($class)) {
+                if (!$this->isSupportedClass($class) || !$this->activityContactProvider->isSupportedEntity($class)) {
                     continue;
                 }
 
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
                 $key   = $class . '_' . $id;
-                if (!isset($this->updatedEntities[$key])
-                    && $this->activityContactProvider->isSupportedEntity($class)
-                ) {
+                if (!isset($this->updatedEntities[$key])) {
                     $changes            = $args->getObjectManager()->getUnitOfWork()->getEntityChangeSet($entity);
                     $isDirectionChanged = $this->activityContactProvider
                         ->getActivityDirectionProvider($entity)
