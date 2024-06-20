@@ -100,7 +100,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     private function loadSources(ObjectManager $manager): void
     {
         $sources = $manager->getRepository(ExtendHelper::buildEnumValueClassName('lead_source'))->findAll();
-        $randomSource = \count($sources)-1;
+        $randomSource = \count($sources) - 1;
         $leads = $manager->getRepository(Lead::class)->findAll();
         foreach ($leads as $lead) {
             /** @var Lead $lead */

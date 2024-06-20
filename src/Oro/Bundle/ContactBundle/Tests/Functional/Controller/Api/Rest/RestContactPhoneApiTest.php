@@ -36,7 +36,7 @@ class RestContactPhoneApiTest extends WebTestCase
 
         $payload = [
             'contactId' => $contact->getId(),
-            'phone' =>'test1@test.test',
+            'phone' => 'test1@test.test',
             'primary' => true
         ];
 
@@ -47,7 +47,7 @@ class RestContactPhoneApiTest extends WebTestCase
     public function testEmptyContactId()
     {
         $payload = [
-            'phone' =>'test@test.test',
+            'phone' => 'test@test.test',
             'primary' => true
         ];
 

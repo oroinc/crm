@@ -36,7 +36,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
 
         $content = json_encode([
             'entityId' => $customer->getId(),
-            'phone' =>'test1@test.test',
+            'phone' => 'test1@test.test',
             'primary' => true
         ], JSON_THROW_ON_ERROR);
 
@@ -47,7 +47,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
     public function testEmptyCustomerId()
     {
         $content = json_encode([
-            'phone' =>'test@test.test',
+            'phone' => 'test@test.test',
             'primary' => true
         ], JSON_THROW_ON_ERROR);
 

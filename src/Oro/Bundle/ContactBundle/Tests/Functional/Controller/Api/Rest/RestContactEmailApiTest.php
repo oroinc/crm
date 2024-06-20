@@ -20,7 +20,7 @@ class RestContactEmailApiTest extends WebTestCase
         $contact = $this->getReference('Contact_' . LoadContactEntitiesData::THIRD_ENTITY_NAME);
         $content = json_encode([
             'contactId' => $contact->getId(),
-            'email' =>'test@test.test',
+            'email' => 'test@test.test',
             'primary' => true
         ], JSON_THROW_ON_ERROR);
 
@@ -36,7 +36,7 @@ class RestContactEmailApiTest extends WebTestCase
         $contact = $this->getReference('Contact_Brenda');
         $payload = [
             'contactId' => $contact->getId(),
-            'email' =>'test1@test.test',
+            'email' => 'test1@test.test',
             'primary' => true
         ];
 
@@ -47,7 +47,7 @@ class RestContactEmailApiTest extends WebTestCase
     public function testEmptyContactId()
     {
         $payload = [
-            'email' =>'test@test.test',
+            'email' => 'test@test.test',
             'primary' => true
         ];
 

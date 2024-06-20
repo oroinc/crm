@@ -114,7 +114,7 @@ class ContactPhoneController extends RestController
             return new JsonResponse(
                 [
                     "code" => $e->getCode(),
-                    "message"=>$e->getMessage(),
+                    "message" => $e->getMessage(),
                     "errors" => $errors
                 ],
                 $e->getCode()
