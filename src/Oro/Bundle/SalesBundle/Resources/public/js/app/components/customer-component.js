@@ -73,7 +73,8 @@ define(function(require) {
                 return;
             }
 
-            mediator.off('customer-dialog:select', this.onCustomerSelect, this);
+            mediator.off('customer-dialog:select', this.onCustomerDialogSelect, this);
+            mediator.off('widget_registration:customer-dialog', this.onCustomerDialogInit, this);
 
             CustomerComponent.__super__.dispose.call(this);
         }
