@@ -36,7 +36,7 @@ define([
                     this.$el.data('select2_query_additional_params', options.additionalParamsCb());
 
                     if (!initialCall) {
-                        this.$el.val(null).change();
+                        this.$el.val(null).trigger('change');
                     }
                 };
 

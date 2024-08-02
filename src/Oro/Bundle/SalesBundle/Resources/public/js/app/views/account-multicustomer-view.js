@@ -54,7 +54,7 @@ define(function(require) {
                     return targetRegExp.test($(this).data('target'));
                 });
                 if ($link.length === 1 && !$link.parent().hasClass('active')) {
-                    $link.click();
+                    $link.trigger('click');
                 }
             }
         },
