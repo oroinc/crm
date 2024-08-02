@@ -127,7 +127,7 @@ define([
     return function(options) {
         let lockedEntities = [];
 
-        if (!_.isArray(options.customerIdentity)) {
+        if (!Array.isArray(options.customerIdentity)) {
             lockedEntities = [options.customerIdentity];
         } else {
             lockedEntities = options.customerIdentity;
