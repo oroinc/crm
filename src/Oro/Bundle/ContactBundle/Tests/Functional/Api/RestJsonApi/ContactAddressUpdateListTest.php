@@ -22,6 +22,28 @@ class ContactAddressUpdateListTest extends RestJsonApiUpdateListTestCase
         ]);
     }
 
+    private function getContactAddressId(string $street): int
+    {
+        /** @var ContactAddress|null $address */
+        $address = $this->getEntityManager()->getRepository(ContactAddress::class)
+            ->findOneBy(['street' => $street]);
+        if (null === $address) {
+            throw new \RuntimeException(sprintf('The address "%s" not found.', $street));
+        }
+
+        return $address->getId();
+    }
+
+    private function getContactAddressIndex(array $data, string $street): int
+    {
+        foreach ($data as $i => $item) {
+            if ($item['attributes']['street'] === $street) {
+                return $i;
+            }
+        }
+        throw new \RuntimeException(sprintf('The address "%s" not found.', $street));
+    }
+
     public function testCreateEntities(): void
     {
         $data = [
@@ -84,6 +106,8 @@ class ContactAddressUpdateListTest extends RestJsonApiUpdateListTestCase
             ['entity' => 'contacts', 'id' => '<toString(@contact1->id)>'],
             ['include' => 'addresses']
         );
+        $address1Id = $this->getContactAddressId('15a Lewis Circle');
+        $address2Id = $this->getContactAddressId('16 Lewis Circle');
         $responseContent = [
             'data'     => [
                 'type'          => 'contacts',
@@ -91,19 +115,20 @@ class ContactAddressUpdateListTest extends RestJsonApiUpdateListTestCase
                 'relationships' => [
                     'addresses' => [
                         'data' => [
-                            ['type' => 'contactaddresses', 'id' => 'new'],
-                            ['type' => 'contactaddresses', 'id' => 'new']
+                            ['type' => 'contactaddresses', 'id' => (string)$address1Id],
+                            ['type' => 'contactaddresses', 'id' => (string)$address2Id]
                         ]
                     ]
                 ]
             ],
             'included' => $data['data']
         ];
-        $responseContent['included'][0]['id'] = 'new';
-        $responseContent['included'][0]['attributes']['primary'] = true;
-        $responseContent['included'][1]['id'] = 'new';
-        $responseContent['included'][1]['attributes']['primary'] = false;
-        $responseContent = $this->updateResponseContent($responseContent, $response);
+        $address1Index = $this->getContactAddressIndex($responseContent['included'], '15a Lewis Circle');
+        $address2Index = $this->getContactAddressIndex($responseContent['included'], '16 Lewis Circle');
+        $responseContent['included'][$address1Index]['id'] = (string)$address1Id;
+        $responseContent['included'][$address1Index]['attributes']['primary'] = true;
+        $responseContent['included'][$address2Index]['id'] = (string)$address2Id;
+        $responseContent['included'][$address2Index]['attributes']['primary'] = false;
         $this->assertResponseContains($responseContent, $response);
     }
 }
