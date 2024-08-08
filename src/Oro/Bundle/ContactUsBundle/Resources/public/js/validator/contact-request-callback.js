@@ -11,7 +11,7 @@ define(['jquery', 'underscore'], function($, _) {
     };
 
     const resetFieldStatus = function(allFields, requiredFields, silent) {
-        const isArray = _.isArray(requiredFields);
+        const isArray = Array.isArray(requiredFields);
 
         _.each(allFields, function(field) {
             const $field = getField(field);
