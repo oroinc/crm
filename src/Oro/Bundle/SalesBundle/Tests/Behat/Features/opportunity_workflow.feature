@@ -49,7 +49,8 @@ Feature: Opportunity workflow
   Scenario: Close as won
     Given I click "Close as Won"
     When I fill "Close As Won Opportunity Form" with:
-      | Close Revenue       | 5000        |
+      | Expected close date | Sep 30, 2019 |
+      | Close Revenue       | 5000         |
     And I click "Submit"
     Then I should see opportunity with:
       | Budget Amount | $1,000.00  |
@@ -75,7 +76,8 @@ Feature: Opportunity workflow
   Scenario: Close opportunity as lost
     Given I click "Close as Lost"
     When I fill "Close As Lost Opportunity Form" with:
-      | Close reason      | Cancelled          |
+      | Expected close date | Sep 30, 2019 |
+      | Close reason        | Cancelled    |
     And I click "Submit"
     Then I should see opportunity with:
       | Budget Amount | $5,000.00   |
