@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ReportCRMBundle\Controller;
 
-use Oro\Bundle\DataGridBundle\Datagrid\Manager;
+use Oro\Bundle\DataGridBundle\Datagrid\ManagerInterface;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -32,7 +32,7 @@ class ReportController extends AbstractController
     public function indexAction($reportGroupName, $reportName)
     {
         $gridName  = implode('-', ['oro_reportcrm', $reportGroupName, $reportName]);
-        $gridConfig = $this->container->get(Manager::class)->getConfigurationForGrid($gridName);
+        $gridConfig = $this->container->get(ManagerInterface::class)->getConfigurationForGrid($gridName);
         $pageTitle = (string) ($gridConfig['pageTitle'] ?? '');
 
         $requiredFeatures = $gridConfig['requiredFeatures'] ?? [];
@@ -71,7 +71,7 @@ class ReportController extends AbstractController
             [
                 TranslatorInterface::class,
                 FeatureChecker::class,
-                Manager::class,
+                ManagerInterface::class,
             ]
         );
     }
