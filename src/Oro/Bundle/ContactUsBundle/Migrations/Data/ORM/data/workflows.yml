@@ -1,10 +1,8 @@
-ROLE_SALES_MANAGER:
-    bap_role: ROLE_MANAGER
+ROLE_MANAGER:
     permissions:
         workflow|orocrm_contact_us_contact_request: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
 
-ROLE_SALES_REP:
-    bap_role: ROLE_USER
+ROLE_USER:
     permissions:
         workflow|orocrm_contact_us_contact_request: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
 

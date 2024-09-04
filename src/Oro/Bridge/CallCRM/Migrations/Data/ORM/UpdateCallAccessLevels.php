@@ -15,14 +15,17 @@ use Symfony\Component\Yaml\Yaml;
 class UpdateCallAccessLevels extends AbstractUpdatePermissions implements DependentFixtureInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [LoadRolesData::class];
     }
 
-    public function load(ObjectManager $manager)
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $manager): void
     {
         if ($this->container->get(ApplicationState::class)->isInstalled()) {
             return;
@@ -39,11 +42,7 @@ class UpdateCallAccessLevels extends AbstractUpdatePermissions implements Depend
         $fileName = str_replace('/', DIRECTORY_SEPARATOR, $fileName);
         $rolesData = Yaml::parse(file_get_contents($fileName));
         foreach ($rolesData as $roleName => $roleConfigData) {
-            if (!array_key_exists('bap_role', $roleConfigData)) {
-                continue;
-            }
-
-            $role = $this->getRole($manager, $roleConfigData['bap_role']);
+            $role = $this->getRole($manager, $roleName);
             if (null !== $role) {
                 foreach ($roleConfigData['permissions'] as $oid => $permissions) {
                     $this->replacePermissions(

@@ -1,11 +1,9 @@
-ROLE_SALES_MANAGER:
-    bap_role: ROLE_MANAGER
+ROLE_MANAGER:
     permissions:
         workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
         workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
 
-ROLE_SALES_REP:
-    bap_role: ROLE_USER
+ROLE_USER:
     permissions:
         workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
         workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]

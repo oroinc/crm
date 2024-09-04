@@ -10,21 +10,24 @@ use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractUpdatePermissions;
 
 /**
  * Updates permissions for Channel entity for the following roles:
- * * ROLE_SALES_REP
+ * * ROLE_USER
  * * ROLE_ONLINE_SALES_REP
  * * ROLE_LEADS_DEVELOPMENT_REP
  */
 class UpdateIntegrationAccessLevels extends AbstractUpdatePermissions implements DependentFixtureInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheriDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [LoadRolesData::class];
     }
 
-    public function load(ObjectManager $manager)
+    /**
+     * {@inheriDoc}
+     */
+    public function load(ObjectManager $manager): void
     {
         if (!$this->container->get(ApplicationState::class)->isInstalled()) {
             return;
@@ -36,7 +39,7 @@ class UpdateIntegrationAccessLevels extends AbstractUpdatePermissions implements
         }
 
         $roleNames = [
-            'ROLE_SALES_REP',
+            'ROLE_USER',
             'ROLE_ONLINE_SALES_REP',
             'ROLE_LEADS_DEVELOPMENT_REP',
         ];

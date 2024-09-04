@@ -10,8 +10,8 @@ use Oro\Bundle\TaskBundle\Entity\Task;
 
 /**
  * Updates permissions for Task entity for the following roles:
- * * ROLE_SALES_MANAGER
- * * ROLE_SALES_REP
+ * * ROLE_MANAGER
+ * * ROLE_USER
  * * ROLE_ONLINE_SALES_REP
  * * ROLE_MARKETING_MANAGER
  * * ROLE_LEADS_DEVELOPMENT_REP
@@ -19,17 +19,17 @@ use Oro\Bundle\TaskBundle\Entity\Task;
 class UpdateTaskAccessLevels extends AbstractUpdatePermissions implements DependentFixtureInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [LoadRolesData::class];
     }
 
     /**
-     * Load ACL for security roles
+     * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $aclManager = $this->getAclManager();
         if (!$aclManager->isAclEnabled()) {
@@ -37,8 +37,8 @@ class UpdateTaskAccessLevels extends AbstractUpdatePermissions implements Depend
         }
 
         $roleNames = [
-            'ROLE_SALES_MANAGER',
-            'ROLE_SALES_REP',
+            'ROLE_MANAGER',
+            'ROLE_USER',
             'ROLE_ONLINE_SALES_REP',
             'ROLE_MARKETING_MANAGER',
             'ROLE_LEADS_DEVELOPMENT_REP',
