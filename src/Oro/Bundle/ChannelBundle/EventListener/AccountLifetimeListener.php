@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\QueryBuilder;
@@ -171,8 +171,7 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
                 $this->scheduleAccount($newAccount, $uow);
             }
         } elseif (array_intersect($this->getCustomerTargetFields(), array_keys($changeSet))) {
-            $account = $entity->getAccount();
-            $this->scheduleAccount($account, $uow);
+            $this->scheduleAccount($entity->getAccount(), $uow);
         }
     }
 
@@ -185,10 +184,11 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
         $this->accounts[spl_object_hash($account)] = $account;
     }
 
-    private function getLifetimeAmountQueryBuilder(EntityManager $em): QueryBuilder
+    private function getLifetimeAmountQueryBuilder(EntityManagerInterface $em): QueryBuilder
     {
-        $qb = $em->getRepository(Opportunity::class)->createQueryBuilder('o');
+        $qb = $em->createQueryBuilder();
         $qb
+            ->from(Opportunity::class, 'o')
             ->select(sprintf('SUM(%s)', $this->getQbTransformer()->getTransformSelectQuery('closeRevenue', $qb, 'o')))
             ->join('o.customerAssociation', 'c')
             ->andWhere('c.account = :account')

@@ -9,34 +9,24 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
- * Doctrine repository for B2bCustomer entity
+ * Doctrine repository for B2bCustomer entity.
  */
 class B2bCustomerRepository extends EntityRepository
 {
-    const VALUABLE_STATUS = 'won';
+    public const VALUABLE_STATUS = 'won';
 
-    /**
-     * Calculates the lifetime value for the given customer
-     *
-     * @param B2bCustomer $customer
-     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
-     *
-     * @return float
-     */
     public function calculateLifetimeValue(
         B2bCustomer $customer,
         CurrencyQueryBuilderTransformerInterface $qbTransformer
-    ) {
+    ): float {
         $associationName = AccountCustomerManager::getCustomerTargetField(B2bCustomer::class);
 
         $qb = $this->getEntityManager()->getRepository(Opportunity::class)
             ->createQueryBuilder('o');
-        $closeRevenueQuery = $qbTransformer->getTransformSelectQuery('closeRevenue', $qb);
-        $qb->select(sprintf('SUM(%s)', $closeRevenueQuery));
+        $qb->select(sprintf('SUM(%s)', $qbTransformer->getTransformSelectQuery('closeRevenue', $qb)));
         $qb->innerJoin('o.customerAssociation', 'c');
         $qb->innerJoin('o.status', 's');
-        $qb->andWhere(sprintf('c.%s = :customer', $associationName));
-        $qb->andWhere('s.id = :status');
+        $qb->where(sprintf('c.%s = :customer AND s.id = :status', $associationName));
         $qb->setParameter('customer', $customer);
         $qb->setParameter('status', self::VALUABLE_STATUS);
 

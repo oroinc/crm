@@ -21,7 +21,7 @@ abstract class BaseStatistics extends WebTestCase
         );
 
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting configure widget dialog window!');
+        $this->assertEquals(200, $response->getStatusCode(), 'Failed in getting configure widget dialog window!');
     }
 
     protected function createDateTime(string $modifyStr): \DateTime
