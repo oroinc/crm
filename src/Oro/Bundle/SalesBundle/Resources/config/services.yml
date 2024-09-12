@@ -148,26 +148,24 @@ services:
         arguments:
             - '@oro_config.user'
 
-    oro_sales.provider.b2b_statistics:
-        class: Oro\Bundle\SalesBundle\Provider\B2bBigNumberProvider
-        abstract: true
+    oro_sales_provider.lead_statistics:
+        class: Oro\Bundle\SalesBundle\Provider\LeadStatisticsProvider
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
             - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_dashboard.provider.big_number.date_helper'
-
-    oro_sales_provider.lead_statistics:
-        class: Oro\Bundle\SalesBundle\Provider\LeadStatisticsProvider
-        parent: oro_sales.provider.b2b_statistics
         tags:
             - { name: oro_dashboard.big_number.provider, alias: lead_stats }
 
     oro_sales_provider.opportunity_statistics:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\OpportunityStatisticsProvider
-        parent: oro_sales.provider.b2b_statistics
-        calls:
-             - [setCurrencyQBTransformer, ["@oro_currency.query.currency_transformer"]]
+        arguments:
+            - '@doctrine'
+            - '@oro_security.acl_helper'
+            - '@oro_dashboard.widget_provider.filter_manager'
+            - '@oro_dashboard.provider.big_number.date_helper'
+            - '@oro_currency.query.currency_transformer'
         tags:
             - { name: oro_dashboard.big_number.provider, alias: opportunity_stats }
 

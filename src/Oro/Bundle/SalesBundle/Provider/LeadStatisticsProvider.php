@@ -2,70 +2,70 @@
 
 namespace Oro\Bundle\SalesBundle\Provider;
 
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Repository\LeadRepository;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 /**
  * The provider for lead statistics to use in widgets.
  */
-class LeadStatisticsProvider extends B2bBigNumberProvider
+class LeadStatisticsProvider
 {
-    /** @var LeadRepository  */
-    protected $leadRepository;
+    private ManagerRegistry $doctrine;
+    private AclHelper $aclHelper;
+    private WidgetProviderFilterManager $widgetProviderFilter;
+    private BigNumberDateHelper $dateHelper;
 
-    /**
-     * @param array $dateRange
-     * @param WidgetOptionBag $widgetOptions
-     *
-     * @return int
-     */
-    public function getNewLeadsCount($dateRange, WidgetOptionBag $widgetOptions)
-    {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, Lead::class, 'createdAt');
-
-        $queryBuilder = $this->getLeadRepository()->getNewLeadsCountQB($start, $end);
-
-        return $this->processDataQueryBuilder($queryBuilder, $widgetOptions)->getSingleScalarResult();
+    public function __construct(
+        ManagerRegistry $doctrine,
+        AclHelper $aclHelper,
+        WidgetProviderFilterManager $widgetProviderFilter,
+        BigNumberDateHelper $dateHelper
+    ) {
+        $this->doctrine = $doctrine;
+        $this->aclHelper = $aclHelper;
+        $this->widgetProviderFilter = $widgetProviderFilter;
+        $this->dateHelper = $dateHelper;
     }
 
-    /**
-     * @param array $dateRange
-     * @param WidgetOptionBag $widgetOptions
-     *
-     * @return int
-     */
-    public function getLeadsCount($dateRange, WidgetOptionBag $widgetOptions)
+    public function getNewLeadsCount(array $dateRange, WidgetOptionBag $widgetOptions): int
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, Lead::class, 'createdAt');
+        [$start, $end] = $this->dateHelper->getPeriod($dateRange, Lead::class, 'createdAt');
+        $qb = $this->getLeadRepository()->getNewLeadsCountQB($start, $end);
 
-        $queryBuilder = $this->getLeadRepository()->getLeadsCountQB($start, $end);
-
-        return $this->processDataQueryBuilder($queryBuilder, $widgetOptions)->getSingleScalarResult();
+        return $this->processDataQueryBuilder($qb, $widgetOptions)->getSingleScalarResult();
     }
 
-    /**
-     * @param array $dateRange
-     * @param WidgetOptionBag $widgetOptions
-     *
-     * @return int
-     */
-    public function getOpenLeadsCount($dateRange, WidgetOptionBag $widgetOptions)
+    public function getLeadsCount(array $dateRange, WidgetOptionBag $widgetOptions): int
     {
-        $queryBuilder = $this->getLeadRepository()->getOpenLeadsCountQB();
+        [$start, $end] = $this->dateHelper->getPeriod($dateRange, Lead::class, 'createdAt');
+        $qb = $this->getLeadRepository()->getLeadsCountQB($start, $end);
 
-        return $this->processDataQueryBuilder($queryBuilder, $widgetOptions)->getSingleScalarResult();
+        return $this->processDataQueryBuilder($qb, $widgetOptions)->getSingleScalarResult();
     }
 
-    /**
-     * @return LeadRepository
-     */
-    protected function getLeadRepository()
+    public function getOpenLeadsCount(array $dateRange, WidgetOptionBag $widgetOptions): int
     {
-        if (null === $this->leadRepository) {
-            $this->leadRepository = $this->doctrine->getRepository(Lead::class);
-        }
+        $qb = $this->getLeadRepository()->getOpenLeadsCountQB();
 
-        return $this->leadRepository;
+        return $this->processDataQueryBuilder($qb, $widgetOptions)->getSingleScalarResult();
+    }
+
+    private function getLeadRepository(): LeadRepository
+    {
+        return $this->doctrine->getRepository(Lead::class);
+    }
+
+    private function processDataQueryBuilder(QueryBuilder $qb, WidgetOptionBag $widgetOptions): Query
+    {
+        $this->widgetProviderFilter->filter($qb, $widgetOptions);
+
+        return $this->aclHelper->apply($qb);
     }
 }
