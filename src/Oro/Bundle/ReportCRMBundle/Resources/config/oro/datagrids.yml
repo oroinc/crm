@@ -85,7 +85,7 @@ datagrids:
                     inner:
                         - { join: o.customerAssociation, alias: c }
                         - { join: c.account, alias: a }
-                        - { join: o.status, alias: s }
+                        - { join: Oro\Bundle\EntityExtendBundle\Entity\EnumOption, alias: s, conditionType: WITH, condition: "JSON_EXTRACT(o.serialized_data, 'status') = s" }
                 groupBy:  a.id
         properties:
             id: ~
@@ -192,14 +192,14 @@ datagrids:
                 join:
                     # if any date filter is used, this will be replaced by OpportunitiesByStatusReportListener
                     left:
-                        - { join: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: opportunity, conditionType: WITH, condition: "opportunity.status = status" }
+                        - { join: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: opportunity, conditionType: WITH, condition: "JSON_EXTRACT(opportunity.serialized_data, 'status') = s" }
                 select:
-                    - status.name as statusLabel
-                    - status.priority as statusPriority
+                    - s.name as statusLabel
+                    - s.priority as statusPriority
                     - COUNT(opportunity.id) as numberOfOpportunities
                     - >
                         SUM(
-                            CASE WHEN status.id IN ('won', 'lost') THEN COALESCE(
+                            CASE WHEN s.internalId IN ('won', 'lost') THEN COALESCE(
                                 @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(closeRevenue, opportunity), 0
                             ) ELSE 0 END
                         ) as closeRevenue
@@ -225,17 +225,17 @@ datagrids:
                     numberOfOpportunities:
                         expr: COUNT(opportunity.id)
                     closeRevenue:
-                        expr: SUM(CASE WHEN status.id IN ('won', 'lost') THEN @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(closeRevenue, opportunity) ELSE 0 END)
+                        expr: SUM(CASE WHEN s.internalId IN ('won', 'lost') THEN @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(closeRevenue, opportunity) ELSE 0 END)
                         formatter: currency
                     budgetAmount:
                         expr: SUM(COALESCE(@oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(budgetAmount, opportunity), 0))
                         formatter: currency
         columns:
-            statusPriority:        { label: statusPriority, renderable: false, manageable: false }
-            statusLabel:           { label: oro.reportcrm.datagrid.columns.status }
+            statusPriority: { label: statusPriority, renderable: false, manageable: false }
+            statusLabel: { label: oro.reportcrm.datagrid.columns.status }
             numberOfOpportunities: { label: oro.reportcrm.datagrid.columns.number_of_opportunities, frontend_type: integer }
-            closeRevenue:          { label: oro.reportcrm.datagrid.columns.close_revenue, frontend_type: currency }
-            budgetAmount:          { label: oro.reportcrm.datagrid.columns.budget_amount, frontend_type: currency }
+            closeRevenue: { label: oro.reportcrm.datagrid.columns.close_revenue, frontend_type: currency }
+            budgetAmount: { label: oro.reportcrm.datagrid.columns.budget_amount, frontend_type: currency }
         sorters:
             columns:
                 statusLabel:           { data_name: statusLabel }
@@ -250,7 +250,7 @@ datagrids:
             columns:
                 statusLabel:
                     type: enum
-                    data_name: status.id
+                    data_name: s.id
                     enum_code: opportunity_status
                 numberOfOpportunities:
                     type: number-range
@@ -311,11 +311,12 @@ datagrids:
                     - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 join:
                     inner:
-                        - { join: o.status, alias: s }
+                        - { join: Oro\Bundle\EntityExtendBundle\Entity\EnumOption, conditionType: WITH,  alias: s, condition: "JSON_EXTRACT(o.serialized_data, 'status') = s" }
                 groupBy: o.closeDate # will be overridden in ReportGridListener with selected period name (monthly or quarterly or yearly)
                 where:
                     and:
-                        - s.id = 'won'
+                        - s.enumCode = 'opportunity_status'
+                        - s.internalId = 'won'
                         - o.closeDate IS NOT NULL
         properties:
             monthPeriod: ~
@@ -408,11 +409,12 @@ datagrids:
                     - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 join:
                     inner:
-                        - { join: o.status, alias: s }
+                        - { join: Oro\Bundle\EntityExtendBundle\Entity\EnumOption, alias: s, conditionType: WITH, condition: "JSON_EXTRACT(o.serialized_data, 'status') = s" }
                         - { join: o.owner, alias: oo }
                 where:
                     and:
-                        - s.id NOT IN ('lost', 'won')
+                        - s.enumCode = 'opportunity_status'
+                        - s.internalId NOT IN ('lost', 'won')
                 groupBy: oo.id
         totals:
             total:

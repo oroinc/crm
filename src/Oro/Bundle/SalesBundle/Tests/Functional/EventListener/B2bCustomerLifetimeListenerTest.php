@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
@@ -47,8 +48,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $this->assertEquals(0, $b2bCustomer->getLifetime());
 
         $opportunity2->setStatus($em->getReference(
-            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
-            'won'
+            EnumOption::class,
+            ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, 'won')
         ));
         $em->persist($opportunity2);
         $em->flush();
@@ -67,8 +68,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $em = $this->getEntityManager();
         $b2bCustomer = $opportunity->getCustomerAssociation()->getTarget();
         $opportunity->setStatus($em->getReference(
-            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
-            'lost'
+            EnumOption::class,
+            ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, 'lost')
         ));
 
         $em->persist($opportunity);
@@ -78,8 +79,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $this->assertEquals(0, $b2bCustomer->getLifetime());
 
         $opportunity->setStatus($em->getReference(
-            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
-            'won'
+            EnumOption::class,
+            ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, 'won')
         ));
         $closeRevenue = MultiCurrency::create(100, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
@@ -151,8 +152,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $closeRevenue = MultiCurrency::create(50, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
         $opportunity->setStatus($em->getReference(
-            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
-            'won'
+            EnumOption::class,
+            ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, 'won')
         ));
         $opportunity->setCustomerAssociation($this->getReference('default_account_customer'));
 
@@ -193,8 +194,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $opportunity->setBudgetAmount($budgetAmount);
         $opportunity->setProbability(0.1);
         $opportunity->setStatus($em->getReference(
-            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
-            'won'
+            EnumOption::class,
+            ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, 'won')
         ));
         $opportunity->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
         $opportunity->setCustomerAssociation($customer);

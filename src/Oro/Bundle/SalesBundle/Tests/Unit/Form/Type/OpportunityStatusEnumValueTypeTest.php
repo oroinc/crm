@@ -57,9 +57,9 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit\Framework\TestCase
     public function preSetDataProvider(): array
     {
         return [
-            'default' => ['test', false],
-            'win should be disabled' => ['won', true],
-            'lost should be disabled' => ['lost', true],
+            'default' => ['opportunity_status.test', false],
+            'win should be disabled' => ['opportunity_status.won', true],
+            'lost should be disabled' => ['opportunity_status.lost', true],
         ];
     }
 }

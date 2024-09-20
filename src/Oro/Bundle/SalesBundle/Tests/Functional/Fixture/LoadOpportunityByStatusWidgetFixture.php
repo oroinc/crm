@@ -7,6 +7,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
@@ -58,10 +59,15 @@ class LoadOpportunityByStatusWidgetFixture extends AbstractFixture implements De
     private function createOpportunity(ObjectManager $manager, \DateTime $createdAt, int $id): void
     {
         $opportunity = new Opportunity();
-        $opportunity->setName('name '.$id);
+        $opportunity->setName('name ' . $id);
         $opportunity->setStatus(
-            $manager->getRepository(ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE))
-                ->find(ExtendHelper::buildEnumValueId('in_progress'))
+            $manager->getRepository(EnumOption::class)
+                ->find(
+                    ExtendHelper::buildEnumOptionId(
+                        Opportunity::INTERNAL_STATUS_CODE,
+                        ExtendHelper::buildEnumInternalId('in_progress')
+                    )
+                )
         );
         $opportunity->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
         $manager->persist($opportunity);

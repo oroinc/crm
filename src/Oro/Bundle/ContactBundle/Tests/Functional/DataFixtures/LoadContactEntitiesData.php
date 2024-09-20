@@ -8,6 +8,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -70,8 +71,8 @@ class LoadContactEntitiesData extends AbstractFixture implements DependentFixtur
             }
 
             if (isset($contactData['testMultiEnum'])) {
-                $multiEnumValue = $manager->getRepository(ExtendHelper::buildEnumValueClassName('test_multi_enum'))
-                    ->find($contactData['testMultiEnum']);
+                $multiEnumValue = $manager->getRepository(EnumOption::class)
+                    ->find(ExtendHelper::buildEnumOptionId('test_multi_enum', $contactData['testMultiEnum']));
                 $contact->setTestMultiEnum(new ArrayCollection([$multiEnumValue]));
             }
 

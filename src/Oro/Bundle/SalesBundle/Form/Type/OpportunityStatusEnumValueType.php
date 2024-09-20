@@ -20,7 +20,7 @@ class OpportunityStatusEnumValueType extends AbstractType
     /**
      * @var array List of statuses which have non-editable probability
      */
-    public static $immutableProbabilityStatuses = ['won', 'lost'];
+    public static $immutableProbabilityStatuses = ['opportunity_status.won', 'opportunity_status.lost'];
 
     /**
      * {@inheritdoc}

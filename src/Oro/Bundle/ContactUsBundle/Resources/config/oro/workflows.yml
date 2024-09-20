@@ -218,7 +218,7 @@ workflows:
                 actions:
                     - '@request_enum_entity':
                         enum_code: opportunity_status
-                        identifier:  'in_progress'
+                        identifier:  'opportunity_status.in_progress'
                         attribute:   $.result.opportunity_status
                     - '@create_entity': # create an opportunity
                         class:     Oro\Bundle\SalesBundle\Entity\Opportunity
@@ -247,7 +247,7 @@ workflows:
                 actions:
                     - '@request_enum_entity':
                         enum_code: lead_status
-                        identifier:  'new'
+                        identifier:  'lead_status.new'
                         attribute:   $.result.lead_status
                     - '@create_entity': # create a lead
                         class:     Oro\Bundle\SalesBundle\Entity\Lead

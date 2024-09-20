@@ -7,7 +7,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOptionInterface;
 use Oro\Bundle\SalesBundle\EventListener\DefaultProbabilityListener;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub;
 use Oro\Bundle\WorkflowBundle\Restriction\RestrictionManager;
@@ -148,9 +148,9 @@ class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
         return $opportunity;
     }
 
-    private function getOpportunityStatus(string $id): AbstractEnumValue
+    private function getOpportunityStatus(string $id): EnumOptionInterface
     {
-        $enum = $this->createMock(AbstractEnumValue::class);
+        $enum = $this->createMock(EnumOptionInterface::class);
         $enum->expects($this->any())
             ->method('getId')
             ->willReturn($id);

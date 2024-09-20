@@ -13,7 +13,8 @@ use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DataAuditBundle\Entity\Audit;
 use Oro\Bundle\DataAuditBundle\Entity\AuditField;
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumOptionsProvider;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -37,7 +38,7 @@ class ForecastProvider
     /** @var WidgetProviderFilterManager */
     protected $widgetProviderFilter;
 
-    /** @var EnumValueProvider */
+    /** @var EnumOptionsProvider */
     protected $enumProvider;
 
     /** @var  array */
@@ -68,7 +69,7 @@ class ForecastProvider
         ManagerRegistry $doctrine,
         AclHelper $aclHelper,
         WidgetProviderFilterManager $widgetProviderFilter,
-        EnumValueProvider $enumProvider,
+        EnumOptionsProvider $enumProvider,
         FilterProcessor $filterProcessor,
         CurrencyQueryBuilderTransformerInterface $qbTransformer,
         OwnerHelper $ownerHelper
@@ -124,7 +125,20 @@ class ForecastProvider
         $clonedStart = $start ? clone $start : null;
         $clonedEnd   = $end ? clone $end : null;
         $alias       = 'o';
-        $qb          = $this->getOpportunityRepository()->getForecastQB($this->qbTransformer, $alias);
+        $qb          = $this->getOpportunityRepository()->getForecastQB(
+            $this->qbTransformer,
+            $alias,
+            [
+                ExtendHelper::buildEnumOptionId(
+                    Opportunity::INTERNAL_STATUS_CODE,
+                    Opportunity::STATUS_WON
+                ),
+                ExtendHelper::buildEnumOptionId(
+                    Opportunity::INTERNAL_STATUS_CODE,
+                    Opportunity::STATUS_LOST
+                )
+            ],
+        );
         $this->applyDateFiltering($qb, 'o.closeDate', $clonedStart, $clonedEnd);
 
         return $this->processDataQueryBuilder($qb, $widgetOptions)->getOneOrNullResult();

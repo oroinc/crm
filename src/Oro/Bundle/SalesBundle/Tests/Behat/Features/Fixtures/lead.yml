@@ -10,7 +10,7 @@ Oro\Bundle\SalesBundle\Entity\Lead:
     name: Bruce
     firstName: Bruce
     lastName: Willis
-    status: '@lead_status_new'
+    status: '@lead_status.new'
     organization: '@organization'
 
 # new lead owner

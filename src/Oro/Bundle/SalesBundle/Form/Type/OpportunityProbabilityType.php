@@ -3,8 +3,8 @@
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\Form\AbstractType;
@@ -20,7 +20,7 @@ class OpportunityProbabilityType extends AbstractType
     const NAME = 'oro_sales_opportunity_probability';
 
     /** @var array List of statuses which have non-editable probability */
-    public static $immutableProbabilityStatuses = ['won', 'lost'];
+    public static $immutableProbabilityStatuses = ['test.won', 'test.lost'];
 
     private EnumTypeHelper $typeHelper;
     private ManagerRegistry $doctrine;
@@ -90,11 +90,10 @@ class OpportunityProbabilityType extends AbstractType
 
     private function getEnumStatuses(): array
     {
-        $enumValueClassName = ExtendHelper::buildEnumValueClassName(
-            $this->typeHelper->getEnumCode(Opportunity::class, 'status')
-        );
-
-        return $this->doctrine->getRepository($enumValueClassName)
-            ->findBy([], ['priority' => 'ASC']);
+        return $this->doctrine->getRepository(EnumOption::class)
+            ->findBy(
+                ['enumCode' => $this->typeHelper->getEnumCode(Opportunity::class, 'status')],
+                ['priority' => 'ASC']
+            );
     }
 }

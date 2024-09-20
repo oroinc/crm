@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumOptionsProvider;
 use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,12 +14,12 @@ class LeadSourceSelectType extends AbstractType
 {
     const NAME = 'oro_type_widget_lead_source_select';
 
-    /** @var EnumValueProvider */
-    protected $enumValueProvider;
+    /** @var EnumOptionsProvider */
+    protected $enumOptionsProvider;
 
-    public function __construct(EnumValueProvider $enumValueProvider)
+    public function __construct(EnumOptionsProvider $enumOptionsProvider)
     {
-        $this->enumValueProvider = $enumValueProvider;
+        $this->enumOptionsProvider = $enumOptionsProvider;
     }
 
     /**
@@ -31,7 +31,7 @@ class LeadSourceSelectType extends AbstractType
             [
                 'oro.sales.lead.source.unclassified' => '',
             ],
-            $this->enumValueProvider->getEnumChoicesByCode('lead_source')
+            $this->enumOptionsProvider->getEnumChoicesByCode('lead_source')
         );
 
         $resolver->setDefaults(

@@ -3,7 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOptionInterface;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
@@ -20,23 +20,23 @@ class ProbabilityProvider
     }
 
     /**
-     * @param AbstractEnumValue $status
+     * @param EnumOptionInterface $status
      *
      * @return bool
      */
-    public function has(AbstractEnumValue $status)
+    public function has(EnumOptionInterface $status)
     {
         $probabilities = $this->getAll();
 
-        return isset($probabilities[$status->getId()]);
+        return array_key_exists($status->getId(), $probabilities);
     }
 
     /**
-     * @param AbstractEnumValue $status
+     * @param EnumOptionInterface $status
      *
      * @return float|null
      */
-    public function get(AbstractEnumValue $status)
+    public function get(EnumOptionInterface $status)
     {
         if ($this->has($status)) {
             return $this->getAll()[$status->getId()];

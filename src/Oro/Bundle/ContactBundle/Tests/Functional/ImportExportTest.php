@@ -140,7 +140,7 @@ class ImportExportTest extends AbstractImportExportTestCase
          * Assert that update not clear snapshot field
          */
         $this->assertNotEmpty(
-            $updatedContact->getTestMultiEnumSnapshot(),
+            $updatedContact->getTestMultiEnum(),
             'Update through the import-export functionality must not clear the system fields'
         );
     }

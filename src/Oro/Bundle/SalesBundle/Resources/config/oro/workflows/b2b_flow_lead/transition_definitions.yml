@@ -7,7 +7,7 @@ workflows:
             qualify_definition:
                 preconditions:  # if lead.status = "new"
                     '@and':
-                        - '@equal': [$lead.status.id, 'new']
+                        - '@equal': [$lead.status.internalId, 'new']
                         - '@feature_enabled':
                             feature: sales_opportunity
                 conditions:
@@ -19,7 +19,7 @@ workflows:
                 actions: # set lead.status = "qualified"
                     - '@request_enum_entity':
                         enum_code: lead_status
-                        identifier: 'qualified'
+                        identifier: 'lead_status.qualified'
                         attribute: $lead.status
                     - '@tree': # create Contact entity
                         conditions: # if contact not specified
@@ -166,7 +166,7 @@ workflows:
                             notes:       $notes
                     - '@request_enum_entity': # set status "In Progress" to opportunity
                         enum_code: opportunity_status
-                        identifier: 'in_progress'
+                        identifier: 'opportunity_status.in_progress'
                         attribute: $.result.opportunity.status
                     - '@unset_value':
                         [$account, $customer_association]
@@ -176,19 +176,19 @@ workflows:
                             id: $.result.opportunity.id
             cancel_definition: # if lead.status = "new"
                 conditions:
-                    '@equal': [$lead.status.id, 'new']
+                    '@equal': [$lead.status.internalId, 'new']
                 actions: # set lead.status = "canceled"
                     - '@request_enum_entity':
                         enum_code: lead_status
-                        identifier: 'canceled'
+                        identifier: 'lead_status.canceled'
                         attribute: $lead.status
             reactivate_definition:  # if lead.status = "qualified" or lead.status = "canceled"
                 conditions:
                     '@or':
-                        - '@equal': [$lead.status.id, 'qualified']
-                        - '@equal': [$lead.status.id, 'canceled']
+                        - '@equal': [$lead.status.internalId, 'qualified']
+                        - '@equal': [$lead.status.internalId, 'canceled']
                 actions: # set lead.status = "new"
                     - '@request_enum_entity':
                         enum_code: lead_status
-                        identifier: 'new'
+                        identifier: 'lead_status.new'
                         attribute: $lead.status

@@ -39,7 +39,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
   opportunity{1..5}:
     customerAssociation: '@customer<current()>'
     name: 'Opportunity <current()>'
-    status: '@opportunity_status_in_progress'
+    status: '@opportunity_status.in_progress'
     owner: '@admin'
     organization: '@organization'
 
@@ -47,6 +47,6 @@ Oro\Bundle\SalesBundle\Entity\Lead:
   lead{6..10}:
     customerAssociation: '@customer<current()>'
     name: 'Lead <current()>'
-    status: '@lead_status_new'
+    status: '@lead_status.new'
     owner: '@admin'
     organization: '@organization'

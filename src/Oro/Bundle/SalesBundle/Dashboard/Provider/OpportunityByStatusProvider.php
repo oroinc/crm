@@ -7,44 +7,27 @@ use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
-use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumOptionRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Provides chart data for 'Opportunity By Status' dashboard widget.
  */
 class OpportunityByStatusProvider
 {
-    /** @var ManagerRegistry */
-    protected $registry;
-
-    /** @var AclHelper */
-    protected $aclHelper;
-
-    /** @var WidgetProviderFilterManager */
-    protected $widgetProviderFilter;
-
-    /** @var DateFilterProcessor */
-    protected $dateFilterProcessor;
-
-    /** @var  CurrencyQueryBuilderTransformerInterface */
-    protected $qbTransformer;
-
     public function __construct(
-        ManagerRegistry $doctrine,
-        AclHelper $aclHelper,
-        WidgetProviderFilterManager $widgetProviderFilter,
-        DateFilterProcessor $processor,
-        CurrencyQueryBuilderTransformerInterface $qbTransformer
+        protected ManagerRegistry $registry,
+        protected AclHelper $aclHelper,
+        protected WidgetProviderFilterManager $widgetProviderFilter,
+        protected DateFilterProcessor $dateFilterProcessor,
+        protected CurrencyQueryBuilderTransformerInterface $qbTransformer,
+        protected TranslatorInterface $translator
     ) {
-        $this->registry             = $doctrine;
-        $this->aclHelper            = $aclHelper;
-        $this->widgetProviderFilter = $widgetProviderFilter;
-        $this->dateFilterProcessor  = $processor;
-        $this->qbTransformer        = $qbTransformer;
     }
 
     /**
@@ -54,19 +37,19 @@ class OpportunityByStatusProvider
      */
     public function getOpportunitiesGroupedByStatus(WidgetOptionBag $widgetOptions)
     {
-        $dateRange        = $widgetOptions->get('dateRange');
+        $dateRange = $widgetOptions->get('dateRange');
 
         /**
          * Excluded statuses will be filtered from result in method `formatResult` below.
          * Due to performance issues with `NOT IN` clause in database.
          */
         $excludedStatuses = $widgetOptions->get('excluded_statuses', []);
-        $orderBy          = $widgetOptions->get('useQuantityAsData') ? 'quantity' : 'budget';
+        $orderBy = $widgetOptions->get('useQuantityAsData') ? 'quantity' : 'budget';
 
         /** @var OpportunityRepository $opportunityRepository */
         $opportunityRepository = $this->registry->getRepository(Opportunity::class);
         $qb = $opportunityRepository->createQueryBuilder('o')
-            ->select('IDENTITY (o.status) status')
+            ->select("JSON_EXTRACT(o.serialized_data, 'status') as status")
             ->groupBy('status')
             ->orderBy($orderBy, 'DESC');
 
@@ -79,7 +62,7 @@ class OpportunityByStatusProvider
                 $budgetAmountQuery = $this->qbTransformer->getTransformSelectQuery('budgetAmount', $qb, 'o');
                 $qb->addSelect(sprintf(
                     'SUM(
-                        CASE WHEN o.status = \'won\'
+                        CASE WHEN JSON_EXTRACT(o.serialized_data, \'status\') = \'opportunity_status.won\'
                             THEN (CASE WHEN o.closeRevenueValue IS NOT NULL THEN (%1$s) ELSE 0 END)
                             ELSE (CASE WHEN o.budgetAmountValue IS NOT NULL THEN (%2$s) ELSE 0 END)
                         END
@@ -97,9 +80,9 @@ class OpportunityByStatusProvider
     }
 
     /**
-     * @param array    $result
+     * @param array $result
      * @param string[] $excludedStatuses
-     * @param string   $orderBy
+     * @param string $orderBy
      *
      * @return array
      */
@@ -127,7 +110,7 @@ class OpportunityByStatusProvider
             } else {
                 $result[] = [
                     'status' => $statusKey,
-                    'label'  => $statusLabel,
+                    'label' => $statusLabel,
                     $orderBy => 0
                 ];
             }
@@ -136,20 +119,24 @@ class OpportunityByStatusProvider
         return $result;
     }
 
-    /**
-     * @return array
-     */
-    protected function getAvailableOpportunityStatuses()
+    protected function getAvailableOpportunityStatuses(): array
     {
-        /** @var EnumValueRepository $statusesRepository */
-        $statusesRepository = $this->registry->getRepository(
-            ExtendHelper::buildEnumValueClassName('opportunity_status')
-        );
+        /** @var EnumOptionRepository $statusesRepository */
+        $statusesRepository = $this->registry->getRepository(EnumOption::class);
         $statuses = $statusesRepository->createQueryBuilder('s')
-            ->select('s.id, s.name')
+            ->select('s.id')
+            ->andWhere('s.enumCode = :enumCode')
+            ->setParameter('enumCode', Opportunity::INTERNAL_STATUS_CODE)
             ->getQuery()
             ->getArrayResult();
 
-        return array_column($statuses, 'name', 'id');
+        $result = [];
+        foreach ($statuses as $status) {
+            $result[$status['id']] =  $this->translator->trans(
+                ExtendHelper::buildEnumOptionTranslationKey($status['id'])
+            );
+        }
+
+        return $result;
     }
 }

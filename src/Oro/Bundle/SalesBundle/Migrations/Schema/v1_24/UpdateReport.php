@@ -3,7 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\OutdatedExtendExtension;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
@@ -252,7 +252,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
     protected function fixFilterCriterion($def, $field, $key)
     {
         $paramOldClassName = 'Oro\Bundle\SalesBundle\Entity\LeadStatus';
-        $paramNewClassName = ExtendHelper::buildEnumValueClassName('lead_status');
+        $paramNewClassName = OutdatedExtendExtension::buildEnumValueClassName('lead_status');
         if (isset($field['criterion']['data']['params']['class'])
             && $field['criterion']['data']['params']['class'] === $paramOldClassName
             && $field['criterion']['filter'] === 'dictionary'

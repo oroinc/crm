@@ -15,8 +15,7 @@ use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
-use Oro\Bundle\EntityExtendBundle\Migration\Query\EnumDataValue;
-use Oro\Bundle\EntityExtendBundle\Migration\Query\InsertEnumValuesQuery;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
@@ -54,7 +53,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion(): string
     {
-        return 'v1_43_1';
+        return 'v1_44';
     }
 
     /**
@@ -96,7 +95,6 @@ class OroSalesBundleInstaller implements
         $this->addLeadStatusField($schema, $queries);
         $this->customerExtension->addCustomerAssociation($schema, 'orocrm_sales_b2bcustomer');
 
-        $this->addOpportunitiesByStatusIndex($schema);
         $this->addLeadOwnerToOroEmailAddress($schema);
     }
 
@@ -627,7 +625,7 @@ class OroSalesBundleInstaller implements
 
     private function addOpportunityStatusField(Schema $schema, QueryBag $queries): void
     {
-        $enumTable = $this->extendExtension->addEnumField(
+        $this->extendExtension->addEnumField(
             $schema,
             'orocrm_sales_opportunity',
             'status',
@@ -642,24 +640,23 @@ class OroSalesBundleInstaller implements
             ]
         );
 
-        $options = new OroOptions();
-        $options->set('enum', 'immutable_codes', ['in_progress', 'won', 'lost']);
-        $enumTable->addOption(OroOptions::KEY, $options);
-
-        $queries->addPostQuery(new InsertEnumValuesQuery($this->extendExtension, 'opportunity_status', [
-            new EnumDataValue('in_progress', 'Open', 1, true),
-            new EnumDataValue('identification_alignment', 'Identification & Alignment', 2),
-            new EnumDataValue('needs_analysis', 'Needs Analysis', 3),
-            new EnumDataValue('solution_development', 'Solution Development', 4),
-            new EnumDataValue('negotiation', 'Negotiation', 5),
-            new EnumDataValue('won', 'Closed Won', 6),
-            new EnumDataValue('lost', 'Closed Lost', 7)
-        ]));
+        $enumOptionIds = [
+            ExtendHelper::buildEnumOptionId('opportunity_status', 'in_progress'),
+            ExtendHelper::buildEnumOptionId('opportunity_status', 'won'),
+            ExtendHelper::buildEnumOptionId('opportunity_status', 'lost'),
+        ];
+        $schema->getTable('orocrm_sales_opportunity')
+            ->addExtendColumnOption(
+                'status',
+                'enum',
+                'immutable_codes',
+                $enumOptionIds
+            );
     }
 
     private function addLeadStatusField(Schema $schema, QueryBag $queries): void
     {
-        $enumTable = $this->extendExtension->addEnumField(
+        $this->extendExtension->addEnumField(
             $schema,
             'orocrm_sales_lead',
             'status',
@@ -667,22 +664,24 @@ class OroSalesBundleInstaller implements
             false,
             false,
             [
-                'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
-                'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
-                'dataaudit' => ['auditable' => true],
-                'importexport' => ['order' => 90, 'short' => true]
+               'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
+               'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
+               'dataaudit' => ['auditable' => true],
+               'importexport' => ['order' => 90, 'short' => true]
             ]
         );
-
-        $options = new OroOptions();
-        $options->set('enum', 'immutable_codes', ['new', 'qualified', 'canceled']);
-        $enumTable->addOption(OroOptions::KEY, $options);
-
-        $queries->addPostQuery(new InsertEnumValuesQuery($this->extendExtension, 'lead_status', [
-            new EnumDataValue('new', 'New', 1, true),
-            new EnumDataValue('qualified', 'Qualified', 2),
-            new EnumDataValue('canceled', 'Disqualified', 3)
-        ]));
+        $enumOptionIds = [
+            ExtendHelper::buildEnumOptionId('lead_status', 'new'),
+            ExtendHelper::buildEnumOptionId('lead_status', 'qualified'),
+            ExtendHelper::buildEnumOptionId('lead_status', 'canceled'),
+        ];
+        $schema->getTable('orocrm_sales_lead')
+            ->addExtendColumnOption(
+                'status',
+                'enum',
+                'immutable_codes',
+                $enumOptionIds
+            );
     }
 
     /**
@@ -811,18 +810,6 @@ class OroSalesBundleInstaller implements
             ['country_code'],
             ['iso2_code'],
             ['onDelete' => null, 'onUpdate' => null]
-        );
-    }
-
-    /**
-     * Add opportunity 'opportunities_by_status_idx' index, used to speedup 'Opportunity By Status' widget
-     */
-    private function addOpportunitiesByStatusIndex(Schema $schema): void
-    {
-        $table = $schema->getTable('orocrm_sales_opportunity');
-        $table->addIndex(
-            ['organization_id', 'status_id', 'close_revenue_value', 'budget_amount_value', 'created_at'],
-            'opportunities_by_status_idx'
         );
     }
 

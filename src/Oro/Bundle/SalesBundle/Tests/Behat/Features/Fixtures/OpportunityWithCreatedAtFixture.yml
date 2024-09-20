@@ -12,7 +12,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
         name: 'Opportunity'
         customerAssociation: '@customer'
         organization: '@organization'
-        status: '@opportunity_status_in_progress'
+        status: '@opportunity_status.in_progress'
         owner: '@admin'
         budgetAmountCurrency: USD
         budgetAmountValue: 50.00

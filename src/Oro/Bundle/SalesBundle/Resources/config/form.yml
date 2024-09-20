@@ -3,7 +3,7 @@ services:
         class: Oro\Bundle\SalesBundle\Form\Type\OpportunityType
         arguments:
             - '@oro_sales.provider.probability'
-            - '@oro_entity_extend.enum_value_provider'
+            - '@oro_entity_extend.enum_options_provider'
             - '@oro_entity_extend.enum_type_helper'
             - '@oro_sales.builder.opportunity_relations'
         tags:
@@ -194,7 +194,7 @@ services:
 
     oro_sales.lead_mailbox_process_source.type:
         class: Oro\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSourceType
-        arguments:  ["@oro_entity_extend.enum_value_provider"]
+        arguments:  ["@oro_entity_extend.enum_options_provider"]
         tags:
             - { name: form.type, alias: oro_sales_lead_mailbox_process_source }
 
@@ -231,21 +231,21 @@ services:
     oro_sales.type.widget_oppotunity_status_select:
         class: Oro\Bundle\SalesBundle\Form\Type\WidgetOpportunityStatusSelectType
         arguments:
-            - '@oro_entity_extend.enum_value_provider'
+            - '@oro_entity_extend.enum_options_provider'
         tags:
             - { name: form.type, alias: oro_type_widget_opportunity_status_select }
 
     oro_sales.type.lead_source_select:
         class: Oro\Bundle\SalesBundle\Form\Type\LeadSourceSelectType
         arguments:
-            - '@oro_entity_extend.enum_value_provider'
+            - '@oro_entity_extend.enum_options_provider'
         tags:
             - { name: form.type, alias: oro_type_widget_lead_source_select }
 
     oro_sales.type.lead_status_select:
         class: Oro\Bundle\SalesBundle\Form\Type\LeadStatusSelectType
         arguments:
-           - '@oro_entity_extend.enum_value_provider'
+           - '@oro_entity_extend.enum_options_provider'
         tags:
             - { name: form.type, alias: oro_type_widget_lead_status_select }
 

@@ -7,9 +7,9 @@ Oro\Bundle\TaskBundle\Entity\TaskPriority:
     label: test
     order: 1
 
-Extend\Entity\EV_Task_Status:
+Oro\Bundle\EntityExtendBundle\Entity\EnumOption:
   testStatus:
-    __construct: [test, test]
+    __construct: ['task_status', 'test', 'test']
 
 Oro\Bundle\TaskBundle\Entity\Task:
   task-{1..30}:

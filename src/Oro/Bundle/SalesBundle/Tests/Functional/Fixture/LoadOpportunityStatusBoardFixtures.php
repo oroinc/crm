@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
@@ -40,8 +41,8 @@ class LoadOpportunityStatusBoardFixtures extends AbstractFixture implements Depe
             $opportunity->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
             $statusName = $opportunityStatuses[$i % self::STATUSES_COUNT];
             $opportunity->setStatus($manager->getReference(
-                ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
-                $statusName
+                EnumOption::class,
+                ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, $statusName)
             ));
             $manager->persist($opportunity);
             $manager->flush();

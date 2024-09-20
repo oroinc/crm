@@ -6,7 +6,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ObjectManager;
-use Oro\Bundle\ConfigBundle\Config\GlobalScopeManager;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\DistributionBundle\Handler\ApplicationState;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
@@ -62,18 +62,18 @@ WHERE c.status = :status AND e.name IN(:classes);
 SQL;
         $params = [
             'classes' => array_keys($this->featuresClasses),
-            'status'  => true,
+            'status' => true,
         ];
         $types = [
             'classes' => Connection::PARAM_STR_ARRAY,
-            'status'  => Types::BOOLEAN,
+            'status' => Types::BOOLEAN,
         ];
 
         $entities = $this->getConnection()
             ->executeQuery($query, $params, $types)
             ->fetchNumeric();
 
-        return array_map('current', $entities);
+        return false !== $entities ? array_map('current', $entities) : [];
     }
 
     protected function clearChannelsConfigurations(): void
@@ -92,7 +92,7 @@ SQL;
         );
     }
 
-    protected function getConfigManager(): GlobalScopeManager
+    protected function getConfigManager(): ConfigManager
     {
         return $this->container->get('oro_config.global');
     }

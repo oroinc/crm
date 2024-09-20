@@ -35,13 +35,13 @@ class Configuration implements ConfigurationInterface
             ->end();
 
         $defaults = [
-            'in_progress'               => 0,
-            'identification_alignment'  => 0.1,
-            'needs_analysis'            => 0.2,
-            'solution_development'      => 0.5,
-            'negotiation'               => 0.8,
-            'won'                       => 1,
-            'lost'                      => 0,
+            'opportunity_status.in_progress'               => 0,
+            'opportunity_status.identification_alignment'  => 0.1,
+            'opportunity_status.needs_analysis'            => 0.2,
+            'opportunity_status.solution_development'      => 0.5,
+            'opportunity_status.negotiation'               => 0.8,
+            'opportunity_status.won'                       => 1,
+            'opportunity_status.lost'                      => 0,
         ];
 
         SettingsBuilder::append(

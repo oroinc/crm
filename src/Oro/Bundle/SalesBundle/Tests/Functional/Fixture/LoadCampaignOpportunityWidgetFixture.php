@@ -9,6 +9,7 @@ use Oro\Bundle\CampaignBundle\Entity\Campaign;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
@@ -103,8 +104,8 @@ class LoadCampaignOpportunityWidgetFixture extends AbstractFixture implements De
         $opportunity = new Opportunity();
         $opportunity->setName(sprintf('Test Opportunity #%d', ++$this->opportunityCount));
         $opportunity->setStatus(
-            $manager->getRepository(ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE))
-                ->find(ExtendHelper::buildEnumValueId($status))
+            $manager->getRepository(EnumOption::class)
+                ->find(ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, $status))
         );
         $opportunity->setLead($lead);
         if (null !== $closeRevenue) {

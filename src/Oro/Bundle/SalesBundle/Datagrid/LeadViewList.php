@@ -6,6 +6,9 @@ use Oro\Bundle\DataGridBundle\Entity\GridView;
 use Oro\Bundle\DataGridBundle\Extension\GridViews\AbstractViewsList;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\EnumFilterType;
 
+/**
+ * View list for leads.
+ */
 class LeadViewList extends AbstractViewsList
 {
     protected $systemViews =  [
@@ -18,7 +21,7 @@ class LeadViewList extends AbstractViewsList
             'filters'       => [
                 'status' => [
                     'type'  => EnumFilterType::TYPE_NOT_IN,
-                    'value' => ['qualified', 'canceled']
+                    'value' => ['lead_status.qualified', 'lead_status.canceled']
                 ]
             ],
             'sorters'       => [],

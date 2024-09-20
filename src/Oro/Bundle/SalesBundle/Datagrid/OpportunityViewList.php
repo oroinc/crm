@@ -7,6 +7,9 @@ use Oro\Bundle\DataGridBundle\Extension\GridViews\AbstractViewsList;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\EnumFilterType;
 
+/**
+ * View list for Opportunity.
+ */
 class OpportunityViewList extends AbstractViewsList
 {
     protected $systemViews =  [
@@ -19,7 +22,7 @@ class OpportunityViewList extends AbstractViewsList
             'filters'       => [
                 'status' => [
                     'type'  => EnumFilterType::TYPE_NOT_IN,
-                    'value' => ['lost', 'won']
+                    'value' => ['opportunity_status.lost', 'opportunity_status.won']
                 ]
             ],
             'sorters'       => [],
@@ -37,7 +40,7 @@ class OpportunityViewList extends AbstractViewsList
                 ],
                 'status' => [
                     'type'  => EnumFilterType::TYPE_NOT_IN,
-                    'value' => ['lost', 'won']
+                    'value' => ['opportunity_status.lost', 'opportunity_status.won']
                 ]
             ],
             'sorters'       => [
@@ -58,7 +61,7 @@ class OpportunityViewList extends AbstractViewsList
                 ],
                 'status' => [
                     'type'  => EnumFilterType::TYPE_IN,
-                    'value' => ['won']
+                    'value' => ['opportunity_status.won']
                 ]
             ],
             'sorters'       => [

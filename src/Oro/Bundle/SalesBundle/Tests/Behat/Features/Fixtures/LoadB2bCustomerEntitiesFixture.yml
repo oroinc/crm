@@ -93,7 +93,7 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         customerAssociation: '@sales_customer_b2b_1'
         firstName: 'B2b ContactFN1'
         lastName: 'B2b ContactLN1'
-        status: '@lead_status_new'
+        status: '@lead_status.new'
         owner: '@admin'
         organization: '@organization'
         addresses: ['@b2b_lead_address_1']
@@ -102,7 +102,7 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         customerAssociation: '@sales_customer_b2b_1'
         firstName: 'B2b ContactFN2'
         lastName: 'B2b ContactLN2'
-        status: '@lead_status_new'
+        status: '@lead_status.new'
         owner: '@admin'
         organization: '@organization'
         addresses: ['@b2b_lead_address_2']

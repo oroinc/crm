@@ -236,7 +236,7 @@ class LeadUpdateListTest extends RestJsonApiUpdateListTestCase
         $leadOpportunity = $lead1->getOpportunities()->first();
         self::assertEquals('New Opportunity', $leadOpportunity->getName());
         self::assertEquals('New Account 1', $leadOpportunity->getCustomerAssociation()->getAccount()->getName());
-        self::assertEquals('lost', $leadOpportunity->getStatus()->getId());
+        self::assertEquals('lost', $leadOpportunity->getStatus()->getInternalId());
 
         /** @var Lead $lead1 */
         $lead2 = $this->getEntityManager()->getRepository(Lead::class)->findOneBy(['name' => 'New Lead 2']);

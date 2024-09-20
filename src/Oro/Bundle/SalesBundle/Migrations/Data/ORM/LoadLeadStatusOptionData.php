@@ -3,27 +3,28 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 
 use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 /**
- * Loads Lead source enum options
+ * Load lead status enum options data.
  */
-class LoadLeadSourceData extends AbstractEnumFixture
+class LoadLeadStatusOptionData extends AbstractEnumFixture
 {
     protected function getData(): array
     {
         return [
-            $this->getDefaultValue() => 'Demand Generation'
+            'new' => 'New',
+            'qualified' => 'Qualified',
+            'canceled' => 'Disqualified',
         ];
     }
 
     protected function getDefaultValue(): string
     {
-        return ExtendHelper::buildEnumInternalId('Demand Generation');
+        return 'new';
     }
 
     protected function getEnumCode(): string
     {
-        return 'lead_source';
+        return 'lead_status';
     }
 }

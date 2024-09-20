@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
@@ -78,8 +79,13 @@ class LoadOpportunityStatisticsWidgetFixture extends AbstractFixture implements 
         $opportunity->setOwner($owner);
         $opportunity->setBudgetAmount(MultiCurrency::create($amount, 'USD'));
         $opportunity->setStatus(
-            $manager->getRepository(ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE))
-                ->find(ExtendHelper::buildEnumValueId($statusName))
+            $manager->getRepository(EnumOption::class)
+                ->find(
+                    ExtendHelper::buildEnumOptionId(
+                        Opportunity::INTERNAL_STATUS_CODE,
+                        ExtendHelper::buildEnumInternalId($statusName)
+                    )
+                )
         );
         $opportunity->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
 

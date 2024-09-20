@@ -2,23 +2,26 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumOptionsProvider;
 use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Select form type for Lead Mailbox Process Source.
+ */
 class LeadMailboxProcessSourceType extends AbstractType
 {
-    /** @var EnumValueProvider */
-    private $enumValueProvider;
+    /** @var EnumOptionsProvider */
+    private $enumOptionsProvider;
 
     /**
      * LeadMailboxProcessSourceType constructor.
      */
-    public function __construct(EnumValueProvider $enumValueProvider)
+    public function __construct(EnumOptionsProvider $enumOptionsProvider)
     {
-        $this->enumValueProvider = $enumValueProvider;
+        $this->enumOptionsProvider = $enumOptionsProvider;
     }
 
     /**
@@ -41,7 +44,7 @@ class LeadMailboxProcessSourceType extends AbstractType
      */
     protected function getChoices()
     {
-        return $this->enumValueProvider->getEnumChoicesByCode('lead_source');
+        return $this->enumOptionsProvider->getEnumChoicesByCode('lead_source');
     }
 
     /**

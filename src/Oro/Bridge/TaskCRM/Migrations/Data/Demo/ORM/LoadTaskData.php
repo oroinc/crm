@@ -10,6 +10,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\TaskBundle\Entity\Task;
@@ -116,7 +117,8 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
 
         $accounts = $manager->getRepository(Account::class)->findAll();
         $contacts = $manager->getRepository(Contact::class)->findAll();
-        $status = $manager->getRepository(ExtendHelper::buildEnumValueClassName('task_status'))->find('open');
+        $status = $manager->getRepository(EnumOption::class)
+            ->find(ExtendHelper::buildEnumOptionId('task_status', 'open'));
 
         for ($i = 0; $i < self::FIXTURES_COUNT; ++$i) {
             /** @var User $assignedTo */

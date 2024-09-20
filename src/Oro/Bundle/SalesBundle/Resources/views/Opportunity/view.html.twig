@@ -58,7 +58,7 @@
     {{ parent() }}
     {% if entity.status and is_granted('VIEW', entity, 'status') %}
         <span class="page-title__status">
-            {{ UI.badge(entity.status.name, entity.status.id != 'lost' ? 'enabled' : 'disabled') }}
+            {{ UI.badge(entity.status.id|trans_enum, entity.status.internalId != 'lost' ? 'enabled' : 'disabled')  }}
         </span>
     {% endif %}
 {% endblock breadcrumbs %}

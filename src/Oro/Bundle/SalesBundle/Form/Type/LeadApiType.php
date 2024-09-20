@@ -2,10 +2,14 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\EntityExtendBundle\Form\Type\EnumSelectType;
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * The form type for Lead entity for API only.
+ */
 class LeadApiType extends LeadType
 {
     /**
@@ -15,6 +19,11 @@ class LeadApiType extends LeadType
     {
         parent::buildForm($builder, $options);
         $builder->addEventSubscriber(new PatchSubscriber());
+        if ($builder->has('status')) {
+            $options = $builder->get('status')->getOptions();
+            $options['choice_value'] = 'internalId';
+            $builder->add('status', EnumSelectType::class, $options);
+        }
     }
 
     /**

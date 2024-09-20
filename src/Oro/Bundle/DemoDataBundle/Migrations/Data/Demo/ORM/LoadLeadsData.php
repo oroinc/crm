@@ -8,6 +8,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Lead;
@@ -99,7 +100,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     private function loadSources(ObjectManager $manager): void
     {
-        $sources = $manager->getRepository(ExtendHelper::buildEnumValueClassName('lead_source'))->findAll();
+        $sources = $manager->getRepository(EnumOption::class)
+            ->findBy(['enumCode' => 'lead_source']);
         $randomSource = \count($sources) - 1;
         $leads = $manager->getRepository(Lead::class)->findAll();
         foreach ($leads as $lead) {
@@ -119,9 +121,12 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         array $countries
     ): Lead {
         $lead = new Lead();
-
-        $className = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
-        $defaultStatus = $manager->getRepository($className)->find(ExtendHelper::buildEnumValueId('new'));
+        $defaultStatus = $manager->getRepository(EnumOption::class)->find(
+            ExtendHelper::buildEnumOptionId(
+                Lead::INTERNAL_STATUS_CODE,
+                ExtendHelper::buildEnumInternalId('new')
+            )
+        );
 
         $lead->setStatus($defaultStatus);
         $lead->setName($data['Company']);

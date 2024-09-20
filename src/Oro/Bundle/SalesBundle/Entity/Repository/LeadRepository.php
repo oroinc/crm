@@ -44,7 +44,10 @@ class LeadRepository extends EntityRepository
     {
         $qb = $this->createLeadsCountQb(null, null);
         $qb->andWhere(
-            $qb->expr()->notIn('l.status', ['qualified', 'canceled'])
+            $qb->expr()->notIn(
+                "JSON_EXTRACT(l.serialized_data, 'status')",
+                ['lead_status.qualified', 'lead_status.canceled']
+            )
         );
 
         return $qb;

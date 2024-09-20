@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\ImportExport\TemplateFixture;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
@@ -73,9 +74,8 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setNameSuffix('Jr.');
 
                 $statusName = 'New';
-                $className = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
-                $id = ExtendHelper::buildEnumValueId($statusName);
-                $entity->setStatus(new $className($id, $statusName));
+                $internalId = ExtendHelper::buildEnumInternalId($statusName);
+                $entity->setStatus(new EnumOption(Lead::INTERNAL_STATUS_CODE, $statusName, $internalId));
 
                 $entity->setJobTitle('Manager');
                 $entity->addPhone(new LeadPhone('585-255-1127'));

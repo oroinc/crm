@@ -137,7 +137,7 @@ class OpportunityStatusConfigType extends AbstractType
             if (empty($id)) {
                 // enum_option is just added and still does not have a generated id
                 // we generate one, because we bind before the option is persisted
-                $id = ExtendHelper::buildEnumValueId($enum_option['label']);
+                $id = ExtendHelper::buildEnumInternalId($enum_option['label']);
             }
 
             $value[$id] = isset($enum_option['probability']) ? $enum_option['probability'] : null;

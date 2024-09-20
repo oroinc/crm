@@ -421,8 +421,8 @@ dashboards:
                             placeholder:  oro.sales.dashboard.opportunities_list.excluded_statuses.placeholder
                     converter_attributes:
                         default_selected:
-                            - won
-                            - lost
+                            - opportunity_status.won
+                            - opportunity_status.lost
                 sortBy:
                     type: Oro\Bundle\DashboardBundle\Form\Type\WidgetSortByType
                     show_on_widget: true
@@ -459,8 +459,8 @@ dashboards:
                             placeholder:  oro.sales.dashboard.leads_list.excluded_statuses.placeholder
                     converter_attributes:
                         default_selected:
-                            - canceled
-                            - qualified
+                            - lead_status.canceled
+                            - lead_status.qualified
                 sortBy:
                     type: Oro\Bundle\DashboardBundle\Form\Type\WidgetSortByType
                     show_on_widget: true

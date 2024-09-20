@@ -13,9 +13,9 @@ Feature: Unidirectional entity relations created via UI
     And I click view Lead in grid
     And I click "Create field"
     And I fill form with:
-      | Field name   | TestField    |
-      | Storage type | Table column |
-      | Type         | Select       |
+      | Field name   | TestField        |
+      | Storage type | Serialized field |
+      | Type         | Select           |
     And I click "Continue"
     And set Options with:
       | Label   |
@@ -23,8 +23,6 @@ Feature: Unidirectional entity relations created via UI
       | Option2 |
     And I save and close form
     Then I should see "Field saved" flash message
-    When I click update schema
-    Then I should see Schema updated flash message
 
   Scenario: Update value of field for Lead entity
     Given I go to Sales/ Leads

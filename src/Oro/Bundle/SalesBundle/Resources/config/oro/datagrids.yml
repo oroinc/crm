@@ -23,7 +23,6 @@ datagrids:
                     - o.closeRevenueValue  as closeRevenue
                     - o.budgetAmountCurrency as budgetAmountCurrency
                     - o.closeRevenueCurrency as closeRevenueCurrency
-                    - IDENTITY(o.status) as status
                     - CONCAT_WS(' ', contactAlias.firstName, contactAlias.lastName) as contactName
                     - contactAlias.id as contact
                     - closeReason.label as closeReasonLabel
@@ -102,7 +101,8 @@ datagrids:
             status:
                 label:         oro.sales.opportunity.status.label
                 frontend_type: select
-                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+                data_name: status
+                choices: "@oro_entity_extend.enum_options_provider->getEnumChoicesByCode('opportunity_status')"
                 translatable_options: false
             primaryEmail:
                 label:         oro.contact.email.label
@@ -145,7 +145,7 @@ datagrids:
                 probability:
                     data_name: o.probability
                 status:
-                    data_name: o.status
+                    data_name: status
                 primaryEmail:
                     data_name: o.contact
                 ownerName:
@@ -255,7 +255,8 @@ datagrids:
                     type: percent
                     data_name: o.probability
                 status:
-                    type:      enum
+                    label: oro.sales.opportunity.status.label
+                    type: enum
                     data_name: status
                     enum_code: opportunity_status
                 primaryEmail:
@@ -338,8 +339,6 @@ datagrids:
                     - l.numberOfEmployees
                     - l.twitter
                     - l.linkedIn
-                    - IDENTITY(l.source) as source
-                    - IDENTITY(l.status) as status
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                     - address.city as addressCity
@@ -377,8 +376,9 @@ datagrids:
                 label:         oro.sales.lead.name.label
             status:
                 label:         oro.sales.lead.status.label
+                data_name: status
                 frontend_type: select
-                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+                choices: "@oro_entity_extend.enum_options_provider->getEnumChoicesByCode('lead_status')"
                 translatable_options: false
             firstName:
                 label:         oro.sales.lead.first_name.label
@@ -410,7 +410,7 @@ datagrids:
             source:
                 label:         oro.sales.lead.source.label
                 frontend_type: select
-                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_source')"
+                choices: "@oro_entity_extend.enum_options_provider->getEnumChoicesByCode('lead_source')"
                 translatable_options: false
                 renderable: false
             email:
@@ -1045,7 +1045,6 @@ datagrids:
                     - l.createdAt
                     - email.email
                     - phone.phone
-                    - s.id as status
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                     - >
@@ -1060,7 +1059,6 @@ datagrids:
                     - { table: Oro\Bundle\SalesBundle\Entity\Lead, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: s }
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: l.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
                         - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -1142,7 +1140,7 @@ datagrids:
             status:
                 frontend_type: select
                 label:         oro.sales.lead.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+                choices:       "@oro_entity_extend.enum_options_provider->getEnumChoicesByCode('lead_status')"
                 translatable_options: false
             firstName:
                 label:         oro.sales.lead.first_name.label
@@ -1222,14 +1220,12 @@ datagrids:
                     - o.budgetAmountValue as budgetAmount
                     - o.budgetAmountCurrency as budgetAmountCurrency
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
-                    - s.id as status
                     - email.email as primaryEmail
                 from:
                     - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 join:
                     left:
                         - { join: o.contact , alias: contact }
-                        - { join: o.status, alias: s }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
         filters:
             columns:
@@ -1351,7 +1347,7 @@ datagrids:
             status:
                 frontend_type: select
                 label:         oro.sales.opportunity.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+                choices:       "@oro_entity_extend.enum_options_provider->getEnumChoicesByCode('opportunity_status')"
                 translatable_options: false
             primaryEmail:
                 label:         oro.contact.email.label
@@ -1394,12 +1390,10 @@ datagrids:
                     - l.firstName
                     - l.lastName
                     - email.email
-                    - s.id as status
                 from:
                     - { table: Oro\Bundle\SalesBundle\Entity\Lead, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: s }
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
             hints:
                 - HINT_TRANSLATABLE
@@ -1411,7 +1405,7 @@ datagrids:
             status:
                 frontend_type: select
                 label:         oro.sales.lead.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+                choices:       "@oro_entity_extend.enum_options_provider->getEnumChoicesByCode('lead_status')"
                 translatable_options: false
             firstName:
                 label:         oro.sales.lead.first_name.label
@@ -1475,7 +1469,6 @@ datagrids:
                     - o.name
                     - o.createdAt
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
-                    - s.id as status
                     - email.email as primaryEmail
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
@@ -1483,7 +1476,6 @@ datagrids:
                 join:
                     left:
                         - { join: o.contact , alias: contact }
-                        - { join: o.status, alias: s }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.owner, alias: owner }
         columns:
@@ -1494,8 +1486,9 @@ datagrids:
             status:
                 frontend_type: select
                 label:         oro.sales.opportunity.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+                choices:       "@oro_entity_extend.enum_options_provider->getEnumChoicesByCode('opportunity_status')"
                 translatable_options: false
+                data_name: status
             primaryEmail:
                 label:         oro.contact.email.label
             ownerName:
@@ -1508,7 +1501,7 @@ datagrids:
                 name:
                     data_name: o.name
                 statusLabel:
-                    data_name: o.status
+                    data_name: s.id
                 primaryEmail:
                     data_name: o.contact
                 ownerName:
@@ -1617,14 +1610,10 @@ datagrids:
                     - o.name
                     - o.budgetAmountValue as budgetAmount
                     - o.budgetAmountCurrency as budgetAmountCurrency
-                    - s.id as status
                     - o.probability
                     - o.closeDate
                 from:
                     - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
-                join:
-                    left:
-                        - { join: o.status, alias: s }
         columns:
             name:
                 label: oro.sales.opportunity.name.label
@@ -1645,8 +1634,9 @@ datagrids:
             status:
                 frontend_type: select
                 label:         oro.sales.opportunity.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+                choices:       "@oro_entity_extend.enum_options_provider->getEnumChoicesByCode('opportunity_status')"
                 translatable_options: false
+                data_name: status
             probability:
                 label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
@@ -1660,7 +1650,7 @@ datagrids:
                 budgetAmount:
                     data_name: o.budgetAmountValue
                 status:
-                    data_name: o.status
+                    data_name: status
                 probability:
                     data_name: o.probability
                 closeDate:
@@ -1684,12 +1674,8 @@ datagrids:
                 select:
                     - l.id
                     - l.name
-                    - s.id as status
                 from:
                     - { table: Oro\Bundle\SalesBundle\Entity\Lead, alias: l }
-                join:
-                    left:
-                        - { join: l.status, alias: s }
         columns:
             name:
                 label: oro.sales.lead.name.label
@@ -1700,7 +1686,7 @@ datagrids:
             status:
                 frontend_type: select
                 label:         oro.sales.lead.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+                choices:       "@oro_entity_extend.enum_options_provider->getEnumChoicesByCode('lead_status')"
                 translatable_options: false
         options:
             entityHint: oro.sales.opportunity.entity_plural_label
@@ -1727,7 +1713,6 @@ datagrids:
                     - o.budgetAmountValue as budgetAmount
                     - o.budgetAmountCurrency as budgetAmountCurrency
                     - o.probability
-                    - s.id as status
                     - o.closeDate
                     - o.createdAt
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
@@ -1735,7 +1720,6 @@ datagrids:
                     - { table: Oro\Bundle\SalesBundle\Entity\Opportunity, alias: o }
                 join:
                     left:
-                        - { join: o.status, alias: s }
                         - { join: o.owner, alias: owner }
         fields_acl:
             columns:
@@ -1745,8 +1729,8 @@ datagrids:
                     data_name: o.budgetAmountValue
                 probability:
                     data_name: o.probability
-                statusLabel:
-                    data_name: o.status
+                status:
+                    data_name: status
                 closeDate:
                     data_name: o.closeDate
                 createdAt:
@@ -1832,7 +1816,7 @@ datagrids:
             status:
                 frontend_type: select
                 label:         oro.sales.opportunity.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+                choices:       "@oro_entity_extend.enum_options_provider->getEnumChoicesByCode('opportunity_status')"
                 translatable_options: false
             closeDate:
                 label:         oro.sales.opportunity.close_date.label
@@ -1888,7 +1872,7 @@ datagrids:
             status:
                 frontend_type: select
                 label:         oro.sales.lead.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+                choices:       "@oro_entity_extend.enum_options_provider->getEnumChoicesByCode('lead_status')"
                 translatable_options: false
             firstName:
                 label:         oro.sales.lead.first_name.label

@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumOptionsProvider;
 use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,12 +14,12 @@ class WidgetOpportunityStatusSelectType extends AbstractType
 {
     const NAME = 'oro_type_widget_opportunity_status_select';
 
-    /** @var EnumValueProvider */
-    protected $enumValueProvider;
+    /** @var EnumOptionsProvider */
+    protected $enumOptionsProvider;
 
-    public function __construct(EnumValueProvider $enumValueProvider)
+    public function __construct(EnumOptionsProvider $enumOptionsProvider)
     {
-        $this->enumValueProvider = $enumValueProvider;
+        $this->enumOptionsProvider = $enumOptionsProvider;
     }
 
     /**
@@ -29,7 +29,7 @@ class WidgetOpportunityStatusSelectType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'choices'  => $this->enumValueProvider->getEnumChoicesByCode('opportunity_status'),
+                'choices'  => $this->enumOptionsProvider->getEnumChoicesByCode('opportunity_status'),
                 'multiple' => true,
                 'configs'  => [
                     'allowClear' => true,

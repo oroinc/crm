@@ -4,12 +4,16 @@ namespace Oro\Bundle\SalesBundle\ImportExport\TemplateFixture;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * Opportunity demo data
+ */
 class OpportunityFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
     /**
@@ -65,9 +69,8 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
 
                 $entity->setCustomerAssociation($customer);
                 $statusName = 'in_progress';
-                $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
-                $id = ExtendHelper::buildEnumValueId($statusName);
-                $entity->setStatus(new $className($id, $statusName));
+                $internalId = ExtendHelper::buildEnumInternalId($statusName);
+                $entity->setStatus(new EnumOption(Opportunity::INTERNAL_STATUS_CODE, $statusName, $internalId));
 
                 return;
         }

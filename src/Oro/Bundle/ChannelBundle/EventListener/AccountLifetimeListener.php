@@ -11,6 +11,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\ChannelBundle\Entity\Manager\LifetimeHistoryStatusUpdateManager;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
@@ -136,12 +137,15 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
         $changeSet = $uow->getEntityChangeSet($entity);
         if ($uow->isScheduledForDelete($entity)
             || (
-                array_intersect(['closeRevenueValue', 'status', 'customerAssociation'], array_keys($changeSet))
+                array_intersect(['closeRevenueValue', 'serialized_data', 'customerAssociation'], array_keys($changeSet))
                 && (
-                    ($entity->getStatus() && $entity->getStatus()->getId() === Opportunity::STATUS_WON)
+                    ($entity->getStatus() && $entity->getStatus()->getInternalId() === Opportunity::STATUS_WON)
                     || (
-                        !empty($changeSet['status'][0])
-                        && $changeSet['status'][0]->getId() === Opportunity::STATUS_WON
+                        !empty($changeSet['serialized_data'][0]['status'])
+                        && $changeSet['serialized_data'][0]['status'] === ExtendHelper::buildEnumOptionId(
+                            Opportunity::INTERNAL_STATUS_CODE,
+                            Opportunity::STATUS_WON
+                        )
                     )
                 )
             )
@@ -192,8 +196,11 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
             ->select(sprintf('SUM(%s)', $this->getQbTransformer()->getTransformSelectQuery('closeRevenue', $qb, 'o')))
             ->join('o.customerAssociation', 'c')
             ->andWhere('c.account = :account')
-            ->andWhere('o.status = :status')
-            ->setParameter('status', Opportunity::STATUS_WON);
+            ->andWhere("JSON_EXTRACT(o.serialized_data, 'status') = :status")
+            ->setParameter(
+                'status',
+                ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, Opportunity::STATUS_WON)
+            );
 
         $noCustomerCondition = $this->createNoCustomerCondition('c');
         if ($noCustomerCondition) {

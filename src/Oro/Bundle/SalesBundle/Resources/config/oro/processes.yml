@@ -89,11 +89,11 @@ processes:
                                             email_address: $.email.fromName
                                 - '@find_entity':
                                     attribute: $.leadSource
-                                    class: Extend\Entity\EV_Lead_Source
+                                    class: Oro\Bundle\EntityExtendBundle\Entity\EnumOption
                                     identifier: $.mailbox.processSettings.source
                                 - '@request_enum_entity':
                                     enum_code: lead_status
-                                    identifier: 'new'
+                                    identifier: 'lead_status.new'
                                     attribute: $.leadStatus
                                 - '@create_entity':
                                     class: Oro\Bundle\SalesBundle\Entity\Lead

@@ -7,6 +7,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
@@ -118,7 +119,20 @@ class IndeterminateForecastProvider
         return $this->filterProcessor
             ->process(
                 $this->getOpportunityRepository()
-                    ->getForecastQB($this->qbTransformer, $alias)
+                    ->getForecastQB(
+                        $this->qbTransformer,
+                        $alias,
+                        [
+                            ExtendHelper::buildEnumOptionId(
+                                Opportunity::INTERNAL_STATUS_CODE,
+                                Opportunity::STATUS_WON
+                            ),
+                            ExtendHelper::buildEnumOptionId(
+                                Opportunity::INTERNAL_STATUS_CODE,
+                                Opportunity::STATUS_LOST
+                            )
+                        ],
+                    )
                     ->andWhere(sprintf('%s.closeDate IS NULL', $alias)),
                 'Oro\Bundle\SalesBundle\Entity\Opportunity',
                 $filters,

@@ -28,7 +28,7 @@ class LeadActionsAccessProvider
 
     public function isDisqualifyAllowed(Lead $lead): bool
     {
-        return $lead->getStatus()->getId() !== ChangeLeadStatus::STATUS_DISQUALIFY &&
+        return $lead->getStatus()->getInternalId() !== ChangeLeadStatus::STATUS_DISQUALIFY &&
                !$this->isLeadWfEnabled();
     }
 

@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumOptionsProvider;
 use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\Form\AbstractType;
@@ -13,14 +13,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class LeadStatusSelectType extends AbstractType
 {
-    const NAME = 'oro_type_widget_lead_status_select';
+    const string NAME = 'oro_type_widget_lead_status_select';
 
-    /** @var EnumValueProvider */
-    protected $enumValueProvider;
-
-    public function __construct(EnumValueProvider $enumValueProvider)
+    public function __construct(protected EnumOptionsProvider $enumOptionsProvider)
     {
-        $this->enumValueProvider = $enumValueProvider;
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -29,7 +25,7 @@ class LeadStatusSelectType extends AbstractType
 
         $resolver->setDefaults(
             [
-                'choices' => $this->enumValueProvider->getEnumChoicesByCode(Lead::INTERNAL_STATUS_CODE),
+                'choices' => $this->enumOptionsProvider->getEnumChoicesByCode(Lead::INTERNAL_STATUS_CODE),
                 'multiple' => true,
                 'configs' => [
                     'allowClear' => true,

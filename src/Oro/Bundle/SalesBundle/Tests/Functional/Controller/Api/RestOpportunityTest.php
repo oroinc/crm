@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\Api;
 
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOptionInterface;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -59,7 +59,7 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         // Because api return name of status, that can be different, assert id
-        $this->assertEquals('in_progress', $this->getStatusByLabel($result['status'])->getId());
+        $this->assertEquals('in_progress', $this->getStatusByLabel($result['status'])->getInternalId());
         // Incomplete CRM-816
         //$this->assertEquals($request['opportunity']['owner'], $result['owner']['id']);
 
@@ -92,7 +92,7 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         // Because api return name of status, that can be different, assert id
-        $this->assertEquals('in_progress', $this->getStatusByLabel($result['status'])->getId());
+        $this->assertEquals('in_progress', $this->getStatusByLabel($result['status'])->getInternalId());
 
         return $request;
     }
@@ -113,7 +113,7 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         // Because api return name of status, that can be different, assert id
-        $this->assertEquals('in_progress', $this->getStatusByLabel($result['status'])->getId());
+        $this->assertEquals('in_progress', $this->getStatusByLabel($result['status'])->getInternalId());
 
         $this->client->request('GET', $baseUrl . '?contactId=' . $request['opportunity']['contact']);
         $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
@@ -143,12 +143,12 @@ class RestOpportunityTest extends WebTestCase
         $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 
-    private function getStatusByLabel(string $statusLabel): AbstractEnumValue
+    private function getStatusByLabel(string $statusLabel): EnumOptionInterface
     {
         return $this->getContainer()
             ->get('doctrine')
             ->getManager()
-            ->getRepository(ExtendHelper::buildEnumValueClassName('opportunity_status'))
-            ->findOneBy(['name' => $statusLabel]);
+            ->getRepository(EnumOption::class)
+            ->findOneBy(['name' => $statusLabel, 'enumCode' => 'opportunity_status']);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Fixture;
 
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOptionInterface;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityStub extends Opportunity
@@ -13,7 +13,7 @@ class OpportunityStub extends Opportunity
     /** @var object|null */
     protected $dataChannel;
 
-    /** @var AbstractEnumValue */
+    /** @var EnumOptionInterface */
     private $status;
 
     /**
@@ -58,13 +58,13 @@ class OpportunityStub extends Opportunity
         $this->dataChannel = $dataChannel;
     }
 
-    public function setStatus(AbstractEnumValue $status)
+    public function setStatus(EnumOptionInterface $status)
     {
         $this->status = $status;
     }
 
     /**
-     * @return AbstractEnumValue
+     * @return EnumOptionInterface
      */
     public function getStatus()
     {

@@ -30,8 +30,8 @@ class DefaultProbabilityListener
         if (null === $entity->getStatus()) {
             return;
         }
-
-        if (!$args->hasChangedField('status')) {
+        $changeSet = $args->getEntityChangeSet();
+        if (!isset($changeSet['serialized_data'][0]['status'])) {
             return;
         }
 
@@ -46,8 +46,8 @@ class DefaultProbabilityListener
 
         $oldProbability = $probability;
 
-        if (null !== $args->getOldValue('status')) {
-            $oldProbability = $this->getDefaultProbability($args->getOldValue('status')->getId());
+        if (null !== $changeSet['serialized_data'][0]['status']) {
+            $oldProbability = $this->getDefaultProbability($changeSet['serialized_data'][0]['status']);
         }
 
         // don't change if it's already overwritten

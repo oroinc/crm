@@ -12,7 +12,7 @@ use Oro\Bundle\CurrencyBundle\Entity\MultiCurrencyHolderInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOptionInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
@@ -31,17 +31,13 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @method AbstractEnumValue getStatus()
- * @method Opportunity setStatus(AbstractEnumValue $status)
+ * @method EnumOptionInterface getStatus()
+ * @method Opportunity setStatus(EnumOptionInterface $status)
  * @mixin OroSalesBundle_Entity_Opportunity
  */
 #[ORM\Entity(repositoryClass: OpportunityRepository::class)]
 #[ORM\Table(name: 'orocrm_sales_opportunity')]
 #[ORM\Index(columns: ['created_at', 'id'], name: 'opportunity_created_idx')]
-#[ORM\Index(
-    columns: ['organization_id', 'status_id', 'close_revenue_value', 'budget_amount_value', 'created_at'],
-    name: 'opportunities_by_status_idx'
-)]
 #[ORM\HasLifecycleCallbacks]
 #[Config(
     routeName: 'oro_sales_opportunity_index',
@@ -69,10 +65,9 @@ class Opportunity implements
 {
     use ExtendEntityTrait;
 
-    const INTERNAL_STATUS_CODE = 'opportunity_status';
-
-    const STATUS_LOST = 'lost';
-    const STATUS_WON  = 'won';
+    public const INTERNAL_STATUS_CODE = 'opportunity_status';
+    public const STATUS_LOST = 'lost';
+    public const STATUS_WON  = 'won';
 
     /**
      * The key in system config for probability - status map
@@ -792,10 +787,7 @@ class Opportunity implements
         return $this->closedAt;
     }
 
-    /**
-     * @return array
-     */
-    public static function getClosedStatuses()
+    public static function getClosedStatuses(): array
     {
         return [self::STATUS_WON, self::STATUS_LOST];
     }

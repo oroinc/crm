@@ -24,9 +24,6 @@ Feature: Create Report with Enum field
       | Option2 |
     And I save and close form
     Then I should see "Field saved" flash message
-    When I click "Update schema"
-    And I click "Yes, Proceed"
-    Then I should see Schema updated flash message
 
     When go to System/User Management/Users
     And click Edit admin in grid

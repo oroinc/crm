@@ -28,27 +28,27 @@ class OpportunityStatusBoardTest extends AbstractDatagridTestCase
     public function gridProvider(): array
     {
         return [
-            'Opportunity grid'                => [
+            'Opportunity grid' => [
                 [
-                    'gridParameters'      => [
+                    'gridParameters' => [
                         'gridName' => 'sales-opportunity-grid',
                         'sales-opportunity-grid[_pager][_per_page]' => 10,
                     ],
-                    'gridFilters'         => [],
-                    'assert'              => [],
+                    'gridFilters' => [],
+                    'assert' => [],
                     'expectedResultCount' => 10
                 ],
             ],
             'Opportunity status board' => [
                 [
-                    'gridParameters'      => [
+                    'gridParameters' => [
                         'gridName' => 'sales-opportunity-grid',
                         'sales-opportunity-grid[_appearance][_type]' => 'board',
                         'sales-opportunity-grid[_appearance][_data][id]' => 'opportunity-by-status',
                         'sales-opportunity-grid[_pager][_per_page]' => 25,
                     ],
-                    'gridFilters'         => [],
-                    'assert'              => [],
+                    'gridFilters' => [],
+                    'assert' => [],
                     'expectedResultCount' => 25
                 ],
             ],
