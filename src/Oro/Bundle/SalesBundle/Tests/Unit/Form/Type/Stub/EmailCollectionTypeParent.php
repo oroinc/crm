@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 
 class EmailCollectionTypeParent extends AbstractType
 {
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'test_email_entity';

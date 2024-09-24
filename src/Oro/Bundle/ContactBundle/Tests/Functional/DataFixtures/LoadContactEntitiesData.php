@@ -43,17 +43,13 @@ class LoadContactEntitiesData extends AbstractFixture implements DependentFixtur
         ],
     ];
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganization::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $user = $manager->getRepository(User::class)->findOneByUsername(self::$owner);

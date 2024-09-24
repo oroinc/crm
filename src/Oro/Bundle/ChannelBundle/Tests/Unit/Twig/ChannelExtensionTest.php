@@ -22,6 +22,7 @@ class ChannelExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelExtension */
     private $extension;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->metadataProvider = $this->createMock(MetadataProvider::class);

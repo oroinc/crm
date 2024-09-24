@@ -30,9 +30,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
     private const UPDATE_LIFETIME_READ_BATCH_SIZE = 1000;
     private const UPDATE_LIFETIME_WRITE_BATCH_SIZE = 200;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganizationAndBusinessUnitData::class];

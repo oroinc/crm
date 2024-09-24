@@ -11,6 +11,7 @@ class EmailHolderHelperConfigPassTest extends \PHPUnit\Framework\TestCase
     /** @var EmailHolderHelperConfigPass */
     private $compiler;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->compiler = new EmailHolderHelperConfigPass();

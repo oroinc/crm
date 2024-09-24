@@ -11,9 +11,7 @@ class OpportunityPhoneProvider implements PhoneProviderInterface, RootPhoneProvi
     /** @var PhoneProviderInterface */
     protected $rootProvider;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function setRootProvider(PhoneProviderInterface $rootProvider)
     {
         $this->rootProvider = $rootProvider;
@@ -26,6 +24,7 @@ class OpportunityPhoneProvider implements PhoneProviderInterface, RootPhoneProvi
      *
      * @return string|null
      */
+    #[\Override]
     public function getPhoneNumber($object)
     {
         $contact = $object->getContact();
@@ -43,6 +42,7 @@ class OpportunityPhoneProvider implements PhoneProviderInterface, RootPhoneProvi
      *
      * @return array of [phone number, phone owner]
      */
+    #[\Override]
     public function getPhoneNumbers($object)
     {
         $contact = $object->getContact();

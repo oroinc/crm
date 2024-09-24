@@ -11,9 +11,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
  */
 class BusinessCustomerSearchHandler extends ChannelLimitationHandler
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function convertItem($item)
     {
         $result = [];
@@ -53,9 +51,7 @@ class BusinessCustomerSearchHandler extends ChannelLimitationHandler
         return sprintf('%s (%s)', $customerName, $accountName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getEntitiesByIds(array $entityIds)
     {
         /** @var QueryBuilder $queryBuilder */

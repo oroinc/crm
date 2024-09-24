@@ -12,9 +12,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
  */
 class MakeLabelLocalizableMigration implements Migration
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->createOrocrmContactReasonTitlesTable($schema);

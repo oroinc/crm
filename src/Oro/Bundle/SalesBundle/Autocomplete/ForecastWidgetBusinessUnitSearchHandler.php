@@ -36,6 +36,7 @@ class ForecastWidgetBusinessUnitSearchHandler extends SearchHandler
      * @param int    $maxResults
      * @return array
      */
+    #[\Override]
     protected function searchIds($search, $firstResult, $maxResults)
     {
         $ids = [];

@@ -22,6 +22,7 @@ class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
     /** @var LeadToOpportunityProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $entityFieldProvider = $this->createMock(EntityFieldProvider::class);

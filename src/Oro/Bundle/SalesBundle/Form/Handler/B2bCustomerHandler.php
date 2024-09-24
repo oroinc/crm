@@ -26,9 +26,7 @@ class B2bCustomerHandler implements FormHandlerInterface
         $this->requestChannelProvider = $requestChannelProvider;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function process($entity, FormInterface $form, Request $request)
     {
         $this->requestChannelProvider->setDataChannel($entity);

@@ -13,6 +13,7 @@ class LoadB2bCustomerEmailData extends AbstractFixture implements DependentFixtu
     const SECOND_ENTITY_NAME = 'test2@test.test';
     const THIRD_ENTITY_NAME  = 'test3@test.test';
 
+    #[\Override]
     public function getDependencies()
     {
         return [
@@ -38,9 +39,7 @@ class LoadB2bCustomerEmailData extends AbstractFixture implements DependentFixtu
         ]
     ];
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $customer = $this->getReference('B2bCustomer_' . LoadB2bCustomerEntitiesData::FIRST_ENTITY_NAME);

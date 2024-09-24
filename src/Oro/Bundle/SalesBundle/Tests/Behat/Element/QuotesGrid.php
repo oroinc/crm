@@ -16,9 +16,7 @@ class QuotesGrid extends Grid implements GridMappedChildInterface
         return $this->getRows();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getMappedChildElementName($name)
     {
         return $name;

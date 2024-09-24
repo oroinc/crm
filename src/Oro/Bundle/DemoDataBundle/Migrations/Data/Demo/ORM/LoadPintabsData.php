@@ -27,17 +27,13 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadUserData::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $navigationFactory = $this->container->get('oro_navigation.item.factory');

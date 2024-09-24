@@ -47,17 +47,13 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
         $this->activityContactProvider = $activityContactProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function execute(LoggerInterface $logger)
     {
         $this->addActivityContactColumns($logger);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDescription()
     {
         $logger = new ArrayLogger();

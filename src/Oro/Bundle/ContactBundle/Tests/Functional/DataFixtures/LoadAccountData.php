@@ -17,9 +17,7 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
 
     protected $names = ['first', 'second'];
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
@@ -28,6 +26,7 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
     /**
      * Load Accounts
      */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         foreach ($this->names as $name) {

@@ -16,17 +16,13 @@ use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractUpdatePermissions;
  */
 class UpdateIntegrationAccessLevels extends AbstractUpdatePermissions implements DependentFixtureInterface
 {
-    /**
-     * {@inheriDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadRolesData::class];
     }
 
-    /**
-     * {@inheriDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         if (!$this->container->get(ApplicationState::class)->isInstalled()) {

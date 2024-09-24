@@ -33,6 +33,7 @@ class LeadAddressTest extends RestJsonApiTestCase
     private const ANOTHER_OWNER_REF             = 'another_lead';
     private const ANOTHER_OWNER_ADDRESS_2_REF   = 'another_lead_address2';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

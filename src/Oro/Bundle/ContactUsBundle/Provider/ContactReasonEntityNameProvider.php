@@ -12,9 +12,7 @@ use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
  */
 class ContactReasonEntityNameProvider implements EntityNameProviderInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getName($format, $locale, $entity)
     {
         if (!$entity instanceof ContactReason) {
@@ -28,9 +26,7 @@ class ContactReasonEntityNameProvider implements EntityNameProviderInterface
         return $localizedTitle ?: (string)$entity->getDefaultTitle();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getNameDQL($format, $locale, $className, $alias)
     {
         if (!is_a($className, ContactReason::class, true)) {

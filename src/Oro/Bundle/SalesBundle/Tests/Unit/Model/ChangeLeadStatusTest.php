@@ -20,6 +20,7 @@ class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
     /** @var ChangeLeadStatus */
     private $model;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->entityManager = $this->createMock(EntityManager::class);

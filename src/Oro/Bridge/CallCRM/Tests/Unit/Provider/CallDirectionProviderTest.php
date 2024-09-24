@@ -15,6 +15,7 @@ class CallDirectionProviderTest extends \PHPUnit\Framework\TestCase
     /** @var CallDirectionProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->activityManager = $this->createMock(ActivityManager::class);

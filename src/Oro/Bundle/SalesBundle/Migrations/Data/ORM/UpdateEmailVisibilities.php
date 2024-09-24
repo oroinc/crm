@@ -16,9 +16,7 @@ class UpdateEmailVisibilities extends AbstractFixture implements ContainerAwareI
 {
     use ContainerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         if (!$this->container->get(ApplicationState::class)->isInstalled()) {

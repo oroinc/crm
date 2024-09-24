@@ -14,17 +14,13 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
  */
 class UpdateSalesEntitiesWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganizationAndBusinessUnitData::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $this->update($manager, Lead::class);

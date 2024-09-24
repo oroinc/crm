@@ -14,17 +14,13 @@ class RemoveWorkflowFields implements Migration, OrderedMigrationInterface
 {
     use RemoveWorkflowFieldsTrait;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getOrder()
     {
         return 100;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         //workflow now has no direct relations

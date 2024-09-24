@@ -20,8 +20,8 @@ class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionA
     /**
      * Changes account_id to onDelete=CASCADE
      *
-     * {@inheritdoc}
      */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->convertToExtendExtension->manyToOneRelation(

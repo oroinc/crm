@@ -18,25 +18,19 @@ use Oro\Bundle\SalesBundle\Entity\LeadPhone;
  */
 class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEntityClass()
     {
         return 'Oro\Bundle\SalesBundle\Entity\Lead';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getData()
     {
         return $this->getEntityData('Jerry Coleman');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function createEntity($key)
     {
         return new Lead();
@@ -46,6 +40,7 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
      * @param string $key
      * @param Lead   $entity
      */
+    #[\Override]
     public function fillEntityData($key, $entity)
     {
         $userRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');

@@ -9,9 +9,7 @@ use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationProvide
 
 class AccountImportExportConfigurationProvider implements ImportExportConfigurationProviderInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function get(): ImportExportConfigurationInterface
     {
         return new ImportExportConfiguration([

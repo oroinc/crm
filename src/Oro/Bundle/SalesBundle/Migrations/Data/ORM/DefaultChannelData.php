@@ -20,25 +20,19 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture implements
 
     private ?string $alreadyLoadedVersion = null;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getVersion(): string
     {
         return '1.0';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function setLoadedVersion($version = null): void
     {
         $this->alreadyLoadedVersion = $version;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         if (!$this->alreadyLoadedVersion) {

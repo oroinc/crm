@@ -12,6 +12,7 @@ class AccountAttachment implements Migration, AttachmentExtensionAwareInterface
 {
     use AttachmentExtensionAwareTrait;
 
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->attachmentExtension->addAttachmentAssociation(

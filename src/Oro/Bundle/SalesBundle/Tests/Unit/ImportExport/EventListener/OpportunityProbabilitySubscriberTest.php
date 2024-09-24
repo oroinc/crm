@@ -15,6 +15,7 @@ class OpportunityProbabilitySubscriberTest extends \PHPUnit\Framework\TestCase
     /** @var OpportunityProbabilitySubscriber */
     private $subscriber;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->opportunity = new Opportunity();

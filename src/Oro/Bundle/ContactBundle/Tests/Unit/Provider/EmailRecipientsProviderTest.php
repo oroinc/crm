@@ -20,6 +20,7 @@ class EmailRecipientsProviderTest extends \PHPUnit\Framework\TestCase
     /** @var EmailRecipientsProvider */
     private $emailRecipientsProvider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->doctrine = $this->createMock(ManagerRegistry::class);

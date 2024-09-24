@@ -35,9 +35,7 @@ class AccountCustomerAssociationProvider implements ResetInterface
         $this->resourcesProvider = $resourcesProvider;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function reset()
     {
         $this->customerAssociations = [];

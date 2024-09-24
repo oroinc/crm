@@ -13,6 +13,7 @@ class ContactApiTypeTest extends \PHPUnit\Framework\TestCase
     /** @var ContactApiType */
     private $type;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->type = new ContactApiType();

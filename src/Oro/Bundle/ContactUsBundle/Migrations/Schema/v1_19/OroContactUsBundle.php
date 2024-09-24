@@ -13,9 +13,7 @@ class OroContactUsBundle implements Migration, OrderedMigrationInterface, Rename
 {
     use RenameExtensionAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_contactus_request');
@@ -31,9 +29,7 @@ class OroContactUsBundle implements Migration, OrderedMigrationInterface, Rename
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getOrder()
     {
         return 100;

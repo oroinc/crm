@@ -27,6 +27,7 @@ class LeadType extends AbstractType
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -130,6 +131,7 @@ class LeadType extends AbstractType
             ->add('linkedIn', TextType::class, array('required' => false, 'label' => 'oro.sales.lead.linked_in.label'));
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -147,9 +149,7 @@ class LeadType extends AbstractType
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'oro_sales_lead';

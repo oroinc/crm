@@ -26,9 +26,7 @@ class ContactPhoneDeleteHandlerExtension extends AbstractEntityDeleteHandlerExte
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function assertDeleteGranted($entity): void
     {
         /** @var ContactPhone $entity */

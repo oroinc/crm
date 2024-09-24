@@ -11,6 +11,7 @@ use Oro\Bundle\UIBundle\Tests\Functional\Stub\PlaceholderConfigurationProviderDe
 
 class AccountControllerTest extends WebTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient([], self::generateBasicAuthHeader());

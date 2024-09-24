@@ -22,6 +22,7 @@ class LeadPhoneDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var LeadPhoneDeleteHandlerExtension */
     private $extension;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);

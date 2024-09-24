@@ -171,6 +171,7 @@ class ContactController extends RestController
      *
      * @return ApiEntityManager
      */
+    #[\Override]
     public function getManager()
     {
         return $this->container->get('oro_contact.contact.manager.api');
@@ -179,6 +180,7 @@ class ContactController extends RestController
     /**
      * @return FormInterface
      */
+    #[\Override]
     public function getForm()
     {
         return $this->container->get('oro_contact.form.contact.api');
@@ -187,16 +189,13 @@ class ContactController extends RestController
     /**
      * @return ApiFormHandler
      */
+    #[\Override]
     public function getFormHandler()
     {
         return $this->container->get('oro_contact.form.handler.contact.api');
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * overriden because of new updateHandler requirements ->process(entity, form, request)
-     */
+    #[\Override]
     protected function processForm($entity)
     {
         $this->fixRequestAttributes($entity);
@@ -219,6 +218,7 @@ class ContactController extends RestController
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[\Override]
     protected function fixRequestAttributes($entity)
     {
         $formAlias = $this->getFormAlias();
@@ -271,9 +271,7 @@ class ContactController extends RestController
         return ContactApiType::NAME;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function fixFormData(array &$data, $entity)
     {
         /** @var Contact $entity */
@@ -288,6 +286,7 @@ class ContactController extends RestController
         return true;
     }
 
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return array_merge(

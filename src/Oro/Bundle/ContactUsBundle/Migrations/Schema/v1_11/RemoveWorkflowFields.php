@@ -11,9 +11,7 @@ class RemoveWorkflowFields implements Migration
 {
     use RemoveWorkflowFieldsTrait;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->removeWorkflowFields($schema->getTable('orocrm_contactus_request'));

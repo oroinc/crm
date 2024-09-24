@@ -23,9 +23,7 @@ class ContactApiEntityManager extends ApiEntityManager
         $this->fileApiEntityManager = $fileApiEntityManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getSerializationConfig()
     {
         $config = [

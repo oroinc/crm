@@ -10,25 +10,19 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
 class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEntityClass()
     {
         return 'Oro\Bundle\SalesBundle\Entity\B2bCustomer';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getData()
     {
         return $this->getEntityData('Jerry Coleman');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function createEntity($key)
     {
         return new B2bCustomer();
@@ -38,6 +32,7 @@ class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateF
      * @param string      $key
      * @param B2bCustomer $entity
      */
+    #[\Override]
     public function fillEntityData($key, $entity)
     {
         $addressRepo = $this->templateManager->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Address');

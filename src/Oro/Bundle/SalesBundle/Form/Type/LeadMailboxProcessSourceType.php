@@ -24,9 +24,7 @@ class LeadMailboxProcessSourceType extends AbstractType
         $this->enumOptionsProvider = $enumOptionsProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
@@ -47,34 +45,25 @@ class LeadMailboxProcessSourceType extends AbstractType
         return $this->enumOptionsProvider->getEnumChoicesByCode('lead_source');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
         $builder->resetModelTransformers();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'oro_sales_lead_mailbox_process_source';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getParent(): ?string
     {
         return Select2ChoiceType::class;

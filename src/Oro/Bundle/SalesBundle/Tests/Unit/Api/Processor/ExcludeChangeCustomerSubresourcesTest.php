@@ -24,6 +24,7 @@ class ExcludeChangeCustomerSubresourcesTest extends \PHPUnit\Framework\TestCase
     /** @var CollectSubresourcesContext */
     private $context;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->accountCustomerAssociationProvider = $this->createMock(AccountCustomerAssociationProvider::class);

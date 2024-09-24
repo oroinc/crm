@@ -36,17 +36,13 @@ class RFMBuilder implements AnalyticsBuilderInterface
         $this->doctrineHelper = $doctrineHelper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function supports(Channel $channel)
     {
         return is_a($channel->getCustomerIdentity(), RFMAwareInterface::class, true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function build(Channel $channel, array $ids = [])
     {
         $data = $channel->getData();

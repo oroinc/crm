@@ -30,9 +30,7 @@ class ContactExtension extends AbstractExtension implements ServiceSubscriberInt
         return $this->container->get('oro_contact.social_url_formatter');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getFunctions()
     {
         return [
@@ -55,9 +53,7 @@ class ContactExtension extends AbstractExtension implements ServiceSubscriberInt
         return $this->getSocialUrlFormatter()->getSocialUrl($socialType, $username);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return [

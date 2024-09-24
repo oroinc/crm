@@ -60,9 +60,7 @@ class OpportunityStatusConfigType extends AbstractType
         $this->configModel = $entityConfigManager->getConfigFieldModel(Opportunity::class, 'status');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $config = $this->entityConfigManager->getConfig($this->configId);
@@ -147,9 +145,7 @@ class OpportunityStatusConfigType extends AbstractType
         $this->configManager->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -161,17 +157,12 @@ class OpportunityStatusConfigType extends AbstractType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return self::NAME;

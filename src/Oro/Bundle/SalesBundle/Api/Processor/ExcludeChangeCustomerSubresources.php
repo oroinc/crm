@@ -25,9 +25,7 @@ class ExcludeChangeCustomerSubresources implements ProcessorInterface
         $this->accountCustomerAssociationProvider = $accountCustomerAssociationProvider;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function process(ContextInterface $context): void
     {
         /** @var CollectSubresourcesContext $context */

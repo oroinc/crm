@@ -8,25 +8,19 @@ use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
 class AccountFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEntityClass()
     {
         return 'Oro\Bundle\AccountBundle\Entity\Account';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getData()
     {
         return $this->getEntityData('Coleman');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function createEntity($key)
     {
         return new Account();
@@ -36,6 +30,7 @@ class AccountFixture extends AbstractTemplateRepository implements TemplateFixtu
      * @param string  $key
      * @param Account $entity
      */
+    #[\Override]
     public function fillEntityData($key, $entity)
     {
         $userRepo = $this->templateManager

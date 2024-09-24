@@ -6,17 +6,13 @@ use Symfony\Component\Validator\Constraint;
 
 class ChannelIntegrationConstraint extends Constraint
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getTargets(): string|array
     {
         return self::CLASS_CONSTRAINT;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function validatedBy(): string
     {
         return 'oro_channel.validator.channel_integration';

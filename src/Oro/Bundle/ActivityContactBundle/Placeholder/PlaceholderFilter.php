@@ -7,7 +7,7 @@ use Oro\Bundle\ActivityListBundle\Placeholder\PlaceholderFilter as BasePlacehold
 
 class PlaceholderFilter extends BasePlaceholder
 {
-    /** {@inheritdoc} */
+    #[\Override]
     public function isApplicable($entity = null, $pageType = null)
     {
         $entityClass = $this->doctrineHelper->getEntityClass($entity);

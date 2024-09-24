@@ -12,11 +12,13 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 class LifetimeHistoryStatusUpdateTopicTest extends AbstractTopicTestCase
 {
+    #[\Override]
     protected function getTopic(): TopicInterface
     {
         return new LifetimeHistoryStatusUpdateTopic();
     }
 
+    #[\Override]
     public function validBodyDataProvider(): array
     {
         $records = [
@@ -53,6 +55,7 @@ class LifetimeHistoryStatusUpdateTopicTest extends AbstractTopicTestCase
         ];
     }
 
+    #[\Override]
     public function invalidBodyDataProvider(): array
     {
         return [

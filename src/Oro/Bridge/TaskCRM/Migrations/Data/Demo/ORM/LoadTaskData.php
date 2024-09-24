@@ -75,9 +75,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
         'Praesent congue erat at massa. Sed cursus turpis vitae tortor. Donec posuere vulputate arcu.',
     ];
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [
@@ -87,9 +85,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $tokenStorage = $this->container->get('security.token_storage');

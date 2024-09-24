@@ -16,9 +16,6 @@ class OpportunityStub extends Opportunity
     /** @var EnumOptionInterface */
     private $status;
 
-    /**
-     * @inheritDoc
-     */
     public function __construct($id = null)
     {
         parent::__construct();

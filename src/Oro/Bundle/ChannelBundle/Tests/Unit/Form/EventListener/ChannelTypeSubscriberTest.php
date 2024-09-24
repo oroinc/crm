@@ -25,6 +25,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
     /** @var ChannelTypeSubscriber */
     private $subscriber;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->settingsProvider = $this->createMock(SettingsProvider::class);
@@ -146,9 +147,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function getExtensions(): array
     {
         $channelType = new ChannelType($this->settingsProvider, $this->subscriber);

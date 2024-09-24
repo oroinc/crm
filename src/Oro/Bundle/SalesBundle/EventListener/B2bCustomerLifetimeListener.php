@@ -32,9 +32,7 @@ class B2bCustomerLifetimeListener implements ServiceSubscriberInterface
         $this->container = $container;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return [

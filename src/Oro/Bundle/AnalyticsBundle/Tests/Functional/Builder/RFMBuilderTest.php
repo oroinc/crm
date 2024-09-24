@@ -11,6 +11,7 @@ class RFMBuilderTest extends WebTestCase
     /** @var RFMBuilder */
     private $builder;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient();

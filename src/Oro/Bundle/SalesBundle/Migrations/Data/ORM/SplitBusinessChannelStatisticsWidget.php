@@ -11,9 +11,7 @@ use Oro\Bundle\DashboardBundle\Entity\Widget;
  */
 class SplitBusinessChannelStatisticsWidget extends AbstractFixture
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         /** @var Widget|null $oldWidget */

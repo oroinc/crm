@@ -33,9 +33,7 @@ class UpdateFeaturesConfigs extends AbstractFixture implements ContainerAwareInt
         Opportunity::class => 'oro_sales.opportunity_feature_enabled',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         if ($this->container->get(ApplicationState::class)->isInstalled()) {

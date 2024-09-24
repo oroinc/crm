@@ -13,17 +13,13 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
  */
 class UpdateB2bCustomerWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganizationAndBusinessUnitData::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $this->update($manager, B2bCustomer::class);

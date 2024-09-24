@@ -24,17 +24,13 @@ abstract class AbstractOpportunityFixtures extends AbstractFixture implements
     private ?User $user = null;
     private ?Organization $organization = null;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganization::class, LoadUser::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $this->createChannel($manager);

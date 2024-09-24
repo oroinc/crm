@@ -44,6 +44,7 @@ class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelHandler */
     private $handler;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->request = new Request();

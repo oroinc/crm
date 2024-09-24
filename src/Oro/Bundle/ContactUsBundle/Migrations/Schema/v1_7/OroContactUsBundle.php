@@ -9,9 +9,7 @@ use Oro\Bundle\SecurityBundle\Migrations\Schema\SetOwnershipTypeQuery;
 
 class OroContactUsBundle implements Migration
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $table = $schema->getTable('orocrm_contactus_request');

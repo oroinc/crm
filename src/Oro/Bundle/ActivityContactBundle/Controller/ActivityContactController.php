@@ -33,9 +33,7 @@ class ActivityContactController extends AbstractController
             : new Response();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return array_merge(

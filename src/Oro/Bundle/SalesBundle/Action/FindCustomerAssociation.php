@@ -22,9 +22,7 @@ class FindCustomerAssociation extends AbstractAction
     /** @var array */
     protected $options = [];
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function initialize(array $options)
     {
         if (empty($options['customer'])) {
@@ -48,9 +46,7 @@ class FindCustomerAssociation extends AbstractAction
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function executeAction($context)
     {
         $target = $this->contextAccessor->getValue($context, $this->options['customer']);

@@ -25,9 +25,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $this->settingsProvider = $settingsProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

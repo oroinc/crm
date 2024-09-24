@@ -93,9 +93,7 @@ class OpportunityViewList extends AbstractViewsList
         ]
     ];
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function getViewsList()
     {
         return $this->getSystemViewsList();

@@ -11,9 +11,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
  */
 class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         // create channels for integrations

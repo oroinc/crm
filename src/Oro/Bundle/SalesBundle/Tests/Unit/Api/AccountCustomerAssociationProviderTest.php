@@ -24,6 +24,7 @@ class AccountCustomerAssociationProviderTest extends \PHPUnit\Framework\TestCase
     /** @var AccountCustomerAssociationProvider */
     private $accountCustomerAssociationProvider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->configProvider = $this->createMock(ConfigProvider::class);

@@ -23,9 +23,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
 {
     private ContainerInterface $container;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [
@@ -34,17 +32,13 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function setContainer(ContainerInterface $container = null): void
     {
         $this->container = $container;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         /** @var UserManager $userManager */

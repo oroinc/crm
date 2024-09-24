@@ -44,9 +44,7 @@ class AccountExtension extends AbstractExtension
         $this->entityClassResolver = $entityClassResolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isApplicable(DatagridConfiguration $config)
     {
         return
@@ -70,9 +68,7 @@ class AccountExtension extends AbstractExtension
             && !empty($parameters[self::DISABLED_PARAM]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function processConfigs(DatagridConfiguration $config)
     {
         $columns = $config->offsetGetByPath('[columns]', []);
@@ -121,9 +117,7 @@ class AccountExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
         /** @var OrmDatasource $datasource */

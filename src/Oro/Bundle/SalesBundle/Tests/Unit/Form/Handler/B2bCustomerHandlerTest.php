@@ -32,6 +32,7 @@ class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var B2bCustomerHandler */
     private $handler;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->form = $this->createMock(Form::class);

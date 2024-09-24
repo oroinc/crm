@@ -12,9 +12,7 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
 {
     use ActivityExtensionAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_account');

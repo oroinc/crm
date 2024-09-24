@@ -16,6 +16,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit\Framework\TestCase
     /** @var LeadToOpportunityType */
     private $type;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->type = new LeadToOpportunityType();

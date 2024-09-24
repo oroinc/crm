@@ -64,6 +64,7 @@ class ActivityContactRecalculateCommand extends Command
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Recalculates counters and last contact date for contact activities.');
@@ -73,6 +74,7 @@ class ActivityContactRecalculateCommand extends Command
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $logger = new OutputLogger($output);

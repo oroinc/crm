@@ -36,17 +36,13 @@ class ContactEmail extends AbstractEmail implements
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Contact $owner = null;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEmailField()
     {
         return 'email';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEmailOwner()
     {
         return $this->getOwner();

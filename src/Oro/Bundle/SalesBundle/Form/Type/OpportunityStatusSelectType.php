@@ -20,9 +20,7 @@ class OpportunityStatusSelectType extends AbstractType
         $this->configManager = $configManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         if (isset($options['probabilities'])) {
@@ -30,9 +28,7 @@ class OpportunityStatusSelectType extends AbstractType
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $probabilities = $this->configManager->get(Opportunity::PROBABILITIES_CONFIG_KEY);
@@ -53,25 +49,18 @@ class OpportunityStatusSelectType extends AbstractType
         $resolver->setDefaults(['probabilities' => $probabilities]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getParent(): ?string
     {
         return EnumSelectType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'oro_sales_opportunity_status_select';

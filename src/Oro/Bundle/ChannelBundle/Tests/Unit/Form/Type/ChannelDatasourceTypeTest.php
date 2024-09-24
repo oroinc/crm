@@ -62,6 +62,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
     /** @var ChannelDatasourceType */
     private $type;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->doctrine = $this->createMock(ManagerRegistry::class);
@@ -71,9 +72,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         parent::setUp();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function getExtensions(): array
     {
         $transportName = 'test transport';

@@ -26,9 +26,7 @@ class LeadEmailDeleteHandlerExtension extends AbstractEntityDeleteHandlerExtensi
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function assertDeleteGranted($entity): void
     {
         /** @var LeadEmail $entity */

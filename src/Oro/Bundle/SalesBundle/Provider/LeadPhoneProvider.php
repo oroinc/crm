@@ -14,6 +14,7 @@ class LeadPhoneProvider implements PhoneProviderInterface
      *
      * @return string|null
      */
+    #[\Override]
     public function getPhoneNumber($object)
     {
         $primaryPhone = $object->getPrimaryPhone();
@@ -28,6 +29,7 @@ class LeadPhoneProvider implements PhoneProviderInterface
      *
      * @return array of [phone number, phone owner]
      */
+    #[\Override]
     public function getPhoneNumbers($object)
     {
         $result = [];

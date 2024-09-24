@@ -287,15 +287,13 @@ class Opportunity implements
     #[ConfigField(defaultValues: ['importexport' => ['full' => true]])]
     protected ?Customer $customerAssociation = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct()
     {
         $this->loadMultiCurrencyFields();
     }
 
     #[ORM\PostLoad]
+    #[\Override]
     public function loadMultiCurrencyFields()
     {
         $this->budgetAmount = MultiCurrency::create(
@@ -360,6 +358,7 @@ class Opportunity implements
      * @return void
      */
     #[ORM\PreFlush]
+    #[\Override]
     public function updateMultiCurrencyFields()
     {
         $this->updateBudgetAmount();
@@ -681,6 +680,7 @@ class Opportunity implements
      *
      * @return string
      */
+    #[\Override]
     public function getEmail()
     {
         $contact = $this->getContact();
@@ -696,6 +696,7 @@ class Opportunity implements
             : $contactEmail;
     }
 
+    #[\Override]
     public function __toString()
     {
         return (string) $this->getName();

@@ -17,25 +17,19 @@ use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
  */
 class ContactFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEntityClass()
     {
         return 'Oro\Bundle\ContactBundle\Entity\Contact';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getData()
     {
         return $this->getEntityData('Jerry Coleman');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function createEntity($key)
     {
         return new Contact();
@@ -45,6 +39,7 @@ class ContactFixture extends AbstractTemplateRepository implements TemplateFixtu
      * @param string  $key
      * @param Contact $entity
      */
+    #[\Override]
     public function fillEntityData($key, $entity)
     {
         $userRepo = $this->templateManager

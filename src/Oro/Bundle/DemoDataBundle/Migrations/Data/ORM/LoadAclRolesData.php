@@ -6,9 +6,7 @@ use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractLoadAclData;
 
 abstract class LoadAclRolesData extends AbstractLoadAclData
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [

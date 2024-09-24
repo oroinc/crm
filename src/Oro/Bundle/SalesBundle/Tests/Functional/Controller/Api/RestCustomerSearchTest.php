@@ -10,6 +10,7 @@ class RestCustomerSearchTest extends WebTestCase
     /** @var string */
     private $baseUrl;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->markTestSkipped('Due to BAP-8365');

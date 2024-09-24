@@ -9,9 +9,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroCustomerLifetimeField implements Migration
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         if ($schema->hasTable('orocrm_sales_b2bcustomer')) {

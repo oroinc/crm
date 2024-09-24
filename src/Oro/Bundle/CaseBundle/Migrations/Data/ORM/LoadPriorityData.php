@@ -13,9 +13,7 @@ class LoadPriorityData extends AbstractTranslatableEntityFixture
 {
     private const TRANSLATION_PREFIX = 'case_priority';
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function loadEntities(ObjectManager $manager): void
     {
         $casePriorityRepository = $manager->getRepository(CasePriority::class);

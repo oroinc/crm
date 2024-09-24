@@ -52,17 +52,13 @@ class LeadEmail extends AbstractEmail implements ExtendEntityInterface, EmailInt
         return $this->owner;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getEmailField()
     {
         return 'email';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getEmailOwner()
     {
         return $this->getOwner();

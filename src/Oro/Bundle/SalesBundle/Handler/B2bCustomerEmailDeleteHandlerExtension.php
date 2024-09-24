@@ -26,9 +26,7 @@ class B2bCustomerEmailDeleteHandlerExtension extends AbstractEntityDeleteHandler
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function assertDeleteGranted($entity): void
     {
         /** @var B2bCustomerEmail $entity */

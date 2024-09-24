@@ -19,17 +19,13 @@ class LoadContactData extends AbstractFixture implements DependentFixtureInterfa
         ]
     ];
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganization::class, LoadUser::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         foreach ($this->contactsData as $reference => $contactData) {

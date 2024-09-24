@@ -15,6 +15,7 @@ class RFMBuilderTest extends \PHPUnit\Framework\TestCase
     /** @var RFMBuilder */
     private $builder;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);

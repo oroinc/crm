@@ -216,9 +216,7 @@ class Lead implements
         $this->addresses = new ArrayCollection();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getEmailFields()
     {
         return null;
@@ -229,6 +227,7 @@ class Lead implements
      *
      * @return integer
      */
+    #[\Override]
     public function getId()
     {
         return $this->id;
@@ -273,6 +272,7 @@ class Lead implements
     /**
      * @return string
      */
+    #[\Override]
     public function getNamePrefix()
     {
         return $this->namePrefix;
@@ -297,6 +297,7 @@ class Lead implements
      *
      * @return string
      */
+    #[\Override]
     public function getFirstName()
     {
         return $this->firstName;
@@ -305,6 +306,7 @@ class Lead implements
     /**
      * @return string
      */
+    #[\Override]
     public function getMiddleName()
     {
         return $this->middleName;
@@ -341,6 +343,7 @@ class Lead implements
      *
      * @return string
      */
+    #[\Override]
     public function getLastName()
     {
         return $this->lastName;
@@ -361,6 +364,7 @@ class Lead implements
     /**
      * @return string
      */
+    #[\Override]
     public function getNameSuffix()
     {
         return $this->nameSuffix;
@@ -645,6 +649,7 @@ class Lead implements
     /**
      * @return string
      */
+    #[\Override]
     public function __toString()
     {
         return (string) $this->getName();
@@ -946,9 +951,7 @@ class Lead implements
         return $this->emails;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEmail()
     {
         $primaryEmail = $this->getPrimaryEmail();

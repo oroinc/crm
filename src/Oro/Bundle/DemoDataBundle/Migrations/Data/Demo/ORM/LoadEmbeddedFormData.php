@@ -57,9 +57,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
     );
     // @codingStandardsIgnoreEnd
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [
@@ -67,17 +65,13 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $om)
     {
         $this->organization = $this->getReference('default_organization');

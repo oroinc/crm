@@ -18,6 +18,7 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
     /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $settingsProvider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->settingsProvider = $this->createMock(SettingsProvider::class);

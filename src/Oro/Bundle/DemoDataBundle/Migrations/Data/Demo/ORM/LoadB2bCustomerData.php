@@ -19,9 +19,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
 {
     private ?array $accountIds = null;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [
@@ -31,9 +29,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $dictionaryDir = $this->container

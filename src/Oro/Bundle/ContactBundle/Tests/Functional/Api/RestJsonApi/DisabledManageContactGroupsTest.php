@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DisabledManageContactGroupsTest extends RestJsonApiTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

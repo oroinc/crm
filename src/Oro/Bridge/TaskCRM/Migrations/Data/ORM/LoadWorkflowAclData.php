@@ -9,9 +9,7 @@ use Oro\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadAclRolesData;
  */
 class LoadWorkflowAclData extends LoadAclRolesData
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getDataPath()
     {
         return '@OroTaskCRMBridgeBundle/Migrations/Data/ORM/CrmRoles/workflows.yml';

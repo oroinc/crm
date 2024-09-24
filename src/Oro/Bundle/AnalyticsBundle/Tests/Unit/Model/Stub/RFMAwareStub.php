@@ -10,16 +10,12 @@ class RFMAwareStub implements RFMAwareInterface
 {
     use RFMAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function setDataChannel(Channel $channel = null)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDataChannel()
     {
     }

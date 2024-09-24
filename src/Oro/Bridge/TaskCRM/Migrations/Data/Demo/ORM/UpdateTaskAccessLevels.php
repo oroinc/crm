@@ -18,17 +18,13 @@ use Oro\Bundle\TaskBundle\Entity\Task;
  */
 class UpdateTaskAccessLevels extends AbstractUpdatePermissions implements DependentFixtureInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadRolesData::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $aclManager = $this->getAclManager();

@@ -28,17 +28,13 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
     ];
     // @codingStandardsIgnoreEnd
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadBusinessUnitData::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $reportTypeRepository = $manager->getRepository(ReportType::class);

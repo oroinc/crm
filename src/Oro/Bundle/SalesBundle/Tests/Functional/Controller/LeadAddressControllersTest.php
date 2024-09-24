@@ -8,6 +8,7 @@ use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 
 class LeadAddressControllersTest extends WebTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient(

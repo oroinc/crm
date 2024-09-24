@@ -12,9 +12,7 @@ class RemoveExtendSourceField implements Migration, ExtendOptionsManagerAwareInt
 {
     use ExtendOptionsManagerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $queries->addQuery(new RemoveExtendSourceFieldQuery());

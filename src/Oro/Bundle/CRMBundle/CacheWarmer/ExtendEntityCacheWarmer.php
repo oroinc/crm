@@ -37,6 +37,7 @@ class ExtendEntityCacheWarmer implements CacheWarmerInterface
         $this->applicationState = $applicationState;
     }
 
+    #[\Override]
     public function isOptional(): bool
     {
         return false;
@@ -45,6 +46,7 @@ class ExtendEntityCacheWarmer implements CacheWarmerInterface
     /**
      * @throws ReflectionException
      */
+    #[\Override]
     public function warmUp(string $cacheDir): array
     {
         if (\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {

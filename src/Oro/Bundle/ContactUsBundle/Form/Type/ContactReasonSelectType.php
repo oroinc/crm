@@ -13,9 +13,7 @@ class ContactReasonSelectType extends AbstractType
 {
     const NAME = 'oro_contactus_contact_reason_select';
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -27,17 +25,13 @@ class ContactReasonSelectType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return self::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getParent(): ?string
     {
         return OroEntitySelectOrCreateInlineType::class;

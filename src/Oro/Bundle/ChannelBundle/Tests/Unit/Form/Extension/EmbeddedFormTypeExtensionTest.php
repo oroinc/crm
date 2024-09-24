@@ -15,15 +15,14 @@ class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
 {
     private EmbeddedFormTypeExtension $extension;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->extension = new EmbeddedFormTypeExtension();
         parent::setUp();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function getExtensions(): array
     {
         return [

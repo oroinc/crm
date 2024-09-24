@@ -11,6 +11,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadOpportunitiesDa
  */
 class OpportunityUpdateListTest extends RestJsonApiUpdateListTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

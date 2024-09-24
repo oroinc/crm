@@ -14,6 +14,7 @@ class LoadContactEmailData extends AbstractFixture implements DependentFixtureIn
     const THIRD_ENTITY_NAME  = 'test3@test.test';
     const FOURTH_ENTITY_NAME  = 'test4@test.test';
 
+    #[\Override]
     public function getDependencies()
     {
         return [
@@ -39,9 +40,7 @@ class LoadContactEmailData extends AbstractFixture implements DependentFixtureIn
         ]
     ];
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $contact = $this->getReference('Contact_' . LoadContactEntitiesData::FIRST_ENTITY_NAME);

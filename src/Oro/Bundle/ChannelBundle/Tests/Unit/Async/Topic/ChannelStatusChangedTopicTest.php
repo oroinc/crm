@@ -10,11 +10,13 @@ use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 class ChannelStatusChangedTopicTest extends AbstractTopicTestCase
 {
+    #[\Override]
     protected function getTopic(): TopicInterface
     {
         return new ChannelStatusChangedTopic();
     }
 
+    #[\Override]
     public function validBodyDataProvider(): array
     {
         $requiredOptionsSet = [
@@ -29,6 +31,7 @@ class ChannelStatusChangedTopicTest extends AbstractTopicTestCase
         ];
     }
 
+    #[\Override]
     public function invalidBodyDataProvider(): array
     {
         return [

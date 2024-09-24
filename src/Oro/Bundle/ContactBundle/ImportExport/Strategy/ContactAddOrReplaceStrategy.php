@@ -19,9 +19,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         $this->contactImportHelper = $contactImportHelper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function beforeProcessEntity($entity): Contact
     {
         /** @var Contact $entity */
@@ -43,9 +41,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         return $entity;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function afterProcessEntity($entity): Contact
     {
         /** @var Contact $entity */
@@ -63,8 +59,8 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
      * Since addresses and phones are always unique for a specific contact and do not have unique identifiers,
      * there is no point in using them again. Also see method: storeNewEntity
      *
-     * {@inheritdoc}
      */
+    #[\Override]
     protected function findEntityByIdentityValues($entityName, array $identityValues): ?object
     {
         if (is_a($entityName, ContactPhone::class, true)
@@ -89,6 +85,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         return parent::findEntityByIdentityValues($entityName, $identityValues);
     }
 
+    #[\Override]
     protected function storeNewEntity(object $entity, array $identityValues = null): ?object
     {
         if (is_a($entity, ContactPhone::class, true) || is_a($entity, ContactAddress::class, true)) {

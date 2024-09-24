@@ -7,17 +7,13 @@ use Oro\Bundle\SalesBundle\Provider\Customer\AccountAutocomplete\AccountAutocomp
 
 class AccountAutocompleteProvider implements AccountAutocompleteProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isSupportEntity($entity)
     {
         return $entity instanceof Account;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEmails($entity)
     {
         $data = [];
@@ -38,9 +34,7 @@ class AccountAutocompleteProvider implements AccountAutocompleteProviderInterfac
         return $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getPhones($entity)
     {
         $data = [];
@@ -61,9 +55,7 @@ class AccountAutocompleteProvider implements AccountAutocompleteProviderInterfac
         return $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getNames($entity)
     {
         $data = [];

@@ -30,6 +30,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelIntegrationHandler */
     private $handler;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->form = $this->createMock(FormInterface::class);

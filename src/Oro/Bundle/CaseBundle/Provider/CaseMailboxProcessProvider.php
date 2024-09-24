@@ -15,41 +15,31 @@ class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
 {
     const PROCESS_DEFINITION_NAME = 'convert_mailbox_email_to_case';
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getSettingsEntityFQCN()
     {
         return CaseMailboxProcessSettings::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getSettingsFormType()
     {
         return CaseMailboxProcessSettingsType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getLabel()
     {
         return 'oro.case.mailbox.process.case.label';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isEnabled(Mailbox $mailbox = null)
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getProcessDefinitionName()
     {
         return self::PROCESS_DEFINITION_NAME;

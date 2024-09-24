@@ -21,6 +21,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelsByEntitiesProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $channelsProvider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->channelsProvider = $this->createMock(ChannelsByEntitiesProvider::class);

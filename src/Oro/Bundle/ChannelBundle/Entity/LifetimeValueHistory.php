@@ -75,6 +75,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
      *
      * remove null after BAP-5248
      */
+    #[\Override]
     public function setDataChannel(Channel $dataChannel = null)
     {
         $this->dataChannel = $dataChannel;
@@ -83,6 +84,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
     /**
      * @return Channel
      */
+    #[\Override]
     public function getDataChannel()
     {
         return $this->dataChannel;
@@ -141,6 +143,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
     /**
      * @return string
      */
+    #[\Override]
     public function __toString()
     {
         return (string)$this->getId();

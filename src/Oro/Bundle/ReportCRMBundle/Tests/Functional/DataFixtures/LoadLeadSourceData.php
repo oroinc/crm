@@ -21,6 +21,7 @@ class LoadLeadSourceData extends AbstractFixture implements OrderedFixtureInterf
         'Partner' => false
     ];
 
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         /** @var EnumOptionRepository $enumRepo */
@@ -41,6 +42,7 @@ class LoadLeadSourceData extends AbstractFixture implements OrderedFixtureInterf
         $manager->flush();
     }
 
+    #[\Override]
     public function getOrder(): int
     {
         return 290;

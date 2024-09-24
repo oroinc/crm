@@ -15,17 +15,13 @@ use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractUpdatePermissions;
  */
 class LoadAccountAndContactToAccountManagerRole extends AbstractUpdatePermissions implements DependentFixtureInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [LoadUserRolesData::class];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         if ($this->container->get(ApplicationState::class)->isInstalled()) {

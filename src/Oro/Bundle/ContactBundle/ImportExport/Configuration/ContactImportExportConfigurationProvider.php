@@ -20,9 +20,7 @@ class ContactImportExportConfigurationProvider implements ImportExportConfigurat
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function get(): ImportExportConfigurationInterface
     {
         return new ImportExportConfiguration([

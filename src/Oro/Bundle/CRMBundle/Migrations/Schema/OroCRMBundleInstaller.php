@@ -20,17 +20,13 @@ class OroCRMBundleInstaller implements Installation, ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getMigrationVersion(): string
     {
         return 'v4_2_0_1';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         if ($this->container->get(ApplicationState::class)->isInstalled()) {

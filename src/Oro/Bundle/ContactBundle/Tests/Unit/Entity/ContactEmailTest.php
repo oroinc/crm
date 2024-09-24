@@ -10,6 +10,7 @@ class ContactEmailTest extends \PHPUnit\Framework\TestCase
     /** @var ContactEmail */
     private $email;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->email = new ContactEmail();

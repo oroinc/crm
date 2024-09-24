@@ -13,9 +13,7 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
 {
     use ExtendExtensionAwareTrait;
 
-    /**
-    * {@inheritdoc}
-    */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Tables generation **/

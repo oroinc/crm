@@ -16,6 +16,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         'won_opportunities_to_date_amount' => 'Won Opportunities to date amount'
     ];
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());
@@ -292,9 +293,7 @@ class OpportunityStatisticsTest extends BaseStatistics
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getWidget(): Widget
     {
         return $this->getReference('widget_opportunity_statistics');

@@ -7,6 +7,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class ContactReasonTest extends WebTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient();

@@ -21,34 +21,25 @@ class CaseMailboxProcessSettingsTagType extends AbstractType
         $this->newTagSubscriber = $newTagSubscriber;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->getEventDispatcher()->removeSubscriber($this->oldTagSubscriber);
         $builder->addEventSubscriber($this->newTagSubscriber);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getParent(): ?string
     {
         return TagSelectType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'case_mailbox_process_settings_tag';

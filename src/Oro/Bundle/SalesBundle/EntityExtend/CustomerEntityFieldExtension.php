@@ -16,17 +16,20 @@ use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
  */
 class CustomerEntityFieldExtension extends AbstractAssociationEntityFieldExtension
 {
+    #[\Override]
     public function isApplicable(EntityFieldProcessTransport $transport): bool
     {
         return $transport->getClass() === Customer::class
             && AssociationNameGenerator::extractAssociationKind($transport->getName()) === $this->getRelationKind();
     }
 
+    #[\Override]
     public function getRelationKind(): ?string
     {
         return CustomerScope::ASSOCIATION_KIND;
     }
 
+    #[\Override]
     public function getRelationType(): string
     {
         return RelationType::MANY_TO_ONE;

@@ -95,6 +95,7 @@ class ContactReason implements ExtendEntityInterface
     /**
      * @return string
      */
+    #[\Override]
     public function __toString()
     {
         return (string) $this->getDefaultFallbackValue($this->titles);

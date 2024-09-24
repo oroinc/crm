@@ -11,6 +11,7 @@ use Oro\Bundle\TestFrameworkCRMBundle\Entity\TestCustomer2;
 
 class CustomerAssociationListenerTest extends WebTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient();

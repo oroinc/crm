@@ -20,17 +20,13 @@ class AddMultiCurrencyFields implements
 {
     use RenameExtensionAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getOrder(): int
     {
         return 1;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $table = $schema->getTable('orocrm_sales_opportunity');

@@ -50,6 +50,7 @@ class OpportunityByStatusProviderTest extends TestCase
     /** @var OpportunityByStatusProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->doctrine = $this->createMock(ManagerRegistry::class);

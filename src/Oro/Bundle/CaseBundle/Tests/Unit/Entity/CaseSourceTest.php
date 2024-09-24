@@ -9,6 +9,7 @@ class CaseSourceTest extends \PHPUnit\Framework\TestCase
     /** @var CaseSource */
     private $caseSource;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->caseSource = new CaseSource('test');

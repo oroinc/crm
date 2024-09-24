@@ -12,9 +12,7 @@ use Oro\Bundle\SalesBundle\Entity\Customer;
  */
 class EntityVariablesProvider implements EntityVariablesProviderInterface
 {
-    /**
-     * @inheridoc
-     */
+    #[\Override]
     public function getVariableGetters(): array
     {
         return [
@@ -22,9 +20,7 @@ class EntityVariablesProvider implements EntityVariablesProviderInterface
         ];
     }
 
-    /**
-     * @inheridoc
-     */
+    #[\Override]
     public function getVariableDefinitions(): array
     {
         return [
@@ -38,9 +34,7 @@ class EntityVariablesProvider implements EntityVariablesProviderInterface
         ];
     }
 
-    /**
-     * @inheridoc
-     */
+    #[\Override]
     public function getVariableProcessors(string $entityClass): array
     {
         return [];

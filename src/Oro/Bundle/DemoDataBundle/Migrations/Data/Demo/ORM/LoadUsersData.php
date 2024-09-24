@@ -32,9 +32,7 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
     private BusinessUnit $businessUnit;
     private Role $role;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [
@@ -43,9 +41,7 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $userManager = $this->container->get('oro_user.manager');

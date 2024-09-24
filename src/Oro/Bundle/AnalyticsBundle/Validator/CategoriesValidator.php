@@ -19,8 +19,8 @@ class CategoriesValidator extends ConstraintValidator
      * @param PersistentCollection|RFMMetricCategory[] $value
      * @param CategoriesConstraint $constraint
      *
-     * {@inheritdoc}
      */
+    #[\Override]
     public function validate($value, Constraint $constraint)
     {
         if (!$value instanceof PersistentCollection) {
@@ -148,9 +148,6 @@ class CategoriesValidator extends ConstraintValidator
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function validatedBy()
     {
         return 'oro_analytics.validator.categories';

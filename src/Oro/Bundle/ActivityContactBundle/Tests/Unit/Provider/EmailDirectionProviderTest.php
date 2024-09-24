@@ -25,6 +25,7 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
     private EmailDirectionProvider $provider;
     private Inflector $inflector;
 
+    #[\Override]
     protected function setUp(): void
     {
         $fieldConfiguration = $this->createMock(Config::class);

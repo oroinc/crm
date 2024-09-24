@@ -38,9 +38,7 @@ class ChangeIntegrationStatusProcessor implements
         $this->logger = new NullLogger();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function process(MessageInterface $message, SessionInterface $session): string
     {
         $messageBody = $message->getBody();
@@ -76,9 +74,7 @@ class ChangeIntegrationStatusProcessor implements
         return self::ACK;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedTopics(): array
     {
         return [ChannelStatusChangedTopic::getName()];

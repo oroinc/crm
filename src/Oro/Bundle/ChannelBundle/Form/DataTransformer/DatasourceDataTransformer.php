@@ -19,9 +19,7 @@ class DatasourceDataTransformer implements DataTransformerInterface
         $this->formFactory = $formFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function transform($value)
     {
         if (null === $value || (!$value instanceof Integration)) {
@@ -37,9 +35,7 @@ class DatasourceDataTransformer implements DataTransformerInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function reverseTransform($value)
     {
         if (null === $value) {

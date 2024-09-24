@@ -24,6 +24,7 @@ class FillContactTestMultiEnum extends AbstractFixture implements DependentFixtu
         'Chester Benington' => false
     ];
 
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         /** @var EnumOptionRepository $enumRepo */
@@ -43,6 +44,7 @@ class FillContactTestMultiEnum extends AbstractFixture implements DependentFixtu
         $manager->flush();
     }
 
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadLanguageData::class];

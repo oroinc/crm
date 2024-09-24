@@ -18,6 +18,7 @@ class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
     /** @var TimezoneChangeListener */
     private $listener;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->manager = $this->createMock(RFMMetricStateManager::class);

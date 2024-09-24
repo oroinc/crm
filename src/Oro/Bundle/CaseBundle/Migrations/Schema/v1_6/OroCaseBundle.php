@@ -12,9 +12,7 @@ class OroCaseBundle implements Migration, ActivityExtensionAwareInterface
 {
     use ActivityExtensionAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_case');

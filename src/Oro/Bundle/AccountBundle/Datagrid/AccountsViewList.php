@@ -8,9 +8,7 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\BooleanFilterType;
 
 class AccountsViewList extends AbstractViewsList
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getViewsList()
     {
         return [

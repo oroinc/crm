@@ -26,6 +26,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
     /** @var LeadActionsAccessProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->featureChecker = $this->createMock(FeatureChecker::class);

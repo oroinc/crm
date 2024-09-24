@@ -22,9 +22,7 @@ class OpportunityStatusEnumValueType extends AbstractType
      */
     public static $immutableProbabilityStatuses = ['opportunity_status.won', 'opportunity_status.lost'];
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'preSetData']);
@@ -58,25 +56,18 @@ class OpportunityStatusEnumValueType extends AbstractType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getParent(): ?string
     {
         return EnumValueType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return self::NAME;

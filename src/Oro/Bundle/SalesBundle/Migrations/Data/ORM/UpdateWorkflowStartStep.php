@@ -13,9 +13,7 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
  */
 class UpdateWorkflowStartStep extends AbstractFixture
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         /** @var WorkflowItemRepository $workflowItemRepository */

@@ -13,9 +13,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class HasContactInformationValidatorTest extends ConstraintValidatorTestCase
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function createValidator(): HasContactInformationValidator
     {
         return new HasContactInformationValidator();

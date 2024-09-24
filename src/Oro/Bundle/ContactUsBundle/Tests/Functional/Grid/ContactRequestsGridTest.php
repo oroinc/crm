@@ -7,15 +7,14 @@ use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 
 class ContactRequestsGridTest extends AbstractDatagridTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures([LoadContactUsBundleFixtures::class]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function gridProvider(): array
     {
         return [

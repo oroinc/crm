@@ -10,9 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LeadPhoneType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // basic plain fields
@@ -21,9 +19,7 @@ class LeadPhoneType extends AbstractType
             ->add('primary', CheckboxType::class, array('required' => true));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -35,17 +31,12 @@ class LeadPhoneType extends AbstractType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'oro_sales_lead_phone';

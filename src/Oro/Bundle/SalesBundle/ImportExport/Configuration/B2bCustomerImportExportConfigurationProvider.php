@@ -9,9 +9,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class B2bCustomerImportExportConfigurationProvider implements ImportExportConfigurationProviderInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function get(): ImportExportConfigurationInterface
     {
         return new ImportExportConfiguration([

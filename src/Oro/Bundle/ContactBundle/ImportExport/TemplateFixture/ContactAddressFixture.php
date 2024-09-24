@@ -9,17 +9,13 @@ use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
 class ContactAddressFixture extends AddressFixture implements TemplateFixtureInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEntityClass()
     {
         return 'Oro\Bundle\ContactBundle\Entity\ContactAddress';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function createEntity($key)
     {
         return new ContactAddress();
@@ -29,6 +25,7 @@ class ContactAddressFixture extends AddressFixture implements TemplateFixtureInt
      * @param string $key
      * @param ContactAddress $entity
      */
+    #[\Override]
     public function fillEntityData($key, $entity)
     {
         $typeRepository = $this->templateManager
@@ -53,9 +50,7 @@ class ContactAddressFixture extends AddressFixture implements TemplateFixtureInt
         parent::fillEntityData($key, $entity);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getData()
     {
         return $this->getEntityData('Jerry Coleman');

@@ -34,9 +34,7 @@ class ContactPhoneApiHandler extends AbstractEntityApiHandler
         $this->propertyAccessor = $propertyAccessor;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function beforeProcess($entity)
     {
         //check owner (Contact) entity with 'edit' permission
@@ -45,9 +43,7 @@ class ContactPhoneApiHandler extends AbstractEntityApiHandler
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function afterProcess($entity)
     {
         $owner = $entity->getOwner();
@@ -59,9 +55,7 @@ class ContactPhoneApiHandler extends AbstractEntityApiHandler
         return $changeSet;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getClass()
     {
         return self::ENTITY_CLASS;

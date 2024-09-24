@@ -11,6 +11,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     /** @var Group */
     private $group;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->group = new Group();

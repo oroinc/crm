@@ -19,17 +19,13 @@ class LoadOpportunityStatusBoardFixtures extends AbstractFixture implements Depe
     private const OPPORTUNITY_COUNT = 25;
     private const STATUSES_COUNT = 4;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganization::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $opportunityStatuses = ['in_progress', 'lost', 'needs_analysis', 'won'];

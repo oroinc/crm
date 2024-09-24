@@ -32,6 +32,7 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
         $this->currencyTransformer = $currencyTransformer;
     }
 
+    #[\Override]
     public function configure()
     {
         parent::configure();
@@ -40,6 +41,7 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
             ->addUsage('--force');
     }
 
+    #[\Override]
     protected function getChannelType(): string
     {
         return 'b2b';
@@ -50,6 +52,7 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
      * @param B2bCustomer $customer
      * @return float
      */
+    #[\Override]
     protected function calculateCustomerLifetime(EntityManager $em, object $customer): float
     {
         /** @var B2bCustomerRepository $customerRepo */

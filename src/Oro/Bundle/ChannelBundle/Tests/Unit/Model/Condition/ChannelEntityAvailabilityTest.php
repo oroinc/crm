@@ -17,6 +17,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelEntityAvailability */
     private $condition;
 
+    #[\Override]
     protected function setUp(): void
     {
         $stateProvider = $this->createMock(StateProvider::class);

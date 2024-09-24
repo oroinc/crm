@@ -15,14 +15,13 @@ class IntegrationFormTypeStub extends AbstractType
      *
      * @return string The name of this type
      */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'oro_integration_channel_form';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('type', ChoiceType::class, [
@@ -30,9 +29,7 @@ class IntegrationFormTypeStub extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(

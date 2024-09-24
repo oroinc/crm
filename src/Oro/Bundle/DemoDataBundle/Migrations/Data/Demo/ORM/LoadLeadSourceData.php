@@ -24,6 +24,7 @@ class LoadLeadSourceData extends AbstractFixture implements DependentFixtureInte
         'Partner' => false
     ];
 
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         /** @var EnumOptionRepository $enumRepo */
@@ -44,6 +45,7 @@ class LoadLeadSourceData extends AbstractFixture implements DependentFixtureInte
         $manager->flush();
     }
 
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadLanguageData::class];

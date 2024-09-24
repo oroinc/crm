@@ -11,6 +11,7 @@ class ContactSelectTypeTest extends \PHPUnit\Framework\TestCase
     /** @var ContactSelectType */
     private $type;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->type = new ContactSelectType();

@@ -14,9 +14,7 @@ class AddOpportunityStatus implements Migration, OutdatedExtendExtensionAwareInt
 {
     use OutdatedExtendExtensionAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $queries->addQuery(new ParametrizedSqlMigrationQuery(

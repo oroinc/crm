@@ -9,6 +9,7 @@ use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
  */
 class LoadLeadStatusOptionData extends AbstractEnumFixture
 {
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -18,11 +19,13 @@ class LoadLeadStatusOptionData extends AbstractEnumFixture
         ];
     }
 
+    #[\Override]
     protected function getDefaultValue(): string
     {
         return 'new';
     }
 
+    #[\Override]
     protected function getEnumCode(): string
     {
         return 'lead_status';

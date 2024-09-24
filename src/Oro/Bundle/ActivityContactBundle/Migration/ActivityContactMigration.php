@@ -23,9 +23,7 @@ class ActivityContactMigration implements Migration
         $this->activityContactProvider = $activityContactProvider;
     }
 
-    /**
-     * @inheritdoc
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         if ($schema instanceof ExtendSchema) {

@@ -11,9 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OpportunityProbabilitySubscriber implements EventSubscriberInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

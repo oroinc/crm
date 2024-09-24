@@ -23,9 +23,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     /** @var EntityManager */
     protected $em;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [
@@ -35,9 +33,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $this->em = $manager;

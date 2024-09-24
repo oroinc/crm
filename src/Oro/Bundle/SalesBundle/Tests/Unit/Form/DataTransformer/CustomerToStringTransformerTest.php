@@ -23,6 +23,7 @@ class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerToStringTransformer */
     private $transformer;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->entityToStringTransformer = $this->createMock(DataTransformerInterface::class);

@@ -25,17 +25,13 @@ class AddLeadStatus implements
     use OutdatedExtendExtensionAwareTrait;
     use ExtendOptionsManagerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getOrder(): int
     {
         return 1;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $this->extendOptionsManager->removeColumnOptions('orocrm_sales_lead', 'status');

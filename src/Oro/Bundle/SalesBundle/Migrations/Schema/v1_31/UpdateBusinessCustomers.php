@@ -16,17 +16,13 @@ class UpdateBusinessCustomers implements
     Migration,
     OrderedMigrationInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getOrder()
     {
         return 2;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $customerColumnName = AccountCustomerManager::getCustomerTargetField(B2bCustomer::class) . '_id';

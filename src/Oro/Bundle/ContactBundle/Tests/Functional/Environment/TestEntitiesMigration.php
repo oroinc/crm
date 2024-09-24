@@ -10,9 +10,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class TestEntitiesMigration implements Migration
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->addCustomFieldsToContactAddress($schema);

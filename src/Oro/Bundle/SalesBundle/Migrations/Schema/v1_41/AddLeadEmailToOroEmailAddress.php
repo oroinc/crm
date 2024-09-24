@@ -14,9 +14,7 @@ class AddLeadEmailToOroEmailAddress implements Migration, DatabasePlatformAwareI
 {
     use DatabasePlatformAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->addOwnerToOroEmailAddress($schema);

@@ -13,9 +13,7 @@ class EmailHolderHelperConfigPass implements CompilerPassInterface
 {
     private const SERVICE_KEY = 'oro_email.email_holder_helper';
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition(self::SERVICE_KEY)) {

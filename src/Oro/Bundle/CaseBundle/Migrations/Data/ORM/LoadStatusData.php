@@ -13,9 +13,7 @@ class LoadStatusData extends AbstractTranslatableEntityFixture
 {
     private const TRANSLATION_PREFIX = 'case_status';
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function loadEntities(ObjectManager $manager): void
     {
         $caseStatusRepository = $manager->getRepository(CaseStatus::class);

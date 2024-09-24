@@ -16,25 +16,19 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
  */
 class OpportunityFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEntityClass()
     {
         return 'Oro\Bundle\SalesBundle\Entity\Opportunity';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getData()
     {
         return $this->getEntityData('Jerry Coleman');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function createEntity($key)
     {
         return new Opportunity();
@@ -44,6 +38,7 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
      * @param string      $key
      * @param Opportunity $entity
      */
+    #[\Override]
     public function fillEntityData($key, $entity)
     {
         $userRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');

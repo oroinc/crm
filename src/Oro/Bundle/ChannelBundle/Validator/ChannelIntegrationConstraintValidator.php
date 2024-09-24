@@ -21,9 +21,7 @@ class ChannelIntegrationConstraintValidator extends ConstraintValidator
         $this->provider = $provider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function validate($value, Constraint $constraint)
     {
         if (!$value instanceof Channel) {

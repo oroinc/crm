@@ -18,9 +18,7 @@ class DropFieldConfig implements Migration
         'contact_reason_id' => ['Oro\\Bundle\\ContactUsBundle\\Entity\\ContactRequest']
     ];
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         foreach ($this->fields as $fieldName => $entityClasses) {

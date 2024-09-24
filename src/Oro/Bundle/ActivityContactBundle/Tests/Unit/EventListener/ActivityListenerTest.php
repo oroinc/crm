@@ -38,6 +38,7 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
     /** @var ActivityContactProvider */
     private $activityContactProvider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);

@@ -39,6 +39,7 @@ abstract class RecalculateLifetimeCommand extends Command
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
+    #[\Override]
     public function configure()
     {
         $this
@@ -51,6 +52,7 @@ abstract class RecalculateLifetimeCommand extends Command
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
+    #[\Override]
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->progressBar = new ProgressBar($output);

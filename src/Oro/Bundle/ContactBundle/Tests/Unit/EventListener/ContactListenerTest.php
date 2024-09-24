@@ -23,6 +23,7 @@ class ContactListenerTest extends TestCase
     /** @var ContactListener */
     private $contactListener;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);

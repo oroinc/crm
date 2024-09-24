@@ -36,9 +36,6 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
     /** @var SettingsProvider */
     protected $settings;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(
         $class,
         ObjectManager $om,

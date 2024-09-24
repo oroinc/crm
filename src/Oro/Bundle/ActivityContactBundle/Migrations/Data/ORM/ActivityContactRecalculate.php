@@ -17,9 +17,7 @@ class ActivityContactRecalculate extends AbstractFixture implements ContainerAwa
 {
     use ContainerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         /** @var MessageProducerInterface $producer */

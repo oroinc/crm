@@ -130,25 +130,19 @@ class ChannelController extends RestController
         return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getForm()
     {
         throw new \BadMethodCallException('FormHandler is not available.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getManager()
     {
         return $this->container->get('oro_channel.manager.channel.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getFormHandler()
     {
         throw new \BadMethodCallException('FormHandler is not available.');

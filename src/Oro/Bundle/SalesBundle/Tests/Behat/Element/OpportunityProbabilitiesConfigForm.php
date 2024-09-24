@@ -12,6 +12,7 @@ class OpportunityProbabilitiesConfigForm extends Form
     /**
      * @throws ElementNotFoundException
      */
+    #[\Override]
     public function fill(TableNode $table)
     {
         $headers = $table->getRow(0);

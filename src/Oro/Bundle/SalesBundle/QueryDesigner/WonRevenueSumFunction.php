@@ -10,9 +10,7 @@ use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FunctionInterface;
  */
 class WonRevenueSumFunction implements FunctionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getExpression(
         $tableAlias,
         $fieldName,

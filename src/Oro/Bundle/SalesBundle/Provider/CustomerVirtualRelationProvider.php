@@ -45,9 +45,7 @@ class CustomerVirtualRelationProvider implements VirtualRelationProviderInterfac
         $this->sourceClass = $className;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isVirtualRelation($className, $fieldName)
     {
         return
@@ -55,17 +53,13 @@ class CustomerVirtualRelationProvider implements VirtualRelationProviderInterfac
             && in_array($fieldName, array_values($this->getTargets()), true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getVirtualRelationQuery($className, $fieldName)
     {
         return $this->getQueryPart($fieldName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getVirtualRelations($className)
     {
         if (!is_a($className, $this->sourceClass, true)) {
@@ -87,9 +81,7 @@ class CustomerVirtualRelationProvider implements VirtualRelationProviderInterfac
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getTargetJoinAlias($className, $fieldName, $selectFieldName = null)
     {
         return $fieldName;

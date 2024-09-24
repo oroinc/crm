@@ -17,6 +17,7 @@ class ContactExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var ContactExtension */
     private $extension;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->urlFormatter = $this->createMock(SocialUrlFormatter::class);

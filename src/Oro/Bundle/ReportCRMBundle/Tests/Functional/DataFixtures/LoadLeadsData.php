@@ -32,17 +32,13 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     private const FLUSH_MAX = 50;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganization::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $workflowManager = $this->container->get('oro_workflow.manager');

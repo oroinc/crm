@@ -11,9 +11,7 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
  */
 abstract class ChannelRepositoryAbstract extends EntityRepository implements ChannelRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getAvailableChannelNames(AclHelper $aclHelper, $type = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -28,9 +26,7 @@ abstract class ChannelRepositoryAbstract extends EntityRepository implements Cha
         return $aclHelper->apply($qb)->getArrayResult();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getChannelsByEntities(
         array $entities = [],
         $status = Channel::STATUS_ACTIVE,
@@ -45,9 +41,7 @@ abstract class ChannelRepositoryAbstract extends EntityRepository implements Cha
         return $query->getResult();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getChannelsByEntitiesQB(array $entities = [], $status = Channel::STATUS_ACTIVE)
     {
         $query = $this->createQueryBuilder('c');

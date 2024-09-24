@@ -8,9 +8,7 @@ use Psr\Log\LoggerInterface;
 
 class DropExtendConfigQuery extends ParametrizedMigrationQuery
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDescription()
     {
         $logger = new ArrayLogger();
@@ -20,17 +18,12 @@ class DropExtendConfigQuery extends ParametrizedMigrationQuery
         return $logger->getMessages();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function execute(LoggerInterface $logger)
     {
         $this->doExecute($logger);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function doExecute(LoggerInterface $logger, $dryRun = false)
     {
         $updateSql = <<<DQL

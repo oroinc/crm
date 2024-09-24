@@ -9,9 +9,7 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityImportExportConfigurationProvider implements ImportExportConfigurationProviderInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function get(): ImportExportConfigurationInterface
     {
         return new ImportExportConfiguration([

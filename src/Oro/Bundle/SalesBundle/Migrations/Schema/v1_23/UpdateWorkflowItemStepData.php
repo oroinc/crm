@@ -13,9 +13,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
     /** @var array */
     protected $steps;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDescription()
     {
         $logger = new ArrayLogger();
@@ -23,9 +21,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         return $logger->getMessages();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function execute(LoggerInterface $logger)
     {
         $this->doExecute($logger);

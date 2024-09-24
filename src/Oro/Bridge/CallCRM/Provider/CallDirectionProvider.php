@@ -24,34 +24,30 @@ class CallDirectionProvider implements DirectionProviderInterface
     }
 
     /**
-     * {@inheritdoc}
      * @param Call $activity
      */
+    #[\Override]
     public function getDirection($activity, $target)
     {
         return $activity->getDirection()->getName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isDirectionChanged($changeSet = [])
     {
         return array_key_exists('direction', $changeSet);
     }
 
     /**
-     * {@inheritdoc}
      * @param Call $activity
      */
+    #[\Override]
     public function getDate($activity)
     {
         return $activity->getCallDateTime() ?: new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getLastActivitiesDateForTarget(EntityManager $em, $target, $direction, $skipId = null)
     {
         $result = [];

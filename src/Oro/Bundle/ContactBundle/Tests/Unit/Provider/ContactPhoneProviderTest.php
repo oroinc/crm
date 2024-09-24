@@ -11,6 +11,7 @@ class ContactPhoneProviderTest extends \PHPUnit\Framework\TestCase
     /** @var ContactPhoneProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->provider = new ContactPhoneProvider();

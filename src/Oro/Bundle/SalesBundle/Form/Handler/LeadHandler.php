@@ -26,9 +26,7 @@ class LeadHandler implements FormHandlerInterface
         $this->requestChannelProvider = $requestChannelProvider;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function process($entity, FormInterface $form, Request $request)
     {
         $form->setData($entity);

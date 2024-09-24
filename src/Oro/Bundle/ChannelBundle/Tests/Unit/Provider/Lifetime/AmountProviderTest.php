@@ -15,6 +15,7 @@ class AmountProviderTest extends OrmTestCase
     private EntityManagerInterface $em;
     private AmountProvider $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->em = $this->getTestEntityManager();

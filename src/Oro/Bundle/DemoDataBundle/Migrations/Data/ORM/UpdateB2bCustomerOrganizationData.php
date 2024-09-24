@@ -11,9 +11,7 @@ use Doctrine\Persistence\ObjectManager;
  */
 class UpdateB2bCustomerOrganizationData extends AbstractFixture
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $this->updateB2bCustomerOrganization($manager);

@@ -7,6 +7,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatusBoardFi
 
 class OpportunityStatusBoardTest extends AbstractDatagridTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
@@ -23,8 +24,8 @@ class OpportunityStatusBoardTest extends AbstractDatagridTestCase
 
     /**
      * Check that status board loads correct records count based on available statuses
-     * {@inheritdoc}
      */
+    #[\Override]
     public function gridProvider(): array
     {
         return [

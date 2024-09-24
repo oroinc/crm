@@ -8,9 +8,7 @@ use Symfony\Component\Form\FormView;
 
 abstract class AbstractChannelAwareType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['channel_id'] = isset($options['channel_id']) ? $options['channel_id'] : null;

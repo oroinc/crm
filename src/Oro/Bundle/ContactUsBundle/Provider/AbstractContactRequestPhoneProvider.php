@@ -14,6 +14,7 @@ class AbstractContactRequestPhoneProvider implements PhoneProviderInterface
      *
      * @return string|null
      */
+    #[\Override]
     public function getPhoneNumber($object)
     {
         return $object->getPhone();
@@ -26,6 +27,7 @@ class AbstractContactRequestPhoneProvider implements PhoneProviderInterface
      *
      * @return array of [phone number, phone owner]
      */
+    #[\Override]
     public function getPhoneNumbers($object)
     {
         $result = [];

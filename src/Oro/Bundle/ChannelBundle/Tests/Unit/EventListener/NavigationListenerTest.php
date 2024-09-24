@@ -26,6 +26,7 @@ class NavigationListenerTest extends \PHPUnit\Framework\TestCase
     /** @var NavigationListener */
     private $listener;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->settings = $this->createMock(SettingsProvider::class);

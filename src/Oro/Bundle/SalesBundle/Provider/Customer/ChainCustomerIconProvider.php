@@ -18,9 +18,7 @@ class ChainCustomerIconProvider implements CustomerIconProviderInterface
         $this->providers = $providers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getIcon($entity)
     {
         foreach ($this->providers as $provider) {

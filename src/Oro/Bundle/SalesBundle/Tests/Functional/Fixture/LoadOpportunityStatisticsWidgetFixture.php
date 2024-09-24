@@ -16,17 +16,13 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadOpportunityStatisticsWidgetFixture extends AbstractFixture implements DependentFixtureInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganization::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $this->createOpportunities($manager);

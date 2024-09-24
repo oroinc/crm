@@ -11,9 +11,7 @@ class AccountPhoneProvider implements PhoneProviderInterface, RootPhoneProviderA
     /** @var PhoneProviderInterface */
     protected $rootProvider;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function setRootProvider(PhoneProviderInterface $rootProvider)
     {
         $this->rootProvider = $rootProvider;
@@ -26,6 +24,7 @@ class AccountPhoneProvider implements PhoneProviderInterface, RootPhoneProviderA
      *
      * @return string|null
      */
+    #[\Override]
     public function getPhoneNumber($object)
     {
         $defaultContact = $object->getDefaultContact();
@@ -43,6 +42,7 @@ class AccountPhoneProvider implements PhoneProviderInterface, RootPhoneProviderA
      *
      * @return array of [phone number, phone owner]
      */
+    #[\Override]
     public function getPhoneNumbers($object)
     {
         $defaultContact = $object->getDefaultContact();

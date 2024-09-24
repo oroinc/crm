@@ -10,9 +10,7 @@ use Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
 
 class OroSalesBundle implements Migration
 {
-    /**
-     * @inheritdoc
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $sql = <<<SQL

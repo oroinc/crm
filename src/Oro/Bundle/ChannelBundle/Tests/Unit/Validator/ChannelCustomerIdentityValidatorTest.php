@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class ChannelCustomerIdentityValidatorTest extends ConstraintValidatorTestCase
 {
+    #[\Override]
     protected function createValidator(): ChannelCustomerIdentityConstraintValidator
     {
         return new ChannelCustomerIdentityConstraintValidator();

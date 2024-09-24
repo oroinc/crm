@@ -6,6 +6,7 @@ use Oro\Bundle\ApiBundle\Tests\Functional\RestPlainApiTestCase;
 
 class ContactTest extends RestPlainApiTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

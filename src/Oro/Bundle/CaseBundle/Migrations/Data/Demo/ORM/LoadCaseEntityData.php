@@ -84,9 +84,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
 
     private array $entitiesCount = [];
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [
@@ -96,9 +94,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $caseManager = $this->container->get('oro_case.manager');

@@ -48,9 +48,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     /** @var Organization */
     private $organization;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
@@ -78,9 +76,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $this->organization = $this->em->getRepository(Organization::class)->getFirst();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $this->loadAccounts();

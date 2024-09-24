@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RestLeadEmailApiTest extends WebTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());

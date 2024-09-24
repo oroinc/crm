@@ -134,6 +134,7 @@ class OpportunityController extends RestController
      *
      * @return ApiEntityManager
      */
+    #[\Override]
     public function getManager()
     {
         return $this->container->get('oro_sales.opportunity.manager.api');
@@ -142,6 +143,7 @@ class OpportunityController extends RestController
     /**
      * @return FormInterface
      */
+    #[\Override]
     public function getForm()
     {
         return $this->container->get('oro_sales.opportunity.form.api');
@@ -150,16 +152,13 @@ class OpportunityController extends RestController
     /**
      * @return ApiFormHandler
      */
+    #[\Override]
     public function getFormHandler()
     {
         return $this->container->get('oro_sales.opportunity.form.handler.api');
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * overriden because of new updateHandler requirements ->process(entity, form, request)
-     */
+    #[\Override]
     protected function processForm($entity)
     {
         $this->fixRequestAttributes($entity);
@@ -177,6 +176,7 @@ class OpportunityController extends RestController
         return $result ? $entity : null;
     }
 
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return array_merge(

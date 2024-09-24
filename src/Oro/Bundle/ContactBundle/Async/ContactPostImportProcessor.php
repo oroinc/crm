@@ -29,9 +29,7 @@ class ContactPostImportProcessor implements MessageProcessorInterface, TopicSubs
         $this->logger = new NullLogger();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function process(MessageInterface $message, SessionInterface $session): string
     {
         try {
@@ -50,6 +48,7 @@ class ContactPostImportProcessor implements MessageProcessorInterface, TopicSubs
         return self::ACK;
     }
 
+    #[\Override]
     public static function getSubscribedTopics(): array
     {
         return [ActualizeContactEmailAssociationsTopic::getName()];

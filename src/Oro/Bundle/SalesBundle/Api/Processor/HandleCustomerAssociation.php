@@ -36,9 +36,7 @@ class HandleCustomerAssociation implements ProcessorInterface
         $this->isRelationOptional = $isRelationOptional;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function process(ContextInterface $context): void
     {
         /** @var CustomizeFormDataContext $context */

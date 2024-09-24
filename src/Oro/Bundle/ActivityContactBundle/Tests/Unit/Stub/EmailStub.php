@@ -12,6 +12,7 @@ class EmailStub extends Email
 {
     protected $targets = [];
 
+    #[\Override]
     public function getActivityTargets($targetClass = null)
     {
         return $this->targets;

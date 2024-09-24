@@ -113,33 +113,25 @@ class LeadAddressController extends RestController
         return $this->container->get('oro_sales.lead.manager.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getManager()
     {
         return $this->container->get('oro_sales.lead_address.manager.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getForm()
     {
         throw new \BadMethodCallException('Form is not available.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getFormHandler()
     {
         throw new \BadMethodCallException('FormHandler is not available.');
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function getPreparedItem($entity, $resultFields = [])
     {
         $result = parent::getPreparedItem($entity);

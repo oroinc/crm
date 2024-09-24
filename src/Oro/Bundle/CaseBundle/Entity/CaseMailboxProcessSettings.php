@@ -125,9 +125,7 @@ class CaseMailboxProcessSettings extends MailboxProcessSettings implements Tagga
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getType()
     {
         return 'case';
@@ -136,22 +134,19 @@ class CaseMailboxProcessSettings extends MailboxProcessSettings implements Tagga
     /**
      * @return string
      */
+    #[\Override]
     public function __toString()
     {
         return (string)$this->getId();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getTaggableId()
     {
         return $this->getId();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getTags()
     {
         $this->tags = $this->tags ?: new ArrayCollection();
@@ -159,9 +154,7 @@ class CaseMailboxProcessSettings extends MailboxProcessSettings implements Tagga
         return $this->tags;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function setTags($tags)
     {
         $this->tags = $tags;

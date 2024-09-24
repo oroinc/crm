@@ -117,17 +117,13 @@ class B2bCustomerPhoneController extends RestController
         return $this->container->get('oro_sales.b2bcustomer.manager.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getManager()
     {
         return $this->container->get('oro_sales.b2bcustomer_phone.manager.api');
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function getPreparedItem($entity, $resultFields = [])
     {
         $result['id']      = $entity->getId();
@@ -141,14 +137,13 @@ class B2bCustomerPhoneController extends RestController
     /**
      * @return ApiFormHandler
      */
+    #[\Override]
     public function getFormHandler()
     {
         return $this->container->get('oro_sales.form.type.b2bcustomer_phone.handler');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getForm()
     {
         return $this->container->get('oro_sales.form.type.b2bcustomer_phone.type');

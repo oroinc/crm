@@ -20,6 +20,7 @@ class LeadTypeTest extends \PHPUnit\Framework\TestCase
 {
     private LeadType $type;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->type = new LeadType();

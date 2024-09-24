@@ -32,6 +32,7 @@ class AccountTypeTest extends \PHPUnit\Framework\TestCase
     /** @var AccountType */
     private $type;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->router = $this->createMock(RouterInterface::class);

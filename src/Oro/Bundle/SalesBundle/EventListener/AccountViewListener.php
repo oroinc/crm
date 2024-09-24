@@ -50,9 +50,6 @@ class AccountViewListener
         $this->entityClass = $entityClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onView(BeforeListRenderEvent $event)
     {
         // guard

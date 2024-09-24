@@ -27,9 +27,7 @@ class CaseEntityHandler extends ApiFormHandler
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function onSuccess($entity)
     {
         $this->entityManager->persist($entity);

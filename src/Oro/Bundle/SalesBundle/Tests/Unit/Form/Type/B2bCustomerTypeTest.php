@@ -42,15 +42,14 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
     /** @var B2bCustomerType */
     private $formType;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->formType = new B2bCustomerType(PropertyAccess::createPropertyAccessor());
         parent::setUp();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function getExtensions(): array
     {
         $objectManager = $this->createMock(ObjectManager::class);

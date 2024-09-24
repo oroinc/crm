@@ -30,6 +30,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
     /** @var ForecastOfOpportunities */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->translator = $this->createMock(TranslatorInterface::class);

@@ -27,17 +27,13 @@ class UpdateOpportunityStatus implements
     use ConnectionAwareTrait;
     use OutdatedExtendExtensionAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getOrder(): int
     {
         return 2;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $defaultStatuses = ['in_progress', 'won', 'lost'];

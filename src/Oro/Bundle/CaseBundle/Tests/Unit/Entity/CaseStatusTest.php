@@ -9,6 +9,7 @@ class CaseStatusTest extends \PHPUnit\Framework\TestCase
     /** @var CaseStatus */
     private $caseStatus;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->caseStatus = new CaseStatus('test');

@@ -27,6 +27,7 @@ class AddAccountCustomerAssociationDescriptionsTest extends ConfigProcessorTestC
     /** @var AddAccountCustomerAssociationDescriptions */
     private $processor;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

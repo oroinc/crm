@@ -18,6 +18,7 @@ class CaseEntityTest extends \PHPUnit\Framework\TestCase
     /** @var CaseEntity */
     private $case;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->case = new CaseEntity();

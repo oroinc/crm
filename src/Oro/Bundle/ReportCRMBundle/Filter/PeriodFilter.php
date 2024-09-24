@@ -11,9 +11,7 @@ use Oro\Bundle\FilterBundle\Filter\FilterUtility;
  */
 class PeriodFilter extends ChoiceFilter
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function apply(FilterDatasourceAdapterInterface $ds, $data)
     {
         $data = $this->parseData($data);
@@ -30,9 +28,7 @@ class PeriodFilter extends ChoiceFilter
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function init($name, array $params)
     {
         $params[FilterUtility::TYPE_KEY] = 'choice';

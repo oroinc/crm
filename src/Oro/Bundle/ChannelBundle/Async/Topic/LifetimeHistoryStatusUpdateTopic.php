@@ -14,16 +14,19 @@ class LifetimeHistoryStatusUpdateTopic extends AbstractTopic
     public const RECORDS_FIELD = 'records';
     public const STATUS_FIELD  = 'status';
 
+    #[\Override]
     public static function getName(): string
     {
         return 'oro.channel.lifetime_history_status_update';
     }
 
+    #[\Override]
     public static function getDescription(): string
     {
         return 'Update status of history entries based on data given';
     }
 
+    #[\Override]
     public function configureMessageBody(OptionsResolver $resolver): void
     {
         $resolver

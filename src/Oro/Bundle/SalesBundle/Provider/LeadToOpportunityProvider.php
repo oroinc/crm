@@ -176,9 +176,7 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
         return $contact;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function prepareOpportunityForForm(Lead $lead, $isGetRequest = true)
     {
         $opportunity = $this->createOpportunity();
@@ -201,9 +199,7 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
         return $opportunity;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function saveOpportunity(Opportunity $opportunity, callable $errorMessageCallback)
     {
         $lead = $opportunity->getLead();

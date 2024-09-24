@@ -11,9 +11,7 @@ class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProvi
     /** @var PhoneProviderInterface */
     protected $rootProvider;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function setRootProvider(PhoneProviderInterface $rootProvider)
     {
         $this->rootProvider = $rootProvider;
@@ -26,6 +24,7 @@ class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProvi
      *
      * @return string|null
      */
+    #[\Override]
     public function getPhoneNumber($object)
     {
         $phone = null;
@@ -50,6 +49,7 @@ class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProvi
      *
      * @return array of [phone number, phone owner]
      */
+    #[\Override]
     public function getPhoneNumbers($object)
     {
         $result = [];

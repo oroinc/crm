@@ -26,6 +26,7 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
     /** @var StepExecutionProxyContext */
     private $context;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());

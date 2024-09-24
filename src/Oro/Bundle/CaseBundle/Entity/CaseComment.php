@@ -108,6 +108,7 @@ class CaseComment extends BaseComment implements ExtendEntityInterface
     /**
      * @return string
      */
+    #[\Override]
     public function __toString()
     {
         return (string)$this->getId();

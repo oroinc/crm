@@ -11,6 +11,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
  */
 class DropOpportunitiesByStatusIndex implements Migration
 {
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $table = $schema->getTable('orocrm_sales_opportunity');

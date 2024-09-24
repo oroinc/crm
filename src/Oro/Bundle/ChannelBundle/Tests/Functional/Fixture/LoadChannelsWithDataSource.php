@@ -18,9 +18,7 @@ class LoadChannelsWithDataSource extends AbstractFixture implements DependentFix
         ],
     ];
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         foreach ($this->data as $data) {
@@ -41,9 +39,7 @@ class LoadChannelsWithDataSource extends AbstractFixture implements DependentFix
         $manager->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [LoadChannel::class, LoadChannelData::class];

@@ -13,6 +13,7 @@ class LeadAddressTypeTest extends \PHPUnit\Framework\TestCase
     /** @var LeadAddressType */
     private $type;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->type = new LeadAddressType();

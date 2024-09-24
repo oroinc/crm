@@ -18,6 +18,7 @@ class ChannelHelperTest extends OrmTestCase
     private EntityManagerInterface $em;
     private ChannelHelper $helper;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->em = $this->getTestEntityManager();

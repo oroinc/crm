@@ -7,6 +7,7 @@ class WonOpportunityStatusCountFunction extends AbstractOpportunityStatusCountFu
     /**
      * @return string
      */
+    #[\Override]
     protected function getStatus()
     {
         return 'won';

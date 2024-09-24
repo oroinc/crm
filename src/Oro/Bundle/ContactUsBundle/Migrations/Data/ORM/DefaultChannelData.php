@@ -17,9 +17,7 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
     public const PREFERABLE_CHANNEL_TYPE = 'custom';
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $forms = $manager->getRepository(EmbeddedForm::class)

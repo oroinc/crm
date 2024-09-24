@@ -19,17 +19,13 @@ class LoadCampaignOpportunityWidgetFixture extends AbstractFixture implements De
 {
     private int $opportunityCount = 0;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganization::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $this->createOpportunities($manager);

@@ -39,9 +39,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
     /** @var Organization */
     private $organization;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function setContainer(ContainerInterface $container = null)
     {
         $this->userManager = $container->get('oro_user.manager');
@@ -52,9 +50,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $this->organization = $this->em->getRepository(Organization::class)->getFirst();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $this->loadUsers();

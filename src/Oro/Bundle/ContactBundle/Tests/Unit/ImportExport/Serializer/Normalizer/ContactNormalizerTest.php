@@ -21,6 +21,7 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
     /** @var ContactNormalizer */
     private $normalizer;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->socialUrlFormatter = $this->createMock(SocialUrlFormatter::class);

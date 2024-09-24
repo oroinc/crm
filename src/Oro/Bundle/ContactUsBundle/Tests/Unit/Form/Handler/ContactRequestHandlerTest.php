@@ -30,6 +30,7 @@ class ContactRequestHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var ContactRequestHandler */
     private $handler;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->form = $this->createMock(Form::class);

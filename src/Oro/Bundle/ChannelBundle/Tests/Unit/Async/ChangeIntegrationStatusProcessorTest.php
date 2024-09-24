@@ -34,6 +34,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
 
     private ChangeIntegrationStatusProcessor $processor;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->stateProvider = $this->createMock(StateProvider::class);

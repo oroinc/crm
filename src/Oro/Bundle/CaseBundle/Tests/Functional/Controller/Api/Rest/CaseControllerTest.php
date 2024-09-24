@@ -23,12 +23,14 @@ class CaseControllerTest extends WebTestCase
     /** @var int */
     private static $adminUserId = 1;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());
         $this->loadFixtures([LoadCaseEntityData::class]);
     }
 
+    #[\Override]
     protected function postFixtureLoad()
     {
         $contact = self::getContainer()->get('doctrine')->getRepository(Contact::class)

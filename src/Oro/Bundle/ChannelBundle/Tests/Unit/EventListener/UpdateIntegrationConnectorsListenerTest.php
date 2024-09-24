@@ -33,6 +33,7 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit\Framework\TestCas
     /** @var UpdateIntegrationConnectorsListener */
     private $listener;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->registry = $this->createMock(ManagerRegistry::class);

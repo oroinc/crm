@@ -23,6 +23,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
     /** @var B2bCustomer */
     private $entity;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->entity = new B2bCustomer();

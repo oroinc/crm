@@ -15,9 +15,7 @@ abstract class AbstractOpportunityStatusCountFunction implements FunctionInterfa
      */
     abstract protected function getStatus();
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getExpression($tableAlias, $fieldName, $columnName, $columnAlias, AbstractQueryConverter $qc)
     {
         if (str_contains($columnName, 'JSON_EXTRACT')) {

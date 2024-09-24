@@ -36,6 +36,7 @@ class ContactReasonStub extends ContactReason
      * @param Collection $values
      * @return mixed
      */
+    #[\Override]
     public function getDefaultFallbackValue(Collection $values)
     {
         return $this->defaultTitle;

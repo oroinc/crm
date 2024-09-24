@@ -91,9 +91,7 @@ class LeadMailboxProcessSettings extends MailboxProcessSettings implements Exten
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getType()
     {
         return 'lead';

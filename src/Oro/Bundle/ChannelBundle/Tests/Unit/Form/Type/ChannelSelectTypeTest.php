@@ -21,6 +21,7 @@ class ChannelSelectTypeTest extends OrmTestCase
     /** @var FormFactory */
     private $factory;
 
+    #[\Override]
     protected function setUp(): void
     {
         $registry = $this->createMock(ManagerRegistry::class);

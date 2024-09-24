@@ -10,6 +10,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
  */
 class LoadLeadSourceData extends AbstractEnumFixture
 {
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -17,11 +18,13 @@ class LoadLeadSourceData extends AbstractEnumFixture
         ];
     }
 
+    #[\Override]
     protected function getDefaultValue(): string
     {
         return ExtendHelper::buildEnumInternalId('Demand Generation');
     }
 
+    #[\Override]
     protected function getEnumCode(): string
     {
         return 'lead_source';

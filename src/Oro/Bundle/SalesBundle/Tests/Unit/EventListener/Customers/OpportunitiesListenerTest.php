@@ -31,6 +31,7 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
     /** @var OpportunitiesListener */
     private $listener;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->provider = $this->createMock(CustomerConfigProvider::class);

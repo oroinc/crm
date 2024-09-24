@@ -16,12 +16,14 @@ class ChannelIntegrationValidatorTest extends ConstraintValidatorTestCase
     /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->provider = $this->createMock(SettingsProvider::class);
         parent::setUp();
     }
 
+    #[\Override]
     protected function createValidator(): ChannelIntegrationConstraintValidator
     {
         return new ChannelIntegrationConstraintValidator($this->provider);

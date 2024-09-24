@@ -12,9 +12,7 @@ class OpportunityAttachment implements Migration, AttachmentExtensionAwareInterf
 {
     use AttachmentExtensionAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $this->attachmentExtension->addAttachmentAssociation(

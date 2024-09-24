@@ -48,17 +48,13 @@ class OroSalesBundleInstaller implements
     use RenameExtensionAwareTrait;
     use CustomerExtensionTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getMigrationVersion(): string
     {
         return 'v1_44';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         /** Tables generation **/

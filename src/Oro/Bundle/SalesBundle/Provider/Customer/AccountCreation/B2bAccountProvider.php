@@ -6,9 +6,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class B2bAccountProvider implements AccountProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getAccount($targetCustomer)
     {
         if ($targetCustomer instanceof B2bCustomer && $targetCustomer->getAccount()) {

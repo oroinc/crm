@@ -30,9 +30,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     private const FLUSH_MAX = 50;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [
@@ -43,9 +41,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $tokenStorage = $this->container->get('security.token_storage');

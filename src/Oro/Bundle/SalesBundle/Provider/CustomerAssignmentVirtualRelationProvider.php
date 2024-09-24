@@ -32,9 +32,7 @@ class CustomerAssignmentVirtualRelationProvider implements VirtualRelationProvid
         $this->sourceClass = $sourceClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isVirtualRelation($className, $fieldName)
     {
         return
@@ -45,9 +43,7 @@ class CustomerAssignmentVirtualRelationProvider implements VirtualRelationProvid
             );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getVirtualRelations($className)
     {
         if (!is_a($className, $this->sourceClass, true)) {
@@ -72,9 +68,7 @@ class CustomerAssignmentVirtualRelationProvider implements VirtualRelationProvid
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getVirtualRelationQuery($className, $fieldName)
     {
         $relations = $this->getVirtualRelations($className);
@@ -82,9 +76,7 @@ class CustomerAssignmentVirtualRelationProvider implements VirtualRelationProvid
         return isset($relations[$fieldName]) ? $relations[$fieldName]['query'] : [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getTargetJoinAlias($className, $fieldName, $selectFieldName = null)
     {
         $relations = $this->getVirtualRelations($className);

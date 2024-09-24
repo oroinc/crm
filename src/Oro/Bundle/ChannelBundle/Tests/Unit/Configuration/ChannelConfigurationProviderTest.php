@@ -17,6 +17,7 @@ class ChannelConfigurationProviderTest extends \PHPUnit\Framework\TestCase
 
     private ChannelConfigurationProvider $configurationProvider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $cacheFile = $this->getTempFile('ChannelConfigurationProvider');

@@ -9,9 +9,7 @@ use Oro\Bundle\DashboardBundle\Entity\Widget;
 
 class LoadLeadsListWidgetFixture extends AbstractFixture
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $dashboard = new Dashboard();

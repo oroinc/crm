@@ -22,17 +22,13 @@ class IntegrationTypeExtension extends AbstractTypeExtension
         $this->settingsProvider = $settingsProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getExtendedTypes(): iterable
     {
         return [ChannelType::class];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if (!$options['disable_customer_datasource_types']) {
@@ -68,9 +64,7 @@ class IntegrationTypeExtension extends AbstractTypeExtension
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['disable_customer_datasource_types' => true]);

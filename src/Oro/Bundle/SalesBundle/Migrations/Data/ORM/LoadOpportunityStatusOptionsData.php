@@ -9,6 +9,7 @@ use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
  */
 class LoadOpportunityStatusOptionsData extends AbstractEnumFixture
 {
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -22,11 +23,13 @@ class LoadOpportunityStatusOptionsData extends AbstractEnumFixture
         ];
     }
 
+    #[\Override]
     protected function getEnumCode(): string
     {
         return 'opportunity_status';
     }
 
+    #[\Override]
     protected function getDefaultValue(): string
     {
         return 'in_progress';

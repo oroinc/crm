@@ -9,9 +9,7 @@ use Oro\Bundle\EmailBundle\Migrations\Data\ORM\AbstractEmailFixture;
  */
 class LoadEmailTemplates extends AbstractEmailFixture
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getEmailsDir(): string
     {
         return $this->container

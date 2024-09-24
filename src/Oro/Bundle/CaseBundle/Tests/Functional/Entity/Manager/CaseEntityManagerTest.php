@@ -16,6 +16,7 @@ class CaseEntityManagerTest extends WebTestCase
     /** @var CaseEntityManager */
     private $manager;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient([], $this->generateBasicAuthHeader());

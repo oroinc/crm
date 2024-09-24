@@ -21,6 +21,7 @@ class ChannelsByEntitiesProviderTest extends TestCase
     /** @var AclHelper|MockObject */
     private $aclHelper;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->repo = $this->createMock(ChannelRepository::class);

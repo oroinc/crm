@@ -8,6 +8,7 @@ use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 
 class LoadContactReasonData extends AbstractFixture
 {
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $data = [
