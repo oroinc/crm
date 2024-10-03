@@ -6,8 +6,8 @@ workflows:
                 field: status
                 mode: disallow
                 values:
-                    - 'won'
-                    - 'lost'
+                    - 'opportunity_status.won'
+                    - 'opportunity_status.lost'
             opportunity_close_reason_creation:
                 attribute: opportunity
                 field: closeReason
@@ -20,8 +20,8 @@ workflows:
                 step: open
                 mode: disallow
                 values:
-                    - 'won'
-                    - 'lost'
+                    - 'opportunity_status.won'
+                    - 'opportunity_status.lost'
             opportunity_close_reason_open:
                 attribute: opportunity
                 field: closeReason

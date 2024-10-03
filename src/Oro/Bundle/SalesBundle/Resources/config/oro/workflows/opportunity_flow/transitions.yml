@@ -25,8 +25,8 @@ workflows:
                                     - NotBlank: ~
                                 choice_label: name
                                 excluded_values:
-                                    - won
-                                    - lost
+                                    - 'opportunity_status.won'
+                                    - 'opportunity_status.lost'
                         probability: ~
             develop:
                 step_to: open
@@ -64,8 +64,8 @@ workflows:
                                     - NotBlank: ~
                                 choice_label: name
                                 excluded_values:
-                                    - won
-                                    - lost
+                                    - 'opportunity_status.won'
+                                    - 'opportunity_status.lost'
                         probability: ~
                         close_date: ~
                         customer_need:
@@ -169,8 +169,8 @@ workflows:
                                     - NotBlank: ~
                                 choice_label: name
                                 excluded_values:
-                                    - won
-                                    - lost
+                                    - 'opportunity_status.won'
+                                    - 'opportunity_status.lost'
                         probability: ~
                         close_date: ~
                         customer_need:
