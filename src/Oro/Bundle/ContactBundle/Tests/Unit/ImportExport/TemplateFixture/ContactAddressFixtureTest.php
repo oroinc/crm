@@ -16,6 +16,7 @@ class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
     /** @var ContactAddressFixture */
     private $fixture;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->fixture = new ContactAddressFixture();

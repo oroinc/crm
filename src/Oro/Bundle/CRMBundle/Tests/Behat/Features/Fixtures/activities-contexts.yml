@@ -13,7 +13,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
         name: 'Test Opportunity'
         owner: '@admin'
         organization: '@organization'
-        status: '@opportunity_status_in_progress'
+        status: '@opportunity_status.in_progress'
         customerAssociation: '@context_customer'
 
 Oro\Bundle\SalesBundle\Entity\Lead:
@@ -21,4 +21,4 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         name: 'Test Lead'
         owner: '@admin'
         organization: '@organization'
-        status: '@lead_status_new'
+        status: '@lead_status.new'

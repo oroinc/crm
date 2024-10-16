@@ -11,6 +11,7 @@ class B2bCustomerSelectTypeTest extends \PHPUnit\Framework\TestCase
     /** @var B2bCustomerSelectType */
     private $type;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->type = new B2bCustomerSelectType();

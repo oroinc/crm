@@ -10,6 +10,7 @@ use Oro\Bundle\ContactBundle\Entity\Group;
  */
 class ContactGroupTest extends RestJsonApiTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

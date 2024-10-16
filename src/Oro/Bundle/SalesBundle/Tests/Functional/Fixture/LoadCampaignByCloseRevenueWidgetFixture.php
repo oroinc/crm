@@ -10,9 +10,7 @@ use Oro\Bundle\DashboardBundle\Entity\Widget;
 
 class LoadCampaignByCloseRevenueWidgetFixture extends AbstractFixture implements DependentFixtureInterface
 {
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         /** @var Dashboard $dashboard */
@@ -30,6 +28,7 @@ class LoadCampaignByCloseRevenueWidgetFixture extends AbstractFixture implements
         $manager->flush();
     }
 
+    #[\Override]
     public function getDependencies(): array
     {
         return [

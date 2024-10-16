@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -19,9 +20,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  */
 class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixtureInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [
@@ -32,9 +31,7 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $tokenStorage = $this->container->get('security.token_storage');
@@ -87,8 +84,12 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
 
         $opportunityStatuses = ['in_progress', 'lost', 'needs_analysis', 'won'];
         $statusName = $opportunityStatuses[array_rand($opportunityStatuses)];
-        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
-        $opportunity->setStatus($manager->getReference($enumClass, $statusName));
+        $opportunity->setStatus(
+            $manager->getReference(
+                EnumOption::class,
+                ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, $statusName)
+            )
+        );
         if (Opportunity::STATUS_WON === $statusName) {
             $closeRevenueVal = mt_rand(10, 10000);
             $opportunity->setCloseRevenue(MultiCurrency::create($closeRevenueVal, 'USD'));

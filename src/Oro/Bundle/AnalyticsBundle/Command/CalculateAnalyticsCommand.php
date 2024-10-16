@@ -32,15 +32,14 @@ class CalculateAnalyticsCommand extends Command implements CronCommandScheduleDe
         $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDefaultDefinition(): string
     {
         return '0 0 * * *';
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
+    #[\Override]
     protected function configure()
     {
         $this
@@ -50,6 +49,7 @@ class CalculateAnalyticsCommand extends Command implements CronCommandScheduleDe
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
+    #[\Override]
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $channelId = $input->getOption('channel');

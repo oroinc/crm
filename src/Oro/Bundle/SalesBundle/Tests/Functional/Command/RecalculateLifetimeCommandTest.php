@@ -10,12 +10,14 @@ use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntities
 
 class RecalculateLifetimeCommandTest extends AbstractRecalculateLifetimeCommandTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->loadFixtures([LoadB2bCustomerEntitiesData::class]);
     }
 
+    #[\Override]
     public function testThatCommandNotProduceNewDataAuditRecordsInDatabase()
     {
         /**
@@ -37,6 +39,7 @@ class RecalculateLifetimeCommandTest extends AbstractRecalculateLifetimeCommandT
         parent::testThatCommandNotProduceNewDataAuditRecordsInDatabase();
     }
 
+    #[\Override]
     protected function getCommandName(): string
     {
         return RecalculateLifetimeCommand::getDefaultName();

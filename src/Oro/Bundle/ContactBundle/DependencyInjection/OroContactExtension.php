@@ -11,9 +11,7 @@ class OroContactExtension extends Extension
 {
     private const PARAMETER_SOCIAL_URL_FORMAT = 'oro_contact.social_url_format';
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);

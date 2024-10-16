@@ -3,35 +3,51 @@
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumOptionRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\TranslationBundle\Migrations\Data\ORM\LoadLanguageData;
 
-class LoadLeadSourceData extends AbstractFixture
+/**
+ * Loads lead_source enum options for Lead entities.
+ */
+class LoadLeadSourceData extends AbstractFixture implements DependentFixtureInterface
 {
-    /** @var array */
-    protected $data = [
-        'Website'         => false,
-        'Direct Mail'     => false,
-        'Affiliate'       => false,
+    protected array $data = [
+        'Website' => false,
+        'Direct Mail' => false,
+        'Affiliate' => false,
         'Email Marketing' => false,
-        'Outbound'        => false,
-        'Partner'         => false
+        'Outbound' => false,
+        'Partner' => false
     ];
 
-    public function load(ObjectManager $manager)
+    #[\Override]
+    public function load(ObjectManager $manager): void
     {
-        $className = ExtendHelper::buildEnumValueClassName('lead_source');
-
-        /** @var EnumValueRepository $enumRepo */
-        $enumRepo = $manager->getRepository($className);
+        /** @var EnumOptionRepository $enumRepo */
+        $enumRepo = $manager->getRepository(EnumOption::class);
 
         $priority = 1;
         foreach ($this->data as $name => $isDefault) {
-            $enumOption = $enumRepo->createEnumValue($name, $priority++, $isDefault);
+            $enumOption = $enumRepo->createEnumOption(
+                'lead_source',
+                ExtendHelper::buildEnumInternalId($name),
+                $name,
+                $priority++,
+                $isDefault
+            );
             $manager->persist($enumOption);
         }
 
         $manager->flush();
+    }
+
+    #[\Override]
+    public function getDependencies(): array
+    {
+        return [LoadLanguageData::class];
     }
 }

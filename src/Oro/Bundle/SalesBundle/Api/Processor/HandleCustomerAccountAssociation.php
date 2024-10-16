@@ -33,9 +33,7 @@ class HandleCustomerAccountAssociation implements ProcessorInterface, ServiceSub
         $this->container = $container;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return [
@@ -44,9 +42,7 @@ class HandleCustomerAccountAssociation implements ProcessorInterface, ServiceSub
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function process(ContextInterface $context): void
     {
         /** @var CustomizeFormDataContext $context */

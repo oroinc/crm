@@ -17,6 +17,7 @@ class LoadMethodData extends AbstractFixture
         'mail'  => 'Mail',
     );
 
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         foreach ($this->data as $methodName => $methodLabel) {

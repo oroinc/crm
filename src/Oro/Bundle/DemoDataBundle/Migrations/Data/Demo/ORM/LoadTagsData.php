@@ -24,9 +24,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
 {
     use ContainerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [
@@ -36,9 +34,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $organization = $this->getReference('default_organization');

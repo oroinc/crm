@@ -7,6 +7,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatusBoardFi
 
 class OpportunityStatusBoardTest extends AbstractDatagridTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
@@ -23,32 +24,32 @@ class OpportunityStatusBoardTest extends AbstractDatagridTestCase
 
     /**
      * Check that status board loads correct records count based on available statuses
-     * {@inheritdoc}
      */
+    #[\Override]
     public function gridProvider(): array
     {
         return [
-            'Opportunity grid'                => [
+            'Opportunity grid' => [
                 [
-                    'gridParameters'      => [
+                    'gridParameters' => [
                         'gridName' => 'sales-opportunity-grid',
                         'sales-opportunity-grid[_pager][_per_page]' => 10,
                     ],
-                    'gridFilters'         => [],
-                    'assert'              => [],
+                    'gridFilters' => [],
+                    'assert' => [],
                     'expectedResultCount' => 10
                 ],
             ],
             'Opportunity status board' => [
                 [
-                    'gridParameters'      => [
+                    'gridParameters' => [
                         'gridName' => 'sales-opportunity-grid',
                         'sales-opportunity-grid[_appearance][_type]' => 'board',
                         'sales-opportunity-grid[_appearance][_data][id]' => 'opportunity-by-status',
                         'sales-opportunity-grid[_pager][_per_page]' => 25,
                     ],
-                    'gridFilters'         => [],
-                    'assert'              => [],
+                    'gridFilters' => [],
+                    'assert' => [],
                     'expectedResultCount' => 25
                 ],
             ],

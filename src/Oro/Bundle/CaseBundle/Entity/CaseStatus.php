@@ -121,6 +121,7 @@ class CaseStatus implements Translatable
     /**
      * @return string
      */
+    #[\Override]
     public function __toString()
     {
         return (string)$this->label;

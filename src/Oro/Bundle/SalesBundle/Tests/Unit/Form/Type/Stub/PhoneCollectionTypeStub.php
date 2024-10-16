@@ -7,9 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PhoneCollectionTypeStub extends PhoneCollectionType
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -19,9 +17,7 @@ class PhoneCollectionTypeStub extends PhoneCollectionType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getParent(): ?string
     {
         return PhoneCollectionTypeParent::class;

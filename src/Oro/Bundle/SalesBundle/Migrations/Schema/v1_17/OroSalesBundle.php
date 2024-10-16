@@ -17,9 +17,7 @@ class OroSalesBundle implements Migration, ActivityExtensionAwareInterface, Name
     use ActivityExtensionAwareTrait;
     use ExtendNameGeneratorAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $relationTableName = $this->nameGenerator->generateManyToManyJoinTableName(

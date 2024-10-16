@@ -14,6 +14,7 @@ class CampaignOpportunityTest extends AbstractWidgetTestCase
 {
     private Widget $widget;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());

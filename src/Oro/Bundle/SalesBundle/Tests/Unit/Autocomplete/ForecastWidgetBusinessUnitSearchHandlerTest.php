@@ -32,6 +32,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends TestCase
     /** @var ForecastWidgetBusinessUnitSearchHandler */
     private $handler;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->businessAclProvider = $this->createMock(BusinessUnitAclProvider::class);

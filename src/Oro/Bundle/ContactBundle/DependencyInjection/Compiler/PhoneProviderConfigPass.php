@@ -13,9 +13,7 @@ class PhoneProviderConfigPass implements CompilerPassInterface
 {
     private const SERVICE_KEY = 'oro_address.provider.phone';
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition(self::SERVICE_KEY)) {

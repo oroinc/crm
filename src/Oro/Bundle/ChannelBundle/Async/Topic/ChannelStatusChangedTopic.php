@@ -10,16 +10,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ChannelStatusChangedTopic extends AbstractTopic
 {
+    #[\Override]
     public static function getName(): string
     {
         return 'oro.channel.channel_status_changed';
     }
 
+    #[\Override]
     public static function getDescription(): string
     {
         return 'Changes channel data source.';
     }
 
+    #[\Override]
     public function configureMessageBody(OptionsResolver $resolver): void
     {
         $resolver

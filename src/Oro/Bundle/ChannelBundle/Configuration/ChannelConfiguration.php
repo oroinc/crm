@@ -15,9 +15,7 @@ class ChannelConfiguration implements ConfigurationInterface
     private const DEFAULT_CUSTOMER_IDENTITY = 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity';
     private const DEFAULT_PRIORITY          = 0;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder(self::ROOT_NODE);

@@ -23,6 +23,7 @@ class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
     /** @var ActivityContactProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->directionProvider = $this->createMock(DirectionProviderInterface::class);

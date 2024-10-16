@@ -16,6 +16,7 @@ class StateProviderTest extends WebTestCase
     /** @var StateProvider */
     private $stateProvider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient();
@@ -29,6 +30,7 @@ class StateProviderTest extends WebTestCase
         );
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

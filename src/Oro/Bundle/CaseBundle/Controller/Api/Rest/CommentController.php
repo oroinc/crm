@@ -110,33 +110,25 @@ class CommentController extends RestController
         return $this->handleDeleteRequest($id);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getManager()
     {
         return $this->container->get('oro_case.manager.comment.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getForm()
     {
         return $this->container->get('oro_case.form.comment.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getFormHandler()
     {
         return $this->container->get('oro_case.form.handler.comment.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function transformEntityField($field, &$value)
     {
         switch ($field) {
@@ -153,9 +145,7 @@ class CommentController extends RestController
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function fixFormData(array &$data, $entity)
     {
         /** @var CaseEntity $entity */

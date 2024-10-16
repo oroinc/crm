@@ -121,6 +121,7 @@ class AccountController extends RestController
      *
      * @return ApiEntityManager
      */
+    #[\Override]
     public function getManager()
     {
         return $this->container->get('oro_account.account.manager.api');
@@ -129,6 +130,7 @@ class AccountController extends RestController
     /**
      * @return FormInterface
      */
+    #[\Override]
     public function getForm()
     {
         return $this->container->get('oro_account.form.account.api');
@@ -137,16 +139,13 @@ class AccountController extends RestController
     /**
      * @return ApiFormHandler
      */
+    #[\Override]
     public function getFormHandler()
     {
         return $this->container->get('oro_account.form.handler.account.api');
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * overriden because of new updateHandler requirements ->process(entity, form, request)
-     */
+    #[\Override]
     protected function processForm($entity)
     {
         $this->fixRequestAttributes($entity);
@@ -164,6 +163,7 @@ class AccountController extends RestController
         return $result ? $entity : null;
     }
 
+    #[\Override]
     protected function getPreparedItem($entity, $resultFields = [])
     {
         $result = parent::getPreparedItem($entity, $resultFields);
@@ -176,9 +176,7 @@ class AccountController extends RestController
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getPreparedItems($entities, $resultFields = [])
     {
         $result = [];

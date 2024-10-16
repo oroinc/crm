@@ -14,17 +14,13 @@ use Symfony\Component\Yaml\Yaml;
  */
 class UpdateCallAccessLevels extends AbstractUpdatePermissions implements DependentFixtureInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadRolesData::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         if ($this->container->get(ApplicationState::class)->isInstalled()) {

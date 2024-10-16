@@ -10,9 +10,7 @@ use Oro\Bundle\WorkflowBundle\Model\Filter\WorkflowDefinitionFilters;
  */
 class LoadWorkflowAclData extends LoadAclRolesData
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         /* @var $filters WorkflowDefinitionFilters */
@@ -24,9 +22,7 @@ class LoadWorkflowAclData extends LoadAclRolesData
         $filters->setEnabled(true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getDataPath()
     {
         return '@OroDemoDataBundle/Migrations/Data/ORM/CrmRoles/workflows.yml';

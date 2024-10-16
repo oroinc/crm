@@ -18,9 +18,7 @@ class TestForm extends AbstractType
         $this->name = $name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -33,6 +31,7 @@ class TestForm extends AbstractType
     /**
      * @return string
      */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return $this->name;

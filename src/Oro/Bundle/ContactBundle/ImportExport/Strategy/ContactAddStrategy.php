@@ -28,9 +28,7 @@ class ContactAddStrategy extends AbstractImportStrategy
         $this->tokenStorage = $tokenStorage;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function process($entity)
     {
         $this->assertEnvironment($entity);
@@ -105,9 +103,7 @@ class ContactAddStrategy extends AbstractImportStrategy
         $this->processContactAddresses($entity);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function afterProcessEntity($entity)
     {
         /** @var Contact $entity */

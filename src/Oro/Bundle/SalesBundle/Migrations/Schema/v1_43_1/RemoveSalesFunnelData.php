@@ -14,9 +14,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
  */
 class RemoveSalesFunnelData implements Migration
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         if ($schema->hasTable('orocrm_sales_funnel')) {

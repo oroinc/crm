@@ -18,9 +18,7 @@ class ChannelLimitationExtension extends AbstractExtension
     const CHANNEL_OPTIONS_PATH         = '[channel_limitation]';
     const CHANNEL_RELATION_OPTION_PATH = '[channel_limitation][channel_relation_path]';
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isApplicable(DatagridConfiguration $config)
     {
         return
@@ -29,9 +27,7 @@ class ChannelLimitationExtension extends AbstractExtension
             && $this->getParameters()->get('channelIds', false);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function processConfigs(DatagridConfiguration $config)
     {
         $options           = $config->offsetGetByPath(self::CHANNEL_OPTIONS_PATH, []);
@@ -43,9 +39,7 @@ class ChannelLimitationExtension extends AbstractExtension
         $config->offsetSetByPath(self::CHANNEL_OPTIONS_PATH, $optionsNormalized);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
         /** @var OrmDatasource $datasource */

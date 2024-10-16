@@ -76,9 +76,7 @@ class RFMCategoryController extends AbstractController
         return $this->rfmMetricCategoryRepository;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return array_merge(

@@ -4,9 +4,9 @@ namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 use Oro\Bundle\CurrencyBundle\Form\Type\MultiCurrencyType;
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOptionInterface;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumOptionsProvider;
 use Oro\Bundle\FormBundle\Form\Type\OroDateType;
 use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
@@ -34,8 +34,8 @@ class OpportunityType extends AbstractType
     /** @var ProbabilityProvider */
     protected $probabilityProvider;
 
-    /** @var EnumValueProvider */
-    protected $enumValueProvider;
+    /** @var EnumOptionsProvider */
+    protected $enumOptionsProvider;
 
     /** @var EnumTypeHelper */
     protected $typeHelper;
@@ -45,20 +45,20 @@ class OpportunityType extends AbstractType
 
     public function __construct(
         ProbabilityProvider $probabilityProvider,
-        EnumValueProvider $enumValueProvider,
+        EnumOptionsProvider $enumOptionsProvider,
         EnumTypeHelper $typeHelper,
         OpportunityRelationsBuilder $relationsBuilder
     ) {
         $this->probabilityProvider = $probabilityProvider;
-        $this->enumValueProvider   = $enumValueProvider;
+        $this->enumOptionsProvider   = $enumOptionsProvider;
         $this->typeHelper          = $typeHelper;
         $this->relationsBuilder    = $relationsBuilder;
     }
 
     /**
-     * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -196,9 +196,7 @@ class OpportunityType extends AbstractType
         $event->setData($opportunity);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -209,17 +207,12 @@ class OpportunityType extends AbstractType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return self::NAME;
@@ -240,11 +233,11 @@ class OpportunityType extends AbstractType
     /**
      * Return default enum value for Opportunity Status
      *
-     * @return AbstractEnumValue|null Return null if there is no default status
+     * @return EnumOptionInterface|null Return null if there is no default status
      */
     private function getDefaultStatus()
     {
-        return $this->enumValueProvider->getDefaultEnumValueByCode(
+        return $this->enumOptionsProvider->getDefaultEnumOptionByCode(
             $this->typeHelper->getEnumCode(Opportunity::class, 'status')
         );
     }

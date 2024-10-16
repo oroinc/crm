@@ -4,14 +4,13 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class LoadOpenOpportunityFixtures extends AbstractOpportunityFixtures
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function createOpportunity(ObjectManager $manager): void
     {
         $opportunity = new Opportunity();
@@ -23,8 +22,8 @@ class LoadOpenOpportunityFixtures extends AbstractOpportunityFixtures
         $opportunity->setCloseRevenue(MultiCurrency::create(0, 'USD'));
         $opportunity->setProbability(0.4);
         $opportunity->setStatus($manager->getReference(
-            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
-            'in_progress'
+            EnumOption::class,
+            ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, 'in_progress')
         ));
 
         $manager->persist($opportunity);

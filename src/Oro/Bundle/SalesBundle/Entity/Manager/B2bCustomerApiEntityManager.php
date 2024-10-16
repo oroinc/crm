@@ -7,9 +7,7 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 class B2bCustomerApiEntityManager extends ApiEntityManager
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getSerializationConfig()
     {
         $config = [

@@ -72,6 +72,7 @@ class LeadAddress extends AbstractAddress implements PrimaryItem, ExtendEntityIn
      * @param bool $primary
      * @return LeadAddress
      */
+    #[\Override]
     public function setPrimary($primary)
     {
         $this->primary = (bool)$primary;
@@ -82,6 +83,7 @@ class LeadAddress extends AbstractAddress implements PrimaryItem, ExtendEntityIn
     /**
      * @return bool
      */
+    #[\Override]
     public function isPrimary()
     {
         return (bool)$this->primary;

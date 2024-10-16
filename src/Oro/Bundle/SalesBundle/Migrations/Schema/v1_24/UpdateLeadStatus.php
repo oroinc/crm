@@ -4,10 +4,10 @@ namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareTrait;
-use Oro\Bundle\EntityExtendBundle\Migration\Query\EnumDataValue;
-use Oro\Bundle\EntityExtendBundle\Migration\Query\InsertEnumValuesQuery;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\OutdatedExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\OutdatedExtendExtensionAwareTrait;
+use Oro\Bundle\EntityExtendBundle\Migration\Query\OutdatedEnumDataValue;
+use Oro\Bundle\EntityExtendBundle\Migration\Query\OutdatedInsertEnumValuesQuery;
 use Oro\Bundle\MigrationBundle\Migration\ConnectionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\ConnectionAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -15,33 +15,32 @@ use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
+/**
+ * Creates Lead absent statuses and updates Lead statuses.
+ */
 class UpdateLeadStatus implements
     Migration,
     ConnectionAwareInterface,
-    ExtendExtensionAwareInterface,
+    OutdatedExtendExtensionAwareInterface,
     OrderedMigrationInterface
 {
     use ConnectionAwareTrait;
-    use ExtendExtensionAwareTrait;
+    use OutdatedExtendExtensionAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getOrder(): int
     {
         return 2;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $defaultStatuses = ['new', 'qualified', 'canceled'];
         $oldStatuses = $this->connection->fetchAllAssociative('SELECT name, label FROM orocrm_sales_lead_status');
         $newStatuses = $this->connection->fetchAllAssociative(sprintf(
             'SELECT id, priority FROM %s',
-            $this->extendExtension->getNameGenerator()->generateEnumTableName('lead_status')
+            $this->outdatedExtendExtension::generateEnumTableName('lead_status')
         ));
         $oldStatuses = $this->buildOneDimensionArray($oldStatuses, 'name', 'label');
         $newStatuses = $this->buildOneDimensionArray($newStatuses, 'id', 'priority');
@@ -58,10 +57,12 @@ class UpdateLeadStatus implements
     {
         $values = [];
         foreach ($statuses as $id => $name) {
-            $values[] = new EnumDataValue($id, $name, $priority);
+            $values[] = new OutdatedEnumDataValue($id, $name, $priority);
             $priority++;
         }
-        $queries->addPostQuery(new InsertEnumValuesQuery($this->extendExtension, 'lead_status', $values));
+        $queries->addPostQuery(
+            new OutdatedInsertEnumValuesQuery($this->outdatedExtendExtension, 'lead_status', $values)
+        );
     }
 
     private function updateLeadTable(QueryBag $queries, array $statuses): void

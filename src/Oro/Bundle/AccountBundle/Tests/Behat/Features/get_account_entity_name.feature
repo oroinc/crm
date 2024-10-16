@@ -25,9 +25,6 @@ Feature: Get account entity name
     And I save and close form
     Then I should see "Field saved" flash message
 
-    When I click update schema
-    Then I should see Schema updated flash message
-
   Scenario: Update value of field for Account entity
     Given I go to Customers/ Accounts
     When I click edit account_1 in grid

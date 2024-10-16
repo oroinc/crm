@@ -7,9 +7,7 @@ namespace Oro\Bundle\ChannelBundle\Entity\Repository;
  */
 class ChannelRepository extends ChannelRepositoryAbstract
 {
-    /**
-     * @inheritdoc
-     */
+    #[\Override]
     public function getVisitsCountForChannelTypeQB($type)
     {
         return null;

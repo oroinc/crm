@@ -15,17 +15,13 @@ class ConvertPhoneNumberInPhone implements
     /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getOrder()
     {
         return 5;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $query  = 'INSERT INTO orocrm_sales_lead_phone (owner_id, phone, is_primary)

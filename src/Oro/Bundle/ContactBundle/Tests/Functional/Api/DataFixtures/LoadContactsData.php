@@ -22,9 +22,7 @@ class LoadContactsData extends AbstractFixture implements ContainerAwareInterfac
     /** @var EntityManager */
     protected $em;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [
@@ -33,9 +31,7 @@ class LoadContactsData extends AbstractFixture implements ContainerAwareInterfac
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $this->em = $manager;

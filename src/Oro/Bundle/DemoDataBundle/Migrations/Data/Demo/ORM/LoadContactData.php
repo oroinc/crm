@@ -27,9 +27,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [
@@ -38,9 +36,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $users = $manager->getRepository(User::class)->findAll();

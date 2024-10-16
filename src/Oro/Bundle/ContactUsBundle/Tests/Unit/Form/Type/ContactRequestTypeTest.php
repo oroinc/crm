@@ -16,6 +16,7 @@ class ContactRequestTypeTest extends TypeTestCase
     /** @var ContactRequestType */
     private $formType;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->formType = new ContactRequestType();

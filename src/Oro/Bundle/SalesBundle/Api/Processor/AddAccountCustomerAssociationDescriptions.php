@@ -49,9 +49,7 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
         $this->entityNameProvider = $entityNameProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function process(ContextInterface $context): void
     {
         /** @var ConfigContext $context */

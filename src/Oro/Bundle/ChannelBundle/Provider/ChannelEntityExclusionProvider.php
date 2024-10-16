@@ -18,9 +18,7 @@ class ChannelEntityExclusionProvider extends AbstractExclusionProvider
         $this->settingsProvider = $settingsProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isIgnoredEntity($className)
     {
         return !$this->settingsProvider->isChannelEntity($className);

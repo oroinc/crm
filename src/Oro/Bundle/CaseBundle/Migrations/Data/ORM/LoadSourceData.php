@@ -13,9 +13,7 @@ class LoadSourceData extends AbstractTranslatableEntityFixture
 {
     private const TRANSLATION_PREFIX = 'case_source';
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function loadEntities(ObjectManager $manager): void
     {
         $caseSourceRepository = $manager->getRepository(CaseSource::class);

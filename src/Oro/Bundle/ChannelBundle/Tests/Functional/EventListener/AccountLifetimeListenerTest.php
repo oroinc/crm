@@ -7,7 +7,8 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Async\Topic\LifetimeHistoryStatusUpdateTopic;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOptionInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -19,6 +20,7 @@ class AccountLifetimeListenerTest extends WebTestCase
 {
     use MessageQueueExtension;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient();
@@ -274,11 +276,11 @@ class AccountLifetimeListenerTest extends WebTestCase
         return $this->getContainer()->get('oro_channel.provider.lifetime.amount_provider');
     }
 
-    private function findOpportunityStatus(string $code): AbstractEnumValue
+    private function findOpportunityStatus(string $code): EnumOptionInterface
     {
         $status = $this->getEntityManager()
-            ->getRepository(ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE))
-            ->find($code);
+            ->getRepository(EnumOption::class)
+            ->find(ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, $code));
 
         if (!$status) {
             throw new \InvalidArgumentException(sprintf('Status "%s" doesn\'t exists', $code));

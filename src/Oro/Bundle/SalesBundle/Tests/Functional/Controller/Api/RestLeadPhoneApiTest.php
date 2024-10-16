@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RestLeadPhoneApiTest extends WebTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());

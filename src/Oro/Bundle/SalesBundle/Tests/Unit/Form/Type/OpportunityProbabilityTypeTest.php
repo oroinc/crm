@@ -67,9 +67,21 @@ class OpportunityProbabilityTypeTest extends \PHPUnit\Framework\TestCase
         return [
             'default' => [
                 [
-                    new TestEnumValue('in_progress', 'Open'),
-                    new TestEnumValue('lost', 'Lost'),
-                    new TestEnumValue('win', 'Win'),
+                    new TestEnumValue(
+                        'test',
+                        'Open',
+                        'in_progress'
+                    ),
+                    new TestEnumValue(
+                        'test',
+                        'Lost',
+                        'lost'
+                    ),
+                    new TestEnumValue(
+                        'test',
+                        'Win',
+                        'win'
+                    ),
                 ],
             ],
             'empty' => [

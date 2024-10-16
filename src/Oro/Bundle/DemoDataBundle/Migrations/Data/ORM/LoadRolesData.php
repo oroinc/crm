@@ -13,9 +13,7 @@ use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadRolesData as LoadUserRolesData
  */
 class LoadRolesData extends AbstractLoadAclData
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [
@@ -24,17 +22,13 @@ class LoadRolesData extends AbstractLoadAclData
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDataPath()
     {
         return '@OroDemoDataBundle/Migrations/Data/ORM/CrmRoles/roles.yml';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getRole(ObjectManager $objectManager, $roleName, $roleConfigData)
     {
         $role = parent::getRole($objectManager, $roleName, $roleConfigData);

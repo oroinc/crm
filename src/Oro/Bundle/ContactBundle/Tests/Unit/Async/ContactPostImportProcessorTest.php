@@ -20,6 +20,7 @@ class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var ContactPostImportProcessor */
     private $processor;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->contactEmailAddressHandler = $this->createMock(ContactEmailAddressHandler::class);

@@ -11,6 +11,7 @@ class ContactReasonVariablesProviderTest extends \PHPUnit\Framework\TestCase
     /** @var ContactReasonVariablesProvider */
     private $contactReasonVariablesProvider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->contactReasonVariablesProvider = new ContactReasonVariablesProvider();

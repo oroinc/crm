@@ -10,17 +10,13 @@ use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 
 class AddLeadAddressTable implements Migration, OrderedMigrationInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getOrder(): int
     {
         return 1;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $this->createLeadAddressTable($schema);

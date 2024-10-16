@@ -25,25 +25,18 @@ class ChannelDatasourceType extends AbstractType
         $this->integrationEntityClass = $integrationEntityClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'oro_channel_datasource_form';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $em = $this->doctrine->getManagerForClass($this->integrationEntityClass);
@@ -61,9 +54,7 @@ class ChannelDatasourceType extends AbstractType
         $builder->add('name', HiddenType::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['type']);

@@ -3,11 +3,17 @@
 namespace Oro\Bundle\TestFrameworkCRMBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumOptionRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\TranslationBundle\Migrations\Data\ORM\LoadLanguageData;
 
-class FillContactTestMultiEnum extends AbstractFixture
+/**
+ * Fills test_multi_enum options for test environment.
+ */
+class FillContactTestMultiEnum extends AbstractFixture implements DependentFixtureInterface
 {
     const CONTACT_FIELD_TEST_ENUM_CODE = 'test_multi_enum';
 
@@ -18,19 +24,29 @@ class FillContactTestMultiEnum extends AbstractFixture
         'Chester Benington' => false
     ];
 
+    #[\Override]
     public function load(ObjectManager $manager)
     {
-        $className = ExtendHelper::buildEnumValueClassName(self::CONTACT_FIELD_TEST_ENUM_CODE);
-
-        /** @var EnumValueRepository $enumRepo */
-        $enumRepo = $manager->getRepository($className);
-
+        /** @var EnumOptionRepository $enumRepo */
+        $enumRepo = $manager->getRepository(EnumOption::class);
         $priority = 1;
         foreach ($this->data as $name => $isDefault) {
-            $enumOption = $enumRepo->createEnumValue($name, $priority++, $isDefault);
+            $enumOption = $enumRepo->createEnumOption(
+                self::CONTACT_FIELD_TEST_ENUM_CODE,
+                ExtendHelper::buildEnumInternalId($name),
+                $name,
+                $priority++,
+                $isDefault
+            );
             $manager->persist($enumOption);
         }
 
         $manager->flush();
+    }
+
+    #[\Override]
+    public function getDependencies(): array
+    {
+        return [LoadLanguageData::class];
     }
 }

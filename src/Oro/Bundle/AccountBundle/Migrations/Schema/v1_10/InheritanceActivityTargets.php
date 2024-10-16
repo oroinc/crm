@@ -12,9 +12,7 @@ class InheritanceActivityTargets implements Migration, ActivityListExtensionAwar
 {
     use ActivityListExtensionAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $this->activityListExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_contact', ['accounts']);

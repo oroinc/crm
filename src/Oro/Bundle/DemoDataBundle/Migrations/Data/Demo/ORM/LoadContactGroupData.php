@@ -17,17 +17,13 @@ class LoadContactGroupData extends AbstractFixture implements ContainerAwareInte
 {
     use ContainerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadUserData::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $saleUser = $this->getUser($manager, 'sale');

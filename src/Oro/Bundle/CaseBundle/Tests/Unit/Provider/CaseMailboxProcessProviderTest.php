@@ -11,6 +11,7 @@ class CaseMailboxProcessProviderTest extends \PHPUnit\Framework\TestCase
     /** @var CaseMailboxProcessProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->provider = new CaseMailboxProcessProvider();

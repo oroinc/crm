@@ -74,9 +74,7 @@ class CustomerSearchHandler extends ContextSearchHandler
         $this->chainAccountAutocompleteProvider = $chainAccountAutocompleteProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function search($query, $page, $perPage, $searchById = false)
     {
         $this->query = trim($query);
@@ -86,9 +84,7 @@ class CustomerSearchHandler extends ContextSearchHandler
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function convertItems(array $items)
     {
         $groupedItems = $this->groupItemsByEntityName($items);
@@ -345,9 +341,7 @@ class CustomerSearchHandler extends ContextSearchHandler
         return strpos(strtolower(str_replace("-", "", $value)), strtolower(str_replace("-", "", $query))) !== false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function convertItem($item)
     {
         $entity = $item['entity'];
@@ -391,9 +385,7 @@ class CustomerSearchHandler extends ContextSearchHandler
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getSearchAliases()
     {
         $customers = $this->customerConfigProvider->getCustomerClasses();
@@ -401,9 +393,7 @@ class CustomerSearchHandler extends ContextSearchHandler
         return array_values($this->indexer->getEntityAliases($customers));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function decodeTargets($targetsString)
     {
         return array_map(

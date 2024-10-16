@@ -12,9 +12,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
  */
 class B2bConfigurableAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function afterProcessEntity($entity)
     {
         /** @var B2bCustomer $entity */

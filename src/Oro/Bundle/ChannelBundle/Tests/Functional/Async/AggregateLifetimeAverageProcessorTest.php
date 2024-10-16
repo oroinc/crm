@@ -19,6 +19,7 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
     use ConfigManagerAwareTestTrait;
     use MessageQueueExtension;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient();

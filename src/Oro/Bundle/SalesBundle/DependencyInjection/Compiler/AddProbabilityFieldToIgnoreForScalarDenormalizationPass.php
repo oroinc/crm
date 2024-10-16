@@ -12,9 +12,7 @@ class AddProbabilityFieldToIgnoreForScalarDenormalizationPass implements Compile
 {
     const SERVICE_KEY = 'oro_importexport.serializer.scalar_field_denormalizer';
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition(self::SERVICE_KEY)) {

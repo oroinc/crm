@@ -22,9 +22,7 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
         $this->emailRecipientsHelper = $emailRecipientsHelper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getRecipients(EmailRecipientsProviderArgs $args)
     {
         return $this->emailRecipientsHelper->getRecipients(
@@ -35,9 +33,7 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getSection(): string
     {
         return 'oro.contact.entity_plural_label';

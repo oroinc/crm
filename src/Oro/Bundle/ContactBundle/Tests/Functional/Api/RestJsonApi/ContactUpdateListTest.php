@@ -11,6 +11,7 @@ use Oro\Bundle\ContactBundle\Tests\Functional\Api\DataFixtures\LoadContactsData;
  */
 class ContactUpdateListTest extends RestJsonApiUpdateListTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

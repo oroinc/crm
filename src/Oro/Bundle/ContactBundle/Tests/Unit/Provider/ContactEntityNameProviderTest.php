@@ -22,6 +22,7 @@ class ContactEntityNameProviderTest extends \PHPUnit\Framework\TestCase
     /** @var ContactEntityNameProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->nameFormatter = $this->createMock(NameFormatter::class);

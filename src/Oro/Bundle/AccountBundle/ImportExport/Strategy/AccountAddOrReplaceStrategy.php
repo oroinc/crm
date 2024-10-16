@@ -12,9 +12,7 @@ use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrate
  */
 class AccountAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function importExistingEntity(
         $entity,
         $existingEntity,

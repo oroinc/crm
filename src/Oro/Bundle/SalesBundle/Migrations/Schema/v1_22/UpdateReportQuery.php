@@ -2,16 +2,14 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_22;
 
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\OutdatedExtendExtension;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 use Psr\Log\LoggerInterface;
 
 class UpdateReportQuery extends ParametrizedMigrationQuery
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDescription()
     {
         $logger = new ArrayLogger();
@@ -20,9 +18,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
         return $logger->getMessages();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function execute(LoggerInterface $logger)
     {
         $this->doExecute($logger);
@@ -179,7 +175,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
     protected function fixFilterCriterion($def, $field, $key)
     {
         $paramOldClassName = 'Oro\Bundle\SalesBundle\Entity\OpportunityStatus';
-        $paramNewClassName = ExtendHelper::buildEnumValueClassName('opportunity_status');
+        $paramNewClassName = OutdatedExtendExtension::buildEnumValueClassName('opportunity_status');
         if (isset($field['criterion']['data']['params']['class'])
             && $field['criterion']['data']['params']['class'] === $paramOldClassName
             && $field['criterion']['filter'] === 'dictionary'

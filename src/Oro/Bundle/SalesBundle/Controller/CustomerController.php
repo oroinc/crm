@@ -16,9 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/customer')]
 class CustomerController extends AbstractController
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [

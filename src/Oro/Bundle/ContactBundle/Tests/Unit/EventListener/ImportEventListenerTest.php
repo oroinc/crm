@@ -21,6 +21,7 @@ class ImportEventListenerTest extends \PHPUnit\Framework\TestCase
 
     private ImportEventListener $listener;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->messageProducer = $this->createMock(MessageProducerInterface::class);

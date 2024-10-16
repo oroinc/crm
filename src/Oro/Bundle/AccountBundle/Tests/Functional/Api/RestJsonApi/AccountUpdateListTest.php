@@ -10,6 +10,7 @@ use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiUpdateListTestCase;
  */
 class AccountUpdateListTest extends RestJsonApiUpdateListTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

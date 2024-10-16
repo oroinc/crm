@@ -23,10 +23,10 @@ class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareI
     protected $accounts = [];
 
     /**
-     * {@inheritdoc}
      *
      * @param EntityManager $manager
      */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $handle  = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'history_data.csv', 'r');

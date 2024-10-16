@@ -20,6 +20,7 @@ class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
     /** @var ChangeLeadStatus */
     private $model;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->entityManager = $this->createMock(EntityManager::class);
@@ -42,13 +43,13 @@ class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
     public function testDisqualify()
     {
         $this->model->disqualify($this->lead);
-        $this->assertEquals('canceled', $this->lead->getStatus());
+        $this->assertEquals('lead_status.canceled', $this->lead->getStatus());
     }
 
     public function testQualify()
     {
         $this->model->qualify($this->lead);
-        $this->assertEquals('qualified', $this->lead->getStatus());
+        $this->assertEquals('lead_status.qualified', $this->lead->getStatus());
     }
 
     public function testSuccessQualify()

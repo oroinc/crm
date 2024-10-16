@@ -67,6 +67,7 @@ abstract class AbstractContactRequest implements
     /**
      * @return string
      */
+    #[\Override]
     public function getFirstName()
     {
         return $this->firstName;
@@ -83,6 +84,7 @@ abstract class AbstractContactRequest implements
     /**
      * @return string
      */
+    #[\Override]
     public function getLastName()
     {
         return $this->lastName;
@@ -175,25 +177,17 @@ abstract class AbstractContactRequest implements
         $this->updatedAt = clone $this->createdAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEmail()
     {
         return $this->emailAddress;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPhoneNumber()
     {
         return !empty($this->phone) ? $this->phone : null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPhoneNumbers()
     {
         $result = [];
@@ -217,6 +211,7 @@ abstract class AbstractContactRequest implements
     /**
      * @return string
      */
+    #[\Override]
     public function __toString()
     {
         return (string)$this->getFullName();

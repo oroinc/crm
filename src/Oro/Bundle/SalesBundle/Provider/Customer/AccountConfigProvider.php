@@ -10,9 +10,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
  */
 class AccountConfigProvider extends ConfigProvider
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getAssociatedCustomerClasses()
     {
         return array_merge([Account::class], parent::getAssociatedCustomerClasses());
@@ -21,6 +19,7 @@ class AccountConfigProvider extends ConfigProvider
     /**
      * @return string
      */
+    #[\Override]
     protected function getCacheKey()
     {
         return 'account';

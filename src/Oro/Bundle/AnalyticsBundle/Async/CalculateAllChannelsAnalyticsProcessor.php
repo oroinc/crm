@@ -30,9 +30,7 @@ class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterfac
         $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function process(MessageInterface $message, SessionInterface $session): string
     {
         $qb = $this->doctrineHelper->getEntityRepository(Channel::class)->createQueryBuilder('c');
@@ -56,9 +54,7 @@ class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterfac
         return self::ACK;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedTopics(): array
     {
         return [CalculateAllChannelsAnalyticsTopic::getName()];

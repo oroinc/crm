@@ -21,6 +21,7 @@ class TestEntityNameResolverDataLoader implements TestEntityNameResolverDataLoad
         $this->innerDataLoader = $innerDataLoader;
     }
 
+    #[\Override]
     public function loadEntity(
         EntityManagerInterface $em,
         ReferenceRepository $repository,
@@ -113,6 +114,7 @@ class TestEntityNameResolverDataLoader implements TestEntityNameResolverDataLoad
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[\Override]
     public function getExpectedEntityName(
         ReferenceRepository $repository,
         string $entityClass,

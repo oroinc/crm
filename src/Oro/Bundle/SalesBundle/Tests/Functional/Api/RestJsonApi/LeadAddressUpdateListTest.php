@@ -11,6 +11,7 @@ use Oro\Bundle\SalesBundle\Entity\LeadAddress;
  */
 class LeadAddressUpdateListTest extends RestJsonApiUpdateListTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

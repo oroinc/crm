@@ -20,9 +20,7 @@ class ChainAccountProvider implements AccountProviderInterface
         $this->providers = $providers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getAccount($targetCustomer)
     {
         foreach ($this->providers as $provider) {

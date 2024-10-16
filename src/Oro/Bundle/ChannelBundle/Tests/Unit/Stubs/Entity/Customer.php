@@ -59,17 +59,13 @@ class Customer implements ChannelAwareInterface
         return $this->account;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function setDataChannel(Channel $channel = null)
     {
         $this->dataChannel = $channel;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDataChannel()
     {
         return $this->dataChannel;

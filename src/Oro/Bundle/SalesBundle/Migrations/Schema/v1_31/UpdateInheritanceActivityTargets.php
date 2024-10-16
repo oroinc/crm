@@ -24,17 +24,13 @@ class UpdateInheritanceActivityTargets implements
     use ActivityListExtensionAwareTrait;
     use ContainerAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getOrder()
     {
         return 4;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->removeOldInheritanceActivityTargets($queries);

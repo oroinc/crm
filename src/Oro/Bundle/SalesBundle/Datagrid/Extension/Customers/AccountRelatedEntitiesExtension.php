@@ -11,9 +11,7 @@ use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
  */
 class AccountRelatedEntitiesExtension extends RelatedEntitiesExtension
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isApplicable(DatagridConfiguration $config)
     {
         return
@@ -24,9 +22,7 @@ class AccountRelatedEntitiesExtension extends RelatedEntitiesExtension
             && $this->parameters->get('related_entity_class') === $this->relatedEntityClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getCustomerField($customerClass)
     {
         return 'account';

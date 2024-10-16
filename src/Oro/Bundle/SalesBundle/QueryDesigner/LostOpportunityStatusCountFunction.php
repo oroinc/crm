@@ -7,6 +7,7 @@ class LostOpportunityStatusCountFunction extends AbstractOpportunityStatusCountF
     /**
      * @return string
      */
+    #[\Override]
     protected function getStatus()
     {
         return 'lost';

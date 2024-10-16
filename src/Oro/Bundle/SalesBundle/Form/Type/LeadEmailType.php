@@ -10,9 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LeadEmailType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -20,9 +18,7 @@ class LeadEmailType extends AbstractType
             ->add('primary', CheckboxType::class, array('required' => true));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -34,17 +30,12 @@ class LeadEmailType extends AbstractType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'oro_sales_lead_email';

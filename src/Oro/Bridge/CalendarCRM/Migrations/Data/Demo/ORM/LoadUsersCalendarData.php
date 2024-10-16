@@ -30,17 +30,13 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
 
     private ?\DateTimeZone $timeZone = null;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadUsersData::class, LoadUserData::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $tokenStorage = $this->container->get('security.token_storage');

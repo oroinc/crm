@@ -10,9 +10,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class RemoveDeprecatedTablesAndFields implements Migration
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_sales_lead');

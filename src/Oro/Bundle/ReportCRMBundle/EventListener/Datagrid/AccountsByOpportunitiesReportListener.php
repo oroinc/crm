@@ -3,9 +3,12 @@
 namespace Oro\Bundle\ReportCRMBundle\EventListener\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumOptionsProvider;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * AccountsByOpportunitiesReportListener class
+ */
 class AccountsByOpportunitiesReportListener
 {
     const GRAND_TOTAL_PATH = '[totals][grand_total][columns]';
@@ -14,23 +17,17 @@ class AccountsByOpportunitiesReportListener
     const FILTERS_PATH = '[filters][columns]';
     const TOTALOPS_LABEL = 'totalOps';
 
-    protected $allowedFilterStates = [
-        'won',
-        'lost',
-        'in_progress'
+    protected array $allowedFilterStates = [
+        'opportunity_status.won',
+        'opportunity_status.lost',
+        'opportunity_status.in_progress'
     ];
 
-    /**
-     * @var EnumValueProvider
-     */
-    protected $enumProvider;
-
-    public function __construct(EnumValueProvider $enumProvider)
+    public function __construct(protected EnumOptionsProvider $enumProvider)
     {
-        $this->enumProvider = $enumProvider;
     }
 
-    public function onBuildBefore(BuildBefore $event)
+    public function onBuildBefore(BuildBefore $event): void
     {
         $enumValues = $this->enumProvider->getEnumChoicesByCode(Opportunity::INTERNAL_STATUS_CODE);
         $config = $event->getConfig();
@@ -45,7 +42,7 @@ class AccountsByOpportunitiesReportListener
         $filters = $config->offsetGetByPath(self::FILTERS_PATH, array());
 
         foreach ($enumValues as $text => $id) {
-            $label = $id.'Count';
+            $label = str_replace('opportunity_status.', '', $id) . 'Count';
             $selects[] = sprintf($selectTemplate, $id, $label);
             $grandTotals[$label] = ['expr' => sprintf($grandTotalTemplate, $id)];
             $columns[$label] = ['label' => $text, 'frontend_type' => 'integer'];

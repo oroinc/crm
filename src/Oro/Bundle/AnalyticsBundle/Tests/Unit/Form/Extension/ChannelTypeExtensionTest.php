@@ -29,6 +29,7 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelTypeExtension */
     private $extension;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);

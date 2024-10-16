@@ -9,9 +9,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [
@@ -19,9 +17,7 @@ class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInt
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         /** @var Organization $organization */

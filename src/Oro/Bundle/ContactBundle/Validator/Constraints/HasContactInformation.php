@@ -12,9 +12,7 @@ class HasContactInformation extends Constraint
 {
     public string $message = 'oro.contact.validators.contact.has_information';
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getTargets(): string
     {
         return self::CLASS_CONSTRAINT;

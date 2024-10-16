@@ -28,14 +28,9 @@ class CategoriesConstraint extends Constraint
      */
     protected $type;
 
-    /**
-     * {@inheritdoc}
-     */
     public $groups = [self::GROUP];
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function validatedBy(): string
     {
         return 'oro_analytics.categories_validator';

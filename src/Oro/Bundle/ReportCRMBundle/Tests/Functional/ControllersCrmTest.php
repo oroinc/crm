@@ -8,6 +8,7 @@ use Oro\Bundle\ReportCRMBundle\Tests\Functional\DataFixtures\LoadLeadSourceData;
 
 class ControllersCrmTest extends BaseControllersTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient(

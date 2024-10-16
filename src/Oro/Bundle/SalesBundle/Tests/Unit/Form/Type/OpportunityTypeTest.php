@@ -5,10 +5,10 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityExtendBundle\Cache\EnumTranslationCache;
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOptionInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumOptionRepository;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumOptionsProvider;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityType;
@@ -75,13 +75,13 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
     private function getDefaultProbabilities(): array
     {
         return [
-            'identification_alignment' => 0.3,
-            'needs_analysis' => 0.2,
-            'solution_development' => 0.5,
-            'negotiation' => 0.8,
-            'in_progress' => 0.1,
-            'won' => 1.0,
-            'lost' => 0.0,
+            'test.identification_alignment' => 0.3,
+            'test.needs_analysis' => 0.2,
+            'test.solution_development' => 0.5,
+            'test.negotiation' => 0.8,
+            'test.in_progress' => 0.1,
+            'test.won' => 1.0,
+            'test.lost' => 0.0,
         ];
     }
 
@@ -99,7 +99,7 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
             return $this->getOpportunityStatus($id);
         }, $defaultStatuses);
 
-        $repo = $this->createMock(EnumValueRepository::class);
+        $repo = $this->createMock(EnumOptionRepository::class);
         $repo->expects($this->any())
             ->method('getDefaultValues')
             ->willReturn($defaultStatuses);
@@ -116,7 +116,7 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
 
         return new OpportunityType(
             $probabilityProvider,
-            new EnumValueProvider($doctrineHelper, $this->createMock(EnumTranslationCache::class)),
+            new EnumOptionsProvider($doctrineHelper, $this->createMock(EnumTranslationCache::class)),
             $enumTypeHelper,
             new OpportunityRelationsBuilder()
         );
@@ -127,9 +127,9 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
         return new FormEvent($this->createMock(FormInterface::class), $opportunity);
     }
 
-    private function getOpportunityStatus(string $id): AbstractEnumValue
+    private function getOpportunityStatus(string $id): EnumOptionInterface
     {
-        return new TestEnumValue($id, $id);
+        return new TestEnumValue('test', 'Test', $id);
     }
 
     private function getOpportunity(string $statusId = null, float $probability = null): OpportunityStub

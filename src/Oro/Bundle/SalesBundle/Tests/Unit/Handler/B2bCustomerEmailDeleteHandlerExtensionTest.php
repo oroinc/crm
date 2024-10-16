@@ -22,6 +22,7 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
     /** @var B2bCustomerEmailDeleteHandlerExtension */
     private $extension;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);

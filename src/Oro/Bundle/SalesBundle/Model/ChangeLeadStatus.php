@@ -3,10 +3,14 @@
 namespace Oro\Bundle\SalesBundle\Model;
 
 use Doctrine\ORM\EntityManager;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ * Encapsulates the status change logic for the Lead entity.
+ */
 class ChangeLeadStatus
 {
     const STATUS_QUALIFY    = 'qualified';
@@ -53,8 +57,10 @@ class ChangeLeadStatus
     protected function changeStatus($lead, $statusCode)
     {
         try {
-            $enumStatusClass = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
-            $status          = $this->manager->getReference($enumStatusClass, $statusCode);
+            $status = $this->manager->getReference(
+                EnumOption::class,
+                ExtendHelper::buildEnumOptionId(Lead::INTERNAL_STATUS_CODE, $statusCode)
+            );
             $lead->setStatus($status);
 
             $errors = $this->validator->validate($lead);

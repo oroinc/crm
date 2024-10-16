@@ -2,31 +2,31 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Persistence\ObjectManager;
-use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
-class LoadLeadSourceData extends AbstractFixture
+/**
+ * Loads Lead source enum options
+ */
+class LoadLeadSourceData extends AbstractEnumFixture
 {
-    /** @var array */
-    protected $data = [
-        'Demand Generation' => true
-    ];
-
-    public function load(ObjectManager $manager)
+    #[\Override]
+    protected function getData(): array
     {
-        $className = ExtendHelper::buildEnumValueClassName('lead_source');
+        return [
+            $this->getDefaultValue() => 'Demand Generation'
+        ];
+    }
 
-        /** @var EnumValueRepository $enumRepo */
-        $enumRepo = $manager->getRepository($className);
+    #[\Override]
+    protected function getDefaultValue(): string
+    {
+        return ExtendHelper::buildEnumInternalId('Demand Generation');
+    }
 
-        $priority = 1;
-        foreach ($this->data as $name => $isDefault) {
-            $enumOption = $enumRepo->createEnumValue($name, $priority++, $isDefault);
-            $manager->persist($enumOption);
-        }
-
-        $manager->flush();
+    #[\Override]
+    protected function getEnumCode(): string
+    {
+        return 'lead_source';
     }
 }

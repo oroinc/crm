@@ -28,6 +28,7 @@ class ContactTest extends RestJsonApiTestCase
     private const PRIMARY_PHONE = '5556661112';
     private const NOT_PRIMARY_PHONE = '5556661111';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

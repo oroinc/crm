@@ -77,6 +77,7 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
         ];
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->settingsProvider = $this->createMock(SettingsProvider::class);
@@ -86,9 +87,7 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
         parent::setUp();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getExtensions()
     {
         $integrationType = new IntegrationFormTypeStub();

@@ -26,6 +26,7 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
     /** @var LeadActionsAccessProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->featureChecker = $this->createMock(FeatureChecker::class);
@@ -97,7 +98,11 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
     private function getValidLead(): Lead
     {
         $lead = new LeadStub();
-        $lead->setStatus(new TestEnumValue(ChangeLeadStatus::STATUS_QUALIFY, 'test'));
+        $lead->setStatus(new TestEnumValue(
+            'test',
+            'Test',
+            ChangeLeadStatus::STATUS_QUALIFY
+        ));
 
         return $lead;
     }
@@ -105,7 +110,11 @@ class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
     private function getDisqualifiedLead(): Lead
     {
         $lead = new LeadStub();
-        $lead->setStatus(new TestEnumValue(ChangeLeadStatus::STATUS_DISQUALIFY, 'test'));
+        $lead->setStatus(new TestEnumValue(
+            'test',
+            'Test',
+            ChangeLeadStatus::STATUS_DISQUALIFY
+        ));
 
         return $lead;
     }

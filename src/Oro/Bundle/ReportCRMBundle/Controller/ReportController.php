@@ -61,9 +61,7 @@ class ReportController extends AbstractController
         return $this->container->get(FeatureChecker::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return array_merge(

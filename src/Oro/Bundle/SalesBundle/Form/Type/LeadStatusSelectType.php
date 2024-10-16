@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumOptionsProvider;
 use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\Form\AbstractType;
@@ -13,23 +13,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class LeadStatusSelectType extends AbstractType
 {
-    const NAME = 'oro_type_widget_lead_status_select';
+    const string NAME = 'oro_type_widget_lead_status_select';
 
-    /** @var EnumValueProvider */
-    protected $enumValueProvider;
-
-    public function __construct(EnumValueProvider $enumValueProvider)
+    public function __construct(protected EnumOptionsProvider $enumOptionsProvider)
     {
-        $this->enumValueProvider = $enumValueProvider;
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(
             [
-                'choices' => $this->enumValueProvider->getEnumChoicesByCode(Lead::INTERNAL_STATUS_CODE),
+                'choices' => $this->enumOptionsProvider->getEnumChoicesByCode(Lead::INTERNAL_STATUS_CODE),
                 'multiple' => true,
                 'configs' => [
                     'allowClear' => true,
@@ -38,25 +35,18 @@ class LeadStatusSelectType extends AbstractType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return self::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getParent(): ?string
     {
         return Select2ChoiceType::class;

@@ -60,9 +60,7 @@ class OpportunityStatusConfigType extends AbstractType
         $this->configModel = $entityConfigManager->getConfigFieldModel(Opportunity::class, 'status');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $config = $this->entityConfigManager->getConfig($this->configId);
@@ -137,7 +135,7 @@ class OpportunityStatusConfigType extends AbstractType
             if (empty($id)) {
                 // enum_option is just added and still does not have a generated id
                 // we generate one, because we bind before the option is persisted
-                $id = ExtendHelper::buildEnumValueId($enum_option['label']);
+                $id = ExtendHelper::buildEnumInternalId($enum_option['label']);
             }
 
             $value[$id] = isset($enum_option['probability']) ? $enum_option['probability'] : null;
@@ -147,9 +145,7 @@ class OpportunityStatusConfigType extends AbstractType
         $this->configManager->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -161,17 +157,12 @@ class OpportunityStatusConfigType extends AbstractType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return self::NAME;

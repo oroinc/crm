@@ -23,6 +23,7 @@ class RFMCategoryListenerTest extends \PHPUnit\Framework\TestCase
     /** @var RFMCategoryListener */
     private $listener;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->manager = $this->createMock(RFMMetricStateManager::class);

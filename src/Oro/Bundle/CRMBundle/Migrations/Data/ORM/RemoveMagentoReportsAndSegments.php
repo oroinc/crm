@@ -15,6 +15,7 @@ use Oro\Bundle\SegmentBundle\Entity\Segment;
  */
 class RemoveMagentoReportsAndSegments extends AbstractFixture
 {
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $qbReports = $manager->createQueryBuilder();

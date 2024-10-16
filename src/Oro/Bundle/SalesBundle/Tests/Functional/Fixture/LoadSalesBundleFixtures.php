@@ -29,17 +29,13 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     public const CHANNEL_NAME = 'b2b Channel';
     public const ACCOUNT_NAME = 'some account name';
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganization::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $tokenStorage = $this->container->get('security.token_storage');

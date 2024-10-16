@@ -12,21 +12,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class AggregateLifetimeAverageTopic extends AbstractTopic implements JobAwareTopicInterface
 {
+    #[\Override]
     public static function getName(): string
     {
         return 'oro.channel.aggregate_lifetime_average';
     }
 
+    #[\Override]
     public static function getDescription(): string
     {
         return 'Aggregates an average lifetime value.';
     }
 
+    #[\Override]
     public function getDefaultPriority(string $queueName): string
     {
         return MessagePriority::VERY_LOW;
     }
 
+    #[\Override]
     public function configureMessageBody(OptionsResolver $resolver): void
     {
         $resolver
@@ -40,6 +44,7 @@ class AggregateLifetimeAverageTopic extends AbstractTopic implements JobAwareTop
             ->addAllowedTypes('use_truncate', 'bool');
     }
 
+    #[\Override]
     public function createJobName($messageBody): string
     {
         return 'oro_channel:aggregate_lifetime_average';

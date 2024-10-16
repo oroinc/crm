@@ -7,7 +7,8 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\CurrencyBundle\Converter\RateConverterInterface;
 use Oro\Bundle\CurrencyBundle\Provider\DefaultCurrencyProviderInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOptionInterface;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
@@ -55,7 +56,7 @@ class OpportunityListener
                 continue;
             }
 
-            $newStatusId = $opportunity->getStatus() ? $opportunity->getStatus()->getId() : null;
+            $newStatusId = $opportunity->getStatus() ? $opportunity->getStatus()->getInternalId() : null;
             $isOpportunityChanged = $this->updateBaseBudgetAmountFields($newStatusId, $opportunity);
             $isOpportunityChanged |= $this->onStatusChange($newStatusId, $entityChangeSet, $opportunity);
 
@@ -80,13 +81,15 @@ class OpportunityListener
             $isOpportunityChanged = true;
         }
 
-        if (empty($entityChangeSet['status'])) {
+        if (!isset($entityChangeSet['serialized_data']) ||
+            empty(array_column($entityChangeSet['serialized_data'], 'status'))) {
             return $isOpportunityChanged;
         }
 
-        /** @var AbstractEnumValue|null $oldStatus */
-        $oldStatus = $entityChangeSet['status'][0];
-        $oldStatusId = $oldStatus ? $oldStatus->getId() : null;
+        /** @var EnumOptionInterface|null $oldStatus */
+        $oldStatus = isset($entityChangeSet['serialized_data'][0]['status']) ?
+            $entityChangeSet['serialized_data'][0]['status'] : null;
+        $oldStatusId = $oldStatus ? ExtendHelper::getEnumInternalId($oldStatus) : null;
         $valuableChanges = array_intersect([$oldStatusId, $newStatusId], Opportunity::getClosedStatuses());
 
         if (\in_array($newStatusId, $valuableChanges, true)) {

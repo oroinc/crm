@@ -10,9 +10,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class RemoveOldData implements Migration
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $sql = <<<EOF

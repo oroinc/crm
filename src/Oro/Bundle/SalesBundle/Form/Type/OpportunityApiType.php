@@ -6,22 +6,26 @@ use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * The form type for Opportunity entity for API only.
+ */
 class OpportunityApiType extends OpportunityType
 {
-    const NAME = 'oro_sales_opportunity_api';
+    const string NAME = 'oro_sales_opportunity_api';
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
         $builder->addEventSubscriber(new PatchSubscriber());
+        if ($builder->has('status')) {
+            $options = $builder->get('status')->getOptions();
+            $options['choice_value'] = 'internalId';
+            $builder->add('status', OpportunityStatusSelectType::class, $options);
+        }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -33,17 +37,13 @@ class OpportunityApiType extends OpportunityType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return self::NAME;

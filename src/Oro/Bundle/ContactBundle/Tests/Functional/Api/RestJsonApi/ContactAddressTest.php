@@ -35,6 +35,7 @@ class ContactAddressTest extends RestJsonApiTestCase
     private const ANOTHER_OWNER_REF             = 'another_contact';
     private const ANOTHER_OWNER_ADDRESS_2_REF   = 'another_contact_address2';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -33,9 +33,7 @@ class ChannelLimitationHandler extends SearchHandler
         $this->channelSearchPropertyName = $channelSearchPropertyName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function searchIds($search, $firstResult, $maxResults)
     {
         $parts        = explode(';', $search);
@@ -69,9 +67,7 @@ class ChannelLimitationHandler extends SearchHandler
         return $ids;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function findById($query)
     {
         $parts     = explode(';', $query);

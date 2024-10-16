@@ -18,6 +18,7 @@ class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
     /** @var MailboxSavedListener */
     private $listener;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->tagManager = $this->createMock(TagManager::class);

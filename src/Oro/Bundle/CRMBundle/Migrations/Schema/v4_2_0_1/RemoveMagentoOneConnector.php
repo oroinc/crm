@@ -18,6 +18,7 @@ class RemoveMagentoOneConnector implements Migration
     /**
      * @throws \Doctrine\DBAL\Schema\SchemaException if fails to alter database schema
      */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         if (\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {

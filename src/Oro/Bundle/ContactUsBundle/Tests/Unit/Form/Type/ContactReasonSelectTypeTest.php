@@ -12,6 +12,7 @@ class ContactReasonSelectTypeTest extends TypeTestCase
     /** @var ContactReasonSelectType */
     private $formType;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->formType = new ContactReasonSelectType();

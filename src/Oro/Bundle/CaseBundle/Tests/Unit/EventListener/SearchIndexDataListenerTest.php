@@ -25,6 +25,7 @@ class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
     /** @var SearchIndexDataListener */
     private $listener;
 
+    #[\Override]
     protected function setUp(): void
     {
         $htmlTagHelper = $this->createMock(HtmlTagHelper::class);

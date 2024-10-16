@@ -25,8 +25,8 @@ workflows:
                                     - NotBlank: ~
                                 choice_label: name
                                 excluded_values:
-                                    - won
-                                    - lost
+                                    - 'opportunity_status.won'
+                                    - 'opportunity_status.lost'
                         probability: ~
             develop:
                 step_to: open
@@ -64,8 +64,8 @@ workflows:
                                     - NotBlank: ~
                                 choice_label: name
                                 excluded_values:
-                                    - won
-                                    - lost
+                                    - 'opportunity_status.won'
+                                    - 'opportunity_status.lost'
                         probability: ~
                         close_date: ~
                         customer_need:
@@ -92,7 +92,7 @@ workflows:
                             conditions:
                                 '@empty': [$status]
                             enum_code: opportunity_status
-                            identifier: 'in_progress'
+                            identifier: 'opportunity_status.in_progress'
                             attribute: $opportunity.status
                         - '@create_date':
                             parameters:
@@ -128,7 +128,7 @@ workflows:
                             conditions:
                                 '@empty': [$status]
                             enum_code: opportunity_status
-                            identifier: 'in_progress'
+                            identifier: 'opportunity_status.in_progress'
                             attribute: $opportunity.status
                         - '@create_date':
                             parameters:
@@ -169,8 +169,8 @@ workflows:
                                     - NotBlank: ~
                                 choice_label: name
                                 excluded_values:
-                                    - won
-                                    - lost
+                                    - 'opportunity_status.won'
+                                    - 'opportunity_status.lost'
                         probability: ~
                         close_date: ~
                         customer_need:
@@ -182,6 +182,7 @@ workflows:
                     form_init:
                         - '@request_enum_entity':
                             enum_code: opportunity_status
+                            identifier: 'opportunity_status.in_progress'
                             order_by:
                                 priority: ASC
                             attribute: $opportunity.status

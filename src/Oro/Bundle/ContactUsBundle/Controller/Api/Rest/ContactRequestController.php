@@ -30,9 +30,7 @@ class ContactRequestController extends RestController
         return $this->handleGetRequest($id);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getManager()
     {
         return $this->container->get('oro_contact_us.contact_request.manager.api');
@@ -41,14 +39,13 @@ class ContactRequestController extends RestController
     /**
      * @return ContactRequestHandler
      */
+    #[\Override]
     public function getFormHandler()
     {
         return $this->container->get('oro_contact_us.contact_request.form.handler');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getForm()
     {
         return $this->container->get('oro_contact_us.embedded_form');

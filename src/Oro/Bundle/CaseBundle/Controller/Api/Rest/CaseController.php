@@ -115,33 +115,25 @@ class CaseController extends RestController
         return $this->handleDeleteRequest($id);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getManager()
     {
         return $this->container->get('oro_case.manager.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getForm()
     {
         return $this->container->get('oro_case.form.entity.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getFormHandler()
     {
         return $this->container->get('oro_case.form.handler.entity.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function transformEntityField($field, &$value)
     {
         switch ($field) {
@@ -166,9 +158,7 @@ class CaseController extends RestController
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function fixFormData(array &$data, $entity)
     {
         /** @var CaseEntity $entity */

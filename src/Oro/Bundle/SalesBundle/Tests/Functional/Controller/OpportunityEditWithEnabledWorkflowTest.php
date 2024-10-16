@@ -11,6 +11,7 @@ class OpportunityEditWithEnabledWorkflowTest extends WebTestCase
     /** @var WorkflowManager */
     private $workflowManager;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());

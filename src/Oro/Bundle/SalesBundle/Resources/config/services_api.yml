@@ -68,7 +68,7 @@ services:
     oro_sales.api.lead.set_default_status:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeFormData\SetDefaultEnumValue
         arguments:
-            - '@oro_entity_extend.enum_value_provider'
+            - '@oro_entity_extend.enum_options_provider'
             - '@oro_api.doctrine_helper'
             - '@oro_api.form_property_accessor'
             - 'status'

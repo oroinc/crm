@@ -23,6 +23,7 @@ class ContactReasonSearchHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var ContactReasonSearchHandler */
     private $searchHandler;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->doctrineHelper = $this->createMock(DoctrineHelper::class);

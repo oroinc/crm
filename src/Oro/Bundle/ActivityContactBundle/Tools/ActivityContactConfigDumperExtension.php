@@ -25,17 +25,13 @@ class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExt
         $this->activityContactProvider = $activityContactProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function supports($actionType)
     {
         return $actionType === ExtendConfigDumper::ACTION_PRE_UPDATE;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function preUpdate()
     {
         /** @var ConfigProvider $extendConfigProvider */

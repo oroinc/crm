@@ -10,11 +10,13 @@ use Oro\Bundle\EntityBundle\Twig\Sandbox\EntityVariablesProviderInterface;
  */
 class ContactReasonVariablesProvider implements EntityVariablesProviderInterface
 {
+    #[\Override]
     public function getVariableDefinitions(): array
     {
         return [];
     }
 
+    #[\Override]
     public function getVariableGetters(): array
     {
         return [
@@ -34,6 +36,7 @@ class ContactReasonVariablesProvider implements EntityVariablesProviderInterface
         ];
     }
 
+    #[\Override]
     public function getVariableProcessors(string $entityClass): array
     {
         return [];

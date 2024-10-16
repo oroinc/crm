@@ -29,9 +29,7 @@ class ContactRequestEditType extends AbstractType
         $this->localizationHelper = $localizationHelper;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('firstName', TextType::class, ['label' => 'oro.contactus.contactrequest.first_name.label']);
@@ -83,9 +81,7 @@ class ContactRequestEditType extends AbstractType
         $builder->add('submit', SubmitType::class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => ContactRequest::class]);

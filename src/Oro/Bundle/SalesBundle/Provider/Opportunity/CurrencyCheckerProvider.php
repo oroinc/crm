@@ -24,17 +24,13 @@ class CurrencyCheckerProvider implements RepositoryCurrencyCheckerProviderInterf
         $this->doctrine = $doctrine;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getEntityLabel()
     {
         return self::ENTITY_LABEL;
     }
 
-    /**
-     * @inheritdoc
-     */
+    #[\Override]
     public function hasRecordsWithRemovingCurrencies(
         array $removingCurrencies,
         Organization $organization = null

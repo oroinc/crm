@@ -47,7 +47,7 @@ Oro\Bundle\SalesBundle\Entity\Customer:
 
 Oro\Bundle\SalesBundle\Entity\Opportunity:
     opportunity1:
-        status: '@opportunity_status_won'
+        status: '@opportunity_status.won'
         owner: '@admin'
         closeRevenueCurrency: USD
         closeRevenueValue: 70.00
@@ -59,7 +59,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
         budgetAmountCurrency: USD
         budgetAmountValue: 1
     opportunity2:
-        status: '@opportunity_status_won'
+        status: '@opportunity_status.won'
         owner: '@admin'
         closeRevenueCurrency: USD
         closeRevenueValue: 10.00
@@ -71,7 +71,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
         budgetAmountCurrency: USD
         budgetAmountValue: 2
     opportunity3:
-        status: '@opportunity_status_won'
+        status: '@opportunity_status.won'
         owner: '@admin'
         closeRevenueCurrency: USD
         closeRevenueValue: 1000.00
@@ -83,7 +83,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
         budgetAmountCurrency: USD
         budgetAmountValue: 3
     opportunity4:
-        status: '@opportunity_status_identification_alignment'
+        status: '@opportunity_status.identification_alignment'
         owner: '@admin'
         closeRevenueCurrency: USD
         closeRevenueValue: 250.00
@@ -93,7 +93,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
         budgetAmountCurrency: USD
         budgetAmountValue: 4
     opportunity5:
-        status: '@opportunity_status_in_progress'
+        status: '@opportunity_status.in_progress'
         owner: '@admin'
         closeRevenueCurrency: USD
         closeRevenueValue: 320.00
@@ -103,7 +103,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
         budgetAmountCurrency: USD
         budgetAmountValue: 5
     opportunity6:
-        status: '@opportunity_status_lost'
+        status: '@opportunity_status.lost'
         owner: '@admin'
         closeRevenueCurrency: USD
         closeRevenueValue: 256.00
@@ -113,7 +113,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
         budgetAmountCurrency: USD
         budgetAmountValue: 6
     opportunity7:
-        status: '@opportunity_status_needs_analysis'
+        status: '@opportunity_status.needs_analysis'
         owner: '@admin'
         closeRevenueCurrency: USD
         closeRevenueValue: 222.00
@@ -123,7 +123,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
         budgetAmountCurrency: USD
         budgetAmountValue: 7
     opportunity8:
-        status: '@opportunity_status_negotiation'
+        status: '@opportunity_status.negotiation'
         owner: '@admin'
         closeRevenueCurrency: USD
         closeRevenueValue: 123.00
@@ -136,7 +136,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
         name: 'Opportunity <current()>'
         customerAssociation: '@customer<current()>'
         organization: '@organization'
-        status: '@opportunity_status_solution_development'
+        status: '@opportunity_status.solution_development'
         owner: '@second_user'
         budgetAmountCurrency: USD
         budgetAmountValue: <current()>
@@ -146,7 +146,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
         organization: '@organization'
         budgetAmountCurrency: USD
         budgetAmountValue: 21
-        status: '@opportunity_status_won'
+        status: '@opportunity_status.won'
         owner: '@admin'
         closeRevenueCurrency: USD
         closeRevenueValue: 70.00

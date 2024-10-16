@@ -15,41 +15,31 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
 {
     const PROCESS_DEFINITION_NAME = 'convert_mailbox_email_to_lead';
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getSettingsEntityFQCN()
     {
         return LeadMailboxProcessSettings::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getSettingsFormType()
     {
         return LeadMailboxProcessSettingsType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getLabel()
     {
         return 'oro.sales.mailbox.process.lead.label';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isEnabled(Mailbox $mailbox = null)
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getProcessDefinitionName()
     {
         return self::PROCESS_DEFINITION_NAME;

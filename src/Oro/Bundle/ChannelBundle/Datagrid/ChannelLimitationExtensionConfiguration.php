@@ -10,9 +10,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class ChannelLimitationExtensionConfiguration implements ConfigurationInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('root');

@@ -17,9 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/dashboard')]
 class DashboardController extends AbstractController
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [

@@ -20,9 +20,7 @@ class OpportunityApiHandler extends AbstractEntityApiHandler
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function afterProcess($entity)
     {
         return [
@@ -32,9 +30,7 @@ class OpportunityApiHandler extends AbstractEntityApiHandler
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getClass()
     {
         return self::ENTITY_CLASS;

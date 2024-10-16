@@ -473,6 +473,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
      *
      * @return string
      */
+    #[\Override]
     public function getEmail()
     {
         $contact = $this->getRelatedContact();
@@ -505,6 +506,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
     /**
      * @return string
      */
+    #[\Override]
     public function __toString()
     {
         return (string)$this->subject;

@@ -19,9 +19,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function reverseTransform($value)
     {
         if (!$value) {
@@ -51,9 +49,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function transform($value)
     {
         if ($value instanceof Customer) {

@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
@@ -27,9 +28,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var EntityManager */
     protected $em;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [
@@ -38,9 +37,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $this->em = $manager;
@@ -135,8 +132,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setCustomerAssociation($this->getReference('customer_association'));
         $lead->setStatus(
             $this->em->getReference(
-                ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE),
-                $status
+                EnumOption::class,
+                ExtendHelper::buildEnumOptionId(Lead::INTERNAL_STATUS_CODE, $status)
             )
         );
 

@@ -12,9 +12,7 @@ class OroContactBundle implements Migration, AttachmentExtensionAwareInterface
 {
     use AttachmentExtensionAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $this->attachmentExtension->addImageRelation($schema, 'orocrm_contact', 'picture', [], 2, 58, 58);

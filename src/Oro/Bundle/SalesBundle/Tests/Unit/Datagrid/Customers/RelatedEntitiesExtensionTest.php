@@ -24,6 +24,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
     /** @var RelatedEntitiesExtension */
     private $extension;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->configProvider = $this->createMock(ConfigProvider::class);

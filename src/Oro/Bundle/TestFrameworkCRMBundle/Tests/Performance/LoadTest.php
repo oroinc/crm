@@ -15,6 +15,7 @@ class LoadTest extends WebTestCase
     protected $resultData;
     protected $resultLimit;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient(array("debug" => false), $this->generateBasicAuthHeader());
@@ -47,6 +48,7 @@ class LoadTest extends WebTestCase
         $this->resultData = $container->averageTime;
     }
 
+    #[\Override]
     protected function assertPostConditions(): void
     {
         $data = $this->getName() . ',' . date('d/m/y') .  ',' . $this->resultLimit. ',' . $this->resultData . "\n";

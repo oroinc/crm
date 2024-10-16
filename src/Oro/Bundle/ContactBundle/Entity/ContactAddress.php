@@ -75,6 +75,7 @@ class ContactAddress extends AbstractTypedAddress implements ExtendEntityInterfa
      *
      * @return \DateTime
      */
+    #[\Override]
     public function getCreated()
     {
         return $this->created;
@@ -85,6 +86,7 @@ class ContactAddress extends AbstractTypedAddress implements ExtendEntityInterfa
      *
      * @return \DateTime
      */
+    #[\Override]
     public function getUpdated()
     {
         return $this->updated;

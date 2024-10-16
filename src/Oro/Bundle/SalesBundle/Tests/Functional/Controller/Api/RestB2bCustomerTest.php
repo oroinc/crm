@@ -19,12 +19,14 @@ class RestB2bCustomerTest extends WebTestCase
     /** @var Channel */
     private static $dataChannel;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient([], $this->generateWsseAuthHeader());
         $this->loadFixtures([LoadSalesBundleFixtures::class]);
     }
 
+    #[\Override]
     protected function postFixtureLoad()
     {
         self::$dataChannel = $this->getReference('default_channel');

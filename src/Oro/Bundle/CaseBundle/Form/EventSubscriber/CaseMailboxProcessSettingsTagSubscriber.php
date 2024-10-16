@@ -11,9 +11,7 @@ use Symfony\Component\Form\FormEvents;
 
 class CaseMailboxProcessSettingsTagSubscriber extends TagSubscriber
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return array_merge(
@@ -22,9 +20,7 @@ class CaseMailboxProcessSettingsTagSubscriber extends TagSubscriber
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function preSet(FormEvent $event)
     {
         $mailbox = $event->getForm()->getRoot()->getData();
@@ -36,9 +32,6 @@ class CaseMailboxProcessSettingsTagSubscriber extends TagSubscriber
         parent::preSet($event);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function postSubmit(FormEvent $event)
     {
         $entity = $event->getForm()->getParent()->getData();

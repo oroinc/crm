@@ -17,6 +17,7 @@ class LoadWorkflowData extends AbstractFixture implements ContainerAwareInterfac
 {
     use ContainerAwareTrait;
 
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         /** @noinspection ClassConstantCanBeUsedInspection */

@@ -28,6 +28,7 @@ class AccountHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var AccountHandler */
     private $handler;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->form = $this->createMock(Form::class);

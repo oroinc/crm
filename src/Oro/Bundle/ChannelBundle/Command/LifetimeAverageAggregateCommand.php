@@ -29,15 +29,14 @@ class LifetimeAverageAggregateCommand extends Command implements CronCommandSche
         $this->messageProducer = $messageProducer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDefaultDefinition(): string
     {
         return '0 4 * * *';
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
+    #[\Override]
     public function configure()
     {
         $this->addOption('force', 'f', InputOption::VALUE_NONE, 'Regenerate aggregated data from scratch')
@@ -71,6 +70,7 @@ HELP
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
+    #[\Override]
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->messageProducer->send(

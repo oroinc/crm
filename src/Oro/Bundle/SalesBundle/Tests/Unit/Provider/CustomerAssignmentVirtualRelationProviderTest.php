@@ -66,6 +66,7 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
     /** @var CustomerAssignmentVirtualRelationProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->provider = new CustomerAssignmentVirtualRelationProvider(self::CLASS_NAME);

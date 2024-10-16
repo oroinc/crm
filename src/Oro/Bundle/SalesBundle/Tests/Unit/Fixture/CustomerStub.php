@@ -13,17 +13,11 @@ class CustomerStub extends Customer
         $this->id = $id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getCustomerTarget()
     {
         return $this->customerTarget;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setCustomerTarget($target)
     {
         $this->customerTarget = $target;

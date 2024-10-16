@@ -9,9 +9,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class ChannelCustomerIdentityConstraintValidator extends ConstraintValidator
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function validate($value, Constraint $constraint)
     {
         if (!($value instanceof Channel)) {

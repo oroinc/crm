@@ -15,9 +15,7 @@ class EnableSalesFeatures extends AbstractFixture implements ContainerAwareInter
 {
     use ContainerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $configManager = $this->getConfigManager();

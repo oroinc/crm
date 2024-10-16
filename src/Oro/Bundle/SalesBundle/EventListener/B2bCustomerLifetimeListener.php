@@ -32,9 +32,7 @@ class B2bCustomerLifetimeListener implements ServiceSubscriberInterface
         $this->container = $container;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return [
@@ -155,40 +153,45 @@ class B2bCustomerLifetimeListener implements ServiceSubscriberInterface
         return
             $this->hasB2bCustomerTarget($opportunity)
             && $opportunity->getStatus()
-            && $opportunity->getStatus()->getId() === B2bCustomerRepository::VALUABLE_STATUS
+            && $opportunity->getStatus()->getInternalId() === B2bCustomerRepository::VALUABLE_STATUS
             && ($takeZeroRevenue || $opportunity->getCloseRevenueValue() > 0);
     }
 
     private function isChangeSetValuable(array $changeSet): bool
     {
         $fieldsUpdated = array_intersect(
-            ['customerAssociation', 'status', 'closeRevenueValue', 'closeRevenueCurrency', 'baseCloseRevenueValue'],
+            [
+                'customerAssociation',
+                'serialized_data',
+                'closeRevenueValue',
+                'closeRevenueCurrency',
+                'baseCloseRevenueValue'
+            ],
             array_keys($changeSet)
         );
 
-        if (!empty($changeSet['status'])) {
+        if (!empty($changeSet['serialized_data'])) {
             $statusChangeSet = array_map(
-                function ($status = null) {
-                    return $status ? $status->getId() : null;
-                },
-                $changeSet['status']
+                fn ($status) => $status['status'] ?? null,
+                $changeSet['serialized_data']
             );
 
             // if status was changed, check whether it had/has needed value
-            return \in_array(B2bCustomerRepository::VALUABLE_STATUS, $statusChangeSet, true);
+            $valuableStatusId = ExtendHelper::buildEnumOptionId(
+                Opportunity::INTERNAL_STATUS_CODE,
+                B2bCustomerRepository::VALUABLE_STATUS
+            );
+
+            return in_array($valuableStatusId, $statusChangeSet, true);
         }
 
-        return (bool)$fieldsUpdated;
+        return !empty($fieldsUpdated);
     }
 
     private function getOldStatus(Opportunity $opportunity, array $changeSet): ?string
     {
-        if (isset($changeSet['status'])
-            && ClassUtils::getClass($changeSet['status'][0]) === ExtendHelper::buildEnumValueClassName(
-                Opportunity::INTERNAL_STATUS_CODE
-            )
-        ) {
-            return $changeSet['status'][0]->getId();
+        if (isset($changeSet['serialized_data'][0]['status'])) {
+            return $changeSet['serialized_data'][0]['status'];
         }
 
         return $opportunity->getStatus()
@@ -217,7 +220,12 @@ class B2bCustomerLifetimeListener implements ServiceSubscriberInterface
 
     private function isOldStatusValuable(Opportunity $entity, array $changeSet): bool
     {
-        return B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet);
+        $optionId = ExtendHelper::buildEnumOptionId(
+            Opportunity::INTERNAL_STATUS_CODE,
+            B2bCustomerRepository::VALUABLE_STATUS
+        );
+
+        return $optionId === $this->getOldStatus($entity, $changeSet);
     }
 
     private function getQbTransformer(): CurrencyQueryBuilderTransformerInterface

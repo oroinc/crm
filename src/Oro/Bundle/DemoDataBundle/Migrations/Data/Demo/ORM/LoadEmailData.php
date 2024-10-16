@@ -24,17 +24,13 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadContactData::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $templates = $this->loadEmailTemplates();

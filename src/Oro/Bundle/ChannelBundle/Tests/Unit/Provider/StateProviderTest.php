@@ -30,6 +30,7 @@ class StateProviderTest extends \PHPUnit\Framework\TestCase
     /** @var StateProvider */
     private $stateProvider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->cacheProvider = $this->createMock(AbstractAdapter::class);

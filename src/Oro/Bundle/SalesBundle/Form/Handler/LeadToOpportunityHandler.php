@@ -33,9 +33,7 @@ class LeadToOpportunityHandler extends OpportunityHandler
         parent::__construct($manager, $requestChannelProvider, $logger);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function process($entity, FormInterface $form, Request $request)
     {
         $processResult = parent::process($entity, $form, $request);
@@ -61,6 +59,7 @@ class LeadToOpportunityHandler extends OpportunityHandler
         return $handler->update($opportunity, $form, $saveMessage, $request, $this);
     }
 
+    #[\Override]
     protected function onSuccess(Opportunity $entity): void
     {
         $this->manager->persist($entity);

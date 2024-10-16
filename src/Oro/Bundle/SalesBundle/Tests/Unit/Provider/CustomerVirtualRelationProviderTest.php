@@ -18,6 +18,7 @@ class CustomerVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerVirtualRelationProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->configProvider = $this->createMock(ConfigProvider::class);

@@ -18,6 +18,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
     /** @var OpportunityRelationsBuilder */
     private $relationsBuilder;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->relationsBuilder = new OpportunityRelationsBuilder();

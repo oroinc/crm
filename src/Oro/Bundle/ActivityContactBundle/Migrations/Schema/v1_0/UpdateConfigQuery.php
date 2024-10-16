@@ -10,9 +10,7 @@ use Psr\Log\LoggerInterface;
 
 class UpdateConfigQuery extends ParametrizedMigrationQuery
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDescription()
     {
         $logger = new ArrayLogger();
@@ -21,9 +19,7 @@ class UpdateConfigQuery extends ParametrizedMigrationQuery
         return $logger->getMessages();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function execute(LoggerInterface $logger)
     {
         $this->doExecute($logger);

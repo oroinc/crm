@@ -16,9 +16,7 @@ class CustomerIconProvider implements CustomerIconProviderInterface
         $this->configProvider = $configProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getIcon($entity)
     {
         $entityClass = ClassUtils::getClass($entity);

@@ -16,17 +16,13 @@ class AddCustomerAssociations implements
 {
     use CustomerExtensionTrait;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getOrder()
     {
         return 1;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->customerExtension->addCustomerAssociation($schema, 'orocrm_sales_b2bcustomer');

@@ -119,32 +119,25 @@ class B2bCustomerController extends RestController
      *
      * @return ApiEntityManager
      */
+    #[\Override]
     public function getManager()
     {
         return $this->container->get('oro_sales.b2bcustomer.manager.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getForm()
     {
         return $this->container->get('oro_sales.b2bcustomer.form.api');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getFormHandler()
     {
         return $this->container->get('oro_sales.b2bcustomer.form.handler.api');
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * overriden because of new updateHandler requirements ->process(entity, form, request)
-     */
+    #[\Override]
     protected function processForm($entity)
     {
         $this->fixRequestAttributes($entity);
@@ -162,9 +155,7 @@ class B2bCustomerController extends RestController
         return $result ? $entity : null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function fixRequestAttributes($entity)
     {
         $formAlias = 'b2bcustomer';

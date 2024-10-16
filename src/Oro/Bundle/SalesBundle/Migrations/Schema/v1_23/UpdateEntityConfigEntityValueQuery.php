@@ -14,7 +14,6 @@ class UpdateEntityConfigEntityValueQuery extends BaseQuery
     protected $oldValue;
 
     /**
-     * {@inheritdoc}
      * @param string $oldValue
      */
     public function __construct($entityName, $scope, $code, $value, $oldValue)
@@ -24,9 +23,7 @@ class UpdateEntityConfigEntityValueQuery extends BaseQuery
         $this->oldValue = $oldValue;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function execute(LoggerInterface $logger)
     {
         if ($this->isEqualOldValue($logger)) {

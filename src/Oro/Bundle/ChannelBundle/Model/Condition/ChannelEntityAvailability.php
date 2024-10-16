@@ -27,17 +27,13 @@ class ChannelEntityAvailability extends AbstractCondition implements ContextAcce
         $this->stateProvider = $stateProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getName()
     {
         return 'channel_entity_availiable';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function initialize(array $options)
     {
         if (2 === count($options)) {
@@ -57,9 +53,7 @@ class ChannelEntityAvailability extends AbstractCondition implements ContextAcce
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function isConditionAllowed($context)
     {
         if (null !== $this->channel) {

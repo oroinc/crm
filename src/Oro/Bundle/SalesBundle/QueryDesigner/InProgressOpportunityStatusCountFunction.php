@@ -7,6 +7,7 @@ class InProgressOpportunityStatusCountFunction extends AbstractOpportunityStatus
     /**
      * @return string
      */
+    #[\Override]
     protected function getStatus()
     {
         return 'in_progress';

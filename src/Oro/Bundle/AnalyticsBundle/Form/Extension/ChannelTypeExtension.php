@@ -37,17 +37,13 @@ class ChannelTypeExtension extends AbstractTypeExtension
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getExtendedTypes(): iterable
     {
         return [ChannelType::class];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'loadCategories']);
@@ -55,9 +51,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'manageCategories'], 20);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['validation_groups' => $this->getValidationGroups()]);

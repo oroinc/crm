@@ -13,6 +13,7 @@ abstract class AbstractRecalculateLifetimeCommandTest extends WebTestCase
     use CommandTestingTrait;
     use MessageQueueExtension;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient();

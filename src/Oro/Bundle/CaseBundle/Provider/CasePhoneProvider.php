@@ -11,9 +11,7 @@ class CasePhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwar
     /** @var PhoneProviderInterface */
     protected $rootProvider;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function setRootProvider(PhoneProviderInterface $rootProvider)
     {
         $this->rootProvider = $rootProvider;
@@ -26,6 +24,7 @@ class CasePhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwar
      *
      * @return string|null
      */
+    #[\Override]
     public function getPhoneNumber($object)
     {
         $contact = $object->getRelatedContact();
@@ -43,6 +42,7 @@ class CasePhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwar
      *
      * @return array of [phone number, phone owner]
      */
+    #[\Override]
     public function getPhoneNumbers($object)
     {
         $relatedContact = $object->getRelatedContact();

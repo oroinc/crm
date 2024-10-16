@@ -16,25 +16,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ContactRequestType extends AbstractType implements EmbeddedFormInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'oro_contactus_contact_request';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if ($options['dataChannelField']) {
@@ -74,9 +67,7 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
         $builder->add('submit', SubmitType::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -88,9 +79,9 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
     }
 
     /**
-     * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[\Override]
     public function getDefaultCss()
     {
         return <<<CSS
@@ -197,9 +188,7 @@ span.validation-failed {
 CSS;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDefaultSuccessMessage()
     {
         return '<p>Form has been submitted successfully</p>{back_link}';

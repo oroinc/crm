@@ -10,6 +10,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class ActivityContactRecalculateCommandTest extends WebTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient();

@@ -21,6 +21,7 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
     /** @var ContactNormalizer */
     private $normalizer;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->socialUrlFormatter = $this->createMock(SocialUrlFormatter::class);
@@ -43,7 +44,10 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityFields')
             ->willReturn(
                 [
-                    ['name' => 'twitter']
+                    [
+                        'name' => 'twitter',
+                        'type' => ContactNormalizer::CONTACT_TYPE
+                    ]
                 ]
             );
         $this->fieldHelper->expects(self::any())
@@ -72,7 +76,10 @@ class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityFields')
             ->willReturn(
                 [
-                    ['name' => 'twitter']
+                    [
+                        'name' => 'twitter',
+                        'type' => ContactNormalizer::CONTACT_TYPE
+                    ]
                 ]
             );
 

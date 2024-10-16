@@ -36,9 +36,7 @@ class MetadataProvider implements MetadataProviderInterface
         $this->router         = $router;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEntitiesMetadata()
     {
         $result = [];
@@ -58,9 +56,7 @@ class MetadataProvider implements MetadataProviderInterface
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getChannelTypeMetadata()
     {
         return $this->settings->getChannelTypeChoiceList();

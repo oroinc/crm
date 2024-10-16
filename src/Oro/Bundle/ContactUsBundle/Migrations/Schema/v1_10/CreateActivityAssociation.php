@@ -21,17 +21,13 @@ class CreateActivityAssociation implements
     use ActivityExtensionAwareTrait;
     use ActivityListExtensionAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getOrder(): int
     {
         return 1;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $this->enableActivityAssociations($schema);

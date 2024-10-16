@@ -31,6 +31,6 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
     name: '<{opportunity1_name}>'
     customerAssociation: '@mrcustomer'
     organization: '@organization'
-    status: '@opportunity_status_in_progress'
+    status: '@opportunity_status.in_progress'
     owner: '@admin'
     customerNeed: '\<p\>some needs\</p\>'

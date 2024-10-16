@@ -25,17 +25,13 @@ class LoadB2bCustomerEntitiesData extends AbstractFixture implements DependentFi
         self::FOURTH_ENTITY_NAME
     ];
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganization::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $user = $manager->getRepository(User::class)->findOneByUsername(self::$owner);

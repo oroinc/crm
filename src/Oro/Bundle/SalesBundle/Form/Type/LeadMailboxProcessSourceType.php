@@ -2,28 +2,29 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumOptionsProvider;
 use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Select form type for Lead Mailbox Process Source.
+ */
 class LeadMailboxProcessSourceType extends AbstractType
 {
-    /** @var EnumValueProvider */
-    private $enumValueProvider;
+    /** @var EnumOptionsProvider */
+    private $enumOptionsProvider;
 
     /**
      * LeadMailboxProcessSourceType constructor.
      */
-    public function __construct(EnumValueProvider $enumValueProvider)
+    public function __construct(EnumOptionsProvider $enumOptionsProvider)
     {
-        $this->enumValueProvider = $enumValueProvider;
+        $this->enumOptionsProvider = $enumOptionsProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
@@ -41,37 +42,28 @@ class LeadMailboxProcessSourceType extends AbstractType
      */
     protected function getChoices()
     {
-        return $this->enumValueProvider->getEnumChoicesByCode('lead_source');
+        return $this->enumOptionsProvider->getEnumChoicesByCode('lead_source');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
         $builder->resetModelTransformers();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'oro_sales_lead_mailbox_process_source';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getParent(): ?string
     {
         return Select2ChoiceType::class;

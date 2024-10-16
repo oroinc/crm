@@ -11,6 +11,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadOpportunitiesDa
  */
 class OpportunityUpdateListTest extends RestJsonApiUpdateListTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -99,11 +100,11 @@ class OpportunityUpdateListTest extends RestJsonApiUpdateListTestCase
         $repo = $this->getEntityManager()->getRepository(Opportunity::class);
         $opportunity1 = $repo->findOneBy(['name' => 'New Opportunity1']);
         self::assertEquals('New Account 1', $opportunity1->getCustomerAssociation()->getAccount()->getName());
-        self::assertEquals('lost', $opportunity1->getStatus()->getId());
+        self::assertEquals('lost', $opportunity1->getStatus()->getInternalId());
 
         $opportunity2 = $repo->findOneBy(['name' => 'New Opportunity2']);
         self::assertEquals('New Account 2', $opportunity2->getCustomerAssociation()->getAccount()->getName());
-        self::assertEquals('won', $opportunity2->getStatus()->getId());
+        self::assertEquals('won', $opportunity2->getStatus()->getInternalId());
     }
 
     public function testUpdateEntities()

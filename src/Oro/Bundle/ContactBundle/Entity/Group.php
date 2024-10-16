@@ -89,6 +89,7 @@ class Group implements ExtendEntityInterface
         return $this;
     }
 
+    #[\Override]
     public function __toString()
     {
         return (string)$this->getLabel();

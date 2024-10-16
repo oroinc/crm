@@ -55,17 +55,13 @@ class LoadCaseEntityData extends AbstractFixture implements ContainerAwareInterf
         ],
     ];
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadContactData::class, LoadOrganization::class, LoadUser::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $caseManager = $this->container->get('oro_case.manager');

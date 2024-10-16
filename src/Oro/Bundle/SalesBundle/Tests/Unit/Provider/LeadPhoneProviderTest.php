@@ -11,6 +11,7 @@ class LeadPhoneProviderTest extends \PHPUnit\Framework\TestCase
     /** @var LeadPhoneProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->provider = new LeadPhoneProvider();

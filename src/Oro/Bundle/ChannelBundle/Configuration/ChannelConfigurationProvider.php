@@ -79,9 +79,7 @@ class ChannelConfigurationProvider extends PhpArrayConfigProvider
         return $config[self::CUSTOMER_ENTITIES];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function doLoadConfig(ResourcesContainerInterface $resourcesContainer)
     {
         $configs = [];

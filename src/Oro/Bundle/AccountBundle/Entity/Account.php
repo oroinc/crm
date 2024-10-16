@@ -159,9 +159,7 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getName()
     {
         return $this->name;
@@ -283,6 +281,7 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
         return $this;
     }
 
+    #[\Override]
     public function __toString()
     {
         return (string) $this->getName();
@@ -377,6 +376,7 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
      *
      * @return string
      */
+    #[\Override]
     public function getEmail()
     {
         $contact = $this->getDefaultContact();

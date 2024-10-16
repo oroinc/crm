@@ -12,9 +12,7 @@ class OroSalesBundle implements Migration, ActivityExtensionAwareInterface
 {
     use ActivityExtensionAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_sales_lead');

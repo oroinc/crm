@@ -399,6 +399,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         $this->defaultInAccounts = new ArrayCollection();
     }
 
+    #[\Override]
     public function __clone()
     {
         parent::__clone();
@@ -426,6 +427,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
      *
      * @return string[]|null
      */
+    #[\Override]
     public function getEmailFields()
     {
         return null;
@@ -759,9 +761,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         return $this->emails;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEmail()
     {
         $primaryEmail = $this->getPrimaryEmail();
@@ -939,6 +939,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
      *
      * @return BasePerson
      */
+    #[\Override]
     public function addAddress(AbstractAddress $address)
     {
         if (!$address instanceof ContactAddress) {
@@ -1220,6 +1221,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
     /**
      * @return string
      */
+    #[\Override]
     public function __toString()
     {
         $name = $this->getNamePrefix() . ' '

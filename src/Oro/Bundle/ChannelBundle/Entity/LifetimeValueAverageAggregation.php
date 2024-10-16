@@ -87,6 +87,7 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
         return $this->amount;
     }
 
+    #[\Override]
     public function setDataChannel(Channel $dataChannel = null)
     {
         $this->dataChannel = $dataChannel;
@@ -95,6 +96,7 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
     /**
      * @return Channel
      */
+    #[\Override]
     public function getDataChannel()
     {
         return $this->dataChannel;
@@ -181,6 +183,7 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
     /**
      * @return string
      */
+    #[\Override]
     public function __toString()
     {
         return (string)$this->getId();

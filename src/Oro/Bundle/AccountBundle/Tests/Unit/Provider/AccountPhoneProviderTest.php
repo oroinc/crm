@@ -15,6 +15,7 @@ class AccountPhoneProviderTest extends \PHPUnit\Framework\TestCase
     /** @var AccountPhoneProvider */
     private $provider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->rootProvider = $this->createMock(PhoneProviderInterface::class);

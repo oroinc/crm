@@ -19,18 +19,11 @@ trait ChannelEntityTrait
     #[ConfigField(defaultValues: ['importexport' => ['short' => true, 'order' => 5]])]
     protected $dataChannel;
 
-    /**
-     * {@inheritdoc}
-     * Remove null after BAP-5248
-     */
     public function setDataChannel(Channel $channel = null)
     {
         $this->dataChannel = $channel;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDataChannel()
     {
         return $this->dataChannel;

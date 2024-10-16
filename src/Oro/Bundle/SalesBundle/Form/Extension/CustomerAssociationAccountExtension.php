@@ -33,9 +33,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
         $this->container = $container;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return [
@@ -44,9 +42,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if ($options['customer_association_disabled']) {
@@ -144,9 +140,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -154,9 +148,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getExtendedTypes(): iterable
     {
         return [FormType::class];

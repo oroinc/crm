@@ -8,23 +8,20 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 
 class LoadForecastWidgetFixtures extends AbstractFixture implements DependentFixtureInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganization::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $this->addWidget($manager);
@@ -79,8 +76,8 @@ class LoadForecastWidgetFixtures extends AbstractFixture implements DependentFix
             $opportunity->setOrganization($this->getReference(LoadOrganization::ORGANIZATION));
             $opportunity->setCloseDate($opportunityData['close_date']);
             $opportunity->setStatus($manager->getReference(
-                ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
-                $opportunityData['status']
+                EnumOption::class,
+                ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, $opportunityData['status'])
             ));
             $manager->persist($opportunity);
         }

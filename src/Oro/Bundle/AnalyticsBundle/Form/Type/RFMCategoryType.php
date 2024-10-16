@@ -11,9 +11,7 @@ class RFMCategoryType extends AbstractType
 {
     const NAME = 'oro_analytics_rfm_category';
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -23,9 +21,7 @@ class RFMCategoryType extends AbstractType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -34,17 +30,12 @@ class RFMCategoryType extends AbstractType
             ->add('max_value', HiddenType::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return self::NAME;

@@ -28,9 +28,7 @@ class ContactReasonSearchHandler implements SearchHandlerInterface
         $this->propertyAccessor = $propertyAccessor;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function search($query, $page, $perPage, $searchById = false)
     {
         $repository = $this->doctrineHelper->getEntityRepository(ContactReason::class);
@@ -58,25 +56,19 @@ class ContactReasonSearchHandler implements SearchHandlerInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getProperties()
     {
         return $this->displayFields;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEntityName()
     {
         return ContactReason::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function convertItem($item)
     {
         $result = [];

@@ -42,9 +42,9 @@ class EmailDirectionProvider implements DirectionProviderInterface
     }
 
     /**
-     * {@inheritdoc}
      * @param Email $activity
      */
+    #[\Override]
     public function getDirection($activity, $target)
     {
         // check if target is entity created from admin part
@@ -94,9 +94,7 @@ class EmailDirectionProvider implements DirectionProviderInterface
         return $fieldConfiguration->get('contact_information') === self::CONTACT_INFORMATION_SCOPE_EMAIL;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isDirectionChanged($changeSet = [])
     {
         /**
@@ -106,17 +104,15 @@ class EmailDirectionProvider implements DirectionProviderInterface
     }
 
     /**
-     * {@inheritdoc}
      * @param Email $activity
      */
+    #[\Override]
     public function getDate($activity)
     {
         return $activity->getSentAt() ?: new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getLastActivitiesDateForTarget(EntityManager $em, $target, $direction, $skipId = null)
     {
         $result = [];

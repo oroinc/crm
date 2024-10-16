@@ -10,6 +10,7 @@ class ContactPhoneTest extends \PHPUnit\Framework\TestCase
     /** @var ContactPhone */
     private $phone;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->phone = new ContactPhone();

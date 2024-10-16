@@ -6,12 +6,11 @@ use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\FilterBundle\Filter\DateFilterUtility;
 use Oro\Bundle\FilterBundle\Filter\FilterUtility;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\FilterBundle\Utils\DateFilterModifier;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 /**
@@ -57,7 +56,8 @@ class OpportunitiesByStatusReportListener
     {
         $event->getConfig()->getOrmQuery()
             ->resetFrom()
-            ->addFrom(ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE), 'status');
+            ->addFrom(EnumOption::class, 's')
+            ->addAndWhere(["s.enumCode = 'opportunity_status'"]);
     }
 
     /**

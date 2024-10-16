@@ -15,6 +15,7 @@ class CustomerIconProviderTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerIconProvider */
     private $customerIconProvider;
 
+    #[\Override]
     protected function setUp(): void
     {
         $entityConfigs = [

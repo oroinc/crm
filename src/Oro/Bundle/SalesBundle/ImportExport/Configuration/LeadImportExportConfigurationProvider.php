@@ -9,9 +9,7 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class LeadImportExportConfigurationProvider implements ImportExportConfigurationProviderInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function get(): ImportExportConfigurationInterface
     {
         return new ImportExportConfiguration([

@@ -14,9 +14,7 @@ class AddCIIndex implements Migration, DatabasePlatformAwareInterface
 {
     use DatabasePlatformAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         if ($this->platform instanceof PostgreSqlPlatform) {

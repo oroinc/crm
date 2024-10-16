@@ -10,6 +10,7 @@ use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadAddress;
@@ -31,24 +32,21 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     private const FLUSH_MAX = 50;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganization::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $workflowManager = $this->container->get('oro_workflow.manager');
         $tokenStorage = $this->container->get('security.token_storage');
         $users = $manager->getRepository(User::class)->findAll();
         $countries = $manager->getRepository(Country::class)->findAll();
-        $sources = $manager->getRepository(ExtendHelper::buildEnumValueClassName('lead_source'))->findAll();
+        $sources = $manager->getRepository(EnumOption::class)
+            ->findBy(['enumCode' => Lead::INTERNAL_STATUS_CODE]);
         $this->createChannel($manager);
 
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR . 'leads.csv', 'r');
@@ -173,8 +171,11 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     ): Lead {
         $lead = new Lead();
 
-        $className = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
-        $defaultStatus = $manager->getRepository($className)->find(ExtendHelper::buildEnumValueId('new'));
+        $defaultStatus = $manager->getRepository(EnumOption::class)
+            ->find(ExtendHelper::buildEnumOptionId(
+                Lead::INTERNAL_STATUS_CODE,
+                ExtendHelper::buildEnumInternalId('new')
+            ));
 
         $lead->setStatus($defaultStatus);
         $lead->setName($data['Company']);

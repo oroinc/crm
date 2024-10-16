@@ -5,38 +5,45 @@ namespace Oro\Bundle\ReportCRMBundle\Tests\Functional\DataFixtures;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumOptionRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class LoadLeadSourceData extends AbstractFixture implements OrderedFixtureInterface
 {
-    /** @var array */
-    protected $data = [
-        'Website'         => false,
-        'Direct Mail'     => false,
-        'Affiliate'       => false,
+    protected array $data = [
+        'Website' => false,
+        'Direct Mail' => false,
+        'Affiliate' => false,
         'Email Marketing' => false,
-        'Outbound'        => false,
-        'Partner'         => false
+        'Outbound' => false,
+        'Partner' => false
     ];
 
-    public function load(ObjectManager $manager)
+    #[\Override]
+    public function load(ObjectManager $manager): void
     {
-        $className = ExtendHelper::buildEnumValueClassName('lead_source');
-
-        /** @var EnumValueRepository $enumRepo */
-        $enumRepo = $manager->getRepository($className);
+        /** @var EnumOptionRepository $enumRepo */
+        $enumRepo = $manager->getRepository(EnumOption::class);
 
         $priority = 1;
         foreach ($this->data as $name => $isDefault) {
-            $enumOption = $enumRepo->createEnumValue($name, $priority++, $isDefault);
+            $enumOption = $enumRepo->createEnumOption(
+                Lead::INTERNAL_STATUS_CODE,
+                ExtendHelper::buildEnumInternalId($name),
+                $name,
+                $priority++,
+                $isDefault
+            );
             $manager->persist($enumOption);
         }
 
         $manager->flush();
     }
 
-    public function getOrder()
+    #[\Override]
+    public function getOrder(): int
     {
         return 290;
     }

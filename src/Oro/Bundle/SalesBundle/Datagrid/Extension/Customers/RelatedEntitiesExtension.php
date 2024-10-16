@@ -34,9 +34,7 @@ class RelatedEntitiesExtension extends AbstractExtension
         $this->relatedEntityClass = $relatedEntityClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isApplicable(DatagridConfiguration $config)
     {
         return
@@ -48,9 +46,7 @@ class RelatedEntitiesExtension extends AbstractExtension
             && $this->customerConfigProvider->isCustomerClass($this->parameters->get('customer_class'));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
         /** @var OrmDatasource $datasource */

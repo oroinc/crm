@@ -15,9 +15,7 @@ class DefaultProvider implements AccountProviderInterface
         $this->nameResolver = $resolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getAccount($targetCustomer)
     {
         return (new Account())

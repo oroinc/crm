@@ -10,11 +10,13 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 class AggregateLifetimeAverageTopicTest extends AbstractTopicTestCase
 {
+    #[\Override]
     protected function getTopic(): TopicInterface
     {
         return new AggregateLifetimeAverageTopic();
     }
 
+    #[\Override]
     public function validBodyDataProvider(): array
     {
         $fullOptionsSet = [
@@ -37,6 +39,7 @@ class AggregateLifetimeAverageTopicTest extends AbstractTopicTestCase
         ];
     }
 
+    #[\Override]
     public function invalidBodyDataProvider(): array
     {
         return [

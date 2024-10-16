@@ -26,17 +26,13 @@ class LoadCaseMailboxSettingsData extends AbstractFixture implements ContainerAw
      */
     private $tagManager;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function setContainer(ContainerInterface $container = null)
     {
         $this->tagManager = $container->get('oro_tag.tag.manager');
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [
@@ -44,9 +40,7 @@ class LoadCaseMailboxSettingsData extends AbstractFixture implements ContainerAw
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         /** @var User $user */

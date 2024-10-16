@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 
 class UpdateChannelJsonArrayQuery extends ParametrizedMigrationQuery
 {
+    #[\Override]
     public function getDescription()
     {
         $logger = new ArrayLogger();
@@ -20,17 +21,12 @@ class UpdateChannelJsonArrayQuery extends ParametrizedMigrationQuery
         return $logger->getMessages();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function execute(LoggerInterface $logger)
     {
         $this->doExecute($logger);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function doExecute(LoggerInterface $logger, $dryRun = false)
     {
         $platform = $this->connection->getDatabasePlatform();

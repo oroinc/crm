@@ -21,6 +21,7 @@ class LifetimeHistoryStatusUpdateProcessorTest extends \PHPUnit\Framework\TestCa
     private StateProvider|\PHPUnit\Framework\MockObject\MockObject $stateProvider;
     private EntityManager|\PHPUnit\Framework\MockObject\MockObject $entityManager;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->stateProvider = $this->createMock(StateProvider::class);

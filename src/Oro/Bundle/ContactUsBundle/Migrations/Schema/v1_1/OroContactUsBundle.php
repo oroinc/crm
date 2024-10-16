@@ -12,9 +12,7 @@ class OroContactUsBundle implements Migration, RenameExtensionAwareInterface
 {
     use RenameExtensionAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->renameExtension->renameTable(

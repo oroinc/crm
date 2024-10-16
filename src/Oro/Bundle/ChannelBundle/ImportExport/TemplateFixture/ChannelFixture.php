@@ -8,25 +8,19 @@ use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
 class ChannelFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getEntityClass()
     {
         return 'Oro\Bundle\ChannelBundle\Entity\Channel';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getData()
     {
         return $this->getEntityData('Custom channel|custom');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function createEntity($key)
     {
         return new Channel();
@@ -36,6 +30,7 @@ class ChannelFixture extends AbstractTemplateRepository implements TemplateFixtu
      * @param string  $key
      * @param Channel $entity
      */
+    #[\Override]
     public function fillEntityData($key, $entity)
     {
         list($name, $type) = explode('|', $key);

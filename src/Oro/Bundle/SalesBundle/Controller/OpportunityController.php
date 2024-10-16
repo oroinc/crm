@@ -27,9 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route(path: '/opportunity')]
 class OpportunityController extends AbstractController
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [

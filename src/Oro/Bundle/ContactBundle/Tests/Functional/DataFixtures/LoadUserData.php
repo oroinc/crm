@@ -33,14 +33,13 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
         ]
     ];
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [LoadOrganization::class, LoadBusinessUnit::class];
     }
 
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $role = new Role(self::$roleData['name']);

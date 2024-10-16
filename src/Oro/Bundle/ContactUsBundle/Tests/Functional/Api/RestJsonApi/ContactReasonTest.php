@@ -12,6 +12,7 @@ use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
  */
 class ContactReasonTest extends RestJsonApiTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

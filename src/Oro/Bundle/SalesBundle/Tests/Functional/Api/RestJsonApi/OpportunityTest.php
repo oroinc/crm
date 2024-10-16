@@ -15,6 +15,7 @@ use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadOpportunitiesDa
  */
 class OpportunityTest extends RestJsonApiTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,9 +23,9 @@ class OpportunityTest extends RestJsonApiTestCase
     }
 
     /**
-     * @dataProvider cgetDataProvider
+     * @dataProvider getListDataProvider
      */
-    public function testCget(array $parameters, string $expectedDataFileName)
+    public function testGetList(array $parameters, string $expectedDataFileName)
     {
         $response = $this->cget(['entity' => 'opportunities'], $parameters);
 
@@ -34,7 +35,7 @@ class OpportunityTest extends RestJsonApiTestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function cgetDataProvider(): array
+    public function getListDataProvider(): array
     {
         return [
             'without parameters'                                                 => [
@@ -126,16 +127,38 @@ class OpportunityTest extends RestJsonApiTestCase
                     'include'               => 'lead.customer.organization'
                 ],
                 'expectedContent' => 'cget_opportunity_customer_association_nested2_title.yml'
-            ],
-            'title for close reason and status'                                  => [
-                'parameters'      => [
-                    'meta'                  => 'title',
-                    'fields[opportunities]' => 'closeReason,status',
-                    'include'               => 'closeReason,status'
-                ],
-                'expectedContent' => 'cget_opportunity_dictionary_title.yml'
             ]
         ];
+    }
+
+    public function testGetListWithTitlesForCloseReasonAndStatus()
+    {
+        $response = $this->cget(
+            ['entity' => 'opportunities'],
+            [
+                'meta'                  => 'title',
+                'fields[opportunities]' => 'closeReason,status',
+                'include'               => 'closeReason,status'
+            ]
+        );
+
+        $this->assertResponseContains('cget_opportunity_dictionary_title.yml', $response);
+
+        // test that the "title" meta property is not returned in included data
+        // because it is disabled for dictionary entities
+        $responseContent = self::jsonToArray($response->getContent());
+        $errors = [];
+        foreach ($responseContent['included'] as $i => $item) {
+            if (array_key_exists('meta', $item)) {
+                $errors[] = sprintf(
+                    'Path: "included.%d.meta". Error: Failed asserting that an array does not have the key "meta".',
+                    $i
+                );
+            }
+        }
+        if ($errors) {
+            self::fail(implode(PHP_EOL, $errors));
+        }
     }
 
     public function testGet()

@@ -7,6 +7,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason;
@@ -22,9 +23,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     /** @var EntityManager */
     protected $em;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [
@@ -34,9 +33,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $this->em = $manager;
@@ -66,8 +63,8 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
         $opportunity->setCloseDate(new \DateTime('2017-01-01', new \DateTimeZone('UTC')));
         $opportunity->setStatus(
             $this->em->getReference(
-                ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
-                $status
+                EnumOption::class,
+                ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, $status)
             )
         );
         if ($closeReason) {

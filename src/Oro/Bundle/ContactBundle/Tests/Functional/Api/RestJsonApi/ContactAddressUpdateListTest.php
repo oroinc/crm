@@ -12,6 +12,7 @@ use Oro\Bundle\ContactBundle\Entity\ContactAddress;
  */
 class ContactAddressUpdateListTest extends RestJsonApiUpdateListTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -14,6 +14,7 @@ use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractLoadAclData;
  */
 class LoadWorkflowAclData extends AbstractLoadAclData
 {
+    #[\Override]
     public function getDependencies()
     {
         return [
@@ -22,11 +23,13 @@ class LoadWorkflowAclData extends AbstractLoadAclData
         ];
     }
 
+    #[\Override]
     protected function getDataPath()
     {
         return '@OroContactUsBundle/Migrations/Data/ORM/data/workflows.yml';
     }
 
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         /** @noinspection ClassConstantCanBeUsedInspection */

@@ -120,6 +120,7 @@ class ContactGroupController extends RestController
      *
      * @return ApiEntityManager
      */
+    #[\Override]
     public function getManager()
     {
         return $this->container->get('oro_contact.group.manager.api');
@@ -128,6 +129,7 @@ class ContactGroupController extends RestController
     /**
      * @return FormInterface
      */
+    #[\Override]
     public function getForm()
     {
         return $this->container->get('oro_contact.form.group.api');
@@ -136,6 +138,7 @@ class ContactGroupController extends RestController
     /**
      * @return ApiFormHandler
      */
+    #[\Override]
     public function getFormHandler()
     {
         return $this->container->get('oro_contact.form.handler.group.api');

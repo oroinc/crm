@@ -13,9 +13,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Repository\BusinessUnitRepository;
  */
 class LoadBusinessUnitData extends AbstractFixture
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $organization = $manager->getRepository(Organization::class)->getFirst();

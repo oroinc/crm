@@ -40,6 +40,7 @@ class CleanupMagentoOneConnectorEntityConfigsQuery extends AbstractCleanupMarket
         'Extend\Entity\EV_Mage_Subscr_Status',
     ];
 
+    #[\Override]
     public function getClassNames()
     {
         return self::ENTITY_CLASSES;

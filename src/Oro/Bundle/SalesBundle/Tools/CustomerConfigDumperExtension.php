@@ -8,25 +8,19 @@ use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
 class CustomerConfigDumperExtension extends AssociationEntityConfigDumperExtension
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getAssociationEntityClass()
     {
         return Customer::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getAssociationScope()
     {
         return 'customer';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function getAssociationKind()
     {
         return CustomerScope::ASSOCIATION_KIND;

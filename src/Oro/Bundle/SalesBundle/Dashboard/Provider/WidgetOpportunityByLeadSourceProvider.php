@@ -201,13 +201,10 @@ class WidgetOpportunityByLeadSourceProvider
             return $this->translator->trans('oro.sales.lead.source.others');
         }
 
-        return $this->enumValueTranslator->transEnum($source, 'lead_source');
+        return $this->enumValueTranslator->transEnum($source);
     }
 
-    /**
-     * @return OpportunityRepository
-     */
-    protected function getOpportunityRepository()
+    protected function getOpportunityRepository(): OpportunityRepository
     {
         return $this->registry->getRepository(Opportunity::class);
     }

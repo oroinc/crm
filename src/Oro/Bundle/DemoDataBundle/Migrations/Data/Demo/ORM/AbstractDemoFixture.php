@@ -30,9 +30,7 @@ abstract class AbstractDemoFixture extends AbstractFixture implements ContainerA
     /** @var array ['country ISO2 code' => ['region code' => 'region combined code']] */
     private $regionByCountryMap;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function setContainer(ContainerInterface $container = null)
     {
         $this->em        = $container->get('doctrine')->getManager();

@@ -30,6 +30,6 @@ services:
     oro_reportcrm.accounts.opportunities.listener:
         class: Oro\Bundle\ReportCRMBundle\EventListener\Datagrid\AccountsByOpportunitiesReportListener
         arguments:
-            - '@oro_entity_extend.enum_value_provider'
+            - '@oro_entity_extend.enum_options_provider'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.oro_reportcrm-accounts-by_opportunities, method: onBuildBefore }

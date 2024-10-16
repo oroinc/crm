@@ -23,9 +23,7 @@ class ContactEntityNameProvider implements EntityNameProviderInterface
         $this->dqlNameFormatterLink = $dqlNameFormatterLink;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getName($format, $locale, $entity)
     {
         if (!$entity instanceof Contact || self::FULL !== $format) {
@@ -45,9 +43,7 @@ class ContactEntityNameProvider implements EntityNameProviderInterface
         return (string)($entity->getPrimaryEmail() ?: $entity->getPrimaryPhone());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getNameDQL($format, $locale, $className, $alias)
     {
         if (!is_a($className, Contact::class, true) || self::FULL !== $format) {

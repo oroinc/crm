@@ -11,6 +11,7 @@ class RemoveExtendSourceFieldQuery extends ParametrizedMigrationQuery
     /**
      * {inheritdoc}
      */
+    #[\Override]
     public function getDescription()
     {
         $logger = new ArrayLogger();
@@ -22,6 +23,7 @@ class RemoveExtendSourceFieldQuery extends ParametrizedMigrationQuery
     /**
      * {inheritdoc}
      */
+    #[\Override]
     public function execute(LoggerInterface $logger)
     {
         $this->doExecute($logger);

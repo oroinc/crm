@@ -25,9 +25,7 @@ class CaseApiEntityManager extends ApiEntityManager
         parent::__construct($class, $om);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function createEntity()
     {
         return $this->caseManager->createCase();

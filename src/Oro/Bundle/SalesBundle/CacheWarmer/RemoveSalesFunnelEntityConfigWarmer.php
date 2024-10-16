@@ -30,17 +30,13 @@ class RemoveSalesFunnelEntityConfigWarmer implements CacheWarmerInterface
         $this->applicationState = $applicationState;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function isOptional(): bool
     {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function warmUp(string $cacheDir): array
     {
         if (!$this->applicationState->isInstalled()) {

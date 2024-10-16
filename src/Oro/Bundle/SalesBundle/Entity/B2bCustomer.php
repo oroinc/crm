@@ -151,9 +151,6 @@ class B2bCustomer implements
     #[ConfigField(defaultValues: ['importexport' => ['order' => 90], 'dataaudit' => ['auditable' => true]])]
     protected ?Collection $emails = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct()
     {
         $this->phones = new ArrayCollection();
@@ -370,6 +367,7 @@ class B2bCustomer implements
     /**
      * @return string
      */
+    #[\Override]
     public function __toString()
     {
         return (string) $this->getName();

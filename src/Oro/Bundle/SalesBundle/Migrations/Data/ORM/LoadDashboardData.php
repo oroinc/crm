@@ -12,17 +12,13 @@ use Oro\Bundle\DashboardBundle\Migrations\Data\ORM\LoadDashboardData as Depended
  */
 class LoadDashboardData extends AbstractDashboardFixture implements DependentFixtureInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [DependedLoadDashboardData::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $mainDashboard = $this->findAdminDashboardModel($manager, 'main');

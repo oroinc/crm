@@ -25,6 +25,7 @@ class ChannelLimitationHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelLimitationHandler */
     private $handler;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->handler = new ChannelLimitationHandler(

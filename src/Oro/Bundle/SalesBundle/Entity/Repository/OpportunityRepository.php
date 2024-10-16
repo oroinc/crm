@@ -4,9 +4,12 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -22,8 +25,7 @@ class OpportunityRepository extends EntityRepository
         Organization $organization = null
     ): bool {
         $qb = $this->createQueryBuilder('opportunity');
-        $qb
-            ->select('COUNT(opportunity.id)')
+        $qb->select('COUNT(opportunity.id)')
             ->where($qb->expr()->in('opportunity.budgetAmountCurrency', ':removingCurrencies'))
             ->orWhere($qb->expr()->in('opportunity.closeRevenueCurrency', ':removingCurrencies'))
             ->setParameter('removingCurrencies', $removingCurrencies);
@@ -76,8 +78,11 @@ class OpportunityRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('o');
         $qb->select('COUNT(o.id)')
-            ->andWhere('o.status = :status')
-            ->setParameter('status', Opportunity::STATUS_WON);
+            ->andWhere("JSON_EXTRACT(o.serialized_data, 'status') = :oppStatus")
+            ->setParameter(
+                'oppStatus',
+                ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, Opportunity::STATUS_WON)
+            );
         if ($start) {
             $qb
                 ->andWhere('o.closedAt >= :dateStart')
@@ -95,8 +100,14 @@ class OpportunityRepository extends EntityRepository
     public function getWonOpportunitiesByPeriodQB(\DateTime $start = null, \DateTime $end = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('o')
-            ->andWhere('o.status = :status')
-            ->setParameter('status', Opportunity::STATUS_WON);
+            ->andWhere("JSON_EXTRACT(o.serialized_data, 'status') = :status")
+            ->setParameter(
+                'status',
+                ExtendHelper::buildEnumOptionId(
+                    Opportunity::INTERNAL_STATUS_CODE,
+                    Opportunity::STATUS_WON
+                )
+            );
         if ($start) {
             $qb
                 ->andWhere('o.closedAt >= :dateStart')
@@ -131,7 +142,12 @@ class OpportunityRepository extends EntityRepository
         $qb = $this->createQueryBuilder('o')
             ->select('s.id as source')
             ->leftJoin('o.lead', 'l')
-            ->leftJoin('l.source', 's')
+            ->leftJoin(
+                EnumOption::class,
+                's',
+                Expr\Join::WITH,
+                "JSON_EXTRACT(l.serialized_data, 'source') = s"
+            )
             ->groupBy('source');
 
         $dateFilterProcessor->process($qb, $dateRange, 'o.createdAt');
@@ -158,7 +174,11 @@ class OpportunityRepository extends EntityRepository
         );
 
         if ($excludedStatuses) {
-            $qb->andWhere($qb->expr()->notIn(QueryBuilderUtil::getField($alias, 'status'), $excludedStatuses));
+            $qb->andWhere($qb->expr()->notIn("JSON_EXTRACT(o.serialized_data, 'status')", ':excludedStatuses'));
+            $qb->setParameter(
+                'excludedStatuses',
+                ExtendHelper::mapToEnumOptionIds(Opportunity::INTERNAL_STATUS_CODE, $excludedStatuses)
+            );
         }
 
         return $qb;

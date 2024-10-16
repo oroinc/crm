@@ -25,9 +25,7 @@ class SingleChannelModeExtension extends AbstractTypeExtension
         $this->channelsProvider = $channelsProvider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if (!$options['single_channel_mode']) {
@@ -47,9 +45,7 @@ class SingleChannelModeExtension extends AbstractTypeExtension
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         if (!$options['single_channel_mode']) {
@@ -63,17 +59,13 @@ class SingleChannelModeExtension extends AbstractTypeExtension
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['single_channel_mode' => true]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getExtendedTypes(): iterable
     {
         return [ChannelSelectType::class];

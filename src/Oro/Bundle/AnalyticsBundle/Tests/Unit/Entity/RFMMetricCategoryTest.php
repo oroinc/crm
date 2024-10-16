@@ -12,6 +12,7 @@ class RFMMetricCategoryTest extends \PHPUnit\Framework\TestCase
     /** @var RFMMetricCategory */
     private $entity;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->entity = new RFMMetricCategory();

@@ -18,6 +18,7 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
     private ?string $originalTimezone;
     private ConfigManager $globalScopeManager;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->initClient(
@@ -33,6 +34,7 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
         $this->originalTimezone = $this->globalScopeManager->get('oro_locale.timezone');
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->globalScopeManager->set('oro_locale.timezone', $this->originalTimezone);

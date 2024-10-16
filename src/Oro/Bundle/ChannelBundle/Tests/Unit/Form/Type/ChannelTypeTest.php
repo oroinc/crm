@@ -28,6 +28,7 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
     /** @var ChannelTypeSubscriber */
     private $channelTypeSubscriber;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->builder = $this->createMock(FormBuilder::class);

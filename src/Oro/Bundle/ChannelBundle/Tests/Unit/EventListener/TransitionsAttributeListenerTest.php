@@ -18,6 +18,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit\Framework\TestCase
     /** @var TransitionsAttributeListener */
     private $listener;
 
+    #[\Override]
     protected function setUp(): void
     {
         $formArray = [

@@ -11,9 +11,7 @@ use Oro\Bundle\EmailBundle\Entity\Repository\EmailAwareRepository;
  */
 class ContactRepository extends EntityRepository implements EmailAwareRepository
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getPrimaryEmailsQb($fullNameQueryPart, array $excludedEmailNames = [], $query = null)
     {
         $qb = $this->createQueryBuilder('c');
@@ -50,9 +48,7 @@ class ContactRepository extends EntityRepository implements EmailAwareRepository
         return $qb;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getSecondaryEmailsQb($fullNameQueryPart, array $excludedEmailNames = [], $query = null)
     {
         $qb = $this->createQueryBuilder('c');

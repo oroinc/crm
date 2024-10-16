@@ -11,9 +11,7 @@ use Oro\Bundle\SalesBundle\Form\Type\LeadSelectType;
 
 class UpdateLeadFormType implements Migration
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
         $queries->addQuery(

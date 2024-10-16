@@ -4,14 +4,13 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\EntityExtendBundle\Entity\EnumOption;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class LoadClosedOpportunityFixtures extends AbstractOpportunityFixtures
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function createOpportunity(ObjectManager $manager): void
     {
         $opportunity = new Opportunity();
@@ -24,8 +23,8 @@ class LoadClosedOpportunityFixtures extends AbstractOpportunityFixtures
         $opportunity->setOrganization($this->getOrganization());
         $opportunity->setCloseDate(new \DateTime());
         $opportunity->setStatus($manager->getReference(
-            ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE),
-            'lost'
+            EnumOption::class,
+            ExtendHelper::buildEnumOptionId(Opportunity::INTERNAL_STATUS_CODE, 'lost')
         ));
 
         $manager->persist($opportunity);

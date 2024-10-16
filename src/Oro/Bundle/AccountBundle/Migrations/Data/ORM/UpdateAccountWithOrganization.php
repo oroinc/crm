@@ -13,17 +13,13 @@ use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\UpdateWithOrganization;
  */
 class UpdateAccountWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [LoadOrganizationAndBusinessUnitData::class];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $this->update($manager, Account::class);

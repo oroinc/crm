@@ -15,14 +15,13 @@ use Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractUpdatePermissions;
  */
 class UpdateEmailAccessLevels extends AbstractUpdatePermissions implements DependentFixtureInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getDependencies()
     {
         return [LoadRolesData::class];
     }
 
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $aclManager = $this->getAclManager();

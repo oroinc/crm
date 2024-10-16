@@ -19,6 +19,7 @@ use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganizatio
  */
 class ImportExportTest extends AbstractImportExportTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -140,7 +141,7 @@ class ImportExportTest extends AbstractImportExportTestCase
          * Assert that update not clear snapshot field
          */
         $this->assertNotEmpty(
-            $updatedContact->getTestMultiEnumSnapshot(),
+            $updatedContact->getTestMultiEnum(),
             'Update through the import-export functionality must not clear the system fields'
         );
     }

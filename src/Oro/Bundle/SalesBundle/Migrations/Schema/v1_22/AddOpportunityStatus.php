@@ -7,35 +7,31 @@ use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManagerAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManagerAwareTrait;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareTrait;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\OutdatedExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\OutdatedExtendExtensionAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
-use Oro\Bundle\EntityExtendBundle\Migration\Query\EnumDataValue;
-use Oro\Bundle\EntityExtendBundle\Migration\Query\InsertEnumValuesQuery;
+use Oro\Bundle\EntityExtendBundle\Migration\Query\OutdatedEnumDataValue;
+use Oro\Bundle\EntityExtendBundle\Migration\Query\OutdatedInsertEnumValuesQuery;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class AddOpportunityStatus implements
     Migration,
-    ExtendExtensionAwareInterface,
+    OutdatedExtendExtensionAwareInterface,
     ExtendOptionsManagerAwareInterface,
     OrderedMigrationInterface
 {
-    use ExtendExtensionAwareTrait;
+    use OutdatedExtendExtensionAwareTrait;
     use ExtendOptionsManagerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getOrder(): int
     {
         return 1;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function up(Schema $schema, QueryBag $queries): void
     {
         $this->extendOptionsManager->removeColumnOptions('orocrm_sales_opportunity', 'status');
@@ -45,7 +41,7 @@ class AddOpportunityStatus implements
 
     private function addOpportunityStatusField(Schema $schema, QueryBag $queries): void
     {
-        $enumTable = $this->extendExtension->addEnumField(
+        $enumTable = $this->outdatedExtendExtension->addOutdatedEnumField(
             $schema,
             'orocrm_sales_opportunity',
             'status',
@@ -64,14 +60,14 @@ class AddOpportunityStatus implements
         $options->set('enum', 'immutable_codes', ['in_progress', 'won', 'lost']);
         $enumTable->addOption(OroOptions::KEY, $options);
 
-        $queries->addPostQuery(new InsertEnumValuesQuery($this->extendExtension, 'opportunity_status', [
-            new EnumDataValue('in_progress', 'In Progress', 1, true),
-            new EnumDataValue('identification_alignment', 'Identification & Alignment', 2),
-            new EnumDataValue('needs_analysis', 'Needs Analysis', 3),
-            new EnumDataValue('solution_development', 'Solution Development', 4),
-            new EnumDataValue('negotiation', 'Negotiation', 5),
-            new EnumDataValue('won', 'Closed Won', 6),
-            new EnumDataValue('lost', 'Closed Lost', 7)
+        $queries->addPostQuery(new OutdatedInsertEnumValuesQuery($this->outdatedExtendExtension, 'opportunity_status', [
+            new OutdatedEnumDataValue('in_progress', 'In Progress', 1, true),
+            new OutdatedEnumDataValue('identification_alignment', 'Identification & Alignment', 2),
+            new OutdatedEnumDataValue('needs_analysis', 'Needs Analysis', 3),
+            new OutdatedEnumDataValue('solution_development', 'Solution Development', 4),
+            new OutdatedEnumDataValue('negotiation', 'Negotiation', 5),
+            new OutdatedEnumDataValue('won', 'Closed Won', 6),
+            new OutdatedEnumDataValue('lost', 'Closed Lost', 7)
         ]));
     }
 }

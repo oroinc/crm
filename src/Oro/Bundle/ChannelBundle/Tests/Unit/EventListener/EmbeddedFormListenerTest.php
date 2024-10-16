@@ -24,6 +24,7 @@ class EmbeddedFormListenerTest extends \PHPUnit\Framework\TestCase
     /** @var EmbeddedFormListener */
     private $listener;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->request = new Request([], [], ['_route' => 'oro_embedded_form_']);

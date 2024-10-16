@@ -11,21 +11,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ActualizeContactEmailAssociationsTopic extends AbstractTopic
 {
+    #[\Override]
     public static function getName(): string
     {
         return 'oro_contact.actualize_contact_email_associations';
     }
 
+    #[\Override]
     public static function getDescription(): string
     {
         return 'Actualizes EmailAddress records.';
     }
 
+    #[\Override]
     public function getDefaultPriority(string $queueName): string
     {
         return MessagePriority::VERY_LOW;
     }
 
+    #[\Override]
     public function configureMessageBody(OptionsResolver $resolver): void
     {
     }

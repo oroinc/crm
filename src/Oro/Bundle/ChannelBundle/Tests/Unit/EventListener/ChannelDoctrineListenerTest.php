@@ -56,6 +56,7 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     /** @var LifetimeHistoryStatusUpdateManager */
     private $statusUpdateManager;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->lifetimeRepo = $this->createMock(LifetimeHistoryRepository::class);

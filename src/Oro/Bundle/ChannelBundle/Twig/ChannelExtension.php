@@ -28,9 +28,7 @@ class ChannelExtension extends AbstractExtension implements ServiceSubscriberInt
         $this->container = $container;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getFunctions()
     {
         return [
@@ -67,9 +65,7 @@ class ChannelExtension extends AbstractExtension implements ServiceSubscriberInt
         return $this->getAmountProvider()->getAccountLifeTimeValue($account, $channel);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return [

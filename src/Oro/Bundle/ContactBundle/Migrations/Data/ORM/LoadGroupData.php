@@ -11,6 +11,7 @@ class LoadGroupData extends AbstractFixture
     /**
      * Load sample groups
      */
+    #[\Override]
     public function load(ObjectManager $manager)
     {
         $groups = array('Sales Group','Marketing Group');

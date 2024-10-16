@@ -5,5 +5,5 @@ Oro\Bundle\SalesBundle\Entity\Lead:
     lead1:
         owner: '@admin'
         name: '<{lead1_name}>'
-        status: '@lead_status_new'
+        status: '@lead_status.new'
         organization: '@organization'

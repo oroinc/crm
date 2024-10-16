@@ -7,6 +7,9 @@ use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\OrmResultBefore;
 
+/**
+ * Excluding entities by status.
+ */
 class WidgetExcludedStatusListener
 {
     /** @var WidgetConfigs */
@@ -27,9 +30,12 @@ class WidgetExcludedStatusListener
             $dataSource  = $event->getDatagrid()->getDatasource();
             $qb          = $dataSource->getQueryBuilder();
             $rootAliases = $qb->getRootAliases();
-            $field       = sprintf('%s.status', reset($rootAliases));
-            $qb->andWhere($qb->expr()->notIn($field, ':statuses'));
-
+            $qb->andWhere(
+                $qb->expr()->notIn(
+                    "JSON_EXTRACT(" . reset($rootAliases) . ".serialized_data, 'status')",
+                    ':statuses'
+                )
+            );
             /** @var Query $query */
             $query = $event->getQuery();
             $query->setDQL($dataSource->getQueryBuilder()->getQuery()->getDQL());

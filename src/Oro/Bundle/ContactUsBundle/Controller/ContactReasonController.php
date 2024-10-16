@@ -76,9 +76,7 @@ class ContactReasonController extends AbstractController
         return new JsonResponse('', Response::HTTP_OK);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return array_merge(

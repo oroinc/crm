@@ -13,9 +13,7 @@ use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
  */
 class RelevantOpportunitiesExtension extends AccountRelatedEntitiesExtension
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function isApplicable(DatagridConfiguration $config)
     {
         return
@@ -23,9 +21,7 @@ class RelevantOpportunitiesExtension extends AccountRelatedEntitiesExtension
             && parent::isApplicable($config);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
         /** @var OrmDatasource $datasource */

@@ -39,9 +39,7 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
         $this->socialUrlFormatter = $socialUrlFormatter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function normalize($object, string $format = null, array $context = [])
     {
         $result = parent::normalize($object, $format, $context);
@@ -58,9 +56,7 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         foreach (static::$socialFields as $socialType => $fieldName) {
@@ -75,17 +71,13 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
         return parent::denormalize($data, $type, $format, $context);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
         return $data instanceof Contact;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function supportsDenormalization($data, string $type, string $format = null, array $context = []): bool
     {
         return is_array($data) && $type === static::CONTACT_TYPE;

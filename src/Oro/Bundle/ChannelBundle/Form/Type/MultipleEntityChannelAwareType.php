@@ -9,42 +9,31 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MultipleEntityChannelAwareType extends AbstractChannelAwareType
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['extra_config' => 'channel_aware', 'channel_field' => 'dataChannel']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         parent::buildView($view, $form, $options);
         $view->vars['extra_config'] = 'channel_aware';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'oro_multiple_entity_channel_aware';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getParent(): ?string
     {
         return MultipleEntityType::class;

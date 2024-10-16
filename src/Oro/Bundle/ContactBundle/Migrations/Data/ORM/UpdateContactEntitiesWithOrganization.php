@@ -14,9 +14,7 @@ use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\UpdateWithOrganization;
  */
 class UpdateContactEntitiesWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getDependencies(): array
     {
         return [
@@ -25,9 +23,7 @@ class UpdateContactEntitiesWithOrganization extends UpdateWithOrganization imple
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $this->update($manager, Group::class);
