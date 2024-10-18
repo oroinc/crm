@@ -71,7 +71,7 @@
 
     {{ parent() }}
     <span class="page-title__status">
-        {{ UI.badge(entity.status.name, entity.status.id != 'canceled' ? 'enabled' : 'disabled') }}
+        {{ UI.badge(entity.status.name, entity.status.internalId != 'canceled' ? 'enabled' : 'disabled') }}
     </span>
 {% endblock breadcrumbs %}
 
