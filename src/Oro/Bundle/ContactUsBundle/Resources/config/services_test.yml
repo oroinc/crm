@@ -5,7 +5,7 @@ services:
         arguments:
             - '@.inner'
         calls:
-            - [ addSkippedEntity, [ 'Oro\Bundle\ContactUsBundle\Entity\ContactReason', [ 'get_list', 'delete', 'delete_list' ] ] ]
+            - [addSkippedEntity, ['Oro\Bundle\ContactUsBundle\Entity\ContactReason', ['get_list', 'delete', 'delete_list']]]
 
     oro_contact_us.tests.entity_name_resolver.data_loader:
         class: Oro\Bundle\ContactUsBundle\Tests\Functional\Environment\TestEntityNameResolverDataLoader
