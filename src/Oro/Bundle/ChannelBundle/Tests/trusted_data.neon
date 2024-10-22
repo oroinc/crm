@@ -1,9 +1,6 @@
 # Configuration for https://github.com/oroinc/phpstan-rules/
 trusted_data:
     variables:
-        Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository:
-            massStatusUpdate:
-                k: true
         Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository:
             getAggregatedValue:
                 calculationPeriodEnd: true
