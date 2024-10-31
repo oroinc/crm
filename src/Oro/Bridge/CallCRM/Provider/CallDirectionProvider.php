@@ -5,7 +5,6 @@ namespace Oro\Bridge\CallCRM\Provider;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
-use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\CallBundle\Entity\Call;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
@@ -15,14 +14,6 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
  */
 class CallDirectionProvider implements DirectionProviderInterface
 {
-    /** @var ActivityManager */
-    protected $activityManager;
-
-    public function __construct(ActivityManager $activityManager)
-    {
-        $this->activityManager = $activityManager;
-    }
-
     /**
      * @param Call $activity
      */
@@ -80,9 +71,6 @@ class CallDirectionProvider implements DirectionProviderInterface
     protected function getLastActivity(EntityManager $em, $target, $skipId, $direction = null)
     {
         $targetClass = ClassUtils::getClass($target);
-        if (!$this->activityManager->hasActivityAssociation($targetClass, Call::class)) {
-            return null;
-        }
 
         $qb = $em->getRepository(Call::class)
             ->createQueryBuilder('call')
