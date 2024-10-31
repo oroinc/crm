@@ -4,6 +4,7 @@ namespace Oro\Bundle\ActivityContactBundle\Provider;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Psr\Container\ContainerInterface;
 
@@ -17,6 +18,8 @@ class ActivityContactProvider
 
     /** @var ContainerInterface */
     private $providers;
+
+    private ActivityManager $activityManager;
 
     /**
      * @param string[]           $supportedClasses
@@ -90,15 +93,27 @@ class ActivityContactProvider
         $directionDate  = null;
         $allDates = [];
         $directionDates = [];
+        $targetClass = ClassUtils::getClass($targetEntity);
+
         foreach ($this->supportedClasses as $supportedClass) {
             $skippedId = ($skippedId && $supportedClass === $class) ? $skippedId : null;
             /** @var DirectionProviderInterface $provider */
             $provider = $this->providers->get($supportedClass);
-            $result = $provider->getLastActivitiesDateForTarget($em, $targetEntity, $direction, $skippedId);
-            if (!empty($result)) {
-                $allDates[] = $result['all'];
-                if ($result['direction']) {
-                    $directionDates[] = $result['direction'];
+
+            $lastActivitiesDateForTarget = [];
+            if ($this->activityManager->hasActivityAssociation($targetClass, $supportedClass)) {
+                $lastActivitiesDateForTarget = $provider->getLastActivitiesDateForTarget(
+                    $em,
+                    $targetEntity,
+                    $direction,
+                    $skippedId
+                );
+            }
+
+            if (!empty($lastActivitiesDateForTarget)) {
+                $allDates[] = $lastActivitiesDateForTarget['all'];
+                if ($lastActivitiesDateForTarget['direction']) {
+                    $directionDates[] = $lastActivitiesDateForTarget['direction'];
                 }
             }
         }
@@ -139,5 +154,10 @@ class ActivityContactProvider
         }
 
         return $result;
+    }
+
+    public function setActivityManager(ActivityManager $activityManager): void
+    {
+        $this->activityManager = $activityManager;
     }
 }

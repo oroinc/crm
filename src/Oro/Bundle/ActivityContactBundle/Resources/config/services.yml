@@ -20,6 +20,8 @@ services:
         arguments:
             - [] # supported classes
             - ~ # service locator for direction providers
+        calls:
+          - [ 'setActivityManager', [ '@oro_activity.manager' ] ]
 
     oro_activity_contact.listener.activity_listener:
         class: Oro\Bundle\ActivityContactBundle\EventListener\ActivityListener
