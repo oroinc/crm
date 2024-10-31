@@ -3,24 +3,18 @@
 namespace Oro\Bridge\CallCRM\Tests\Unit\Provider;
 
 use Oro\Bridge\CallCRM\Provider\CallDirectionProvider;
-use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\CallBundle\Entity\Call;
 use Oro\Bundle\CallBundle\Entity\CallDirection;
 
 class CallDirectionProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ActivityManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $activityManager;
-
     /** @var CallDirectionProvider */
     private $provider;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->activityManager = $this->createMock(ActivityManager::class);
-
-        $this->provider = new CallDirectionProvider($this->activityManager);
+        $this->provider = new CallDirectionProvider();
     }
 
     public function testGetDirection()

@@ -3,31 +3,33 @@
 namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
 use Doctrine\ORM\EntityManager;
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Stub\EmailStub as TestActivity1;
 use Oro\Component\Testing\Unit\TestContainerBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var DirectionProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $directionProvider;
+    private DirectionProviderInterface|MockObject $directionProvider;
 
-    /** @var DirectionProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $directionProvider1;
+    private DirectionProviderInterface|MockObject $directionProvider1;
 
-    /** @var ActivityContactProvider */
-    private $provider;
+    private ActivityContactProvider $provider;
+
+    private ActivityManager|MockObject $activityManager;
 
     #[\Override]
     protected function setUp(): void
     {
         $this->directionProvider = $this->createMock(DirectionProviderInterface::class);
         $this->directionProvider1 = $this->createMock(DirectionProviderInterface::class);
+        $this->activityManager = $this->createMock(ActivityManager::class);
 
         $providers = TestContainerBuilder::create()
             ->add(TestActivity::class, $this->directionProvider)
@@ -36,7 +38,8 @@ class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->provider = new ActivityContactProvider(
             [TestActivity::class, TestActivity1::class],
-            $providers
+            $providers,
+            $this->activityManager
         );
     }
 
@@ -115,6 +118,14 @@ class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
         $allDate2 = new \DateTime('2015-01-02');
         $directionDate2 = new \DateTime('2015-01-02');
 
+        $this->activityManager->expects(self::exactly(2))
+            ->method('hasActivityAssociation')
+            ->withConsecutive(
+                ['stdClass', TestActivity::class],
+                ['stdClass', TestActivity1::class]
+            )
+            ->willReturn(true, true);
+
         $this->directionProvider->expects(self::once())
             ->method('getLastActivitiesDateForTarget')
             ->with(self::identicalTo($em), self::identicalTo($targetEntity), $direction, self::isNull())
@@ -130,6 +141,60 @@ class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testGetLastContactActivityDateWithOneRelation(): void
+    {
+        $em = $this->createMock(EntityManager::class);
+        $targetEntity = new \stdClass();
+        $direction = DirectionProviderInterface::DIRECTION_INCOMING;
+        $allDate1 = new \DateTime('2015-01-01');
+        $directionDate1 = new \DateTime('2015-01-01');
+
+        $this->activityManager->expects(self::exactly(2))
+            ->method('hasActivityAssociation')
+            ->withConsecutive(
+                ['stdClass', TestActivity::class],
+                ['stdClass', TestActivity1::class]
+            )
+            ->willReturn(true, false);
+
+        $this->directionProvider->expects(self::once())
+            ->method('getLastActivitiesDateForTarget')
+            ->with(self::identicalTo($em), self::identicalTo($targetEntity), $direction, self::isNull())
+            ->willReturn(['all' => $allDate1, 'direction' => $directionDate1]);
+        $this->directionProvider1->expects(self::never())
+            ->method('getLastActivitiesDateForTarget');
+
+        self::assertSame(
+            ['all' => $allDate1, 'direction' => $directionDate1],
+            $this->provider->getLastContactActivityDate($em, $targetEntity, $direction)
+        );
+    }
+
+    public function testGetLastContactActivityDateWithoutRelations(): void
+    {
+        $em = $this->createMock(EntityManager::class);
+        $targetEntity = new \stdClass();
+        $direction = DirectionProviderInterface::DIRECTION_INCOMING;
+
+        $this->activityManager->expects(self::exactly(2))
+            ->method('hasActivityAssociation')
+            ->withConsecutive(
+                ['stdClass', TestActivity::class],
+                ['stdClass', TestActivity1::class]
+            )
+            ->willReturn(false, false);
+
+        $this->directionProvider->expects(self::never())
+            ->method('getLastActivitiesDateForTarget');
+        $this->directionProvider1->expects(self::never())
+            ->method('getLastActivitiesDateForTarget');
+
+        self::assertSame(
+            ['all' => null, 'direction' => null],
+            $this->provider->getLastContactActivityDate($em, $targetEntity, $direction)
+        );
+    }
+
     public function testGetLastContactActivityDateWithImmutableDates(): void
     {
         $em = $this->createMock(EntityManager::class);
@@ -139,6 +204,14 @@ class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
         $directionDate1 = new \DateTimeImmutable('2015-01-01');
         $allDate2 = new \DateTimeImmutable('2015-01-02');
         $directionDate2 = new \DateTimeImmutable('2015-01-02');
+
+        $this->activityManager->expects(self::exactly(2))
+            ->method('hasActivityAssociation')
+            ->withConsecutive(
+                ['stdClass', TestActivity::class],
+                ['stdClass', TestActivity1::class]
+            )
+            ->willReturn(true, true);
 
         $this->directionProvider->expects(self::once())
             ->method('getLastActivitiesDateForTarget')
@@ -160,6 +233,14 @@ class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
         $em = $this->createMock(EntityManager::class);
         $targetEntity = new \stdClass();
         $direction = DirectionProviderInterface::DIRECTION_INCOMING;
+
+        $this->activityManager->expects(self::exactly(2))
+            ->method('hasActivityAssociation')
+            ->withConsecutive(
+                ['stdClass', TestActivity::class],
+                ['stdClass', TestActivity1::class]
+            )
+            ->willReturn(true, true);
 
         $this->directionProvider->expects(self::once())
             ->method('getLastActivitiesDateForTarget')
