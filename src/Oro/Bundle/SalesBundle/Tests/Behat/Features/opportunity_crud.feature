@@ -52,6 +52,7 @@ Feature: Opportunity crud
     When I click "Edit Opportunity"
     And fill "Opportunity Form" with:
       | Opportunity name | Opportunity_3 |
+      | Status           | Closed Won    |
     And save and close form
     Then I should see "Opportunity saved" flash message
     And I should see opportunity with:
@@ -61,20 +62,30 @@ Feature: Opportunity crud
       | Budget Amount    | $10,000.00    |
       | Close Reason     | Cancelled     |
       | Customer Need    | 10001         |
+      | Status           | Closed Won    |
 
   Scenario: Opportunity View in grid
     When go to Sales/ Opportunities
     Then I should see following grid containing rows:
       | Opportunity Name | Budget Amount | Probability | Status |
-      | Opportunity_3    | $10,000.00    | 50%         | Open   |
       | Opportunity_1    | $50.00        | 10%         | Open   |
+    When I reset Status filter
+    # Reload the page 2 times and check problems: whether the default state of the grid has not been restored after
+    # the first reload and whether the filters have been applied to the grid after the second reload.
+    # This behaviour is erroneous and regardless of the number of reloads, the state of the datagrid should not change.
+    And I reload the page
+    And I reload the page
+    Then I should see following grid containing rows:
+      | Opportunity Name | Budget Amount | Probability | Status     |
+      | Opportunity_3    | $10,000.00    | 50%         | Closed Won |
+      | Opportunity_1    | $50.00        | 10%         | Open       |
     And I filter Budget Amount as equals "1,500.00"
     And there is no records in grid
     And I reset Budget Amount filter
     And I filter Opportunity Name as is equal to "Opportunity_3"
     And I should see following grid:
-      | Opportunity Name | Budget Amount | Probability | Status |
-      | Opportunity_3    | $10,000.00    | 50%         | Open   |
+      | Opportunity Name | Budget Amount | Probability | Status     |
+      | Opportunity_3    | $10,000.00    | 50%         | Closed Won |
 
   Scenario: Opportunity Delete
     When I click Delete Opportunity_3 in grid
