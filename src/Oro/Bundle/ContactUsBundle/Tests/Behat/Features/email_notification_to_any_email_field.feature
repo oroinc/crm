@@ -58,7 +58,7 @@ Scenario: Administrator creates notification rule for "Contact request" and pick
       | Template    | contact_request_create_notification |
     And check "Opportunity"
     And check "Contact Email" element
-    And check "Organization name"
+    And check "Company Name"
     And check "TableColumnStringField"
     And check "SerializedTextField"
     Then I save and close form
@@ -107,8 +107,9 @@ Scenario: Administrator removes "Email" item from used fields
 
 Scenario: Administrator checks state of previously created notification rule
     Given I go to System/ Emails/ Notification Rules
+    And I check "Contact Request" in Entity name filter
     When I click edit "Contact Request" in grid
     Then I should not see an "Contact Email" element
-    And I should not see "Organization name"
+    And I should not see "Company Name"
     And I should not see "TableColumnStringField"
     And I should not see "SerializedTextField"
