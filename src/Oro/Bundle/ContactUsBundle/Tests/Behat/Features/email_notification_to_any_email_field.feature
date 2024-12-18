@@ -107,6 +107,7 @@ Scenario: Administrator removes "Email" item from used fields
 
 Scenario: Administrator checks state of previously created notification rule
     Given I go to System/ Emails/ Notification Rules
+    And I check "Contact Request" in Entity name filter
     When I click edit "Contact Request" in grid
     Then I should not see an "Contact Email" element
     And I should not see "Organization name"
