@@ -9,7 +9,8 @@ Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
             - Length:
                 max: 100
         emailAddress:
-            - Email:    ~
+            - Email:
+                  mode: strict
             - Length:
                   max: 100
         phone:
