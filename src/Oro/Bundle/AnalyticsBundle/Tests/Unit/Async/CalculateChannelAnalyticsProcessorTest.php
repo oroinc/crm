@@ -308,7 +308,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         return $entityManager;
     }
 
-    private function getDoctrineHelper(EntityManagerInterface $entityManager = null): DoctrineHelper
+    private function getDoctrineHelper(?EntityManagerInterface $entityManager = null): DoctrineHelper
     {
         $doctrineHelper = $this->createMock(DoctrineHelper::class);
         $doctrineHelper->expects(self::any())

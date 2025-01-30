@@ -30,7 +30,7 @@ abstract class ChannelRepositoryAbstract extends EntityRepository implements Cha
     public function getChannelsByEntities(
         array $entities = [],
         $status = Channel::STATUS_ACTIVE,
-        AclHelper $aclHelper = null
+        ?AclHelper $aclHelper = null
     ) {
         $query = $this->getChannelsByEntitiesQB($entities, $status)->getQuery();
 

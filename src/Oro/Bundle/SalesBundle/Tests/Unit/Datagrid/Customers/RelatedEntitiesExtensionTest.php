@@ -38,7 +38,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider testIsApplicableDataProvider
      */
-    public function testIsApplicable(array $config, array $parameters, bool $result, bool $enabledConfig = null)
+    public function testIsApplicable(array $config, array $parameters, bool $result, ?bool $enabledConfig = null)
     {
         $this->extension->setParameters(new ParameterBag($parameters));
         $this->prepareConfigProvider($parameters, $enabledConfig);
@@ -134,7 +134,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->visitDatasource($config, $datasource);
     }
 
-    private function prepareConfigProvider(array $parameters, bool $enabledConfig = null)
+    private function prepareConfigProvider(array $parameters, ?bool $enabledConfig = null)
     {
         if ($enabledConfig !== null) {
             $this->configProvider->expects($this->once())
@@ -145,11 +145,11 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
     }
 
     private function prepareQueryBuilder(
-        string $opportunityClass,
-        string $customerField = null,
-        int $customerId = null,
-        string $customerIdParam = null,
-        string $alias = null
+        string  $opportunityClass,
+        ?string $customerField = null,
+        ?int    $customerId = null,
+        ?string $customerIdParam = null,
+        ?string $alias = null
     ): QueryBuilder {
         $qb = $this->createMock(QueryBuilder::class);
         $qb->expects($this->never())

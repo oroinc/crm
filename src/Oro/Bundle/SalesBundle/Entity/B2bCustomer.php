@@ -218,7 +218,7 @@ class B2bCustomer implements
      *
      * @return $this
      */
-    public function setShippingAddress(Address $shippingAddress = null)
+    public function setShippingAddress(?Address $shippingAddress = null)
     {
         $this->shippingAddress = $shippingAddress;
 
@@ -238,7 +238,7 @@ class B2bCustomer implements
      *
      * @return $this
      */
-    public function setBillingAddress(Address $billingAddress = null)
+    public function setBillingAddress(?Address $billingAddress = null)
     {
         $this->billingAddress = $billingAddress;
 
@@ -258,7 +258,7 @@ class B2bCustomer implements
      *
      * @return $this
      */
-    public function setAccount(Account $account = null)
+    public function setAccount(?Account $account = null)
     {
         $this->account = $account;
 
@@ -278,7 +278,7 @@ class B2bCustomer implements
      *
      * @return $this
      */
-    public function setContact(Contact $contact = null)
+    public function setContact(?Contact $contact = null)
     {
         $this->contact = $contact;
 
@@ -298,7 +298,7 @@ class B2bCustomer implements
      *
      * @return $this
      */
-    public function setOwner(User $owner = null)
+    public function setOwner(?User $owner = null)
     {
         $this->owner = $owner;
 
@@ -318,7 +318,7 @@ class B2bCustomer implements
      *
      * @return $this
      */
-    public function setCreatedAt(\DateTime $createdAt = null)
+    public function setCreatedAt(?\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
 
@@ -338,7 +338,7 @@ class B2bCustomer implements
      *
      * @return $this
      */
-    public function setUpdatedAt(\DateTime $updatedAt = null)
+    public function setUpdatedAt(?\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
 
@@ -379,7 +379,7 @@ class B2bCustomer implements
      * @param Organization|null $organization
      * @return B2bCustomer
      */
-    public function setOrganization(Organization $organization = null)
+    public function setOrganization(?Organization $organization = null)
     {
         $this->organization = $organization;
 

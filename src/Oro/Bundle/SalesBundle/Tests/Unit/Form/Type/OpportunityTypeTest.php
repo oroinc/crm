@@ -132,7 +132,7 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
         return new TestEnumValue('test', 'Test', $id);
     }
 
-    private function getOpportunity(string $statusId = null, float $probability = null): OpportunityStub
+    private function getOpportunity(?string $statusId = null, ?float $probability = null): OpportunityStub
     {
         $opportunity = new OpportunityStub();
         if (null !== $statusId) {

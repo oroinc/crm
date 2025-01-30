@@ -37,7 +37,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider testBuildFormDataProvider
      */
-    public function testBuildForm(array $entities, array $channels, callable $callback = null)
+    public function testBuildForm(array $entities, array $channels, ?callable $callback = null)
     {
         $builder = $this->createMock(FormBuilderInterface::class);
         $this->channelsProvider->expects($this->once())

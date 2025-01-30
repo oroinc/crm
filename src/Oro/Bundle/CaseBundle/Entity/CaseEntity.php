@@ -392,7 +392,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
      * @param \DateTime|null $createdAt
      * @return CaseEntity
      */
-    public function setCreatedAt(\DateTime $createdAt = null)
+    public function setCreatedAt(?\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
 
@@ -411,7 +411,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
      * @param \DateTime|null $updatedAt
      * @return CaseEntity
      */
-    public function setUpdatedAt(\DateTime $updatedAt = null)
+    public function setUpdatedAt(?\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
 
@@ -430,7 +430,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
      * @param \DateTime|null $reportedAt
      * @return CaseEntity
      */
-    public function setReportedAt(\DateTime $reportedAt = null)
+    public function setReportedAt(?\DateTime $reportedAt = null)
     {
         $this->reportedAt = $reportedAt;
 
@@ -449,7 +449,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
      * @param \DateTime|null $closedAt
      * @return CaseEntity
      */
-    public function setClosedAt(\DateTime $closedAt = null)
+    public function setClosedAt(?\DateTime $closedAt = null)
     {
         $this->closedAt = $closedAt;
 
@@ -518,7 +518,7 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
      * @param Organization|null $organization
      * @return CaseEntity
      */
-    public function setOrganization(Organization $organization = null)
+    public function setOrganization(?Organization $organization = null)
     {
         $this->organization = $organization;
 

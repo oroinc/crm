@@ -151,7 +151,7 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('theMessageId', $uniqueJobs[0]['ownerId']);
     }
 
-    private function getDoctrine(ObjectRepository $repository = null): ManagerRegistry
+    private function getDoctrine(?ObjectRepository $repository = null): ManagerRegistry
     {
         $registry = $this->createMock(ManagerRegistry::class);
         $registry->expects(self::any())

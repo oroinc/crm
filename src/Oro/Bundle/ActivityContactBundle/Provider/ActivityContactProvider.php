@@ -64,8 +64,8 @@ class ActivityContactProvider
      * @param EntityManager $em
      * @param object        $targetEntity
      * @param string        $direction
-     * @param int|null      $skippedId
-     * @param string|null   $class
+     * @param int|null $skippedId
+     * @param string|null $class
      *
      * @return array ['all' => date, 'direction' => date]
      *   - all: Last activity date without regard to the direction
@@ -73,10 +73,10 @@ class ActivityContactProvider
      */
     public function getLastContactActivityDate(
         EntityManager $em,
-        object $targetEntity,
-        string $direction,
-        int $skippedId = null,
-        string $class = null
+        object        $targetEntity,
+        string        $direction,
+        ?int          $skippedId = null,
+        ?string       $class = null
     ): array {
         $allDate = null;
         $directionDate  = null;

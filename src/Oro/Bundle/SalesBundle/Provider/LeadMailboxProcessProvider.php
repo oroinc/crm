@@ -34,7 +34,7 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
     }
 
     #[\Override]
-    public function isEnabled(Mailbox $mailbox = null)
+    public function isEnabled(?Mailbox $mailbox = null)
     {
         return true;
     }

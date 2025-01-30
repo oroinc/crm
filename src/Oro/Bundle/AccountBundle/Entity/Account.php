@@ -394,7 +394,7 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
      *
      * @return Account
      */
-    public function setOrganization(Organization $organization = null)
+    public function setOrganization(?Organization $organization = null)
     {
         $this->organization = $organization;
 
@@ -424,7 +424,7 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
      *
      * @return Account
      */
-    public function setReferredBy(Account $referredBy = null)
+    public function setReferredBy(?Account $referredBy = null)
     {
         $this->referredBy = $referredBy;
 

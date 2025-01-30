@@ -762,7 +762,7 @@ class Lead implements
      * @param Organization|null $organization
      * @return Lead
      */
-    public function setOrganization(Organization $organization = null)
+    public function setOrganization(?Organization $organization = null)
     {
         $this->organization = $organization;
 
@@ -1027,7 +1027,7 @@ class Lead implements
      *
      * @return $this
      */
-    public function setCustomerAssociation(Customer $customer = null)
+    public function setCustomerAssociation(?Customer $customer = null)
     {
         $this->customerAssociation = $customer;
 

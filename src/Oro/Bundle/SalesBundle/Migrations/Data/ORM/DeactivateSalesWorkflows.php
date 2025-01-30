@@ -17,7 +17,7 @@ class DeactivateSalesWorkflows extends AbstractFixture implements ContainerAware
     protected $container;
 
     #[\Override]
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(?ContainerInterface $container = null)
     {
         $this->container = $container;
     }

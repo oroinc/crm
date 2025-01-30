@@ -76,7 +76,7 @@ class CaseEntityManager
      *
      * @return CaseComment
      */
-    public function createComment(CaseEntity $case = null)
+    public function createComment(?CaseEntity $case = null)
     {
         $comment = $this->createCommentObject();
 

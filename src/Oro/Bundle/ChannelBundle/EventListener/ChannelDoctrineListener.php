@@ -107,7 +107,7 @@ class ChannelDoctrineListener
      * @param Account|null $account
      * @param Channel|null $channel
      */
-    public function scheduleEntityUpdate($customerIdentityEntity, Account $account = null, Channel $channel = null)
+    public function scheduleEntityUpdate($customerIdentityEntity, ?Account $account = null, ?Channel $channel = null)
     {
         if (!$this->uow) {
             throw new \RuntimeException('UOW is missing, listener is not initialized');
@@ -196,7 +196,7 @@ class ChannelDoctrineListener
         || array_key_exists($this->customerIdentities[$className], $changeSet);
     }
 
-    protected function scheduleUpdate(Account $account = null, Channel $channel = null)
+    protected function scheduleUpdate(?Account $account = null, ?Channel $channel = null)
     {
         if ($account && $channel) {
             // skip removal, history items will be flushed by FK constraints

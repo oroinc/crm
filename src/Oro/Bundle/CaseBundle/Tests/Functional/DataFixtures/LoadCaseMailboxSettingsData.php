@@ -27,7 +27,7 @@ class LoadCaseMailboxSettingsData extends AbstractFixture implements ContainerAw
     private $tagManager;
 
     #[\Override]
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(?ContainerInterface $container = null)
     {
         $this->tagManager = $container->get('oro_tag.tag.manager');
     }

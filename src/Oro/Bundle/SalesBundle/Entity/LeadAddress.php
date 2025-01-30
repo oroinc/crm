@@ -47,7 +47,7 @@ class LeadAddress extends AbstractAddress implements PrimaryItem, ExtendEntityIn
     /**
      * Set lead as owner.
      */
-    public function setOwner(Lead $owner = null)
+    public function setOwner(?Lead $owner = null)
     {
         if (null === $owner && null !== $this->owner) {
             $this->owner->removeAddress($this);

@@ -38,7 +38,7 @@ class RFMMetricStateManager
         $this->channelClass = $channelClass;
     }
 
-    public function resetMetrics(Channel $channel = null)
+    public function resetMetrics(?Channel $channel = null)
     {
         $criteria = [];
 

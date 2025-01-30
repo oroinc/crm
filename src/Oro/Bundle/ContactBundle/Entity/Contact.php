@@ -1240,7 +1240,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
      * @param Organization|null $organization
      * @return Contact
      */
-    public function setOrganization(Organization $organization = null)
+    public function setOrganization(?Organization $organization = null)
     {
         $this->organization = $organization;
 

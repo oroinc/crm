@@ -76,7 +76,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
      * remove null after BAP-5248
      */
     #[\Override]
-    public function setDataChannel(Channel $dataChannel = null)
+    public function setDataChannel(?Channel $dataChannel = null)
     {
         $this->dataChannel = $dataChannel;
     }

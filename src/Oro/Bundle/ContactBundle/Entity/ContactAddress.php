@@ -49,7 +49,7 @@ class ContactAddress extends AbstractTypedAddress implements ExtendEntityInterfa
     /**
      * Set contact as owner.
      */
-    public function setOwner(Contact $owner = null)
+    public function setOwner(?Contact $owner = null)
     {
         if (null === $owner && null !== $this->owner) {
             $this->owner->removeAddress($this);

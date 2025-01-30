@@ -86,7 +86,7 @@ class B2bCustomerController extends AbstractController
         return $this->update(new B2bCustomer());
     }
 
-    protected function update(B2bCustomer $entity = null): array|RedirectResponse
+    protected function update(?B2bCustomer $entity = null): array|RedirectResponse
     {
         return $this->container->get(UpdateHandlerFacade::class)->update(
             $entity,

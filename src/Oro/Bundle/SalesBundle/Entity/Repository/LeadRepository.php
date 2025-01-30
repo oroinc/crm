@@ -18,8 +18,8 @@ class LeadRepository extends EntityRepository
      * @return QueryBuilder
      */
     public function getLeadsCountQB(
-        \DateTime $start = null,
-        \DateTime $end = null
+        ?\DateTime $start = null,
+        ?\DateTime $end = null
     ) {
         return $this->createLeadsCountQb($start, $end)->innerJoin('l.opportunities', 'o');
     }
@@ -31,8 +31,8 @@ class LeadRepository extends EntityRepository
      * @return QueryBuilder
      */
     public function getNewLeadsCountQB(
-        \DateTime $start = null,
-        \DateTime $end = null
+        ?\DateTime $start = null,
+        ?\DateTime $end = null
     ) {
         return $this->createLeadsCountQb($start, $end);
     }
@@ -60,8 +60,8 @@ class LeadRepository extends EntityRepository
      * @return QueryBuilder
      */
     protected function createLeadsCountQb(
-        \DateTime $start = null,
-        \DateTime $end = null
+        ?\DateTime $start = null,
+        ?\DateTime $end = null
     ) {
         $qb = $this
             ->createQueryBuilder('l')

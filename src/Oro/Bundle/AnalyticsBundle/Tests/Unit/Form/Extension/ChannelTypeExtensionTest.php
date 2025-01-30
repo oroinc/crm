@@ -54,7 +54,7 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider postSubmitDataProvider
      */
-    public function testPostSubmit(?Channel $channel, int $expectedPersist = null, int $expectedRemove = null)
+    public function testPostSubmit(?Channel $channel, ?int $expectedPersist = null, ?int $expectedRemove = null)
     {
         $event = $this->createMock(FormEvent::class);
 
@@ -127,7 +127,7 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    private function getChannel(string $identityClass = null): Channel
+    private function getChannel(?string $identityClass = null): Channel
     {
         $channel = $this->createMock(Channel::class);
         if ($identityClass) {
@@ -245,10 +245,10 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
      */
     public function testHandleState(
         Channel|\PHPUnit\Framework\MockObject\MockObject $channel,
-        bool $hasStateForm,
-        bool $isEnabled = null,
-        array $actualData = null,
-        array $expectedData = null
+        bool                                             $hasStateForm,
+        ?bool                                            $isEnabled = null,
+        ?array                                           $actualData = null,
+        ?array                                           $expectedData = null
     ) {
         $event = $this->createMock(FormEvent::class);
         $event->expects($this->once())

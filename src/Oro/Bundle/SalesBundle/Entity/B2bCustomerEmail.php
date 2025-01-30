@@ -34,7 +34,7 @@ class B2bCustomerEmail extends AbstractEmail implements ExtendEntityInterface
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?B2bCustomer $owner = null;
 
-    public function setOwner(B2bCustomer $owner = null)
+    public function setOwner(?B2bCustomer $owner = null)
     {
         $this->owner = $owner;
         $this->owner->addEmail($this);

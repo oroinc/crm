@@ -31,7 +31,7 @@ abstract class AbstractDemoFixture extends AbstractFixture implements ContainerA
     private $regionByCountryMap;
 
     #[\Override]
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(?ContainerInterface $container = null)
     {
         $this->em        = $container->get('doctrine')->getManager();
         $this->container = $container;

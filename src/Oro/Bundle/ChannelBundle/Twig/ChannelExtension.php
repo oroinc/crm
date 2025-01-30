@@ -60,7 +60,7 @@ class ChannelExtension extends AbstractExtension implements ServiceSubscriberInt
      *
      * @return float
      */
-    public function getLifetimeValue(Account $account, Channel $channel = null)
+    public function getLifetimeValue(Account $account, ?Channel $channel = null)
     {
         return $this->getAmountProvider()->getAccountLifeTimeValue($account, $channel);
     }

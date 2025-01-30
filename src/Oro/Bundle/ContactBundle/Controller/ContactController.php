@@ -114,7 +114,7 @@ class ContactController extends AbstractController
         return $this->container->get(ApiEntityManager::class);
     }
 
-    protected function update(Contact $entity = null): array|RedirectResponse
+    protected function update(?Contact $entity = null): array|RedirectResponse
     {
         if (!$entity) {
             $entity = $this->getManager()->createEntity();

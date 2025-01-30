@@ -145,7 +145,7 @@ class StateProvider
     /**
      * Get cache ID for given organization id. If id was not set, get cache ID depending on the current organization
      */
-    private function getCacheId(int $organizationId = null): string
+    private function getCacheId(?int $organizationId = null): string
     {
         if (!$organizationId) {
             $organizationId = $this->tokenAccessor->getOrganizationId();

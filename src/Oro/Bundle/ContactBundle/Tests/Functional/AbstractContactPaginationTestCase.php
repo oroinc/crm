@@ -55,7 +55,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
         );
     }
 
-    protected function redirectViaFrontend(string $expectedMessage = null): Crawler
+    protected function redirectViaFrontend(?string $expectedMessage = null): Crawler
     {
         $response = $this->client->getResponse();
         $this->assertEquals('application/json', $response->headers->get('Content-Type'));

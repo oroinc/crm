@@ -88,7 +88,7 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
     }
 
     #[\Override]
-    public function setDataChannel(Channel $dataChannel = null)
+    public function setDataChannel(?Channel $dataChannel = null)
     {
         $this->dataChannel = $dataChannel;
     }

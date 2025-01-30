@@ -19,7 +19,7 @@ trait ChannelEntityTrait
     #[ConfigField(defaultValues: ['importexport' => ['short' => true, 'order' => 5]])]
     protected $dataChannel;
 
-    public function setDataChannel(Channel $channel = null)
+    public function setDataChannel(?Channel $channel = null)
     {
         $this->dataChannel = $channel;
     }

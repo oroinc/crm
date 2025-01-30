@@ -212,7 +212,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
      *
      * @return bool
      */
-    protected function isApplicable(Channel $channel = null)
+    protected function isApplicable(?Channel $channel = null)
     {
         if (!$channel) {
             return false;
