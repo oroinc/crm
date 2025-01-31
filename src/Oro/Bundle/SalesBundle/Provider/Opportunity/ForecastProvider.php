@@ -211,9 +211,9 @@ class ForecastProvider
      */
     protected function applyDateFiltering(
         QueryBuilder $qb,
-                     $field,
-        ?\DateTime   $start = null,
-        ?\DateTime   $end = null
+        $field,
+        ?\DateTime $start = null,
+        ?\DateTime $end = null
     ) {
         if ($start) {
             $qb
