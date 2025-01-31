@@ -29,7 +29,7 @@ class LeadAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     #[\Override]
-    protected function storeNewEntity(object $entity, array $identityValues = null): ?object
+    protected function storeNewEntity(object $entity, ?array $identityValues = null): ?object
     {
         if (is_a($entity, LeadPhone::class, true) || is_a($entity, LeadAddress::class, true)) {
             return null;

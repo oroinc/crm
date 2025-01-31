@@ -22,7 +22,7 @@ class OpportunityRepository extends EntityRepository
 {
     public function hasRecordsWithRemovingCurrencies(
         array $removingCurrencies,
-        Organization $organization = null
+        ?Organization $organization = null
     ): bool {
         $qb = $this->createQueryBuilder('opportunity');
         $qb->select('COUNT(opportunity.id)')
@@ -38,8 +38,8 @@ class OpportunityRepository extends EntityRepository
     }
 
     public function getOpportunitiesCountQB(
-        \DateTime $start = null,
-        \DateTime $end = null
+        ?\DateTime $start = null,
+        ?\DateTime $end = null
     ): QueryBuilder {
         $qb = $this->createQueryBuilder('o');
         $qb->select('COUNT(o.id)');
@@ -57,7 +57,7 @@ class OpportunityRepository extends EntityRepository
         return $qb;
     }
 
-    public function getOpportunitiesByPeriodQB(\DateTime $start = null, \DateTime $end = null): QueryBuilder
+    public function getOpportunitiesByPeriodQB(?\DateTime $start = null, ?\DateTime $end = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('o');
         if ($start) {
@@ -74,7 +74,7 @@ class OpportunityRepository extends EntityRepository
         return $qb;
     }
 
-    public function getWonOpportunitiesCountByPeriodQB(\DateTime $start = null, \DateTime $end = null): QueryBuilder
+    public function getWonOpportunitiesCountByPeriodQB(?\DateTime $start = null, ?\DateTime $end = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('o');
         $qb->select('COUNT(o.id)')
@@ -97,7 +97,7 @@ class OpportunityRepository extends EntityRepository
         return $qb;
     }
 
-    public function getWonOpportunitiesByPeriodQB(\DateTime $start = null, \DateTime $end = null): QueryBuilder
+    public function getWonOpportunitiesByPeriodQB(?\DateTime $start = null, ?\DateTime $end = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('o')
             ->andWhere("JSON_EXTRACT(o.serialized_data, 'status') = :status")

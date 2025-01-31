@@ -24,7 +24,7 @@ class LifetimeHistoryRepository extends EntityRepository
      *
      * @return double
      */
-    public function calculateAccountLifetime(array $customerIdentities, Account $account, Channel $channel = null)
+    public function calculateAccountLifetime(array $customerIdentities, Account $account, ?Channel $channel = null)
     {
         if (!$customerIdentities) {
             return 0.0;

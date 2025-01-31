@@ -25,7 +25,7 @@ class AmountProvider
     /**
      * Returns account lifetime value aggregated for all channels or for a single channel.
      */
-    public function getAccountLifeTimeValue(Account $account, Channel $channel = null): float
+    public function getAccountLifeTimeValue(Account $account, ?Channel $channel = null): float
     {
         if (null !== $channel) {
             $qb = $this->getChannelAccountLifetimeQueryBuilder(true);
@@ -71,7 +71,7 @@ class AmountProvider
     /**
      * Returns query builder that allows to fetch list of lifetime values for each account.
      */
-    public function getAccountsLifetimeQueryBuilder(array $accountIds = null): QueryBuilder
+    public function getAccountsLifetimeQueryBuilder(?array $accountIds = null): QueryBuilder
     {
         /** @var EntityManagerInterface $em */
         $em = $this->doctrine->getManagerForClass(LifetimeValueHistory::class);

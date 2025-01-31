@@ -32,7 +32,7 @@ class CommentApiEntityManager extends ApiEntityManager
      * @return CaseComment
      */
     #[\Override]
-    public function createEntity(CaseEntity $case = null)
+    public function createEntity(?CaseEntity $case = null)
     {
         return $this->caseManager->createComment($case);
     }

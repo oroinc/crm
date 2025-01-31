@@ -215,7 +215,7 @@ class Channel
      *
      * @return Channel
      */
-    public function setDataSource(Integration $dataSource = null)
+    public function setDataSource(?Integration $dataSource = null)
     {
         $this->dataSource = $dataSource;
 
@@ -314,7 +314,7 @@ class Channel
      *
      * @return Channel
      */
-    public function setCreatedAt(\DateTime $createdAt = null)
+    public function setCreatedAt(?\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
 

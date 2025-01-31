@@ -104,7 +104,7 @@ class ChannelObjectBuilder
      *
      * @return ChannelObjectBuilder
      */
-    public function setEntities(array $entities = null)
+    public function setEntities(?array $entities = null)
     {
         if (null === $entities) {
             $entities               = [];
@@ -123,7 +123,7 @@ class ChannelObjectBuilder
      *
      * @return ChannelObjectBuilder
      */
-    public function setOwner(Organization $organization = null)
+    public function setOwner(?Organization $organization = null)
     {
         $this->owner = $organization;
 
@@ -149,7 +149,7 @@ class ChannelObjectBuilder
      *
      * @return ChannelObjectBuilder
      */
-    public function setDataSource(Integration $dataSource = null)
+    public function setDataSource(?Integration $dataSource = null)
     {
         $this->dataSource = $dataSource;
 

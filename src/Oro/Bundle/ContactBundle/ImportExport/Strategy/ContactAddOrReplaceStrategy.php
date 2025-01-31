@@ -86,7 +86,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     #[\Override]
-    protected function storeNewEntity(object $entity, array $identityValues = null): ?object
+    protected function storeNewEntity(object $entity, ?array $identityValues = null): ?object
     {
         if (is_a($entity, ContactPhone::class, true) || is_a($entity, ContactAddress::class, true)) {
             return null;

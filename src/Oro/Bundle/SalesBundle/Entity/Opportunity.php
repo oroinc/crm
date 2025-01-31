@@ -758,7 +758,7 @@ class Opportunity implements
      * @param Organization|null $organization
      * @return Opportunity
      */
-    public function setOrganization(Organization $organization = null)
+    public function setOrganization(?Organization $organization = null)
     {
         $this->organization = $organization;
 
@@ -775,7 +775,7 @@ class Opportunity implements
         return $this->organization;
     }
 
-    public function setClosedAt(\DateTime $closedAt = null)
+    public function setClosedAt(?\DateTime $closedAt = null)
     {
         $this->closedAt = $closedAt;
     }
@@ -824,7 +824,7 @@ class Opportunity implements
      *
      * @return $this
      */
-    public function setCustomerAssociation(Customer $customer = null)
+    public function setCustomerAssociation(?Customer $customer = null)
     {
         $this->customerAssociation = $customer;
 

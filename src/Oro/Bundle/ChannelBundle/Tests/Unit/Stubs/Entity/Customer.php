@@ -60,7 +60,7 @@ class Customer implements ChannelAwareInterface
     }
 
     #[\Override]
-    public function setDataChannel(Channel $channel = null)
+    public function setDataChannel(?Channel $channel = null)
     {
         $this->dataChannel = $channel;
     }

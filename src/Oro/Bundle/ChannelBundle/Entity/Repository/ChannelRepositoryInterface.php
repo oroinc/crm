@@ -31,7 +31,7 @@ interface ChannelRepositoryInterface
     public function getChannelsByEntities(
         array $entities = [],
         $status = Channel::STATUS_ACTIVE,
-        AclHelper $aclHelper = null
+        ?AclHelper $aclHelper = null
     );
 
     /**

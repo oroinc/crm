@@ -24,9 +24,9 @@ class CategoriesValidatorTest extends ConstraintValidatorTestCase
      */
     public function testValidate(
         ?PersistentCollection $collection,
-        string $type,
-        string $expectedViolationsMessage = null,
-        array $parameters = []
+        string                $type,
+        ?string               $expectedViolationsMessage = null,
+        array                 $parameters = []
     ) {
         $constraint = new CategoriesConstraint(['type' => $type]);
         $this->validator->validate($collection, $constraint);

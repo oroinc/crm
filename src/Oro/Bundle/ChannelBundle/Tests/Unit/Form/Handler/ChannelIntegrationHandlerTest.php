@@ -123,7 +123,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
         string $requestType,
         array $requestData,
         array $expectedResult,
-        string $expectedException = null
+        ?string $expectedException = null
     ): void {
         $this->request->setMethod($requestType);
         foreach ($requestData as $key => $value) {

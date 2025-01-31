@@ -24,7 +24,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
         $this->relationsBuilder = new OpportunityRelationsBuilder();
     }
 
-    private function getCustomer(Account $account, object $target = null): Customer
+    private function getCustomer(Account $account, ?object $target = null): Customer
     {
         $customer = new CustomerStub();
         $customer->setTarget($account, $target);
@@ -40,7 +40,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
         return $opportunity;
     }
 
-    private function getB2bCustomer(int $id = null): B2bCustomer
+    private function getB2bCustomer(?int $id = null): B2bCustomer
     {
         $b2bCustomer = new B2bCustomer();
         ReflectionUtil::setId($b2bCustomer, $id);

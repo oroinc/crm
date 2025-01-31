@@ -11,7 +11,7 @@ class RFMAwareStub implements RFMAwareInterface
     use RFMAwareTrait;
 
     #[\Override]
-    public function setDataChannel(Channel $channel = null)
+    public function setDataChannel(?Channel $channel = null)
     {
     }
 

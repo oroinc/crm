@@ -118,7 +118,7 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider testAddOpportunitiesNotCustomerDataProvider
      */
-    public function testAddOpportunitiesNotCustomer(object $entity = null, bool $isCustomerClass = null)
+    public function testAddOpportunitiesNotCustomer(?object $entity = null, ?bool $isCustomerClass = null)
     {
         $env = $this->createMock(Environment::class);
         $data = ['dataBlocks' => ['subblocks' => ['title' => 'some title', 'data' => 'some data']]];
@@ -132,7 +132,7 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    private function prepareConfigProvider(?object $entity, bool $isCustomerClass = null): void
+    private function prepareConfigProvider(?object $entity, ?bool $isCustomerClass = null): void
     {
         if (null !== $isCustomerClass) {
             $this->provider->expects($this->once())

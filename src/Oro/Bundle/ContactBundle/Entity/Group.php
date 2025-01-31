@@ -120,7 +120,7 @@ class Group implements ExtendEntityInterface
      * @param Organization|null $organization
      * @return Group
      */
-    public function setOrganization(Organization $organization = null)
+    public function setOrganization(?Organization $organization = null)
     {
         $this->organization = $organization;
 

@@ -139,7 +139,7 @@ class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
         return new PreUpdateEventArgs($object, $em, $changeSet);
     }
 
-    private function getOpportunity(string $statusId, float $probability = null): OpportunityStub
+    private function getOpportunity(string $statusId, ?float $probability = null): OpportunityStub
     {
         $opportunity = new OpportunityStub();
         $opportunity->setStatus($this->getOpportunityStatus($statusId));

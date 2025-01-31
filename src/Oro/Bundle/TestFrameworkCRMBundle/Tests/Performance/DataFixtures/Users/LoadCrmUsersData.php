@@ -40,7 +40,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
     private $organization;
 
     #[\Override]
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(?ContainerInterface $container = null)
     {
         $this->userManager = $container->get('oro_user.manager');
         $this->em = $container->get('doctrine')->getManager();

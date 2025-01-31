@@ -105,7 +105,7 @@ class HandleCustomerAssociation implements ProcessorInterface
         return $ownerEntity->getCustomerAssociation();
     }
 
-    private function setCustomerAssociation(object $ownerEntity, Customer $customerAssociation = null): void
+    private function setCustomerAssociation(object $ownerEntity, ?Customer $customerAssociation = null): void
     {
         $ownerEntity->setCustomerAssociation($customerAssociation);
     }
@@ -190,8 +190,8 @@ class HandleCustomerAssociation implements ProcessorInterface
      */
     private function changeCustomerAssociation(
         FormInterface $form,
-        Account $submittedAccount = null,
-        object $submittedCustomer = null
+        ?Account      $submittedAccount = null,
+        ?object       $submittedCustomer = null
     ): void {
         if (null === $submittedAccount && null === $submittedCustomer) {
             if (!$this->isRelationOptional) {

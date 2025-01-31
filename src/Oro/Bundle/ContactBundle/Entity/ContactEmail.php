@@ -51,7 +51,7 @@ class ContactEmail extends AbstractEmail implements
     /**
      * Set contact as owner.
      */
-    public function setOwner(Contact $owner = null)
+    public function setOwner(?Contact $owner = null)
     {
         $this->owner = $owner;
     }

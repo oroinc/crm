@@ -85,7 +85,7 @@ class AccountController extends AbstractController
         return $this->container->get(ApiEntityManager::class);
     }
 
-    protected function update(Account $entity = null): array|RedirectResponse
+    protected function update(?Account $entity = null): array|RedirectResponse
     {
         if (!$entity) {
             $entity = $this->getManager()->createEntity();
@@ -108,7 +108,7 @@ class AccountController extends AbstractController
     )]
     #[Template]
     #[AclAncestor('oro_contact_view')]
-    public function contactsInfoAction(Account $account = null): array
+    public function contactsInfoAction(?Account $account = null): array
     {
         return [
             'account' => $account

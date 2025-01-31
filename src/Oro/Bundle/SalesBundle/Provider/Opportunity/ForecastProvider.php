@@ -93,9 +93,9 @@ class ForecastProvider
      */
     public function getForecastData(
         WidgetOptionBag $widgetOptions,
-        \DateTime $start = null,
-        \DateTime $end = null,
-        \DateTime $moment = null
+        ?\DateTime      $start = null,
+        ?\DateTime      $end = null,
+        ?\DateTime      $moment = null
     ) {
         $key = $this->getDataHashKey($widgetOptions, $moment);
 
@@ -119,8 +119,8 @@ class ForecastProvider
      */
     protected function getCurrentData(
         WidgetOptionBag $widgetOptions,
-        \DateTime $start = null,
-        \DateTime $end = null
+        ?\DateTime      $start = null,
+        ?\DateTime      $end = null
     ) {
         $clonedStart = $start ? clone $start : null;
         $clonedEnd   = $end ? clone $end : null;
@@ -147,16 +147,16 @@ class ForecastProvider
     /**
      * @param WidgetOptionBag   $widgetOptions
      * @param \DateTime         $moment
-     * @param \DateTime|null    $start
-     * @param \DateTime|null    $end
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
      *
      * @return array
      */
     protected function getMomentData(
         WidgetOptionBag $widgetOptions,
-        \DateTime $moment,
-        \DateTime $start = null,
-        \DateTime $end = null
+        \DateTime       $moment,
+        ?\DateTime      $start = null,
+        ?\DateTime      $end = null
     ) {
         // clone datetimes as doctrine modifies their timezone which breaks stuff
         $moment = clone $moment;
@@ -179,7 +179,7 @@ class ForecastProvider
         return $this->getAggregatedResult($result);
     }
 
-    protected function applyHistoryDateFiltering(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
+    protected function applyHistoryDateFiltering(QueryBuilder $qb, ?\DateTime $start = null, ?\DateTime $end = null)
     {
         if (!$start && !$end) {
             return;
@@ -212,8 +212,8 @@ class ForecastProvider
     protected function applyDateFiltering(
         QueryBuilder $qb,
         $field,
-        \DateTime $start = null,
-        \DateTime $end = null
+        ?\DateTime $start = null,
+        ?\DateTime $end = null
     ) {
         if ($start) {
             $qb
@@ -279,7 +279,7 @@ class ForecastProvider
      * @param \DateTime|null $moment
      * @return string
      */
-    protected function getDataHashKey(WidgetOptionBag $widgetOptions, \DateTime $moment = null)
+    protected function getDataHashKey(WidgetOptionBag $widgetOptions, ?\DateTime $moment = null)
     {
         return md5(serialize([$widgetOptions, $moment]));
     }
