@@ -190,8 +190,8 @@ class HandleCustomerAssociation implements ProcessorInterface
      */
     private function changeCustomerAssociation(
         FormInterface $form,
-        ?Account      $submittedAccount = null,
-        ?object       $submittedCustomer = null
+        ?Account $submittedAccount = null,
+        ?object $submittedCustomer = null
     ): void {
         if (null === $submittedAccount && null === $submittedCustomer) {
             if (!$this->isRelationOptional) {

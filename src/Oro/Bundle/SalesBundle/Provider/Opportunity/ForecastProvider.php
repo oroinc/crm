@@ -93,9 +93,9 @@ class ForecastProvider
      */
     public function getForecastData(
         WidgetOptionBag $widgetOptions,
-        ?\DateTime      $start = null,
-        ?\DateTime      $end = null,
-        ?\DateTime      $moment = null
+        ?\DateTime $start = null,
+        ?\DateTime $end = null,
+        ?\DateTime $moment = null
     ) {
         $key = $this->getDataHashKey($widgetOptions, $moment);
 
@@ -119,8 +119,8 @@ class ForecastProvider
      */
     protected function getCurrentData(
         WidgetOptionBag $widgetOptions,
-        ?\DateTime      $start = null,
-        ?\DateTime      $end = null
+        ?\DateTime $start = null,
+        ?\DateTime $end = null
     ) {
         $clonedStart = $start ? clone $start : null;
         $clonedEnd   = $end ? clone $end : null;
@@ -154,9 +154,9 @@ class ForecastProvider
      */
     protected function getMomentData(
         WidgetOptionBag $widgetOptions,
-        \DateTime       $moment,
-        ?\DateTime      $start = null,
-        ?\DateTime      $end = null
+        \DateTime $moment,
+        ?\DateTime $start = null,
+        ?\DateTime $end = null
     ) {
         // clone datetimes as doctrine modifies their timezone which breaks stuff
         $moment = clone $moment;

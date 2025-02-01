@@ -197,8 +197,8 @@ DQL
      */
     public function testGetOpportunitiesGroupedByStatusResultFormatter(
         WidgetOptionBag $widgetOptions,
-        array           $result,
-        array           $expected
+        array $result,
+        array $expected
     ) {
         $opportunityQB = new QueryBuilder($this->createMock(EntityManagerInterface::class));
         $opportunityQB->from(Opportunity::class, 'o');

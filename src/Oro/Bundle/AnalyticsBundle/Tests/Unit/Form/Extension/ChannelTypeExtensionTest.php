@@ -245,10 +245,10 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
      */
     public function testHandleState(
         Channel|\PHPUnit\Framework\MockObject\MockObject $channel,
-        bool                                             $hasStateForm,
-        ?bool                                            $isEnabled = null,
-        ?array                                           $actualData = null,
-        ?array                                           $expectedData = null
+        bool $hasStateForm,
+        ?bool $isEnabled = null,
+        ?array $actualData = null,
+        ?array $expectedData = null
     ) {
         $event = $this->createMock(FormEvent::class);
         $event->expects($this->once())
