@@ -92,10 +92,10 @@ class ContactListenerTest extends TestCase
      */
     public function testPreUpdate(
         Contact $entity,
-        bool    $mockToken = false,
-        bool    $mockUser = false,
-        ?bool   $detachedUser = null,
-        ?bool   $reloadUser = null
+        bool $mockToken = false,
+        bool $mockUser = false,
+        ?bool $detachedUser = null,
+        ?bool $reloadUser = null
     ) {
         $oldDate = new \DateTime('2012-12-12 12:12:12');
         $oldUser = new User();

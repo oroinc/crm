@@ -145,9 +145,9 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
     }
 
     private function prepareQueryBuilder(
-        string  $opportunityClass,
+        string $opportunityClass,
         ?string $customerField = null,
-        ?int    $customerId = null,
+        ?int $customerId = null,
         ?string $customerIdParam = null,
         ?string $alias = null
     ): QueryBuilder {
