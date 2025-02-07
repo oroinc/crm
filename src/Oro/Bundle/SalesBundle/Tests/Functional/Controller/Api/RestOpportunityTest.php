@@ -14,7 +14,7 @@ class RestOpportunityTest extends WebTestCase
     {
         $this->initClient(
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $this->loadFixtures([LoadSalesBundleFixtures::class]);

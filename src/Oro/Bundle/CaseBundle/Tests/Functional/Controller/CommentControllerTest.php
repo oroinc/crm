@@ -40,7 +40,7 @@ class CommentControllerTest extends WebTestCase
             $this->getUrl('oro_case_comment_create', ['caseId' => self::$caseId, '_widgetContainer' => 'dialog']),
             [],
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $this->assertResponseStatusCodeEquals($this->client->getResponse(), 200);
@@ -82,7 +82,7 @@ class CommentControllerTest extends WebTestCase
             $this->getUrl('oro_case_comment_update', ['id' => $id, '_widgetContainer' => 'dialog']),
             [],
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $this->assertResponseStatusCodeEquals($this->client->getResponse(), 200);
@@ -118,7 +118,7 @@ class CommentControllerTest extends WebTestCase
             $this->getUrl('oro_case_comment_list', ['id' => self::$caseId]),
             [],
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $comments = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -182,7 +182,7 @@ class CommentControllerTest extends WebTestCase
             $this->getUrl('oro_case_widget_comments', ['id' => self::$caseId, '_widgetContainer' => 'widget']),
             [],
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $response = $this->client->getResponse();

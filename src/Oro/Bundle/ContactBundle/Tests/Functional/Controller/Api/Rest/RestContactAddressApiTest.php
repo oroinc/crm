@@ -9,7 +9,7 @@ class RestContactAddressApiTest extends WebTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->initClient([], $this->generateWsseAuthHeader());
+        $this->initClient([], self::generateApiAuthHeader());
         $this->loadFixtures(['@OroContactBundle/Tests/Functional/DataFixtures/contact_addresses.yml']);
     }
 

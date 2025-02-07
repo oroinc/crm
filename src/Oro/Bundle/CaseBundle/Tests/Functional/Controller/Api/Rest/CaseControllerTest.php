@@ -26,7 +26,7 @@ class CaseControllerTest extends WebTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->initClient([], $this->generateWsseAuthHeader());
+        $this->initClient([], self::generateApiAuthHeader());
         $this->loadFixtures([LoadCaseEntityData::class]);
     }
 
@@ -67,7 +67,7 @@ class CaseControllerTest extends WebTestCase
             'GET',
             $this->getUrl('oro_case_api_get_cases'),
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $cases = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -101,7 +101,7 @@ class CaseControllerTest extends WebTestCase
             'GET',
             $this->getUrl('oro_case_api_get_case', ['id' => $id]),
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $case = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -148,7 +148,7 @@ class CaseControllerTest extends WebTestCase
             'PUT',
             $this->getUrl('oro_case_api_put_case', ['id' => $id]),
             ['case' => $putData],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $result = $this->client->getResponse();
@@ -181,7 +181,7 @@ class CaseControllerTest extends WebTestCase
             'DELETE',
             $this->getUrl('oro_case_api_delete_case', ['id' => $id]),
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
@@ -189,7 +189,7 @@ class CaseControllerTest extends WebTestCase
             'GET',
             $this->getUrl('oro_case_api_get_case', ['id' => $id]),
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 404);

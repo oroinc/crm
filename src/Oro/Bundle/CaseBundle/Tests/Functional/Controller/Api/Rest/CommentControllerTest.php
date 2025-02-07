@@ -27,7 +27,7 @@ class CommentControllerTest extends WebTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->initClient([], $this->generateWsseAuthHeader());
+        $this->initClient([], self::generateApiAuthHeader());
         $this->loadFixtures([LoadCaseEntityData::class]);
     }
 
@@ -53,7 +53,7 @@ class CommentControllerTest extends WebTestCase
             'POST',
             $this->getUrl('oro_case_api_post_comment', ['id' => self::$caseId]),
             ['comment' => $this->commentPostData],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $response = $this->getJsonResponseContent($this->client->getResponse(), 201);
@@ -73,7 +73,7 @@ class CommentControllerTest extends WebTestCase
             'GET',
             $this->getUrl('oro_case_api_get_comments', ['id' => self::$caseId]),
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $comments = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -102,7 +102,7 @@ class CommentControllerTest extends WebTestCase
             'GET',
             $this->getUrl('oro_case_api_get_comment', ['id' => $id]),
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $comment = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -138,7 +138,7 @@ class CommentControllerTest extends WebTestCase
             'PUT',
             $this->getUrl('oro_case_api_put_comment', ['id' => $id]),
             ['comment' => $putData],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $result = $this->client->getResponse();
@@ -169,7 +169,7 @@ class CommentControllerTest extends WebTestCase
             'DELETE',
             $this->getUrl('oro_case_api_delete_comment', ['id' => $id]),
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $result = $this->client->getResponse();
@@ -179,7 +179,7 @@ class CommentControllerTest extends WebTestCase
             'GET',
             $this->getUrl('oro_case_api_get_comment', ['id' => $id]),
             [],
-            $this->generateWsseAuthHeader()
+            self::generateApiAuthHeader()
         );
 
         $result = $this->client->getResponse();
