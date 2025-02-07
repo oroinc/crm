@@ -15,7 +15,7 @@ class RestCustomerSearchTest extends WebTestCase
     {
         $this->markTestSkipped('Due to BAP-8365');
 
-        $this->initClient([], $this->generateWsseAuthHeader());
+        $this->initClient([], self::generateApiAuthHeader());
         $this->loadFixtures([LoadSalesBundleFixtures::class]);
 
         $this->baseUrl = $this->getUrl('oro_api_get_search_customers');
