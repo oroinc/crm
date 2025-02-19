@@ -5490,7 +5490,7 @@
             "dist": {
                 "type": "path",
                 "url": "../calendar",
-                "reference": "abb81fb0e0fb08ab775b15f2181f78f917451dfc"
+                "reference": "0a824df298ce0f0c4b4e82059667ccfe2fbdb530"
             },
             "require": {
                 "oro/platform": "5.0.*"
@@ -5509,7 +5509,7 @@
                     "Oro\\Bundle\\CalendarBundle\\": ""
                 },
                 "exclude-from-classmap": [
-                    "/Tests/"
+                    "**/Tests/"
                 ]
             },
             "license": [
@@ -5539,7 +5539,7 @@
             "dist": {
                 "type": "path",
                 "url": "../call",
-                "reference": "aa73ce52147200bafcd42838a8cf3118e15baf0a"
+                "reference": "ea8fcc4612e8d903f0bd4001ea4b47e9135279a1"
             },
             "require": {
                 "oro/platform": "5.0.*"
@@ -5555,7 +5555,7 @@
                     "Oro\\Bundle\\CallBundle\\": ""
                 },
                 "exclude-from-classmap": [
-                    "/Tests/"
+                    "**/Tests/"
                 ]
             },
             "license": [
@@ -5583,7 +5583,7 @@
             "dist": {
                 "type": "path",
                 "url": "../task",
-                "reference": "0b4a578861cc34c8c9b7464c008725a56101d2e0"
+                "reference": "5980063e6064805be786de747cc320a2c9f3334c"
             },
             "require": {
                 "oro/platform": "5.0.*"
@@ -5599,7 +5599,7 @@
                     "Oro\\Bundle\\TaskBundle\\": ""
                 },
                 "exclude-from-classmap": [
-                    "/Tests/"
+                    "**/Tests/"
                 ]
             },
             "license": [
@@ -5688,7 +5688,7 @@
             "dist": {
                 "type": "path",
                 "url": "../marketing",
-                "reference": "c9c7773db3f37a0e6ac81861984e8703623aa1fc"
+                "reference": "a46d8ed90a8b86980e4193c7384860c3f00564df"
             },
             "require": {
                 "ext-curl": "*",
@@ -5708,7 +5708,7 @@
                     "Oro\\Bundle\\TrackingBundle\\": "src/Oro/Bundle/TrackingBundle"
                 },
                 "exclude-from-classmap": [
-                    "/Tests/"
+                    "**/Tests/"
                 ]
             },
             "license": [
@@ -5738,7 +5738,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "0c08db27d790953c555b32e93ca5ca69fb9f73cd"
+                "reference": "a467a226a2d86e44abc49debdbd2f85b64968286"
             },
             "require": {
                 "ass/xmlsecurity": "1.1.1",
@@ -6042,7 +6042,7 @@
                     "Oro\\Component\\TestUtils\\": "src/Oro/Component/TestUtils"
                 },
                 "exclude-from-classmap": [
-                    "/Tests/"
+                    "**/Tests/"
                 ]
             },
             "license": [
@@ -6066,7 +6066,7 @@
             "dist": {
                 "type": "path",
                 "url": "../redis-config",
-                "reference": "32180191cdf78e221123b30db9eaa592962a3d5e"
+                "reference": "9499d0cb8329b3dc94698adefc1113dda28a1b8b"
             },
             "require": {
                 "predis/predis": "~1.1.6",
@@ -6086,7 +6086,7 @@
                     "Oro\\Bundle\\RedisConfigBundle\\": ""
                 },
                 "exclude-from-classmap": [
-                    "/Tests/"
+                    "**/Tests/"
                 ]
             },
             "license": [
