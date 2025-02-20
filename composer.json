@@ -28,7 +28,7 @@
             "Oro\\Bundle\\SalesBundle\\": "src/Oro/Bundle/SalesBundle",
             "Oro\\Bundle\\TestFrameworkCRMBundle\\": "src/Oro/Bundle/TestFrameworkCRMBundle"
         },
-        "exclude-from-classmap": ["/Tests/"]
+        "exclude-from-classmap": ["**/Tests/"]
     },
     "require": {
         "oro/platform": "6.1.*",
