@@ -29,7 +29,7 @@
             "Oro\\Bundle\\TestFrameworkCRMBundle\\": "src/Oro/Bundle/TestFrameworkCRMBundle"
         },
         "exclude-from-classmap": [
-            "/Tests/"
+            "**/Tests/"
         ]
     },
     "require": {
