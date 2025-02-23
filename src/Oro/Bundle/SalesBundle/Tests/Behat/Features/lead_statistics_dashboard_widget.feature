@@ -1,5 +1,3 @@
-@skip
-@ticket-OPI-1390
 @regression
 @ticket-BAP-21510
 @fixture-OroSalesBundle:leads_data.yml
