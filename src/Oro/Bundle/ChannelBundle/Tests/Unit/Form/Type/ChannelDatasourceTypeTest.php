@@ -3,7 +3,7 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use Doctrine\Inflector\Rules\English\InflectorFactory;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
@@ -33,6 +33,7 @@ use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
 use Oro\Component\Testing\Unit\PreloadedExtension;
 use Oro\Component\Testing\Unit\TestContainerBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Csrf\Type\FormTypeCsrfExtension;
@@ -56,11 +57,8 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
     private const TEST_CHANNEL_TYPE = 'channelType';
     private const TEST_ENTITY_NAME = 'OroIntegration:Channel';
 
-    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    private $doctrine;
-
-    /** @var ChannelDatasourceType */
-    private $type;
+    private ManagerRegistry&MockObject $doctrine;
+    private ChannelDatasourceType $type;
 
     #[\Override]
     protected function setUp(): void
@@ -92,15 +90,6 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             ->method('isGranted')
             ->willReturn(true);
 
-        $entityManager = $this->createMock(EntityManager::class);
-        $metadata = $this->createMock(ClassMetadata::class);
-        $entityManager->expects($this->once())
-            ->method('getClassMetadata')
-            ->with('OroUser:User')
-            ->willReturn($metadata);
-        $metadata->expects($this->once())
-            ->method('getSingleIdentifierFieldName')
-            ->willReturn(self::TEST_ID_FIELD_NAME);
         $searchHandler = $this->createMock(SearchHandlerInterface::class);
         $searchHandler->expects($this->any())
             ->method('getEntityName')
@@ -121,17 +110,17 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                         $authorizationChecker,
                         $this->createMock(FeatureChecker::class),
                         $this->createMock(ConfigManager::class),
-                        $entityManager,
+                        $this->doctrine,
                         $searchRegistry
                     ),
                     new OroJquerySelect2HiddenType(
-                        $entityManager,
+                        $this->doctrine,
                         $searchRegistry,
                         $this->createMock(ConfigProvider::class)
                     )
                 ],
                 [
-                    FormType::class    => [
+                    FormType::class => [
                         new FormTypeCsrfExtension($this->createMock(CsrfTokenManagerInterface::class)),
                         new FormTypeValidatorExtension(new RecursiveValidator(
                             new ExecutionContextFactory(new IdentityTranslator()),
@@ -150,45 +139,48 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
 
     public function testFormSubmit()
     {
-        $entityManager = $this->createMock(EntityManager::class);
-        $metadata = $this->createMock(ClassMetadata::class);
-        $repo = $this->createMock(EntityRepository::class);
         $entity = new Integration();
         $entity->setName(self::TEST_NAME);
         $entity->setType(self::TEST_TYPE);
 
-        $this->doctrine->expects($this->once())
-            ->method('getManagerForClass')
-            ->with(self::TEST_ENTITY_NAME)
-            ->willReturn($entityManager);
+        $metadata = $this->createMock(ClassMetadata::class);
+        $metadata->expects($this->once())
+            ->method('getSingleIdentifierFieldName')
+            ->willReturn(self::TEST_ID_FIELD_NAME);
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->expects($this->once())
             ->method('getClassMetadata')
             ->with(self::TEST_ENTITY_NAME)
             ->willReturn($metadata);
-        $metadata->expects($this->once())
-            ->method('getSingleIdentifierFieldName')
-            ->willReturn(self::TEST_ID_FIELD_NAME);
-        $entityManager->expects($this->once())
-            ->method('getRepository')
-            ->with(self::TEST_ENTITY_NAME)
-            ->willReturn($repo);
+
+        $repo = $this->createMock(EntityRepository::class);
         $repo->expects($this->once())
             ->method('find')
             ->with(self::TEST_ID)
             ->willReturn($entity);
 
+        $this->doctrine->expects($this->once())
+            ->method('getManagerForClass')
+            ->with(self::TEST_ENTITY_NAME)
+            ->willReturn($entityManager);
+        $this->doctrine->expects($this->once())
+            ->method('getRepository')
+            ->with(self::TEST_ENTITY_NAME)
+            ->willReturn($repo);
+
         $form = $this->factory->create(
             ChannelDatasourceType::class,
             null,
             [
-                'type'            => self::TEST_CHANNEL_TYPE,
+                'type' => self::TEST_CHANNEL_TYPE,
                 'csrf_protection' => false
             ]
         );
         $form->submit(
             [
                 'identifier' => self::TEST_ID,
-                'data'       => json_encode(
+                'data' => json_encode(
                     ['name' => self::TEST_SUBMITTED_NAME, 'type' => self::TEST_TYPE],
                     JSON_THROW_ON_ERROR
                 )
@@ -204,10 +196,10 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
 
         $this->assertSame(
             [
-                'type'       => self::TEST_TYPE,
-                'data'       => null,
+                'type' => self::TEST_TYPE,
+                'data' => null,
                 'identifier' => $integration,
-                'name'       => self::TEST_SUBMITTED_NAME
+                'name' => self::TEST_SUBMITTED_NAME
             ],
             $viewData
         );

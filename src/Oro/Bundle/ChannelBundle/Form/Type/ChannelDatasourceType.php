@@ -16,18 +16,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ChannelDatasourceType extends AbstractType
 {
-    private ManagerRegistry $doctrine;
-    private string $integrationEntityClass;
-
-    public function __construct(ManagerRegistry $doctrine, string $integrationEntityClass)
-    {
-        $this->doctrine = $doctrine;
-        $this->integrationEntityClass = $integrationEntityClass;
-    }
-
-    public function getName()
-    {
-        return $this->getBlockPrefix();
+    public function __construct(
+        private ManagerRegistry $doctrine,
+        private string $integrationEntityClass
+    ) {
     }
 
     #[\Override]
@@ -37,15 +29,14 @@ class ChannelDatasourceType extends AbstractType
     }
 
     #[\Override]
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $em = $this->doctrine->getManagerForClass($this->integrationEntityClass);
         $formFactory = $builder->getFormFactory();
 
         $data = $builder->create('data', HiddenType::class);
         $data->addViewTransformer(new ArrayToJsonTransformer());
         $identifier = $builder->create('identifier', HiddenType::class);
-        $identifier->addViewTransformer(new EntityToIdTransformer($em, $this->integrationEntityClass));
+        $identifier->addViewTransformer(new EntityToIdTransformer($this->doctrine, $this->integrationEntityClass));
         $builder->addViewTransformer(new DatasourceDataTransformer($formFactory));
 
         $builder->add($data);
@@ -55,7 +46,7 @@ class ChannelDatasourceType extends AbstractType
     }
 
     #[\Override]
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['type']);
     }
