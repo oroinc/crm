@@ -122,7 +122,8 @@ class WidgetOpportunityByLeadSourceProvider
         $budgetAmountQuery = $this->qbTransformer->getTransformSelectQuery('budgetAmount', $qb);
         $qb->addSelect(
             sprintf(
-                "SUM(CASE WHEN o.status = 'won' THEN (%s) ELSE (%s) END) as value",
+                "SUM(CASE WHEN JSON_EXTRACT(o.serialized_data, 'status') = 'opportunity_status.won'
+                THEN (%s) ELSE (%s) END) as value",
                 $closeRevenueQuery,
                 $budgetAmountQuery
             )

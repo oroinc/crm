@@ -2,11 +2,14 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Dashboard\Provider;
 
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
 use Oro\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -30,7 +33,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
     /**
      * @dataProvider opportunitiesBySourceDataProvider
      */
-    public function testCreateOthersCategoryWithExcludedSources(array $inputData)
+    public function testCreateOthersCategoryWithExcludedSources(array $inputData): void
     {
         $provider = $this->getProvider($inputData);
         $data = $provider->getChartData([], [], ['affiliate', 'partner', 'website']);
@@ -43,7 +46,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
     /**
      * @dataProvider opportunitiesBySourceDataProvider
      */
-    public function testAddSmallSourceValuesOverLimitToOthersCategory(array $inputData)
+    public function testAddSmallSourceValuesOverLimitToOthersCategory(array $inputData): void
     {
         $data = array_merge(
             [
@@ -72,7 +75,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
     /**
      * @dataProvider opportunitiesBySourceDataProvider
      */
-    public function testCreateUnclassifiedCategoryWithEmptySources(array $inputData)
+    public function testCreateUnclassifiedCategoryWithEmptySources(array $inputData): void
     {
         $provider = $this->getProvider($inputData);
         $data = $provider->getChartData([], []);
@@ -85,7 +88,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
     /**
      * @dataProvider opportunitiesBySourceDataProvider
      */
-    public function testFilterOutZeroSources(array $inputData)
+    public function testFilterOutZeroSources(array $inputData): void
     {
         $provider = $this->getProvider($inputData);
         $data = $provider->getChartData([], []);
@@ -106,6 +109,48 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
                 ['source' => 'email_marketing', 'value' => 10],
             ]]
         ];
+    }
+
+
+    public function testCreateUnclassifiedCategoryQueryByAmount(): void
+    {
+        $doctrine = $this->getDoctrine( ['source' => 'direct_mail', 'value' => 15]);
+        $opportunityRepo = $doctrine->getRepository(Opportunity::class);
+
+        $aclHelper = $this->createMock(AclHelper::class);
+        $processor = $this->createMock(DateFilterProcessor::class);
+
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')->willReturnArgument(0);
+
+        $queryMock = $this->createMock(AbstractQuery::class);
+        $queryBuilderMock = $this->createMock(QueryBuilder::class);
+        $opportunityRepo->expects($this->once())
+            ->method('getOpportunitiesGroupByLeadSourceQueryBuilder')
+            ->willReturn($queryBuilderMock);
+        $queryBuilderMock->method('getQuery')->willReturn($queryMock);
+        $aclHelper->expects($this->once())->method('apply')->willReturn($queryMock);
+
+        // check if the query is built correctly with enum status
+        $queryBuilderMock->expects($this->once())
+            ->method('addSelect')
+            ->with('SUM(CASE WHEN JSON_EXTRACT(o.serialized_data, \'status\') = \'opportunity_status.won\'
+                THEN () ELSE () END) as value');
+        $enumTranslator = $this->createMock(EnumExtension::class);
+        $enumTranslator->method('transEnum')->willReturnArgument(0);
+        $qbTransformer = $this->createMock(CurrencyQueryBuilderTransformerInterface::class);
+
+        $provider = new WidgetOpportunityByLeadSourceProvider(
+            $doctrine,
+            $aclHelper,
+            $processor,
+            $translator,
+            $enumTranslator,
+            $qbTransformer
+        );
+        $data = $provider->getChartData([], [], [], true);
+
+        $this->assertIsArray($data);
     }
 
     private function getProvider(array $data): WidgetOpportunityByLeadSourceProvider
