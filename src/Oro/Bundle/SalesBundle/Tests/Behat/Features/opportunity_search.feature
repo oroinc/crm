@@ -9,7 +9,6 @@ Feature: Opportunity Search
 
   Scenario: Search opportunities when the feature enabled
     Given I login as administrator
-    When I click "Search"
     And I select "Opportunity" from search types
     And type "Opportunity" in "search"
     Then I should see 1 search suggestion
@@ -26,10 +25,8 @@ Feature: Opportunity Search
   Scenario: Search opportunities when the feature disabled
     Given I disable Opportunity feature
     And I login as administrator
-    When I click "Search"
     When type "Opportunity" in "search"
     Then I should see 0 search suggestion
     When I click "Search Submit"
     Then I should see "No results were found to match your search."
-    When I click "Search"
     Then I should not see "Opportunity" in search types

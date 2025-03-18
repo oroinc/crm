@@ -18,7 +18,8 @@ Feature: Lead activity list workflow
     And click "Create Task"
     Then should see "Task created successfully" flash message
 
-    When I click "Start progress" on "Test task" in activity list
+    When I hover on "Activity Dropdown Menu"
+    And I click "Start progress" on "Test task" in activity list
     Then shouldn't see "Test task Open" task in activity list
     And should see "Test task In progress" task in activity list
 
