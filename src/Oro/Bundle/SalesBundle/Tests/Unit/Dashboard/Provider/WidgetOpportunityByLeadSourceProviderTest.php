@@ -114,30 +114,36 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
 
     public function testCreateUnclassifiedCategoryQueryByAmount(): void
     {
-        $doctrine = $this->getDoctrine( ['source' => 'direct_mail', 'value' => 15]);
+        $doctrine = $this->getDoctrine(['source' => 'direct_mail', 'value' => 15]);
         $opportunityRepo = $doctrine->getRepository(Opportunity::class);
 
         $aclHelper = $this->createMock(AclHelper::class);
         $processor = $this->createMock(DateFilterProcessor::class);
 
         $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')->willReturnArgument(0);
+        $translator->method('trans')
+            ->willReturnArgument(0);
 
-        $queryMock = $this->createMock(AbstractQuery::class);
-        $queryBuilderMock = $this->createMock(QueryBuilder::class);
+        $query = $this->createMock(AbstractQuery::class);
+        $queryBuilder = $this->createMock(QueryBuilder::class);
+
         $opportunityRepo->expects($this->once())
             ->method('getOpportunitiesGroupByLeadSourceQueryBuilder')
-            ->willReturn($queryBuilderMock);
-        $queryBuilderMock->method('getQuery')->willReturn($queryMock);
-        $aclHelper->expects($this->once())->method('apply')->willReturn($queryMock);
+            ->willReturn($queryBuilder);
+        $queryBuilder->method('getQuery')
+            ->willReturn($query);
+        $aclHelper->expects($this->once())
+            ->method('apply')
+            ->willReturn($query);
 
         // check if the query is built correctly with enum status
-        $queryBuilderMock->expects($this->once())
+        $queryBuilder->expects($this->once())
             ->method('addSelect')
             ->with('SUM(CASE WHEN JSON_EXTRACT(o.serialized_data, \'status\') = \'opportunity_status.won\'
                 THEN () ELSE () END) as value');
         $enumTranslator = $this->createMock(EnumExtension::class);
-        $enumTranslator->method('transEnum')->willReturnArgument(0);
+        $enumTranslator->method('transEnum')
+            ->willReturnArgument(0);
         $qbTransformer = $this->createMock(CurrencyQueryBuilderTransformerInterface::class);
 
         $provider = new WidgetOpportunityByLeadSourceProvider(
