@@ -9,7 +9,7 @@ Oro\Bundle\CalendarBundle\Entity\SystemCalendar:
   systemCalendar1:
     name: 'System Calendar 1'
     public: true
-    backgroundColor: '#F83A22'
+    backgroundColor: '#A92F1F'
     createdAt: '<dateTime()>'
     updatedAt: '<dateTime()>'
     organization: '@organization'

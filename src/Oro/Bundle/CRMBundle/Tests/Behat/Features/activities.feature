@@ -87,14 +87,16 @@ Feature: Activities
     And save and close form
     And go to Sales/ Leads
     And click view "OroInc" in grid
-    When I hover on "Activity Dropdown Menu"
+    When I scroll to "Activity Dropdown Menu"
+    And I hover on "Activity Dropdown Menu"
     And click "Update Task"
     And fill form with:
       | Subject | Sprint Nemo |
     And click "Update Task"
     Then should see "Task created successfully" flash message
     And should see "Sprint Nemo - test description"
-    When I hover on "Activity Dropdown Menu"
+    When I scroll to "Activity Dropdown Menu"
+    And I hover on "Activity Dropdown Menu"
     And click "Add Context"
     And click "Context Entity Dropdown"
     And click on "Lead"
@@ -149,7 +151,8 @@ Feature: Activities
   Scenario:View and Manage Calls on the view page of a record
     Given go to Sales/ Leads
     And click view "OroInc" in grid
-    When I hover on "Activity Dropdown Menu"
+    When I scroll to "Activity Dropdown Menu"
+    And I hover on "Activity Dropdown Menu"
     And click "Update Call log"
     And I fill form with:
       | Phone number | 0503504444 |
