@@ -152,22 +152,8 @@ oro_behat_extension:
       selector: '.oro-grid-table'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendTableGrid
 
-    Configuration Localization Form:
-      selector: 'form[name="localization"]'
-      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
-      options:
-        mapping:
-          Default Localization: 'localization[oro_locale___default_localization][value]'
-          Primary Location Use Default: 'localization[oro_locale___country][use_parent_scope_value]'
-          Primary Location: 'localization[oro_locale___country][value]'
-
     CurrencyPopover:
       selector: '.action-cell button[data-toggle="popover"]'
-
-    EuroAsDefaultValue:
-      selector:
-          type: xpath
-          locator: '//td[text()[contains(.,"EUR")]]/parent::tr/*[1]//input'
 
     OpportunityStatusFilter:
        selector:
