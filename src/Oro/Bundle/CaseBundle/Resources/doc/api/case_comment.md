@@ -149,7 +149,7 @@ Delete a collection of case comment records.
 
 #### get_subresource
 
-Retrieve the record of the attachment uploaded with a specific case comment.
+Retrieve a record of the attachment uploaded with a specific case comment.
 
 #### get_relationship
 
@@ -176,7 +176,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the case a specific case comment was made on.
+Retrieve a record of the case a specific case comment was made on.
 
 #### get_relationship
 
@@ -203,7 +203,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the records of the contact who is an author of a specific case comment record.
+Retrieve a record of the contact who is an author of a specific case comment record.
 
 #### get_relationship
 
@@ -230,7 +230,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the organization a specific case comment belongs to.
+Retrieve a record of the organization a specific case comment belongs to.
 
 #### get_relationship
 
@@ -257,7 +257,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the records of the user who is an owner of a specific case comment record.
+Retrieve a record of the user who is an owner of a specific case comment record.
 
 This user is also considered the case comment author if the *contact* field value is not specified for the case comment.
 
@@ -286,7 +286,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the user who last updated a specific case comment record.
+Retrieve a record of the user who last updated a specific case comment record.
 
 #### get_relationship
 

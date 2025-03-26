@@ -342,7 +342,7 @@ Retrieve IDs of address records assigned to a specific contact record.
 
 #### get_subresource
 
-Retrieve the record of the user to whom a specific contact record is assigned.
+Retrieve a record of the user to whom a specific contact record is assigned.
 
 #### get_relationship
 
@@ -369,7 +369,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the user who created a specific contact record.
+Retrieve a record of the user who created a specific contact record.
 
 #### get_relationship
 
@@ -463,7 +463,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the records of groups a specific contact record belongs to.
+Retrieve records of groups a specific contact record belongs to.
 
 #### get_relationship
 
@@ -471,7 +471,7 @@ Retrieve the IDs of the groups a specific contact record belongs to.
 
 #### add_relationship
 
-Set groups a specific contact will belong to.
+Set groups a specific contact belongs to.
 
 {@request:json_api}
 Example:
@@ -530,7 +530,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the contact method configured for a specific contact record.
+Retrieve a record of the contact method configured for a specific contact record.
 
 #### get_relationship
 
@@ -557,11 +557,11 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the organization a specific contact record belongs to.
+Retrieve a record of the organization a specific contact record belongs to.
 
 #### get_relationship
 
-Retrieve the ID of the organization record which a specific contact record will belong to.
+Retrieve the ID of the organization record which a specific contact record belongs to.
 
 #### update_relationship
 
@@ -584,7 +584,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the user who is an owner of a specific contact record.
+Retrieve a record of the user who is an owner of a specific contact record.
 
 #### get_relationship
 
@@ -638,7 +638,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the contact a specific contact record reports to.
+Retrieve a record of the contact a specific contact record reports to.
 
 #### get_relationship
 
@@ -692,7 +692,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the user who updated a specific contact record.
+Retrieve a record of the user who updated a specific contact record.
 
 #### get_relationship
 

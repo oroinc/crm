@@ -18,7 +18,7 @@ The %customer_entity_plural_name% associated with the account record.
 
 #### get_subresource
 
-Retrieve the records of the %customer_entity_plural_name% associated with a specific account record.
+Retrieve records of the %customer_entity_plural_name% associated with a specific account record.
 
 #### get_relationship
 

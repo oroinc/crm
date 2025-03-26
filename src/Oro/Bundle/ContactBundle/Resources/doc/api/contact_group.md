@@ -123,7 +123,7 @@ Delete a collection of contact group records.
 
 #### get_subresource
 
-Retrieve the record of the organization a specific contact group record belongs to.
+Retrieve a record of the organization a specific contact group record belongs to.
 
 #### get_relationship
 
@@ -150,7 +150,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the user who is the owner of a specific contact group record.
+Retrieve a record of the user who is the owner of a specific contact group record.
 
 #### get_relationship
 

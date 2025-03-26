@@ -278,7 +278,7 @@ Filter records by primary phone number.
 
 #### get_subresource
 
-Retrieve the record of the billing address configured for a specific business customer.
+Retrieve a record of the billing address configured for a specific business customer.
 
 #### get_relationship
 
@@ -305,7 +305,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the contact that is specified for a specific business customer.
+Retrieve a record of the contact that is specified for a specific business customer.
 
 #### get_relationship
 
@@ -332,7 +332,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the channel via which an information about a specific business customer is received.
+Retrieve a record of the channel via which an information about a specific business customer is received.
 
 #### get_relationship
 
@@ -359,7 +359,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the records of the leads that a specific business customer is assigned to.
+Retrieve records of the leads that a specific business customer is assigned to.
 
 #### get_relationship
 
@@ -419,7 +419,7 @@ Remove the leads that a specific business customer is assigned to.
 
 #### get_subresource
 
-Retrieve the records of the opportunities that a specific business customer is assigned to.
+Retrieve records of the opportunities that a specific business customer is assigned to.
 
 #### get_relationship
 
@@ -471,7 +471,7 @@ Remove the opportunities that a specific business customer is assigned to.
 
 #### get_subresource
 
-Retrieve the record of the organization that a specific business customer belongs to.
+Retrieve a record of the organization that a specific business customer belongs to.
 
 #### get_relationship
 
@@ -498,7 +498,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the user who is the owner of a specific business customer record.
+Retrieve a record of the user who is the owner of a specific business customer record.
 
 #### get_relationship
 

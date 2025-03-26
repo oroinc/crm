@@ -161,7 +161,7 @@ Delete a collection of lead address records.
 
 #### get_subresource
 
-Retrieve the record of the country configured for a specific lead address record.
+Retrieve a record of the country configured for a specific lead address record.
 
 #### get_relationship
 
@@ -188,7 +188,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the lead who is the owner of a specific lead address record.
+Retrieve a record of the lead who is the owner of a specific lead address record.
 
 #### get_relationship
 
@@ -215,7 +215,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the region configured for a specific lead address record.
+Retrieve a record of the region configured for a specific lead address record.
 
 #### get_relationship
 

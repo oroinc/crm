@@ -279,7 +279,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the organization a specific account belongs to.
+Retrieve a record of the organization a specific account belongs to.
 
 #### get_relationship
 
@@ -306,7 +306,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the user who is the owner of a specific lead record.
+Retrieve a record of the user who is the owner of a specific lead record.
 
 #### get_relationship
 

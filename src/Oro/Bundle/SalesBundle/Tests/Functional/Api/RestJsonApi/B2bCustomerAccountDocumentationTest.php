@@ -120,7 +120,7 @@ class B2bCustomerAccountDocumentationTest extends RestJsonApiTestCase
         $resourceData = $this->getResourceData($this->getSimpleFormatter()->format($docs));
         self::assertEquals('Get b2b customers', $resourceData['description']);
         self::assertEquals(
-            '<p>Retrieve the records of the business customers associated with a specific account record.</p>',
+            '<p>Retrieve records of the business customers associated with a specific account record.</p>',
             $resourceData['documentation']
         );
     }
