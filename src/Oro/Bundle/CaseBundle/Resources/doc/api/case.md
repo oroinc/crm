@@ -280,7 +280,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the records of the comments made on a specific case.
+Retrieve records of the comments made on a specific case.
 
 #### get_relationship
 
@@ -355,7 +355,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the organization a specific case belongs to.
+Retrieve a record of the organization a specific case belongs to.
 
 #### get_relationship
 
@@ -382,7 +382,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the records of the user who is an owner of a specific case record.
+Retrieve a record of the user who is an owner of a specific case record.
 
 #### get_relationship
 
@@ -436,7 +436,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the account that is related to a specific case.
+Retrieve a record of the account that is related to a specific case.
 
 #### get_relationship
 
@@ -463,7 +463,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the contact that is related to a specific case.
+Retrieve a record of the contact that is related to a specific case.
 
 #### get_relationship
 
@@ -490,7 +490,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the source configured for a specific case record.
+Retrieve a record of the source configured for a specific case record.
 
 #### get_relationship
 

@@ -161,7 +161,7 @@ Delete a collection of contact address records.
 
 #### get_subresource
 
-Retrieve the record of the country configured for a specific contact address record.
+Retrieve a record of the country configured for a specific contact address record.
 
 #### get_relationship
 
@@ -188,7 +188,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the contact who is the owner of a specific contact address record.
+Retrieve a record of the contact who is the owner of a specific contact address record.
 
 #### get_relationship
 
@@ -215,7 +215,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the region configured for a specific contact address record.
+Retrieve a record of the region configured for a specific contact address record.
 
 #### get_relationship
 
