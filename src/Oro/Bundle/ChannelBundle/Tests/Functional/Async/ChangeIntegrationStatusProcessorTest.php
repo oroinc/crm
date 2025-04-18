@@ -36,14 +36,14 @@ class ChangeIntegrationStatusProcessorTest extends WebTestCase
     {
         $sentMessage = self::sendMessage(
             ChannelStatusChangedTopic::getName(),
-            ['channelId' => PHP_INT_MAX]
+            ['channelId' => self::BIGINT]
         );
         self::consumeMessage($sentMessage);
 
         self::assertProcessedMessageStatus(MessageProcessorInterface::REJECT, $sentMessage);
         self::assertProcessedMessageProcessor('oro_channel.async.change_integration_status_processor', $sentMessage);
         self::assertTrue(
-            self::getLoggerTestHandler()->hasCritical('Channel not found: ' . PHP_INT_MAX)
+            self::getLoggerTestHandler()->hasCritical('Channel not found: ' . self::BIGINT)
         );
     }
 

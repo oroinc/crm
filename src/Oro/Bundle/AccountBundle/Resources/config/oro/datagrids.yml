@@ -296,7 +296,7 @@ datagrids:
             query:
                 select:
                     - >
-                        (CASE WHEN (:account IS NOT NULL) THEN
+                        (CASE WHEN (CAST(:account as INTEGER) IS NOT NULL) THEN
                           CASE WHEN (:account MEMBER OF c.accounts OR c.id IN (:data_in)) AND c.id NOT IN (:data_not_in)
                           THEN true ELSE false END
                         ELSE
