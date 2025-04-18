@@ -45,7 +45,7 @@ class CalculateChannelAnalyticsProcessorTest extends WebTestCase
     {
         $sentMessage = self::sendMessage(
             CalculateChannelAnalyticsTopic::getName(),
-            ['channel_id' => PHP_INT_MAX]
+            ['channel_id' => self::BIGINT]
         );
         self::consumeMessage($sentMessage);
 
@@ -55,7 +55,7 @@ class CalculateChannelAnalyticsProcessorTest extends WebTestCase
             $sentMessage
         );
         self::assertTrue(
-            self::getLoggerTestHandler()->hasError('Channel not found: ' . PHP_INT_MAX)
+            self::getLoggerTestHandler()->hasError('Channel not found: ' . self::BIGINT)
         );
     }
 
