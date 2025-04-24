@@ -4,6 +4,7 @@ The current file describes significant changes in the code that may affect the u
 
 ## Changes in the CRM package versions
 
+- [6.1.0](#610-2025-03-31)
 - [6.0.0](#600-2024-03-30)
 - [5.1.0](#510-2023-03-31)
 - [5.0.0](#500-2022-01-26)
@@ -31,6 +32,9 @@ The current file describes significant changes in the code that may affect the u
 - [1.3.0](#130-2014-07-23)
 - [1.2.0](#120-2014-05-28)
 - [1.0.0](#100-2014-04-01)
+
+## 6.1.0 (2025-03-31)
+[Show detailed list of changes](incompatibilities-6-1.md)
 
 ## 6.0.0 (2024-03-30)
 [Show detailed list of changes](incompatibilities-6-0.md)
