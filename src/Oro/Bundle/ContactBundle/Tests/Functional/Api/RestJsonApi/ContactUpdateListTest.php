@@ -248,15 +248,13 @@ class ContactUpdateListTest extends RestJsonApiUpdateListTestCase
             false
         );
 
-        $this->assertAsyncOperationErrors(
+        $this->assertAsyncOperationError(
             [
-                [
-                    'id'     => $operationId . '-1-1',
-                    'status' => 400,
-                    'title'  => 'has contact information constraint',
-                    'detail' => 'At least one of the fields First name, Last name, Emails or Phones must be defined.',
-                    'source' => ['pointer' => '/included/1'],
-                ],
+                'id'     => $operationId . '-1-1',
+                'status' => 400,
+                'title'  => 'has contact information constraint',
+                'detail' => 'At least one of the fields First name, Last name, Emails or Phones must be defined.',
+                'source' => ['pointer' => '/included/1']
             ],
             $operationId
         );

@@ -246,15 +246,13 @@ class OpportunityUpdateListTest extends RestJsonApiUpdateListTestCase
             false
         );
 
-        $this->assertAsyncOperationErrors(
+        $this->assertAsyncOperationError(
             [
-                [
-                    'id'     => $operationId.'-1-1',
-                    'status' => 400,
-                    'title'  => 'request data constraint',
-                    'detail' => 'The \'attributes\' property should not be empty',
-                    'source' => ['pointer' => '/included/0/attributes']
-                ]
+                'id'     => $operationId.'-1-1',
+                'status' => 400,
+                'title'  => 'request data constraint',
+                'detail' => 'The \'attributes\' property should not be empty',
+                'source' => ['pointer' => '/included/0/attributes']
             ],
             $operationId
         );
