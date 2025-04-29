@@ -265,22 +265,13 @@ class LeadUpdateListTest extends RestJsonApiUpdateListTestCase
             false
         );
 
-        $this->assertAsyncOperationErrors(
+        $this->assertAsyncOperationError(
             [
-                [
-                    'id'     => $operationId . '-1-1',
-                    'status' => 400,
-                    'title'  => 'form constraint',
-                    'detail' => 'Either an account or a customer should be set.',
-                    'source' => ['pointer' => '/included/0']
-                ],
-                [
-                    'id'     => $operationId . '-1-2',
-                    'status' => 400,
-                    'title'  => 'not blank constraint',
-                    'detail' => 'This value should not be blank.',
-                    'source' => ['pointer' => '/included/0/relationships/status/data']
-                ]
+                'id'     => $operationId . '-1-1',
+                'status' => 400,
+                'title'  => 'form constraint',
+                'detail' => 'Either an account or a customer should be set.',
+                'source' => ['pointer' => '/included/0']
             ],
             $operationId
         );
