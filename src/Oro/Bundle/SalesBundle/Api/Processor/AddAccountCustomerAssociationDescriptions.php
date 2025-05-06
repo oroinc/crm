@@ -31,6 +31,9 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
     private const ACCOUNT_CUSTOMERS_ASSOCIATION_DOC_RESOURCE =
         '@OroSalesBundle/Resources/doc/api/account_customers_association.md';
     private const CUSTOMERS_ASSOCIATION = '%customers_association%';
+    private const CUSTOMER_ENTITY_NAME = '%customer_entity_name%';
+    private const CUSTOMER_ENTITY_PLURAL_NAME = '%customer_entity_plural_name%';
+    private const CUSTOMER_ENTITY_TYPE = '%customer_entity_type%';
 
     private AccountCustomerAssociationProvider $accountCustomerAssociationProvider;
     private ValueNormalizer $valueNormalizer;
@@ -158,7 +161,7 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
                 continue;
             }
             $customerAssociationDefinition->setDescription(strtr($associationDocumentationTemplate, [
-                '%customer_entity_plural_name%' => $this->entityNameProvider->getEntityPluralName(
+                self::CUSTOMER_ENTITY_PLURAL_NAME => $this->entityNameProvider->getEntityPluralName(
                     $customerAssociation['className'],
                     true
                 )
@@ -180,11 +183,11 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
         );
 
         $definition->setDocumentation(strtr($subresourceDocumentationTemplate, [
-            '%customer_entity_plural_name%' => $this->entityNameProvider->getEntityPluralName(
+            self::CUSTOMER_ENTITY_PLURAL_NAME => $this->entityNameProvider->getEntityPluralName(
                 $customerEntityClass,
                 true
             ),
-            '%customer_entity_type%'        => $this->getEntityType($customerEntityClass, $requestType)
+            self::CUSTOMER_ENTITY_TYPE => $this->getEntityType($customerEntityClass, $requestType)
         ]));
     }
 
@@ -206,7 +209,7 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
             $targetAction
         );
         $accountAssociationDefinition->setDescription(strtr($associationDocumentationTemplate, [
-            '%customer_entity_name%' => $this->entityNameProvider->getEntityName($customerEntityClass, true)
+            self::CUSTOMER_ENTITY_NAME => $this->entityNameProvider->getEntityName($customerEntityClass, true)
         ]));
     }
 
@@ -223,7 +226,7 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
             $targetAction
         );
         $definition->setDocumentation(strtr($subresourceDocumentationTemplate, [
-            '%customer_entity_name%' => $this->entityNameProvider->getEntityName($customerEntityClass, true)
+            self::CUSTOMER_ENTITY_NAME => $this->entityNameProvider->getEntityName($customerEntityClass, true)
         ]));
     }
 
