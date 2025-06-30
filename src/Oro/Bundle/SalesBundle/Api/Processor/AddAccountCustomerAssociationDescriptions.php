@@ -62,10 +62,11 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
             return;
         }
 
-        $associationName = $context->getAssociationName();
-        $entityClass = $associationName ? $context->getParentClassName() : $context->getClassName();
         $version = $context->getVersion();
         $requestType = $context->getRequestType();
+        $definition = $context->getResult();
+        $associationName = $context->getAssociationName();
+        $entityClass = $associationName ? $context->getParentClassName() : $context->getClassName();
 
         if (Account::class === $entityClass) {
             $customerAssociations = $this->accountCustomerAssociationProvider->getAccountCustomerAssociations(
@@ -74,7 +75,7 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
             );
             if ($customerAssociations) {
                 $this->addAccountCustomersAssociationDescriptions(
-                    $context->getResult(),
+                    $definition,
                     $requestType,
                     $targetAction,
                     $associationName,
@@ -83,13 +84,33 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
             }
         }
 
-        if ($this->accountCustomerAssociationProvider->isCustomerEntity($entityClass)) {
-            $this->addCustomerAccountAssociationDescription(
-                $context->getResult(),
+        if ($associationName) {
+            $this->setDescriptionForCustomerAccountField(
+                $definition,
                 $requestType,
                 $targetAction,
-                $entityClass,
-                $associationName,
+                $definition->getResourceClass()
+            );
+            $this->setDescriptionsForCustomerFields(
+                $definition,
+                $requestType,
+                $targetAction,
+                $this->accountCustomerAssociationProvider->getAccountCustomerAssociations($version, $requestType)
+            );
+            if (self::ACCOUNT_ASSOCIATION_NAME === $associationName && !$definition->hasDocumentation()) {
+                $this->setDescriptionsForCustomerAccountSubresource(
+                    $definition,
+                    $requestType,
+                    $entityClass,
+                    $targetAction
+                );
+            }
+        } else {
+            $this->setDescriptionForCustomerAccountField(
+                $definition,
+                $requestType,
+                $targetAction,
+                $context->getClassName()
             );
         }
     }
@@ -113,30 +134,6 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
                 $definition,
                 $requestType,
                 $customerAssociations[$associationName]['className'],
-                $targetAction
-            );
-        }
-    }
-
-    private function addCustomerAccountAssociationDescription(
-        EntityDefinitionConfig $definition,
-        RequestType $requestType,
-        string $targetAction,
-        string $customerEntityClass,
-        ?string $associationName
-    ): void {
-        if (!$associationName) {
-            $this->setDescriptionForCustomerAccountField(
-                $definition,
-                $requestType,
-                $targetAction,
-                $customerEntityClass
-            );
-        } elseif (self::ACCOUNT_ASSOCIATION_NAME === $associationName && !$definition->hasDocumentation()) {
-            $this->setDescriptionsForCustomerAccountSubresource(
-                $definition,
-                $requestType,
-                $customerEntityClass,
                 $targetAction
             );
         }
@@ -197,6 +194,10 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
         string $targetAction,
         string $customerEntityClass
     ): void {
+        if (!$this->accountCustomerAssociationProvider->isCustomerEntity($customerEntityClass)) {
+            return;
+        }
+
         $accountAssociationDefinition = $definition->getField(self::ACCOUNT_ASSOCIATION_NAME);
         if (null === $accountAssociationDefinition || $accountAssociationDefinition->hasDescription()) {
             return;
@@ -219,6 +220,10 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
         string $customerEntityClass,
         string $targetAction
     ): void {
+        if (!$this->accountCustomerAssociationProvider->isCustomerEntity($customerEntityClass)) {
+            return;
+        }
+
         $docParser = $this->getDocumentationParser($requestType, self::ACCOUNT_ASSOCIATION_DOC_RESOURCE);
         $subresourceDocumentationTemplate = $docParser->getSubresourceDocumentation(
             self::CUSTOMER_ENTITY,
