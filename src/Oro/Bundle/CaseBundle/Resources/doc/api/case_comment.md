@@ -155,23 +155,6 @@ Retrieve a record of the attachment uploaded with a specific case comment.
 
 Retrieve the ID of the file attached to a specific case comment.
 
-#### update_relationship
-
-Replace the file attached to a specific case comment.
-
-{@request:json_api}
-Example:
-
-```JSON
-{
-  "data": {
-    "type": "files",
-    "id": "4"
-  }
-}
-```
-{@/request}
-
 ### case 
 
 #### get_subresource
