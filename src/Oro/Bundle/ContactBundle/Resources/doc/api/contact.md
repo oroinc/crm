@@ -234,12 +234,6 @@ Example:
                   "id": "37"
                }
             ]
-         },
-         "picture": {
-            "data": {
-               "type": "files",
-               "id": "2"
-            }
          }
       }
    }
@@ -616,23 +610,6 @@ Retrieve the picture configured for a specific contact record.
 #### get_relationship
 
 Retrieve the ID of the picture configured for a specific contact record.
-
-#### update_relationship
-
-Replace the picture for a specific contact record.
-
-{@request:json_api}
-Example:
-
-```JSON
-{
-  "data": {
-    "type": "files",
-    "id": "2"
-  }
-}
-```
-{@/request}
 
 ### reportsTo
 
