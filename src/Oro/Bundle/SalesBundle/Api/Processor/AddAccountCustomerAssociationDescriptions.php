@@ -84,13 +84,13 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
             }
         }
 
+        $this->setDescriptionForCustomerAccountField(
+            $definition,
+            $requestType,
+            $targetAction,
+            $context->getClassName()
+        );
         if ($associationName) {
-            $this->setDescriptionForCustomerAccountField(
-                $definition,
-                $requestType,
-                $targetAction,
-                $definition->getResourceClass()
-            );
             $this->setDescriptionsForCustomerFields(
                 $definition,
                 $requestType,
@@ -105,13 +105,6 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
                     $targetAction
                 );
             }
-        } else {
-            $this->setDescriptionForCustomerAccountField(
-                $definition,
-                $requestType,
-                $targetAction,
-                $context->getClassName()
-            );
         }
     }
 
