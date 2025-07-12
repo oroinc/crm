@@ -330,7 +330,7 @@ Retrieve a record of addresses assigned to a specific contact record.
 
 #### get_relationship
 
-Retrieve IDs of address records assigned to a specific contact record.
+Retrieve the IDs of address records assigned to a specific contact record.
 
 ### assignedTo
 
@@ -699,13 +699,13 @@ Example:
 
 ### get
 
-Retrieve a collection of contact method records.
+Retrieve a specific contact method record.
 
 {@inheritdoc}
 
 ### get_list
 
-Retrieve a specific contact method record.
+Retrieve a collection of contact method records.
 
 {@inheritdoc}
 
@@ -716,12 +716,12 @@ Retrieve a specific contact method record.
 
 ### get
 
-Retrieve a collection of contact source records.
+Retrieve a specific contact source record.
 
 {@inheritdoc}
 
 ### get_list
 
-Retrieve a specific contact source record.
+Retrieve a collection of contact source records.
 
 {@inheritdoc}
