@@ -16,10 +16,11 @@ Feature: Opportunity crud
     And I follow "More actions"
     And click "Create Opportunity"
     And I fill "Opportunity Form" with:
-      | Opportunity Name | Opportunity_1 |
-      | Probability (%)  | 10            |
-      | Budget Amount    | 50            |
-      | Budget Currency  | $             |
+      | Opportunity Name | Opportunity_1    |
+      | Probability (%)  | 10               |
+      | Budget Amount    | 50               |
+      | Budget Currency  | $                |
+      | Customer need    | Order automation |
     And save and close form
     Then I should see "Opportunity saved" flash message
     And I should see opportunity with:
@@ -27,6 +28,10 @@ Feature: Opportunity crud
       | Probability      | 10%           |
       | Budget Amount    | $50.00        |
       | Account          | Acme          |
+    # Since all characters are escaped, a plain text check won't detect the difference between
+    # the encoded text "<p>Order automation</p>" and the actual HTML structure <p>Order automation</p>.
+    # Therefore, we check whether a <p> element exists in the DOM instead.
+    And I should see a "Opportunity Customer Need Field View" element
 
   Scenario: Create Opportunity
     When I open Opportunity Create page
