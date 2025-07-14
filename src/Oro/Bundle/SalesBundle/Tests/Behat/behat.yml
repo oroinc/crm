@@ -62,6 +62,11 @@ oro_behat_extension:
           Close Revenue Currency: 'oro_sales_opportunity_form[closeRevenue][currency]'
           DateTimeField: 'oro_sales_opportunity_form[DateTimeField]'
 
+    Opportunity Customer Need Field View:
+      selector:
+        locator: '//div[label[text()="Customer need"]]//div[contains(@class, "collapse-overflow")]//p[text()="Order automation"]'
+        type: xpath
+
     ImportLead:
       selector: 'div[class="opportunity-card-view card-view ui-sortable-handle"]'
 
