@@ -288,7 +288,7 @@ Retrieve a record of addresses assigned to a specific lead record.
 
 #### get_relationship
 
-Retrieve IDs of address records assigned to a specific lead record.
+Retrieve the IDs of address records assigned to a specific lead record.
 
 ### contact
 

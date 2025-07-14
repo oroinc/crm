@@ -4,13 +4,13 @@
 
 ### get
 
-Retrieve a collection of channel records.
+Retrieve a specific channel record.
 
 {@inheritdoc}
 
 ### get_list
 
-Retrieve a specific channel record.
+Retrieve a collection of channel records.
 
 {@inheritdoc}
 

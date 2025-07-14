@@ -435,7 +435,7 @@ Retrieve a specific opportunity close reason record.
 
 ### get_list
 
-Retrieve the collection of opportunity closed reason records.
+Retrieve a collection of opportunity closed reason records.
 
 {@inheritdoc}
 
