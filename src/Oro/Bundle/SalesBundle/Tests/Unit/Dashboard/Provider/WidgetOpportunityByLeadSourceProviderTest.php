@@ -122,7 +122,8 @@ class WidgetOpportunityByLeadSourceProviderTest extends TestCase
         $processor = $this->createMock(DateFilterProcessor::class);
 
         $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
+        $translator->expects(self::any())
+            ->method('trans')
             ->willReturnArgument(0);
 
         $query = $this->createMock(AbstractQuery::class);
@@ -131,7 +132,8 @@ class WidgetOpportunityByLeadSourceProviderTest extends TestCase
         $opportunityRepo->expects($this->once())
             ->method('getOpportunitiesGroupByLeadSourceQueryBuilder')
             ->willReturn($queryBuilder);
-        $queryBuilder->method('getQuery')
+        $queryBuilder->expects(self::any())
+            ->method('getQuery')
             ->willReturn($query);
         $aclHelper->expects($this->once())
             ->method('apply')
@@ -143,7 +145,8 @@ class WidgetOpportunityByLeadSourceProviderTest extends TestCase
             ->with('SUM(CASE WHEN JSON_EXTRACT(o.serialized_data, \'status\') = \'opportunity_status.won\'
                 THEN () ELSE () END) as value');
         $enumTranslator = $this->createMock(EnumExtension::class);
-        $enumTranslator->method('transEnum')
+        $enumTranslator->expects(self::any())
+            ->method('transEnum')
             ->willReturnArgument(0);
         $qbTransformer = $this->createMock(CurrencyQueryBuilderTransformerInterface::class);
 
