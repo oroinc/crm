@@ -5,11 +5,11 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Provider;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Provider\ContactPhoneProvider;
+use PHPUnit\Framework\TestCase;
 
-class ContactPhoneProviderTest extends \PHPUnit\Framework\TestCase
+class ContactPhoneProviderTest extends TestCase
 {
-    /** @var ContactPhoneProvider */
-    private $provider;
+    private ContactPhoneProvider $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -17,7 +17,7 @@ class ContactPhoneProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider = new ContactPhoneProvider();
     }
 
-    public function testGetPhoneNumber()
+    public function testGetPhoneNumber(): void
     {
         $entity = new Contact();
 
@@ -37,7 +37,7 @@ class ContactPhoneProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetPhoneNumbers()
+    public function testGetPhoneNumbers(): void
     {
         $entity = new Contact();
 

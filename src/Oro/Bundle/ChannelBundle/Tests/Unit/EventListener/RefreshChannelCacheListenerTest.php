@@ -8,17 +8,13 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\EventListener\ORM\RefreshChannelCacheListener;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Component\Testing\Unit\ORM\OrmTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class RefreshChannelCacheListenerTest extends OrmTestCase
 {
-    /** @var StateProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $stateProvider;
-
-    /** @var RefreshChannelCacheListener */
-    private $refreshChannelCacheListener;
-
-    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $em;
+    private StateProvider&MockObject $stateProvider;
+    private RefreshChannelCacheListener $refreshChannelCacheListener;
+    private EntityManager&MockObject $em;
 
     #[\Override]
     protected function setUp(): void

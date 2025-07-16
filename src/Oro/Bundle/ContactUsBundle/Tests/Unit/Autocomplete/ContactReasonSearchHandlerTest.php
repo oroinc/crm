@@ -14,14 +14,13 @@ use Oro\Bundle\ContactUsBundle\Tests\Unit\Stub\ContactReasonStub;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Component\Testing\ReflectionUtil;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ContactReasonSearchHandlerTest extends \PHPUnit\Framework\TestCase
+class ContactReasonSearchHandlerTest extends TestCase
 {
-    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $doctrineHelper;
-
-    /** @var ContactReasonSearchHandler */
-    private $searchHandler;
+    private DoctrineHelper&MockObject $doctrineHelper;
+    private ContactReasonSearchHandler $searchHandler;
 
     #[\Override]
     protected function setUp(): void
@@ -42,7 +41,7 @@ class ContactReasonSearchHandlerTest extends \PHPUnit\Framework\TestCase
         return $contactReason;
     }
 
-    public function testSearchWithoutQuery()
+    public function testSearchWithoutQuery(): void
     {
         $query = $this->createMock(AbstractQuery::class);
         $query->expects($this->once())
@@ -83,7 +82,7 @@ class ContactReasonSearchHandlerTest extends \PHPUnit\Framework\TestCase
         ], 'more' => false], $this->searchHandler->search('', 0, 5));
     }
 
-    public function testSearchWithQuery()
+    public function testSearchWithQuery(): void
     {
         $query = $this->createMock(AbstractQuery::class);
         $query->expects($this->once())
@@ -126,17 +125,17 @@ class ContactReasonSearchHandlerTest extends \PHPUnit\Framework\TestCase
         ], 'more' => false], $this->searchHandler->search('Search string...', 0, 5));
     }
 
-    public function testGetProperties()
+    public function testGetProperties(): void
     {
         $this->assertEquals(['defaultTitle'], $this->searchHandler->getProperties());
     }
 
-    public function testGetEntityName()
+    public function testGetEntityName(): void
     {
         $this->assertEquals(ContactReason::class, $this->searchHandler->getEntityName());
     }
 
-    public function testConvertItem()
+    public function testConvertItem(): void
     {
         $entity = $this->getContactReason(2, 'Title');
 

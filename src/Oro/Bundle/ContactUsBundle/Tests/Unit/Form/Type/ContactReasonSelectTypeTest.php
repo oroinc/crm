@@ -9,8 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContactReasonSelectTypeTest extends TypeTestCase
 {
-    /** @var ContactReasonSelectType */
-    private $formType;
+    private ContactReasonSelectType $formType;
 
     #[\Override]
     protected function setUp(): void

@@ -15,14 +15,15 @@ use Oro\Bundle\ContactBundle\Entity\Method;
 use Oro\Bundle\ContactBundle\Entity\Source;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class ContactTest extends \PHPUnit\Framework\TestCase
+class ContactTest extends TestCase
 {
-    public function testGetGroupLabels()
+    public function testGetGroupLabels(): void
     {
         $entity = new Contact();
         $this->assertEquals([], $entity->getGroupLabels());
@@ -39,7 +40,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['Group Two'], $entity->getGroupLabels());
     }
 
-    public function testGetGroupLabelsAsString()
+    public function testGetGroupLabelsAsString(): void
     {
         $entity = new Contact();
         $this->assertEquals('', $entity->getGroupLabelsAsString());
@@ -51,7 +52,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Group One, Group Two', $entity->getGroupLabelsAsString());
     }
 
-    public function testAddAccount()
+    public function testAddAccount(): void
     {
         $account = new Account();
         $account->setId(1);
@@ -67,7 +68,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($account, current($actualAccounts));
     }
 
-    public function testRemoveAccount()
+    public function testRemoveAccount(): void
     {
         $account = new Account();
         $account->setId(1);
@@ -82,7 +83,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($contact->getAccounts()->toArray());
     }
 
-    public function testEmails()
+    public function testEmails(): void
     {
         $emailOne = new ContactEmail('email-one@example.com');
         $emailTwo = new ContactEmail('email-two@example.com');
@@ -116,7 +117,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([1 => $emailTwo, 2 => $emailThree], $actual->toArray());
     }
 
-    public function testGetPrimaryEmail()
+    public function testGetPrimaryEmail(): void
     {
         $contact = new Contact();
         $this->assertNull($contact->getPrimaryEmail());
@@ -136,7 +137,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($email->isPrimary());
     }
 
-    public function testAddEmailShouldNotAllowMultiplePrimaries()
+    public function testAddEmailShouldNotAllowMultiplePrimaries(): void
     {
         $contact = new Contact();
 
@@ -156,7 +157,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $primaryElements);
     }
 
-    public function testResetEmailsShouldNotAllowMultiplePrimaries()
+    public function testResetEmailsShouldNotAllowMultiplePrimaries(): void
     {
         $contact = new Contact();
 
@@ -175,7 +176,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $primaryElements);
     }
 
-    public function testPhones()
+    public function testPhones(): void
     {
         $phoneOne = new ContactPhone('06001122334455');
         $phoneTwo = new ContactPhone('07001122334455');
@@ -209,7 +210,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([1 => $phoneTwo, 2 => $phoneThree], $actual->toArray());
     }
 
-    public function testGetPrimaryPhone()
+    public function testGetPrimaryPhone(): void
     {
         $contact = new Contact();
         $this->assertNull($contact->getPrimaryPhone());
@@ -229,7 +230,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($phone->isPrimary());
     }
 
-    public function testAddPhoneShouldNotAllowMultiplePrimaries()
+    public function testAddPhoneShouldNotAllowMultiplePrimaries(): void
     {
         $contact = new Contact();
 
@@ -249,7 +250,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $primaryElements);
     }
 
-    public function testResetPhonesShouldNotAllowMultiplePrimaries()
+    public function testResetPhonesShouldNotAllowMultiplePrimaries(): void
     {
         $contact = new Contact();
 
@@ -268,7 +269,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $primaryElements);
     }
 
-    public function testAddresses()
+    public function testAddresses(): void
     {
         $addressOne = new ContactAddress();
         $addressOne->setCountry(new Country('US'));
@@ -305,7 +306,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([1 => $addressTwo, 2 => $addressThree], $actual->toArray());
     }
 
-    public function testGetPrimaryAddress()
+    public function testGetPrimaryAddress(): void
     {
         $contact = new Contact();
         $this->assertNull($contact->getPrimaryAddress());
@@ -326,7 +327,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($address->isPrimary());
     }
 
-    public function testAddAddressShouldNotAllowMultiplePrimaries()
+    public function testAddAddressShouldNotAllowMultiplePrimaries(): void
     {
         $contact = new Contact();
 
@@ -346,7 +347,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $primaryElements);
     }
 
-    public function testResetAddressesShouldNotAllowMultiplePrimaries()
+    public function testResetAddressesShouldNotAllowMultiplePrimaries(): void
     {
         $contact = new Contact();
 
@@ -365,7 +366,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $primaryElements);
     }
 
-    public function testGetAddressByTypeName()
+    public function testGetAddressByTypeName(): void
     {
         $contact = new Contact();
         $this->assertNull($contact->getAddressByTypeName('billing'));
@@ -377,7 +378,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($address, $contact->getAddressByTypeName('billing'));
     }
 
-    public function testGetAddressByType()
+    public function testGetAddressByType(): void
     {
         $address = new ContactAddress();
         $addressType = new AddressType('billing');
@@ -390,13 +391,13 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($address, $contact->getAddressByType($addressType));
     }
 
-    public function testToStringNoAttributes()
+    public function testToStringNoAttributes(): void
     {
         $contact = new Contact();
         $this->assertEquals('', $contact->__toString());
     }
 
-    public function testNames()
+    public function testNames(): void
     {
         $contact = new Contact();
         $contact->setNamePrefix('Mr.');
@@ -409,7 +410,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Mr. First Middle Last Sn.', (string)$contact);
     }
 
-    public function testToStringsPartial()
+    public function testToStringsPartial(): void
     {
         $contact = new Contact();
         $contact->setFirstName('First');
@@ -421,7 +422,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider flatPropertiesDataProvider
      */
-    public function testGetSet($property, $value, $expected)
+    public function testGetSet($property, $value, $expected): void
     {
         $obj = new Contact();
 
@@ -429,7 +430,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, call_user_func_array([$obj, 'get' . ucfirst($property)], []));
     }
 
-    public function testSetAddressType()
+    public function testSetAddressType(): void
     {
         $contact = new Contact();
 
@@ -484,7 +485,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testHasAccounts()
+    public function testHasAccounts(): void
     {
         $contact = new Contact();
         $this->assertFalse($contact->hasAccounts());
@@ -493,7 +494,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($contact->hasAccounts());
     }
 
-    public function testHasEmail()
+    public function testHasEmail(): void
     {
         $email = new ContactEmail();
 
@@ -504,7 +505,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($contact->hasEmail($email));
     }
 
-    public function testHasPhone()
+    public function testHasPhone(): void
     {
         $phone = new ContactPhone();
 
@@ -515,7 +516,7 @@ class ContactTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($contact->hasPhone($phone));
     }
 
-    public function testGetEmail()
+    public function testGetEmail(): void
     {
         $contact = new Contact();
         $this->assertNull($contact->getEmail());

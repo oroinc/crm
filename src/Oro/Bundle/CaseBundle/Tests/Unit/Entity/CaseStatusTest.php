@@ -3,11 +3,11 @@
 namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
+use PHPUnit\Framework\TestCase;
 
-class CaseStatusTest extends \PHPUnit\Framework\TestCase
+class CaseStatusTest extends TestCase
 {
-    /** @var CaseStatus */
-    private $caseStatus;
+    private CaseStatus $caseStatus;
 
     #[\Override]
     protected function setUp(): void
@@ -15,12 +15,12 @@ class CaseStatusTest extends \PHPUnit\Framework\TestCase
         $this->caseStatus = new CaseStatus('test');
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         $this->assertEquals('test', $this->caseStatus->getName());
     }
 
-    public function testLabel()
+    public function testLabel(): void
     {
         $this->assertNull($this->caseStatus->getLabel());
 
@@ -30,7 +30,7 @@ class CaseStatusTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($label, $this->caseStatus->getLabel());
     }
 
-    public function testOrder()
+    public function testOrder(): void
     {
         $this->assertNull($this->caseStatus->getOrder());
 
@@ -40,7 +40,7 @@ class CaseStatusTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($order, $this->caseStatus->getOrder());
     }
 
-    public function testLocale()
+    public function testLocale(): void
     {
         $this->assertNull($this->caseStatus->getLocale());
 

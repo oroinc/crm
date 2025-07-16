@@ -4,11 +4,11 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use PHPUnit\Framework\TestCase;
 
-class ContactEmailTest extends \PHPUnit\Framework\TestCase
+class ContactEmailTest extends TestCase
 {
-    /** @var ContactEmail */
-    private $email;
+    private ContactEmail $email;
 
     #[\Override]
     protected function setUp(): void
@@ -16,7 +16,7 @@ class ContactEmailTest extends \PHPUnit\Framework\TestCase
         $this->email = new ContactEmail();
     }
 
-    public function testOwner()
+    public function testOwner(): void
     {
         $this->assertNull($this->email->getOwner());
 

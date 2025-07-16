@@ -12,19 +12,16 @@ use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Component\Testing\Unit\EntityTrait;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class NavigationListenerTest extends \PHPUnit\Framework\TestCase
+class NavigationListenerTest extends TestCase
 {
     use EntityTrait;
 
-    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $settings;
-
-    /** @var StateProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $state;
-
-    /** @var NavigationListener */
-    private $listener;
+    private SettingsProvider&MockObject $settings;
+    private StateProvider&MockObject $state;
+    private NavigationListener $listener;
 
     #[\Override]
     protected function setUp(): void
@@ -38,7 +35,7 @@ class NavigationListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider navigationConfigureDataProvider
      */
-    public function testOnNavigationConfigure(array $entities, bool $isEnabled, bool $expectedResult)
+    public function testOnNavigationConfigure(array $entities, bool $isEnabled, bool $expectedResult): void
     {
         $factory = new MenuFactory();
 
@@ -123,9 +120,8 @@ class NavigationListenerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testOnChannelSave()
+    public function testOnChannelSave(): void
     {
-        /** @var Organization $org */
         $org =  $this->getEntity(Organization::class, ['id' => 2]);
         $channel = new Channel();
         $channel->setOwner($org);

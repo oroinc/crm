@@ -6,14 +6,13 @@ use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 use Oro\Bundle\SalesBundle\Provider\B2bCustomerPhoneProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class B2bCustomerPhoneProviderTest extends \PHPUnit\Framework\TestCase
+class B2bCustomerPhoneProviderTest extends TestCase
 {
-    /** @var PhoneProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $rootProvider;
-
-    /** @var B2bCustomerPhoneProvider */
-    private $provider;
+    private PhoneProviderInterface&MockObject $rootProvider;
+    private B2bCustomerPhoneProvider $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -24,7 +23,7 @@ class B2bCustomerPhoneProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider->setRootProvider($this->rootProvider);
     }
 
-    public function testGetPhoneNumber()
+    public function testGetPhoneNumber(): void
     {
         $entity = new B2bCustomer();
         $this->assertNull(
@@ -42,7 +41,7 @@ class B2bCustomerPhoneProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetPhoneNumbers()
+    public function testGetPhoneNumbers(): void
     {
         $entity = new B2bCustomer();
 

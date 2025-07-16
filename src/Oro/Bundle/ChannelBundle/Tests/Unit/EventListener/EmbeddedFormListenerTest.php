@@ -8,21 +8,17 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\EmbeddedFormStub;
 use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
-class EmbeddedFormListenerTest extends \PHPUnit\Framework\TestCase
+class EmbeddedFormListenerTest extends TestCase
 {
-    /** @var Request */
-    private $request;
-
-    /** @var RequestStack */
-    private $requestStack;
-
-    /** @var EmbeddedFormListener */
-    private $listener;
+    private Request $request;
+    private RequestStack $requestStack;
+    private EmbeddedFormListener $listener;
 
     #[\Override]
     protected function setUp(): void
@@ -33,7 +29,7 @@ class EmbeddedFormListenerTest extends \PHPUnit\Framework\TestCase
         $this->listener = new EmbeddedFormListener($this->requestStack);
     }
 
-    public function testAddDataChannelField()
+    public function testAddDataChannelField(): void
     {
         $env = $this->createMock(Environment::class);
         $newField = "<input>";
@@ -75,7 +71,7 @@ class EmbeddedFormListenerTest extends \PHPUnit\Framework\TestCase
         $this->listener->addDataChannelField($event);
     }
 
-    public function testAddDataChannelFieldNoRequest()
+    public function testAddDataChannelFieldNoRequest(): void
     {
         $event = $this->createMock(BeforeFormRenderEvent::class);
         $event->expects($this->never())
@@ -83,7 +79,7 @@ class EmbeddedFormListenerTest extends \PHPUnit\Framework\TestCase
         $this->listener->addDataChannelField($event);
     }
 
-    public function testOnEmbeddedFormSubmit()
+    public function testOnEmbeddedFormSubmit(): void
     {
         $formEntity = $this->createMock(EmbeddedFormStub::class);
         $formEntity->expects($this->never())
@@ -95,7 +91,7 @@ class EmbeddedFormListenerTest extends \PHPUnit\Framework\TestCase
         $this->listener->onEmbeddedFormSubmit($event);
     }
 
-    public function testOnEmbeddedFormSubmitWithDataChannel()
+    public function testOnEmbeddedFormSubmitWithDataChannel(): void
     {
         $formEntity = $this->createMock(EmbeddedFormStub::class);
 

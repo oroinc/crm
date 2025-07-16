@@ -8,6 +8,7 @@ use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Form\IntegrationFormTypeStub;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
 use Oro\Component\Testing\Unit\PreloadedExtension;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
@@ -15,11 +16,8 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
 {
     public static $allChoices = ['type 1' => 'type 1', 'type 2' => 'type 2'];
 
-    /** @var IntegrationTypeExtension */
-    private $extension;
-
-    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $settingsProvider;
+    private IntegrationTypeExtension $extension;
+    private SettingsProvider&MockObject $settingsProvider;
 
     /**
      * @dataProvider buildFormProvider

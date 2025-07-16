@@ -6,14 +6,12 @@ use Oro\Bundle\ImportExportBundle\Event\DenormalizeEntityEvent;
 use Oro\Bundle\ImportExportBundle\Event\NormalizeEntityEvent;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityProbabilitySubscriber;
+use PHPUnit\Framework\TestCase;
 
-class OpportunityProbabilitySubscriberTest extends \PHPUnit\Framework\TestCase
+class OpportunityProbabilitySubscriberTest extends TestCase
 {
-    /** @var Opportunity */
-    private $opportunity;
-
-    /** @var OpportunityProbabilitySubscriber */
-    private $subscriber;
+    private Opportunity $opportunity;
+    private OpportunityProbabilitySubscriber $subscriber;
 
     #[\Override]
     protected function setUp(): void
@@ -23,7 +21,7 @@ class OpportunityProbabilitySubscriberTest extends \PHPUnit\Framework\TestCase
         $this->subscriber = new OpportunityProbabilitySubscriber();
     }
 
-    public function testBeforeNormalize()
+    public function testBeforeNormalize(): void
     {
         $this->opportunity->setProbability(0.1);
         $event = new NormalizeEntityEvent($this->opportunity, [], false);
@@ -31,7 +29,7 @@ class OpportunityProbabilitySubscriberTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('10', $this->opportunity->getProbability());
     }
 
-    public function testAfterDenormalize()
+    public function testAfterDenormalize(): void
     {
         $this->opportunity->setProbability('10');
         $event = new DenormalizeEntityEvent($this->opportunity, []);

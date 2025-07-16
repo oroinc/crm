@@ -18,12 +18,14 @@ use Oro\Component\MessageQueue\Test\JobRunner;
 use Oro\Component\MessageQueue\Transport\Message;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\Testing\ClassExtensionTrait;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
+class CalculateChannelAnalyticsProcessorTest extends TestCase
 {
     use ClassExtensionTrait;
 
@@ -167,7 +169,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(MessageProcessorInterface::REJECT, $status);
     }
 
-    public function testShouldBuildAnalyticsForGivenChannelIfChannelCustomerIdentityInstanceOfAnalyticsAwareInterface()
+    public function testShouldBuildAnalyticsForGivenChannelIfCustomerIdentityInstanceOfAnalyticsAwareInterface(): void
     {
         //guard
         $this->assertClassImplements(AnalyticsAwareInterface::class, CustomerAwareStub::class);
@@ -290,10 +292,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('theMessageId', $uniqueJobs[0]['ownerId']);
     }
 
-    /**
-     * @return EntityManagerInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private function getEntityManager()
+    private function getEntityManager(): EntityManagerInterface&MockObject
     {
         $connection = $this->createMock(Connection::class);
         $connection->expects(self::any())

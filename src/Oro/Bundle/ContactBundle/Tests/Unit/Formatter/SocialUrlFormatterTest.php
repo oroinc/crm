@@ -4,8 +4,9 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Formatter;
 
 use Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
 use Oro\Bundle\ContactBundle\Model\Social;
+use PHPUnit\Framework\TestCase;
 
-class SocialUrlFormatterTest extends \PHPUnit\Framework\TestCase
+class SocialUrlFormatterTest extends TestCase
 {
     /**
      * @param array $format
@@ -14,7 +15,7 @@ class SocialUrlFormatterTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider urlProvider
      */
-    public function testGetSocialUrl($format, $link, $username)
+    public function testGetSocialUrl($format, $link, $username): void
     {
         $formatter = new SocialUrlFormatter($format);
         $this->assertEquals($link, $formatter->getSocialUrl(Social::TWITTER, $username));
@@ -48,7 +49,7 @@ class SocialUrlFormatterTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider usernameProvider
      */
-    public function testGetSocialUsername($format, $link, $username)
+    public function testGetSocialUsername($format, $link, $username): void
     {
         $formatter = new SocialUrlFormatter($format);
         $this->assertEquals(
@@ -83,7 +84,7 @@ class SocialUrlFormatterTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetSocialUrlNoSocial()
+    public function testGetSocialUrlNoSocial(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown social network type "type"');
@@ -92,7 +93,7 @@ class SocialUrlFormatterTest extends \PHPUnit\Framework\TestCase
         $formatter->getSocialUrl('type', 'me');
     }
 
-    public function testGetSocialUsernameNoSocial()
+    public function testGetSocialUsernameNoSocial(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown social network type "type"');

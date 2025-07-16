@@ -6,14 +6,13 @@ use Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder;
 use Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RFMBuilderTest extends \PHPUnit\Framework\TestCase
+class RFMBuilderTest extends TestCase
 {
-    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $doctrineHelper;
-
-    /** @var RFMBuilder */
-    private $builder;
+    private DoctrineHelper&MockObject $doctrineHelper;
+    private RFMBuilder $builder;
 
     #[\Override]
     protected function setUp(): void
@@ -26,7 +25,7 @@ class RFMBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider supportsDataProvider
      */
-    public function testSupports(Channel $entity, bool $expected)
+    public function testSupports(Channel $entity, bool $expected): void
     {
         $this->assertSame($expected, $this->builder->supports($entity));
     }

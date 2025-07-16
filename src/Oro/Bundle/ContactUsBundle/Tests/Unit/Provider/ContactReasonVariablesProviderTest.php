@@ -5,11 +5,11 @@ namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Provider;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Provider\ContactReasonVariablesProvider;
 use Oro\Bundle\TestFrameworkBundle\Entity\TestActivity;
+use PHPUnit\Framework\TestCase;
 
-class ContactReasonVariablesProviderTest extends \PHPUnit\Framework\TestCase
+class ContactReasonVariablesProviderTest extends TestCase
 {
-    /** @var ContactReasonVariablesProvider */
-    private $contactReasonVariablesProvider;
+    private ContactReasonVariablesProvider $contactReasonVariablesProvider;
 
     #[\Override]
     protected function setUp(): void

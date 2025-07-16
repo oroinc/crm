@@ -8,19 +8,16 @@ use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
 use Oro\Bundle\ChannelBundle\Provider\MetadataProvider;
 use Oro\Bundle\ChannelBundle\Twig\ChannelExtension;
 use Oro\Component\Testing\Unit\TwigExtensionTestCaseTrait;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ChannelExtensionTest extends \PHPUnit\Framework\TestCase
+class ChannelExtensionTest extends TestCase
 {
     use TwigExtensionTestCaseTrait;
 
-    /** @var MetadataProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $metadataProvider;
-
-    /** @var AmountProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $amountProvider;
-
-    /** @var ChannelExtension */
-    private $extension;
+    private MetadataProvider&MockObject $metadataProvider;
+    private AmountProvider&MockObject $amountProvider;
+    private ChannelExtension $extension;
 
     #[\Override]
     protected function setUp(): void
@@ -36,7 +33,7 @@ class ChannelExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension = new ChannelExtension($container);
     }
 
-    public function testGetEntitiesMetadata()
+    public function testGetEntitiesMetadata(): void
     {
         $expectedResult = new \stdClass();
 
@@ -50,7 +47,7 @@ class ChannelExtensionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetChannelTypeMetadata()
+    public function testGetChannelTypeMetadata(): void
     {
         $expectedResult = ['key' => 'value'];
 
@@ -64,7 +61,7 @@ class ChannelExtensionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetLifetimeValue()
+    public function testGetLifetimeValue(): void
     {
         $expectedResult = 12.33;
         $account = $this->createMock(Account::class);

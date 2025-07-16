@@ -5,13 +5,14 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Builder;
 use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilderInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use PHPUnit\Framework\TestCase;
 
-class AnalyticsBuilderTest extends \PHPUnit\Framework\TestCase
+class AnalyticsBuilderTest extends TestCase
 {
     /**
      * @dataProvider buildDataProvider
      */
-    public function testBuild(array $builders)
+    public function testBuild(array $builders): void
     {
         $entity = $this->createMock(Channel::class);
 

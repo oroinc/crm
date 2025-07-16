@@ -8,13 +8,14 @@ use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityProbabilityType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Range;
 
-class OpportunityProbabilityTypeTest extends \PHPUnit\Framework\TestCase
+class OpportunityProbabilityTypeTest extends TestCase
 {
-    public function testConfigureOptions()
+    public function testConfigureOptions(): void
     {
         $resolver = new OptionsResolver();
         $type = $this->getFormType([]);
@@ -28,7 +29,7 @@ class OpportunityProbabilityTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider enumOptionsDataProvider
      */
-    public function testBuildForm(array $enumOptions)
+    public function testBuildForm(array $enumOptions): void
     {
         $type = $this->getFormType($enumOptions);
 

@@ -14,8 +14,9 @@ use Oro\Component\MessageQueue\Test\JobRunner;
 use Oro\Component\MessageQueue\Transport\Message;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\Testing\ClassExtensionTrait;
+use PHPUnit\Framework\TestCase;
 
-class AggregateLifetimeAverageProcessorTest extends \PHPUnit\Framework\TestCase
+class AggregateLifetimeAverageProcessorTest extends TestCase
 {
     use ClassExtensionTrait;
 

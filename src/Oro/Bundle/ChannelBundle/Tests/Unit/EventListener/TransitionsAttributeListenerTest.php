@@ -11,12 +11,12 @@ use Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType;
 use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
 use Oro\Component\ConfigExpression\ContextAccessor;
 use Oro\Component\Testing\Unit\PreloadedExtension;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Forms;
 
-class TransitionsAttributeListenerTest extends \PHPUnit\Framework\TestCase
+class TransitionsAttributeListenerTest extends TestCase
 {
-    /** @var TransitionsAttributeListener */
-    private $listener;
+    private TransitionsAttributeListener $listener;
 
     #[\Override]
     protected function setUp(): void
@@ -43,7 +43,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testWrongFormType()
+    public function testWrongFormType(): void
     {
         $attribute = new Attribute();
         $attributeOptions = ['form_type' => 'wrong_form'];
@@ -55,7 +55,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($attributeOptions, $event->getAttributeOptions());
     }
 
-    public function testNotAbstractChannelAwareType()
+    public function testNotAbstractChannelAwareType(): void
     {
         $attribute = new Attribute();
         $attributeOptions = ['form_type' => ChannelEntityType::class];

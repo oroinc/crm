@@ -4,15 +4,15 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\FormBundle\Form\Type\OroPercentType;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumValueType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\Range;
 
-class OpportunityStatusEnumValueTypeTest extends \PHPUnit\Framework\TestCase
+class OpportunityStatusEnumValueTypeTest extends TestCase
 {
-    /** @var OpportunityStatusEnumValueType */
-    private $type;
+    private OpportunityStatusEnumValueType $type;
 
     #[\Override]
     protected function setUp(): void
@@ -20,7 +20,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit\Framework\TestCase
         $this->type = new OpportunityStatusEnumValueType();
     }
 
-    public function testBuildForm()
+    public function testBuildForm(): void
     {
         $builder = $this->createMock(FormBuilderInterface::class);
 
@@ -30,7 +30,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider preSetDataProvider
      */
-    public function testPreSetData(string $enumOptionId, bool $shouldBeDisabled)
+    public function testPreSetData(string $enumOptionId, bool $shouldBeDisabled): void
     {
         $form = $this->createMock(FormInterface::class);
         $attr = [];

@@ -4,8 +4,9 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadAddress;
+use PHPUnit\Framework\TestCase;
 
-class LeadAddressTest extends \PHPUnit\Framework\TestCase
+class LeadAddressTest extends TestCase
 {
     public function testOwner(): void
     {

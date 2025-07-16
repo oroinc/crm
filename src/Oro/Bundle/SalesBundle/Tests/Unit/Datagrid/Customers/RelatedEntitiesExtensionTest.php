@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Datagrid\Customers;
 
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
@@ -15,14 +16,13 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
+class RelatedEntitiesExtensionTest extends TestCase
 {
-    /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $configProvider;
-
-    /** @var RelatedEntitiesExtension */
-    private $extension;
+    private ConfigProvider&MockObject $configProvider;
+    private RelatedEntitiesExtension $extension;
 
     #[\Override]
     protected function setUp(): void
@@ -38,7 +38,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider testIsApplicableDataProvider
      */
-    public function testIsApplicable(array $config, array $parameters, bool $result, ?bool $enabledConfig = null)
+    public function testIsApplicable(array $config, array $parameters, bool $result, ?bool $enabledConfig = null): void
     {
         $this->extension->setParameters(new ParameterBag($parameters));
         $this->prepareConfigProvider($parameters, $enabledConfig);
@@ -98,7 +98,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testVisitDatasource()
+    public function testVisitDatasource(): void
     {
         $customerClass = TestEntity::class;
         $customerField = ExtendHelper::buildAssociationName($customerClass, CustomerScope::ASSOCIATION_KIND);
@@ -120,7 +120,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->visitDatasource($config, $datasource);
     }
 
-    public function testVisitDatasourceNotFoundOpportunityFrom()
+    public function testVisitDatasourceNotFoundOpportunityFrom(): void
     {
         $this->expectException(DatasourceException::class);
         $this->expectExceptionMessage("Couldn't find Oro\Bundle\SalesBundle\Entity\Opportunity alias in QueryBuilder.");
@@ -154,7 +154,7 @@ class RelatedEntitiesExtensionTest extends \PHPUnit\Framework\TestCase
         $qb = $this->createMock(QueryBuilder::class);
         $qb->expects($this->never())
             ->method('getDQLPart');
-        $from = $this->createMock(Expr\From::class);
+        $from = $this->createMock(From::class);
         $from->expects($this->once())
             ->method('getFrom')
             ->willReturn($opportunityClass);

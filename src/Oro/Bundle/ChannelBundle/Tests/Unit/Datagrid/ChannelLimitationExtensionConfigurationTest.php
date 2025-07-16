@@ -3,24 +3,25 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Datagrid;
 
 use Oro\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtensionConfiguration;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
-class ChannelLimitationExtensionConfigurationTest extends \PHPUnit\Framework\TestCase
+class ChannelLimitationExtensionConfigurationTest extends TestCase
 {
-    public function testDefaultConfiguration()
+    public function testDefaultConfiguration(): void
     {
         $this->assertSame(['channel_relation_path' => '.dataChannel'], $this->processConfiguration([]));
     }
 
-    public function testGivenSomeValidConfiguration()
+    public function testGivenSomeValidConfiguration(): void
     {
         $resolved = $this->processConfiguration(['root' => ['channel_relation_path' => '.channel']]);
 
         $this->assertSame(['channel_relation_path' => '.channel'], $resolved);
     }
 
-    public function testInvalidRelationGiven()
+    public function testInvalidRelationGiven(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('Must contains relative path with single nesting');

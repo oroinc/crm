@@ -4,14 +4,14 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilder;
 
-class ChannelEntityTypeTest extends \PHPUnit\Framework\TestCase
+class ChannelEntityTypeTest extends TestCase
 {
-    /** @var ChannelEntityType */
-    private $type;
+    private ChannelEntityType $type;
 
     #[\Override]
     protected function setUp(): void
@@ -19,7 +19,7 @@ class ChannelEntityTypeTest extends \PHPUnit\Framework\TestCase
         $this->type = new ChannelEntityType();
     }
 
-    public function testType()
+    public function testType(): void
     {
         $this->assertSame('oro_channel_entities', $this->type->getName());
         $this->assertSame(HiddenType::class, $this->type->getParent());
@@ -27,7 +27,7 @@ class ChannelEntityTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(AbstractType::class, $this->type);
     }
 
-    public function testBuildForm()
+    public function testBuildForm(): void
     {
         $builder = $this->createMock(FormBuilder::class);
 

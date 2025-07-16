@@ -11,14 +11,14 @@ use Oro\Bundle\ContactBundle\EventListener\ImportEventListener;
 use Oro\Bundle\ContactBundle\ImportExport\Configuration\ContactImportExportConfigurationProvider;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ImportEventListenerTest extends \PHPUnit\Framework\TestCase
+class ImportEventListenerTest extends TestCase
 {
-    private OptionalListenerManager|\PHPUnit\Framework\MockObject\MockObject $optionalListenerManager;
-
-    private MessageProducerInterface|\PHPUnit\Framework\MockObject\MockObject $messageProducer;
-
+    private OptionalListenerManager&MockObject $optionalListenerManager;
+    private MessageProducerInterface&MockObject $messageProducer;
     private ImportEventListener $listener;
 
     #[\Override]

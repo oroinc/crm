@@ -11,20 +11,17 @@ use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class LeadActionsAccessProviderTest extends \PHPUnit\Framework\TestCase
+class LeadActionsAccessProviderTest extends TestCase
 {
-    /** @var FeatureChecker|\PHPUnit\Framework\MockObject\MockObject */
-    private $featureChecker;
-
-    /** @var WorkflowRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    private $workflowRegistry;
-
-    /** @var LeadActionsAccessProvider */
-    private $provider;
+    private FeatureChecker&MockObject $featureChecker;
+    private WorkflowRegistry&MockObject $workflowRegistry;
+    private LeadActionsAccessProvider $provider;
 
     #[\Override]
     protected function setUp(): void

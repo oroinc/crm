@@ -10,6 +10,8 @@ use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Oro\Bundle\FormBundle\Form\Type\MultipleEntityType;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
@@ -18,19 +20,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class AccountTypeTest extends \PHPUnit\Framework\TestCase
+class AccountTypeTest extends TestCase
 {
-    /** @var RouterInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $router;
-
-    /** @var EntityNameResolver|\PHPUnit\Framework\MockObject\MockObject */
-    private $entityNameResolver;
-
-    /** @var AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $authorizationChecker;
-
-    /** @var AccountType */
-    private $type;
+    private RouterInterface&MockObject $router;
+    private EntityNameResolver&MockObject $entityNameResolver;
+    private AuthorizationCheckerInterface&MockObject $authorizationChecker;
+    private AccountType $type;
 
     #[\Override]
     protected function setUp(): void
@@ -42,7 +37,7 @@ class AccountTypeTest extends \PHPUnit\Framework\TestCase
         $this->type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
     }
 
-    public function testAddEntityFields()
+    public function testAddEntityFields(): void
     {
         $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
@@ -62,7 +57,7 @@ class AccountTypeTest extends \PHPUnit\Framework\TestCase
         $this->type->buildForm($builder, []);
     }
 
-    public function testAddEntityFieldsWithoutContactPermission()
+    public function testAddEntityFieldsWithoutContactPermission(): void
     {
         $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
@@ -78,7 +73,7 @@ class AccountTypeTest extends \PHPUnit\Framework\TestCase
         $this->type->buildForm($builder, []);
     }
 
-    public function testConfigureOptions()
+    public function testConfigureOptions(): void
     {
         $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())
@@ -88,7 +83,7 @@ class AccountTypeTest extends \PHPUnit\Framework\TestCase
         $this->type->configureOptions($resolver);
     }
 
-    public function testFinishView()
+    public function testFinishView(): void
     {
         $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
@@ -152,7 +147,7 @@ class AccountTypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testFinishViewWithoutContactPermission()
+    public function testFinishViewWithoutContactPermission(): void
     {
         $this->authorizationChecker->expects($this->once())
             ->method('isGranted')

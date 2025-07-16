@@ -12,14 +12,15 @@ use Oro\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvi
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestCase
+class WidgetOpportunityByLeadSourceProviderTest extends TestCase
 {
     /**
      * @dataProvider opportunitiesBySourceDataProvider
      */
-    public function testSortByValue(array $inputData)
+    public function testSortByValue(array $inputData): void
     {
         $provider = $this->getProvider($inputData);
 
@@ -121,7 +122,8 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $processor = $this->createMock(DateFilterProcessor::class);
 
         $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
+        $translator->expects(self::any())
+            ->method('trans')
             ->willReturnArgument(0);
 
         $query = $this->createMock(AbstractQuery::class);
@@ -130,7 +132,8 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
         $opportunityRepo->expects($this->once())
             ->method('getOpportunitiesGroupByLeadSourceQueryBuilder')
             ->willReturn($queryBuilder);
-        $queryBuilder->method('getQuery')
+        $queryBuilder->expects(self::any())
+            ->method('getQuery')
             ->willReturn($query);
         $aclHelper->expects($this->once())
             ->method('apply')
@@ -142,7 +145,8 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestC
             ->with('SUM(CASE WHEN JSON_EXTRACT(o.serialized_data, \'status\') = \'opportunity_status.won\'
                 THEN () ELSE () END) as value');
         $enumTranslator = $this->createMock(EnumExtension::class);
-        $enumTranslator->method('transEnum')
+        $enumTranslator->expects(self::any())
+            ->method('transEnum')
             ->willReturnArgument(0);
         $qbTransformer = $this->createMock(CurrencyQueryBuilderTransformerInterface::class);
 

@@ -15,8 +15,9 @@ use Oro\Bundle\EmailBundle\Tools\EmailHolderHelper;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use PHPUnit\Framework\TestCase;
 
-class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
+class EmailDirectionProviderTest extends TestCase
 {
     private const FROM_EMAIL = 'from@example.com';
     private const TO_EMAIL = 'to@example.com';
@@ -67,7 +68,7 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetDirection()
+    public function testGetDirection(): void
     {
         $sender  = new TestEmailHolder(self::FROM_EMAIL);
         $recipient = new TestEmailHolder(self::TO_EMAIL);
@@ -87,7 +88,7 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testOutgoingDirectionForCustomEntity()
+    public function testOutgoingDirectionForCustomEntity(): void
     {
         $getMethodName = 'get' . $this->inflector->classify(self::COLUMN_NAME);
         $target = $this->getMockBuilder(\ArrayObject::class)
@@ -109,7 +110,7 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testIncomingDirectionForCustomEntity()
+    public function testIncomingDirectionForCustomEntity(): void
     {
         $getMethodName = 'get' . $this->inflector->classify(self::COLUMN_NAME);
         $target = $this->getMockBuilder(\ArrayObject::class)
@@ -137,7 +138,7 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testUnknownDirectionForCustomEntity()
+    public function testUnknownDirectionForCustomEntity(): void
     {
         $getMethodName = 'get' . $this->inflector->classify(self::COLUMN_NAME);
         $target = $this->getMockBuilder(\ArrayObject::class)
@@ -165,7 +166,7 @@ class EmailDirectionProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetDate()
+    public function testGetDate(): void
     {
         $email = new Email();
         $date  = new \DateTime('now', new \DateTimeZone('UTC'));

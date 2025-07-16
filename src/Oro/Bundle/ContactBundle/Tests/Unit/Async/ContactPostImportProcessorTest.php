@@ -9,16 +9,15 @@ use Oro\Bundle\TestFrameworkBundle\Test\Logger\LoggerAwareTraitTestTrait;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\Message;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ContactPostImportProcessorTest extends \PHPUnit\Framework\TestCase
+class ContactPostImportProcessorTest extends TestCase
 {
     use LoggerAwareTraitTestTrait;
 
-    /** @var ContactEmailAddressHandler|\PHPUnit\Framework\MockObject\MockObject */
-    private $contactEmailAddressHandler;
-
-    /** @var ContactPostImportProcessor */
-    private $processor;
+    private ContactEmailAddressHandler&MockObject $contactEmailAddressHandler;
+    private ContactPostImportProcessor $processor;
 
     #[\Override]
     protected function setUp(): void

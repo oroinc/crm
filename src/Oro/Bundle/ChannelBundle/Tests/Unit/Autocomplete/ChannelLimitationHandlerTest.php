@@ -12,8 +12,9 @@ use Oro\Bundle\SearchBundle\Engine\Indexer;
 use Oro\Bundle\SearchBundle\Provider\SearchMappingProvider;
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Query\Result;
+use PHPUnit\Framework\TestCase;
 
-class ChannelLimitationHandlerTest extends \PHPUnit\Framework\TestCase
+class ChannelLimitationHandlerTest extends TestCase
 {
     private const TEST_ENTITY_NAME = 'Oro\\Bundle\\ChannelBundle\\Tests\\Unit\\Stubs\\Entity\\StubEntity';
     private const TEST_ENTITY_ALIAS = 'oro_channel_stub';
@@ -22,8 +23,7 @@ class ChannelLimitationHandlerTest extends \PHPUnit\Framework\TestCase
     private const TEST_CHANNEL_RELATION_FIELD = 'some_fieldDataChannel';
     private const TEST_ID_FIELD = 'id';
 
-    /** @var ChannelLimitationHandler */
-    private $handler;
+    private ChannelLimitationHandler $handler;
 
     #[\Override]
     protected function setUp(): void
@@ -39,7 +39,7 @@ class ChannelLimitationHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider searchDataProvider
      */
-    public function testSearch(string $search, ?int $channelId, int $page, int $perPage)
+    public function testSearch(string $search, ?int $channelId, int $page, int $perPage): void
     {
         $indexer = $this->createMock(Indexer::class);
 

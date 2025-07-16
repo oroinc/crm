@@ -6,10 +6,11 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
+use PHPUnit\Framework\TestCase;
 
-class AccountTest extends \PHPUnit\Framework\TestCase
+class AccountTest extends TestCase
 {
-    public function testGettersSetters()
+    public function testGettersSetters(): void
     {
         $entity = new Account();
         $entity->setName('Test');
@@ -23,21 +24,21 @@ class AccountTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($organization, $entity->getOrganization());
     }
 
-    public function testBeforeSave()
+    public function testBeforeSave(): void
     {
         $entity = new Account();
         $entity->beforeSave();
         $this->assertInstanceOf(\DateTime::class, $entity->getCreatedAt());
     }
 
-    public function testDoPreUpdate()
+    public function testDoPreUpdate(): void
     {
         $entity = new Account();
         $entity->doPreUpdate();
         $this->assertInstanceOf(\DateTime::class, $entity->getUpdatedAt());
     }
 
-    public function testAddContact()
+    public function testAddContact(): void
     {
         $account = new Account();
         $account->setId(1);
@@ -53,7 +54,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($contact, current($actualContacts));
     }
 
-    public function testRemoveContact()
+    public function testRemoveContact(): void
     {
         $account = new Account();
         $account->setId(1);
@@ -68,7 +69,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($account->getContacts()->toArray());
     }
 
-    public function testOwners()
+    public function testOwners(): void
     {
         $entity = new Account();
         $user = new User();
@@ -80,7 +81,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($user, $entity->getOwner());
     }
 
-    public function testGetEmail()
+    public function testGetEmail(): void
     {
         $account = new Account();
         $contact = $this->createMock(Contact::class);
@@ -94,7 +95,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('email@example.com', $account->getEmail());
     }
 
-    public function testSetDefaultContact()
+    public function testSetDefaultContact(): void
     {
         $account = new Account();
         $this->assertNull($account->getDefaultContact());

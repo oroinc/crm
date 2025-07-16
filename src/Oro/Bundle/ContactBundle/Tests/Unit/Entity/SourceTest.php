@@ -3,16 +3,17 @@
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\ContactBundle\Entity\Source;
+use PHPUnit\Framework\TestCase;
 
-class SourceTest extends \PHPUnit\Framework\TestCase
+class SourceTest extends TestCase
 {
-    public function testName()
+    public function testName(): void
     {
         $obj = new Source('test');
         $this->assertEquals('test', $obj->getName());
     }
 
-    public function testLabel()
+    public function testLabel(): void
     {
         $obj = new Source('test');
         $obj->setLabel('TEST_LABEL');

@@ -6,11 +6,11 @@ use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use PHPUnit\Framework\TestCase;
 
-class RFMMetricCategoryTest extends \PHPUnit\Framework\TestCase
+class RFMMetricCategoryTest extends TestCase
 {
-    /** @var RFMMetricCategory */
-    private $entity;
+    private RFMMetricCategory $entity;
 
     #[\Override]
     protected function setUp(): void
@@ -25,7 +25,7 @@ class RFMMetricCategoryTest extends \PHPUnit\Framework\TestCase
      * @param mixed $expected
      * @param mixed $default
      */
-    public function testSettersAndGetters($property, $value, $expected, $default = null)
+    public function testSettersAndGetters($property, $value, $expected, $default = null): void
     {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $this->assertEquals($default, $propertyAccessor->getValue($this->entity, $property));

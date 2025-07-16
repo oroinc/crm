@@ -15,15 +15,16 @@ use Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber;
 use Oro\Bundle\EntityExtendBundle\Tools\EnumSynchronizer;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendDbIdentifierNameGenerator;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class OpportunityStatusConfigTypeTest extends \PHPUnit\Framework\TestCase
+class OpportunityStatusConfigTypeTest extends TestCase
 {
-    public function testShouldPopulateProbabilityFieldsFromSystemConfig()
+    public function testShouldPopulateProbabilityFieldsFromSystemConfig(): void
     {
         $configManager = $this->createMock(ConfigManager::class);
         $configManager->expects($this->once())
@@ -71,7 +72,7 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider eventDataProvider
      */
-    public function testShouldSaveProbabilityMapToSystemConfig(array $eventData)
+    public function testShouldSaveProbabilityMapToSystemConfig(array $eventData): void
     {
         $expectedData = [
             'in_progress' => 0.2,

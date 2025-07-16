@@ -13,8 +13,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 class ContactRequestTypeTest extends TypeTestCase
 {
-    /** @var ContactRequestType */
-    private $formType;
+    private ContactRequestType $formType;
 
     #[\Override]
     protected function setUp(): void

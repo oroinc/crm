@@ -14,12 +14,13 @@ use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityType;
 use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 
-class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
+class OpportunityTypeTest extends TestCase
 {
-    public function testShouldNotOverwriteProbability()
+    public function testShouldNotOverwriteProbability(): void
     {
         $opportunity = $this->getOpportunity('negotiation', 0.7);
         $event = $this->getFormEvent($opportunity);
@@ -30,7 +31,7 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0.7, $opportunity->getProbability());
     }
 
-    public function testShouldSetProbabilityBasedOnStatus()
+    public function testShouldSetProbabilityBasedOnStatus(): void
     {
         $opportunity = $this->getOpportunity('negotiation');
         $event = $this->getFormEvent($opportunity);
@@ -40,7 +41,7 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0.8, $event->getData()->getProbability());
     }
 
-    public function testShouldSetProbabilityBasedOnDefaultStatus()
+    public function testShouldSetProbabilityBasedOnDefaultStatus(): void
     {
         $opportunity = $this->getOpportunity();
         $event = $this->getFormEvent($opportunity);
@@ -50,7 +51,7 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0.1, $event->getData()->getProbability());
     }
 
-    public function testShouldNotChangeProbabilityWithoutDefaultStatus()
+    public function testShouldNotChangeProbabilityWithoutDefaultStatus(): void
     {
         $opportunity = $this->getOpportunity(null, 0.7);
         $event = $this->getFormEvent($opportunity);
@@ -61,7 +62,7 @@ class OpportunityTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0.7, $opportunity->getProbability());
     }
 
-    public function testShouldNotChangeProbabilityWithUnknownStatus()
+    public function testShouldNotChangeProbabilityWithUnknownStatus(): void
     {
         $opportunity = $this->getOpportunity('dummy', 0.7);
         $event = $this->getFormEvent($opportunity);

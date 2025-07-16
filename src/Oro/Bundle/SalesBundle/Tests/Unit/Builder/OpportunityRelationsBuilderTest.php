@@ -12,11 +12,11 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub;
 use Oro\Component\Testing\ReflectionUtil;
+use PHPUnit\Framework\TestCase;
 
-class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
+class OpportunityRelationsBuilderTest extends TestCase
 {
-    /** @var OpportunityRelationsBuilder */
-    private $relationsBuilder;
+    private OpportunityRelationsBuilder $relationsBuilder;
 
     #[\Override]
     protected function setUp(): void
@@ -48,7 +48,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
         return $b2bCustomer;
     }
 
-    public function testShouldSetCustomerOrganization()
+    public function testShouldSetCustomerOrganization(): void
     {
         $organization = new Organization();
         $b2bCustomer = $this->getB2bCustomer();
@@ -65,8 +65,10 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider customerRelationIdentifiersProvider
      */
-    public function testShouldSetCustomerContactIfAtLeastOneOrBothRecordsAreNew(?int $b2bCustomerId, ?int $contactId)
-    {
+    public function testShouldSetCustomerContactIfAtLeastOneOrBothRecordsAreNew(
+        ?int $b2bCustomerId,
+        ?int $contactId
+    ): void {
         $b2bCustomer = $this->getB2bCustomer($b2bCustomerId);
         $customer = $this->getCustomer(new Account(), $b2bCustomer);
 
@@ -89,7 +91,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testShouldNotSetCustomerContactIfAlreadyExists()
+    public function testShouldNotSetCustomerContactIfAlreadyExists(): void
     {
         $contact = new Contact();
         $b2bCustomer = $this->getB2bCustomer();
@@ -106,7 +108,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertNotSame($opportunityContact, $b2bCustomer->getContact());
     }
 
-    public function testShouldNotSetCustomerContactIfBothRecordsAreOld()
+    public function testShouldNotSetCustomerContactIfBothRecordsAreOld(): void
     {
         $b2bCustomer = $this->getB2bCustomer(1);
         $customer = $this->getCustomer(new Account(), $b2bCustomer);
@@ -124,7 +126,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider accountRelationIdentifiersProvider
      */
-    public function testShouldAddContactToAccountIfAtLeastOneOrBothRecordsAreNew(?int $accountId, ?int $contactId)
+    public function testShouldAddContactToAccountIfAtLeastOneOrBothRecordsAreNew(?int $accountId, ?int $contactId): void
     {
         $contact = new Contact();
         $contact->setId($contactId);

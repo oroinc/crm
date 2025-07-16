@@ -26,20 +26,11 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     private const TEST_CHANNEL_ID = 1;
     private const TEST_ACCOUNT_ID = 112;
 
-    /** @var LifetimeHistoryRepository */
-    private $lifetimeRepo;
-
-    /** @var CustomerRepository */
-    private $customerRepo;
-
-    /** @var EntityManager */
-    private $em;
-
-    /** @var UnitOfWork */
-    private $uow;
-
-    /** @var ChannelDoctrineListener */
-    private $channelDoctrineListener;
+    private LifetimeHistoryRepository $lifetimeRepo;
+    private CustomerRepository $customerRepo;
+    private EntityManager $em;
+    private UnitOfWork $uow;
+    private ChannelDoctrineListener $channelDoctrineListener;
 
     private array $settings = [
         'someChannelType' => [
@@ -48,13 +39,9 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         ]
     ];
 
-    /** @var SettingsProvider */
-    private $settingsProvider;
-
-    /** @var MessageProducerInterface */
-    private $messageProducer;
-    /** @var LifetimeHistoryStatusUpdateManager */
-    private $statusUpdateManager;
+    private SettingsProvider $settingsProvider;
+    private MessageProducerInterface $messageProducer;
+    private LifetimeHistoryStatusUpdateManager $statusUpdateManager;
 
     #[\Override]
     protected function setUp(): void

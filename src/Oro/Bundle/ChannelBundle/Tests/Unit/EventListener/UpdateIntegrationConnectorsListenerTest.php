@@ -9,29 +9,18 @@ use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpdateIntegrationConnectorsListenerTest extends \PHPUnit\Framework\TestCase
+class UpdateIntegrationConnectorsListenerTest extends TestCase
 {
-    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    private $registry;
-
-    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $settingProvider;
-
-    /** @var ChannelSaveEvent|\PHPUnit\Framework\MockObject\MockObject */
-    private $event;
-
-    /** @var Channel */
-    private $entity;
-
-    /** @var Integration */
-    private $integration;
-
-    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $em;
-
-    /** @var UpdateIntegrationConnectorsListener */
-    private $listener;
+    private ManagerRegistry&MockObject $registry;
+    private SettingsProvider&MockObject $settingProvider;
+    private ChannelSaveEvent&MockObject $event;
+    private Channel $entity;
+    private Integration $integration;
+    private EntityManager&MockObject $em;
+    private UpdateIntegrationConnectorsListener $listener;
 
     #[\Override]
     protected function setUp(): void
@@ -51,7 +40,7 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit\Framework\TestCas
         );
     }
 
-    public function testOnChannelSave()
+    public function testOnChannelSave(): void
     {
         $this->prepareEvent();
 

@@ -5,8 +5,9 @@ namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Model;
 use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 use Oro\Bundle\TestFrameworkBundle\Entity\TestActivity;
 use Oro\Bundle\UserBundle\Entity\User;
+use PHPUnit\Framework\TestCase;
 
-class TargetExcludeListTest extends \PHPUnit\Framework\TestCase
+class TargetExcludeListTest extends TestCase
 {
     public function isExcludedDataProvider(): array
     {

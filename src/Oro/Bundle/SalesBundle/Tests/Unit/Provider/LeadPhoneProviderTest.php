@@ -5,11 +5,11 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 use Oro\Bundle\SalesBundle\Provider\LeadPhoneProvider;
+use PHPUnit\Framework\TestCase;
 
-class LeadPhoneProviderTest extends \PHPUnit\Framework\TestCase
+class LeadPhoneProviderTest extends TestCase
 {
-    /** @var LeadPhoneProvider */
-    private $provider;
+    private LeadPhoneProvider $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -17,7 +17,7 @@ class LeadPhoneProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider = new LeadPhoneProvider();
     }
 
-    public function testGetPhoneNumber()
+    public function testGetPhoneNumber(): void
     {
         $entity = new Lead();
 
@@ -37,7 +37,7 @@ class LeadPhoneProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetPhoneNumbers()
+    public function testGetPhoneNumbers(): void
     {
         $entity = new Lead();
 

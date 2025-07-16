@@ -5,11 +5,11 @@ namespace Oro\Bundle\CaseBundle\Tests\Unit\Provider;
 use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
 use Oro\Bundle\CaseBundle\Form\Type\CaseMailboxProcessSettingsType;
 use Oro\Bundle\CaseBundle\Provider\CaseMailboxProcessProvider;
+use PHPUnit\Framework\TestCase;
 
-class CaseMailboxProcessProviderTest extends \PHPUnit\Framework\TestCase
+class CaseMailboxProcessProviderTest extends TestCase
 {
-    /** @var CaseMailboxProcessProvider */
-    private $provider;
+    private CaseMailboxProcessProvider $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -17,12 +17,12 @@ class CaseMailboxProcessProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider = new CaseMailboxProcessProvider();
     }
 
-    public function testIsEnabled()
+    public function testIsEnabled(): void
     {
         self::assertTrue($this->provider->isEnabled());
     }
 
-    public function testGetProcessDefinitionName()
+    public function testGetProcessDefinitionName(): void
     {
         self::assertEquals(
             CaseMailboxProcessProvider::PROCESS_DEFINITION_NAME,
@@ -30,17 +30,17 @@ class CaseMailboxProcessProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetSettingsEntityFQCN()
+    public function testGetSettingsEntityFQCN(): void
     {
         self::assertEquals(CaseMailboxProcessSettings::class, $this->provider->getSettingsEntityFQCN());
     }
 
-    public function testGetSettingsFormType()
+    public function testGetSettingsFormType(): void
     {
         self::assertEquals(CaseMailboxProcessSettingsType::class, $this->provider->getSettingsFormType());
     }
 
-    public function testGetLabel()
+    public function testGetLabel(): void
     {
         self::assertEquals('oro.case.mailbox.process.case.label', $this->provider->getLabel());
     }

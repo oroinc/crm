@@ -3,13 +3,13 @@
 namespace Oro\Bundle\CaseBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\CaseBundle\Form\Type\CaseEntityType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CaseEntityTypeTest extends \PHPUnit\Framework\TestCase
+class CaseEntityTypeTest extends TestCase
 {
-    /** @var CaseEntityType */
-    private $formType;
+    private CaseEntityType $formType;
 
     #[\Override]
     protected function setUp(): void
@@ -20,7 +20,7 @@ class CaseEntityTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider formTypeProvider
      */
-    public function testBuildForm(array $widgets)
+    public function testBuildForm(array $widgets): void
     {
         $builder = $this->createMock(FormBuilder::class);
         $builder->expects($this->exactly(count($widgets)))
@@ -55,7 +55,7 @@ class CaseEntityTypeTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testConfigureOptions()
+    public function testConfigureOptions(): void
     {
         $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())

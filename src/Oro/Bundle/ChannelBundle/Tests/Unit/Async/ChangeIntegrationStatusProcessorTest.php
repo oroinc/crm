@@ -15,23 +15,21 @@ use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\Message;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\Testing\ClassExtensionTrait;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class ChangeIntegrationStatusProcessorTest extends \PHPUnit\Framework\TestCase
+class ChangeIntegrationStatusProcessorTest extends TestCase
 {
     use ClassExtensionTrait;
     use LoggerAwareTraitTestTrait;
 
-    private StateProvider|\PHPUnit\Framework\MockObject\MockObject $stateProvider;
-
-    private EntityManager|\PHPUnit\Framework\MockObject\MockObject $entityManager;
-
-    private SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session;
-
+    private StateProvider&MockObject $stateProvider;
+    private EntityManager&MockObject $entityManager;
+    private SessionInterface&MockObject $session;
     private Channel $channel;
-
     private ChangeIntegrationStatusProcessor $processor;
 
     #[\Override]

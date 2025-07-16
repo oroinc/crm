@@ -3,11 +3,11 @@
 namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
+use PHPUnit\Framework\TestCase;
 
-class CaseSourceTest extends \PHPUnit\Framework\TestCase
+class CaseSourceTest extends TestCase
 {
-    /** @var CaseSource */
-    private $caseSource;
+    private CaseSource $caseSource;
 
     #[\Override]
     protected function setUp(): void
@@ -15,12 +15,12 @@ class CaseSourceTest extends \PHPUnit\Framework\TestCase
         $this->caseSource = new CaseSource('test');
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         $this->assertEquals('test', $this->caseSource->getName());
     }
 
-    public function testLabel()
+    public function testLabel(): void
     {
         $this->assertNull($this->caseSource->getLabel());
 
@@ -30,7 +30,7 @@ class CaseSourceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($label, $this->caseSource->getLabel());
     }
 
-    public function testLocale()
+    public function testLocale(): void
     {
         $this->assertNull($this->caseSource->getLocale());
 

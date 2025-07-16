@@ -10,17 +10,14 @@ use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 use Oro\Component\DependencyInjection\ServiceLink;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ContactEntityNameProviderTest extends \PHPUnit\Framework\TestCase
+class ContactEntityNameProviderTest extends TestCase
 {
-    /** @var NameFormatter|\PHPUnit\Framework\MockObject\MockObject */
-    private $nameFormatter;
-
-    /** @var DQLNameFormatter|\PHPUnit\Framework\MockObject\MockObject */
-    private $dqlNameFormatter;
-
-    /** @var ContactEntityNameProvider */
-    private $provider;
+    private NameFormatter&MockObject $nameFormatter;
+    private DQLNameFormatter&MockObject $dqlNameFormatter;
+    private ContactEntityNameProvider $provider;
 
     #[\Override]
     protected function setUp(): void

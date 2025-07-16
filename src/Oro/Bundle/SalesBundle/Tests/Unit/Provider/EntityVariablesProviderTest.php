@@ -6,11 +6,11 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityExtendBundle\Extend\RelationType;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Provider\EntityVariablesProvider;
+use PHPUnit\Framework\TestCase;
 
-class EntityVariablesProviderTest extends \PHPUnit\Framework\TestCase
+class EntityVariablesProviderTest extends TestCase
 {
-    /** @var EntityVariablesProvider */
-    private $variableProvider;
+    private EntityVariablesProvider $variableProvider;
 
     #[\Override]
     protected function setUp(): void

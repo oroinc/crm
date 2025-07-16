@@ -8,6 +8,7 @@ use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\EntityBundle\Provider\EntityProvider;
 use Oro\Component\Testing\Unit\PreloadedExtension;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -19,11 +20,8 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
     private const TEST_CHANNEL_TYPE = 'test_type';
     private const TEST_CUSTOMER_IDENTITY = 'Oro\Bundle\AcmeBundle\Entity\Test1';
 
-    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $settingsProvider;
-
-    /** @var ChannelTypeSubscriber */
-    private $subscriber;
+    private SettingsProvider&MockObject $settingsProvider;
+    private ChannelTypeSubscriber $subscriber;
 
     #[\Override]
     protected function setUp(): void

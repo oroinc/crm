@@ -41,14 +41,9 @@ class OpportunityByStatusProviderTest extends TestCase
         'oro.entity_extend.enum_option.opportunity_status.lost' => 'Closed Lost'
     ];
 
-    /** @var ManagerRegistry|MockObject */
-    private $doctrine;
-
-    /** @var AclHelper|MockObject */
-    private $aclHelper;
-
-    /** @var OpportunityByStatusProvider */
-    private $provider;
+    private ManagerRegistry&MockObject $doctrine;
+    private AclHelper&MockObject $aclHelper;
+    private OpportunityByStatusProvider $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -76,7 +71,7 @@ class OpportunityByStatusProviderTest extends TestCase
     /**
      * @dataProvider getOpportunitiesGroupedByStatusDQLDataProvider
      */
-    public function testGetOpportunitiesGroupedByStatusDQL(WidgetOptionBag $widgetOptions, string $expectation)
+    public function testGetOpportunitiesGroupedByStatusDQL(WidgetOptionBag $widgetOptions, string $expectation): void
     {
         $opportunityQB = new QueryBuilder($this->createMock(EntityManagerInterface::class));
         $opportunityQB->from(Opportunity::class, 'o');
@@ -199,7 +194,7 @@ DQL
         WidgetOptionBag $widgetOptions,
         array $result,
         array $expected
-    ) {
+    ): void {
         $opportunityQB = new QueryBuilder($this->createMock(EntityManagerInterface::class));
         $opportunityQB->from(Opportunity::class, 'o');
 

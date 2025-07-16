@@ -11,17 +11,14 @@ use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RFMCategoryListenerTest extends \PHPUnit\Framework\TestCase
+class RFMCategoryListenerTest extends TestCase
 {
-    /** @var RFMMetricStateManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $manager;
-
-    /** @var CalculateAnalyticsScheduler */
-    private $scheduler;
-
-    /** @var RFMCategoryListener */
-    private $listener;
+    private RFMMetricStateManager&MockObject $manager;
+    private CalculateAnalyticsScheduler $scheduler;
+    private RFMCategoryListener $listener;
 
     #[\Override]
     protected function setUp(): void
@@ -46,7 +43,7 @@ class RFMCategoryListenerTest extends \PHPUnit\Framework\TestCase
         array $deleteEntities,
         int $expectedResetMetrics = 0,
         int $expectedScheduleRecalculation = 0
-    ) {
+    ): void {
         $em = $this->createMock(EntityManager::class);
         $uow = $this->createMock(UnitOfWork::class);
 

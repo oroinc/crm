@@ -7,8 +7,9 @@ use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider;
+use PHPUnit\Framework\TestCase;
 
-class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
+class CustomerAssignmentVirtualRelationProviderTest extends TestCase
 {
     private const CLASS_NAME = B2bCustomer::class;
 
@@ -63,8 +64,7 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
         ]
     ];
 
-    /** @var CustomerAssignmentVirtualRelationProvider */
-    private $provider;
+    private CustomerAssignmentVirtualRelationProvider $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -75,7 +75,7 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
     /**
      * @dataProvider isVirtualRelationDataProvider
      */
-    public function testIsVirtualRelation(string $class, string $field, bool $expected)
+    public function testIsVirtualRelation(string $class, string $field, bool $expected): void
     {
         $this->assertEquals($expected, $this->provider->isVirtualRelation($class, $field));
     }
@@ -114,7 +114,7 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
     /**
      * @dataProvider getVirtualRelationsDataProvider
      */
-    public function testGetVirtualRelations(string $className, array $expected)
+    public function testGetVirtualRelations(string $className, array $expected): void
     {
         $this->assertEquals($expected, $this->provider->getVirtualRelations($className));
     }
@@ -136,7 +136,7 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
     /**
      * @dataProvider getVirtualRelationQueryDataProvider
      */
-    public function testGetVirtualRelationQuery(string $class, string $field, array $expected)
+    public function testGetVirtualRelationQuery(string $class, string $field, array $expected): void
     {
         $this->assertEquals($expected, $this->provider->getVirtualRelationQuery($class, $field));
     }
@@ -176,7 +176,7 @@ class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit\Framework\T
     /**
      * @dataProvider getTargetJoinAliasDataProvider
      */
-    public function testGetTargetJoinAlias(string $class, string $field, string $expected)
+    public function testGetTargetJoinAlias(string $class, string $field, string $expected): void
     {
         $this->assertEquals($expected, $this->provider->getTargetJoinAlias($class, $field));
     }

@@ -12,17 +12,14 @@ use Oro\Bundle\ApiBundle\Request\ApiSubresource;
 use Oro\Bundle\ApiBundle\Request\RequestType;
 use Oro\Bundle\SalesBundle\Api\AccountCustomerAssociationProvider;
 use Oro\Bundle\SalesBundle\Api\Processor\ExcludeChangeCustomerSubresources;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ExcludeChangeCustomerSubresourcesTest extends \PHPUnit\Framework\TestCase
+class ExcludeChangeCustomerSubresourcesTest extends TestCase
 {
-    /** @var AccountCustomerAssociationProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $accountCustomerAssociationProvider;
-
-    /** @var ExcludeChangeCustomerSubresources */
-    private $processor;
-
-    /** @var CollectSubresourcesContext */
-    private $context;
+    private AccountCustomerAssociationProvider&MockObject $accountCustomerAssociationProvider;
+    private ExcludeChangeCustomerSubresources $processor;
+    private CollectSubresourcesContext $context;
 
     #[\Override]
     protected function setUp(): void

@@ -7,21 +7,18 @@ use Oro\Bundle\EntityExtendBundle\Test\ExtendedEntityTestTrait;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Form\DataTransformer\CustomerToStringTransformer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class CustomerToStringTransformerTest extends \PHPUnit\Framework\TestCase
+class CustomerToStringTransformerTest extends TestCase
 {
     use ExtendedEntityTestTrait;
 
-    /** @var DataTransformerInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $entityToStringTransformer;
-
-    /** @var AccountCustomerManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $accountCustomerManager;
-
-    /** @var CustomerToStringTransformer */
-    private $transformer;
+    private DataTransformerInterface&MockObject $entityToStringTransformer;
+    private AccountCustomerManager&MockObject $accountCustomerManager;
+    private CustomerToStringTransformer $transformer;
 
     #[\Override]
     protected function setUp(): void

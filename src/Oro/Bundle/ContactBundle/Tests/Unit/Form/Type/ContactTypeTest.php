@@ -14,15 +14,15 @@ use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
 use Oro\Bundle\TranslationBundle\Form\Type\TranslatableEntityType;
 use Oro\Bundle\UserBundle\Form\Type\GenderType;
 use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ContactTypeTest extends \PHPUnit\Framework\TestCase
+class ContactTypeTest extends TestCase
 {
-    /** @var ContactType */
-    private $type;
+    private ContactType $type;
 
     #[\Override]
     protected function setUp(): void
@@ -30,7 +30,7 @@ class ContactTypeTest extends \PHPUnit\Framework\TestCase
         $this->type = new ContactType();
     }
 
-    public function testConfigureOptions()
+    public function testConfigureOptions(): void
     {
         $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())
@@ -39,7 +39,7 @@ class ContactTypeTest extends \PHPUnit\Framework\TestCase
         $this->type->configureOptions($resolver);
     }
 
-    public function testBuildForm()
+    public function testBuildForm(): void
     {
         $fields = [
             ['namePrefix', TextType::class],

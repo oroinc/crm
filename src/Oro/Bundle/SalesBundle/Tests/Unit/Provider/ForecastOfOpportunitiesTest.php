@@ -11,24 +11,17 @@ use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
 use Oro\Component\Testing\ReflectionUtil;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
+class ForecastOfOpportunitiesTest extends TestCase
 {
-    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $translator;
-
-    /** @var ForecastProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $forecastProvider;
-
-    /** @var DateHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $dateHelper;
-
-    /** @var FilterDateRangeConverter|\PHPUnit\Framework\MockObject\MockObject */
-    private $filterDateRangeConverter;
-
-    /** @var ForecastOfOpportunities */
-    private $provider;
+    private TranslatorInterface&MockObject $translator;
+    private ForecastProvider&MockObject $forecastProvider;
+    private DateHelper&MockObject $dateHelper;
+    private FilterDateRangeConverter&MockObject $filterDateRangeConverter;
+    private ForecastOfOpportunities $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -60,7 +53,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testForecastOfOpportunitiesValues()
+    public function testForecastOfOpportunitiesValues(): void
     {
         $options = [
             'dateRange' => ['start' => null, 'end' => null]
@@ -85,7 +78,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['value' => 500], $result);
     }
 
-    public function testForecastOfOpportunitiesValuesWithCompareDate()
+    public function testForecastOfOpportunitiesValuesWithCompareDate(): void
     {
         $start = new \DateTime();
         $start->setDate(2016, 6, 1)->setTime(0, 0, 0);

@@ -6,21 +6,20 @@ use Oro\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
 use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Test\FormInterface;
 
-class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
+class DatasourceDataTransformerTest extends TestCase
 {
     private const TEST_TYPE = 'testType';
     private const TEST_NAME = 'testName';
 
-    /** @var FormFactoryInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $formFactory;
-
-    /** @var DatasourceDataTransformer */
-    private $transformer;
+    private FormFactoryInterface&MockObject $formFactory;
+    private DatasourceDataTransformer $transformer;
 
     #[\Override]
     protected function setUp(): void
@@ -35,7 +34,7 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
      * @param mixed $data
      * @param mixed $expectedResult
      */
-    public function testTransform($data, $expectedResult)
+    public function testTransform($data, $expectedResult): void
     {
         $this->assertSame($expectedResult, $this->transformer->transform($data));
     }
@@ -69,14 +68,13 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider reverseTransformDataProvider
-     *
-     * @param mixed       $data
-     * @param mixed       $expectedResult
-     * @param bool        $expectedSubmit
-     * @param null|string $expectedException
      */
-    public function testReverseTransform($data, $expectedResult, $expectedSubmit = false, $expectedException = null)
-    {
+    public function testReverseTransform(
+        mixed $data,
+        mixed $expectedResult,
+        bool $expectedSubmit = false,
+        ?string $expectedException = null
+    ): void {
         if (null !== $expectedException) {
             $this->expectException($expectedException);
         }
@@ -85,7 +83,7 @@ class DatasourceDataTransformerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame($expectedResult, $this->transformer->reverseTransform($data));
     }
-    public function testReverseTransformShouldBindData()
+    public function testReverseTransformShouldBindData(): void
     {
         $this->initializeMocks(true);
 

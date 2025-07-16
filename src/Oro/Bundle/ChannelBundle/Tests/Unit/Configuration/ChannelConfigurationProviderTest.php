@@ -10,8 +10,9 @@ use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer;
 use Oro\Component\Config\CumulativeResourceManager;
 use Oro\Component\Config\Resolver\ResolverInterface;
 use Oro\Component\Testing\TempDirExtension;
+use PHPUnit\Framework\TestCase;
 
-class ChannelConfigurationProviderTest extends \PHPUnit\Framework\TestCase
+class ChannelConfigurationProviderTest extends TestCase
 {
     use TempDirExtension;
 
@@ -39,7 +40,7 @@ class ChannelConfigurationProviderTest extends \PHPUnit\Framework\TestCase
             ]);
     }
 
-    public function testGetEntities()
+    public function testGetEntities(): void
     {
         $this->assertEquals(
             [
@@ -77,7 +78,7 @@ class ChannelConfigurationProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetDependentEntitiesMap()
+    public function testGetDependentEntitiesMap(): void
     {
         $this->assertEquals(
             [
@@ -95,7 +96,7 @@ class ChannelConfigurationProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetChannelTypes()
+    public function testGetChannelTypes(): void
     {
         $this->assertEquals(
             [
@@ -124,7 +125,7 @@ class ChannelConfigurationProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetCustomerEntities()
+    public function testGetCustomerEntities(): void
     {
         $this->assertEquals(
             [Customer::class, CustomerIdentity::class],

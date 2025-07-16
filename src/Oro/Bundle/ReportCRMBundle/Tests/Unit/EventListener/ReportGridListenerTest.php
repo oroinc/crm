@@ -8,8 +8,9 @@ use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\DataGridBundle\Provider\State\DatagridStateProviderInterface;
 use Oro\Bundle\ReportCRMBundle\EventListener\ReportGridListener;
+use PHPUnit\Framework\TestCase;
 
-class ReportGridListenerTest extends \PHPUnit\Framework\TestCase
+class ReportGridListenerTest extends TestCase
 {
     /**
      * @dataProvider onBuildBeforeDataProvider

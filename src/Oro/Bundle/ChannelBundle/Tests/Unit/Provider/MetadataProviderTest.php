@@ -8,9 +8,10 @@ use Oro\Bundle\EntityBundle\Provider\EntityProvider;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouterInterface;
 
-class MetadataProviderTest extends \PHPUnit\Framework\TestCase
+class MetadataProviderTest extends TestCase
 {
     private int $entityId1 = 35;
     private int $entityId2 = 84;
@@ -62,7 +63,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
         'icon'         => '',
     ];
 
-    public function testGetEntitiesMetadata()
+    public function testGetEntitiesMetadata(): void
     {
         $settingsProvider = $this->createMock(SettingsProvider::class);
         $settingsProvider->expects($this->once())

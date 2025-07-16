@@ -7,12 +7,13 @@ use Oro\Bundle\ChannelBundle\Entity\EntityName;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as IntegrationChannel;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Component\Testing\Unit\EntityTestCaseTrait;
+use PHPUnit\Framework\TestCase;
 
-class ChannelTest extends \PHPUnit\Framework\TestCase
+class ChannelTest extends TestCase
 {
     use EntityTestCaseTrait;
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $properties = [
             'id'                       => ['id', 1],
@@ -34,7 +35,7 @@ class ChannelTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider entitiesDataProvider
      */
-    public function testEntities(array $loadedNames, array $toSet, array $expectedResult)
+    public function testEntities(array $loadedNames, array $toSet, array $expectedResult): void
     {
         $entity = new Channel();
         foreach ($loadedNames as $name) {
@@ -63,7 +64,7 @@ class ChannelTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testPrePersist()
+    public function testPrePersist(): void
     {
         $entity = new Channel();
         $entity->prePersist();
@@ -80,7 +81,7 @@ class ChannelTest extends \PHPUnit\Framework\TestCase
         self::assertNotSame($existingUpdatedAt, $entity->getUpdatedAt());
     }
 
-    public function testPreUpdate()
+    public function testPreUpdate(): void
     {
         $entity = new Channel();
         $entity->preUpdate();
@@ -92,7 +93,7 @@ class ChannelTest extends \PHPUnit\Framework\TestCase
         self::assertNotSame($existingUpdatedAt, $entity->getUpdatedAt());
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $entity = new Channel();
         $this->assertSame('', (string)$entity);

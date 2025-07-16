@@ -9,11 +9,11 @@ use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProvider;
 use Oro\Bundle\UIBundle\Model\Image;
+use PHPUnit\Framework\TestCase;
 
-class CustomerIconProviderTest extends \PHPUnit\Framework\TestCase
+class CustomerIconProviderTest extends TestCase
 {
-    /** @var CustomerIconProvider */
-    private $customerIconProvider;
+    private CustomerIconProvider $customerIconProvider;
 
     #[\Override]
     protected function setUp(): void
@@ -46,7 +46,7 @@ class CustomerIconProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getIconProvider
      */
-    public function testGetIcon(object $entity, ?Image $expectedImage)
+    public function testGetIcon(object $entity, ?Image $expectedImage): void
     {
         $this->assertEquals(
             $expectedImage,

@@ -9,14 +9,13 @@ use Oro\Bundle\EntityExtendBundle\Entity\Manager\AssociationManager;
 use Oro\Bundle\SalesBundle\Provider\CustomerVirtualRelationProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CustomerVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
+class CustomerVirtualRelationProviderTest extends TestCase
 {
-    /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $configProvider;
-
-    /** @var CustomerVirtualRelationProvider */
-    private $provider;
+    private ConfigProvider&MockObject $configProvider;
+    private CustomerVirtualRelationProvider $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -32,22 +31,22 @@ class CustomerVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider->setSourceClass(LeadStub::class);
     }
 
-    public function testIsVirtualRelationWithNotSupportedClass()
+    public function testIsVirtualRelationWithNotSupportedClass(): void
     {
         self::assertFalse($this->provider->isVirtualRelation('Some\Test\Class', 'testField'));
     }
 
-    public function testIsVirtualRelationWithNotSupportedField()
+    public function testIsVirtualRelationWithNotSupportedField(): void
     {
         self::assertFalse($this->provider->isVirtualRelation(LeadStub::class, 'testField'));
     }
 
-    public function testIsVirtualRelation()
+    public function testIsVirtualRelation(): void
     {
         self::assertTrue($this->provider->isVirtualRelation(LeadStub::class, 'target_field'));
     }
 
-    public function testGetVirtualRelationQuery()
+    public function testGetVirtualRelationQuery(): void
     {
         self::assertEquals(
             [
@@ -70,12 +69,12 @@ class CustomerVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetVirtualRelationsOnNonSupportedClass()
+    public function testGetVirtualRelationsOnNonSupportedClass(): void
     {
         self::assertEquals([], $this->provider->getVirtualRelations('Some\Test\Class'));
     }
 
-    public function testGetVirtualRelations()
+    public function testGetVirtualRelations(): void
     {
         $customerConfig = new Config(
             new EntityConfigId('entity', CustomerStub::class),
@@ -118,7 +117,7 @@ class CustomerVirtualRelationProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetTargetJoinAlias()
+    public function testGetTargetJoinAlias(): void
     {
         self::assertEquals('test', $this->provider->getTargetJoinAlias('someClass', 'test'));
     }

@@ -11,12 +11,13 @@ use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Form\Type\CustomerType;
 use Oro\Bundle\SalesBundle\Form\Type\LeadType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LeadTypeTest extends \PHPUnit\Framework\TestCase
+class LeadTypeTest extends TestCase
 {
     private LeadType $type;
 
@@ -26,7 +27,7 @@ class LeadTypeTest extends \PHPUnit\Framework\TestCase
         $this->type = new LeadType();
     }
 
-    public function testBuildForm()
+    public function testBuildForm(): void
     {
         $fields = [
             ['name', TextType::class],
@@ -61,12 +62,12 @@ class LeadTypeTest extends \PHPUnit\Framework\TestCase
         $this->type->buildForm($builder, ['data_class' => Lead::class]);
     }
 
-    public function testName()
+    public function testName(): void
     {
         $this->assertEquals('oro_sales_lead', $this->type->getName());
     }
 
-    public function testConfigureOptions()
+    public function testConfigureOptions(): void
     {
         $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())

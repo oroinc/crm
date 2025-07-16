@@ -23,20 +23,15 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Component\Testing\ReflectionUtil;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ActivityListenerTest extends \PHPUnit\Framework\TestCase
+class ActivityListenerTest extends TestCase
 {
-    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $doctrineHelper;
-
-    /** @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $config;
-
-    /** @var ActivityListener */
-    private $listener;
-
-    /** @var ActivityContactProvider */
-    private $activityContactProvider;
+    private DoctrineHelper&MockObject $doctrineHelper;
+    private ConfigInterface&MockObject $config;
+    private ActivityListener $listener;
+    private ActivityContactProvider $activityContactProvider;
 
     #[\Override]
     protected function setUp(): void
@@ -150,7 +145,7 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider onAddActivityProvider
      */
-    public function testOnAddActivity(object $object, string $expectedDirection)
+    public function testOnAddActivity(object $object, string $expectedDirection): void
     {
         $target = new TestTarget();
         $event = new ActivityEvent($object, $target);
@@ -210,7 +205,7 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testOnAddActivityWithNonExtendedEntity()
+    public function testOnAddActivityWithNonExtendedEntity(): void
     {
         $accessor = PropertyAccess::createPropertyAccessor();
         $target = new TestTarget();
@@ -244,7 +239,7 @@ class ActivityListenerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testFlushEvents()
+    public function testFlushEvents(): void
     {
         $targets = [
             (new Account())->setId(2)->setCreatedAt(new \DateTime()),

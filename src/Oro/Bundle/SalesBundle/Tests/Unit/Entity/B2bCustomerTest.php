@@ -12,16 +12,16 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 use Oro\Bundle\UserBundle\Entity\User;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class B2bCustomerTest extends \PHPUnit\Framework\TestCase
+class B2bCustomerTest extends TestCase
 {
     private const TEST_NAME = 'test name';
 
-    /** @var B2bCustomer */
-    private $entity;
+    private B2bCustomer $entity;
 
     #[\Override]
     protected function setUp(): void
@@ -32,7 +32,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getSetDataProvider
      */
-    public function testGetSet($property, $value, $expected = null)
+    public function testGetSet($property, $value, $expected = null): void
     {
         if (null !== $value) {
             call_user_func([$this->entity, 'set' . ucfirst($property)], $value);
@@ -68,7 +68,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testPrePersist()
+    public function testPrePersist(): void
     {
         $this->assertNull($this->entity->getCreatedAt());
 
@@ -78,7 +78,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertLessThan(3, $this->entity->getCreatedAt()->diff(new \DateTime())->s);
     }
 
-    public function testPreUpdate()
+    public function testPreUpdate(): void
     {
         $this->assertNull($this->entity->getUpdatedAt());
 
@@ -88,13 +88,13 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertLessThan(3, $this->entity->getUpdatedAt()->diff(new \DateTime())->s);
     }
 
-    public function testToSting()
+    public function testToSting(): void
     {
         $this->entity->setName(self::TEST_NAME);
         $this->assertSame(self::TEST_NAME, (string)$this->entity);
     }
 
-    public function testAddDuplicatePhone()
+    public function testAddDuplicatePhone(): void
     {
         $customer = new B2bCustomer();
         $firstPhone = new B2bCustomerPhone('06001122334455');
@@ -112,7 +112,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($customerPhones, $actual->toArray());
     }
 
-    public function testAddNewPhone()
+    public function testAddNewPhone(): void
     {
         $customer = new B2bCustomer();
         $firstPhone = new B2bCustomerPhone('06001122334455');
@@ -126,7 +126,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$firstPhone, $secondPhone, $thirdPhone], $actual->toArray());
     }
 
-    public function testRemoveExistingPhone()
+    public function testRemoveExistingPhone(): void
     {
         $customer = new B2bCustomer();
         $firstPhone = new B2bCustomerPhone('06001122334455');
@@ -139,7 +139,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$firstPhone], $actual->toArray());
     }
 
-    public function testRemoveNonExistingPhone()
+    public function testRemoveNonExistingPhone(): void
     {
         $customer = new B2bCustomer();
         $firstPhone = new B2bCustomerPhone('06001122334455');
@@ -153,7 +153,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$firstPhone, $secondPhone], $actual->toArray());
     }
 
-    public function testGetPrimaryPhone()
+    public function testGetPrimaryPhone(): void
     {
         $firstPhone = new B2bCustomerPhone('06001122334455');
         $secondPhone = new B2bCustomerPhone('07001122334455');
@@ -169,7 +169,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($firstPhone->isPrimary());
     }
 
-    public function testAddDuplicateEmail()
+    public function testAddDuplicateEmail(): void
     {
         $customer = new B2bCustomer();
         $firstEmail = new B2bCustomerEmail('email-one@example.com');
@@ -187,7 +187,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($customerEmails, $actual->toArray());
     }
 
-    public function testAddNewEmail()
+    public function testAddNewEmail(): void
     {
         $customer = new B2bCustomer();
         $firstEmail = new B2bCustomerEmail('email-one@example.com');
@@ -201,7 +201,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$firstEmail, $secondEmail, $thirdEmail], $actual->toArray());
     }
 
-    public function testRemoveExistingEmail()
+    public function testRemoveExistingEmail(): void
     {
         $customer = new B2bCustomer();
         $firstEmail = new B2bCustomerEmail('email-one@example.com');
@@ -214,7 +214,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$firstEmail], $actual->toArray());
     }
 
-    public function testRemoveNonExistingEmail()
+    public function testRemoveNonExistingEmail(): void
     {
         $customer = new B2bCustomer();
         $firstEmail = new B2bCustomerEmail('email-one@example.com');
@@ -228,7 +228,7 @@ class B2bCustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$firstEmail, $secondEmail], $actual->toArray());
     }
 
-    public function testGetPrimaryEmail()
+    public function testGetPrimaryEmail(): void
     {
         $customer = new B2bCustomer();
         $this->assertNull($customer->getPrimaryEmail());

@@ -4,17 +4,16 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\ChannelBundle\Configuration\ChannelConfigurationProvider;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class SettingsProviderTest extends \PHPUnit\Framework\TestCase
+class SettingsProviderTest extends TestCase
 {
-    /** @var ChannelConfigurationProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $configProvider;
-
-    /** @var SettingsProvider */
-    private $settingsProvider;
+    private ChannelConfigurationProvider&MockObject $configProvider;
+    private SettingsProvider $settingsProvider;
 
     #[\Override]
     protected function setUp(): void
@@ -24,7 +23,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->settingsProvider = new SettingsProvider($this->configProvider);
     }
 
-    public function testGetChannelTypes()
+    public function testGetChannelTypes(): void
     {
         $channelTypes = ['channel1' => []];
 
@@ -35,7 +34,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($channelTypes, $this->settingsProvider->getChannelTypes());
     }
 
-    public function testGetEntities()
+    public function testGetEntities(): void
     {
         $entities = ['Test\Entity1' => []];
 
@@ -46,7 +45,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($entities, $this->settingsProvider->getEntities());
     }
 
-    public function testIsChannelEntity()
+    public function testIsChannelEntity(): void
     {
         $this->configProvider->expects(self::any())
             ->method('getEntities')
@@ -58,7 +57,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->settingsProvider->isChannelEntity('Test\Entity2'));
     }
 
-    public function testIsCustomerEntity()
+    public function testIsCustomerEntity(): void
     {
         $this->configProvider->expects(self::any())
             ->method('getCustomerEntities')
@@ -68,7 +67,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->settingsProvider->isCustomerEntity('Test\Entity2'));
     }
 
-    public function testIsDependentOnChannelEntity()
+    public function testIsDependentOnChannelEntity(): void
     {
         $this->configProvider->expects(self::any())
             ->method('getDependentEntitiesMap')
@@ -80,7 +79,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->settingsProvider->isDependentOnChannelEntity('Test\Entity2'));
     }
 
-    public function testGetDependentEntities()
+    public function testGetDependentEntities(): void
     {
         $dependentEntitiesMap = ['Test\Entity1' => ['Test\Entity2']];
 
@@ -95,7 +94,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([], $this->settingsProvider->getDependentEntities('Test\Entity2'));
     }
 
-    public function testGetSourceIntegrationTypes()
+    public function testGetSourceIntegrationTypes(): void
     {
         $this->configProvider->expects(self::any())
             ->method('getChannelTypes')
@@ -112,7 +111,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetChannelTypeChoiceList()
+    public function testGetChannelTypeChoiceList(): void
     {
         $this->configProvider->expects(self::once())
             ->method('getChannelTypes')
@@ -133,7 +132,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetNonSystemChannelTypeChoiceList()
+    public function testGetNonSystemChannelTypeChoiceList(): void
     {
         $this->configProvider->expects(self::any())
             ->method('getChannelTypes')
@@ -160,7 +159,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetIntegrationType()
+    public function testGetIntegrationType(): void
     {
         $this->configProvider->expects(self::any())
             ->method('getChannelTypes')
@@ -177,7 +176,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->settingsProvider->getIntegrationType('channel4'));
     }
 
-    public function testGetIntegrationTypeForUnknownChannel()
+    public function testGetIntegrationTypeForUnknownChannel(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('The channel "channel2" is not defined.');
@@ -191,7 +190,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->settingsProvider->getIntegrationType('channel2');
     }
 
-    public function testIsSystemChannel()
+    public function testIsSystemChannel(): void
     {
         $this->configProvider->expects(self::any())
             ->method('getChannelTypes')
@@ -206,7 +205,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->settingsProvider->isSystemChannel('channel3'));
     }
 
-    public function testIsSystemChannelForUnknownChannel()
+    public function testIsSystemChannelForUnknownChannel(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('The channel "channel2" is not defined.');
@@ -220,7 +219,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->settingsProvider->isSystemChannel('channel2');
     }
 
-    public function testGetIntegrationConnectorName()
+    public function testGetIntegrationConnectorName(): void
     {
         $this->configProvider->expects(self::any())
             ->method('getEntities')
@@ -238,7 +237,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->settingsProvider->getIntegrationConnectorName('Test\Entity3'));
     }
 
-    public function testGetCustomerIdentityFromConfig()
+    public function testGetCustomerIdentityFromConfig(): void
     {
         $this->configProvider->expects(self::any())
             ->method('getChannelTypes')
@@ -255,7 +254,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->settingsProvider->getCustomerIdentityFromConfig('channel3'));
     }
 
-    public function testGetEntitiesByChannelType()
+    public function testGetEntitiesByChannelType(): void
     {
         $this->configProvider->expects(self::any())
             ->method('getChannelTypes')
@@ -272,7 +271,7 @@ class SettingsProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([], $this->settingsProvider->getEntitiesByChannelType('channel3'));
     }
 
-    public function testGetLifetimeValueSettings()
+    public function testGetLifetimeValueSettings(): void
     {
         $this->configProvider->expects(self::any())
             ->method('getChannelTypes')

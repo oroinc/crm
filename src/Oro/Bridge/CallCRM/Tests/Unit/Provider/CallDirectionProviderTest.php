@@ -5,11 +5,11 @@ namespace Oro\Bridge\CallCRM\Tests\Unit\Provider;
 use Oro\Bridge\CallCRM\Provider\CallDirectionProvider;
 use Oro\Bundle\CallBundle\Entity\Call;
 use Oro\Bundle\CallBundle\Entity\CallDirection;
+use PHPUnit\Framework\TestCase;
 
-class CallDirectionProviderTest extends \PHPUnit\Framework\TestCase
+class CallDirectionProviderTest extends TestCase
 {
-    /** @var CallDirectionProvider */
-    private $provider;
+    private CallDirectionProvider $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -17,7 +17,7 @@ class CallDirectionProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider = new CallDirectionProvider();
     }
 
-    public function testGetDirection()
+    public function testGetDirection(): void
     {
         $directionName = 'incoming';
 
@@ -27,7 +27,7 @@ class CallDirectionProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($directionName, $this->provider->getDirection($call, new \stdClass()));
     }
 
-    public function testGetDate()
+    public function testGetDate(): void
     {
         $date = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->assertEquals($date->format('Y'), $this->provider->getDate(new Call())->format('Y'));

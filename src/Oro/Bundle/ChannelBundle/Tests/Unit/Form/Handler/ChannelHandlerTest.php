@@ -8,6 +8,8 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
 use Oro\Component\Testing\Unit\Form\Type\Stub\FormStub;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormConfigInterface;
@@ -18,31 +20,18 @@ use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ChannelHandlerTest extends \PHPUnit\Framework\TestCase
+class ChannelHandlerTest extends TestCase
 {
     private const TEST_NAME = 'name';
     private const FORM_DATA = ['field' => 'value'];
 
-    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $form;
-
-    /** @var Request */
-    private $request;
-
-    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    private $registry;
-
-    /** @var EventDispatcherInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $dispatcher;
-
-    /** @var Channel */
-    private $entity;
-
-    /** @var EntityManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $em;
-
-    /** @var ChannelHandler */
-    private $handler;
+    private FormInterface&MockObject $form;
+    private Request $request;
+    private ManagerRegistry&MockObject $registry;
+    private EventDispatcherInterface&MockObject $dispatcher;
+    private Channel $entity;
+    private EntityManager&MockObject $em;
+    private ChannelHandler $handler;
 
     #[\Override]
     protected function setUp(): void

@@ -5,10 +5,11 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\ImportExport\Configuration;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\ImportExport\Configuration\OpportunityImportExportConfigurationProvider;
+use PHPUnit\Framework\TestCase;
 
-class OpportunityImportExportConfigurationProviderTest extends \PHPUnit\Framework\TestCase
+class OpportunityImportExportConfigurationProviderTest extends TestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         self::assertEquals(
             new ImportExportConfiguration([

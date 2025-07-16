@@ -39,8 +39,7 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
 {
     use EntityTrait;
 
-    /** @var B2bCustomerType */
-    private $formType;
+    private B2bCustomerType $formType;
 
     #[\Override]
     protected function setUp(): void

@@ -8,20 +8,17 @@ use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Handler\ContactEmailDeleteHandlerExtension;
 use Oro\Bundle\EntityBundle\Handler\EntityDeleteAccessDeniedExceptionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
+class ContactEmailDeleteHandlerExtensionTest extends TestCase
 {
-    /** @var AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $authorizationChecker;
-
-    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $translator;
-
-    /** @var ContactEmailDeleteHandlerExtension */
-    private $extension;
+    private AuthorizationCheckerInterface&MockObject $authorizationChecker;
+    private TranslatorInterface&MockObject $translator;
+    private ContactEmailDeleteHandlerExtension $extension;
 
     #[\Override]
     protected function setUp(): void
@@ -37,7 +34,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->setAccessDeniedExceptionFactory(new EntityDeleteAccessDeniedExceptionFactory());
     }
 
-    public function testAssertDeleteGrantedWhenNoOwner()
+    public function testAssertDeleteGrantedWhenNoOwner(): void
     {
         $contactEmail = new ContactEmail();
 
@@ -49,7 +46,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    public function testAssertDeleteGrantedWhenAccessGranted()
+    public function testAssertDeleteGrantedWhenAccessGranted(): void
     {
         $contactEmail = new ContactEmail();
         $contact = new Contact();
@@ -67,7 +64,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    public function testAssertDeleteGrantedWhenAccessDenied()
+    public function testAssertDeleteGrantedWhenAccessDenied(): void
     {
         $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
@@ -86,7 +83,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails()
+    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails(): void
     {
         $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
@@ -111,7 +108,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedIfThereIsNoOtherEmails()
+    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedIfThereIsNoOtherEmails(): void
     {
         $contactEmail = new ContactEmail();
         $contact = new Contact();
@@ -131,7 +128,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    public function testAssertDeleteGrantedWhenNotPrimaryEmailIsDeleted()
+    public function testAssertDeleteGrantedWhenNotPrimaryEmailIsDeleted(): void
     {
         $contactEmail = new ContactEmail();
         $contact = new Contact();
@@ -150,7 +147,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    public function testAssertDeleteGrantedWhenLastEmailIsDeletedAndContactDoesNotHaveOtherIdentification()
+    public function testAssertDeleteGrantedWhenLastEmailIsDeletedAndContactDoesNotHaveOtherIdentification(): void
     {
         $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
@@ -174,7 +171,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    public function testAssertDeleteGrantedWhenLastEmailIsDeletedAndContactHasFirstName()
+    public function testAssertDeleteGrantedWhenLastEmailIsDeletedAndContactHasFirstName(): void
     {
         $contactEmail = new ContactEmail();
         $contact = new Contact();
@@ -194,7 +191,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    public function testAssertDeleteGrantedWhenLastEmailIsDeletedAndContactHasLastName()
+    public function testAssertDeleteGrantedWhenLastEmailIsDeletedAndContactHasLastName(): void
     {
         $contactEmail = new ContactEmail();
         $contact = new Contact();
@@ -214,7 +211,7 @@ class ContactEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($contactEmail);
     }
 
-    public function testAssertDeleteGrantedWhenLastEmailIsDeletedAndContactHasPhone()
+    public function testAssertDeleteGrantedWhenLastEmailIsDeletedAndContactHasPhone(): void
     {
         $contactEmail = new ContactEmail();
         $contact = new Contact();

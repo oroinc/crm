@@ -6,15 +6,15 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormView;
 
-class LeadToOpportunityTypeTest extends \PHPUnit\Framework\TestCase
+class LeadToOpportunityTypeTest extends TestCase
 {
-    /** @var LeadToOpportunityType */
-    private $type;
+    private LeadToOpportunityType $type;
 
     #[\Override]
     protected function setUp(): void
@@ -22,7 +22,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit\Framework\TestCase
         $this->type = new LeadToOpportunityType();
     }
 
-    public function testPreSetDataWithContact()
+    public function testPreSetDataWithContact(): void
     {
         $form = $this->createMock(Form::class);
         $lead = $this->createMock(Lead::class);
@@ -47,7 +47,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($formView->vars['use_full_contact_form']);
     }
 
-    public function testPreSetDataWithoutContact()
+    public function testPreSetDataWithoutContact(): void
     {
         $form = $this->createMock(Form::class);
         $lead = $this->createMock(Lead::class);
@@ -72,7 +72,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($formView->vars['use_full_contact_form']);
     }
 
-    public function testBuildForm()
+    public function testBuildForm(): void
     {
         $builder = $this->createMock(FormBuilder::class);
         $builder->expects($this->once())

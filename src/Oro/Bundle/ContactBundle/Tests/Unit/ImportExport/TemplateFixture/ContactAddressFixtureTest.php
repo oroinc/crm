@@ -10,11 +10,11 @@ use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ContactBundle\ImportExport\TemplateFixture\ContactAddressFixture;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateEntityRegistry;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateManager;
+use PHPUnit\Framework\TestCase;
 
-class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
+class ContactAddressFixtureTest extends TestCase
 {
-    /** @var ContactAddressFixture */
-    private $fixture;
+    private ContactAddressFixture $fixture;
 
     #[\Override]
     protected function setUp(): void
@@ -22,12 +22,12 @@ class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixture = new ContactAddressFixture();
     }
 
-    public function testGetEntityClass()
+    public function testGetEntityClass(): void
     {
         $this->assertEquals(ContactAddress::class, $this->fixture->getEntityClass());
     }
 
-    public function testCreateEntity()
+    public function testCreateEntity(): void
     {
         $this->fixture->setTemplateManager($this->getTemplateManager());
 
@@ -37,7 +37,7 @@ class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider fillEntityDataProvider
      */
-    public function testFillEntityData(string $key, array $types)
+    public function testFillEntityData(string $key, array $types): void
     {
         $this->fixture->setTemplateManager($this->getTemplateManager());
 
@@ -68,7 +68,7 @@ class ContactAddressFixtureTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetData()
+    public function testGetData(): void
     {
         $this->fixture->setTemplateManager($this->getTemplateManager());
 

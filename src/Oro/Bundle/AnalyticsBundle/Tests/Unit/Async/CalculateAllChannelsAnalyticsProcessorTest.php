@@ -9,8 +9,9 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\Testing\ClassExtensionTrait;
+use PHPUnit\Framework\TestCase;
 
-class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit\Framework\TestCase
+class CalculateAllChannelsAnalyticsProcessorTest extends TestCase
 {
     use ClassExtensionTrait;
 

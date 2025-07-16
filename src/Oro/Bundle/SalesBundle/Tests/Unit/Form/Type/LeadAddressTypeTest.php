@@ -5,13 +5,13 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\AddressBundle\Form\EventListener\FixAddressesPrimarySubscriber;
 use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Oro\Bundle\SalesBundle\Form\Type\LeadAddressType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilder;
 
-class LeadAddressTypeTest extends \PHPUnit\Framework\TestCase
+class LeadAddressTypeTest extends TestCase
 {
-    /** @var LeadAddressType */
-    private $type;
+    private LeadAddressType $type;
 
     #[\Override]
     protected function setUp(): void
@@ -19,7 +19,7 @@ class LeadAddressTypeTest extends \PHPUnit\Framework\TestCase
         $this->type = new LeadAddressType();
     }
 
-    public function testBuildForm()
+    public function testBuildForm(): void
     {
         $builder = $this->createMock(FormBuilder::class);
         $builder->expects($this->once())
@@ -33,7 +33,7 @@ class LeadAddressTypeTest extends \PHPUnit\Framework\TestCase
         $this->type->buildForm($builder, ['single_form' => true]);
     }
 
-    public function testName()
+    public function testName(): void
     {
         $this->assertEquals('oro_sales_lead_address', $this->type->getName());
     }
