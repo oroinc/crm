@@ -6,31 +6,22 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class B2bCustomerHandlerTest extends \PHPUnit\Framework\TestCase
+class B2bCustomerHandlerTest extends TestCase
 {
     private const FORM_DATA = ['field' => 'value'];
 
-    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $form;
-
-    /** @var Request */
-    private $request;
-
-    /** @var ObjectManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $manager;
-
-    /** @var RequestChannelProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $requestChannelProvider;
-
-    /** @var B2bCustomer */
-    private $entity;
-
-    /** @var B2bCustomerHandler */
-    private $handler;
+    private FormInterface&MockObject $form;
+    private Request $request;
+    private ObjectManager&MockObject $manager;
+    private RequestChannelProvider&MockObject $requestChannelProvider;
+    private B2bCustomer $entity;
+    private B2bCustomerHandler $handler;
 
     #[\Override]
     protected function setUp(): void

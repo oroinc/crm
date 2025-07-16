@@ -5,12 +5,13 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 use Oro\Component\Testing\Unit\EntityTestCaseTrait;
+use PHPUnit\Framework\TestCase;
 
-class LifetimeValueAverageAggregationTest extends \PHPUnit\Framework\TestCase
+class LifetimeValueAverageAggregationTest extends TestCase
 {
     use EntityTestCaseTrait;
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $properties = [
             'id'          => ['id', 1],
@@ -25,7 +26,7 @@ class LifetimeValueAverageAggregationTest extends \PHPUnit\Framework\TestCase
         self::assertPropertyAccessors($entity, $properties);
     }
 
-    public function testAggregationDate()
+    public function testAggregationDate(): void
     {
         $entity = new LifetimeValueAverageAggregation();
         self::assertNull($entity->getAggregationDate());
@@ -36,7 +37,7 @@ class LifetimeValueAverageAggregationTest extends \PHPUnit\Framework\TestCase
         self::assertNotSame($date, $entity->getAggregationDate());
     }
 
-    public function testPrePersist()
+    public function testPrePersist(): void
     {
         $entity = new LifetimeValueAverageAggregation();
         $entity->prePersist();

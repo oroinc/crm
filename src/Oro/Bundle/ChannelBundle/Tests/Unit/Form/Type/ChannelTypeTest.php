@@ -7,6 +7,8 @@ use Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\FormBundle\Form\Type\Select2ChoiceType;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilder;
@@ -14,19 +16,12 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ChannelTypeTest extends \PHPUnit\Framework\TestCase
+class ChannelTypeTest extends TestCase
 {
-    /** @var FormBuilder|\PHPUnit\Framework\MockObject\MockObject */
-    private $builder;
-
-    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $settingsProvider;
-
-    /** @var ChannelType */
-    private $type;
-
-    /** @var ChannelTypeSubscriber */
-    private $channelTypeSubscriber;
+    private FormBuilder&MockObject $builder;
+    private SettingsProvider&MockObject $settingsProvider;
+    private ChannelType $type;
+    private ChannelTypeSubscriber $channelTypeSubscriber;
 
     #[\Override]
     protected function setUp(): void
@@ -45,7 +40,7 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
         $this->type = new ChannelType($this->settingsProvider, $this->channelTypeSubscriber);
     }
 
-    public function testBuildForm()
+    public function testBuildForm(): void
     {
         $fields = [];
 
@@ -71,7 +66,7 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testConfigureOptions()
+    public function testConfigureOptions(): void
     {
         $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())
@@ -80,7 +75,7 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
         $this->type->configureOptions($resolver);
     }
 
-    public function testFinishViewShouldNotFailsIfNoOwnerField()
+    public function testFinishViewShouldNotFailsIfNoOwnerField(): void
     {
         $this->type->finishView(new FormView(), $this->createMock(FormInterface::class), []);
     }
@@ -91,7 +86,7 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
      * @param array $choices
      * @param bool  $shouldAdd
      */
-    public function testFinishViewShouldAddHideClassRelyOnChoices(array $choices, $shouldAdd)
+    public function testFinishViewShouldAddHideClassRelyOnChoices(array $choices, $shouldAdd): void
     {
         $mainView                    = new FormView();
         $ownerView                   = new FormView($mainView);
@@ -112,7 +107,7 @@ class ChannelTypeTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testFinishViewShouldAddHideClassAndNotOverrideOld()
+    public function testFinishViewShouldAddHideClassAndNotOverrideOld(): void
     {
         $mainView                    = new FormView();
         $ownerView                   = new FormView($mainView);

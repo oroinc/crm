@@ -4,12 +4,12 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType;
 use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class B2bCustomerSelectTypeTest extends \PHPUnit\Framework\TestCase
+class B2bCustomerSelectTypeTest extends TestCase
 {
-    /** @var B2bCustomerSelectType */
-    private $type;
+    private B2bCustomerSelectType $type;
 
     #[\Override]
     protected function setUp(): void
@@ -17,7 +17,7 @@ class B2bCustomerSelectTypeTest extends \PHPUnit\Framework\TestCase
         $this->type = new B2bCustomerSelectType();
     }
 
-    public function testConfigureOptions()
+    public function testConfigureOptions(): void
     {
         $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())
@@ -26,12 +26,12 @@ class B2bCustomerSelectTypeTest extends \PHPUnit\Framework\TestCase
         $this->type->configureOptions($resolver);
     }
 
-    public function testGetParent()
+    public function testGetParent(): void
     {
         $this->assertEquals(CreateOrSelectInlineChannelAwareType::class, $this->type->getParent());
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         $this->assertEquals('oro_sales_b2bcustomer_select', $this->type->getName());
     }

@@ -6,15 +6,16 @@ use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use PHPUnit\Framework\TestCase;
 
-class ContactRequestTest extends \PHPUnit\Framework\TestCase
+class ContactRequestTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         new ContactRequest();
     }
 
-    public function testSettersAndGetters()
+    public function testSettersAndGetters(): void
     {
         $firstName = uniqid('firstName');
         $lastName = uniqid('lastName');
@@ -73,7 +74,7 @@ class ContactRequestTest extends \PHPUnit\Framework\TestCase
         $request->setContactReason(null);
     }
 
-    public function testBeforeSave()
+    public function testBeforeSave(): void
     {
         $request = new ContactRequest();
 
@@ -89,7 +90,7 @@ class ContactRequestTest extends \PHPUnit\Framework\TestCase
         $this->assertNotSame($request->getCreatedAt(), $request->getUpdatedAt());
     }
 
-    public function testDoPreUpdate()
+    public function testDoPreUpdate(): void
     {
         $request   = new ContactRequest();
         $updatedAt = new \DateTime();
@@ -101,7 +102,7 @@ class ContactRequestTest extends \PHPUnit\Framework\TestCase
         $this->assertNotSame($updatedAt, $request->getUpdatedAt());
     }
 
-    public function testGetEmail()
+    public function testGetEmail(): void
     {
         $request = new ContactRequest();
 

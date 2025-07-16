@@ -5,13 +5,13 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Placeholder;
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Placeholder\RFMAwareFilter;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use PHPUnit\Framework\TestCase;
 
-class RFMAwareFilterTest extends \PHPUnit\Framework\TestCase
+class RFMAwareFilterTest extends TestCase
 {
     private const INTERFACE = AnalyticsAwareInterface::class;
 
-    /** @var RFMAwareFilter */
-    private $filter;
+    private RFMAwareFilter $filter;
 
     #[\Override]
     protected function setUp(): void
@@ -24,7 +24,7 @@ class RFMAwareFilterTest extends \PHPUnit\Framework\TestCase
      * @param object $entity
      * @param bool $expected
      */
-    public function testIsApplicable($entity, $expected)
+    public function testIsApplicable($entity, $expected): void
     {
         $this->assertEquals($expected, $this->filter->isApplicable($entity));
     }
@@ -62,7 +62,7 @@ class RFMAwareFilterTest extends \PHPUnit\Framework\TestCase
      * @param object $entity
      * @param bool $expected
      */
-    public function testIsViewApplicable($entity, $expected)
+    public function testIsViewApplicable($entity, $expected): void
     {
         $this->assertEquals($expected, $this->filter->isViewApplicable($entity));
     }

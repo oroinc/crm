@@ -17,11 +17,8 @@ use Symfony\Component\Security\Core\User\InMemoryUser;
 
 class ContactListenerTest extends TestCase
 {
-    /** @var TokenStorageInterface|MockObject */
-    private $tokenStorage;
-
-    /** @var ContactListener */
-    private $contactListener;
+    private TokenStorageInterface&MockObject $tokenStorage;
+    private ContactListener $contactListener;
 
     #[\Override]
     protected function setUp(): void
@@ -34,7 +31,7 @@ class ContactListenerTest extends TestCase
     /**
      * @dataProvider prePersistAndPreUpdateDataProvider
      */
-    public function testPrePersist(Contact $entity, bool $mockToken = false, bool $mockUser = false)
+    public function testPrePersist(Contact $entity, bool $mockToken = false, bool $mockUser = false): void
     {
         $user = $mockUser ? new User() : null;
         $this->mockSecurityContext($mockToken, $mockUser, $user);
@@ -66,7 +63,7 @@ class ContactListenerTest extends TestCase
         }
     }
 
-    public function testPrePersistWithAlreadySetCreatedAtAndCreatedBy()
+    public function testPrePersistWithAlreadySetCreatedAtAndCreatedBy(): void
     {
         $entity = new Contact();
         $createdAt = new \DateTime();
@@ -96,7 +93,7 @@ class ContactListenerTest extends TestCase
         bool $mockUser = false,
         ?bool $detachedUser = null,
         ?bool $reloadUser = null
-    ) {
+    ): void {
         $oldDate = new \DateTime('2012-12-12 12:12:12');
         $oldUser = new User();
         $oldUser->setFirstName('oldUser');
@@ -183,7 +180,7 @@ class ContactListenerTest extends TestCase
         ];
     }
 
-    public function testPreUpdateWhenNoUser()
+    public function testPreUpdateWhenNoUser(): void
     {
         $token = $this->createMock(TokenInterface::class);
         $token->expects($this->once())

@@ -7,8 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TestForm extends AbstractType
 {
-    /** @var string */
-    protected $name;
+    protected string $name;
 
     /**
      * @param string $name

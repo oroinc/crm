@@ -12,11 +12,11 @@ use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
+use PHPUnit\Framework\TestCase;
 
-class CaseEntityTest extends \PHPUnit\Framework\TestCase
+class CaseEntityTest extends TestCase
 {
-    /** @var CaseEntity */
-    private $case;
+    private CaseEntity $case;
 
     #[\Override]
     protected function setUp(): void
@@ -27,7 +27,7 @@ class CaseEntityTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider settersAndGettersDataProvider
      */
-    public function testSettersAndGetters($property, $value)
+    public function testSettersAndGetters($property, $value): void
     {
         $method = 'set' . ucfirst($property);
         $result = $this->case->$method($value);
@@ -61,14 +61,14 @@ class CaseEntityTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetComments()
+    public function testGetComments(): void
     {
         $this->assertInstanceOf(ArrayCollection::class, $this->case->getComments());
 
         $this->assertEquals(0, $this->case->getComments()->count());
     }
 
-    public function testAddComment()
+    public function testAddComment(): void
     {
         $comment = $this->createMock(CaseComment::class);
         $comment->expects($this->once())

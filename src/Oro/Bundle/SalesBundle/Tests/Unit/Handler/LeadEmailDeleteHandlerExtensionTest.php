@@ -7,20 +7,17 @@ use Oro\Bundle\EntityBundle\Handler\EntityDeleteAccessDeniedExceptionFactory;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Handler\LeadEmailDeleteHandlerExtension;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
+class LeadEmailDeleteHandlerExtensionTest extends TestCase
 {
-    /** @var AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $authorizationChecker;
-
-    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $translator;
-
-    /** @var LeadEmailDeleteHandlerExtension */
-    private $extension;
+    private AuthorizationCheckerInterface&MockObject $authorizationChecker;
+    private TranslatorInterface&MockObject $translator;
+    private LeadEmailDeleteHandlerExtension $extension;
 
     #[\Override]
     protected function setUp(): void
@@ -36,7 +33,7 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->setAccessDeniedExceptionFactory(new EntityDeleteAccessDeniedExceptionFactory());
     }
 
-    public function testAssertDeleteGrantedWhenNoOwner()
+    public function testAssertDeleteGrantedWhenNoOwner(): void
     {
         $leadEmail = new LeadEmail();
 
@@ -48,7 +45,7 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($leadEmail);
     }
 
-    public function testAssertDeleteGrantedWhenAccessGranted()
+    public function testAssertDeleteGrantedWhenAccessGranted(): void
     {
         $leadEmail = new LeadEmail();
         $lead = new Lead();
@@ -64,7 +61,7 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($leadEmail);
     }
 
-    public function testAssertDeleteGrantedWhenAccessDenied()
+    public function testAssertDeleteGrantedWhenAccessDenied(): void
     {
         $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
@@ -83,7 +80,7 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($leadEmail);
     }
 
-    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails()
+    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails(): void
     {
         $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
@@ -108,7 +105,7 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($leadEmail);
     }
 
-    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedIfThereIsNoOtherEmails()
+    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedIfThereIsNoOtherEmails(): void
     {
         $leadEmail = new LeadEmail();
         $lead = new Lead();
@@ -127,7 +124,7 @@ class LeadEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension->assertDeleteGranted($leadEmail);
     }
 
-    public function testAssertDeleteGrantedWhenNotPrimaryEmailIsDeleted()
+    public function testAssertDeleteGrantedWhenNotPrimaryEmailIsDeleted(): void
     {
         $leadEmail = new LeadEmail();
         $lead = new Lead();

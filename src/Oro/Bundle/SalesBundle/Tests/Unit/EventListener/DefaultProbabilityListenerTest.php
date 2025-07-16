@@ -11,13 +11,14 @@ use Oro\Bundle\EntityExtendBundle\Entity\EnumOptionInterface;
 use Oro\Bundle\SalesBundle\EventListener\DefaultProbabilityListener;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub;
 use Oro\Bundle\WorkflowBundle\Restriction\RestrictionManager;
+use PHPUnit\Framework\TestCase;
 
-class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
+class DefaultProbabilityListenerTest extends TestCase
 {
     /**
      * @dataProvider statusDataProvider
      */
-    public function testShouldSetProbabilityOnUpdate(string $statusId, float $expectedProbability)
+    public function testShouldSetProbabilityOnUpdate(string $statusId, float $expectedProbability): void
     {
         $opportunity = $this->getOpportunity($statusId, $this->getDefaultProbabilities()[$statusId]);
         $eventArguments = $this->getPreUpdateEventArguments($opportunity, [
@@ -32,7 +33,7 @@ class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedProbability, $opportunity->getProbability());
     }
 
-    public function testShouldNotOverwriteProbabilityOnUpdate()
+    public function testShouldNotOverwriteProbabilityOnUpdate(): void
     {
         $opportunity = $this->getOpportunity('negotiation', 0.25);
         $eventArguments = $this->getPreUpdateEventArguments($opportunity, [
@@ -49,7 +50,7 @@ class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0.25, $eventArguments->getNewValue('probability'));
     }
 
-    public function testShouldNotSetProbabilityWithoutStatusChangeOnUpdate()
+    public function testShouldNotSetProbabilityWithoutStatusChangeOnUpdate(): void
     {
         $opportunity = $this->getOpportunity('negotiation', 0.25);
         $eventArguments = $this->getPreUpdateEventArguments($opportunity, [
@@ -62,7 +63,7 @@ class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0.25, $eventArguments->getNewValue('probability'));
     }
 
-    public function testShouldNotModifyRestrictedFieldsOnUpdate()
+    public function testShouldNotModifyRestrictedFieldsOnUpdate(): void
     {
         $opportunity = $this->getOpportunity('solution_development', 0.25);
         $eventArguments = $this->getPreUpdateEventArguments($opportunity, [

@@ -6,10 +6,11 @@ use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Entity\EnumOptionInterface;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
+use PHPUnit\Framework\TestCase;
 
-class ProbabilityProviderTest extends \PHPUnit\Framework\TestCase
+class ProbabilityProviderTest extends TestCase
 {
-    public function testShouldReturnProbabilityForExistingStatus()
+    public function testShouldReturnProbabilityForExistingStatus(): void
     {
         $provider = $this->getProvider();
         $status = $this->getOpportunityStatus('negotiation');
@@ -17,7 +18,7 @@ class ProbabilityProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0.8, $provider->get($status));
     }
 
-    public function testShouldReturnNullForUnknownStatus()
+    public function testShouldReturnNullForUnknownStatus(): void
     {
         $provider = $this->getProvider();
         $status = $this->getOpportunityStatus('dummy');
@@ -25,7 +26,7 @@ class ProbabilityProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($provider->get($status));
     }
 
-    public function testShouldReturnProbabilityMap()
+    public function testShouldReturnProbabilityMap(): void
     {
         $provider = $this->getProvider();
 

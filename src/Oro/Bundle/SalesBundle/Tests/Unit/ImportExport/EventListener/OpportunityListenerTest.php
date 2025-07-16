@@ -15,11 +15,12 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub as Opportunity;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class OpportunityListenerTest extends \PHPUnit\Framework\TestCase
+class OpportunityListenerTest extends TestCase
 {
-    public function testOnProcessAfter()
+    public function testOnProcessAfter(): void
     {
         $organization = new Organization();
         $channel = new Channel();

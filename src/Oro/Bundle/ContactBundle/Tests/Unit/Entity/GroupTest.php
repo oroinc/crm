@@ -5,11 +5,11 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
 use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
+use PHPUnit\Framework\TestCase;
 
-class GroupTest extends \PHPUnit\Framework\TestCase
+class GroupTest extends TestCase
 {
-    /** @var Group */
-    private $group;
+    private Group $group;
 
     #[\Override]
     protected function setUp(): void
@@ -17,7 +17,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         $this->group = new Group();
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $this->assertNull($this->group->getLabel());
 
@@ -25,7 +25,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Label', $group->getLabel());
     }
 
-    public function testLabel()
+    public function testLabel(): void
     {
         $this->assertNull($this->group->getLabel());
         $this->group->setLabel('Label');
@@ -33,7 +33,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Label', $this->group->__toString());
     }
 
-    public function testOwners()
+    public function testOwners(): void
     {
         $entity = new Group();
         $user = new User();
@@ -45,7 +45,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($user, $entity->getOwner());
     }
 
-    public function testOrganization()
+    public function testOrganization(): void
     {
         $entity = new Group();
         $organization = new Organization();

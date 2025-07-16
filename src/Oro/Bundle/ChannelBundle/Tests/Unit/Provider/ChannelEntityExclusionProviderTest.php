@@ -5,18 +5,17 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Oro\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
+class ChannelEntityExclusionProviderTest extends TestCase
 {
     private const TEST_ENTITY_NAME = 'TestBundle\Entity\Test';
     private const TEST_ASSOC_NAME = 'relation';
     private const TEST_FIELD_NAME = 'field';
 
-    /** @var ChannelEntityExclusionProvider */
-    private $exclusionProvider;
-
-    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $settingsProvider;
+    private ChannelEntityExclusionProvider $exclusionProvider;
+    private SettingsProvider&MockObject $settingsProvider;
 
     #[\Override]
     protected function setUp(): void
@@ -32,7 +31,7 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
      * @param bool $expected
      * @param bool $isChannelEntity
      */
-    public function testIsEntityExcluded($expected, $isChannelEntity)
+    public function testIsEntityExcluded($expected, $isChannelEntity): void
     {
         $this->settingsProvider->expects($this->any())
             ->method('isChannelEntity')
@@ -42,7 +41,7 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $this->exclusionProvider->isIgnoredEntity(self::TEST_ENTITY_NAME));
     }
 
-    public function testIsRelationExcluded()
+    public function testIsRelationExcluded(): void
     {
         $classMetadataMock = $this->createMock(ClassMetadata::class);
 
@@ -52,7 +51,7 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testIsFieldExcluded()
+    public function testIsFieldExcluded(): void
     {
         $classMetadataMock = $this->createMock(ClassMetadata::class);
 

@@ -8,15 +8,16 @@ use Oro\Bundle\CaseBundle\Entity\CasePriority;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\Testing\Unit\EntityTestCaseTrait;
+use PHPUnit\Framework\TestCase;
 
-class CaseMailboxProcessSettingsTest extends \PHPUnit\Framework\TestCase
+class CaseMailboxProcessSettingsTest extends TestCase
 {
     use EntityTestCaseTrait;
 
     /**
      * Test setters getters
      */
-    public function testAccessors()
+    public function testAccessors(): void
     {
         $entity = new CaseMailboxProcessSettings();
 

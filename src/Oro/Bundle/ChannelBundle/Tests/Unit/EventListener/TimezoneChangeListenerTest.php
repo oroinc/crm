@@ -6,8 +6,9 @@ use Oro\Bundle\ChannelBundle\Async\Topic\AggregateLifetimeAverageTopic;
 use Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener;
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 use Oro\Bundle\MessageQueueBundle\Test\Unit\MessageQueueExtension;
+use PHPUnit\Framework\TestCase;
 
-class TimezoneChangeListenerTest extends \PHPUnit\Framework\TestCase
+class TimezoneChangeListenerTest extends TestCase
 {
     use MessageQueueExtension;
 

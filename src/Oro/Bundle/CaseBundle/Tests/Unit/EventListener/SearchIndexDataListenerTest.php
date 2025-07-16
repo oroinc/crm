@@ -13,17 +13,15 @@ use Oro\Bundle\SearchBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\SearchBundle\Provider\SearchMappingProvider;
 use Oro\Bundle\SearchBundle\Test\Unit\SearchMappingTypeCastingHandlersTestTrait;
 use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
+class SearchIndexDataListenerTest extends TestCase
 {
     use SearchMappingTypeCastingHandlersTestTrait;
 
-    /** @var ObjectMapper|\PHPUnit\Framework\MockObject\MockObject */
-    private $mapper;
-
-    /** @var SearchIndexDataListener */
-    private $listener;
+    private ObjectMapper $mapper;
+    private SearchIndexDataListener $listener;
 
     #[\Override]
     protected function setUp(): void
@@ -62,7 +60,7 @@ class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
         $this->listener = new SearchIndexDataListener($this->mapper);
     }
 
-    public function testOnPrepareEntityMapNotCaseEntity()
+    public function testOnPrepareEntityMapNotCaseEntity(): void
     {
         $data = ['message' => 'very long string'];
         $event = new PrepareEntityMapEvent(new \DateTime(), \DateTime::class, $data, []);
@@ -76,7 +74,7 @@ class SearchIndexDataListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider onPrepareEntityMapDataProvider
      */
-    public function testOnPrepareEntityMap(array $shortenedFields, array $originalData, array $expectedData)
+    public function testOnPrepareEntityMap(array $shortenedFields, array $originalData, array $expectedData): void
     {
         $event = new PrepareEntityMapEvent(new CaseEntity(), CaseEntity::class, $originalData, []);
 

@@ -11,13 +11,14 @@ use Oro\Bundle\SalesBundle\Entity\LeadAddress;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 use Oro\Bundle\UserBundle\Entity\User;
+use PHPUnit\Framework\TestCase;
 
-class LeadTest extends \PHPUnit\Framework\TestCase
+class LeadTest extends TestCase
 {
     /**
      * @dataProvider getSetDataProvider
      */
-    public function testGetSet($property, $value, $expected)
+    public function testGetSet($property, $value, $expected): void
     {
         $obj = new Lead();
 
@@ -55,7 +56,7 @@ class LeadTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testAddresses()
+    public function testAddresses(): void
     {
         $addressOne = new LeadAddress();
         $addressOne->setCountry(new Country('US'));
@@ -92,7 +93,7 @@ class LeadTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([1 => $addressTwo, 2 => $addressThree], $actual->toArray());
     }
 
-    public function testGetPrimaryAddress()
+    public function testGetPrimaryAddress(): void
     {
         $lead = new Lead();
         $this->assertNull($lead->getPrimaryAddress());
@@ -113,7 +114,7 @@ class LeadTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($address->isPrimary());
     }
 
-    public function testPhones()
+    public function testPhones(): void
     {
         $phoneOne = new LeadPhone('06001122334455');
         $phoneTwo = new LeadPhone('07001122334455');
@@ -147,7 +148,7 @@ class LeadTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([1 => $phoneTwo, 2 => $phoneThree], $actual->toArray());
     }
 
-    public function testGetPrimaryPhone()
+    public function testGetPrimaryPhone(): void
     {
         $lead = new Lead();
         $this->assertNull($lead->getPrimaryPhone());
@@ -167,7 +168,7 @@ class LeadTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($phone->isPrimary());
     }
 
-    public function testEmails()
+    public function testEmails(): void
     {
         $emailOne = new LeadEmail('email-one@example.com');
         $emailTwo = new LeadEmail('email-two@example.com');
@@ -201,7 +202,7 @@ class LeadTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([1 => $emailTwo, 2 => $emailThree], $actual->toArray());
     }
 
-    public function testGetPrimaryEmail()
+    public function testGetPrimaryEmail(): void
     {
         $lead = new Lead();
         $this->assertNull($lead->getPrimaryEmail());

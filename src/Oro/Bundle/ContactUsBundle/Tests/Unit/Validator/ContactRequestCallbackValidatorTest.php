@@ -4,10 +4,11 @@ namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Validator;
 
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Validator\ContactRequestCallbackValidator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-class ContactRequestCallbackValidatorTest extends \PHPUnit\Framework\TestCase
+class ContactRequestCallbackValidatorTest extends TestCase
 {
     /**
      * @dataProvider validationDataProvider

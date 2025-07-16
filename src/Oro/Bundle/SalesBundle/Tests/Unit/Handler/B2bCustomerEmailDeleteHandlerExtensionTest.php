@@ -7,20 +7,17 @@ use Oro\Bundle\EntityBundle\Handler\EntityDeleteAccessDeniedExceptionFactory;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Handler\B2bCustomerEmailDeleteHandlerExtension;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\TestCase
+class B2bCustomerEmailDeleteHandlerExtensionTest extends TestCase
 {
-    /** @var AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $authorizationChecker;
-
-    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $translator;
-
-    /** @var B2bCustomerEmailDeleteHandlerExtension */
-    private $extension;
+    private AuthorizationCheckerInterface&MockObject $authorizationChecker;
+    private TranslatorInterface&MockObject $translator;
+    private B2bCustomerEmailDeleteHandlerExtension $extension;
 
     #[\Override]
     protected function setUp(): void
@@ -36,7 +33,7 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
         $this->extension->setAccessDeniedExceptionFactory(new EntityDeleteAccessDeniedExceptionFactory());
     }
 
-    public function testAssertDeleteGrantedWhenNoOwner()
+    public function testAssertDeleteGrantedWhenNoOwner(): void
     {
         $customerEmail = new B2bCustomerEmail();
 
@@ -48,7 +45,7 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
         $this->extension->assertDeleteGranted($customerEmail);
     }
 
-    public function testAssertDeleteGrantedWhenAccessGranted()
+    public function testAssertDeleteGrantedWhenAccessGranted(): void
     {
         $customerEmail = new B2bCustomerEmail();
         $customer = new B2bCustomer();
@@ -64,7 +61,7 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
         $this->extension->assertDeleteGranted($customerEmail);
     }
 
-    public function testAssertDeleteGrantedWhenAccessDenied()
+    public function testAssertDeleteGrantedWhenAccessDenied(): void
     {
         $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: access denied.');
@@ -83,7 +80,7 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
         $this->extension->assertDeleteGranted($customerEmail);
     }
 
-    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails()
+    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedAndThereIsOtherEmails(): void
     {
         $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('The delete operation is forbidden. Reason: translated exception message.');
@@ -108,7 +105,7 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
         $this->extension->assertDeleteGranted($customerEmail);
     }
 
-    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedIfThereIsNoOtherEmails()
+    public function testAssertDeleteGrantedWhenPrimaryEmailIsDeletedIfThereIsNoOtherEmails(): void
     {
         $customerEmail = new B2bCustomerEmail();
         $customer = new B2bCustomer();
@@ -127,7 +124,7 @@ class B2bCustomerEmailDeleteHandlerExtensionTest extends \PHPUnit\Framework\Test
         $this->extension->assertDeleteGranted($customerEmail);
     }
 
-    public function testAssertDeleteGrantedWhenNotPrimaryEmailIsDeleted()
+    public function testAssertDeleteGrantedWhenNotPrimaryEmailIsDeleted(): void
     {
         $customerEmail = new B2bCustomerEmail();
         $customer = new B2bCustomer();

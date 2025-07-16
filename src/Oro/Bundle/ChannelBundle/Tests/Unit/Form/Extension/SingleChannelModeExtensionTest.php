@@ -6,6 +6,8 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Form\Extension\SingleChannelModeExtension;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -13,13 +15,10 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
+class SingleChannelModeExtensionTest extends TestCase
 {
-    /** @var SingleChannelModeExtension */
-    private $extension;
-
-    /** @var ChannelsByEntitiesProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $channelsProvider;
+    private SingleChannelModeExtension $extension;
+    private ChannelsByEntitiesProvider&MockObject $channelsProvider;
 
     #[\Override]
     protected function setUp(): void
@@ -29,7 +28,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
         $this->extension = new SingleChannelModeExtension($this->channelsProvider);
     }
 
-    public function testGetExtendedTypes()
+    public function testGetExtendedTypes(): void
     {
         $this->assertEquals([ChannelSelectType::class], SingleChannelModeExtension::getExtendedTypes());
     }
@@ -37,7 +36,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider testBuildFormDataProvider
      */
-    public function testBuildForm(array $entities, array $channels, ?callable $callback = null)
+    public function testBuildForm(array $entities, array $channels, ?callable $callback = null): void
     {
         $builder = $this->createMock(FormBuilderInterface::class);
         $this->channelsProvider->expects($this->once())
@@ -60,7 +59,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
      * @param bool $readOnly
      * @param bool $hide
      */
-    public function testBuildView(array $entities, array $channels, $readOnly = false, $hide = false)
+    public function testBuildView(array $entities, array $channels, $readOnly = false, $hide = false): void
     {
         $view = new FormView();
 
@@ -81,7 +80,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testConfigureOptions()
+    public function testConfigureOptions(): void
     {
         $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())

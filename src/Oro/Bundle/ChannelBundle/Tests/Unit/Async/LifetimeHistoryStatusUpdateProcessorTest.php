@@ -2,30 +2,26 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Async\LifetimeHistoryStatusUpdateProcessor;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
-use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Component\MessageQueue\Transport\Message;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LifetimeHistoryStatusUpdateProcessorTest extends \PHPUnit\Framework\TestCase
+class LifetimeHistoryStatusUpdateProcessorTest extends TestCase
 {
-    private SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session;
-    private ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject $doctrine;
+    private SessionInterface&MockObject $session;
+    private ManagerRegistry&MockObject $doctrine;
+    private MessageProducerInterface&MockObject $messageProducer;
     private LifetimeHistoryStatusUpdateProcessor $processor;
-    private MessageProducerInterface $messageProducer;
-    private StateProvider|\PHPUnit\Framework\MockObject\MockObject $stateProvider;
-    private EntityManager|\PHPUnit\Framework\MockObject\MockObject $entityManager;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->stateProvider = $this->createMock(StateProvider::class);
-        $this->entityManager = $this->createMock(EntityManager::class);
         $this->session = $this->createMock(SessionInterface::class);
         $this->doctrine = $this->createMock(ManagerRegistry::class);
         $this->messageProducer = $this->createMock(MessageProducerInterface::class);
@@ -33,7 +29,7 @@ class LifetimeHistoryStatusUpdateProcessorTest extends \PHPUnit\Framework\TestCa
         $this->processor = new LifetimeHistoryStatusUpdateProcessor($this->doctrine);
     }
 
-    public function testShouldMassStatusUpdate()
+    public function testShouldMassStatusUpdate(): void
     {
         $message = new Message();
         $message->setBody([
@@ -61,7 +57,8 @@ class LifetimeHistoryStatusUpdateProcessorTest extends \PHPUnit\Framework\TestCa
                 LifetimeValueHistory::STATUS_NEW,
             );
 
-        $this->messageProducer->expects(self::never())->method('send');
+        $this->messageProducer->expects(self::never())
+            ->method('send');
 
         $this->processor->process($message, $this->session);
     }

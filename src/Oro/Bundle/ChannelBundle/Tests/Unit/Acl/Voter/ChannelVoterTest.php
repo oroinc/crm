@@ -7,19 +7,16 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\Testing\Unit\TestContainerBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
-class ChannelVoterTest extends \PHPUnit\Framework\TestCase
+class ChannelVoterTest extends TestCase
 {
-    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $doctrineHelper;
-
-    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $settingsProvider;
-
-    /** @var ChannelVoter */
-    private $voter;
+    private DoctrineHelper&MockObject $doctrineHelper;
+    private SettingsProvider&MockObject $settingsProvider;
+    private ChannelVoter $voter;
 
     #[\Override]
     protected function setUp(): void
@@ -37,7 +34,7 @@ class ChannelVoterTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider attributesDataProvider
      */
-    public function testVote(Channel $object, array $attributes, bool $isSystemChannel, int $expected)
+    public function testVote(Channel $object, array $attributes, bool $isSystemChannel, int $expected): void
     {
         $this->voter->setClassName(Channel::class);
 

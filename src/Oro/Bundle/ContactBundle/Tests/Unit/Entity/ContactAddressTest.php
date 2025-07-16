@@ -4,8 +4,9 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use PHPUnit\Framework\TestCase;
 
-class ContactAddressTest extends \PHPUnit\Framework\TestCase
+class ContactAddressTest extends TestCase
 {
     public function testOwner(): void
     {

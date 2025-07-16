@@ -6,19 +6,15 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
+class ChangeLeadStatusTest extends TestCase
 {
-    /** @var EntityManager */
-    private $entityManager;
-
-    /** @var LeadStub */
-    private $lead;
-
-    /** @var ChangeLeadStatus */
-    private $model;
+    private EntityManager $entityManager;
+    private LeadStub $lead;
+    private ChangeLeadStatus $model;
 
     #[\Override]
     protected function setUp(): void
@@ -40,24 +36,24 @@ class ChangeLeadStatusTest extends \PHPUnit\Framework\TestCase
         $this->model = new ChangeLeadStatus($this->entityManager, $validator);
     }
 
-    public function testDisqualify()
+    public function testDisqualify(): void
     {
         $this->model->disqualify($this->lead);
         $this->assertEquals('lead_status.canceled', $this->lead->getStatus());
     }
 
-    public function testQualify()
+    public function testQualify(): void
     {
         $this->model->qualify($this->lead);
         $this->assertEquals('lead_status.qualified', $this->lead->getStatus());
     }
 
-    public function testSuccessQualify()
+    public function testSuccessQualify(): void
     {
         $this->assertTrue($this->model->qualify($this->lead));
     }
 
-    public function testFailQualify()
+    public function testFailQualify(): void
     {
         $this->entityManager->expects($this->once())
             ->method('persist')

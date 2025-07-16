@@ -12,20 +12,16 @@ use Oro\Bundle\ApiBundle\Util\DoctrineHelper;
 use Oro\Bundle\SalesBundle\Api\AccountCustomerAssociationProvider;
 use Oro\Bundle\SalesBundle\Api\Processor\AddAccountCustomerAssociations;
 use Oro\Bundle\SalesBundle\Entity\Customer;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class AddAccountCustomerAssociationsTest extends ConfigProcessorTestCase
 {
-    /** @var AccountCustomerAssociationProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $accountCustomerAssociationProvider;
-
-    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $doctrineHelper;
-
-    /** @var AddAccountCustomerAssociations */
-    private $processor;
+    private AccountCustomerAssociationProvider&MockObject $accountCustomerAssociationProvider;
+    private DoctrineHelper&MockObject $doctrineHelper;
+    private AddAccountCustomerAssociations $processor;
 
     #[\Override]
     protected function setUp(): void

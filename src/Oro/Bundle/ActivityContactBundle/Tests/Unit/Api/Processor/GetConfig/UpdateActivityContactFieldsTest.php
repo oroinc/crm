@@ -10,22 +10,16 @@ use Oro\Bundle\ApiBundle\Util\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\EntityConfigId;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
 {
     private const EXCLUDED_ACTIONS = ['create', 'update'];
 
-    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $doctrineHelper;
-
-    /** @var ConfigManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $configManager;
-
-    /** @var ActivityContactProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $activityContactProvider;
-
-    /** @var UpdateActivityContactFields */
-    private $processor;
+    private DoctrineHelper&MockObject $doctrineHelper;
+    private ConfigManager&MockObject $configManager;
+    private ActivityContactProvider&MockObject $activityContactProvider;
+    private UpdateActivityContactFields $processor;
 
     #[\Override]
     protected function setUp(): void

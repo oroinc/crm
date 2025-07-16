@@ -4,11 +4,11 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
+use PHPUnit\Framework\TestCase;
 
-class B2bCustomerEmailTest extends \PHPUnit\Framework\TestCase
+class B2bCustomerEmailTest extends TestCase
 {
-    /** @var B2bCustomerEmail */
-    private $email;
+    private B2bCustomerEmail $email;
 
     #[\Override]
     protected function setUp(): void
@@ -16,7 +16,7 @@ class B2bCustomerEmailTest extends \PHPUnit\Framework\TestCase
         $this->email = new B2bCustomerEmail();
     }
 
-    public function testOwner()
+    public function testOwner(): void
     {
         $this->assertNull($this->email->getOwner());
 

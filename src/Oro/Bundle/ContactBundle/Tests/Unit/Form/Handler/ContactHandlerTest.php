@@ -7,28 +7,21 @@ use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Form\Handler\ContactHandler;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class ContactHandlerTest extends \PHPUnit\Framework\TestCase
+class ContactHandlerTest extends TestCase
 {
     private const FORM_DATA = ['field' => 'value'];
 
-    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $form;
-
-    /** @var Request */
-    private $request;
-
-    /** @var EntityManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $manager;
-
-    /** @var Contact */
-    private $entity;
-
-    /** @var ContactHandler */
-    private $handler;
+    private FormInterface&MockObject $form;
+    private Request $request;
+    private EntityManagerInterface&MockObject $manager;
+    private Contact $entity;
+    private ContactHandler $handler;
 
     #[\Override]
     protected function setUp(): void

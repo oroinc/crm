@@ -12,14 +12,15 @@ use Oro\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvi
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit\Framework\TestCase
+class WidgetOpportunityByLeadSourceProviderTest extends TestCase
 {
     /**
      * @dataProvider opportunitiesBySourceDataProvider
      */
-    public function testSortByValue(array $inputData)
+    public function testSortByValue(array $inputData): void
     {
         $provider = $this->getProvider($inputData);
 

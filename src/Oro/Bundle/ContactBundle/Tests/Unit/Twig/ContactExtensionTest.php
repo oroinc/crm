@@ -6,16 +6,15 @@ use Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
 use Oro\Bundle\ContactBundle\Model\Social;
 use Oro\Bundle\ContactBundle\Twig\ContactExtension;
 use Oro\Component\Testing\Unit\TwigExtensionTestCaseTrait;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ContactExtensionTest extends \PHPUnit\Framework\TestCase
+class ContactExtensionTest extends TestCase
 {
     use TwigExtensionTestCaseTrait;
 
-    /** @var SocialUrlFormatter|\PHPUnit\Framework\MockObject\MockObject */
-    private $urlFormatter;
-
-    /** @var ContactExtension */
-    private $extension;
+    private SocialUrlFormatter&MockObject $urlFormatter;
+    private ContactExtension $extension;
 
     #[\Override]
     protected function setUp(): void
@@ -32,7 +31,7 @@ class ContactExtensionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider socialUrlDataProvider
      */
-    public function testGetSocialUrl(string $expectedUrl, ?string $socialType, ?string $username)
+    public function testGetSocialUrl(string $expectedUrl, ?string $socialType, ?string $username): void
     {
         if ($socialType && $username) {
             $this->urlFormatter->expects($this->once())

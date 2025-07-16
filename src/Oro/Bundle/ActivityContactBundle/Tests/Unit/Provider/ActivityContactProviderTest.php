@@ -10,19 +10,17 @@ use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Stub\EmailStub as TestActivity1;
 use Oro\Component\Testing\Unit\TestContainerBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class ActivityContactProviderTest extends \PHPUnit\Framework\TestCase
+class ActivityContactProviderTest extends TestCase
 {
-    private DirectionProviderInterface|MockObject $directionProvider;
-
-    private DirectionProviderInterface|MockObject $directionProvider1;
-
+    private DirectionProviderInterface&MockObject $directionProvider;
+    private DirectionProviderInterface&MockObject $directionProvider1;
     private ActivityContactProvider $provider;
-
-    private ActivityManager|MockObject $activityManager;
+    private ActivityManager&MockObject $activityManager;
 
     #[\Override]
     protected function setUp(): void

@@ -26,11 +26,8 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends TestCase
     private const TEST_ENTITY_NAME = BusinessUnit::class;
     private const TEST_ENTITY_ALIAS = 'business_alias';
 
-    /** @var BusinessUnitAclProvider|MockObject */
-    private $businessAclProvider;
-
-    /** @var ForecastWidgetBusinessUnitSearchHandler */
-    private $handler;
+    private BusinessUnitAclProvider&MockObject $businessAclProvider;
+    private ForecastWidgetBusinessUnitSearchHandler $handler;
 
     #[\Override]
     protected function setUp(): void
@@ -48,7 +45,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testApplyBusinessUnitAcl()
+    public function testApplyBusinessUnitAcl(): void
     {
         $actualElements = [
             new SearchElement(1),

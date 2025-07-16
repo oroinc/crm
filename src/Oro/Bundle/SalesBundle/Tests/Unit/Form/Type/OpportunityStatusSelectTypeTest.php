@@ -4,16 +4,17 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusSelectType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class OpportunityStatusSelectTypeTest extends \PHPUnit\Framework\TestCase
+class OpportunityStatusSelectTypeTest extends TestCase
 {
     /**
      * @dataProvider probabilitiesDataProvider
      */
-    public function testViewShouldHaveProbabilitiesDataAttributes(array $probabilities)
+    public function testViewShouldHaveProbabilitiesDataAttributes(array $probabilities): void
     {
         $type = $this->getFormType();
         $formView = new FormView();
@@ -27,7 +28,7 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testShouldHaveProbabilitiesAsDefaultOption()
+    public function testShouldHaveProbabilitiesAsDefaultOption(): void
     {
         $type = $this->getFormType(['won' => 1.0, 'lost' => 0.0]);
         $resolver = new OptionsResolver();
@@ -47,7 +48,7 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testShouldFilterNullProbabilities()
+    public function testShouldFilterNullProbabilities(): void
     {
         $type = $this->getFormType(['won' => 1.0, 'lost' => 0.0, 'empty' => null]);
         $resolver = new OptionsResolver();

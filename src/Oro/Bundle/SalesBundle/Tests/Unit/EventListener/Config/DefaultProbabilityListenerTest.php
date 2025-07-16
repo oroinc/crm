@@ -5,8 +5,9 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\EventListener\Config;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ConfigBundle\Event\ConfigGetEvent;
 use Oro\Bundle\SalesBundle\EventListener\Config\DefaultProbabilityListener;
+use PHPUnit\Framework\TestCase;
 
-class DefaultProbabilityListenerTest extends \PHPUnit\Framework\TestCase
+class DefaultProbabilityListenerTest extends TestCase
 {
     public function testLoadConfig(): void
     {

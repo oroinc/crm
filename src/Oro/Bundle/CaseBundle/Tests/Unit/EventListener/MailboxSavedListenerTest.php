@@ -9,14 +9,13 @@ use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\EmailBundle\Event\MailboxSaved;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\TagBundle\Entity\TagManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
+class MailboxSavedListenerTest extends TestCase
 {
-    /** @var TagManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $tagManager;
-
-    /** @var MailboxSavedListener */
-    private $listener;
+    private TagManager&MockObject $tagManager;
+    private MailboxSavedListener $listener;
 
     #[\Override]
     protected function setUp(): void
@@ -26,7 +25,7 @@ class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
         $this->listener = new MailboxSavedListener($this->tagManager);
     }
 
-    public function testOnMailboxSave()
+    public function testOnMailboxSave(): void
     {
         $event = $this->createMock(MailboxSaved::class);
 
@@ -65,7 +64,7 @@ class MailboxSavedListenerTest extends \PHPUnit\Framework\TestCase
         $this->listener->onMailboxSave($event);
     }
 
-    public function testOnMailboxSaveNotCaseSettings()
+    public function testOnMailboxSaveNotCaseSettings(): void
     {
         $event = $this->createMock(MailboxSaved::class);
 

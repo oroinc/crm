@@ -16,11 +16,12 @@ use Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub as Lead;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub as Opportunity;
 use Oro\Bundle\UserBundle\Entity\User;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LeadToOpportunityProviderTest extends \PHPUnit\Framework\TestCase
+class LeadToOpportunityProviderTest extends TestCase
 {
-    /** @var LeadToOpportunityProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $provider;
+    private LeadToOpportunityProvider&MockObject $provider;
 
     #[\Override]
     protected function setUp(): void

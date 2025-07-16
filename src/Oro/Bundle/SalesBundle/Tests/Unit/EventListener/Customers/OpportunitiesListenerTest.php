@@ -11,25 +11,18 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider as CustomerConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
+class OpportunitiesListenerTest extends TestCase
 {
-    /** @var CustomerConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $provider;
-
-    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $translator;
-
-    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $doctrineHelper;
-
-    /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $configProvider;
-
-    /** @var OpportunitiesListener */
-    private $listener;
+    private CustomerConfigProvider&MockObject $provider;
+    private TranslatorInterface&MockObject $translator;
+    private DoctrineHelper&MockObject $doctrineHelper;
+    private ConfigProvider&MockObject $configProvider;
+    private OpportunitiesListener $listener;
 
     #[\Override]
     protected function setUp(): void
@@ -54,7 +47,7 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testAddOpportunities()
+    public function testAddOpportunities(): void
     {
         $id = 5;
         $entity = new TestEntity($id);
@@ -118,7 +111,7 @@ class OpportunitiesListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider testAddOpportunitiesNotCustomerDataProvider
      */
-    public function testAddOpportunitiesNotCustomer(?object $entity = null, ?bool $isCustomerClass = null)
+    public function testAddOpportunitiesNotCustomer(?object $entity = null, ?bool $isCustomerClass = null): void
     {
         $env = $this->createMock(Environment::class);
         $data = ['dataBlocks' => ['subblocks' => ['title' => 'some title', 'data' => 'some data']]];

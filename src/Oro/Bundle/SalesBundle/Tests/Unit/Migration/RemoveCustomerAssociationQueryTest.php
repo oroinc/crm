@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Migration;
 
 use Oro\Bundle\SalesBundle\Migration\RemoveCustomerAssociationQuery;
+use PHPUnit\Framework\TestCase;
 
-class RemoveCustomerAssociationQueryTest extends \PHPUnit\Framework\TestCase
+class RemoveCustomerAssociationQueryTest extends TestCase
 {
-    public function testInitialized()
+    public function testInitialized(): void
     {
         $query = new RemoveCustomerAssociationQuery('Some\Entity', 'some_table', true);
         self::assertEquals(

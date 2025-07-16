@@ -5,13 +5,14 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use PHPUnit\Framework\TestCase;
 
-class OpportunityTest extends \PHPUnit\Framework\TestCase
+class OpportunityTest extends TestCase
 {
     /**
      * @dataProvider getSetDataProvider
      */
-    public function testGetSet($property, $value, $expected)
+    public function testGetSet($property, $value, $expected): void
     {
         $obj = new Opportunity();
 
@@ -28,7 +29,7 @@ class OpportunityTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetEmail()
+    public function testGetEmail(): void
     {
         $opportunity = new Opportunity();
         $contact = $this->createMock(Contact::class);

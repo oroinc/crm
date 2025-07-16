@@ -7,8 +7,9 @@ use Oro\Bundle\AnalyticsBundle\Async\Topic\CalculateChannelAnalyticsTopic;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\MessageQueueBundle\Test\Unit\MessageQueueExtension;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+use PHPUnit\Framework\TestCase;
 
-class ScheduleCalculateAnalyticsServiceTest extends \PHPUnit\Framework\TestCase
+class ScheduleCalculateAnalyticsServiceTest extends TestCase
 {
     use MessageQueueExtension;
 

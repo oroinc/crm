@@ -6,14 +6,13 @@ use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\Provider\CasePhoneProvider;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CasePhoneProviderTest extends \PHPUnit\Framework\TestCase
+class CasePhoneProviderTest extends TestCase
 {
-    /** @var PhoneProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $rootProvider;
-
-    /** @var CasePhoneProvider */
-    private $provider;
+    private PhoneProviderInterface&MockObject $rootProvider;
+    private CasePhoneProvider $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -24,7 +23,7 @@ class CasePhoneProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider->setRootProvider($this->rootProvider);
     }
 
-    public function testGetPhoneNumberNoContact()
+    public function testGetPhoneNumberNoContact(): void
     {
         $entity = new CaseEntity();
 
@@ -36,7 +35,7 @@ class CasePhoneProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetPhoneNumber()
+    public function testGetPhoneNumber(): void
     {
         $entity = new CaseEntity();
         $contact = $this->createMock(Contact::class);
@@ -53,7 +52,7 @@ class CasePhoneProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetPhoneNumbersNoContact()
+    public function testGetPhoneNumbersNoContact(): void
     {
         $entity = new CaseEntity();
 
@@ -66,7 +65,7 @@ class CasePhoneProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetPhoneNumbers()
+    public function testGetPhoneNumbers(): void
     {
         $entity = new CaseEntity();
         $contact = $this->createMock(Contact::class);

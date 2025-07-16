@@ -8,12 +8,13 @@ use Oro\Bundle\ChannelBundle\Entity\CustomerIdentity;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\Testing\Unit\EntityTestCaseTrait;
+use PHPUnit\Framework\TestCase;
 
-class CustomerIdentityTest extends \PHPUnit\Framework\TestCase
+class CustomerIdentityTest extends TestCase
 {
     use EntityTestCaseTrait;
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $properties = [
             'id'          => ['id', 1],
@@ -30,7 +31,7 @@ class CustomerIdentityTest extends \PHPUnit\Framework\TestCase
         self::assertPropertyAccessors($entity, $properties);
     }
 
-    public function testPrePersist()
+    public function testPrePersist(): void
     {
         $entity = new CustomerIdentity();
         $entity->prePersist();
@@ -47,7 +48,7 @@ class CustomerIdentityTest extends \PHPUnit\Framework\TestCase
         self::assertNotSame($existingUpdatedAt, $entity->getUpdatedAt());
     }
 
-    public function testPreUpdate()
+    public function testPreUpdate(): void
     {
         $entity = new CustomerIdentity();
         $entity->preUpdate();

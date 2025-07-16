@@ -15,25 +15,20 @@ use Oro\Bundle\SalesBundle\Exception\Customer\InvalidCustomerRelationEntityExcep
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\AccountProviderInterface;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub as TargetEntity;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class AccountCustomerManagerTest extends \PHPUnit\Framework\TestCase
+class AccountCustomerManagerTest extends TestCase
 {
     use ExtendedEntityTestTrait;
 
-    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $doctrineHelper;
-
-    /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $configProvider;
-
-    /** @var AccountProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $accountProvider;
-
-    /** @var AccountCustomerManager */
-    private $manager;
+    private DoctrineHelper&MockObject $doctrineHelper;
+    private ConfigProvider&MockObject $configProvider;
+    private AccountProviderInterface&MockObject $accountProvider;
+    private AccountCustomerManager $manager;
 
     #[\Override]
     protected function setUp(): void

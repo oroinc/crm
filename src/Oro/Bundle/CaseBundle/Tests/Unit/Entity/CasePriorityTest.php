@@ -3,11 +3,11 @@
 namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\CaseBundle\Entity\CasePriority;
+use PHPUnit\Framework\TestCase;
 
-class CasePriorityTest extends \PHPUnit\Framework\TestCase
+class CasePriorityTest extends TestCase
 {
-    /** @var CasePriority */
-    private $casePriority;
+    private CasePriority $casePriority;
 
     #[\Override]
     protected function setUp(): void
@@ -15,12 +15,12 @@ class CasePriorityTest extends \PHPUnit\Framework\TestCase
         $this->casePriority = new CasePriority('test');
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         $this->assertEquals('test', $this->casePriority->getName());
     }
 
-    public function testLabel()
+    public function testLabel(): void
     {
         $this->assertNull($this->casePriority->getLabel());
 
@@ -30,7 +30,7 @@ class CasePriorityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($label, $this->casePriority->getLabel());
     }
 
-    public function testOrder()
+    public function testOrder(): void
     {
         $this->assertNull($this->casePriority->getOrder());
 
@@ -40,7 +40,7 @@ class CasePriorityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($order, $this->casePriority->getOrder());
     }
 
-    public function testLocale()
+    public function testLocale(): void
     {
         $this->assertNull($this->casePriority->getLocale());
 

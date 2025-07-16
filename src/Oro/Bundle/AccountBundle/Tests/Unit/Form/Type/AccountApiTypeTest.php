@@ -6,6 +6,7 @@ use Oro\Bundle\AccountBundle\Form\Type\AccountApiType;
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Oro\Bundle\FormBundle\Form\Type\MultipleEntityType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilder;
@@ -13,10 +14,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class AccountApiTypeTest extends \PHPUnit\Framework\TestCase
+class AccountApiTypeTest extends TestCase
 {
-    /** @var AccountApiType */
-    private $type;
+    private AccountApiType $type;
 
     public function init(bool $havePrivilege = true)
     {
@@ -32,7 +32,7 @@ class AccountApiTypeTest extends \PHPUnit\Framework\TestCase
         $this->type = new AccountApiType($router, $entityNameResolver, $authorizationChecker);
     }
 
-    public function testConfigureOptions()
+    public function testConfigureOptions(): void
     {
         $this->init();
 
@@ -44,13 +44,13 @@ class AccountApiTypeTest extends \PHPUnit\Framework\TestCase
         $this->type->configureOptions($resolver);
     }
 
-    public function testName()
+    public function testName(): void
     {
         $this->init();
         $this->assertEquals('account', $this->type->getName());
     }
 
-    public function testAddEntityFields()
+    public function testAddEntityFields(): void
     {
         $this->init();
 
@@ -70,7 +70,7 @@ class AccountApiTypeTest extends \PHPUnit\Framework\TestCase
         $this->type->buildForm($builder, []);
     }
 
-    public function testAddEntityFieldsWithoutContactPermission()
+    public function testAddEntityFieldsWithoutContactPermission(): void
     {
         $this->init(false);
 

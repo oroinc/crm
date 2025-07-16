@@ -9,20 +9,15 @@ use Oro\Bundle\ApiBundle\Request\ValueNormalizer;
 use Oro\Bundle\SalesBundle\Api\AccountCustomerAssociationProvider;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AccountCustomerAssociationProviderTest extends \PHPUnit\Framework\TestCase
+class AccountCustomerAssociationProviderTest extends TestCase
 {
-    /** @var ConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $configProvider;
-
-    /** @var ValueNormalizer|\PHPUnit\Framework\MockObject\MockObject */
-    private $valueNormalizer;
-
-    /** @var ResourcesProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $resourcesProvider;
-
-    /** @var AccountCustomerAssociationProvider */
-    private $accountCustomerAssociationProvider;
+    private ConfigProvider&MockObject $configProvider;
+    private ValueNormalizer&MockObject $valueNormalizer;
+    private ResourcesProvider&MockObject $resourcesProvider;
+    private AccountCustomerAssociationProvider $accountCustomerAssociationProvider;
 
     #[\Override]
     protected function setUp(): void

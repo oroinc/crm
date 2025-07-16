@@ -12,14 +12,9 @@ use PHPUnit\Framework\TestCase;
 
 class ChannelsByEntitiesProviderTest extends TestCase
 {
-    /** @var ChannelsByEntitiesProvider */
-    private $provider;
-
-    /** @var ChannelRepository|MockObject */
-    private $repo;
-
-    /** @var AclHelper|MockObject */
-    private $aclHelper;
+    private ChannelsByEntitiesProvider $provider;
+    private ChannelRepository&MockObject $repo;
+    private AclHelper&MockObject $aclHelper;
 
     #[\Override]
     protected function setUp(): void
@@ -40,7 +35,7 @@ class ChannelsByEntitiesProviderTest extends TestCase
         $this->provider = new ChannelsByEntitiesProvider($doctrineHelper, $this->aclHelper);
     }
 
-    public function testGetChannelsByEntities()
+    public function testGetChannelsByEntities(): void
     {
         $channelsForParams1 = [new Channel(), new Channel()];
         $channelsForParams2 = [new Channel(), new Channel()];

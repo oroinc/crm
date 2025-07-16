@@ -10,12 +10,12 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\ConfigExpression\ContextAccessor;
 use Oro\Component\ConfigExpression\Exception\InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
-class ChannelEntityAvailabilityTest extends \PHPUnit\Framework\TestCase
+class ChannelEntityAvailabilityTest extends TestCase
 {
-    /** @var ChannelEntityAvailability */
-    private $condition;
+    private ChannelEntityAvailability $condition;
 
     #[\Override]
     protected function setUp(): void

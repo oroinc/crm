@@ -6,12 +6,13 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Component\Testing\Unit\EntityTestCaseTrait;
+use PHPUnit\Framework\TestCase;
 
-class LifetimeValueHistoryTest extends \PHPUnit\Framework\TestCase
+class LifetimeValueHistoryTest extends TestCase
 {
     use EntityTestCaseTrait;
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $properties = [
             'id'          => ['id', 1],
@@ -26,7 +27,7 @@ class LifetimeValueHistoryTest extends \PHPUnit\Framework\TestCase
         self::assertPropertyAccessors($entity, $properties);
     }
 
-    public function testPrePersist()
+    public function testPrePersist(): void
     {
         $entity = new LifetimeValueHistory();
         $entity->prePersist();

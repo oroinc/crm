@@ -18,20 +18,11 @@ class AverageLifetimeWidgetProviderTest extends TestCase
 {
     private const TEST_TZ = 'UTC';
 
-    /** @var ManagerRegistry|MockObject */
-    private $registry;
-
-    /** @var AclHelper|MockObject */
-    private $aclHelper;
-
-    /** @var LocaleSettings|MockObject */
-    private $localeSettings;
-
-    /** @var DateFilterProcessor|MockObject */
-    private $dateFilterProcessor;
-
-    /** @var AverageLifetimeWidgetProvider */
-    private $provider;
+    private ManagerRegistry&MockObject $registry;
+    private AclHelper&MockObject $aclHelper;
+    private LocaleSettings&MockObject $localeSettings;
+    private DateFilterProcessor&MockObject $dateFilterProcessor;
+    private AverageLifetimeWidgetProvider $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -52,7 +43,7 @@ class AverageLifetimeWidgetProviderTest extends TestCase
     /**
      * @dataProvider chartDataProvider
      */
-    public function testGetChartData(array $channelsData, array $averageData, array $expectedResult, array $dates)
+    public function testGetChartData(array $channelsData, array $averageData, array $expectedResult, array $dates): void
     {
         $channelRepo = $this->createMock(ChannelRepository::class);
         $averageRepo = $this->createMock(LifetimeValueAverageAggregationRepository::class);

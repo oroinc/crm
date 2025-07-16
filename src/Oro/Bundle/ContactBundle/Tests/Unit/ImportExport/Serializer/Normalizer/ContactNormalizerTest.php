@@ -9,17 +9,14 @@ use Oro\Bundle\ContactBundle\Model\Social;
 use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Bundle\ImportExportBundle\Tests\Unit\Strategy\Stub\ImportEntity;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ContactNormalizerTest extends \PHPUnit\Framework\TestCase
+class ContactNormalizerTest extends TestCase
 {
-    /** @var SocialUrlFormatter|\PHPUnit\Framework\MockObject\MockObject */
-    private $socialUrlFormatter;
-
-    /** @var FieldHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $fieldHelper;
-
-    /** @var ContactNormalizer */
-    private $normalizer;
+    private SocialUrlFormatter&MockObject $socialUrlFormatter;
+    private FieldHelper&MockObject $fieldHelper;
+    private ContactNormalizer $normalizer;
 
     #[\Override]
     protected function setUp(): void

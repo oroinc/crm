@@ -6,6 +6,8 @@ use Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
 use Oro\Component\Testing\Unit\Form\Type\Stub\FormStub;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -14,21 +16,14 @@ use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ChannelIntegrationHandlerTest extends \PHPUnit\Framework\TestCase
+class ChannelIntegrationHandlerTest extends TestCase
 {
     private const TEST_NAME = 'name';
 
-    /** @var FormInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $form;
-
-    /** @var Request */
-    private $request;
-
-    /** @var Integration */
-    private $entity;
-
-    /** @var ChannelIntegrationHandler */
-    private $handler;
+    private FormInterface&MockObject $form;
+    private Request $request;
+    private Integration $entity;
+    private ChannelIntegrationHandler $handler;
 
     #[\Override]
     protected function setUp(): void

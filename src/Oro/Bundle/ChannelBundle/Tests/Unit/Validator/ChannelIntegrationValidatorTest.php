@@ -7,14 +7,14 @@ use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint;
 use Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class ChannelIntegrationValidatorTest extends ConstraintValidatorTestCase
 {
-    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $provider;
+    private SettingsProvider&MockObject $provider;
 
     #[\Override]
     protected function setUp(): void

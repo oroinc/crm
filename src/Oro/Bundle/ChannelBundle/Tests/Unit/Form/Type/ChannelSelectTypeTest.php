@@ -15,11 +15,8 @@ use Symfony\Component\Form\Forms;
 
 class ChannelSelectTypeTest extends OrmTestCase
 {
-    /** @var ChannelSelectType */
-    private $type;
-
-    /** @var FormFactory */
-    private $factory;
+    private ChannelSelectType $type;
+    private FormFactory $factory;
 
     #[\Override]
     protected function setUp(): void

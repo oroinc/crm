@@ -3,9 +3,10 @@
 namespace Oro\Bundle\ContactBundle\Tests\Unit\DependencyInjection;
 
 use Oro\Bundle\ContactBundle\DependencyInjection\OroContactExtension;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class OroContactExtensionTest extends \PHPUnit\Framework\TestCase
+class OroContactExtensionTest extends TestCase
 {
     public function testLoad(): void
     {

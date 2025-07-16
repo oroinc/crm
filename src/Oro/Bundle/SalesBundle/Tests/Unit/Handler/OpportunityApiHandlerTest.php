@@ -4,13 +4,14 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Handler;
 
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Handler\OpportunityApiHandler;
+use PHPUnit\Framework\TestCase;
 
-class OpportunityApiHandlerTest extends \PHPUnit\Framework\TestCase
+class OpportunityApiHandlerTest extends TestCase
 {
     /**
      * @dataProvider probabilityDataProvider
      */
-    public function testShouldAppendProbabilityToChangeSet(float $probability)
+    public function testShouldAppendProbabilityToChangeSet(float $probability): void
     {
         $changeSet = [
             'fields' => [

@@ -7,14 +7,14 @@ use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\Testing\ReflectionUtil;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class CaseCommentTest extends \PHPUnit\Framework\TestCase
+class CaseCommentTest extends TestCase
 {
-    /** @var CaseComment */
-    private $comment;
+    private CaseComment $comment;
 
     #[\Override]
     protected function setUp(): void
@@ -22,7 +22,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->comment = new CaseComment();
     }
 
-    public function testId()
+    public function testId(): void
     {
         $this->assertNull($this->comment->getId());
 
@@ -31,7 +31,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->comment->getId());
     }
 
-    public function testMessage()
+    public function testMessage(): void
     {
         $this->assertNull($this->comment->getMessage());
 
@@ -41,7 +41,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->comment->getMessage());
     }
 
-    public function testPublic()
+    public function testPublic(): void
     {
         $this->assertFalse($this->comment->isPublic());
 
@@ -49,7 +49,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->comment->isPublic());
     }
 
-    public function testContact()
+    public function testContact(): void
     {
         $this->assertNull($this->comment->getContact());
 
@@ -59,7 +59,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->comment->getContact());
     }
 
-    public function testCase()
+    public function testCase(): void
     {
         $this->assertNull($this->comment->getCase());
 
@@ -69,7 +69,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->comment->getCase());
     }
 
-    public function testUpdatedBy()
+    public function testUpdatedBy(): void
     {
         $this->assertNull($this->comment->getUpdatedBy());
 
@@ -79,7 +79,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->comment->getUpdatedBy());
     }
 
-    public function testOwner()
+    public function testOwner(): void
     {
         $this->assertNull($this->comment->getOwner());
 
@@ -89,7 +89,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->comment->getOwner());
     }
 
-    public function testCreatedAt()
+    public function testCreatedAt(): void
     {
         $this->assertNull($this->comment->getCreatedAt());
 
@@ -99,7 +99,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->comment->getCreatedAt());
     }
 
-    public function testUpdatedAt()
+    public function testUpdatedAt(): void
     {
         $this->assertNull($this->comment->getUpdatedAt());
 
@@ -109,7 +109,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->comment->getUpdatedAt());
     }
 
-    public function testPrePersist()
+    public function testPrePersist(): void
     {
         $this->assertNull($this->comment->getCreatedAt());
 
@@ -119,7 +119,7 @@ class CaseCommentTest extends \PHPUnit\Framework\TestCase
         $this->assertLessThan(3, $this->comment->getCreatedAt()->diff(new \DateTime())->s);
     }
 
-    public function testPreUpdate()
+    public function testPreUpdate(): void
     {
         $this->assertNull($this->comment->getUpdatedAt());
 

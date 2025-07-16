@@ -17,17 +17,16 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\Testing\ReflectionUtil;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 
-class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
+class ChannelTypeExtensionTest extends TestCase
 {
-    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
-    private $doctrineHelper;
-
-    /** @var ChannelTypeExtension */
-    private $extension;
+    private DoctrineHelper&MockObject $doctrineHelper;
+    private ChannelTypeExtension $extension;
 
     #[\Override]
     protected function setUp(): void
@@ -41,7 +40,7 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testBuildForm()
+    public function testBuildForm(): void
     {
         $builder = $this->createMock(FormBuilderInterface::class);
 
@@ -54,7 +53,7 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider postSubmitDataProvider
      */
-    public function testPostSubmit(?Channel $channel, ?int $expectedPersist = null, ?int $expectedRemove = null)
+    public function testPostSubmit(?Channel $channel, ?int $expectedPersist = null, ?int $expectedRemove = null): void
     {
         $event = $this->createMock(FormEvent::class);
 
@@ -142,7 +141,7 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider preSetDataProvider
      */
-    public function testPreSetData(array $categories)
+    public function testPreSetData(array $categories): void
     {
         $channel = $this->getChannel(RFMAwareStub::class);
 
@@ -244,12 +243,12 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
      * @dataProvider stateDataProvider
      */
     public function testHandleState(
-        Channel|\PHPUnit\Framework\MockObject\MockObject $channel,
+        Channel&MockObject $channel,
         bool $hasStateForm,
         ?bool $isEnabled = null,
         ?array $actualData = null,
         ?array $expectedData = null
-    ) {
+    ): void {
         $event = $this->createMock(FormEvent::class);
         $event->expects($this->once())
             ->method('getData')
@@ -350,7 +349,7 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
         return $category;
     }
 
-    public function testGetExtendedTypes()
+    public function testGetExtendedTypes(): void
     {
         $this->assertEquals([ChannelType::class], ChannelTypeExtension::getExtendedTypes());
     }
@@ -358,7 +357,7 @@ class ChannelTypeExtensionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider validationGroupsDataProvider
      */
-    public function testSetDefaults(bool $feature, array $expected)
+    public function testSetDefaults(bool $feature, array $expected): void
     {
         $form = $this->createMock(FormInterface::class);
         $form->expects($this->any())

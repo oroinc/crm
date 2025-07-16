@@ -5,15 +5,14 @@ namespace Oro\Bundle\ContactBundle\Tests\Unit\ImportExport\Configuration;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\ImportExport\Configuration\ContactImportExportConfigurationProvider;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ContactImportExportConfigurationProviderTest extends \PHPUnit\Framework\TestCase
+class ContactImportExportConfigurationProviderTest extends TestCase
 {
-    /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $translator;
-
-    /** @var ContactImportExportConfigurationProvider */
-    private $provider;
+    private TranslatorInterface&MockObject $translator;
+    private ContactImportExportConfigurationProvider $provider;
 
     #[\Override]
     protected function setUp(): void
@@ -23,7 +22,7 @@ class ContactImportExportConfigurationProviderTest extends \PHPUnit\Framework\Te
         $this->provider = new ContactImportExportConfigurationProvider($this->translator);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->translator->expects(self::once())
             ->method('trans')

@@ -8,27 +8,21 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Oro\Bundle\UserBundle\Entity\User;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
 
-class StateProviderTest extends \PHPUnit\Framework\TestCase
+class StateProviderTest extends TestCase
 {
-    /** @var AbstractAdapter|\PHPUnit\Framework\MockObject\MockObject */
-    private $cacheProvider;
-
-    /** @var SettingsProvider|\PHPUnit\Framework\MockObject\MockObject */
-    private $settingsProvider;
-
-    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    private $registry;
-
-    /** @var TokenAccessorInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $token;
-
-    /** @var StateProvider */
-    private $stateProvider;
+    private AbstractAdapter&MockObject $cacheProvider;
+    private SettingsProvider&MockObject $settingsProvider;
+    private ManagerRegistry&MockObject $registry;
+    private TokenAccessorInterface&MockObject $token;
+    private StateProvider $stateProvider;
 
     #[\Override]
     protected function setUp(): void
@@ -45,7 +39,7 @@ class StateProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testEnabledEntitiesNotCached()
+    public function testEnabledEntitiesNotCached(): void
     {
         $entityManager = $this->createMock(EntityManager::class);
         $queryBuilder = $this->createMock(QueryBuilder::class);
@@ -78,19 +72,19 @@ class StateProviderTest extends \PHPUnit\Framework\TestCase
         self::assertFalse($this->stateProvider->isEntityEnabled(User::class));
     }
 
-    public function testEnabledEntitiesCached()
+    public function testEnabledEntitiesCached(): void
     {
         $this->cacheProvider->expects(self::once())
             ->method('get')
             ->willReturn([
-                'Oro\Bundle\SalesBundle\Entity\B2bCustomer' => true,
+                B2bCustomer::class => true,
                 'Oro\Bundle\CustomerBundle\Entity\Customer' => true,
                 'Oro\Bundle\UserBundle\Entity\User' => true
             ]);
         self::assertTrue($this->stateProvider->isEntityEnabled(User::class));
     }
 
-    public function testProcessChannelChange()
+    public function testProcessChannelChange(): void
     {
         $this->token->expects(self::once())
             ->method('getOrganizationId')
@@ -101,7 +95,7 @@ class StateProviderTest extends \PHPUnit\Framework\TestCase
         $this->stateProvider->processChannelChange();
     }
 
-    public function testClearOrganizationCache()
+    public function testClearOrganizationCache(): void
     {
         $organizationId = 1;
         $this->cacheProvider->expects(self::once())
