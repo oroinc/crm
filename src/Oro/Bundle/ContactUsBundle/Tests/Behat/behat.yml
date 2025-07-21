@@ -46,5 +46,6 @@ oro_behat_extension:
                 - Oro\Bundle\FormBundle\Tests\Behat\Context\FormContext
                 - Oro\Bundle\DataGridBundle\Tests\Behat\Context\GridContext
                 - Oro\Bundle\EmailBundle\Tests\Behat\Context\EmailContext
+                - Oro\Bundle\ConfigBundle\Tests\Behat\Context\FeatureContext
             paths:
                 - '@OroContactUsBundle/Tests/Behat/Features'
