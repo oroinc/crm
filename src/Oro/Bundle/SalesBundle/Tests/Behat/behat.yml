@@ -397,5 +397,6 @@ oro_behat_extension:
         - Oro\Bundle\SearchBundle\Tests\Behat\Context\SearchContext
         - Oro\Bundle\FilterBundle\Tests\Behat\Context\FilterContext
         - Oro\Bundle\DashboardBundle\Tests\Behat\Context\FeatureContext
+        - Oro\Bundle\UIBundle\Tests\Behat\Context\BreadcrumbContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'
