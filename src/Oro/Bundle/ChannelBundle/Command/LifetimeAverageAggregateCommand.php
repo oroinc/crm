@@ -7,6 +7,7 @@ namespace Oro\Bundle\ChannelBundle\Command;
 use Oro\Bundle\ChannelBundle\Async\Topic\AggregateLifetimeAverageTopic;
 use Oro\Bundle\CronBundle\Command\CronCommandScheduleDefinitionInterface;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,11 +16,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Schedules daily aggregation of average lifetime value per sales channel.
  */
+#[AsCommand(
+    name: 'oro:cron:lifetime-average:aggregate',
+    description: 'Schedules daily aggregation of average lifetime value per sales channel.'
+)]
 class LifetimeAverageAggregateCommand extends Command implements CronCommandScheduleDefinitionInterface
 {
-    /** @var string */
-    protected static $defaultName = 'oro:cron:lifetime-average:aggregate';
-
     private MessageProducerInterface $messageProducer;
 
     public function __construct(MessageProducerInterface $messageProducer)
@@ -41,7 +43,6 @@ class LifetimeAverageAggregateCommand extends Command implements CronCommandSche
     {
         $this->addOption('force', 'f', InputOption::VALUE_NONE, 'Regenerate aggregated data from scratch')
             ->addOption('use-delete', null, InputOption::VALUE_NONE, 'Use DELETE instead of TRUNCATE in SQL')
-            ->setDescription('Schedules daily aggregation of average lifetime value per sales channel.')
             ->setHelp(
                 <<<'HELP'
 The <info>%command.name%</info> command schedules daily aggregation of average lifetime value per sales channel.

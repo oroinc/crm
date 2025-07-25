@@ -1,6 +1,6 @@
 oro_contact_bundle:
     resource:     "@OroContactBundle/Controller"
-    type:         annotation
+    type:         attribute
     prefix:       /contact
 
 

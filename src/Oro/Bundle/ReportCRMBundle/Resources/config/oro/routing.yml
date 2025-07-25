@@ -1,4 +1,4 @@
 oro_reportcrm:
     resource:     "@OroReportCRMBundle/Controller"
-    type:         annotation
+    type:         attribute
     prefix:       /report

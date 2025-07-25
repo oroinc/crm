@@ -4,7 +4,6 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Command;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Tests\Functional\Command\AbstractRecalculateLifetimeCommandTest;
-use Oro\Bundle\SalesBundle\Command\RecalculateLifetimeCommand;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
 
@@ -42,6 +41,6 @@ class RecalculateLifetimeCommandTest extends AbstractRecalculateLifetimeCommandT
     #[\Override]
     protected function getCommandName(): string
     {
-        return RecalculateLifetimeCommand::getDefaultName();
+        return 'oro:b2b:lifetime:recalculate';
     }
 }

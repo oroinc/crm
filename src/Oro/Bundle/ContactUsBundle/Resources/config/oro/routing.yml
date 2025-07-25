@@ -1,11 +1,11 @@
 oro_contactus:
     resource: "@OroContactUsBundle/Controller/ContactRequestController.php"
-    type:     annotation
+    type:     attribute
     prefix:   /contact-us
 
 oro_contact_reason:
     resource: "@OroContactUsBundle/Controller/ContactReasonController.php"
-    type:     annotation
+    type:     attribute
     prefix:   /contact-reason
 
 

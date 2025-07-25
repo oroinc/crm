@@ -1,6 +1,6 @@
 oro_channel_bundle:
     resource: "@OroChannelBundle/Controller"
-    type:     annotation
+    type:     attribute
     prefix:   /channel
 
 

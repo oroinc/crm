@@ -4,7 +4,6 @@ namespace Oro\Bundle\ActivityContactBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
-use Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
 use Oro\Bundle\CronBundle\Async\Topic\RunCommandTopic;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -23,7 +22,7 @@ class ActivityContactRecalculate extends AbstractFixture implements ContainerAwa
         /** @var MessageProducerInterface $producer */
         $producer = $this->container->get('oro_message_queue.client.message_producer');
         $producer->send(RunCommandTopic::getName(), [
-            'command' => ActivityContactRecalculateCommand::getDefaultName(),
+            'command' => 'oro:activity-contact:recalculate',
             'arguments' => ['-v' => true, '--disabled-listeners' => ['all']]
         ]);
     }

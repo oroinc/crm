@@ -22,6 +22,7 @@ use Oro\Bundle\EntityExtendBundle\PropertyAccess;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Component\Log\OutputLogger;
 use Psr\Log\AbstractLogger;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,12 +30,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Recalculates counters and last contact date for contact activities.
  */
+#[AsCommand(
+    name: 'oro:activity-contact:recalculate',
+    description: 'Recalculates counters and last contact date for contact activities.'
+)]
 class ActivityContactRecalculateCommand extends Command
 {
     private const BATCH_SIZE     = 100;
-
-    /** @var string */
-    protected static $defaultName = 'oro:activity-contact:recalculate';
 
     protected OroEntityManager $em;
     protected ActivityListRepository $activityListRepository;
@@ -61,13 +63,6 @@ class ActivityContactRecalculateCommand extends Command
         $this->activityListener = $activityListener;
         $this->activityListFilterHelper = $activityListFilterHelper;
         $this->activityContactProvider = $activityContactProvider;
-    }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
-    #[\Override]
-    protected function configure()
-    {
-        $this->setDescription('Recalculates counters and last contact date for contact activities.');
     }
 
     /**

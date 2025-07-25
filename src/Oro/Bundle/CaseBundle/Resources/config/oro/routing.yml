@@ -1,6 +1,6 @@
 oro_case_bundle:
     resource: "@OroCaseBundle/Controller"
-    type:     annotation
+    type:     attribute
     prefix:   /case
 
 

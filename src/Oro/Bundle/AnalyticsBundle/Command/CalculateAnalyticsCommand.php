@@ -9,6 +9,7 @@ use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\CronBundle\Command\CronCommandScheduleDefinitionInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -17,11 +18,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Calculates all registered analytic metrics.
  */
+#[AsCommand(
+    name: 'oro:cron:analytic:calculate',
+    description: 'Calculates all registered analytic metrics.'
+)]
 class CalculateAnalyticsCommand extends Command implements CronCommandScheduleDefinitionInterface
 {
-    /** @var string */
-    protected static $defaultName = 'oro:cron:analytic:calculate';
-
     private ManagerRegistry $doctrine;
     private CalculateAnalyticsScheduler $calculateAnalyticsScheduler;
 
@@ -43,7 +45,6 @@ class CalculateAnalyticsCommand extends Command implements CronCommandScheduleDe
     protected function configure()
     {
         $this
-            ->setDescription('Calculates all registered analytic metrics.')
             ->addOption('channel', null, InputOption::VALUE_OPTIONAL, 'Channel ID')
             ->addOption('ids', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Customer IDs');
     }

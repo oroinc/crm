@@ -1,10 +1,10 @@
 oro_sales_bundle:
     resource: "@OroSalesBundle/Controller"
-    type:     annotation
+    type:     attribute
 
 oro_sales_dashboard:
     resource:     "@OroSalesBundle/Controller/Dashboard"
-    type:         annotation
+    type:         attribute
     prefix:       /dashboard
 
 
