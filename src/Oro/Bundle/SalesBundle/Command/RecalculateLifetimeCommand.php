@@ -11,15 +11,17 @@ use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 
 /**
  * Recalculates lifetime values for (offline) B2B sales channel customers.
  */
+#[AsCommand(
+    name: 'oro:b2b:lifetime:recalculate',
+    description: 'Recalculates lifetime values for (offline) B2B sales channel customers.'
+)]
 class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
 {
-    /** @var string */
-    protected static $defaultName = 'oro:b2b:lifetime:recalculate';
-
     private CurrencyQueryBuilderTransformerInterface $currencyTransformer;
 
     public function __construct(
@@ -37,7 +39,7 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
     {
         parent::configure();
 
-        $this->setDescription('Recalculates lifetime values for (offline) B2B sales channel customers.')
+        $this
             ->addUsage('--force');
     }
 

@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ActivityContactBundle\Tests\Functional\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -31,7 +30,7 @@ class ActivityContactRecalculateCommandTest extends WebTestCase
 
     private function runActivityContactRecalculateCommand()
     {
-        $this->runCommand(ActivityContactRecalculateCommand::getDefaultName());
+        $this->runCommand('oro:activity-contact:recalculate');
     }
 
     private function findContact(string $firstName): Contact

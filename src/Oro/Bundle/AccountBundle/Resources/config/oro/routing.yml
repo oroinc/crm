@@ -1,6 +1,6 @@
 oro_account_bundle:
     resource:     "@OroAccountBundle/Controller"
-    type:         annotation
+    type:         attribute
     prefix:       /account
 
 
