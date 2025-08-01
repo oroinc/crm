@@ -453,7 +453,6 @@ services:
 
     oro_sales.customer.config_cache_impl:
         parent: oro.data.cache
-        public: false
         tags:
             - { name: 'cache.pool', namespace: 'oro_sales_customer' }
 
