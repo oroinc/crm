@@ -197,9 +197,9 @@ services:
             - { name: kernel.event_listener, event: oro_channel.channel.save_succeed, method: onChannelSave }
 
     oro_channel.state_cache:
-          parent: oro.data.cache
-          tags:
-              - { name: 'cache.pool', namespace: 'oro_channel_state' }
+        parent: oro.data.cache
+        tags:
+          - { name: 'cache.pool', namespace: 'oro_channel_state' }
 
     oro_channel.form.subscriber.channel_subscriber:
         class: Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
