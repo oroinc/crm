@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Dashboard;
 
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ConfigBundle\Tests\Functional\Traits\ConfigManagerAwareTestTrait;
 use Oro\Bundle\DashboardBundle\Tests\Functional\AbstractWidgetTestCase;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
@@ -15,30 +14,25 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
 {
     use ConfigManagerAwareTestTrait;
 
-    private ?string $originalTimezone;
-    private ConfigManager $globalScopeManager;
+    private ?string $initialTimezone;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->initClient(
-            ['debug' => false],
-            $this->generateBasicAuthHeader()
-        );
+        $this->initClient(['debug' => false], self::generateBasicAuthHeader());
+        $this->loadFixtures([LoadForecastWidgetFixtures::class]);
 
-        $this->loadFixtures([
-            LoadForecastWidgetFixtures::class
-        ]);
-
-        $this->globalScopeManager = self::getConfigManager();
-        $this->originalTimezone = $this->globalScopeManager->get('oro_locale.timezone');
+        $this->initialTimezone = self::getConfigManager()->get('oro_locale.timezone');
     }
 
     #[\Override]
     protected function tearDown(): void
     {
-        $this->globalScopeManager->set('oro_locale.timezone', $this->originalTimezone);
-        $this->globalScopeManager->flush();
+        $configManager = self::getConfigManager();
+        if ($configManager->get('oro_locale.timezone') !== $this->initialTimezone) {
+            $configManager->set('oro_locale.timezone', $this->initialTimezone);
+            $configManager->flush();
+        }
     }
 
     /**
@@ -49,11 +43,12 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
         string $timezone,
         array $value,
         int $inProgressCount
-    ) {
+    ): void {
         $widget = $this->getReference('widget_forecast');
 
-        $this->globalScopeManager->set('oro_locale.timezone', $timezone);
-        $this->globalScopeManager->flush();
+        $configManager = self::getConfigManager();
+        $configManager->set('oro_locale.timezone', $timezone);
+        $configManager->flush();
 
         $this->configureWidget($widget, [
             'forecast_of_opportunities[dateRange][part]'  => 'value',
