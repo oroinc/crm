@@ -19,10 +19,24 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
     use ConfigManagerAwareTestTrait;
     use MessageQueueExtension;
 
+    private ?string $initialTimezone;
+
     #[\Override]
     protected function setUp(): void
     {
         $this->initClient();
+
+        $this->initialTimezone = self::getConfigManager()->get('oro_locale.timezone');
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        $configManager = self::getConfigManager();
+        if ($configManager->get('oro_locale.timezone') !== $this->initialTimezone) {
+            $configManager->set('oro_locale.timezone', $this->initialTimezone);
+            $configManager->flush();
+        }
     }
 
     public function testCouldBeGetFromContainerAsService(): void
