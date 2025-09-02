@@ -36,16 +36,19 @@ Feature: Localized email notification after contact import export
     Given I go to System / Emails / Templates
     When I filter Template Name as is equal to "import_result"
     And I click "edit" on first row in grid
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject | English Import Result Subject |
       | Content | English Import Result Body    |
     And I click "French"
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject Fallback | false                        |
       | Content Fallback | false                        |
       | Subject          | French Import Result Subject |
       | Content          | French Import Result Body    |
     And I click "German"
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject Fallback | false                        |
       | Content Fallback | false                        |
@@ -69,16 +72,19 @@ Feature: Localized email notification after contact import export
     Given I go to System / Emails / Templates
     When I filter Template Name as is equal to "import_validation_result"
     And I click "edit" on first row in grid
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject | English Import Validation Result Subject |
       | Content | English Import Validation Result Body    |
     And I click "French"
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject Fallback | false                                   |
       | Content Fallback | false                                   |
       | Subject          | French Import Validation Result Subject |
       | Content          | French Import Validation Result Body    |
     And I click "German"
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject Fallback | false                                   |
       | Content Fallback | false                                   |
@@ -102,16 +108,19 @@ Feature: Localized email notification after contact import export
     Given I go to System / Emails / Templates
     When I filter Template Name as is equal to "export_result"
     And I click "edit" on first row in grid
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject | English Export Result Subject |
       | Content | English Export Result Body    |
     And I click "French"
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject Fallback | false                        |
       | Content Fallback | false                        |
       | Subject          | French Export Result Subject |
       | Content          | French Export Result Body    |
     And I click "German"
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject Fallback | false                        |
       | Content Fallback | false                        |
@@ -122,16 +131,19 @@ Feature: Localized email notification after contact import export
     When I go to System / Emails / Templates
     And I filter Template Name as is equal to "datagrid_export_result"
     And I click "edit" on first row in grid
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject | English Grid Export Result Subject |
       | Content | English Grid Export Result Body    |
     And I click "French"
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject Fallback | false                             |
       | Content Fallback | false                             |
       | Subject          | French Grid Export Result Subject |
       | Content          | French Grid Export Result Body    |
     And I click "German"
+    And I clear "Content" textarea in form "Email Template Form"
     And fill "Email Template Form" with:
       | Subject Fallback | false                             |
       | Content Fallback | false                             |
