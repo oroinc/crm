@@ -9,7 +9,7 @@ use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SecurityBundle\Attribute\CsrfProtection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -28,7 +28,7 @@ class ContactRequestController extends AbstractController
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'oro_contactus_request_view', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroContactUs/ContactRequest/view.html.twig')]
     #[Acl(id: 'oro_contactus_request_view', type: 'entity', class: ContactRequest::class, permission: 'VIEW')]
     public function viewAction(ContactRequest $contactRequest)
     {

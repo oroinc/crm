@@ -13,8 +13,8 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler;
 use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -42,7 +42,7 @@ class OpportunityController extends AbstractController
     }
 
     #[Route(path: '/view/{id}', name: 'oro_sales_opportunity_view', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroSales/Opportunity/view.html.twig')]
     #[Acl(id: 'oro_sales_opportunity_view', type: 'entity', class: Opportunity::class, permission: 'VIEW')]
     public function viewAction(Opportunity $entity): array
     {
@@ -52,7 +52,7 @@ class OpportunityController extends AbstractController
     }
 
     #[Route(path: '/info/{id}', name: 'oro_sales_opportunity_info', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroSales/Opportunity/info.html.twig')]
     #[AclAncestor('oro_sales_opportunity_view')]
     public function infoAction(Opportunity $entity): array
     {
@@ -75,7 +75,7 @@ class OpportunityController extends AbstractController
         requirements: ['id' => '\d+'],
         defaults: ['id' => 0]
     )]
-    #[Template]
+    #[Template('@OroSales/Opportunity/update.html.twig')]
     #[Acl(id: 'oro_sales_opportunity_update', type: 'entity', class: Opportunity::class, permission: 'EDIT')]
     public function updateAction(Opportunity $entity): array|RedirectResponse
     {
@@ -88,7 +88,7 @@ class OpportunityController extends AbstractController
         requirements: ['_format' => 'html|json'],
         defaults: ['_format' => 'html']
     )]
-    #[Template]
+    #[Template('@OroSales/Opportunity/index.html.twig')]
     #[AclAncestor('oro_sales_opportunity_view')]
     public function indexAction(): array
     {
@@ -104,10 +104,11 @@ class OpportunityController extends AbstractController
      */
     #[Route(path: '/create/{channelIds}', name: 'oro_sales_opportunity_data_channel_aware_create')]
     #[Template('@OroSales/Opportunity/update.html.twig')]
-    #[ParamConverter('channel', class: Channel::class, options: ['id' => 'channelIds'])]
     #[AclAncestor('oro_sales_opportunity_create')]
-    public function opportunityWithDataChannelCreateAction(Channel $channel): array|RedirectResponse
-    {
+    public function opportunityWithDataChannelCreateAction(
+        #[MapEntity(id: 'channelIds')]
+        Channel $channel
+    ): array|RedirectResponse {
         $opportunity = new Opportunity();
         $opportunity->setDataChannel($channel);
 

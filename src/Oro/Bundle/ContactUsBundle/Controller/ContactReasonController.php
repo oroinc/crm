@@ -8,8 +8,8 @@ use Oro\Bundle\ContactUsBundle\Form\Type\ContactReasonType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SecurityBundle\Attribute\CsrfProtection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,7 +23,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ContactReasonController extends AbstractController
 {
     #[Route(path: '/', name: 'oro_contactus_reason_index')]
-    #[Template]
+    #[Template('@OroContactUs/ContactReason/index.html.twig')]
     #[Acl(id: 'oro_contactus_reason_view', type: 'entity', class: ContactReason::class, permission: 'VIEW')]
     public function indexAction(): array
     {
@@ -41,11 +41,12 @@ class ContactReasonController extends AbstractController
     }
 
     #[Route(path: '/update/{id}', name: 'oro_contactus_reason_update', requirements: ['id' => '\d+'])]
-    #[ParamConverter('contactReason', options: ['repository_method' => 'getContactReason'])]
-    #[Template]
+    #[Template('@OroContactUs/ContactReason/update.html.twig')]
     #[Acl(id: 'oro_contactus_reason_update', type: 'entity', class: ContactReason::class, permission: 'EDIT')]
-    public function updateAction(ContactReason $contactReason): array|RedirectResponse
-    {
+    public function updateAction(
+        #[MapEntity(expr: 'repository.getContactReason(id)')]
+        ContactReason $contactReason
+    ): array|RedirectResponse {
         return $this->update($contactReason);
     }
 
@@ -64,11 +65,12 @@ class ContactReasonController extends AbstractController
         requirements: ['id' => '\d+'],
         methods: ['DELETE']
     )]
-    #[ParamConverter('contactReason', options: ['repository_method' => 'getContactReason'])]
     #[Acl(id: 'oro_contactus_reason_delete', type: 'entity', class: ContactReason::class, permission: 'DELETE')]
     #[CsrfProtection()]
-    public function deleteAction(ContactReason $contactReason): JsonResponse
-    {
+    public function deleteAction(
+        #[MapEntity(expr: 'repository.getContactReason(id)')]
+        ContactReason $contactReason
+    ): JsonResponse {
         $em = $this->container->get('doctrine')->getManagerForClass(ContactReason::class);
         $em->remove($contactReason);
         $em->flush();

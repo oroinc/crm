@@ -8,8 +8,8 @@ use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -34,11 +34,12 @@ class RFMCategoryController extends AbstractController
         name: 'oro_analytics_rfm_category_channel_view',
         requirements: ['entity' => '\d+']
     )]
-    #[ParamConverter('channel', class: Channel::class, options: ['id' => 'entity'])]
-    #[Template]
+    #[Template('@OroAnalytics/RFMCategory/channelView.html.twig')]
     #[AclAncestor('oro_channel_view')]
-    public function channelViewAction(Channel $channel)
-    {
+    public function channelViewAction(
+        #[MapEntity(id: 'entity')]
+        Channel $channel
+    ) {
         $rfmCategories = [
             RFMMetricCategory::TYPE_RECENCY => $this->getCategories($channel, RFMMetricCategory::TYPE_RECENCY),
             RFMMetricCategory::TYPE_FREQUENCY => $this->getCategories($channel, RFMMetricCategory::TYPE_FREQUENCY),

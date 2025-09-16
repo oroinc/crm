@@ -12,7 +12,7 @@ use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ContactController extends AbstractController
 {
     #[Route(path: '/view/{id}', name: 'oro_contact_view', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroContact/Contact/view.html.twig')]
     #[Acl(id: 'oro_contact_view', type: 'entity', class: Contact::class, permission: 'VIEW')]
     public function viewAction(Contact $contact): array
     {
@@ -37,7 +37,7 @@ class ContactController extends AbstractController
     }
 
     #[Route(path: '/info/{id}', name: 'oro_contact_info', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroContact/Contact/info.html.twig')]
     #[AclAncestor('oro_contact_view')]
     public function infoAction(Request $request, Contact $contact): array|RedirectResponse
     {
@@ -87,7 +87,7 @@ class ContactController extends AbstractController
      * Update user form
      */
     #[Route(path: '/update/{id}', name: 'oro_contact_update', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroContact/Contact/update.html.twig')]
     #[Acl(id: 'oro_contact_update', type: 'entity', class: Contact::class, permission: 'EDIT')]
     public function updateAction(Contact $entity): array|RedirectResponse
     {
@@ -100,7 +100,7 @@ class ContactController extends AbstractController
         requirements: ['_format' => 'html|json'],
         defaults: ['_format' => 'html']
     )]
-    #[Template]
+    #[Template('@OroContact/Contact/index.html.twig')]
     #[AclAncestor('oro_contact_view')]
     public function indexAction(): array
     {
@@ -130,7 +130,7 @@ class ContactController extends AbstractController
     }
 
     #[Route(path: '/widget/account-contacts/{id}', name: 'oro_account_widget_contacts', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroContact/Contact/accountContacts.html.twig')]
     #[AclAncestor('oro_contact_view')]
     public function accountContactsAction(Account $account): array
     {

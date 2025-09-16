@@ -5,7 +5,7 @@ namespace Oro\Bundle\ReportCRMBundle\Controller;
 use Oro\Bundle\DataGridBundle\Datagrid\ManagerInterface;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -27,7 +27,7 @@ class ReportController extends AbstractController
         requirements: ['reportGroupName' => '\w+', 'reportName' => '\w+', '_format' => 'html|json'],
         defaults: ['_format' => 'html']
     )]
-    #[Template]
+    #[Template('@OroReportCRM/Report/index.html.twig')]
     #[AclAncestor('oro_report_view')]
     public function indexAction($reportGroupName, $reportName)
     {

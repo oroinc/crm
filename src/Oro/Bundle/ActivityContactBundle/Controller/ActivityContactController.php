@@ -4,7 +4,7 @@ namespace Oro\Bundle\ActivityContactBundle\Controller;
 
 use Oro\Bundle\ActivityContactBundle\Provider\EntityActivityContactDataProvider;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

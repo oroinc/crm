@@ -7,7 +7,7 @@ use Oro\Bundle\ContactBundle\Form\Handler\GroupHandler;
 use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\UIBundle\Route\Router;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -48,7 +48,7 @@ class GroupController extends AbstractController
         requirements: ['id' => '\d+'],
         defaults: ['id' => 0]
     )]
-    #[Template]
+    #[Template('@OroContact/Group/update.html.twig')]
     #[Acl(id: 'oro_contact_group_update', type: 'entity', class: Group::class, permission: 'EDIT')]
     public function updateAction(Request $request, Group $entity)
     {
@@ -61,7 +61,7 @@ class GroupController extends AbstractController
         requirements: ['_format' => 'html|json'],
         defaults: ['_format' => 'html']
     )]
-    #[Template]
+    #[Template('@OroContact/Group/index.html.twig')]
     #[Acl(id: 'oro_contact_group_view', type: 'entity', class: Group::class, permission: 'VIEW')]
     public function indexAction()
     {

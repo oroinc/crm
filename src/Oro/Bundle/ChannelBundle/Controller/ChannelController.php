@@ -7,7 +7,7 @@ use Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
 use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\UIBundle\Route\Router;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -24,7 +24,7 @@ class ChannelController extends AbstractController
         requirements: ['_format' => 'html|json'],
         defaults: ['_format' => 'html']
     )]
-    #[Template]
+    #[Template('@OroChannel/Channel/index.html.twig')]
     #[Acl(id: 'oro_channel_view', type: 'entity', class: Channel::class, permission: 'VIEW')]
     public function indexAction()
     {
@@ -40,7 +40,7 @@ class ChannelController extends AbstractController
     }
 
     #[Route(path: '/update/{id}', name: 'oro_channel_update', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroChannel/Channel/update.html.twig')]
     #[Acl(id: 'oro_channel_update', type: 'entity', class: Channel::class, permission: 'EDIT')]
     public function updateAction(Channel $channel, Request $request)
     {
@@ -73,7 +73,7 @@ class ChannelController extends AbstractController
     }
 
     #[Route(path: '/view/{id}', name: 'oro_channel_view', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroChannel/Channel/view.html.twig')]
     #[AclAncestor('oro_channel_view')]
     public function viewAction(Channel $channel)
     {
@@ -83,7 +83,7 @@ class ChannelController extends AbstractController
     }
 
     #[Route(path: '/widget/info/{id}', name: 'oro_channel_widget_info', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroChannel/Channel/info.html.twig')]
     #[AclAncestor('oro_channel_view')]
     public function infoAction(Channel $channel)
     {
