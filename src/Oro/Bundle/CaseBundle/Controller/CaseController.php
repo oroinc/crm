@@ -9,7 +9,7 @@ use Oro\Bundle\CaseBundle\Model\CaseEntityManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\UIBundle\Route\Router;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class CaseController extends AbstractController
 {
     #[Route(name: 'oro_case_index')]
-    #[Template]
+    #[Template('@OroCase/Case/index.html.twig')]
     #[AclAncestor('oro_case_view')]
     public function indexAction()
     {
@@ -30,7 +30,7 @@ class CaseController extends AbstractController
     }
 
     #[Route(path: '/view/{id}', name: 'oro_case_view', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroCase/Case/view.html.twig')]
     #[AclAncestor('oro_case_view')]
     public function viewAction(CaseEntity $case)
     {
@@ -40,7 +40,7 @@ class CaseController extends AbstractController
     }
 
     #[Route(path: '/widget/account-cases/{id}', name: 'oro_case_account_widget_cases', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroCase/Case/accountCases.html.twig')]
     #[AclAncestor('oro_case_view')]
     public function accountCasesAction(Account $account)
     {
@@ -50,7 +50,7 @@ class CaseController extends AbstractController
     }
 
     #[Route(path: '/widget/contact-cases/{id}', name: 'oro_case_contact_widget_cases', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroCase/Case/contactCases.html.twig')]
     #[AclAncestor('oro_case_view')]
     public function contactCasesAction(Contact $contact)
     {
@@ -73,7 +73,7 @@ class CaseController extends AbstractController
     }
 
     #[Route(path: '/update/{id}', name: 'oro_case_update', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroCase/Case/update.html.twig')]
     #[AclAncestor('oro_case_update')]
     public function updateAction(CaseEntity $case, Request $request)
     {

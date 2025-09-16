@@ -5,7 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Controller;
 use Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -35,7 +35,7 @@ class ChannelIntegrationController extends AbstractController
     }
 
     #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'oro_channel_integration_update')]
-    #[Template]
+    #[Template('@OroChannel/ChannelIntegration/update.html.twig')]
     #[AclAncestor('oro_integration_update')]
     public function updateAction(Integration $integration)
     {

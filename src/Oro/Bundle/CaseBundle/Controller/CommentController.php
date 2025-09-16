@@ -10,8 +10,8 @@ use Oro\Bundle\CaseBundle\Model\ViewFactory;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\UserBundle\Entity\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -62,11 +62,13 @@ class CommentController extends AbstractController
      * @return array|RedirectResponse
      */
     #[Route(path: '/{caseId}/comment/create', name: 'oro_case_comment_create', requirements: ['caseId' => '\d+'])]
-    #[ParamConverter('case', options: ['id' => 'caseId'])]
     #[Template('@OroCase/Comment/update.html.twig')]
     #[AclAncestor('oro_case_comment_create')]
-    public function createAction(Request $request, CaseEntity $case)
-    {
+    public function createAction(
+        Request $request,
+        #[MapEntity(id: 'caseId')]
+        CaseEntity $case
+    ) {
         $comment = $this->container->get(CaseEntityManager::class)->createComment($case);
         $comment->setOwner($this->getUser());
 
@@ -77,7 +79,7 @@ class CommentController extends AbstractController
     }
 
     #[Route(path: '/comment/{id}/update', name: 'oro_case_comment_update', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroCase/Comment/update.html.twig')]
     #[AclAncestor('oro_case_comment_update')]
     public function updateAction(CaseComment $comment)
     {

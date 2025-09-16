@@ -11,7 +11,7 @@ use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
@@ -25,7 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AccountController extends AbstractController
 {
     #[Route(path: '/view/{id}', name: 'oro_account_view', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroAccount/Account/view.html.twig')]
     #[Acl(id: 'oro_account_view', type: 'entity', class: Account::class, permission: 'VIEW')]
     public function viewAction(Account $account): array
     {
@@ -58,7 +58,7 @@ class AccountController extends AbstractController
      * Edit user form
      */
     #[Route(path: '/update/{id}', name: 'oro_account_update', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroAccount/Account/update.html.twig')]
     #[Acl(id: 'oro_account_update', type: 'entity', class: Account::class, permission: 'EDIT')]
     public function updateAction(Account $entity): array|RedirectResponse
     {
@@ -71,7 +71,7 @@ class AccountController extends AbstractController
         requirements: ['_format' => 'html|json'],
         defaults: ['_format' => 'html']
     )]
-    #[Template]
+    #[Template('@OroAccount/Account/index.html.twig')]
     #[AclAncestor('oro_account_view')]
     public function indexAction(): array
     {
@@ -106,7 +106,7 @@ class AccountController extends AbstractController
         requirements: ['id' => '\d+'],
         defaults: ['id' => 0]
     )]
-    #[Template]
+    #[Template('@OroAccount/Account/contactsInfo.html.twig')]
     #[AclAncestor('oro_contact_view')]
     public function contactsInfoAction(?Account $account = null): array
     {
@@ -116,7 +116,7 @@ class AccountController extends AbstractController
     }
 
     #[Route(path: '/widget/info/{id}', name: 'oro_account_widget_info', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroAccount/Account/info.html.twig')]
     #[AclAncestor('oro_account_view')]
     public function infoAction(Account $account): array
     {

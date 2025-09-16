@@ -7,8 +7,8 @@ use Oro\Bundle\AddressBundle\Form\Handler\AddressHandler;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class ContactAddressController extends AbstractController
 {
     #[Route(path: '/address-book/{id}', name: 'oro_contact_address_book', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroContact/ContactAddress/addressBook.html.twig')]
     #[AclAncestor('oro_contact_view')]
     public function addressBookAction(Contact $contact): array
     {
@@ -38,10 +38,12 @@ class ContactAddressController extends AbstractController
         requirements: ['contactId' => '\d+']
     )]
     #[Template('@OroContact/ContactAddress/update.html.twig')]
-    #[ParamConverter('contact', options: ['id' => 'contactId'])]
     #[AclAncestor('oro_contact_create')]
-    public function createAction(Request $request, Contact $contact): array|RedirectResponse
-    {
+    public function createAction(
+        Request $request,
+        #[MapEntity(id: 'contactId')]
+        Contact $contact
+    ): array|RedirectResponse {
         return $this->update($request, $contact, new ContactAddress());
     }
 
@@ -51,11 +53,14 @@ class ContactAddressController extends AbstractController
         requirements: ['contactId' => '\d+', 'id' => '\d+'],
         defaults: ['id' => 0]
     )]
-    #[Template]
-    #[ParamConverter('contact', options: ['id' => 'contactId'])]
+    #[Template('@OroContact/ContactAddress/update.html.twig')]
     #[AclAncestor('oro_contact_update')]
-    public function updateAction(Request $request, Contact $contact, ContactAddress $address): array|RedirectResponse
-    {
+    public function updateAction(
+        Request $request,
+        #[MapEntity(id: 'contactId')]
+        Contact $contact,
+        ContactAddress $address
+    ): array|RedirectResponse {
         return $this->update($request, $contact, $address);
     }
 

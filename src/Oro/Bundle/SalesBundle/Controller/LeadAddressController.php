@@ -7,8 +7,8 @@ use Oro\Bundle\AddressBundle\Form\Handler\AddressHandler;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadAddress;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class LeadAddressController extends AbstractController
 {
     #[Route(path: '/address-book/{id}', name: 'oro_sales_lead_address_book', requirements: ['id' => '\d+'])]
-    #[Template]
+    #[Template('@OroSales/LeadAddress/addressBook.html.twig')]
     #[AclAncestor('oro_sales_lead_view')]
     public function addressBookAction(Lead $lead): array
     {
@@ -39,10 +39,12 @@ class LeadAddressController extends AbstractController
         requirements: ['leadId' => '\d+']
     )]
     #[Template('@OroSales/LeadAddress/update.html.twig')]
-    #[ParamConverter('lead', options: ['id' => 'leadId'])]
     #[AclAncestor('oro_sales_lead_update')]
-    public function createAction(Request $request, Lead $lead): array|RedirectResponse
-    {
+    public function createAction(
+        Request $request,
+        #[MapEntity(id: 'leadId')]
+        Lead $lead
+    ): array|RedirectResponse {
         return $this->update($request, $lead, new LeadAddress());
     }
 
@@ -52,11 +54,14 @@ class LeadAddressController extends AbstractController
         requirements: ['leadId' => '\d+', 'id' => '\d+'],
         defaults: ['id' => 0]
     )]
-    #[Template]
-    #[ParamConverter('lead', options: ['id' => 'leadId'])]
+    #[Template('@OroSales/LeadAddress/update.html.twig')]
     #[AclAncestor('oro_sales_lead_update')]
-    public function updateAction(Request $request, Lead $lead, LeadAddress $address): array|RedirectResponse
-    {
+    public function updateAction(
+        Request $request,
+        #[MapEntity(id: 'leadId')]
+        Lead $lead,
+        LeadAddress $address
+    ): array|RedirectResponse {
         return $this->update($request, $lead, $address);
     }
 
