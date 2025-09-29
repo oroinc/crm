@@ -175,6 +175,10 @@ api:
                 customRegion:
                     exclude: false # set manually because this field is marked as excluded in entity.yml
                     property_path: regionText
+            filters:
+                fields:
+                    customRegion:
+                        exclude: false
             actions:
                 update:
                     fields:

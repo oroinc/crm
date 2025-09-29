@@ -19,19 +19,19 @@ class LeadAddressTest extends RestJsonApiTestCase
     use PrimaryAddressTestTrait;
     use UnchangeableAddressOwnerTestTrait;
 
-    private const ENTITY_CLASS                  = LeadAddress::class;
-    private const ENTITY_TYPE                   = 'leadaddresses';
-    private const OWNER_ENTITY_TYPE             = 'leads';
-    private const OWNER_RELATIONSHIP            = 'owner';
-    private const CREATE_MIN_REQUEST_DATA       = 'create_lead_address_min.yml';
+    private const ENTITY_CLASS = LeadAddress::class;
+    private const ENTITY_TYPE = 'leadaddresses';
+    private const OWNER_ENTITY_TYPE = 'leads';
+    private const OWNER_RELATIONSHIP = 'owner';
+    private const CREATE_MIN_REQUEST_DATA = 'create_lead_address_min.yml';
     private const OWNER_CREATE_MIN_REQUEST_DATA = 'create_lead_min.yml';
-    private const IS_REGION_REQUIRED            = false;
-    private const COUNTRY_REGION_ADDRESS_REF    = 'lead_address1';
-    private const PRIMARY_ADDRESS_REF           = 'lead_address1';
-    private const UNCHANGEABLE_ADDRESS_REF      = 'lead_address1';
-    private const OWNER_REF                     = 'lead1';
-    private const ANOTHER_OWNER_REF             = 'another_lead';
-    private const ANOTHER_OWNER_ADDRESS_2_REF   = 'another_lead_address2';
+    private const IS_REGION_REQUIRED = false;
+    private const COUNTRY_REGION_ADDRESS_REF = 'lead_address1';
+    private const PRIMARY_ADDRESS_REF = 'lead_address1';
+    private const UNCHANGEABLE_ADDRESS_REF = 'lead_address1';
+    private const OWNER_REF = 'lead1';
+    private const ANOTHER_OWNER_REF = 'another_lead';
+    private const ANOTHER_OWNER_ADDRESS_2_REF = 'another_lead_address2';
 
     #[\Override]
     protected function setUp(): void
@@ -66,7 +66,7 @@ class LeadAddressTest extends RestJsonApiTestCase
             ['filter' => ['country' => '<toString(@country_israel->iso2Code)>']]
         );
 
-        $this->assertResponseContains('cget_lead_lead_address_filter_country.yml', $response);
+        $this->assertResponseContains('cget_lead_address_filter_country.yml', $response);
     }
 
     public function testGetListFilterByRegion()
@@ -77,6 +77,16 @@ class LeadAddressTest extends RestJsonApiTestCase
         );
 
         $this->assertResponseContains('cget_lead_address_filter_region.yml', $response);
+    }
+
+    public function testGetListFilterByCustomRegion()
+    {
+        $response = $this->cget(
+            ['entity' => self::ENTITY_TYPE],
+            ['filter' => ['customRegion' => 'Some Region']]
+        );
+
+        $this->assertResponseContains('cget_lead_address_filter_custom_region.yml', $response);
     }
 
     public function testGet()
