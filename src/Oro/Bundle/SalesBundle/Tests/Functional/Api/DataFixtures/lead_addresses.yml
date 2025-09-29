@@ -45,6 +45,15 @@ Oro\Bundle\SalesBundle\Entity\LeadAddress:
         region: '@region_israel_telaviv'
         firstName: 'John'
         lastName: 'Smith'
+    lead_address4:
+        owner: '@lead1'
+        primary: false
+        label: 'Address 4'
+        city: 'Some City'
+        country: '@country_isle_of_man'
+        regionText: 'Some Region'
+        firstName: 'John'
+        lastName: 'Smith'
     another_lead_address1:
         owner: '@another_lead'
         primary: true
