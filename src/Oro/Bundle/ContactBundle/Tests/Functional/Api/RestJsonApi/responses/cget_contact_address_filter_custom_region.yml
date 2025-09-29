@@ -1,0 +1,33 @@
+data:
+    -
+        type: contactaddresses
+        id: '<toString(@contact_address4->id)>'
+        attributes:
+            primary: false
+            label: 'Address 4'
+            street: null
+            street2: null
+            city: 'Some City'
+            postalCode: null
+            organization: null
+            namePrefix: null
+            firstName: John
+            middleName: null
+            lastName: Smith
+            nameSuffix: null
+            createdAt: '@contact_address4->created->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@contact_address4->updated->format("Y-m-d\TH:i:s\Z")'
+            customRegion: 'Some Region'
+        relationships:
+            owner:
+                data:
+                    type: contacts
+                    id: '<toString(@contact1->id)>'
+            types:
+                data: []
+            country:
+                data:
+                    type: countries
+                    id: '<toString(@country_isle_of_man->iso2Code)>'
+            region:
+                data: null
