@@ -21,19 +21,19 @@ class ContactAddressTest extends RestJsonApiTestCase
     use PrimaryAddressTestTrait;
     use UnchangeableAddressOwnerTestTrait;
 
-    private const ENTITY_CLASS                  = ContactAddress::class;
-    private const ENTITY_TYPE                   = 'contactaddresses';
-    private const OWNER_ENTITY_TYPE             = 'contacts';
-    private const OWNER_RELATIONSHIP            = 'owner';
-    private const CREATE_MIN_REQUEST_DATA       = 'create_contact_address_min.yml';
+    private const ENTITY_CLASS = ContactAddress::class;
+    private const ENTITY_TYPE = 'contactaddresses';
+    private const OWNER_ENTITY_TYPE = 'contacts';
+    private const OWNER_RELATIONSHIP = 'owner';
+    private const CREATE_MIN_REQUEST_DATA = 'create_contact_address_min.yml';
     private const OWNER_CREATE_MIN_REQUEST_DATA = 'create_contact_min.yml';
-    private const IS_REGION_REQUIRED            = false;
-    private const COUNTRY_REGION_ADDRESS_REF    = 'contact_address1';
-    private const PRIMARY_ADDRESS_REF           = 'contact_address1';
-    private const UNCHANGEABLE_ADDRESS_REF      = 'contact_address1';
-    private const OWNER_REF                     = 'contact1';
-    private const ANOTHER_OWNER_REF             = 'another_contact';
-    private const ANOTHER_OWNER_ADDRESS_2_REF   = 'another_contact_address2';
+    private const IS_REGION_REQUIRED = false;
+    private const COUNTRY_REGION_ADDRESS_REF = 'contact_address1';
+    private const PRIMARY_ADDRESS_REF = 'contact_address1';
+    private const UNCHANGEABLE_ADDRESS_REF = 'contact_address1';
+    private const OWNER_REF = 'contact1';
+    private const ANOTHER_OWNER_REF = 'another_contact';
+    private const ANOTHER_OWNER_ADDRESS_2_REF = 'another_contact_address2';
 
     #[\Override]
     protected function setUp(): void
@@ -79,6 +79,16 @@ class ContactAddressTest extends RestJsonApiTestCase
         );
 
         $this->assertResponseContains('cget_contact_address_filter_region.yml', $response);
+    }
+
+    public function testGetListFilterByCustomRegion()
+    {
+        $response = $this->cget(
+            ['entity' => self::ENTITY_TYPE],
+            ['filter' => ['customRegion' => 'Some Region']]
+        );
+
+        $this->assertResponseContains('cget_contact_address_filter_custom_region.yml', $response);
     }
 
     public function testGet()
@@ -371,7 +381,7 @@ class ContactAddressTest extends RestJsonApiTestCase
         $ownerId = $owner->getId();
 
         // guard
-        self::assertCount(3, $owner->getAddresses());
+        self::assertCount(4, $owner->getAddresses());
         self::assertTrue($existingAddress->hasTypeWithName(AddressType::TYPE_SHIPPING));
 
         $data = $this->getRequestData(self::CREATE_MIN_REQUEST_DATA);
@@ -404,7 +414,7 @@ class ContactAddressTest extends RestJsonApiTestCase
         $ownerId = $owner->getId();
 
         // guard
-        self::assertCount(3, $owner->getAddresses());
+        self::assertCount(4, $owner->getAddresses());
         self::assertTrue($existingAddress->hasTypeWithName(AddressType::TYPE_SHIPPING));
 
         $addressData = $this->getRequestData(self::CREATE_MIN_REQUEST_DATA);
