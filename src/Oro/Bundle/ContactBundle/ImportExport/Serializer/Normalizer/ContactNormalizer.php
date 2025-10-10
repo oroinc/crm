@@ -40,8 +40,11 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
     }
 
     #[\Override]
-    public function normalize($object, ?string $format = null, array $context = [])
-    {
+    public function normalize(
+        mixed $object,
+        ?string $format = null,
+        array $context = []
+    ): float|int|bool|\ArrayObject|array|string|null {
         $result = parent::normalize($object, $format, $context);
 
         foreach (static::$socialFields as $socialType => $fieldName) {
@@ -57,7 +60,7 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
     }
 
     #[\Override]
-    public function denormalize($data, string $type, ?string $format = null, array $context = [])
+    public function denormalize($data, string $type, ?string $format = null, array $context = []): mixed
     {
         foreach (static::$socialFields as $socialType => $fieldName) {
             if (!empty($data[$fieldName])) {
