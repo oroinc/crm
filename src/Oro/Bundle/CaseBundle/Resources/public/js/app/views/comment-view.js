@@ -1,7 +1,7 @@
 define(function(require) {
     'use strict';
 
-    const NoteView = require('oronote/js/app/views/note-view');
+    const NoteView = require('oronote/js/app/views/note-view').default;
     const autolinker = require('autolinker');
 
     const CommentView = NoteView.extend({
