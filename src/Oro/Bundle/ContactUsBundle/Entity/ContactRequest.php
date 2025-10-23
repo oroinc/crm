@@ -73,7 +73,7 @@ class ContactRequest extends AbstractContactRequest implements ExtendEntityInter
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Organization $owner = null;
 
-    public function setCustomerName(string $customerName): void
+    public function setCustomerName(?string $customerName = null): void
     {
         $this->customerName = $customerName;
     }
