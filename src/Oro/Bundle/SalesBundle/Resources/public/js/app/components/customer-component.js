@@ -1,84 +1,80 @@
-define(function(require) {
-    'use strict';
+import _ from 'underscore';
+import tools from 'oroui/js/tools';
+import mediator from 'oroui/js/mediator';
+import BaseComponent from 'oroui/js/app/components/base/component';
+import CreateCustomerView from 'orosales/js/app/views/create-customer-view';
+const CustomerComponent = BaseComponent.extend({
+    views: [],
+    $el: null,
+    inputSelector: null,
+    requiredOptions: [
+        'inputSelector',
+        'customerSelector'
+    ],
 
-    const _ = require('underscore');
-    const tools = require('oroui/js/tools');
-    const mediator = require('oroui/js/mediator');
-    const BaseComponent = require('oroui/js/app/components/base/component');
-    const CreateCustomerView = require('orosales/js/app/views/create-customer-view');
-    const CustomerComponent = BaseComponent.extend({
-        views: [],
-        $el: null,
-        inputSelector: null,
-        requiredOptions: [
-            'inputSelector',
-            'customerSelector'
-        ],
+    /**
+     * @inheritdoc
+     */
+    constructor: function CustomerComponent(options) {
+        CustomerComponent.__super__.constructor.call(this, options);
+    },
 
-        /**
-         * @inheritdoc
-         */
-        constructor: function CustomerComponent(options) {
-            CustomerComponent.__super__.constructor.call(this, options);
-        },
-
-        /**
-         * @inheritdoc
-         */
-        initialize: function(options) {
-            _.each(this.requiredOptions, function(optionName) {
-                if (!_.has(options, optionName)) {
-                    throw new Error('Required option "' + optionName + '" not found.');
-                }
-            });
-            this.inputSelector = options.inputSelector;
-            this.$el = options._sourceElement;
-
-            mediator.on('customer-dialog:select', this.onCustomerDialogSelect, this);
-            mediator.on('widget_registration:customer-dialog', this.onCustomerDialogInit, this);
-
-            const $customers = this.$el.find(options.customerSelector);
-            _.each($customers, function(customer) {
-                this.views.push(new CreateCustomerView({
-                    el: customer,
-                    inputSelector: this.inputSelector
-                }));
-            }, this);
-        },
-
-        onCustomerDialogInit: function(widget) {
-            let routeParams = this.$el.find(this.inputSelector).data('select2_query_additional_params') || {};
-            widget.options.routeParams = routeParams;
-
-            let widgetUrl = widget.options.url;
-            const widgetUrlRoot = widgetUrl.substring(0, widgetUrl.indexOf('?'));
-            const widgetUrlParts = tools.unpackFromQueryString(
-                widgetUrl.substring(widgetUrl.indexOf('?'), widgetUrl.length)
-            );
-            if (!_.isEmpty(routeParams)) {
-                routeParams = _.extend({}, widgetUrlParts, {params: routeParams}, routeParams);
-                widgetUrl = widgetUrlRoot || widgetUrl + '?' + tools.packToQueryString(routeParams);
-                widget.options.url = widgetUrl;
+    /**
+     * @inheritdoc
+     */
+    initialize: function(options) {
+        _.each(this.requiredOptions, function(optionName) {
+            if (!_.has(options, optionName)) {
+                throw new Error('Required option "' + optionName + '" not found.');
             }
-        },
+        });
+        this.inputSelector = options.inputSelector;
+        this.$el = options._sourceElement;
 
-        onCustomerDialogSelect: function(id) {
-            const $input = this.$el.find(this.inputSelector);
-            $input.inputWidget('val', id, true);
-            $input.inputWidget('focus');
-        },
+        mediator.on('customer-dialog:select', this.onCustomerDialogSelect, this);
+        mediator.on('widget_registration:customer-dialog', this.onCustomerDialogInit, this);
 
-        dispose: function() {
-            if (this.disposed) {
-                return;
-            }
+        const $customers = this.$el.find(options.customerSelector);
+        _.each($customers, function(customer) {
+            this.views.push(new CreateCustomerView({
+                el: customer,
+                inputSelector: this.inputSelector
+            }));
+        }, this);
+    },
 
-            mediator.off('customer-dialog:select', this.onCustomerDialogSelect, this);
-            mediator.off('widget_registration:customer-dialog', this.onCustomerDialogInit, this);
+    onCustomerDialogInit: function(widget) {
+        let routeParams = this.$el.find(this.inputSelector).data('select2_query_additional_params') || {};
+        widget.options.routeParams = routeParams;
 
-            CustomerComponent.__super__.dispose.call(this);
+        let widgetUrl = widget.options.url;
+        const widgetUrlRoot = widgetUrl.substring(0, widgetUrl.indexOf('?'));
+        const widgetUrlParts = tools.unpackFromQueryString(
+            widgetUrl.substring(widgetUrl.indexOf('?'), widgetUrl.length)
+        );
+        if (!_.isEmpty(routeParams)) {
+            routeParams = _.extend({}, widgetUrlParts, {params: routeParams}, routeParams);
+            widgetUrl = widgetUrlRoot || widgetUrl + '?' + tools.packToQueryString(routeParams);
+            widget.options.url = widgetUrl;
         }
-    });
+    },
 
-    return CustomerComponent;
+    onCustomerDialogSelect: function(id) {
+        const $input = this.$el.find(this.inputSelector);
+        $input.inputWidget('val', id, true);
+        $input.inputWidget('focus');
+    },
+
+    dispose: function() {
+        if (this.disposed) {
+            return;
+        }
+
+        mediator.off('customer-dialog:select', this.onCustomerDialogSelect, this);
+        mediator.off('widget_registration:customer-dialog', this.onCustomerDialogInit, this);
+
+        CustomerComponent.__super__.dispose.call(this);
+    }
 });
+
+export default CustomerComponent;

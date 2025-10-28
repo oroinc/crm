@@ -1,34 +1,30 @@
-define(function(require) {
-    'use strict';
+import MultipleEntityComponent from 'oroform/js/multiple-entity/component';
+import nameFormatter from 'orolocale/js/formatter/name';
 
-    const MultipleEntityComponent = require('oroform/js/multiple-entity/component');
-    const nameFormatter = require('orolocale/js/formatter/name');
+const AccountContactComponent = MultipleEntityComponent.extend({
+    /**
+     * @inheritdoc
+     */
+    constructor: function AccountContactComponent(options) {
+        AccountContactComponent.__super__.constructor.call(this, options);
+    },
 
-    const AccountContactComponent = MultipleEntityComponent.extend({
-        /**
-         * @inheritdoc
-         */
-        constructor: function AccountContactComponent(options) {
-            AccountContactComponent.__super__.constructor.call(this, options);
-        },
+    _getLabel: function(model) {
+        return nameFormatter.format(model.toJSON());
+    },
 
-        _getLabel: function(model) {
-            return nameFormatter.format(model.toJSON());
-        },
-
-        _getExtraData: function(model) {
-            return [
-                {
-                    label: 'Phone',
-                    value: model.get('primaryPhone')
-                },
-                {
-                    label: 'Email',
-                    value: model.get('primaryEmail')
-                }
-            ];
-        }
-    });
-
-    return AccountContactComponent;
+    _getExtraData: function(model) {
+        return [
+            {
+                label: 'Phone',
+                value: model.get('primaryPhone')
+            },
+            {
+                label: 'Email',
+                value: model.get('primaryEmail')
+            }
+        ];
+    }
 });
+
+export default AccountContactComponent;
