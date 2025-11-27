@@ -8,7 +8,6 @@ use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesDa
 use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ImportExportBundle\Async\Topic\ImportTopic;
-use Oro\Bundle\ImportExportBundle\Async\Topic\PreImportTopic;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
 use Oro\Bundle\ImportExportBundle\Tests\Functional\AbstractImportExportTestCase;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -96,8 +95,6 @@ class ImportExportTest extends AbstractImportExportTestCase
 
     public function testImportDuplicateRecord(): void
     {
-        $this->markTestSkipped('Unskip after BAP-16301');
-
         $this->assertImportWorks(
             $this->getExportImportConfiguration(),
             $this->getFullPathToDataFile('contact_with_duplicate_records.csv')
@@ -112,7 +109,6 @@ class ImportExportTest extends AbstractImportExportTestCase
         $importFilePath = $this->getFullPathToDataFile('update_name_prefix.csv');
 
         $this->assertPreImportActionExecuted($configuration, $importFilePath);
-        $preImportMessageData = $this->getOneSentMessageWithTopic(PreImportTopic::getName());
         $this->assertMessageProcessorExecuted();
 
         $configManager = $this->getConfigManager();
@@ -122,11 +118,9 @@ class ImportExportTest extends AbstractImportExportTestCase
         $configManager->flush();
 
         self::assertMessageSent(ImportTopic::getName());
-        $importMessageData = $this->getOneSentMessageWithTopic(ImportTopic::getName());
         $this->assertMessageProcessorExecuted();
 
-        $this->assertTmpFileRemoved($preImportMessageData['fileName']);
-        $this->assertTmpFileRemoved($importMessageData['fileName']);
+        $this->assertTmpFilesRemoved();
 
         self::assertCount(4, $this->getContactRepository()->findAll());
 
@@ -165,7 +159,7 @@ class ImportExportTest extends AbstractImportExportTestCase
 
     private function getFullPathToDataFile(string $fileName): string
     {
-        $dataDir = $this->getContainer()
+        $dataDir = self::getContainer()
             ->get('kernel')
             ->locateResource('@OroContactBundle/Tests/Functional/DataFixtures/Data');
 
