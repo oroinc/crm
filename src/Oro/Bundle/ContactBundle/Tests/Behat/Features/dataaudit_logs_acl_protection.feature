@@ -15,20 +15,22 @@ Feature: DataAudit logs acl protection
     And go to System/ User Management/ Roles
     And click "Create Role"
     And fill form with:
-    |Role|RoleForTest|
+      | Role | RoleForTest |
     And save and close form
     And go to System/ User Management/ Users
     And click "Create User"
     And fill "Create User Form" with:
-    |Enabled            |Enabled           |
-    |Username           |testUser1@test.com|
-    |Password           |testUser1@test.com|
-    |Re-Enter Password  |testUser1@test.com|
-    |First Name         |FName             |
-    |Last Name          |LName             |
-    |Primary Email      |testUser1@test.com|
-    |OroCRM Organization|true              |
-    |RoleForTest Role   |true              |
+      | Enabled                     | Enabled            |
+      | Username                    | testUser1@test.com |
+      | Password                    | testUser1@test.com |
+      | Re-Enter Password           | testUser1@test.com |
+      | First Name                  | FName              |
+      | Last Name                   | LName              |
+      | Primary Email               | testUser1@test.com |
+      | RoleForTest Role            | true               |
+    And I click "Organization Business Units Element"
+    And I should see "Oro / Main"
+    And I click "Business Unit First Result Element"
     And save and close form
     And go to System/ User Management/ Roles
     When click edit "RoleForTest" in grid
@@ -42,12 +44,12 @@ Feature: DataAudit logs acl protection
     And go to Customers/ Contacts
     And click "Create Contact"
     And fill form with:
-    |First name| testFname|
-    |Last name | testLname|
+      | First name | testFname |
+      | Last name  | testLname |
     And save and close form
     And go to System/ Data Audit
     Then I should see following grid:
-    |Create|1|Contact|testFname testLname|FName LName - admin@example.com|OroCRM|
+    | Create | 1 | Contact | testFname testLname | FName LName - admin@example.com | OroCRM |
 
   Scenario: Ensure that Change History popup works
     Given I proceed as the User
