@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -61,6 +62,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
         $organization = $this->getReference('organization');
         $user->setUsername(self::USER_NAME)
             ->setOwner($this->getReference('business_unit'))
+            ->setBusinessUnits(new ArrayCollection([$this->getReference('business_unit')]))
             ->setPlainPassword(self::USER_PASSWORD)
             ->setFirstName('User')
             ->setLastName('Test')
