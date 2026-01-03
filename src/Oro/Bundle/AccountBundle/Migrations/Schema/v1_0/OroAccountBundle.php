@@ -16,7 +16,7 @@ class OroAccountBundle implements Migration
     #[\Override]
     public function up(Schema $schema, QueryBag $queries)
     {
-        // @codingStandardsIgnoreStart
+        // phpcs:disable
 
         /** Generate table oro_account **/
         $table = $schema->createTable('orocrm_account');
@@ -130,6 +130,6 @@ class OroAccountBundle implements Migration
         $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['contact_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('orocrm_account'), ['account_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
         /** End of generate foreign keys for table oro_account_to_contact **/
-        // @codingStandardsIgnoreEnd
+        // phpcs:enable
     }
 }

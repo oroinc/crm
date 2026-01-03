@@ -17,10 +17,8 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
  * Entity are used to track contact with individuals who are requesting information.
  *
  *
- * @codingStandardsIgnoreStart
  * @method null|CustomerUser getCustomerUser() This method is available only in OroCommerce.
  * @method void setCustomerUser(CustomerUser $customerUser) This method is available only in OroCommerce.
- * @codingStandardsIgnoreEnd
  * @mixin OroContactUsBundle_Entity_ContactRequest
  */
 #[ORM\Entity]
@@ -44,9 +42,9 @@ class ContactRequest extends AbstractContactRequest implements ExtendEntityInter
 {
     use ExtendEntityTrait;
 
-    const CONTACT_METHOD_BOTH  = 'oro.contactus.contactrequest.method.both';
-    const CONTACT_METHOD_PHONE = 'oro.contactus.contactrequest.method.phone';
-    const CONTACT_METHOD_EMAIL = 'oro.contactus.contactrequest.method.email';
+    public const CONTACT_METHOD_BOTH  = 'oro.contactus.contactrequest.method.both';
+    public const CONTACT_METHOD_PHONE = 'oro.contactus.contactrequest.method.phone';
+    public const CONTACT_METHOD_EMAIL = 'oro.contactus.contactrequest.method.email';
 
     #[ORM\Column(name: 'customer_name', type: Types::STRING, nullable: true)]
     protected ?string $customerName = null;
