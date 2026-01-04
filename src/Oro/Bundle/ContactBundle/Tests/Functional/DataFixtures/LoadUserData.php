@@ -21,8 +21,8 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
     use ContainerAwareTrait;
     use SetRolePermissionsTrait;
 
-    const USER_NAME     = 'user';
-    const USER_PASSWORD = 'password';
+    public const USER_NAME     = 'user';
+    public const USER_PASSWORD = 'password';
 
     public static $roleData = [
         'name'        => 'ROLE_TEST',

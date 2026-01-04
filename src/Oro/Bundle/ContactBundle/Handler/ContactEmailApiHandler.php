@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class ContactEmailApiHandler extends AbstractEntityApiHandler
 {
-    const ENTITY_CLASS = 'Oro\Bundle\ContactBundle\Entity\ContactEmail';
+    public const ENTITY_CLASS = 'Oro\Bundle\ContactBundle\Entity\ContactEmail';
 
     /** @var EntityManager */
     protected $entityManager;

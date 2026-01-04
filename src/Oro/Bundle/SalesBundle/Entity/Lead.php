@@ -75,7 +75,7 @@ class Lead implements
 {
     use ExtendEntityTrait;
 
-    const INTERNAL_STATUS_CODE = 'lead_status';
+    public const INTERNAL_STATUS_CODE = 'lead_status';
 
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]

@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class B2bCustomerEmailApiHandler extends AbstractEntityApiHandler
 {
-    const ENTITY_CLASS = 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail';
+    public const ENTITY_CLASS = 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail';
 
     /** @var EntityManager */
     protected $entityManager;

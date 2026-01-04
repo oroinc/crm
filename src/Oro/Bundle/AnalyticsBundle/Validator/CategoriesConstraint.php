@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraint;
 
 class CategoriesConstraint extends Constraint
 {
-    const GROUP = 'RFMCategories';
+    public const GROUP = 'RFMCategories';
 
     /**
      * @var string

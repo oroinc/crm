@@ -17,7 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class OpportunitiesListener
 {
     // below activity block which have 1000
-    const DEFAULT_GRID_BLOCK_PRIORITY = 1010;
+    public const DEFAULT_GRID_BLOCK_PRIORITY = 1010;
 
     /** @var CustomerConfigProvider */
     protected $customerConfigProvider;

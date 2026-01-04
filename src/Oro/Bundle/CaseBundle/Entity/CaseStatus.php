@@ -19,10 +19,10 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 #[Config(defaultValues: ['grouping' => ['groups' => ['dictionary']], 'dictionary' => ['virtual_fields' => ['label']]])]
 class CaseStatus implements Translatable
 {
-    const STATUS_OPEN        = 'open';
-    const STATUS_IN_PROGRESS = 'in_progress';
-    const STATUS_RESOLVED    = 'resolved';
-    const STATUS_CLOSED      = 'closed';
+    public const STATUS_OPEN        = 'open';
+    public const STATUS_IN_PROGRESS = 'in_progress';
+    public const STATUS_RESOLVED    = 'resolved';
+    public const STATUS_CLOSED      = 'closed';
 
     #[ORM\Id]
     #[ORM\Column(name: 'name', type: Types::STRING, length: 16)]

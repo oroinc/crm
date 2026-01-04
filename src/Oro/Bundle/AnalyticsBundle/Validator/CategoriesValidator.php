@@ -11,7 +11,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class CategoriesValidator extends ConstraintValidator
 {
-    const MIN_CATEGORIES_COUNT = 2;
+    public const MIN_CATEGORIES_COUNT = 2;
 
     /**
      * Validate collection.

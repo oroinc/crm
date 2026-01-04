@@ -14,7 +14,7 @@ use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusines
  */
 class ChannelObjectBuilder
 {
-    const CUSTOM_CHANNEL_TYPE = 'custom';
+    public const CUSTOM_CHANNEL_TYPE = 'custom';
 
     /** @var string */
     protected $channelType;

@@ -13,7 +13,7 @@ use Oro\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSettingsType;
  */
 class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
 {
-    const PROCESS_DEFINITION_NAME = 'convert_mailbox_email_to_lead';
+    public const PROCESS_DEFINITION_NAME = 'convert_mailbox_email_to_lead';
 
     #[\Override]
     public function getSettingsEntityFQCN()

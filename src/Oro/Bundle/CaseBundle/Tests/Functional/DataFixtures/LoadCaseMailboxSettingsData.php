@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LoadCaseMailboxSettingsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    const PROCESS_SETTINGS = 'process_settings';
+    public const PROCESS_SETTINGS = 'process_settings';
 
     /**
      * @var TagManager

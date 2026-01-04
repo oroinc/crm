@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class LeadSourceSelectType extends AbstractType
 {
-    const NAME = 'oro_type_widget_lead_source_select';
+    public const NAME = 'oro_type_widget_lead_source_select';
 
     /** @var EnumOptionsProvider */
     protected $enumOptionsProvider;

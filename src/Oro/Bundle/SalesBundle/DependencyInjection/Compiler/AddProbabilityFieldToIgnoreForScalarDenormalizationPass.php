@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class AddProbabilityFieldToIgnoreForScalarDenormalizationPass implements CompilerPassInterface
 {
-    const SERVICE_KEY = 'oro_importexport.serializer.scalar_field_denormalizer';
+    public const SERVICE_KEY = 'oro_importexport.serializer.scalar_field_denormalizer';
 
     #[\Override]
     public function process(ContainerBuilder $container)

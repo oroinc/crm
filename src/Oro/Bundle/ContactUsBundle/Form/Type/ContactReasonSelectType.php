@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ContactReasonSelectType extends AbstractType
 {
-    const NAME = 'oro_contactus_contact_reason_select';
+    public const NAME = 'oro_contactus_contact_reason_select';
 
     #[\Override]
     public function configureOptions(OptionsResolver $resolver)

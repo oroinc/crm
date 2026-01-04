@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ChannelIntegrationHandler
 {
-    const DATA_PARAM_NAME = 'data';
+    public const DATA_PARAM_NAME = 'data';
 
     /** @var RequestStack */
     protected $requestStack;

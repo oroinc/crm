@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class WidgetOpportunityStatusSelectType extends AbstractType
 {
-    const NAME = 'oro_type_widget_opportunity_status_select';
+    public const NAME = 'oro_type_widget_opportunity_status_select';
 
     /** @var EnumOptionsProvider */
     protected $enumOptionsProvider;

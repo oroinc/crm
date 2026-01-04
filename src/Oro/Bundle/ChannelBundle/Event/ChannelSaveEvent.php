@@ -9,5 +9,5 @@ namespace Oro\Bundle\ChannelBundle\Event;
  */
 class ChannelSaveEvent extends AbstractEvent
 {
-    const EVENT_NAME = 'oro_channel.channel.save_succeed';
+    public const EVENT_NAME = 'oro_channel.channel.save_succeed';
 }

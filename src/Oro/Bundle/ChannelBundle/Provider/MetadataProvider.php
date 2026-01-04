@@ -13,8 +13,8 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class MetadataProvider implements MetadataProviderInterface
 {
-    const ENTITY_EDIT_ROUTE = 'oro_entityconfig_update';
-    const ENTITY_VIEW_ROUTE = 'oro_entityconfig_view';
+    public const ENTITY_EDIT_ROUTE = 'oro_entityconfig_update';
+    public const ENTITY_VIEW_ROUTE = 'oro_entityconfig_view';
 
     protected SettingsProvider $settings;
 

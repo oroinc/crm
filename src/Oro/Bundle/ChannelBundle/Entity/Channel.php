@@ -39,8 +39,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 )]
 class Channel
 {
-    const STATUS_ACTIVE = true;
-    const STATUS_INACTIVE = false;
+    public const STATUS_ACTIVE = true;
+    public const STATUS_INACTIVE = false;
 
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]

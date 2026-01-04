@@ -24,7 +24,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class OpportunityStatusConfigType extends AbstractType
 {
-    const NAME = 'oro_sales_opportunity_status_config';
+    public const NAME = 'oro_sales_opportunity_status_config';
 
     /** @var EntityConfigManager */
     protected $entityConfigManager;

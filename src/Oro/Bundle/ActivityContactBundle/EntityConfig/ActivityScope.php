@@ -9,22 +9,22 @@ use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 class ActivityScope
 {
     /** Last contact activity (datetime) */
-    const LAST_CONTACT_DATE = 'ac_last_contact_date';
+    public const LAST_CONTACT_DATE = 'ac_last_contact_date';
 
     /** Last contact activity from our side (datetime) */
-    const LAST_CONTACT_DATE_OUT = 'ac_last_contact_date_out';
+    public const LAST_CONTACT_DATE_OUT = 'ac_last_contact_date_out';
 
     /** Last contact activity from client's side (datetime) */
-    const LAST_CONTACT_DATE_IN = 'ac_last_contact_date_in';
+    public const LAST_CONTACT_DATE_IN = 'ac_last_contact_date_in';
 
     /** Total activities count */
-    const CONTACT_COUNT = 'ac_contact_count';
+    public const CONTACT_COUNT = 'ac_contact_count';
 
     /** Total activities count from our side */
-    const CONTACT_COUNT_OUT = 'ac_contact_count_out';
+    public const CONTACT_COUNT_OUT = 'ac_contact_count_out';
 
     /** Total activities count from client's side */
-    const CONTACT_COUNT_IN = 'ac_contact_count_in';
+    public const CONTACT_COUNT_IN = 'ac_contact_count_in';
 
     /**
      * Contacting statistics storage custom fields default configuration

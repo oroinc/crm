@@ -27,9 +27,9 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 )]
 class RFMMetricCategory
 {
-    const TYPE_RECENCY = 'recency';
-    const TYPE_FREQUENCY = 'frequency';
-    const TYPE_MONETARY = 'monetary';
+    public const TYPE_RECENCY = 'recency';
+    public const TYPE_FREQUENCY = 'frequency';
+    public const TYPE_MONETARY = 'monetary';
 
     /**
      * @var array

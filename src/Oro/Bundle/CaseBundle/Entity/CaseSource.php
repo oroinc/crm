@@ -19,10 +19,10 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 #[Config(defaultValues: ['grouping' => ['groups' => ['dictionary']], 'dictionary' => ['virtual_fields' => ['label']]])]
 class CaseSource implements Translatable
 {
-    const SOURCE_EMAIL = 'email';
-    const SOURCE_PHONE = 'phone';
-    const SOURCE_WEB   = 'web';
-    const SOURCE_OTHER = 'other';
+    public const SOURCE_EMAIL = 'email';
+    public const SOURCE_PHONE = 'phone';
+    public const SOURCE_WEB   = 'web';
+    public const SOURCE_OTHER = 'other';
 
     #[ORM\Id]
     #[ORM\Column(name: 'name', type: Types::STRING, length: 16)]

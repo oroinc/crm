@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class ContactNormalizer extends ConfigurableEntityNormalizer
 {
-    const CONTACT_TYPE = Contact::class;
+    public const CONTACT_TYPE = Contact::class;
 
     protected static array $socialFields = [
         Social::TWITTER => 'twitter',

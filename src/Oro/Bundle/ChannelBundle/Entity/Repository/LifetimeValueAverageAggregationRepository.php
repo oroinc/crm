@@ -16,7 +16,7 @@ use Symfony\Component\Security\Acl\Util\ClassUtils;
  */
 class LifetimeValueAverageAggregationRepository extends EntityRepository
 {
-    const BATCH_SIZE = 50;
+    public const BATCH_SIZE = 50;
 
     /** @var array */
     protected $itemsToWrite = [];

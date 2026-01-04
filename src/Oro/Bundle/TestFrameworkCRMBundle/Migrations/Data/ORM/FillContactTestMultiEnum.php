@@ -15,7 +15,7 @@ use Oro\Bundle\TranslationBundle\Migrations\Data\ORM\LoadLanguageData;
  */
 class FillContactTestMultiEnum extends AbstractFixture implements DependentFixtureInterface
 {
-    const CONTACT_FIELD_TEST_ENUM_CODE = 'test_multi_enum';
+    public const CONTACT_FIELD_TEST_ENUM_CODE = 'test_multi_enum';
 
     /** @var array */
     protected $data = [

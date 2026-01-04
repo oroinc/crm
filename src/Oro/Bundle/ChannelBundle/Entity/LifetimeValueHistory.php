@@ -18,8 +18,8 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 #[ORM\HasLifecycleCallbacks]
 class LifetimeValueHistory implements ChannelAwareInterface
 {
-    const STATUS_NEW = true;
-    const STATUS_OLD = false;
+    public const STATUS_NEW = true;
+    public const STATUS_OLD = false;
 
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]

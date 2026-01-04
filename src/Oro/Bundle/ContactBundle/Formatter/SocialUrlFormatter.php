@@ -7,7 +7,7 @@ namespace Oro\Bundle\ContactBundle\Formatter;
  */
 class SocialUrlFormatter
 {
-    const PARAM = '%username%';
+    public const PARAM = '%username%';
 
     /**
      * @var

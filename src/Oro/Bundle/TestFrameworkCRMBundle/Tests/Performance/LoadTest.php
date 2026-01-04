@@ -9,8 +9,8 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class LoadTest extends WebTestCase
 {
-    const MAX_PAGES = 1000;
-    const MAX_PAGE_TESTS = 100;
+    public const MAX_PAGES = 1000;
+    public const MAX_PAGE_TESTS = 100;
 
     protected $resultData;
     protected $resultLimit;

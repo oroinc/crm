@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ChannelEntityType extends AbstractType
 {
-    const NAME = 'oro_channel_entities';
+    public const NAME = 'oro_channel_entities';
 
     public function getName()
     {

@@ -13,8 +13,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class ChangeLeadStatus
 {
-    const STATUS_QUALIFY    = 'qualified';
-    const STATUS_DISQUALIFY = 'canceled';
+    public const STATUS_QUALIFY    = 'qualified';
+    public const STATUS_DISQUALIFY = 'canceled';
 
     /** @var EntityManager */
     protected $manager;
