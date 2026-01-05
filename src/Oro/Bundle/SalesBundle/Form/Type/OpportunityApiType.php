@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class OpportunityApiType extends OpportunityType
 {
-    const string NAME = 'oro_sales_opportunity_api';
+    public const string NAME = 'oro_sales_opportunity_api';
 
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)

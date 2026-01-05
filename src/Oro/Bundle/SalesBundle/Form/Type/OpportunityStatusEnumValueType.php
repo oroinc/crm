@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints\Range;
  */
 class OpportunityStatusEnumValueType extends AbstractType
 {
-    const NAME = 'oro_sales_opportunity_status_enum_value';
+    public const NAME = 'oro_sales_opportunity_status_enum_value';
 
     /**
      * @var array List of statuses which have non-editable probability

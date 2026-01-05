@@ -13,7 +13,7 @@ use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
  */
 class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
 {
-    const PROCESS_DEFINITION_NAME = 'convert_mailbox_email_to_case';
+    public const PROCESS_DEFINITION_NAME = 'convert_mailbox_email_to_case';
 
     #[\Override]
     public function getSettingsEntityFQCN()

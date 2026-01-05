@@ -12,7 +12,7 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
  */
 class CurrencyCheckerProvider implements RepositoryCurrencyCheckerProviderInterface
 {
-    const ENTITY_LABEL = 'oro.sales.opportunity.entity_label';
+    public const ENTITY_LABEL = 'oro.sales.opportunity.entity_label';
 
     /**
      * @var ManagerRegistry

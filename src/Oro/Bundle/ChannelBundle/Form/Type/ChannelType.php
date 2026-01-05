@@ -17,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ChannelType extends AbstractType
 {
-    const NAME = 'oro_channel_form';
+    public const NAME = 'oro_channel_form';
 
     /** @var SettingsProvider */
     protected $settingsProvider;

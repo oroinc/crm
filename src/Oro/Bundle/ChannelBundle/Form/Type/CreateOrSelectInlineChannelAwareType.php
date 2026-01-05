@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateOrSelectInlineChannelAwareType extends AbstractChannelAwareType
 {
-    const NAME = 'oro_entity_create_or_select_inline_channel_aware';
+    public const NAME = 'oro_entity_create_or_select_inline_channel_aware';
 
     public function getName()
     {

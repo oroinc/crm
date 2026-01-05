@@ -10,7 +10,7 @@ use Oro\Bundle\EntityExtendBundle\PropertyAccess;
  */
 class OpportunityApiHandler extends AbstractEntityApiHandler
 {
-    const ENTITY_CLASS = 'Oro\Bundle\SalesBundle\Entity\Opportunity';
+    public const ENTITY_CLASS = 'Oro\Bundle\SalesBundle\Entity\Opportunity';
 
     /** @var PropertyAccess **/
     protected $accessor;

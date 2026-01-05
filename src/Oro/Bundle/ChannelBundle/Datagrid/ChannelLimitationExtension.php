@@ -15,8 +15,8 @@ use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
  */
 class ChannelLimitationExtension extends AbstractExtension
 {
-    const CHANNEL_OPTIONS_PATH         = '[channel_limitation]';
-    const CHANNEL_RELATION_OPTION_PATH = '[channel_limitation][channel_relation_path]';
+    public const CHANNEL_OPTIONS_PATH         = '[channel_limitation]';
+    public const CHANNEL_RELATION_OPTION_PATH = '[channel_limitation][channel_relation_path]';
 
     #[\Override]
     public function isApplicable(DatagridConfiguration $config)

@@ -22,8 +22,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface
 {
-    const FLUSH_MAX = 20;
-    const MAX_RECORDS = 10000;
+    public const FLUSH_MAX = 20;
+    public const MAX_RECORDS = 10000;
 
     private $maxRecords;
 

@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints\NotNull;
  */
 class OpportunityType extends AbstractType
 {
-    const NAME = 'oro_sales_opportunity';
+    public const NAME = 'oro_sales_opportunity';
 
     /** @var ProbabilityProvider */
     protected $probabilityProvider;

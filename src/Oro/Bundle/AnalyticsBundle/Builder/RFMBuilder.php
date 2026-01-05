@@ -15,7 +15,7 @@ use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
  */
 class RFMBuilder implements AnalyticsBuilderInterface
 {
-    const BATCH_SIZE = 200;
+    public const BATCH_SIZE = 200;
 
     /** @var DoctrineHelper */
     protected $doctrineHelper;

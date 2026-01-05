@@ -8,5 +8,5 @@ namespace Oro\Bundle\ChannelBundle\Event;
  */
 class ChannelDeleteEvent extends AbstractEvent
 {
-    const EVENT_NAME = 'oro_channel.channel.delete_succeed';
+    public const EVENT_NAME = 'oro_channel.channel.delete_succeed';
 }

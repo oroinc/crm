@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class RelevantOpportunitiesListener
 {
     // below additional information block which have 1200
-    const GRID_BLOCK_PRIORITY = 1210;
+    public const GRID_BLOCK_PRIORITY = 1210;
 
     /** @var TranslatorInterface */
     protected $translator;

@@ -11,11 +11,11 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
  */
 class AccountsByOpportunitiesReportListener
 {
-    const GRAND_TOTAL_PATH = '[totals][grand_total][columns]';
-    const COLUMNS_PATH = '[columns]';
-    const SORTERS_PATH = '[sorters][columns]';
-    const FILTERS_PATH = '[filters][columns]';
-    const TOTALOPS_LABEL = 'totalOps';
+    public const GRAND_TOTAL_PATH = '[totals][grand_total][columns]';
+    public const COLUMNS_PATH = '[columns]';
+    public const SORTERS_PATH = '[sorters][columns]';
+    public const FILTERS_PATH = '[filters][columns]';
+    public const TOTALOPS_LABEL = 'totalOps';
 
     protected array $allowedFilterStates = [
         'opportunity_status.won',

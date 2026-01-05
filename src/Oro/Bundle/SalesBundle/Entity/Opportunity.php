@@ -72,7 +72,7 @@ class Opportunity implements
     /**
      * The key in system config for probability - status map
      */
-    const PROBABILITIES_CONFIG_KEY = 'oro_sales.default_opportunity_probabilities';
+    public const PROBABILITIES_CONFIG_KEY = 'oro_sales.default_opportunity_probabilities';
 
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::INTEGER)]

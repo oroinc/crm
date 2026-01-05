@@ -19,9 +19,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 #[Config(defaultValues: ['grouping' => ['groups' => ['dictionary']], 'dictionary' => ['virtual_fields' => ['label']]])]
 class CasePriority implements Translatable
 {
-    const PRIORITY_LOW     = 'low';
-    const PRIORITY_NORMAL  = 'normal';
-    const PRIORITY_HIGH    = 'high';
+    public const PRIORITY_LOW     = 'low';
+    public const PRIORITY_NORMAL  = 'normal';
+    public const PRIORITY_HIGH    = 'high';
 
     #[ORM\Id]
     #[ORM\Column(name: 'name', type: Types::STRING, length: 16)]

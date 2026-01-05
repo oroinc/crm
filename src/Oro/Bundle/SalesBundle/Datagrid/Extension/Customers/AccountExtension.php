@@ -22,11 +22,11 @@ class AccountExtension extends AbstractExtension
 {
     use UnsupportedGridPrefixesTrait;
 
-    const COLUMN_NAME = 'associatedAccountName';
-    const FULL_COLUMN_NAME = 'associatedAccount.name';
+    public const COLUMN_NAME = 'associatedAccountName';
+    public const FULL_COLUMN_NAME = 'associatedAccount.name';
 
-    const CUSTOMER_ROOT_PARAM = '_customers';
-    const DISABLED_PARAM      = '_disabled';
+    public const CUSTOMER_ROOT_PARAM = '_customers';
+    public const DISABLED_PARAM      = '_disabled';
 
     /** @var ConfigProvider */
     protected $customerConfigProvider;

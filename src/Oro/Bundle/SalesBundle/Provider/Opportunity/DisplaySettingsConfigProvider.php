@@ -6,7 +6,7 @@ use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
 class DisplaySettingsConfigProvider
 {
-    const CONFIG_DISPLAY_RELEVANT_DATA = 'oro_sales.display_relevant_opportunities';
+    public const CONFIG_DISPLAY_RELEVANT_DATA = 'oro_sales.display_relevant_opportunities';
 
     /** @var ConfigManager */
     protected $configManager;

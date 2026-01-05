@@ -9,10 +9,10 @@ use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 
 class LoadContactPhoneData extends AbstractFixture implements DependentFixtureInterface
 {
-    const FIRST_ENTITY_NAME  = '1111111';
-    const SECOND_ENTITY_NAME = '2222222';
-    const THIRD_ENTITY_NAME  = '3333333';
-    const FOURTH_ENTITY_NAME  = '4444444';
+    public const FIRST_ENTITY_NAME  = '1111111';
+    public const SECOND_ENTITY_NAME = '2222222';
+    public const THIRD_ENTITY_NAME  = '3333333';
+    public const FOURTH_ENTITY_NAME  = '4444444';
 
     #[\Override]
     public function getDependencies()

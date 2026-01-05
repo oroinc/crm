@@ -15,10 +15,10 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
  */
 class CustomerAssignmentVirtualRelationProvider implements VirtualRelationProviderInterface
 {
-    const OPPORTUNITY_RELATION_NAME = 'opportunities_virtual';
-    const OPPORTUNITY_TARGET_ALIAS = 'virtualOpportunity';
-    const LEAD_RELATION_NAME = 'leads_virtual';
-    const LEAD_TARGET_ALIAS = 'virtualLead';
+    public const OPPORTUNITY_RELATION_NAME = 'opportunities_virtual';
+    public const OPPORTUNITY_TARGET_ALIAS = 'virtualOpportunity';
+    public const LEAD_RELATION_NAME = 'leads_virtual';
+    public const LEAD_TARGET_ALIAS = 'virtualLead';
 
     /**
      * Class name which should has opportunity and load as relations.

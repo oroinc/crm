@@ -9,9 +9,9 @@ use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 
 class LoadLeadPhoneData extends AbstractFixture implements DependentFixtureInterface
 {
-    const FIRST_ENTITY_NAME  = '1111111';
-    const SECOND_ENTITY_NAME = '2222222';
-    const THIRD_ENTITY_NAME  = '3333333';
+    public const FIRST_ENTITY_NAME  = '1111111';
+    public const SECOND_ENTITY_NAME = '2222222';
+    public const THIRD_ENTITY_NAME  = '3333333';
 
     #[\Override]
     public function getDependencies()

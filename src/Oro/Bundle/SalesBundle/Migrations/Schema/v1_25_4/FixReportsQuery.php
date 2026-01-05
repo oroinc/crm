@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
  */
 class FixReportsQuery extends ParametrizedMigrationQuery
 {
-    const LIMIT = 100;
+    public const LIMIT = 100;
 
     /** @var array */
     protected $fixes = [

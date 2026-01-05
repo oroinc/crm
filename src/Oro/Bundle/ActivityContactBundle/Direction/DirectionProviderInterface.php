@@ -9,10 +9,10 @@ use Doctrine\ORM\EntityManager;
  */
 interface DirectionProviderInterface
 {
-    const DIRECTION_INCOMING = 'incoming';
-    const DIRECTION_OUTGOING = 'outgoing';
-    const DIRECTION_UNKNOWN  = 'unknown';
-    const CONTACT_INFORMATION_SCOPE_EMAIL = 'email';
+    public const DIRECTION_INCOMING = 'incoming';
+    public const DIRECTION_OUTGOING = 'outgoing';
+    public const DIRECTION_UNKNOWN  = 'unknown';
+    public const CONTACT_INFORMATION_SCOPE_EMAIL = 'email';
 
     /**
      * Return direction of activity for target

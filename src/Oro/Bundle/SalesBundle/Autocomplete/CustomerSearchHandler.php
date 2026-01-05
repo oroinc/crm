@@ -20,7 +20,7 @@ use Oro\Bundle\SearchBundle\Query\Result\Item;
  */
 class CustomerSearchHandler extends ContextSearchHandler
 {
-    const AMOUNT_SEARCH_RESULT = 10;
+    public const AMOUNT_SEARCH_RESULT = 10;
 
     /** @var EntityRoutingHelper */
     protected $routingHelper;

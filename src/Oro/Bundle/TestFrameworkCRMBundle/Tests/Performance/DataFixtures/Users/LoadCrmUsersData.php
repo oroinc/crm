@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterface
 {
-    const USERS_NUMBER  = 200;
+    public const USERS_NUMBER  = 200;
 
     /** @var EntityManagerInterface */
     private $em;

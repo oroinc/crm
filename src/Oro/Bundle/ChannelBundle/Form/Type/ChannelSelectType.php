@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ChannelSelectType extends AbstractType
 {
-    const NAME = 'oro_channel_select_type';
+    public const NAME = 'oro_channel_select_type';
 
     /**
      * @var ChannelsByEntitiesProvider

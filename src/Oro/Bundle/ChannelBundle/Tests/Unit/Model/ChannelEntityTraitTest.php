@@ -10,7 +10,7 @@ class ChannelEntityTraitTest extends TestCase
 {
     public function testPropertyAndAccessors(): void
     {
-        $stub = new class() {
+        $stub = new class () {
             use ChannelEntityTrait;
         };
 

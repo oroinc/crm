@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContactApiType extends AbstractType
 {
-    const NAME = 'contact';
+    public const NAME = 'contact';
 
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options)

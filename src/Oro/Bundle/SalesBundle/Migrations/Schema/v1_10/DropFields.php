@@ -23,7 +23,6 @@ class DropFields implements Migration, OrderedMigrationInterface
         $this->modifyOrocrmAccountTable($schema, $queries);
         $queries->addQuery(new UpdateExtendedFieldQuery());
     }
-    // @codingStandardsIgnoreStart
 
     protected function modifyOrocrmLeadTable(Schema $schema, QueryBag $queries)
     {
@@ -32,7 +31,9 @@ class DropFields implements Migration, OrderedMigrationInterface
         $table->dropIndex('IDX_73DB46339B6B5FBA');
         $table->dropColumn('account_id');
 
-        if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
+        if ($schema->hasTable('oro_entity_config_index_value')
+            && $schema->hasTable('oro_entity_config_field')
+        ) {
             $queries->addPostQuery(
                 <<<DQL
             DELETE FROM oro_entity_config_field
@@ -54,7 +55,9 @@ DQL
         $table->dropIndex('IDX_C0FE4AAC9B6B5FBA');
         $table->dropColumn('account_id');
 
-        if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
+        if ($schema->hasTable('oro_entity_config_index_value')
+            && $schema->hasTable('oro_entity_config_field')
+        ) {
             $queries->addPostQuery(
                 <<<DQL
             DELETE FROM oro_entity_config_field
@@ -87,7 +90,9 @@ DQL
         $table->dropIndex('IDX_7166D37179D0C0E4');
         $table->dropColumn('billing_address_id');
 
-        if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
+        if ($schema->hasTable('oro_entity_config_index_value')
+            && $schema->hasTable('oro_entity_config_field')
+        ) {
             $queries->addPostQuery(
                 <<<DQL
              DELETE FROM oro_entity_config_field
@@ -112,4 +117,3 @@ DQL
         }
     }
 }
-// @codingStandardsIgnoreEnd

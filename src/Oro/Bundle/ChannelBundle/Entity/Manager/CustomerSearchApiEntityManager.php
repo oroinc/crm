@@ -23,9 +23,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class CustomerSearchApiEntityManager extends ApiEntityManager
 {
-    const DEFAULT_CHANNEL_FIELD_NAME = 'dataChannel';
+    public const DEFAULT_CHANNEL_FIELD_NAME = 'dataChannel';
 
-    const CHANNEL_ENTITY_CLASS = 'Oro\Bundle\ChannelBundle\Entity\Channel';
+    public const CHANNEL_ENTITY_CLASS = 'Oro\Bundle\ChannelBundle\Entity\Channel';
 
     /** @var SearchIndexer */
     protected $searchIndexer;

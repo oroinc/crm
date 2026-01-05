@@ -9,10 +9,10 @@ use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 
 class LoadContactEmailData extends AbstractFixture implements DependentFixtureInterface
 {
-    const FIRST_ENTITY_NAME  = 'test1@test.test';
-    const SECOND_ENTITY_NAME = 'test2@test.test';
-    const THIRD_ENTITY_NAME  = 'test3@test.test';
-    const FOURTH_ENTITY_NAME  = 'test4@test.test';
+    public const FIRST_ENTITY_NAME  = 'test1@test.test';
+    public const SECOND_ENTITY_NAME = 'test2@test.test';
+    public const THIRD_ENTITY_NAME  = 'test3@test.test';
+    public const FOURTH_ENTITY_NAME  = 'test4@test.test';
 
     #[\Override]
     public function getDependencies()

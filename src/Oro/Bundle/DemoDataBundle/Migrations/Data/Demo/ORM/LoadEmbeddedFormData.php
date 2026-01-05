@@ -28,7 +28,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
     /** @var  Channel */
     protected $dataChannel;
 
-    // @codingStandardsIgnoreStart
+    // phpcs:disable
     protected $contactRequests = array(
         array(
             'firstName' => 'Jason',
@@ -55,7 +55,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
             'contactReason' => 'Need help or assistance',
         ),
     );
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
 
     #[\Override]
     public function getDependencies()

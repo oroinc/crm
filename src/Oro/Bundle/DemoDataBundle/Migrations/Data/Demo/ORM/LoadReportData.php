@@ -15,7 +15,7 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
  */
 class LoadReportData extends AbstractFixture implements DependentFixtureInterface
 {
-    // @codingStandardsIgnoreStart
+    // phpcs:disable
     private array $reports = [
         [
             'name' => 'Leads by Geography',
@@ -26,7 +26,7 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
             'definition' => '{"filters":[],"grouping_columns":[{"name":"addresses+Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name"}],"columns":[{"name":"addresses+Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name","label":"State","func":"","sorting":"ASC"},{"name":"id","label":"Number of Leads","func":{"name":"Count","group_type":"aggregates","group_name":"number"},"sorting":""}]}'
         ],
     ];
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
 
     #[\Override]
     public function getDependencies(): array

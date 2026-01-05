@@ -17,7 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class LeadsListener
 {
     // above opportunity block which have 1010
-    const GRID_BLOCK_PRIORITY = 1005;
+    public const GRID_BLOCK_PRIORITY = 1005;
 
     /** @var CustomerConfigProvider */
     protected $customerConfigProvider;

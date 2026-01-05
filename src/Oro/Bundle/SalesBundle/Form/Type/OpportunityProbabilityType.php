@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints\Range;
  */
 class OpportunityProbabilityType extends AbstractType
 {
-    const NAME = 'oro_sales_opportunity_probability';
+    public const NAME = 'oro_sales_opportunity_probability';
 
     /** @var array List of statuses which have non-editable probability */
     public static $immutableProbabilityStatuses = ['test.won', 'test.lost'];

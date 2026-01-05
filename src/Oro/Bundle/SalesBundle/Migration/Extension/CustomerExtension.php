@@ -20,7 +20,7 @@ class CustomerExtension implements ExtendExtensionAwareInterface, NameGeneratorA
     use ExtendExtensionAwareTrait;
     use ExtendNameGeneratorAwareTrait;
 
-    const CUSTOMER_TABLE_NAME = 'orocrm_sales_customer';
+    public const CUSTOMER_TABLE_NAME = 'orocrm_sales_customer';
 
     /**
      * Adds the association between the target customer table and the customer table

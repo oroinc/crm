@@ -16,8 +16,8 @@ use Oro\Bundle\FilterBundle\Grid\Extension\Configuration as FilterConfiguration;
  */
 class ReportGridListener
 {
-    const PERIOD_COLUMN_NAME          = 'period';
-    const PERIOD_FILTER_DEFAULT_VALUE = 'monthPeriod';
+    public const PERIOD_COLUMN_NAME          = 'period';
+    public const PERIOD_FILTER_DEFAULT_VALUE = 'monthPeriod';
 
     /** @var DatagridStateProviderInterface */
     private $filtersStateProvider;

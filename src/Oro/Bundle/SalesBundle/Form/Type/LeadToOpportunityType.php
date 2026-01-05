@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\Valid;
 
 class LeadToOpportunityType extends AbstractType
 {
-    const NAME = 'oro_sales_lead_to_opportunity';
+    public const NAME = 'oro_sales_lead_to_opportunity';
 
     /** @var bool */
     protected $useFullContactForm = false;

@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RFMCategoryType extends AbstractType
 {
-    const NAME = 'oro_analytics_rfm_category';
+    public const NAME = 'oro_analytics_rfm_category';
 
     #[\Override]
     public function configureOptions(OptionsResolver $resolver)
