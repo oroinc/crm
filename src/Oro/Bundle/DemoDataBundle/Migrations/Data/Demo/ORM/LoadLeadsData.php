@@ -17,8 +17,8 @@ use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
@@ -60,7 +60,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             ->get('kernel')
             ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
 
-        $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. 'leads.csv', 'r');
+        $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR . 'leads.csv', 'r');
         if ($handle) {
             $headers = [];
             if (($data = fgetcsv($handle, 1000, ',')) !== false) {

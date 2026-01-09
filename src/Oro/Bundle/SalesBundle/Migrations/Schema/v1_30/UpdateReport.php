@@ -154,7 +154,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
      * @param array $def
      * @param array $row
      * @param string $query
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     protected function executeQuery(LoggerInterface $logger, $dryRun, $def, $row, $query)
     {

@@ -17,8 +17,8 @@ use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\ContactBundle\Entity\Source;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Loads contact demo data
@@ -50,7 +50,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
             ->get('kernel')
             ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
 
-        $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "accounts.csv", "r");
+        $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR . "accounts.csv", "r");
         if ($handle) {
             $headers = [];
             if (($data = fgetcsv($handle, 1000, ",")) !== false) {

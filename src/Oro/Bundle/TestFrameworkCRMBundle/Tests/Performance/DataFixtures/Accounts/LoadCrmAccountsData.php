@@ -17,7 +17,7 @@ use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\ContactBundle\Entity\Source;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface

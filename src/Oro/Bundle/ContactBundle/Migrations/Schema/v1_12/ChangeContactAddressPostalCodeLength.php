@@ -12,6 +12,6 @@ class ChangeContactAddressPostalCodeLength implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_contact_address');
-        $table->changeColumn('postal_code', ['length' => 255]);
+        $table->modifyColumn('postal_code', ['length' => 255]);
     }
 }

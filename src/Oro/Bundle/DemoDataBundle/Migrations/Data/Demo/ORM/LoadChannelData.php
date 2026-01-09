@@ -8,8 +8,8 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Load default "b2b" channel.

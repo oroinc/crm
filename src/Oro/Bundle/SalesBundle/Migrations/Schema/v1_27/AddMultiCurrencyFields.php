@@ -56,12 +56,12 @@ class AddMultiCurrencyFields implements
          * Fix issue with incorrect field type instead DECIMAL instead of NUMERIC
          */
         $type = Type::getType('money_value');
-        $table->changeColumn(
+        $table->modifyColumn(
             'budget_amount',
             ['type' => $type, 'notnull' => false, 'comment' => '(DC2Type:money_value)']
         );
 
-        $table->changeColumn(
+        $table->modifyColumn(
             'close_revenue',
             ['type' => $type, 'notnull' => false, 'comment' => '(DC2Type:money_value)']
         );

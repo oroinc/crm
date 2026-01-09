@@ -16,8 +16,8 @@ use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationT
 use Oro\Bundle\TaskBundle\Entity\Task;
 use Oro\Bundle\TaskBundle\Entity\TaskPriority;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**

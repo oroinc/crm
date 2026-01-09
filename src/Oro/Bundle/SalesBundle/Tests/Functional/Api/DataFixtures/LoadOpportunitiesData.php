@@ -13,8 +13,8 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadOrganization;
 use Oro\Bundle\TestFrameworkBundle\Tests\Functional\DataFixtures\LoadUser;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

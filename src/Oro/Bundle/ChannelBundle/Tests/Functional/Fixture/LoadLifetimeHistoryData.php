@@ -9,8 +9,8 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareInterface
 {

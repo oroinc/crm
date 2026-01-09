@@ -91,8 +91,6 @@ class ChannelDoctrineListener
 
             $this->isInProgress = true;
 
-            $this->em->flush();
-
             foreach (array_chunk($toOutDate, self::MAX_UPDATE_CHUNK_SIZE) as $records) {
                 $this->statusUpdateManager->massUpdate($records);
             }

@@ -11,7 +11,7 @@ use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

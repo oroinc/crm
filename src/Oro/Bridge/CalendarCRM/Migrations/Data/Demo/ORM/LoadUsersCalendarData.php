@@ -17,8 +17,8 @@ use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUserData;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**

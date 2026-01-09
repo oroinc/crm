@@ -47,7 +47,7 @@ class ExtendEntityCacheWarmer implements CacheWarmerInterface
      * @throws ReflectionException
      */
     #[\Override]
-    public function warmUp(string $cacheDir): array
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
         if (\class_exists('Oro\Bundle\MagentoBundle\OroMagentoBundle', false)) {
             return [];

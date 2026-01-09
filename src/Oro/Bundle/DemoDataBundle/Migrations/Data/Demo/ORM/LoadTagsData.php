@@ -13,8 +13,8 @@ use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationT
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**

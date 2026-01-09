@@ -5,9 +5,9 @@ namespace Oro\Bundle\ActivityContactBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\CronBundle\Async\Topic\RunCommandTopic;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareTrait;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Produces message to recalculate contacting activities.

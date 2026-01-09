@@ -3,7 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_25_2;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\MigrationBundle\Exception\UnsupportedDatabasePlatformException;
@@ -124,7 +124,7 @@ ON afm.max_audit_id = a.id
 WHERE o.status_id IN (:status_ids) and 
 a.object_id = o.id AND a.object_class = :objectClass
 SQL;
-        } elseif ($platform instanceof MySqlPlatform) {
+        } elseif ($platform instanceof MySQLPlatform) {
             $updateSql = <<<SQL
 UPDATE orocrm_sales_opportunity o
 INNER JOIN oro_audit a ON a.object_id = o.id AND a.object_class = :objectClass

@@ -10,6 +10,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * Extends embedded form type to make the data channel field required.
+ */
 class EmbeddedFormTypeExtension extends AbstractTypeExtension
 {
     #[\Override]
@@ -19,7 +22,7 @@ class EmbeddedFormTypeExtension extends AbstractTypeExtension
     }
 
     #[\Override]
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $modifier = function (FormEvent $event) {
             $form = $event->getForm();

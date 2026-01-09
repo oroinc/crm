@@ -6,9 +6,12 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\WorkflowBundle\Model\Filter\WorkflowDefinitionFilters;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Data fixture that deactivates sales workflows during migration.
+ */
 class DeactivateSalesWorkflows extends AbstractFixture implements ContainerAwareInterface
 {
     /**

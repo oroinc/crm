@@ -9,6 +9,9 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 
+/**
+ * Transforms integration channel data to and from array representation for form handling.
+ */
 class DatasourceDataTransformer implements DataTransformerInterface
 {
     /** @var FormFactoryInterface */
@@ -20,7 +23,7 @@ class DatasourceDataTransformer implements DataTransformerInterface
     }
 
     #[\Override]
-    public function transform($value)
+    public function transform($value): mixed
     {
         if (null === $value || (!$value instanceof Integration)) {
             return null;
@@ -36,7 +39,7 @@ class DatasourceDataTransformer implements DataTransformerInterface
     }
 
     #[\Override]
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
         if (null === $value) {
             return null;
