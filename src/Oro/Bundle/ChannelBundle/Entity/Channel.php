@@ -83,7 +83,7 @@ class Channel
     /**
      * @var array $data
      */
-    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
+    #[ORM\Column(name: 'data', type: 'json', nullable: true)]
     protected $data;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

@@ -43,7 +43,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
     }
 
     #[\Override]
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if ($options['customer_association_disabled']) {
             return;
@@ -141,7 +141,7 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
     }
 
     #[\Override]
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'customer_association_disabled' => false

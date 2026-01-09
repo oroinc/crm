@@ -16,6 +16,11 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
     {
         // create channels for integrations
         $types = $this->container->get('oro_channel.provider.settings_provider')->getSourceIntegrationTypes();
+
+        if (empty($types)) {
+            return;
+        }
+
         $integrations = $manager->getRepository(Integration::class)->findBy(['type' => $types]);
 
         /** @var Integration $integration */

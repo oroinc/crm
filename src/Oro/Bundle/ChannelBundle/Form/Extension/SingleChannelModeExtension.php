@@ -13,6 +13,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Automatically selects and hides the channel field when only one channel is available.
+ */
 class SingleChannelModeExtension extends AbstractTypeExtension
 {
     /**
@@ -26,7 +29,7 @@ class SingleChannelModeExtension extends AbstractTypeExtension
     }
 
     #[\Override]
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if (!$options['single_channel_mode']) {
             return;
@@ -46,7 +49,7 @@ class SingleChannelModeExtension extends AbstractTypeExtension
     }
 
     #[\Override]
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if (!$options['single_channel_mode']) {
             return;
@@ -60,7 +63,7 @@ class SingleChannelModeExtension extends AbstractTypeExtension
     }
 
     #[\Override]
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['single_channel_mode' => true]);
     }

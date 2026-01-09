@@ -14,7 +14,7 @@ use Oro\Bundle\TagBundle\Entity\Tagging;
 use Oro\Bundle\TagBundle\Entity\TagManager;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Tests\Functional\DataFixtures\LoadUserData;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LoadCaseMailboxSettingsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface

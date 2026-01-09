@@ -44,7 +44,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
     }
 
     #[\Override]
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'loadCategories']);
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'handleState'], 10);
@@ -52,7 +52,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
     }
 
     #[\Override]
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['validation_groups' => $this->getValidationGroups()]);
     }

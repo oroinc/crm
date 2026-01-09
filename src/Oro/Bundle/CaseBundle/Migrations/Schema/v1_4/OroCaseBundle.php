@@ -16,6 +16,6 @@ class OroCaseBundle implements Migration
 
         // make updatedAt NOT NULL
         $table = $schema->getTable('orocrm_case_comment');
-        $table->changeColumn('updatedAt', ['notnull' => true]);
+        $table->modifyColumn('updatedAt', ['notnull' => true]);
     }
 }

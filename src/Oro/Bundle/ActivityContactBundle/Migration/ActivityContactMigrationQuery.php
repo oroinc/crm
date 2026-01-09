@@ -166,7 +166,7 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
      * @param bool $dryRun
      * @param bool $hasSchemaChanges
      * @param Schema $toSchema
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     protected function runSchemaRelated(LoggerInterface $logger, $dryRun, $hasSchemaChanges, $toSchema)
     {

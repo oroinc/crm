@@ -17,8 +17,8 @@ use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Loads new Case entities.

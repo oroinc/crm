@@ -191,6 +191,10 @@ class ActivityContactRecalculateCommand extends Command
 
     protected function getRecordsToRecalculate(string $entityClassName, array $ids, int $offset): array
     {
+        if (empty($ids)) {
+            return [];
+        }
+
         $entityRepository = $this->em->getRepository($entityClassName);
 
         return $entityRepository->findBy(['id' => $ids], ['id' => 'ASC'], self::BATCH_SIZE, $offset);

@@ -51,7 +51,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
     /**
      * @param LoggerInterface $logger
      * @param bool $dryRun
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     protected function updateReportAndSegments(LoggerInterface $logger, $dryRun)
     {
@@ -84,7 +84,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
      * @param bool $dryRun
      * @param string $query
      * @param array $params
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     protected function executeQuery(LoggerInterface $logger, $dryRun, $query, $params = [])
     {

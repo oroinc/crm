@@ -12,8 +12,8 @@ use Oro\Bundle\CallBundle\Entity\CallStatus;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**

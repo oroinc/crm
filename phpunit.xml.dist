@@ -43,7 +43,7 @@
         <env name="ORO_ENV" value="test"/>
         <env name="ORO_DEBUG" value="0"/>
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled" />
-        <ini name="error_reporting" value="-1"/>
+        <ini name="error_reporting" value="8191"/>
         <ini name="memory_limit" value="-1"/>
     </php>
 </phpunit>

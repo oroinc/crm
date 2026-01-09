@@ -12,6 +12,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Filters available integration types in the channel form based on settings.
+ */
 class IntegrationTypeExtension extends AbstractTypeExtension
 {
     /** @var SettingsProvider */
@@ -29,7 +32,7 @@ class IntegrationTypeExtension extends AbstractTypeExtension
     }
 
     #[\Override]
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if (!$options['disable_customer_datasource_types']) {
             return;
@@ -65,7 +68,7 @@ class IntegrationTypeExtension extends AbstractTypeExtension
     }
 
     #[\Override]
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['disable_customer_datasource_types' => true]);
     }

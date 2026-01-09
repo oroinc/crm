@@ -57,7 +57,7 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('status', 'boolean');
         $table->addColumn('channel_type', 'string', ['length' => 255]);
-        $table->addColumn('data', Types::JSON_ARRAY, ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', Types::JSON, ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->addColumn('customer_identity', 'string', ['length' => 255]);
         $table->addColumn('createdAt', 'datetime');
         $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);

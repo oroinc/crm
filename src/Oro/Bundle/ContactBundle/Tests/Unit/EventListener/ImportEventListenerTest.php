@@ -28,7 +28,7 @@ class ImportEventListenerTest extends TestCase
         $translator = $this->createMock(TranslatorInterface::class);
         $translator->expects(self::any())
             ->method('trans')
-            ->willReturn(static fn (string $key) => $key . '.translated');
+            ->willReturnCallback(static fn (string $key) => $key . '.translated');
 
         $contactImportExportConfigurationProvider = new ContactImportExportConfigurationProvider($translator);
         $this->optionalListenerManager = $this->createMock(OptionalListenerManager::class);

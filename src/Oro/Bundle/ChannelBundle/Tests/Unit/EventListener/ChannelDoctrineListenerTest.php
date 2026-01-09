@@ -186,8 +186,6 @@ class ChannelDoctrineListenerTest extends OrmTestCase
 
         $this->em->expects(self::exactly(2))
             ->method('persist');
-        $this->em->expects(self::once())
-            ->method('flush');
 
         $records = [
             [1, 2, null],

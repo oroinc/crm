@@ -15,12 +15,12 @@ class UpdateLocaleFieldLength implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_case_source_trans');
-        $table->changeColumn('locale', ['length' => 16]);
+        $table->modifyColumn('locale', ['length' => 16]);
 
         $table = $schema->getTable('orocrm_case_status_trans');
-        $table->changeColumn('locale', ['length' => 16]);
+        $table->modifyColumn('locale', ['length' => 16]);
 
         $table = $schema->getTable('orocrm_case_priority_trans');
-        $table->changeColumn('locale', ['length' => 16]);
+        $table->modifyColumn('locale', ['length' => 16]);
     }
 }

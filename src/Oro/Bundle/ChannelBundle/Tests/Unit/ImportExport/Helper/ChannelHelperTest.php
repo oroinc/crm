@@ -52,7 +52,7 @@ class ChannelHelperTest extends OrmTestCase
         $this->getDriverConnectionMock($this->em)->expects($this->atLeastOnce())
             ->method('query')
             ->willReturnCallback(function () use ($existingIntegrationId, $existingChannelId) {
-                return $this->createFetchStatementMock(
+                return $this->createFetchResultMock(
                     [['id_0' => $existingChannelId, 'id_1' => $existingIntegrationId]]
                 );
             });

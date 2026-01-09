@@ -4,6 +4,9 @@ namespace Oro\Bundle\AnalyticsBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
+/**
+ * Validates RFM category configuration.
+ */
 class CategoriesConstraint extends Constraint
 {
     public const GROUP = 'RFMCategories';
@@ -28,7 +31,7 @@ class CategoriesConstraint extends Constraint
      */
     protected $type;
 
-    public $groups = [self::GROUP];
+    public ?array $groups = [self::GROUP];
 
     #[\Override]
     public function validatedBy(): string

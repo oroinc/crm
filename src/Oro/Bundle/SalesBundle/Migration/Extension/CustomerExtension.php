@@ -37,7 +37,7 @@ class CustomerExtension implements ExtendExtensionAwareInterface, NameGeneratorA
         $table   = $schema->getTable(self::CUSTOMER_TABLE_NAME);
         $targetTable = $schema->getTable($targetTableName);
         if (empty($targetColumnName)) {
-            $primaryKeyColumns = $targetTable->getPrimaryKeyColumns();
+            $primaryKeyColumns = $targetTable->getPrimaryKey()->getColumns();
             $targetColumnName  = reset($primaryKeyColumns);
         }
         $options = new OroOptions();

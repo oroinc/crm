@@ -20,7 +20,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
     }
 
     #[\Override]
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
         if (!$value) {
             return null;
@@ -50,7 +50,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
     }
 
     #[\Override]
-    public function transform($value)
+    public function transform($value): mixed
     {
         if ($value instanceof Customer) {
             $value = $value->getTarget();

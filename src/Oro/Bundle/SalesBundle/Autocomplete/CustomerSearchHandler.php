@@ -152,6 +152,9 @@ class CustomerSearchHandler extends ContextSearchHandler
     {
         $customers = [];
         foreach ($groupedItems as $entityName => $groupitems) {
+            if (empty($groupitems)) {
+                continue;
+            }
             $customers = array_merge(
                 $customers,
                 $this->objectManager
