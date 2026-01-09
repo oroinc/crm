@@ -43,14 +43,7 @@ search:
                         name:           email
                         target_type:    text
                         target_fields:  [email]
-            -
-                name:                  dataChannel
-                relation_type:         many-to-one
-                relation_fields:
-                    -
-                        name:          id
-                        target_type:   integer
-                        target_fields: [dataChannelId]
+
             -
                 name: phones
                 relation_type: one-to-many
@@ -73,7 +66,7 @@ search:
                 target_type:            text
                 target_fields:          [name]
             -
-                name:                   customer
+                name:                   customerAssociation
                 relation_type:          many-to-one
                 relation_fields:
                     -
@@ -112,14 +105,6 @@ search:
                                 name: email
                                 target_type: text
                                 target_fields: [email]
-            -
-                name:                  dataChannel
-                relation_type:         many-to-one
-                relation_fields:
-                    -
-                        name:          id
-                        target_type:   integer
-                        target_fields: [dataChannelId]
 
     Oro\Bundle\SalesBundle\Entity\B2bCustomer:
         alias:                          oro_sales_b2bcustomer
