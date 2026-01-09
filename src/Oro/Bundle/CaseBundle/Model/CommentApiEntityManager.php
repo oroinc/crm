@@ -7,6 +7,9 @@ use Oro\Bundle\CaseBundle\Entity\CaseComment;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
+/**
+ * Manages API operations for case comment entities, handling CRUD operations through REST endpoints.
+ */
 class CommentApiEntityManager extends ApiEntityManager
 {
     /**

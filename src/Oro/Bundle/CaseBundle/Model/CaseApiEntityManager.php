@@ -5,6 +5,9 @@ namespace Oro\Bundle\CaseBundle\Model;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
+/**
+ * Manages API operations for case entities, handling CRUD operations through REST endpoints.
+ */
 class CaseApiEntityManager extends ApiEntityManager
 {
     /**

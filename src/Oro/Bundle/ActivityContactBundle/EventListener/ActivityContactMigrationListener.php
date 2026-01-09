@@ -7,6 +7,10 @@ use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\EntityExtendBundle\Migration\EntityMetadataHelper;
 use Oro\Bundle\MigrationBundle\Event\PostMigrationEvent;
 
+/**
+ * Listens to post-migration events and registers activity contact relationship migrations
+ * to establish connections between activities and contacts.
+ */
 class ActivityContactMigrationListener
 {
     /**  @var EntityMetadataHelper */

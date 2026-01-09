@@ -6,6 +6,9 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 
+/**
+ * Loads predefined contact reason data during database initialization.
+ */
 class LoadContactReasonData extends AbstractFixture
 {
     #[\Override]

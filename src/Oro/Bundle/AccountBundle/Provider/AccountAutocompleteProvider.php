@@ -5,6 +5,9 @@ namespace Oro\Bundle\AccountBundle\Provider;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountAutocomplete\AccountAutocompleteProviderInterface;
 
+/**
+ * Provides autocomplete suggestions for account selection in forms.
+ */
 class AccountAutocompleteProvider implements AccountAutocompleteProviderInterface
 {
     #[\Override]

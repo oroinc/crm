@@ -2,6 +2,10 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Model;
 
+/**
+ * Marks entities as RFM-aware, indicating they track and expose Recency, Frequency, and Monetary metrics
+ * for customer analysis.
+ */
 interface RFMAwareInterface extends AnalyticsAwareInterface
 {
     public const RFM_STATE_KEY = 'rfm_enabled';

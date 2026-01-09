@@ -8,6 +8,9 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
+/**
+ * Provides test fixture data for B2B customer entities used in import/export testing.
+ */
 class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
     #[\Override]

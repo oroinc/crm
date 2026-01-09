@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\Model;
 
+/**
+ * Manages social media information for contact entities.
+ */
 class Social
 {
     public const TWITTER     = 'twitter';

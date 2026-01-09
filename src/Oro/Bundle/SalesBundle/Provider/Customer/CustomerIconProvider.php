@@ -6,6 +6,9 @@ use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider as EntityConfigProvider;
 use Oro\Bundle\UIBundle\Model\Image;
 
+/**
+ * Provides customer type icons used in UI representations.
+ */
 class CustomerIconProvider implements CustomerIconProviderInterface
 {
     /** @var EntityConfigProvider */

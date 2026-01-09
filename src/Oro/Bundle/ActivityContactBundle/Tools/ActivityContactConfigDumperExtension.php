@@ -11,6 +11,9 @@ use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\Tools\DumperExtensions\AbstractEntityConfigDumperExtension;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendConfigDumper;
 
+/**
+ * Extends configuration dumper to include activity contact relationship configuration.
+ */
 class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExtension
 {
     /** @var ConfigManager */

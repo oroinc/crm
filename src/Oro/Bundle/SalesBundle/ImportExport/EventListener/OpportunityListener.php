@@ -10,6 +10,12 @@ use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Listens to opportunity import/export events and handles related data transformations.
+ *
+ * Processes opportunity entities during import/export operations, including building customer and account
+ * relationships, validating currency configuration, and ensuring data consistency.
+ */
 class OpportunityListener
 {
     /** @var OpportunityRelationsBuilder */

@@ -7,6 +7,9 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
+/**
+ * Defines a validation constraint for channel customer identity configuration.
+ */
 class ChannelCustomerIdentityConstraintValidator extends ConstraintValidator
 {
     #[\Override]

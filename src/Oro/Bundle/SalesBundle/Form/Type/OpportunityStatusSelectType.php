@@ -10,6 +10,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Defines the form type for selecting opportunity status values.
+ */
 class OpportunityStatusSelectType extends AbstractType
 {
     /** @var ConfigManager $configManager */

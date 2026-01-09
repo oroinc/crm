@@ -5,6 +5,10 @@ namespace Oro\Bundle\CaseBundle\Event;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
+/**
+ * Dispatched during case form handling to allow listeners to react to form submission events
+ * and modify form data or entity state.
+ */
 class FormHandlerEvent extends Event
 {
     /**

@@ -4,6 +4,9 @@ namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
+/**
+ * Provides display settings configuration for opportunity entities.
+ */
 class DisplaySettingsConfigProvider
 {
     public const CONFIG_DISPLAY_RELEVANT_DATA = 'oro_sales.display_relevant_opportunities';

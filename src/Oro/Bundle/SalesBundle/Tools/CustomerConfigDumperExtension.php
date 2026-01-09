@@ -6,6 +6,9 @@ use Oro\Bundle\EntityExtendBundle\Tools\DumperExtensions\AssociationEntityConfig
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
+/**
+ * Extends configuration dumper to include customer-related entity configuration.
+ */
 class CustomerConfigDumperExtension extends AssociationEntityConfigDumperExtension
 {
     #[\Override]

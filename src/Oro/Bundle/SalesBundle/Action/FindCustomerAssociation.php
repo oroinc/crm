@@ -8,6 +8,12 @@ use Oro\Component\Action\Exception\InvalidParameterException;
 use Oro\Component\ConfigExpression\ContextAccessor;
 use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
+/**
+ * Handles the action of finding and establishing customer associations for opportunities.
+ *
+ * Executes a workflow action that retrieves the account-customer association for a given customer entity
+ * and stores the result in a specified context attribute for use in workflow transitions.
+ */
 class FindCustomerAssociation extends AbstractAction
 {
     /** @var AccountCustomerManager */

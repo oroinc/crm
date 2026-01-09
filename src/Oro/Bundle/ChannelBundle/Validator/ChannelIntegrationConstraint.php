@@ -4,6 +4,9 @@ namespace Oro\Bundle\ChannelBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
+/**
+ * Defines a validation constraint for channel integration configuration.
+ */
 class ChannelIntegrationConstraint extends Constraint
 {
     #[\Override]

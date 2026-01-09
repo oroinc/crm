@@ -8,6 +8,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Defines the form type for contact data input in REST API endpoints.
+ */
 class ContactApiType extends AbstractType
 {
     public const NAME = 'contact';

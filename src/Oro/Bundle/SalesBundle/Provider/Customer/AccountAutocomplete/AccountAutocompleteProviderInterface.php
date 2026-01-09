@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Customer\AccountAutocomplete;
 
+/**
+ * Defines the contract for providing account autocomplete suggestions in forms and search interfaces.
+ */
 interface AccountAutocompleteProviderInterface
 {
     /**

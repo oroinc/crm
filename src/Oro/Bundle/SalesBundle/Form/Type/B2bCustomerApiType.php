@@ -6,6 +6,9 @@ use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Defines the form type for B2B customer data input in REST API endpoints.
+ */
 class B2bCustomerApiType extends B2bCustomerType
 {
     #[\Override]

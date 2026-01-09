@@ -4,6 +4,10 @@ namespace Oro\Bundle\AnalyticsBundle\Builder;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
+/**
+ * Defines the contract for RFM (Recency, Frequency, Monetary) value providers,
+ * enabling different channel types to supply customer analytics metrics.
+ */
 interface RFMProviderInterface
 {
     /**

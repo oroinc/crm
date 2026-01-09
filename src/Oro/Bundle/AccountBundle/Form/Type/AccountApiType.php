@@ -6,6 +6,9 @@ use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Defines the form type for account data input in REST API endpoints.
+ */
 class AccountApiType extends AccountType
 {
     #[\Override]

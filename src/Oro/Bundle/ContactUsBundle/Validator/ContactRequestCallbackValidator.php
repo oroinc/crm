@@ -5,6 +5,9 @@ namespace Oro\Bundle\ContactUsBundle\Validator;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
+/**
+ * Validates contact request callback data to ensure required fields are present and valid.
+ */
 class ContactRequestCallbackValidator
 {
     /**

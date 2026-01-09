@@ -9,6 +9,9 @@ use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
+/**
+ * Validates RFM category configuration to ensure all required categories are properly defined.
+ */
 class CategoriesValidator extends ConstraintValidator
 {
     public const MIN_CATEGORIES_COUNT = 2;

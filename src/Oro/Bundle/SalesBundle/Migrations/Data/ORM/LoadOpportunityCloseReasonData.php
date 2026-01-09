@@ -6,6 +6,9 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason;
 
+/**
+ * Loads predefined opportunity close reason data during database initialization.
+ */
 class LoadOpportunityCloseReasonData extends AbstractFixture
 {
     /**
