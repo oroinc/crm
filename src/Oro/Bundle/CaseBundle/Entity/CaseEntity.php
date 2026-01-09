@@ -244,7 +244,8 @@ class CaseEntity implements EmailHolderInterface, ExtendEntityInterface
      */
     protected function updateClosedAt($newStatus, $oldStatus)
     {
-        if ($newStatus instanceof CaseStatus &&
+        if (
+            $newStatus instanceof CaseStatus &&
             $newStatus->getName() == CaseStatus::STATUS_CLOSED &&
             !$newStatus->isEqualTo($oldStatus)
         ) {

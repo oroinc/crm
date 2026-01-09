@@ -73,7 +73,8 @@ class OpportunityListener
     {
         $isOpportunityChanged = false;
 
-        if (!\in_array($newStatusId, Opportunity::getClosedStatuses(), true)
+        if (
+            !\in_array($newStatusId, Opportunity::getClosedStatuses(), true)
             && $this->isNotNullBaseAmountFieldsExist($opportunity)
         ) {
             $opportunity->getBudgetAmount()->setBaseCurrencyValue(null);
@@ -81,8 +82,10 @@ class OpportunityListener
             $isOpportunityChanged = true;
         }
 
-        if (!isset($entityChangeSet['serialized_data']) ||
-            empty(array_column($entityChangeSet['serialized_data'], 'status'))) {
+        if (
+            !isset($entityChangeSet['serialized_data']) ||
+            empty(array_column($entityChangeSet['serialized_data'], 'status'))
+        ) {
             return $isOpportunityChanged;
         }
 
@@ -125,7 +128,8 @@ class OpportunityListener
         $defaultCurrency = $this->defaultCurrencyProvider->getDefaultCurrency();
         $budgetAmount = $opportunity->getBudgetAmount();
         if ($budgetAmount && null !== $budgetAmount->getValue()) {
-            if ($budgetAmount->getCurrency() === $defaultCurrency
+            if (
+                $budgetAmount->getCurrency() === $defaultCurrency
                 && null !== $budgetAmount->getBaseCurrencyValue()
             ) {
                 $opportunity->setBaseBudgetAmountValue($budgetAmount->getValue());
@@ -139,7 +143,8 @@ class OpportunityListener
 
         $closeRevenue = $opportunity->getCloseRevenue();
         if ($closeRevenue && null !== $closeRevenue->getValue()) {
-            if ($closeRevenue->getCurrency() === $defaultCurrency
+            if (
+                $closeRevenue->getCurrency() === $defaultCurrency
                 && null !== $closeRevenue->getBaseCurrencyValue()
             ) {
                 $opportunity->setBaseCloseRevenueValue($closeRevenue->getValue());

@@ -90,7 +90,8 @@ class OpportunitiesByStatusReportListener
             $fieldName = $config[FilterUtility::DATA_NAME_KEY];
             $filterType = $config['type'];
             // get date and datetime filters only
-            if (\array_key_exists($key, $filters)
+            if (
+                \array_key_exists($key, $filters)
                 && \in_array($filterType, ['date', 'datetime'])
                 && str_contains($fieldName, '.')
             ) {

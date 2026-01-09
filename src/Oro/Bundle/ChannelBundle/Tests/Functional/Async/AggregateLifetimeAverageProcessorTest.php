@@ -89,7 +89,7 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
 
     private function getExpectedResultsFor(string $timeZone): array
     {
-        $expectedResults = Yaml::parse(file_get_contents(__DIR__ .'/../Fixture/data/expected_results.yml'));
+        $expectedResults = Yaml::parse(file_get_contents(__DIR__ . '/../Fixture/data/expected_results.yml'));
 
         return $expectedResults['data'][$timeZone];
     }

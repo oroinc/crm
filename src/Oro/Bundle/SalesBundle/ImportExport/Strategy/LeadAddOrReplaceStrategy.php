@@ -19,7 +19,8 @@ class LeadAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     #[\Override]
     protected function findEntityByIdentityValues($entityName, array $identityValues): ?object
     {
-        if (is_a($entityName, LeadPhone::class, true)
+        if (
+            is_a($entityName, LeadPhone::class, true)
             || is_a($entityName, LeadAddress::class, true)
         ) {
             return null;

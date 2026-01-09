@@ -77,7 +77,8 @@ class ForecastOfOpportunities
         $value           = $this->provider
             ->getForecastData($widgetOptions, $dateData['start'], $dateData['end'], null);
         $result['value'] = $this->formatValue($value[$dataKey], $dataType);
-        if (!empty($dateData['prev_start'])
+        if (
+            !empty($dateData['prev_start'])
             && !empty($dateData['prev_end'])
             && !empty($dateData['prev_moment'])
         ) {
@@ -208,7 +209,8 @@ class ForecastOfOpportunities
             'start' => $start,
             'end'   => $end
         ];
-        if ($usePrevious
+        if (
+            $usePrevious
             && !empty($dateRange['prev_start'])
             && !empty($dateRange['prev_end'])
         ) {

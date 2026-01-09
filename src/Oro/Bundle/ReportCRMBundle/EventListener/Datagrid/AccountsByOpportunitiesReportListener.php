@@ -56,10 +56,10 @@ class AccountsByOpportunitiesReportListener
             }
         }
 
-        $selects[] = 'COUNT(o.id) as '.self::TOTALOPS_LABEL;
+        $selects[] = 'COUNT(o.id) as ' . self::TOTALOPS_LABEL;
         $grandTotals[self::TOTALOPS_LABEL] = ['expr' => 'COUNT(o.id)'];
         $columns[self::TOTALOPS_LABEL] = [
-            'label' => 'oro.reportcrm.datagrid.columns.'.self::TOTALOPS_LABEL,
+            'label' => 'oro.reportcrm.datagrid.columns.' . self::TOTALOPS_LABEL,
             'frontend_type' => 'integer'
         ];
         $sorters[self::TOTALOPS_LABEL] = ['data_name' => self::TOTALOPS_LABEL];

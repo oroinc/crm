@@ -51,7 +51,7 @@ class LoadTest extends WebTestCase
     #[\Override]
     protected function assertPostConditions(): void
     {
-        $data = $this->getName() . ',' . date('d/m/y') .  ',' . $this->resultLimit. ',' . $this->resultData . "\n";
+        $data = $this->getName() . ',' . date('d/m/y') .  ',' . $this->resultLimit . ',' . $this->resultData . "\n";
         file_put_contents(
             getcwd() . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'statistics.txt',
             $data,

@@ -44,8 +44,10 @@ class ImportEventListener
     public function onAfterJobExecution(JobExecutionEvent $jobExecutionEvent): void
     {
         $jobExecution = $jobExecutionEvent->getJobExecution();
-        if (!$this->isSupportedJob($jobExecution)
-            && $jobExecution->getStatus()->getValue() !== BatchStatus::COMPLETED) {
+        if (
+            !$this->isSupportedJob($jobExecution)
+            && $jobExecution->getStatus()->getValue() !== BatchStatus::COMPLETED
+        ) {
             return;
         }
 

@@ -169,7 +169,7 @@ class RestContactApiTest extends WebTestCase
         $this->client->jsonRequest('GET', $baseUrl . '?phone=' . $requestData['contact']['phones'][0]['phone']);
         $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $this->client->jsonRequest('GET', $baseUrl . '?phone<>' .$requestData['contact']['phones'][0]['phone']);
+        $this->client->jsonRequest('GET', $baseUrl . '?phone<>' . $requestData['contact']['phones'][0]['phone']);
         $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
     }
 

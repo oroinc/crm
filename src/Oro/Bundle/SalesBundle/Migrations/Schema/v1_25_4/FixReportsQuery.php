@@ -303,13 +303,15 @@ SQL;
      */
     protected function isNeedToUpdateEnumFilter(array $row, $filter)
     {
-        if (!isset($filter['columnName'], $filter['criterion']['filter'])
+        if (
+            !isset($filter['columnName'], $filter['criterion']['filter'])
             || $filter['criterion']['filter'] !== 'string'
         ) {
             return false;
         }
 
-        if (isset($this->fixes['filters'][$row['entity']])
+        if (
+            isset($this->fixes['filters'][$row['entity']])
             && $filter['columnName'] === $this->fixes['filters'][$row['entity']]
         ) {
             return true;

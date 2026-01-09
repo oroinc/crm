@@ -28,7 +28,8 @@ class HasContactInformationValidator extends ConstraintValidator
             throw new UnexpectedTypeException($value, Contact::class);
         }
 
-        if ($value->getFirstName()
+        if (
+            $value->getFirstName()
             || $value->getLastName()
             || $value->getEmails()->count() > 0
             || $value->getPhones()->count() > 0

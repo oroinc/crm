@@ -64,7 +64,7 @@ class LifetimeHistoryStatusUpdateTopicTest extends AbstractTopicTestCase
                     'records' => 'string_value',
                 ],
                 'exceptionClass' => InvalidOptionsException::class,
-                'exceptionMessage' => '/The option "records" with value "string_value"'.
+                'exceptionMessage' => '/The option "records" with value "string_value"' .
                     ' is expected to be of type "array", but is of type "string"./',
             ],
             'invalid status type' => [

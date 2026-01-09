@@ -66,7 +66,8 @@ class ChannelType extends AbstractType
     #[\Override]
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        if (isset($view->children['owner'], $view->children['owner']->vars['choices'])
+        if (
+            isset($view->children['owner'], $view->children['owner']->vars['choices'])
             && count($view->children['owner']->vars['choices']) < 2
         ) {
             FormUtils::appendClass($view->children['owner'], 'hide');

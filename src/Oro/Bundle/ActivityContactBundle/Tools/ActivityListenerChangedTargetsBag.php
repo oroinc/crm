@@ -29,8 +29,10 @@ class ActivityListenerChangedTargetsBag
                 continue;
             }
 
-            if (array_key_exists(ActivityScope::CONTACT_COUNT, $changeSet)
-                || array_key_exists(ActivityScope::CONTACT_COUNT_IN, $changeSet)) {
+            if (
+                array_key_exists(ActivityScope::CONTACT_COUNT, $changeSet)
+                || array_key_exists(ActivityScope::CONTACT_COUNT_IN, $changeSet)
+            ) {
                 $this->identifiers[] = $this->getTargetKey($target);
             }
         }

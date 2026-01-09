@@ -76,7 +76,8 @@ class ExtendEntityCacheWarmer implements CacheWarmerInterface
         foreach (CleanupMagentoOneConnectorEntities::getQueries(false) as $query) {
             $classReflection = new \ReflectionObject($query);
 
-            if ($query instanceof RemoveAssociationQuery
+            if (
+                $query instanceof RemoveAssociationQuery
                 && $classReflection->hasProperty('sourceEntityClass')
             ) {
                 $activityClass = $classReflection->getProperty('sourceEntityClass');

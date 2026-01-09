@@ -178,8 +178,10 @@ class CategoriesValidator extends ConstraintValidator
                 $minValue1 = $item1->getMinValue();
                 $minValue2 = $item2->getMinValue();
 
-                if ($minValue1 === $minValue2 ||
-                    (!is_null($item1->getMaxValue()) && $item1->getMaxValue() <= $minValue1)) {
+                if (
+                    $minValue1 === $minValue2 ||
+                    (!is_null($item1->getMaxValue()) && $item1->getMaxValue() <= $minValue1)
+                ) {
                     $isValid = false;
                 }
 

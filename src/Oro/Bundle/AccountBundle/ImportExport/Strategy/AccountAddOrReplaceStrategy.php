@@ -29,8 +29,10 @@ class AccountAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
                 $excludedFields[] = 'defaultContact';
             }
 
-            if (!$this->isFieldExcluded($entityName, 'contacts', $itemData) &&
-                !in_array('contacts', $excludedFields, true)) {
+            if (
+                !$this->isFieldExcluded($entityName, 'contacts', $itemData) &&
+                !in_array('contacts', $excludedFields, true)
+            ) {
                 $this->processChangesInFieldContacts($entity, $existingEntity);
 
                 $excludedFields[] = 'contacts';
@@ -44,8 +46,10 @@ class AccountAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     {
         $defaultContact = $entity->getDefaultContact();
         $existingDefaultContact = $existingEntity->getDefaultContact();
-        if ($existingDefaultContact instanceof Contact &&
-            $entity->getDefaultContact() !== $existingEntity->getDefaultContact()) {
+        if (
+            $existingDefaultContact instanceof Contact &&
+            $entity->getDefaultContact() !== $existingEntity->getDefaultContact()
+        ) {
             $existingDefaultContact->removeDefaultInAccount($existingEntity);
             $existingDefaultContact->removeAccount($existingEntity);
         }

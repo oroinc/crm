@@ -10,7 +10,6 @@ use Oro\Bundle\SearchBundle\Query\Query;
 
 /**
  * Listener cuts amount of data for search index in some fields
- * TODO: Implement proper cutting configuration and functionality in scope of BAP-14415
  */
 class SearchIndexDataListener
 {

@@ -18,7 +18,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
 
     public function testCreateCustomerPhone()
     {
-        $customer = $this->getReference('B2bCustomer_'. LoadB2bCustomerEntitiesData::THIRD_ENTITY_NAME);
+        $customer = $this->getReference('B2bCustomer_' . LoadB2bCustomerEntitiesData::THIRD_ENTITY_NAME);
         $content = json_encode([
             'entityId' => $customer->getId(),
             'phone' => '111',
@@ -33,7 +33,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
 
     public function testCreateSecondPrimaryPhone()
     {
-        $customer = $this->getReference('B2bCustomer_'. LoadB2bCustomerEntitiesData::THIRD_ENTITY_NAME);
+        $customer = $this->getReference('B2bCustomer_' . LoadB2bCustomerEntitiesData::THIRD_ENTITY_NAME);
 
         $content = json_encode([
             'entityId' => $customer->getId(),
@@ -58,7 +58,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
 
     public function testEmptyPhone()
     {
-        $customer = $this->getReference('B2bCustomer_'. LoadB2bCustomerEntitiesData::THIRD_ENTITY_NAME);
+        $customer = $this->getReference('B2bCustomer_' . LoadB2bCustomerEntitiesData::THIRD_ENTITY_NAME);
         $content = json_encode([
             'entityId' => $customer->getId(),
             'primary' => true
@@ -71,7 +71,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
     public function testDeletePhoneForbidden()
     {
         $customerPhone = $this
-            ->getReference('B2bCustomerPhone_Several_'. LoadB2bCustomerPhoneData::FIRST_ENTITY_NAME);
+            ->getReference('B2bCustomerPhone_Several_' . LoadB2bCustomerPhoneData::FIRST_ENTITY_NAME);
         $routeParams = [
             'id' => $customerPhone->getId()
         ];
@@ -90,7 +90,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
 
     public function testDeletePhoneSuccess()
     {
-        $customerPhone = $this->getReference('B2bCustomerPhone_Single_'. LoadB2bCustomerPhoneData::FIRST_ENTITY_NAME);
+        $customerPhone = $this->getReference('B2bCustomerPhone_Single_' . LoadB2bCustomerPhoneData::FIRST_ENTITY_NAME);
         $routeParams = [
             'id' => $customerPhone->getId()
         ];
