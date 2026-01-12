@@ -6,6 +6,9 @@ use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 
+/**
+ * Defines entity configuration scope for activity contact relationships.
+ */
 class ActivityScope
 {
     /** Last contact activity (datetime) */

@@ -11,6 +11,9 @@ use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\Tools\DumperExtensions\AbstractEntityConfigDumperExtension;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendConfigDumper;
 
+/**
+ * Extends configuration dumper to include activity contact relationship configuration.
+ */
 class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExtension
 {
     /** @var ConfigManager */
@@ -54,7 +57,8 @@ class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExt
                  * Check if entity has any activity from contact activities group
                  */
                 $entityActivities = $activityConfigProvider->getConfig($entityClassName)->get('activities');
-                if (!$entityActivities
+                if (
+                    !$entityActivities
                     || !array_intersect($contactingActivityClasses, $entityActivities)
                 ) {
                     continue;

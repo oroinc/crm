@@ -5,6 +5,9 @@ namespace Oro\Bundle\AnalyticsBundle\Placeholder;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
+/**
+ * Filters placeholder visibility based on RFM-aware entity configuration.
+ */
 class RFMAwareFilter
 {
     /**

@@ -6,6 +6,10 @@ use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 
+/**
+ * Listens to timezone change events and invalidates cached RFM metrics
+ * to ensure they are recalculated with the new timezone.
+ */
 class TimezoneChangeListener
 {
     /** @var RFMMetricStateManager */

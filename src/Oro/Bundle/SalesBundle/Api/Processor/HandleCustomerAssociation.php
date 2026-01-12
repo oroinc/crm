@@ -92,7 +92,8 @@ class HandleCustomerAssociation implements ProcessorInterface
 
         if (null === $form->getData()->getId()) {
             $this->changeCustomerAssociation($form, $submittedAccount, $submittedCustomer);
-        } elseif ($hasSubmittedData
+        } elseif (
+            $hasSubmittedData
             && FormUtil::isNotSubmittedOrSubmittedAndValid($accountField)
             && FormUtil::isNotSubmittedOrSubmittedAndValid($customerField)
         ) {
@@ -122,7 +123,8 @@ class HandleCustomerAssociation implements ProcessorInterface
         } else {
             /** @var Customer|null $existingCustomerAssociation */
             $existingCustomerAssociation = $this->getCustomerAssociation($ownerEntity);
-            if (null === $existingCustomerAssociation
+            if (
+                null === $existingCustomerAssociation
                 || !$this->isCustomerAssociationForAccountEquals($existingCustomerAssociation, $account)
             ) {
                 $this->setCustomerAssociation(

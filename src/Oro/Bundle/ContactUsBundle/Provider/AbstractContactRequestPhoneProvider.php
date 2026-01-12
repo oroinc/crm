@@ -5,6 +5,9 @@ namespace Oro\Bundle\ContactUsBundle\Provider;
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\ContactUsBundle\Entity\AbstractContactRequest;
 
+/**
+ * Retrieves phone numbers for {@see AbstractContactRequest} entities.
+ */
 class AbstractContactRequestPhoneProvider implements PhoneProviderInterface
 {
     /**

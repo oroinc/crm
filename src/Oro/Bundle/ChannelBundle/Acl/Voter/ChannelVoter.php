@@ -49,7 +49,8 @@ class ChannelVoter extends AbstractEntityVoter implements ServiceSubscriberInter
     #[\Override]
     protected function getPermissionForAttribute($class, $identifier, $attribute)
     {
-        if (is_a($this->object, $this->className, true)
+        if (
+            is_a($this->object, $this->className, true)
             && $this->getSettingsProvider()->isSystemChannel($this->object->getChannelType())
         ) {
             return self::ACCESS_DENIED;

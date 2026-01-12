@@ -46,7 +46,7 @@ class MigrateB2bCustomersQuery extends ParametrizedMigrationQuery
      */
     protected function doExecute(LoggerInterface $logger, $dryRun = false)
     {
-        $query = 'SELECT id, name, user_owner_id, organization_id, name, createdAt, updatedAt '.
+        $query = 'SELECT id, name, user_owner_id, organization_id, name, createdAt, updatedAt ' .
             'FROM orocrm_sales_b2bcustomer WHERE account_id IS NULL';
         $customersWithoutAccount = $this->connection->fetchAllAssociative($query);
         $serializedDataColumnExists = $this->schema->getTable('orocrm_account')->hasColumn('serialized_data');

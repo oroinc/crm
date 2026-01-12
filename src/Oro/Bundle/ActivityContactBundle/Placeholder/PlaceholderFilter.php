@@ -5,6 +5,9 @@ namespace Oro\Bundle\ActivityContactBundle\Placeholder;
 use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 use Oro\Bundle\ActivityListBundle\Placeholder\PlaceholderFilter as BasePlaceholder;
 
+/**
+ * Filters placeholder visibility based on activity contact relationship configuration.
+ */
 class PlaceholderFilter extends BasePlaceholder
 {
     #[\Override]

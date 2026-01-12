@@ -69,7 +69,8 @@ class AddAccountCustomerAssociations implements ProcessorInterface
         string $customerEntityClass,
         string $customerAssociationName
     ): void {
-        if ($definition->hasField($associationName)
+        if (
+            $definition->hasField($associationName)
             && !$this->isAccountCustomersAssociation($definition->getField($associationName), $customerEntityClass)
         ) {
             throw new \RuntimeException(sprintf(

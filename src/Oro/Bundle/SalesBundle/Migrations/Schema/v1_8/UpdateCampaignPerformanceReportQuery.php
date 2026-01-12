@@ -39,7 +39,8 @@ class UpdateCampaignPerformanceReportQuery extends ParametrizedMigrationQuery
         $rows = $this->connection->fetchAllAssociative($sql, $params, $types);
         foreach ($rows as $row) {
             $def = json_decode($row['definition'], true);
-            if (isset($def['grouping_columns'])
+            if (
+                isset($def['grouping_columns'])
                 && count($def['grouping_columns']) === 1
                 && isset($def['grouping_columns'][0]['name'])
                 && $def['grouping_columns'][0]['name'] === 'id'

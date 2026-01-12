@@ -7,6 +7,9 @@ use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationInterfa
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationProviderInterface;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * Provides import/export configuration for opportunity entities, defining field mappings and import/export behavior.
+ */
 class OpportunityImportExportConfigurationProvider implements ImportExportConfigurationProviderInterface
 {
     #[\Override]

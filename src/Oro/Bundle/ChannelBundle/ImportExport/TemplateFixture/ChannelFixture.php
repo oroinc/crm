@@ -6,6 +6,9 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
+/**
+ * Provides test fixture data for channel entities used in import/export testing.
+ */
 class ChannelFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
     #[\Override]

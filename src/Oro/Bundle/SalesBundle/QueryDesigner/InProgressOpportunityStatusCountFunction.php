@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\QueryDesigner;
 
+/**
+ * Implements a query designer function for counting opportunities with in-progress status.
+ */
 class InProgressOpportunityStatusCountFunction extends AbstractOpportunityStatusCountFunction
 {
     /**

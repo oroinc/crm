@@ -4,6 +4,9 @@ namespace Oro\Bundle\ChannelBundle\Provider\Utility;
 
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 
+/**
+ * Provides entity state information for channel-aware entities.
+ */
 class EntityStateProvider
 {
     /** @var StateProvider */

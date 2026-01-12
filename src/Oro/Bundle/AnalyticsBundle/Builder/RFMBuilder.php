@@ -46,7 +46,8 @@ class RFMBuilder implements AnalyticsBuilderInterface
     public function build(Channel $channel, array $ids = [])
     {
         $data = $channel->getData();
-        if (empty($data[RFMAwareInterface::RFM_STATE_KEY])
+        if (
+            empty($data[RFMAwareInterface::RFM_STATE_KEY])
             || !filter_var($data[RFMAwareInterface::RFM_STATE_KEY], FILTER_VALIDATE_BOOLEAN)
         ) {
             return;
@@ -215,7 +216,8 @@ class RFMBuilder implements AnalyticsBuilderInterface
      */
     protected function getCategories($channelId, $type)
     {
-        if (array_key_exists($channelId, $this->categories)
+        if (
+            array_key_exists($channelId, $this->categories)
             && array_key_exists($type, $this->categories[$channelId])
         ) {
             return $this->categories[$channelId][$type];

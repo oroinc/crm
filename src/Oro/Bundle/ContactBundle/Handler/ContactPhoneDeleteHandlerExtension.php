@@ -46,7 +46,8 @@ class ContactPhoneDeleteHandlerExtension extends AbstractEntityDeleteHandlerExte
             );
         }
 
-        if (!$contact->getFirstName()
+        if (
+            !$contact->getFirstName()
             && !$contact->getLastName()
             && $contact->getPhones()->count() <= 1
             && $contact->getEmails()->count() === 0

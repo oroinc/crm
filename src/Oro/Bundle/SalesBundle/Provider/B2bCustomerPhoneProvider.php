@@ -6,6 +6,10 @@ use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\AddressBundle\Provider\RootPhoneProviderAwareInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
+/**
+ * Retrieves phone numbers for B2B customers from their own phone records,
+ * with fallback to the associated contact's phone numbers.
+ */
 class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwareInterface
 {
     /** @var PhoneProviderInterface */

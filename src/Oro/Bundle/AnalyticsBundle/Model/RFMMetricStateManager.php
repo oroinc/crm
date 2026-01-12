@@ -6,6 +6,13 @@ use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
+/**
+ * Manages RFM metric state by resetting Recency, Frequency, and Monetary values for customer entities across channels.
+ *
+ * It is responsible for clearing RFM metrics when channels are updated or when analytics need to be recalculated.
+ * It identifies all channels with a specific customer identity interface and resets their RFM metric values to null,
+ * allowing the analytics builder to recalculate them based on current data.
+ */
 class RFMMetricStateManager
 {
     /**

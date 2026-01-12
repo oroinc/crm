@@ -12,8 +12,7 @@ use Oro\Bundle\SearchBundle\Query\Query;
  */
 class ChannelLimitationHandler extends SearchHandler
 {
-    protected string  $channelRelationName;
-
+    protected string $channelRelationName;
     protected string $channelSearchPropertyName;
 
     /**

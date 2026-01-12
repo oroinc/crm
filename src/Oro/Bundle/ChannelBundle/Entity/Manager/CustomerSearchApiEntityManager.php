@@ -203,7 +203,8 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
     {
         /** @var ClassMetadata $metadata */
         $metadata = $this->getObjectManager()->getClassMetadata($customerClass);
-        if ($metadata->hasAssociation(self::DEFAULT_CHANNEL_FIELD_NAME)
+        if (
+            $metadata->hasAssociation(self::DEFAULT_CHANNEL_FIELD_NAME)
             && $metadata->getAssociationTargetClass(self::DEFAULT_CHANNEL_FIELD_NAME) === self::CHANNEL_ENTITY_CLASS
         ) {
             return self::DEFAULT_CHANNEL_FIELD_NAME;

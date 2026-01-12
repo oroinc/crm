@@ -63,7 +63,8 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     #[\Override]
     protected function findEntityByIdentityValues($entityName, array $identityValues): ?object
     {
-        if (is_a($entityName, ContactPhone::class, true)
+        if (
+            is_a($entityName, ContactPhone::class, true)
             || is_a($entityName, ContactAddress::class, true)
         ) {
             return null;

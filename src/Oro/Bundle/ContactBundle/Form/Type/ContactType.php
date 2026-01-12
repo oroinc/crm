@@ -47,7 +47,8 @@ class ContactType extends AbstractType
         // set predefined accounts in case of creating a new contact
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
             $contact = $event->getData();
-            if ($contact instanceof Contact
+            if (
+                $contact instanceof Contact
                 && !$contact->getId()
                 && $contact->hasAccounts()
             ) {

@@ -133,7 +133,8 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
         }
 
         $changeSet = $uow->getEntityChangeSet($entity);
-        if ($uow->isScheduledForDelete($entity)
+        if (
+            $uow->isScheduledForDelete($entity)
             || (
                 array_intersect(['closeRevenueValue', 'serialized_data', 'customerAssociation'], array_keys($changeSet))
                 && (

@@ -6,6 +6,10 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\AddressBundle\Provider\RootPhoneProviderAwareInterface;
 
+/**
+ * Retrieves phone numbers for accounts by delegating to the primary contact's phone provider,
+ * with fallback to all associated contacts.
+ */
 class AccountPhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwareInterface
 {
     /** @var PhoneProviderInterface */

@@ -7,6 +7,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * Defines the form type for case mailbox process settings tag configuration.
+ */
 class CaseMailboxProcessSettingsTagType extends AbstractType
 {
     /** @var EventSubscriberInterface */

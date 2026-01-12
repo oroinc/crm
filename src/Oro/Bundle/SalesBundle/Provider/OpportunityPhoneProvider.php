@@ -6,6 +6,9 @@ use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\AddressBundle\Provider\RootPhoneProviderAwareInterface;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * Retrieves phone numbers for opportunity entities from their associated contact's phone records.
+ */
 class OpportunityPhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwareInterface
 {
     /** @var PhoneProviderInterface */

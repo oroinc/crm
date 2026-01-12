@@ -9,6 +9,9 @@ use Oro\Bundle\EntityExtendBundle\Migration\Schema\ExtendSchema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
+/**
+ * Handles database schema and data migrations for establishing activity contact relationships.
+ */
 class ActivityContactMigration implements Migration
 {
     /** @var EntityMetadataHelper */

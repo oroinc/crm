@@ -8,6 +8,9 @@ use Oro\Component\ConfigExpression\ContextAccessor;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
+/**
+ * Listens to workflow transition events and manages attribute updates for channel entities.
+ */
 class TransitionsAttributeListener
 {
     /** @var FormFactoryInterface */

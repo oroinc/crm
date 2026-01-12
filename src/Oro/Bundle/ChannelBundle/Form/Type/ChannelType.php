@@ -15,6 +15,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Defines the form type for channel configuration data input.
+ */
 class ChannelType extends AbstractType
 {
     public const NAME = 'oro_channel_form';
@@ -66,7 +69,8 @@ class ChannelType extends AbstractType
     #[\Override]
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        if (isset($view->children['owner'], $view->children['owner']->vars['choices'])
+        if (
+            isset($view->children['owner'], $view->children['owner']->vars['choices'])
             && count($view->children['owner']->vars['choices']) < 2
         ) {
             FormUtils::appendClass($view->children['owner'], 'hide');

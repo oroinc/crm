@@ -248,7 +248,7 @@ class OpportunityUpdateListTest extends RestJsonApiUpdateListTestCase
 
         $this->assertAsyncOperationError(
             [
-                'id'     => $operationId.'-1-1',
+                'id'     => $operationId . '-1-1',
                 'status' => 400,
                 'title'  => 'request data constraint',
                 'detail' => 'The \'attributes\' property should not be empty',

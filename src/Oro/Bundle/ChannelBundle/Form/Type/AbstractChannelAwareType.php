@@ -6,6 +6,13 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
+/**
+ * Provides common functionality for form types that need channel context.
+ *
+ * This base class handles the propagation of channel ID and channel field name to form views,
+ * making channel information available for client-side logic and validation.
+ * Subclasses should extend this when creating forms that need to be aware of the channel context.
+ */
 abstract class AbstractChannelAwareType extends AbstractType
 {
     #[\Override]

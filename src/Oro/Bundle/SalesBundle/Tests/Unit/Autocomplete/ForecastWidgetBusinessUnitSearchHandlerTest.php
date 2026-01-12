@@ -131,7 +131,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends TestCase
         //the main filter check
         $expr->expects($this->once())
             ->method('in')
-            ->with('e.'.self::TEST_ID_FIELD, ':entityIds');
+            ->with('e.' . self::TEST_ID_FIELD, ':entityIds');
 
         $this->handler->search('query', 0, 10);
     }

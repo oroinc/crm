@@ -56,7 +56,8 @@ class CustomerAccountCountQueryOptimizationListener
         foreach ($fromParts as $from) {
             $rootAlias = $from->getAlias();
             $associationName = AccountCustomerManager::getCustomerTargetField($from->getFrom());
-            if ($condition === "$alias.$associationName = $rootAlias"
+            if (
+                $condition === "$alias.$associationName = $rootAlias"
                 && $this->isOptionalAccountAssociation($qb, $rootAlias, $alias, $requiredJoinAliases)
             ) {
                 $result = true;

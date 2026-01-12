@@ -6,6 +6,14 @@ use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Form type for contact group REST API operations.
+ *
+ * Extends the standard contact group form type to support REST API requests by adding
+ * PATCH subscriber functionality. This enables proper handling of partial updates where
+ * unset fields are not overwritten with null values, allowing clients to update only
+ * specific fields of a contact group via REST API calls.
+ */
 class GroupApiType extends GroupType
 {
     #[\Override]

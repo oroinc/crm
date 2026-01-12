@@ -119,7 +119,8 @@ class ChannelTypeExtension extends AbstractTypeExtension
             $data = [];
         }
 
-        if (array_key_exists(RFMAwareInterface::RFM_STATE_KEY, $data)
+        if (
+            array_key_exists(RFMAwareInterface::RFM_STATE_KEY, $data)
             && $data[RFMAwareInterface::RFM_STATE_KEY] === $rfmEnabled
         ) {
             return;

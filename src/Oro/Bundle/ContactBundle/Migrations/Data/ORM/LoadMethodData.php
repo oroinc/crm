@@ -6,6 +6,9 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Method;
 
+/**
+ * Loads predefined contact method data during database initialization.
+ */
 class LoadMethodData extends AbstractFixture
 {
     /**

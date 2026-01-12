@@ -70,7 +70,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
 
     public function testDeleteEmailForbidden()
     {
-        $customerEmail = $this->getReference('B2bCustomerEmail_Several_'. LoadB2bCustomerEmailData::FIRST_ENTITY_NAME);
+        $customerEmail = $this->getReference('B2bCustomerEmail_Several_' . LoadB2bCustomerEmailData::FIRST_ENTITY_NAME);
         $routeParams = [
             'id' => $customerEmail->getId()
         ];
@@ -89,7 +89,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
 
     public function testDeleteEmailSuccess()
     {
-        $customerEmail = $this->getReference('B2bCustomerEmail_Single_'. LoadB2bCustomerEmailData::FIRST_ENTITY_NAME);
+        $customerEmail = $this->getReference('B2bCustomerEmail_Single_' . LoadB2bCustomerEmailData::FIRST_ENTITY_NAME);
         $routeParams = [
             'id' => $customerEmail->getId()
         ];

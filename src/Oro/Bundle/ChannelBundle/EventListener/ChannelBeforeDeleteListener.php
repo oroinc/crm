@@ -6,6 +6,9 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
 use Oro\Bundle\IntegrationBundle\Manager\DeleteManager;
 
+/**
+ * Listens to channel deletion events and ensures associated data sources are properly deleted.
+ */
 class ChannelBeforeDeleteListener
 {
     /** @var DeleteManager  */

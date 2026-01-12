@@ -69,7 +69,7 @@ class RestLeadPhoneApiTest extends WebTestCase
 
     public function testDeletePhoneForbidden()
     {
-        $leadPhone = $this->getReference('LeadPhone_Several_'. LoadLeadPhoneData::FIRST_ENTITY_NAME);
+        $leadPhone = $this->getReference('LeadPhone_Several_' . LoadLeadPhoneData::FIRST_ENTITY_NAME);
         $routeParams = [
             'id' => $leadPhone->getId()
         ];
@@ -88,7 +88,7 @@ class RestLeadPhoneApiTest extends WebTestCase
 
     public function testDeletePhoneSuccess()
     {
-        $leadPhone = $this->getReference('LeadPhone_Single_'. LoadLeadPhoneData::FIRST_ENTITY_NAME);
+        $leadPhone = $this->getReference('LeadPhone_Single_' . LoadLeadPhoneData::FIRST_ENTITY_NAME);
         $routeParams = [
             'id' => $leadPhone->getId()
         ];

@@ -9,6 +9,12 @@ use Oro\Component\ConfigExpression\ContextAccessorAwareInterface;
 use Oro\Component\ConfigExpression\ContextAccessorAwareTrait;
 use Oro\Component\ConfigExpression\Exception\InvalidArgumentException;
 
+/**
+ * Evaluates conditions for channel entity availability in workflow transitions.
+ *
+ * Determines whether specified entities are available for a given channel or enabled in any channel,
+ * allowing workflow transitions to be conditionally executed based on entity availability configuration.
+ */
 class ChannelEntityAvailability extends AbstractCondition implements ContextAccessorAwareInterface
 {
     use ContextAccessorAwareTrait;

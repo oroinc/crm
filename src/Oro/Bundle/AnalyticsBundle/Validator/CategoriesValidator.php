@@ -9,6 +9,9 @@ use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
+/**
+ * Validates RFM category configuration to ensure all required categories are properly defined.
+ */
 class CategoriesValidator extends ConstraintValidator
 {
     public const MIN_CATEGORIES_COUNT = 2;
@@ -178,8 +181,10 @@ class CategoriesValidator extends ConstraintValidator
                 $minValue1 = $item1->getMinValue();
                 $minValue2 = $item2->getMinValue();
 
-                if ($minValue1 === $minValue2 ||
-                    (!is_null($item1->getMaxValue()) && $item1->getMaxValue() <= $minValue1)) {
+                if (
+                    $minValue1 === $minValue2 ||
+                    (!is_null($item1->getMaxValue()) && $item1->getMaxValue() <= $minValue1)
+                ) {
                     $isValid = false;
                 }
 

@@ -11,6 +11,12 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Handles form submission and processing for channel integration settings.
+ *
+ * Manages the integration channel form lifecycle, including form submission handling, validation,
+ * and form view generation with special handling for update-only mode to suppress validation errors.
+ */
 class ChannelIntegrationHandler
 {
     public const DATA_PARAM_NAME = 'data';

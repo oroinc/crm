@@ -7,6 +7,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Defines the form type for selecting multiple channel-aware entities.
+ */
 class MultipleEntityChannelAwareType extends AbstractChannelAwareType
 {
     #[\Override]

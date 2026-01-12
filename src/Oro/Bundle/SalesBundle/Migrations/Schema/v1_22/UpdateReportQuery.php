@@ -176,7 +176,8 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
     {
         $paramOldClassName = 'Oro\Bundle\SalesBundle\Entity\OpportunityStatus';
         $paramNewClassName = OutdatedExtendExtension::buildEnumValueClassName('opportunity_status');
-        if (isset($field['criterion']['data']['params']['class'])
+        if (
+            isset($field['criterion']['data']['params']['class'])
             && $field['criterion']['data']['params']['class'] === $paramOldClassName
             && $field['criterion']['filter'] === 'dictionary'
         ) {

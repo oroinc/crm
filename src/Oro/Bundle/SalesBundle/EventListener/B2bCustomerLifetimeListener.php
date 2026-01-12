@@ -61,8 +61,10 @@ class B2bCustomerLifetimeListener implements ServiceSubscriberInterface
                 $changeSet = $uow->getEntityChangeSet($entity);
                 if ($this->isChangeSetValuable($changeSet)) {
                     $takeZeroRevenue = isset($changeSet['closeRevenueValue']);
-                    if ($this->hasChangedB2bCustomer($changeSet)
-                        && $this->isOldStatusValuable($entity, $changeSet)) {
+                    if (
+                        $this->hasChangedB2bCustomer($changeSet)
+                        && $this->isOldStatusValuable($entity, $changeSet)
+                    ) {
                         // handle change of b2b customer
                         /** @var Customer $customer */
                         $customer = $changeSet['customerAssociation'][0];
@@ -70,7 +72,8 @@ class B2bCustomerLifetimeListener implements ServiceSubscriberInterface
                         /** @var B2bCustomer $oldCustomer */
                         $this->scheduleUpdate($oldCustomer, $uow);
                     }
-                    if ($this->isValuable($entity, $takeZeroRevenue)
+                    if (
+                        $this->isValuable($entity, $takeZeroRevenue)
                         || ($this->isOldStatusValuable($entity, $changeSet) && $this->hasB2bCustomerTarget($entity))
                     ) {
                         $b2bCustomer = $entity->getCustomerAssociation()->getTarget();

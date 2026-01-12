@@ -70,7 +70,7 @@ class RestContactEmailApiTest extends WebTestCase
 
     public function testDeleteEmailForbidden()
     {
-        $contactEmail = $this->getReference('ContactEmail_Several_'. LoadContactEmailData::FIRST_ENTITY_NAME);
+        $contactEmail = $this->getReference('ContactEmail_Several_' . LoadContactEmailData::FIRST_ENTITY_NAME);
         $routeParams = [
             'id' => $contactEmail->getId()
         ];
@@ -90,7 +90,7 @@ class RestContactEmailApiTest extends WebTestCase
 
     public function testCanDeleteNonPrimaryEmail()
     {
-        $contactEmail = $this->getReference('ContactEmail_Several_'. LoadContactEmailData::THIRD_ENTITY_NAME);
+        $contactEmail = $this->getReference('ContactEmail_Several_' . LoadContactEmailData::THIRD_ENTITY_NAME);
         $routeParams = [
             'id' => $contactEmail->getId()
         ];
@@ -112,7 +112,7 @@ class RestContactEmailApiTest extends WebTestCase
             ['firstName' => '', 'lastName' => '']
         );
 
-        $contactEmail = $this->getReference('ContactEmail_Single_'. LoadContactEmailData::FOURTH_ENTITY_NAME);
+        $contactEmail = $this->getReference('ContactEmail_Single_' . LoadContactEmailData::FOURTH_ENTITY_NAME);
         $routeParams = [
             'id' => $contactEmail->getId()
         ];
@@ -130,7 +130,7 @@ class RestContactEmailApiTest extends WebTestCase
 
     public function testDeleteEmailSuccess()
     {
-        $contactEmail = $this->getReference('ContactEmail_Single_'. LoadContactEmailData::FIRST_ENTITY_NAME);
+        $contactEmail = $this->getReference('ContactEmail_Single_' . LoadContactEmailData::FIRST_ENTITY_NAME);
         $routeParams = [
             'id' => $contactEmail->getId()
         ];

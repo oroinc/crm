@@ -7,6 +7,9 @@ use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationInterfa
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationProviderInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
+/**
+ * Provides import/export configuration for B2B customer entities, defining field mappings and import/export behavior.
+ */
 class B2bCustomerImportExportConfigurationProvider implements ImportExportConfigurationProviderInterface
 {
     #[\Override]

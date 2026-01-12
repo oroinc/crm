@@ -18,7 +18,7 @@ class RestContactPhoneApiTest extends WebTestCase
 
     public function testCreateContactPhone()
     {
-        $contact = $this->getReference('Contact_'. LoadContactEntitiesData::THIRD_ENTITY_NAME);
+        $contact = $this->getReference('Contact_' . LoadContactEntitiesData::THIRD_ENTITY_NAME);
         $payload = [
             'contactId' => $contact->getId(),
             'phone' => '111',
@@ -33,7 +33,7 @@ class RestContactPhoneApiTest extends WebTestCase
 
     public function testCreateSecondPrimaryPhone()
     {
-        $contact = $this->getReference('Contact_'. LoadContactEntitiesData::THIRD_ENTITY_NAME);
+        $contact = $this->getReference('Contact_' . LoadContactEntitiesData::THIRD_ENTITY_NAME);
 
         $payload = [
             'contactId' => $contact->getId(),
@@ -58,7 +58,7 @@ class RestContactPhoneApiTest extends WebTestCase
 
     public function testEmptyPhone()
     {
-        $contact = $this->getReference('Contact_'. LoadContactEntitiesData::THIRD_ENTITY_NAME);
+        $contact = $this->getReference('Contact_' . LoadContactEntitiesData::THIRD_ENTITY_NAME);
         $payload = [
             'contactId' => $contact->getId(),
             'primary' => true
@@ -70,7 +70,7 @@ class RestContactPhoneApiTest extends WebTestCase
 
     public function testDeletePhoneForbidden()
     {
-        $contactPhone = $this->getReference('ContactPhone_Several_'. LoadContactPhoneData::FIRST_ENTITY_NAME);
+        $contactPhone = $this->getReference('ContactPhone_Several_' . LoadContactPhoneData::FIRST_ENTITY_NAME);
         $routeParams = [
             'id' => $contactPhone->getId()
         ];
@@ -90,7 +90,7 @@ class RestContactPhoneApiTest extends WebTestCase
 
     public function testCanDeleteNonPrimaryPhone()
     {
-        $contactPhone = $this->getReference('ContactPhone_Several_'. LoadContactPhoneData::THIRD_ENTITY_NAME);
+        $contactPhone = $this->getReference('ContactPhone_Several_' . LoadContactPhoneData::THIRD_ENTITY_NAME);
         $routeParams = [
             'id' => $contactPhone->getId()
         ];
@@ -112,7 +112,7 @@ class RestContactPhoneApiTest extends WebTestCase
             ['firstName' => '', 'lastName' => '']
         );
 
-        $contactEmail = $this->getReference('ContactPhone_Single_'. LoadContactPhoneData::FOURTH_ENTITY_NAME);
+        $contactEmail = $this->getReference('ContactPhone_Single_' . LoadContactPhoneData::FOURTH_ENTITY_NAME);
         $routeParams = [
             'id' => $contactEmail->getId()
         ];
@@ -130,7 +130,7 @@ class RestContactPhoneApiTest extends WebTestCase
 
     public function testDeletePhoneSuccess()
     {
-        $contactPhone = $this->getReference('ContactPhone_Single_'. LoadContactPhoneData::FIRST_ENTITY_NAME);
+        $contactPhone = $this->getReference('ContactPhone_Single_' . LoadContactPhoneData::FIRST_ENTITY_NAME);
         $routeParams = [
             'id' => $contactPhone->getId()
         ];

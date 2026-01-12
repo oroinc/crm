@@ -35,7 +35,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.CustomerChannel');
 
-        $result = self::runCommand('oro:cron:analytic:calculate', ['--channel='.$channel->getId()]);
+        $result = self::runCommand('oro:cron:analytic:calculate', ['--channel=' . $channel->getId()]);
 
         self::assertStringContainsString(
             sprintf('Schedule analytics calculation for "%s" channel.', $channel->getId()),
@@ -61,7 +61,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
 
         $result = self::runCommand('oro:cron:analytic:calculate', ['--channel=' . $channelId]);
 
-        self::assertStringContainsString('Schedule analytics calculation for "'. $channelId.'" channel.', $result);
+        self::assertStringContainsString('Schedule analytics calculation for "' . $channelId . '" channel.', $result);
         self::assertStringContainsString(
             sprintf('Channel is not supposed to calculate analytics: %s', $channelId),
             $result
@@ -76,7 +76,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
 
         $result = self::runCommand('oro:cron:analytic:calculate', ['--channel=' . $channelId]);
 
-        self::assertStringContainsString('Schedule analytics calculation for "'. $channelId . '" channel.', $result);
+        self::assertStringContainsString('Schedule analytics calculation for "' . $channelId . '" channel.', $result);
         self::assertStringContainsString(sprintf('Channel not active: %s', $channelId), $result);
     }
 
@@ -111,9 +111,9 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         $customerTwo = $this->getReference('Channel.CustomerChannel.Customer2');
 
         $result = self::runCommand('oro:cron:analytic:calculate', [
-            '--channel='.$channel->getId(),
-            '--ids='.$customerOne->getId(),
-            '--ids='.$customerTwo->getId(),
+            '--channel=' . $channel->getId(),
+            '--ids=' . $customerOne->getId(),
+            '--ids=' . $customerTwo->getId(),
         ]);
 
         self::assertStringContainsString(

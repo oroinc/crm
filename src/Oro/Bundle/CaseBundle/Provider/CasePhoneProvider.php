@@ -6,6 +6,9 @@ use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\AddressBundle\Provider\RootPhoneProviderAwareInterface;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 
+/**
+ * Retrieves phone numbers for case entities from their associated contact's phone records.
+ */
 class CasePhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwareInterface
 {
     /** @var PhoneProviderInterface */
