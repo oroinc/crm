@@ -29,15 +29,21 @@ included:
     -
         type: opportunityclosereasons
         id: cancelled
+        meta:
+            title: 'Cancelled'
         attributes:
             label: 'Cancelled'
     -
         type: opportunitystatuses
         id: lost
+        meta:
+            title: 'Closed Lost'
         attributes:
             name: 'Closed Lost'
     -
         type: opportunitystatuses
         id: won
+        meta:
+            title: 'Closed Won'
         attributes:
             name: 'Closed Won'
