@@ -81,6 +81,102 @@ class OpportunityStatusTest extends RestJsonApiTestCase
         );
     }
 
+    public function testGetListWithTitle(): void
+    {
+        $response = $this->cget(['entity' => 'opportunitystatuses'], ['meta' => 'title']);
+        $this->assertResponseContains(
+            [
+                'data' => [
+                    [
+                        'type'       => 'opportunitystatuses',
+                        'id'         => 'identification_alignment',
+                        'meta'       => [
+                            'title' => 'Identification & Alignment'
+                        ],
+                        'attributes' => [
+                            'name'     => 'Identification & Alignment',
+                            'priority' => 2,
+                            'default'  => false
+                        ]
+                    ],
+                    [
+                        'type'       => 'opportunitystatuses',
+                        'id'         => 'in_progress',
+                        'meta'       => [
+                            'title' => 'Open'
+                        ],
+                        'attributes' => [
+                            'name'     => 'Open',
+                            'priority' => 1,
+                            'default'  => true
+                        ]
+                    ],
+                    [
+                        'type'       => 'opportunitystatuses',
+                        'id'         => 'lost',
+                        'meta'       => [
+                            'title' => 'Closed Lost'
+                        ],
+                        'attributes' => [
+                            'name'     => 'Closed Lost',
+                            'priority' => 7,
+                            'default'  => false
+                        ]
+                    ],
+                    [
+                        'type'       => 'opportunitystatuses',
+                        'id'         => 'needs_analysis',
+                        'meta'       => [
+                            'title' => 'Needs Analysis'
+                        ],
+                        'attributes' => [
+                            'name'     => 'Needs Analysis',
+                            'priority' => 3,
+                            'default'  => false
+                        ]
+                    ],
+                    [
+                        'type'       => 'opportunitystatuses',
+                        'id'         => 'negotiation',
+                        'meta'       => [
+                            'title' => 'Negotiation'
+                        ],
+                        'attributes' => [
+                            'name'     => 'Negotiation',
+                            'priority' => 5,
+                            'default'  => false
+                        ]
+                    ],
+                    [
+                        'type'       => 'opportunitystatuses',
+                        'id'         => 'solution_development',
+                        'meta'       => [
+                            'title' => 'Solution Development'
+                        ],
+                        'attributes' => [
+                            'name'     => 'Solution Development',
+                            'priority' => 4,
+                            'default'  => false
+                        ]
+                    ],
+                    [
+                        'type'       => 'opportunitystatuses',
+                        'id'         => 'won',
+                        'meta'       => [
+                            'title' => 'Closed Won'
+                        ],
+                        'attributes' => [
+                            'name'     => 'Closed Won',
+                            'priority' => 6,
+                            'default'  => false
+                        ]
+                    ]
+                ]
+            ],
+            $response
+        );
+    }
+
     public function testGetListSortedByPriority(): void
     {
         $response = $this->cget(['entity' => 'opportunitystatuses'], ['sort' => 'priority']);
@@ -151,19 +247,6 @@ class OpportunityStatusTest extends RestJsonApiTestCase
                         ]
                     ]
                 ]
-            ],
-            $response
-        );
-    }
-
-    public function testTryToGetListWithTitles(): void
-    {
-        $response = $this->cget(['entity' => 'opportunitystatuses'], ['meta' => 'title'], [], false);
-        $this->assertResponseValidationError(
-            [
-                'title'  => 'filter constraint',
-                'detail' => 'The filter is not supported.',
-                'source' => ['parameter' => 'meta']
             ],
             $response
         );
