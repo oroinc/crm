@@ -4,7 +4,6 @@ api:
 
         Oro\Bundle\ContactUsBundle\Entity\ContactReason:
             documentation_resource: '@OroContactUsBundle/Resources/doc/api/contact_reason.md'
-            disable_meta_properties: false # set manually because this entity is marked as a dictionary
             fields:
                 labels:
                     property_path: titles
