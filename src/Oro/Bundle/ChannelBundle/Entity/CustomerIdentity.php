@@ -22,16 +22,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'orocrm_channel_cust_identity')]
-#[Config(
-    defaultValues: [
-        'ownership' => [
-            'owner_type' => 'USER',
-            'owner_field_name' => 'owner',
-            'owner_column_name' => 'user_owner_id'
-        ],
-        'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'sales_data']
-    ]
-)]
+#[Config]
 class CustomerIdentity implements ChannelAwareInterface, ExtendEntityInterface
 {
     use ChannelEntityTrait;
