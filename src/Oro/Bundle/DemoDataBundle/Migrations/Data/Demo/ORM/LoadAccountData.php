@@ -7,6 +7,9 @@ use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
+/**
+ * Loads demo account data during database initialization.
+ */
 class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInterface
 {
     #[\Override]

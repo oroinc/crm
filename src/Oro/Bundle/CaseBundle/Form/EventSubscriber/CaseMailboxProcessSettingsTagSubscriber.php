@@ -9,6 +9,9 @@ use Oro\Bundle\TagBundle\Form\EventSubscriber\TagSubscriber;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
+/**
+ * Subscribes to form events and dynamically configures case mailbox process settings tags.
+ */
 class CaseMailboxProcessSettingsTagSubscriber extends TagSubscriber
 {
     #[\Override]

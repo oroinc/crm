@@ -5,6 +5,12 @@ namespace Oro\Bundle\SalesBundle\Autocomplete;
 use Oro\Bundle\FormBundle\Autocomplete\SearchHandler;
 use Oro\Bundle\OrganizationBundle\Provider\BusinessUnitAclProvider;
 
+/**
+ * Autocomplete search handler for business units in forecast widgets.
+ *
+ * Filters business units by ACL permissions for opportunities using {@see BusinessUnitAclProvider},
+ * returning only units the user can view.
+ */
 class ForecastWidgetBusinessUnitSearchHandler extends SearchHandler
 {
     /** @var BusinessUnitAclProvider */

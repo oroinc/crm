@@ -7,6 +7,9 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+/**
+ * Provides data access and query methods for RFM metric category entities.
+ */
 class RFMMetricCategoryRepository extends EntityRepository
 {
     /**

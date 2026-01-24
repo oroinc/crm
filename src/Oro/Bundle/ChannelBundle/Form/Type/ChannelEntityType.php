@@ -7,6 +7,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * Defines the form type for selecting channel entities in forms.
+ */
 class ChannelEntityType extends AbstractType
 {
     const NAME = 'oro_channel_entities';

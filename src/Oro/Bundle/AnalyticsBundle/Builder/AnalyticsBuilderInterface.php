@@ -4,6 +4,9 @@ namespace Oro\Bundle\AnalyticsBundle\Builder;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
+/**
+ * Defines the contract for analytics builders that compute and persist RFM metrics for customer entities.
+ */
 interface AnalyticsBuilderInterface
 {
     /**

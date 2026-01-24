@@ -7,6 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Defines the form type for RFM category configuration.
+ */
 class RFMCategoryType extends AbstractType
 {
     const NAME = 'oro_analytics_rfm_category';

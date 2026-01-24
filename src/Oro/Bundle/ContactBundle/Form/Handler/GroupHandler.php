@@ -9,6 +9,12 @@ use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Handles form submission and processing for contact group entities.
+ *
+ * Manages group form processing including adding and removing contacts from groups,
+ * with support for bulk contact operations through form submission.
+ */
 class GroupHandler
 {
     use RequestHandlerTrait;

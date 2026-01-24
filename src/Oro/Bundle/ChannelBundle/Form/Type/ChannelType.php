@@ -15,6 +15,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Defines the form type for channel configuration data input.
+ */
 class ChannelType extends AbstractType
 {
     const NAME = 'oro_channel_form';

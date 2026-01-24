@@ -7,6 +7,9 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
+/**
+ * Provides data access and query methods for customer entities.
+ */
 class CustomerRepository extends EntityRepository
 {
     /**

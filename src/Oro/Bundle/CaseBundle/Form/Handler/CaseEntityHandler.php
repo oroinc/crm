@@ -10,6 +10,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Handles form submission and processing for case entities through REST API endpoints.
+ *
+ * Extends the API form handler to provide case-specific functionality, including dispatching
+ * form handler events before saving to allow listeners to modify case data or perform additional operations.
+ */
 class CaseEntityHandler extends ApiFormHandler
 {
     /**

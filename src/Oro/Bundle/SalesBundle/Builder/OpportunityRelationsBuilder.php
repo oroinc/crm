@@ -6,6 +6,10 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * Builds and establishes relationships between opportunities and their associated customers, accounts, and contacts,
+ * ensuring data consistency.
+ */
 class OpportunityRelationsBuilder
 {
     public function buildAll(Opportunity $opportunity)

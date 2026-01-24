@@ -6,6 +6,9 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Source;
 
+/**
+ * Loads predefined contact source data during database initialization.
+ */
 class LoadSourceData extends AbstractFixture
 {
     /**

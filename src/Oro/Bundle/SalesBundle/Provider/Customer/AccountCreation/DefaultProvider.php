@@ -5,6 +5,9 @@ namespace Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 
+/**
+ * Provides default account creation strategy for customer entities.
+ */
 class DefaultProvider implements AccountProviderInterface
 {
     /** @var EntityNameResolver */

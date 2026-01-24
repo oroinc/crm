@@ -8,6 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
 
+/**
+ * Defines the form type for lead mailbox process settings configuration.
+ */
 class LeadMailboxProcessSettingsType extends AbstractType
 {
     #[\Override]

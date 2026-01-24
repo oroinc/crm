@@ -5,6 +5,9 @@ namespace Oro\Bundle\SalesBundle\Provider;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * Defines the contract for providing lead-to-opportunity conversion logic and configuration.
+ */
 interface LeadToOpportunityProviderInterface
 {
     /**

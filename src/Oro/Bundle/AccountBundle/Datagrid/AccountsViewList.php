@@ -6,6 +6,10 @@ use Oro\Bundle\DataGridBundle\Extension\GridViews\AbstractViewsList;
 use Oro\Bundle\DataGridBundle\Extension\GridViews\View;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\BooleanFilterType;
 
+/**
+ * Defines predefined views for the accounts datagrid, including a duplicate accounts view
+ * with appropriate filters and sorting.
+ */
 class AccountsViewList extends AbstractViewsList
 {
     #[\Override]

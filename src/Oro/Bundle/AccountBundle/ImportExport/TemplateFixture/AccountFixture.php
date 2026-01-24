@@ -6,6 +6,9 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
+/**
+ * Provides test fixture data for account entities used in import/export testing.
+ */
 class AccountFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
     #[\Override]

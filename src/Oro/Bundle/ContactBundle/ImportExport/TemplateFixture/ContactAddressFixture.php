@@ -7,6 +7,9 @@ use Oro\Bundle\AddressBundle\ImportExport\TemplateFixture\AddressFixture;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
+/**
+ * Provides test fixture data for contact address entities used in import/export testing.
+ */
 class ContactAddressFixture extends AddressFixture implements TemplateFixtureInterface
 {
     #[\Override]

@@ -5,6 +5,9 @@ namespace Oro\Bundle\SalesBundle\Provider;
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 
+/**
+ * Retrieves phone numbers for lead entities from their associated phone records.
+ */
 class LeadPhoneProvider implements PhoneProviderInterface
 {
     /**

@@ -7,6 +7,9 @@ use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationInterfa
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationProviderInterface;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 
+/**
+ * Provides import/export configuration for lead entities, defining field mappings and import/export behavior.
+ */
 class LeadImportExportConfigurationProvider implements ImportExportConfigurationProviderInterface
 {
     #[\Override]

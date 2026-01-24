@@ -7,6 +7,9 @@ use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationInterface;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationProviderInterface;
 
+/**
+ * Provides import/export configuration for account entities, defining field mappings and import/export behavior.
+ */
 class AccountImportExportConfigurationProvider implements ImportExportConfigurationProviderInterface
 {
     #[\Override]

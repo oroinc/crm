@@ -12,6 +12,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Validator\Constraints\Valid;
 
+/**
+ * Defines the form type for lead-to-opportunity conversion configuration.
+ */
 class LeadToOpportunityType extends AbstractType
 {
     const NAME = 'oro_sales_lead_to_opportunity';

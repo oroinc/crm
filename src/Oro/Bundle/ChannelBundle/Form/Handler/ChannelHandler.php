@@ -12,6 +12,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Handles form submission and processing for channel configuration.
+ *
+ * Manages the complete lifecycle of channel form processing, including handling channel type selection,
+ * form validation, entity persistence, and dispatching channel save events to notify listeners of changes.
+ */
 class ChannelHandler
 {
     use RequestHandlerTrait;

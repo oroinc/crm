@@ -9,6 +9,9 @@ use Oro\Bundle\ImportExportBundle\Event\NormalizeEntityEvent;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Subscribes to import/export events and handles opportunity probability value transformations.
+ */
 class OpportunityProbabilitySubscriber implements EventSubscriberInterface
 {
     #[\Override]

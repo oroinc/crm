@@ -6,6 +6,9 @@ use Oro\Bundle\DataGridBundle\Extension\GridViews\AbstractViewsList;
 use Oro\Bundle\DataGridBundle\Extension\GridViews\View;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\BooleanFilterType;
 
+/**
+ * Defines predefined views for the contacts datagrid.
+ */
 class ContactsViewList extends AbstractViewsList
 {
     #[\Override]

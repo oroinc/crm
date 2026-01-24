@@ -6,6 +6,9 @@ use Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Defines the form type for selecting B2B customer entities in forms.
+ */
 class B2bCustomerSelectType extends AbstractType
 {
     #[\Override]

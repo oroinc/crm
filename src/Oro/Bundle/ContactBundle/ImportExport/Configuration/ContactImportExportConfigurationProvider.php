@@ -8,6 +8,9 @@ use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationInterfa
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfigurationProviderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Provides import/export configuration for contact entities, defining field mappings and import/export behavior.
+ */
 class ContactImportExportConfigurationProvider implements ImportExportConfigurationProviderInterface
 {
     /**

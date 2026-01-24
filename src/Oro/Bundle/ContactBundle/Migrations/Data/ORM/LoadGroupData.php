@@ -6,6 +6,9 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Group;
 
+/**
+ * Loads predefined contact group data during database initialization.
+ */
 class LoadGroupData extends AbstractFixture
 {
     /**

@@ -7,6 +7,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Defines the form type for creating or selecting channel-aware entities inline within parent forms.
+ */
 class CreateOrSelectInlineChannelAwareType extends AbstractChannelAwareType
 {
     const NAME = 'oro_entity_create_or_select_inline_channel_aware';
