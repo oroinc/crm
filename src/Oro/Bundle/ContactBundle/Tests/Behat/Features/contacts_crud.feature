@@ -42,7 +42,7 @@ Scenario: Create contact
     | Street          | Myronosytska 57     |
     | City            | Kharkiv             |
     | Zip/Postal Code | 61000               |
-    | State           | Kharkivs'ka Oblast' |
+    | State           | Kharkivska oblast   |
   When save and close form
   Then I should see "Contact saved" flash message
 
@@ -72,7 +72,7 @@ Scenario: Cancel edit
     | Email   | charlie@gmail.com   |
     | Phone   | +1 415-731-9375     |
     | Country | Ukraine             |
-    | State   | Kharkivs'ka Oblast' |
+    | State   | Kharkivska oblast   |
 
 Scenario: Change primary address
   And I click view Charlie Sheen in grid
