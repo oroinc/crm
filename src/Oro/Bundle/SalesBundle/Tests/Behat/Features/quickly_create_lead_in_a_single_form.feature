@@ -34,7 +34,7 @@ Feature: Quickly create Lead in a single form
       | Street          | Myronosytska 57     |
       | City            | Kharkiv             |
       | Zip/Postal Code | 61000               |
-      | State           | Kharkivs'ka Oblast' |
+      | State           | Kharkivska oblast   |
     And add new address with:
       | Primary         | false               |
       | Country         | United States       |
