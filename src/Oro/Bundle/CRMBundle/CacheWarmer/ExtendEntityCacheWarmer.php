@@ -81,9 +81,7 @@ class ExtendEntityCacheWarmer implements CacheWarmerInterface
                 && $classReflection->hasProperty('sourceEntityClass')
             ) {
                 $activityClass = $classReflection->getProperty('sourceEntityClass');
-                $activityClass->setAccessible(true);
                 $activityClassValue = $activityClass->getValue($query);
-                $activityClass->setAccessible(false);
 
                 $tableName = $this->getEntityTableName($activityClassValue);
 
