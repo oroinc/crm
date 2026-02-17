@@ -13,7 +13,8 @@ services:
             - ['setContainer', ['@Psr\Container\ContainerInterface']]
         tags:
             - { name: container.service_subscriber }
-            - { name: container.service_subscriber, id: 'oro_sales.opportunity.form' }
+            - { name: container.service_subscriber, id: oro_sales.opportunity.form }
+            - { name: container.service_subscriber, id: oro_sales.manager.account_customer, key: Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager }
 
     Oro\Bundle\SalesBundle\Controller\CustomerController:
         calls:

@@ -25,7 +25,7 @@ class ChannelVoterTest extends TestCase
         $this->settingsProvider = $this->createMock(SettingsProvider::class);
 
         $container = TestContainerBuilder::create()
-            ->add('oro_channel.provider.settings_provider', $this->settingsProvider)
+            ->add(SettingsProvider::class, $this->settingsProvider)
             ->getContainer($this);
 
         $this->voter = new ChannelVoter($this->doctrineHelper, $container);

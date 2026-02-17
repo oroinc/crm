@@ -155,5 +155,5 @@ services:
             - '@Psr\Container\ContainerInterface'
         tags:
             - { name: oro.api.processor, action: customize_form_data, event: post_submit }
-            - { name: container.service_subscriber }
             - { name: container.service_subscriber, id: oro_sales.customer.config_provider, key: Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider }
+            - { name: container.service_subscriber, id: oro_sales.manager.account_customer, key: Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager }

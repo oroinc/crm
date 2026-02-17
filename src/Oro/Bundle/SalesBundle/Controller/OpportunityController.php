@@ -31,13 +31,13 @@ class OpportunityController extends AbstractController
     public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [
+            'oro_sales.opportunity.form' => Form::class,
             OpportunityHandler::class,
             TranslatorInterface::class,
-            'oro_sales.opportunity.form' => Form::class,
             AccountCustomerManager::class,
             EntityRoutingHelper::class,
             UpdateHandlerFacade::class,
-            SaveAndReturnActionFormTemplateDataProvider::class,
+            SaveAndReturnActionFormTemplateDataProvider::class
         ]);
     }
 

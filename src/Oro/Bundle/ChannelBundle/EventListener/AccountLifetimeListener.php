@@ -23,25 +23,24 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  */
 class AccountLifetimeListener implements ServiceSubscriberInterface
 {
-    private ContainerInterface $container;
     private ?CurrencyQueryBuilderTransformerInterface $qbTransformer = null;
     private ?AccountCustomerManager $accountCustomerManager = null;
     /** @var Account[] */
     private array $accounts = [];
     private ?array $customerTargetFields = null;
 
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private readonly ContainerInterface $container
+    ) {
     }
 
     #[\Override]
     public static function getSubscribedServices(): array
     {
         return [
-            'oro_currency.query.currency_transformer' => CurrencyQueryBuilderTransformerInterface::class,
-            'oro_sales.manager.account_customer' => AccountCustomerManager::class,
-            'oro_channel.manager.lifetime_history_status_update' => LifetimeHistoryStatusUpdateManager::class,
+            CurrencyQueryBuilderTransformerInterface::class,
+            AccountCustomerManager::class,
+            LifetimeHistoryStatusUpdateManager::class
         ];
     }
 
@@ -221,7 +220,7 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
     private function getQbTransformer(): CurrencyQueryBuilderTransformerInterface
     {
         if (null === $this->qbTransformer) {
-            $this->qbTransformer = $this->container->get('oro_currency.query.currency_transformer');
+            $this->qbTransformer = $this->container->get(CurrencyQueryBuilderTransformerInterface::class);
         }
 
         return $this->qbTransformer;
@@ -230,7 +229,7 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
     private function getAccountCustomerManager(): AccountCustomerManager
     {
         if (null === $this->accountCustomerManager) {
-            $this->accountCustomerManager = $this->container->get('oro_sales.manager.account_customer');
+            $this->accountCustomerManager = $this->container->get(AccountCustomerManager::class);
         }
 
         return $this->accountCustomerManager;
@@ -238,7 +237,8 @@ class AccountLifetimeListener implements ServiceSubscriberInterface
 
     private function sendHistoryUpdates(array $historyUpdates): void
     {
-        $statusUpdateManager = $this->container->get('oro_channel.manager.lifetime_history_status_update');
+        /** @var LifetimeHistoryStatusUpdateManager $statusUpdateManager */
+        $statusUpdateManager = $this->container->get(LifetimeHistoryStatusUpdateManager::class);
         $statusUpdateManager->massUpdate($historyUpdates);
     }
 }

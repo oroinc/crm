@@ -336,7 +336,7 @@ services:
             - [setClassName, ['Oro\Bundle\ChannelBundle\Entity\Channel']]
         tags:
             - { name: security.voter, priority: 500 }
-            - { name: container.service_subscriber, id: oro_channel.provider.settings_provider }
+            - { name: container.service_subscriber, id: oro_channel.provider.settings_provider, key: Oro\Bundle\ChannelBundle\Provider\SettingsProvider }
 
     oro_channel.account_lifetime_listener:
         class: Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeListener
@@ -346,9 +346,9 @@ services:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: doctrine.event_listener, event: postFlush }
             - { name: doctrine.event_listener, event: onClear }
-            - { name: container.service_subscriber, id: oro_currency.query.currency_transformer }
-            - { name: container.service_subscriber, id: oro_sales.manager.account_customer }
-            - { name: container.service_subscriber, id: oro_channel.manager.lifetime_history_status_update }
+            - { name: container.service_subscriber, id: oro_currency.query.currency_transformer, key: Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface }
+            - { name: container.service_subscriber, id: oro_sales.manager.account_customer, key: Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager }
+            - { name: container.service_subscriber, id: oro_channel.manager.lifetime_history_status_update, key: Oro\Bundle\ChannelBundle\Entity\Manager\LifetimeHistoryStatusUpdateManager }
 
     oro_channel.manager.lifetime_history_status_update:
         class: Oro\Bundle\ChannelBundle\Entity\Manager\LifetimeHistoryStatusUpdateManager
