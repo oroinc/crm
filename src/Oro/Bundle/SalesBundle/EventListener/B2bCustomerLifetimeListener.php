@@ -21,22 +21,21 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  */
 class B2bCustomerLifetimeListener implements ServiceSubscriberInterface
 {
-    private ContainerInterface $container;
     private ?CurrencyQueryBuilderTransformerInterface $qbTransformer = null;
     /** @var B2bCustomer[] */
     private array $queued = [];
     private bool $isInProgress = false;
 
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private readonly ContainerInterface $container
+    ) {
     }
 
     #[\Override]
     public static function getSubscribedServices(): array
     {
         return [
-            'oro_currency.query.currency_transformer' => CurrencyQueryBuilderTransformerInterface::class
+            CurrencyQueryBuilderTransformerInterface::class
         ];
     }
 
@@ -234,7 +233,7 @@ class B2bCustomerLifetimeListener implements ServiceSubscriberInterface
     private function getQbTransformer(): CurrencyQueryBuilderTransformerInterface
     {
         if (null === $this->qbTransformer) {
-            $this->qbTransformer = $this->container->get('oro_currency.query.currency_transformer');
+            $this->qbTransformer = $this->container->get(CurrencyQueryBuilderTransformerInterface::class);
         }
 
         return $this->qbTransformer;
