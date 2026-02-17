@@ -336,7 +336,7 @@ services:
             - [setClassName, ['Oro\Bundle\ChannelBundle\Entity\Channel']]
         tags:
             - { name: security.voter, priority: 500 }
-            - { name: container.service_subscriber, id: oro_channel.provider.settings_provider }
+            - { name: container.service_subscriber, id: oro_channel.provider.settings_provider, key: Oro\Bundle\ChannelBundle\Provider\SettingsProvider }
 
     oro_channel.account_lifetime_listener:
         class: Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeListener

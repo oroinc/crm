@@ -17,21 +17,20 @@ class ChannelVoter extends AbstractEntityVoter implements ServiceSubscriberInter
 {
     protected $supportedAttributes = [BasicPermission::CREATE, BasicPermission::DELETE];
 
-    private ContainerInterface $container;
-
     private mixed $object;
 
-    public function __construct(DoctrineHelper $doctrineHelper, ContainerInterface $container)
-    {
+    public function __construct(
+        DoctrineHelper $doctrineHelper,
+        private readonly ContainerInterface $container
+    ) {
         parent::__construct($doctrineHelper);
-        $this->container = $container;
     }
 
     #[\Override]
     public static function getSubscribedServices(): array
     {
         return [
-            'oro_channel.provider.settings_provider' => SettingsProvider::class
+            SettingsProvider::class
         ];
     }
 
@@ -61,6 +60,6 @@ class ChannelVoter extends AbstractEntityVoter implements ServiceSubscriberInter
 
     private function getSettingsProvider(): SettingsProvider
     {
-        return $this->container->get('oro_channel.provider.settings_provider');
+        return $this->container->get(SettingsProvider::class);
     }
 }
