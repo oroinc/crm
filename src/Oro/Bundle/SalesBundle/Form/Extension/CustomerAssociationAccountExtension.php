@@ -21,24 +21,18 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  */
 class CustomerAssociationAccountExtension extends AbstractTypeExtension implements ServiceSubscriberInterface
 {
-    /** @var DoctrineHelper */
-    private $doctrineHelper;
-
-    /** @var ContainerInterface */
-    private $container;
-
-    public function __construct(DoctrineHelper $doctrineHelper, ContainerInterface $container)
-    {
-        $this->doctrineHelper = $doctrineHelper;
-        $this->container = $container;
+    public function __construct(
+        private readonly DoctrineHelper $doctrineHelper,
+        private readonly ContainerInterface $container
+    ) {
     }
 
     #[\Override]
     public static function getSubscribedServices(): array
     {
         return [
-            'oro_sales.customer.config_provider' => ConfigProvider::class,
-            'oro_sales.manager.account_customer' => AccountCustomerManager::class
+            ConfigProvider::class,
+            AccountCustomerManager::class
         ];
     }
 
@@ -156,11 +150,11 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension implemen
 
     private function getConfigProvider(): ConfigProvider
     {
-        return $this->container->get('oro_sales.customer.config_provider');
+        return $this->container->get(ConfigProvider::class);
     }
 
     private function getManager(): AccountCustomerManager
     {
-        return $this->container->get('oro_sales.manager.account_customer');
+        return $this->container->get(AccountCustomerManager::class);
     }
 }
