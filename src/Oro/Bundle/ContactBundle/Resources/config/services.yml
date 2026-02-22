@@ -290,8 +290,8 @@ services:
 
     oro_contact.twig.extension:
         class: Oro\Bundle\ContactBundle\Twig\ContactExtension
-        public: false
         arguments:
             - '@oro_platform.twig.service_locator'
         tags:
             - { name: twig.extension }
+            - { name: container.service_subscriber, id: oro_contact.social_url_formatter, key: Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter }

@@ -27,7 +27,7 @@ class ChannelExtensionTest extends TestCase
 
         $container = self::getContainerBuilder()
             ->add('oro_channel.provider.metadata_provider', $this->metadataProvider)
-            ->add('oro_channel.provider.lifetime.amount_provider', $this->amountProvider)
+            ->add(AmountProvider::class, $this->amountProvider)
             ->getContainer($this);
 
         $this->extension = new ChannelExtension($container);
@@ -35,13 +35,13 @@ class ChannelExtensionTest extends TestCase
 
     public function testGetEntitiesMetadata(): void
     {
-        $expectedResult = new \stdClass();
+        $expectedResult = ['Test\Entity' => ['key' => 'value']];
 
-        $this->metadataProvider->expects($this->once())
+        $this->metadataProvider->expects(self::once())
             ->method('getEntitiesMetadata')
             ->willReturn($expectedResult);
 
-        $this->assertSame(
+        self::assertSame(
             $expectedResult,
             self::callTwigFunction($this->extension, 'oro_channel_entities_metadata', [])
         );
@@ -51,11 +51,11 @@ class ChannelExtensionTest extends TestCase
     {
         $expectedResult = ['key' => 'value'];
 
-        $this->metadataProvider->expects($this->once())
+        $this->metadataProvider->expects(self::once())
             ->method('getChannelTypeMetadata')
             ->willReturn($expectedResult);
 
-        $this->assertSame(
+        self::assertSame(
             array_flip($expectedResult),
             self::callTwigFunction($this->extension, 'oro_channel_type_metadata', [])
         );
@@ -67,12 +67,12 @@ class ChannelExtensionTest extends TestCase
         $account = $this->createMock(Account::class);
         $channel = $this->createMock(Channel::class);
 
-        $this->amountProvider->expects($this->once())
+        $this->amountProvider->expects(self::once())
             ->method('getAccountLifeTimeValue')
-            ->with($this->identicalTo($account), $this->identicalTo($channel))
+            ->with(self::identicalTo($account), self::identicalTo($channel))
             ->willReturn($expectedResult);
 
-        $this->assertSame(
+        self::assertSame(
             $expectedResult,
             self::callTwigFunction($this->extension, 'oro_channel_account_lifetime', [$account, $channel])
         );

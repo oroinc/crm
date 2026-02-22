@@ -22,7 +22,7 @@ class ContactExtensionTest extends TestCase
         $this->urlFormatter = $this->createMock(SocialUrlFormatter::class);
 
         $container = self::getContainerBuilder()
-            ->add('oro_contact.social_url_formatter', $this->urlFormatter)
+            ->add(SocialUrlFormatter::class, $this->urlFormatter)
             ->getContainer($this);
 
         $this->extension = new ContactExtension($container);
@@ -34,18 +34,18 @@ class ContactExtensionTest extends TestCase
     public function testGetSocialUrl(string $expectedUrl, ?string $socialType, ?string $username): void
     {
         if ($socialType && $username) {
-            $this->urlFormatter->expects($this->once())
+            $this->urlFormatter->expects(self::once())
                 ->method('getSocialUrl')
                 ->with($socialType, $username)
                 ->willReturnCallback(function ($socialType, $username) {
                     return 'http://' . $socialType . '/' . $username;
                 });
         } else {
-            $this->urlFormatter->expects($this->never())
+            $this->urlFormatter->expects(self::never())
                 ->method('getSocialUrl');
         }
 
-        $this->assertEquals(
+        self::assertEquals(
             $expectedUrl,
             self::callTwigFunction($this->extension, 'oro_social_url', [$socialType, $username])
         );
