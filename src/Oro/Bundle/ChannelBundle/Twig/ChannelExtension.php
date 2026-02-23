@@ -21,11 +21,9 @@ use Twig\TwigFunction;
  */
 class ChannelExtension extends AbstractExtension implements ServiceSubscriberInterface
 {
-    private ContainerInterface $container;
-
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private readonly ContainerInterface $container
+    ) {
     }
 
     #[\Override]
@@ -38,29 +36,17 @@ class ChannelExtension extends AbstractExtension implements ServiceSubscriberInt
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getEntitiesMetadata()
+    public function getEntitiesMetadata(): array
     {
         return $this->getMetadataProvider()->getEntitiesMetadata();
     }
 
-    /**
-     * @return array
-     */
-    public function getChannelTypeMetadata()
+    public function getChannelTypeMetadata(): array
     {
         return array_flip($this->getMetadataProvider()->getChannelTypeMetadata());
     }
 
-    /**
-     * @param Account      $account
-     * @param Channel|null $channel
-     *
-     * @return float
-     */
-    public function getLifetimeValue(Account $account, ?Channel $channel = null)
+    public function getLifetimeValue(Account $account, ?Channel $channel = null): float
     {
         return $this->getAmountProvider()->getAccountLifeTimeValue($account, $channel);
     }
@@ -70,7 +56,7 @@ class ChannelExtension extends AbstractExtension implements ServiceSubscriberInt
     {
         return [
             'oro_channel.provider.metadata_provider' => MetadataProviderInterface::class,
-            'oro_channel.provider.lifetime.amount_provider' => AmountProvider::class,
+            AmountProvider::class
         ];
     }
 
@@ -81,6 +67,6 @@ class ChannelExtension extends AbstractExtension implements ServiceSubscriberInt
 
     private function getAmountProvider(): AmountProvider
     {
-        return $this->container->get('oro_channel.provider.lifetime.amount_provider');
+        return $this->container->get(AmountProvider::class);
     }
 }

@@ -264,11 +264,11 @@ services:
 
     oro_channel.twig.channel_extension:
         class: Oro\Bundle\ChannelBundle\Twig\ChannelExtension
-        public: false
         arguments:
-            - "@oro_platform.twig.service_locator"
+            - '@oro_platform.twig.service_locator'
         tags:
             - { name: twig.extension }
+            - { name: container.service_subscriber, id: oro_channel.provider.lifetime.amount_provider, key: Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider }
 
     oro_channel.form.integration_type_extension:
         class: Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension

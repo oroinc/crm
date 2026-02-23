@@ -14,20 +14,9 @@ use Twig\TwigFunction;
  */
 class ContactExtension extends AbstractExtension implements ServiceSubscriberInterface
 {
-    /** @var ContainerInterface */
-    protected $container;
-
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
-    /**
-     * @return SocialUrlFormatter
-     */
-    protected function getSocialUrlFormatter()
-    {
-        return $this->container->get('oro_contact.social_url_formatter');
+    public function __construct(
+        private readonly ContainerInterface $container
+    ) {
     }
 
     #[\Override]
@@ -57,7 +46,12 @@ class ContactExtension extends AbstractExtension implements ServiceSubscriberInt
     public static function getSubscribedServices(): array
     {
         return [
-            'oro_contact.social_url_formatter' => SocialUrlFormatter::class,
+            SocialUrlFormatter::class
         ];
+    }
+
+    private function getSocialUrlFormatter(): SocialUrlFormatter
+    {
+        return $this->container->get(SocialUrlFormatter::class);
     }
 }
