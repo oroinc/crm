@@ -4,6 +4,7 @@ The current file describes significant changes in the code that may affect the u
 
 ## Changes in the CRM package versions
 
+- [7.0.0](#700-2026-03-31)
 - [6.1.0](#610-2025-03-31)
 - [6.0.0](#600-2024-03-30)
 - [5.1.0](#510-2023-03-31)
@@ -32,6 +33,9 @@ The current file describes significant changes in the code that may affect the u
 - [1.3.0](#130-2014-07-23)
 - [1.2.0](#120-2014-05-28)
 - [1.0.0](#100-2014-04-01)
+
+## 7.0.0 (2026-03-31)
+[Show detailed list of changes](incompatibilities-7-0.md)
 
 ## 6.1.0 (2025-03-31)
 [Show detailed list of changes](incompatibilities-6-1.md)
@@ -149,8 +153,6 @@ instead of `'%oro_email.email.entity.class%'` (in service definitions, datagrid 
 no exclusion for "channel type" entities on UI.
 
 
-
-
 ## 3.1.4 
 
 ### Removed
@@ -233,10 +235,6 @@ no exclusion for "channel type" entities on UI.
 * The parameter `oro_magento.event_listener.customer_currency.class` was removed form the service container
 * The parameter `oro_magento.event_listener.order.class` was removed form the service container
 * The parameter `oro_magento.integration_entity.remove_listener.class` was removed form the service container
-
-
-
-
 
 
 ## 2.5.0 (2017-11-30)
