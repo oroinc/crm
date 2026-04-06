@@ -1,6 +1,7 @@
 @ticket-BAP-14557
 @regression
 @fixture-OroCRMBundle:activities-contexts.yml
+
 Feature: Activity context widget feature
   In order to have ability manage activities contexts
   As OroCRM sales rep
