@@ -1,5 +1,5 @@
-@regression
 @ticket-BAP-15838
+
 Feature: Email notification to any email field
   As administrator
   When I configure email notifications
