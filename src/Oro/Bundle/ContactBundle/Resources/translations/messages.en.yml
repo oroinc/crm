@@ -93,6 +93,9 @@ oro:
             label:           Groups
             description:     Contact groups the contact belongs to.
         id.label:            Id
+        external_id:
+            label:           External ID
+            description:     A unique identifier from an external system.
         linked_in:
             label:           LinkedIn
             description:     LinkedIn profile of the contact.

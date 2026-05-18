@@ -2,5 +2,12 @@ api:
     entities:
         Oro\Bundle\AccountBundle\Entity\Account:
             documentation_resource: '@OroAccountBundle/Resources/doc/api/account.md'
+            fields:
+                externalId:
+                    property_path: external_id
+            filters:
+                fields:
+                    externalId:
+                        allow_array: true
             actions:
                 update_list: true

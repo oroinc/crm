@@ -11,7 +11,10 @@ use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAware
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareTrait;
@@ -38,7 +41,7 @@ class OroAccountBundleInstaller implements
     #[\Override]
     public function getMigrationVersion(): string
     {
-        return 'v1_14_1';
+        return 'v1_15';
     }
 
     #[\Override]
@@ -80,6 +83,9 @@ class OroAccountBundleInstaller implements
     private function createOrocrmAccountTable(Schema $schema, QueryBag $queries): void
     {
         $table = $schema->createTable('orocrm_account');
+        $table->addOption(OroOptions::KEY, [
+            'extend' => ['unique_key' => ['keys' => [['name' => 'external_id', 'key' => ['external_id']]]]]
+        ]);
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
@@ -91,7 +97,7 @@ class OroAccountBundleInstaller implements
             'extend_description',
             'text',
             [
-                'oro_options' => [
+                OroOptions::KEY => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
                     'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                     'merge'     => ['display' => true, 'autoescape' => false],
@@ -102,6 +108,13 @@ class OroAccountBundleInstaller implements
             ]
         );
         $table->addColumn('referred_by_id', 'integer', ['notnull' => false]);
+        $table->addColumn('external_id', 'string', ['length' => 36, 'notnull' => false, OroOptions::KEY => [
+            ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
+            'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'importexport' => ['excluded' => true],
+            'dataaudit' => ['auditable' => true]
+        ]]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['user_owner_id'], 'IDX_7166D3719EB185F9');
         $table->addIndex(['organization_id'], 'IDX_7166D37132C8A3DE');
