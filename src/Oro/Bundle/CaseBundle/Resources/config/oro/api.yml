@@ -6,6 +6,13 @@ api:
 
         Oro\Bundle\CaseBundle\Entity\CaseEntity:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case.md'
+            fields:
+                externalId:
+                    property_path: external_id
+            filters:
+                fields:
+                    externalId:
+                        allow_array: true
 
         Oro\Bundle\CaseBundle\Entity\CasePriority:
             documentation_resource: '@OroCaseBundle/Resources/doc/api/case.md'

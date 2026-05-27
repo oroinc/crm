@@ -89,6 +89,8 @@ api:
                     property_path: customerAssociation.account
                 customer:
                     property_path: customerAssociation.target
+                externalId:
+                    property_path: external_id
             filters:
                 fields:
                     phones:
@@ -111,6 +113,8 @@ api:
                         type: primaryField
                         options:
                             data_field: email
+                    externalId:
+                        allow_array: true
             sorters:
                 fields:
                     phones:
@@ -149,6 +153,12 @@ api:
                     property_path: customerAssociation.account
                 customer:
                     property_path: customerAssociation.target
+                externalId:
+                    property_path: external_id
+            filters:
+                fields:
+                    externalId:
+                        allow_array: true
             actions:
                 update_list: true
 

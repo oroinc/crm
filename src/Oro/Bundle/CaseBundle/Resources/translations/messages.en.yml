@@ -70,6 +70,9 @@ oro:
             id:
                 label:                      Id
                 description:                The unique identifier of the case record.
+            external_id:
+                label:                      External ID
+                description:                A unique identifier from an external system.
             organization.label:             Organization
 
         casecomment:

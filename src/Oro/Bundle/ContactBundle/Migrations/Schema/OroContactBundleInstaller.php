@@ -8,6 +8,11 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterfac
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareTrait;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareTrait;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
@@ -31,7 +36,7 @@ class OroContactBundleInstaller implements
     #[\Override]
     public function getMigrationVersion(): string
     {
-        return 'v1_18';
+        return 'v1_19';
     }
 
     #[\Override]
@@ -69,6 +74,9 @@ class OroContactBundleInstaller implements
     private function createOrocrmContactTable(Schema $schema): void
     {
         $table = $schema->createTable('orocrm_contact');
+        $table->addOption(OroOptions::KEY, [
+            'extend' => ['unique_key' => ['keys' => [['name' => 'external_id', 'key' => ['external_id']]]]]
+        ]);
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('assigned_to_user_id', 'integer', ['notnull' => false]);
         $table->addColumn('updated_by_user_id', 'integer', ['notnull' => false]);
@@ -96,6 +104,13 @@ class OroContactBundleInstaller implements
         $table->addColumn('createdAt', 'datetime');
         $table->addColumn('updatedAt', 'datetime');
         $table->addColumn('email', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('external_id', 'string', ['length' => 36, 'notnull' => false, OroOptions::KEY => [
+            ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
+            'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'importexport' => ['excluded' => true],
+            'dataaudit' => ['auditable' => true]
+        ]]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['source_name'], 'IDX_403263ED5FA9FB05');
         $table->addIndex(['method_name'], 'IDX_403263ED42F70470');

@@ -11,7 +11,9 @@ use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAware
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
@@ -51,7 +53,7 @@ class OroSalesBundleInstaller implements
     #[\Override]
     public function getMigrationVersion(): string
     {
-        return 'v1_44';
+        return 'v1_45';
     }
 
     #[\Override]
@@ -100,6 +102,9 @@ class OroSalesBundleInstaller implements
     private function createOrocrmSalesOpportunityTable(Schema $schema): void
     {
         $table = $schema->createTable('orocrm_sales_opportunity');
+        $table->addOption(OroOptions::KEY, [
+            'extend' => ['unique_key' => ['keys' => [['name' => 'external_id', 'key' => ['external_id']]]]]
+        ]);
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('close_reason_name', 'string', ['notnull' => false, 'length' => 32]);
@@ -151,6 +156,13 @@ class OroSalesBundleInstaller implements
         $table->addColumn('notes', 'text', ['notnull' => false]);
         $table->addColumn('closed_at', 'datetime', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('external_id', 'string', ['length' => 36, 'notnull' => false, OroOptions::KEY => [
+            ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
+            'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'importexport' => ['excluded' => true],
+            'dataaudit' => ['auditable' => true]
+        ]]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['contact_id'], 'idx_c0fe4aace7a1254a');
         $table->addIndex(['created_at', 'id'], 'opportunity_created_idx');
@@ -179,6 +191,9 @@ class OroSalesBundleInstaller implements
     private function createOrocrmSalesLeadTable(Schema $schema): void
     {
         $table = $schema->createTable('orocrm_sales_lead');
+        $table->addOption(OroOptions::KEY, [
+            'extend' => ['unique_key' => ['keys' => [['name' => 'external_id', 'key' => ['external_id']]]]]
+        ]);
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
@@ -220,6 +235,13 @@ class OroSalesBundleInstaller implements
             ]
         );
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('external_id', 'string', ['length' => 36, 'notnull' => false, OroOptions::KEY => [
+            ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
+            'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'importexport' => ['excluded' => true],
+            'dataaudit' => ['auditable' => true]
+        ]]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9');
         $table->addIndex(['createdat', 'id'], 'lead_created_idx');
@@ -243,12 +265,9 @@ class OroSalesBundleInstaller implements
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
         $table->addColumn('contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
-        $table->addColumn('lifetime', 'money', [
-            'notnull' => false,
-            OroOptions::KEY => [
-                'dataaudit' => ['auditable' => false],
-            ]
-        ]);
+        $table->addColumn('lifetime', 'money', ['notnull' => false, OroOptions::KEY => [
+            'dataaudit' => ['auditable' => false]
+        ]]);
         $table->addColumn('createdAt', 'datetime');
         $table->addColumn('updatedAt', 'datetime');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
@@ -262,61 +281,31 @@ class OroSalesBundleInstaller implements
         $table->addIndex(['name', 'id'], 'orocrm_b2bcustomer_name_idx');
         $table->addIndex(['organization_id'], 'idx_dac0bd2932c8a3de');
 
-        $table->addColumn(
-            'website',
-            'string',
-            [
-                'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
-                    'dataaudit' => ['auditable' => true]
-                ]
-            ]
-        );
-        $table->addColumn(
-            'employees',
-            'integer',
-            [
-                'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
-                    'dataaudit' => ['auditable' => true]
-                ]
-            ]
-        );
-        $table->addColumn(
-            'ownership',
-            'string',
-            [
-                'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
-                    'dataaudit' => ['auditable' => true]
-                ]
-            ]
-        );
-        $table->addColumn(
-            'ticker_symbol',
-            'string',
-            [
-                'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
-                    'dataaudit' => ['auditable' => true]
-                ]
-            ]
-        );
-        $table->addColumn(
-            'rating',
-            'string',
-            [
-                'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
-                    'dataaudit' => ['auditable' => true]
-                ]
-            ]
-        );
+        $table->addColumn('website', 'string', [OroOptions::KEY => [
+            'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'dataaudit' => ['auditable' => true]
+        ]]);
+        $table->addColumn('employees', 'integer', [OroOptions::KEY => [
+            'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'dataaudit' => ['auditable' => true]
+        ]]);
+        $table->addColumn('ownership', 'string', [OroOptions::KEY => [
+            'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'dataaudit' => ['auditable' => true]
+        ]]);
+        $table->addColumn('ticker_symbol', 'string', [OroOptions::KEY => [
+            'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'dataaudit' => ['auditable' => true]
+        ]]);
+        $table->addColumn('rating', 'string', [OroOptions::KEY => [
+            'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'dataaudit' => ['auditable' => true]
+        ]]);
     }
 
     /**

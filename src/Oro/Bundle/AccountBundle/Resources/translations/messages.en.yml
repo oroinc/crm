@@ -42,6 +42,9 @@ oro:
         id:
             label:                  Id
             description:            The unique identifier of an account record.
+        external_id:
+            label:                  External ID
+            description:            A unique identifier from an external system.
         name:
             label:                  Account name
             description:            Unique name that identifies an account record.

@@ -26,6 +26,8 @@ api:
                         constraints:
                             - Email: ~
                     property_path: _
+                externalId:
+                    property_path: external_id
             filters:
                 fields:
                     phones:
@@ -48,6 +50,8 @@ api:
                         type: primaryField
                         options:
                             data_field: email
+                    externalId:
+                        allow_array: true
             sorters:
                 fields:
                     phones:

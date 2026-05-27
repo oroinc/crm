@@ -9,6 +9,11 @@ use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAware
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareTrait;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -25,7 +30,7 @@ class OroCaseBundleInstaller implements
     #[\Override]
     public function getMigrationVersion(): string
     {
-        return 'v1_12';
+        return 'v1_13';
     }
 
     #[\Override]
@@ -65,6 +70,9 @@ class OroCaseBundleInstaller implements
     private function createOrocrmCaseTable(Schema $schema): void
     {
         $table = $schema->createTable('orocrm_case');
+        $table->addOption(OroOptions::KEY, [
+            'extend' => ['unique_key' => ['keys' => [['name' => 'external_id', 'key' => ['external_id']]]]]
+        ]);
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('subject', 'string', ['length' => 255]);
         $table->addColumn('description', 'text', ['notnull' => false]);
@@ -81,6 +89,13 @@ class OroCaseBundleInstaller implements
         $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);
         $table->addColumn('reportedAt', 'datetime');
         $table->addColumn('closedAt', 'datetime', ['notnull' => false]);
+        $table->addColumn('external_id', 'string', ['length' => 36, 'notnull' => false, OroOptions::KEY => [
+            ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
+            'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'importexport' => ['excluded' => true],
+            'dataaudit' => ['auditable' => true]
+        ]]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_AB3BAC1E7E3C61F9');
         $table->addIndex(['organization_id'], 'IDX_AB3BAC1E32C8A3DE');

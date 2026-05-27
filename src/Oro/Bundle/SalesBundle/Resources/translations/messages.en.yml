@@ -132,6 +132,9 @@ oro:
             entity_grid_all_view_label: All %entity_plural_label%
             entity_description:   The Opportunity represent highly probable potential or actual sales to a new or established customer.
             id.label:             Id
+            external_id:
+                label:            External ID
+                description:      A unique identifier from an external system.
             name:
                 label:            Opportunity name
                 description:      The name used to refer to the opportunity in the system.
@@ -245,6 +248,9 @@ oro:
             entity_description:   Leads are prospects or potential sales in a form of contact data. Lead records represent commercial activity with people or businesses that have authority, budget and interest to purchase goods and/or services.
             add_entity:           Add lead
             id.label:             Id
+            external_id:
+                label:            External ID
+                description:      A unique identifier from an external system.
             name:
                 label:            Lead name
                 description:      Unique name that identifies the lead record.

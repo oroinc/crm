@@ -49,6 +49,7 @@ Feature: Check filters in the Grid settings for the Contacts grid
       | Last Incoming Contact Datetime            |
       | Last Outgoing Contact Datetime            |
       | Days Since The Last Contact               |
+      | External ID                               |
       | Tags                                      |
 
   Scenario: Check assigned to filters on contacts grid

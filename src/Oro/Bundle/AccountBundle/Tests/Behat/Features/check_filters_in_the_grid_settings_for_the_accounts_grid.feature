@@ -21,4 +21,5 @@ Feature: Check filters in the Grid settings for the Accounts grid
       | Business Unit |
       | Created At    |
       | Updated At    |
+      | External ID   |
       | Tags          |
