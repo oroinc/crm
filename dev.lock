@@ -249,12 +249,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ratchetphp/Ratchet.git",
-                "reference": "9ac6a412a26d8bae6541ee0b65ffaf78e316b1a6"
+                "reference": "379d9c432e5e01c9cdbb9298a768a88a2558136c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ratchetphp/Ratchet/zipball/9ac6a412a26d8bae6541ee0b65ffaf78e316b1a6",
-                "reference": "9ac6a412a26d8bae6541ee0b65ffaf78e316b1a6",
+                "url": "https://api.github.com/repos/ratchetphp/Ratchet/zipball/379d9c432e5e01c9cdbb9298a768a88a2558136c",
+                "reference": "379d9c432e5e01c9cdbb9298a768a88a2558136c",
                 "shasum": ""
             },
             "require": {
@@ -267,7 +267,7 @@
                 "symfony/routing": "^2.6|^3.0|^4.0|^5.0|^6.0|^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.6 || ^5.7 || ^4.8.36"
+                "phpunit/phpunit": "^9.6 || ^8.5 || ^5.7 || ^4.8.36"
             },
             "default-branch": true,
             "type": "library",
@@ -305,7 +305,7 @@
                 "issues": "https://github.com/ratchetphp/Ratchet/issues",
                 "source": "https://github.com/ratchetphp/Ratchet/tree/0.4.x"
             },
-            "time": "2025-10-25T19:55:26+00:00"
+            "time": "2026-05-31T19:31:34+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -2794,20 +2794,21 @@
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "2.4.1",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "09e8a212562fb1fb6a512c4156ed71525969d6c2"
+                "reference": "4360e982f87f5f258bf872d094647791db2f4c8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/09e8a212562fb1fb6a512c4156ed71525969d6c2",
-                "reference": "09e8a212562fb1fb6a512c4156ed71525969d6c2",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/4360e982f87f5f258bf872d094647791db2f4c8e",
+                "reference": "4360e982f87f5f258bf872d094647791db2f4c8e",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2.5 || ^8.0"
+                "php": "^7.2.5 || ^8.0",
+                "symfony/deprecation-contracts": "^2.5 || ^3.0"
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8.2",
@@ -2857,7 +2858,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/2.4.1"
+                "source": "https://github.com/guzzle/promises/tree/2.5.0"
             },
             "funding": [
                 {
@@ -2873,7 +2874,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-20T22:57:30+00:00"
+            "time": "2026-06-02T12:23:43+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -3160,16 +3161,16 @@
         },
         {
             "name": "imagine/imagine",
-            "version": "1.5.2",
+            "version": "1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-imagine/Imagine.git",
-                "reference": "f9ed796eefb77c2f0f2167e1d4e36bc2b5ed6b0c"
+                "reference": "dd57a4c290ff4d223d17bcd219dac9ac8bf1cc16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-imagine/Imagine/zipball/f9ed796eefb77c2f0f2167e1d4e36bc2b5ed6b0c",
-                "reference": "f9ed796eefb77c2f0f2167e1d4e36bc2b5ed6b0c",
+                "url": "https://api.github.com/repos/php-imagine/Imagine/zipball/dd57a4c290ff4d223d17bcd219dac9ac8bf1cc16",
+                "reference": "dd57a4c290ff4d223d17bcd219dac9ac8bf1cc16",
                 "shasum": ""
             },
             "require": {
@@ -3216,9 +3217,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-imagine/Imagine/issues",
-                "source": "https://github.com/php-imagine/Imagine/tree/1.5.2"
+                "source": "https://github.com/php-imagine/Imagine/tree/1.5.4"
             },
-            "time": "2026-01-09T10:45:12+00:00"
+            "time": "2026-06-04T10:05:48+00:00"
         },
         {
             "name": "knplabs/gaufrette",
@@ -3776,16 +3777,16 @@
         },
         {
             "name": "laminas/laminas-translator",
-            "version": "1.3.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-translator.git",
-                "reference": "1d6bf7d857c3fc310a30f5ea028731b9bf8be9db"
+                "reference": "0169180f44f3d3273bd9a7b00e23ad6b0b870f17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-translator/zipball/1d6bf7d857c3fc310a30f5ea028731b9bf8be9db",
-                "reference": "1d6bf7d857c3fc310a30f5ea028731b9bf8be9db",
+                "url": "https://api.github.com/repos/laminas/laminas-translator/zipball/0169180f44f3d3273bd9a7b00e23ad6b0b870f17",
+                "reference": "0169180f44f3d3273bd9a7b00e23ad6b0b870f17",
                 "shasum": ""
             },
             "require": {
@@ -3793,8 +3794,8 @@
             },
             "require-dev": {
                 "laminas/laminas-coding-standard": "~3.1.0",
-                "phpunit/phpunit": "^11.5.46",
-                "vimeo/psalm": "^6.14.3"
+                "phpunit/phpunit": "^11.5.55",
+                "vimeo/psalm": "^6.16.1"
             },
             "type": "library",
             "autoload": {
@@ -3826,20 +3827,20 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2025-12-30T14:26:45+00:00"
+            "time": "2026-06-02T11:36:39+00:00"
         },
         {
             "name": "laminas/laminas-validator",
-            "version": "3.16.0",
+            "version": "3.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-validator.git",
-                "reference": "70dded6e0b57e87c6eb9dd6b363d3d4dc932168a"
+                "reference": "b475163508bd3ba0c98c7642c485f1a5d65e9fd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/70dded6e0b57e87c6eb9dd6b363d3d4dc932168a",
-                "reference": "70dded6e0b57e87c6eb9dd6b363d3d4dc932168a",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/b475163508bd3ba0c98c7642c485f1a5d65e9fd9",
+                "reference": "b475163508bd3ba0c98c7642c485f1a5d65e9fd9",
                 "shasum": ""
             },
             "require": {
@@ -3849,7 +3850,7 @@
                 "ext-intl": "*",
                 "laminas/laminas-servicemanager": "^4.4.0",
                 "laminas/laminas-stdlib": "^3.19",
-                "laminas/laminas-translator": "^1.0",
+                "laminas/laminas-translator": "^1.0 || ^2.0",
                 "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
                 "psr/container": "^1.1 || ^2.0",
                 "psr/http-client": "^1.0.3",
@@ -3859,6 +3860,7 @@
             "require-dev": {
                 "laminas/laminas-coding-standard": "^3.1.0",
                 "laminas/laminas-diactoros": "^3.8.0",
+                "laminas/laminas-translator": "^2.0",
                 "phpunit/phpunit": "^11.5.55",
                 "psalm/plugin-phpunit": "^0.19.7",
                 "vimeo/psalm": "^6.16.1"
@@ -3903,7 +3905,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2026-04-20T08:40:47+00:00"
+            "time": "2026-06-02T12:34:22+00:00"
         },
         {
             "name": "liip/imagine-bundle",
@@ -5173,7 +5175,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "066ac98f23c0023b5e4fb0efdbe4881cf468fa21"
+                "reference": "4772191423310a3c271e2c07cafa9c378527beb5"
             },
             "require": {
                 "ass/xmlsecurity": "1.1.1",
@@ -5294,7 +5296,7 @@
                 "symfony/validator": "~7.4.0",
                 "symfony/web-link": "~7.4.0",
                 "symfony/yaml": "~7.4.0",
-                "twig/twig": "~v3.26.0",
+                "twig/twig": "~v3.27.0",
                 "xemlock/htmlpurifier-html5": "0.1.10",
                 "zircote/swagger-php": "~4.11.1"
             },
@@ -5306,6 +5308,7 @@
                 "behat/gherkin": "~4.16.0",
                 "behat/mink": "~1.12.0",
                 "behat/mink-selenium2-driver": "~1.6.0",
+                "composer/composer": "~2.9.8",
                 "friends-of-behat/mink-extension": "~v2.7.5",
                 "friends-of-behat/symfony-extension": "~2.6.0",
                 "friendsofphp/php-cs-fixer": "~3.92.3",
@@ -5545,7 +5548,7 @@
         },
         {
             "name": "oroinc/laminas-loader",
-            "version": "dev-php85-support",
+            "version": "2.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroinc/laminas-loader.git",
@@ -5573,29 +5576,7 @@
                     "Laminas\\Loader\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "LaminasTest\\Loader\\": "test/"
-                }
-            },
-            "scripts": {
-                "check": [
-                    "@cs-check",
-                    "@test"
-                ],
-                "cs-check": [
-                    "phpcs"
-                ],
-                "cs-fix": [
-                    "phpcbf"
-                ],
-                "test": [
-                    "phpunit --colors=always"
-                ],
-                "test-coverage": [
-                    "phpunit --colors=always --coverage-clover clover.xml"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -5606,12 +5587,12 @@
                 "loader"
             ],
             "support": {
-                "docs": "https://docs.laminas.dev/laminas-loader/",
-                "issues": "https://github.com/laminas/laminas-loader/issues",
-                "source": "https://github.com/laminas/laminas-loader",
-                "rss": "https://github.com/laminas/laminas-loader/releases.atom",
                 "chat": "https://laminas.dev/chat",
-                "forum": "https://discourse.laminas.dev"
+                "docs": "https://docs.laminas.dev/laminas-loader/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-loader/issues",
+                "rss": "https://github.com/laminas/laminas-loader/releases.atom",
+                "source": "https://github.com/laminas/laminas-loader"
             },
             "abandoned": true,
             "time": "2025-12-29T14:23:03+00:00"
@@ -5622,20 +5603,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroinc/laminas-mail.git",
-                "reference": "fc8589a3b82703f22672126e51f77b77af817cf1"
+                "reference": "b18b1c8adb0fefa5bfad5f5f246a35b2c673bc1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oroinc/laminas-mail/zipball/fc8589a3b82703f22672126e51f77b77af817cf1",
-                "reference": "fc8589a3b82703f22672126e51f77b77af817cf1",
+                "url": "https://api.github.com/repos/oroinc/laminas-mail/zipball/b18b1c8adb0fefa5bfad5f5f246a35b2c673bc1e",
+                "reference": "b18b1c8adb0fefa5bfad5f5f246a35b2c673bc1e",
                 "shasum": ""
             },
             "require": {
                 "ext-iconv": "*",
                 "laminas/laminas-stdlib": "^3.17.0",
                 "laminas/laminas-validator": "^2.31.0 || ^3.0.0",
-                "oroinc/laminas-loader": "dev-php85-support",
-                "oroinc/laminas-mime": "dev-php85-support",
+                "oroinc/laminas-loader": "~2.14.0",
+                "oroinc/laminas-mime": "~2.15.0",
                 "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
                 "symfony/polyfill-intl-idn": "^1.27.0",
                 "symfony/polyfill-mbstring": "^1.27.0",
@@ -5665,33 +5646,7 @@
                     "Laminas\\Mail\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "LaminasTest\\Mail\\": "test/"
-                }
-            },
-            "scripts": {
-                "check": [
-                    "@cs-check",
-                    "@static-analysis",
-                    "@test"
-                ],
-                "cs-check": [
-                    "phpcs"
-                ],
-                "cs-fix": [
-                    "phpcbf"
-                ],
-                "static-analysis": [
-                    "psalm --shepherd --stats"
-                ],
-                "test": [
-                    "phpunit --colors=always"
-                ],
-                "test-coverage": [
-                    "phpunit --colors=always --coverage-clover clover.xml"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -5702,18 +5657,18 @@
                 "mail"
             ],
             "support": {
-                "issues": "https://github.com/laminas/laminas-mail/issues",
-                "forum": "https://discourse.laminas.dev",
                 "chat": "https://laminas.dev/chat",
-                "source": "https://github.com/laminas/laminas-mail",
                 "docs": "https://docs.laminas.dev/laminas-mail/",
-                "rss": "https://github.com/laminas/laminas-mail/releases.atom"
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-mail/issues",
+                "rss": "https://github.com/laminas/laminas-mail/releases.atom",
+                "source": "https://github.com/laminas/laminas-mail"
             },
-            "time": "2025-12-29T14:25:04+00:00"
+            "time": "2026-06-09T11:04:41+00:00"
         },
         {
             "name": "oroinc/laminas-mime",
-            "version": "dev-php85-support",
+            "version": "2.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroinc/laminas-mime.git",
@@ -5746,32 +5701,7 @@
                     "Laminas\\Mime\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "files": [
-                    "test/TestAsset/Mail/Headers.php"
-                ],
-                "psr-4": {
-                    "LaminasTest\\Mime\\": "test/"
-                }
-            },
-            "scripts": {
-                "check": [
-                    "@cs-check",
-                    "@test"
-                ],
-                "cs-check": [
-                    "phpcs"
-                ],
-                "cs-fix": [
-                    "phpcbf"
-                ],
-                "test": [
-                    "phpunit --colors=always"
-                ],
-                "test-coverage": [
-                    "phpunit --colors=always --coverage-clover clover.xml"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -5782,18 +5712,18 @@
                 "mime"
             ],
             "support": {
-                "docs": "https://docs.laminas.dev/laminas-mime/",
-                "issues": "https://github.com/laminas/laminas-mime/issues",
-                "source": "https://github.com/laminas/laminas-mime",
-                "rss": "https://github.com/laminas/laminas-mime/releases.atom",
                 "chat": "https://laminas.dev/chat",
-                "forum": "https://discourse.laminas.dev"
+                "docs": "https://docs.laminas.dev/laminas-mime/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-mime/issues",
+                "rss": "https://github.com/laminas/laminas-mime/releases.atom",
+                "source": "https://github.com/laminas/laminas-mime"
             },
             "time": "2025-12-29T14:22:53+00:00"
         },
         {
             "name": "oroinc/pubsub-router-bundle",
-            "version": "2.9.x-dev",
+            "version": "v2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroinc/PubSubRouterBundle.git",
@@ -5857,7 +5787,7 @@
                 "ZMQ"
             ],
             "support": {
-                "source": "https://github.com/oroinc/PubSubRouterBundle/tree/2.9.x"
+                "source": "https://github.com/oroinc/PubSubRouterBundle/tree/v2.9.0"
             },
             "funding": [
                 {
@@ -5873,17 +5803,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroinc/WebSocketBundle.git",
-                "reference": "2ce69910fdc14438ab8b06ff5a624bb5909c0e27"
+                "reference": "31a4af4321ba9d7aa4fb6f66398f520a465fdc26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oroinc/WebSocketBundle/zipball/2ce69910fdc14438ab8b06ff5a624bb5909c0e27",
-                "reference": "2ce69910fdc14438ab8b06ff5a624bb5909c0e27",
+                "url": "https://api.github.com/repos/oroinc/WebSocketBundle/zipball/31a4af4321ba9d7aa4fb6f66398f520a465fdc26",
+                "reference": "31a4af4321ba9d7aa4fb6f66398f520a465fdc26",
                 "shasum": ""
             },
             "require": {
                 "cboden/ratchet": "^0.4",
-                "oroinc/pubsub-router-bundle": "2.9.x-dev",
+                "oroinc/pubsub-router-bundle": "~2.9",
                 "php": "^8.4",
                 "psr/log": "^1.1 || ^2.0 || ^3.0",
                 "react/event-loop": "^1.2",
@@ -5948,11 +5878,7 @@
                     "Gos\\Component\\WebSocketClient\\": "src/Component/WebSocketClient/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Gos\\Bundle\\WebSocketBundle\\Tests\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -5969,22 +5895,22 @@
             "description": "A fork of Symfony Web Socket Bundle that enables PHP 8.4 and Symfony 7 support",
             "homepage": "https://github.com/GeniusesOfSymfony/WebSocketBundle",
             "keywords": [
-                "IO",
                 "Ratchet",
                 "WAMP",
                 "Web Socket Bundle",
-                "Websocket"
+                "io",
+                "websocket"
             ],
             "support": {
                 "source": "https://github.com/oroinc/WebSocketBundle/tree/3.16.x"
             },
             "funding": [
                 {
-                    "type": "github",
-                    "url": "https://github.com/mbabker"
+                    "url": "https://github.com/mbabker",
+                    "type": "github"
                 }
             ],
-            "time": "2025-10-06T10:34:58+00:00"
+            "time": "2026-06-09T11:24:30+00:00"
         },
         {
             "name": "php-http/client-common",
@@ -7372,16 +7298,16 @@
         },
         {
             "name": "ratchet/rfc6455",
-            "version": "v0.4.0",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ratchetphp/RFC6455.git",
-                "reference": "859d95f85dda0912c6d5b936d036d044e3af47ef"
+                "reference": "9b05f371219cbaf9748b505f139617dd0715592b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ratchetphp/RFC6455/zipball/859d95f85dda0912c6d5b936d036d044e3af47ef",
-                "reference": "859d95f85dda0912c6d5b936d036d044e3af47ef",
+                "url": "https://api.github.com/repos/ratchetphp/RFC6455/zipball/9b05f371219cbaf9748b505f139617dd0715592b",
+                "reference": "9b05f371219cbaf9748b505f139617dd0715592b",
                 "shasum": ""
             },
             "require": {
@@ -7425,9 +7351,9 @@
             "support": {
                 "chat": "https://gitter.im/reactphp/reactphp",
                 "issues": "https://github.com/ratchetphp/RFC6455/issues",
-                "source": "https://github.com/ratchetphp/RFC6455/tree/v0.4.0"
+                "source": "https://github.com/ratchetphp/RFC6455/tree/v0.4.1"
             },
-            "time": "2025-02-24T01:18:22+00:00"
+            "time": "2026-06-06T14:34:23+00:00"
         },
         {
             "name": "react/cache",
@@ -11224,16 +11150,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.38.1",
+            "version": "v1.38.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92"
+                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/14c5439eec4ccff081ac14eca2dc57feb2a66d92",
-                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
+                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
                 "shasum": ""
             },
             "require": {
@@ -11285,7 +11211,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.38.1"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.38.2"
             },
             "funding": [
                 {
@@ -11305,7 +11231,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-26T12:51:13+00:00"
+            "time": "2026-05-27T06:59:30+00:00"
         },
         {
             "name": "symfony/polyfill-php70",
@@ -11526,16 +11452,16 @@
         },
         {
             "name": "symfony/polyfill-php83",
-            "version": "v1.38.1",
+            "version": "v1.38.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php83.git",
-                "reference": "8339098cae28673c15cce00d80734af0453054e2"
+                "reference": "796a26abb75ce49f3a84433cd81bf1009d73d5f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php83/zipball/8339098cae28673c15cce00d80734af0453054e2",
-                "reference": "8339098cae28673c15cce00d80734af0453054e2",
+                "url": "https://api.github.com/repos/symfony/polyfill-php83/zipball/796a26abb75ce49f3a84433cd81bf1009d73d5f8",
+                "reference": "796a26abb75ce49f3a84433cd81bf1009d73d5f8",
                 "shasum": ""
             },
             "require": {
@@ -11582,7 +11508,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php83/tree/v1.38.1"
+                "source": "https://github.com/symfony/polyfill-php83/tree/v1.38.2"
             },
             "funding": [
                 {
@@ -11602,7 +11528,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-26T12:51:13+00:00"
+            "time": "2026-05-27T06:51:48+00:00"
         },
         {
             "name": "symfony/polyfill-php84",
@@ -14097,16 +14023,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.26.0",
+            "version": "v3.27.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "1fcae487b180d78e6351f4e0afa91f9eab96a2bc"
+                "reference": "ae2071bffb38f04847fc0864d730c94b9cb8ab74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/1fcae487b180d78e6351f4e0afa91f9eab96a2bc",
-                "reference": "1fcae487b180d78e6351f4e0afa91f9eab96a2bc",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ae2071bffb38f04847fc0864d730c94b9cb8ab74",
+                "reference": "ae2071bffb38f04847fc0864d730c94b9cb8ab74",
                 "shasum": ""
             },
             "require": {
@@ -14161,7 +14087,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.26.0"
+                "source": "https://github.com/twigphp/Twig/tree/v3.27.1"
             },
             "funding": [
                 {
@@ -14173,7 +14099,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-20T07:31:59+00:00"
+            "time": "2026-05-30T17:09:26+00:00"
         },
         {
             "name": "ua-parser/uap-php",
@@ -16581,7 +16507,6 @@
                     "type": "github"
                 }
             ],
-            "abandoned": true,
             "time": "2020-10-26T13:08:54+00:00"
         },
         {
@@ -16637,7 +16562,6 @@
                     "type": "github"
                 }
             ],
-            "abandoned": true,
             "time": "2020-09-28T05:30:19+00:00"
         },
         {
@@ -18254,10 +18178,10 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }

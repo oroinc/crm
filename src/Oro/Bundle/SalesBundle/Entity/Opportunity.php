@@ -55,7 +55,8 @@ use Oro\Bundle\UserBundle\Entity\User;
         'form' => ['form_type' => OpportunitySelectType::class, 'grid_name' => 'sales-opportunity-grid'],
         'dataaudit' => ['auditable' => true, 'immutable' => true],
         'grid' => ['default' => 'sales-opportunity-grid', 'context' => 'sales-opportunity-for-context-grid'],
-        'tag' => ['enabled' => true, 'enableDefaultRendering' => false]
+        'tag' => ['enabled' => true, 'enableDefaultRendering' => false],
+        'email' => ['available_in_template' => true],
     ]
 )]
 class Opportunity implements
@@ -67,7 +68,7 @@ class Opportunity implements
 
     public const INTERNAL_STATUS_CODE = 'opportunity_status';
     public const STATUS_LOST = 'lost';
-    public const STATUS_WON  = 'won';
+    public const STATUS_WON = 'won';
 
     /**
      * The key in system config for probability - status map
@@ -77,13 +78,17 @@ class Opportunity implements
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ConfigField(defaultValues: ['importexport' => ['order' => 0]])]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 0], 'email' => ['available_in_template' => true]])]
     protected ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: OpportunityCloseReason::class)]
     #[ORM\JoinColumn(name: 'close_reason_name', referencedColumnName: 'name')]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 100, 'short' => true]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 100, 'short' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?OpportunityCloseReason $closeReason = null;
 
@@ -93,15 +98,20 @@ class Opportunity implements
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 120, 'short' => true],
-            'form' => ['form_type' => ContactSelectType::class]
-        ]
+            'form' => ['form_type' => ContactSelectType::class],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?Contact $contact = null;
 
     #[ORM\ManyToOne(targetEntity: Lead::class, inversedBy: 'opportunities')]
     #[ORM\JoinColumn(name: 'lead_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 130, 'short' => true]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 130, 'short' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?Lead $lead = null;
 
@@ -110,20 +120,29 @@ class Opportunity implements
     #[ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true, 'immutable' => true],
-            'importexport' => ['order' => 140, 'short' => true]
-        ]
+            'importexport' => ['order' => 140, 'short' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?User $owner = null;
 
     #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 10, 'identity' => true]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 10, 'identity' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $name = null;
 
     #[ORM\Column(name: 'close_date', type: Types::DATE_MUTABLE, nullable: true)]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true, 'immutable' => true], 'importexport' => ['order' => 20]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true, 'immutable' => true],
+            'importexport' => ['order' => 20],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $closeDate = null;
 
@@ -138,8 +157,9 @@ class Opportunity implements
                 'form_options' => ['constraints' => [['Range' => ['min' => 0, 'max' => 100]]]]
             ],
             'dataaudit' => ['auditable' => true, 'immutable' => true],
-            'importexport' => ['order' => 30]
-        ]
+            'importexport' => ['order' => 30],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected $probability;
 
@@ -159,7 +179,8 @@ class Opportunity implements
         defaultValues: [
             'dataaudit' => ['auditable' => true, 'immutable' => true],
             'importexport' => ['order' => 55],
-            'multicurrency' => ['target' => 'budgetAmount']
+            'multicurrency' => ['target' => 'budgetAmount'],
+            'email' => ['available_in_template' => true],
         ]
     )]
     protected $budgetAmountCurrency;
@@ -176,7 +197,8 @@ class Opportunity implements
             ],
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 50],
-            'multicurrency' => ['target' => 'budgetAmount', 'virtual_field' => 'budgetAmountBaseCurrency']
+            'multicurrency' => ['target' => 'budgetAmount', 'virtual_field' => 'budgetAmountBaseCurrency'],
+            'email' => ['available_in_template' => true],
         ]
     )]
     protected $budgetAmountValue;
@@ -189,8 +211,9 @@ class Opportunity implements
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 56],
-            'multicurrency' => ['target' => 'budgetAmount']
-        ]
+            'multicurrency' => ['target' => 'budgetAmount'],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected $baseBudgetAmountValue;
 
@@ -210,7 +233,8 @@ class Opportunity implements
         defaultValues: [
             'dataaudit' => ['auditable' => true, 'immutable' => true],
             'importexport' => ['order' => 65],
-            'multicurrency' => ['target' => 'closeRevenue']
+            'multicurrency' => ['target' => 'closeRevenue'],
+            'email' => ['available_in_template' => true],
         ]
     )]
     protected $closeRevenueCurrency;
@@ -227,7 +251,8 @@ class Opportunity implements
             ],
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 60],
-            'multicurrency' => ['target' => 'closeRevenue', 'virtual_field' => 'closeRevenueBaseCurrency']
+            'multicurrency' => ['target' => 'closeRevenue', 'virtual_field' => 'closeRevenueBaseCurrency'],
+            'email' => ['available_in_template' => true],
         ]
     )]
     protected $closeRevenueValue;
@@ -240,51 +265,74 @@ class Opportunity implements
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 66],
-            'multicurrency' => ['target' => 'closeRevenue']
-        ]
+            'multicurrency' => ['target' => 'closeRevenue'],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected $baseCloseRevenueValue;
 
     #[ORM\Column(name: 'customer_need', type: Types::TEXT, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 60]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 60],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $customerNeed = null;
 
     #[ORM\Column(name: 'proposed_solution', type: Types::TEXT, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 70]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 70],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $proposedSolution = null;
 
     #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.created_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.created_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.updated_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.updated_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(name: 'notes', type: Types::TEXT, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 80]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 80],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $notes = null;
 
     #[ORM\ManyToOne(targetEntity: Organization::class)]
     #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?OrganizationInterface $organization = null;
 
     #[ORM\Column(name: 'closed_at', type: Types::DATETIME_MUTABLE, nullable: true)]
     #[ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true, 'immutable' => true],
-            'importexport' => ['excluded' => true, 'immutable' => true]
-        ]
+            'importexport' => ['excluded' => true, 'immutable' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $closedAt = null;
 
     #[ORM\ManyToOne(targetEntity: Customer::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'customer_association_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
-    #[ConfigField(defaultValues: ['importexport' => ['full' => true]])]
+    #[ConfigField(defaultValues: ['importexport' => ['full' => true], 'email' => ['available_in_template' => true]])]
     protected ?Customer $customerAssociation = null;
 
     public function __construct()
@@ -317,7 +365,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  Lead        $lead
+     * @param Lead $lead
      * @return Opportunity
      */
     public function setLead($lead)
@@ -486,7 +534,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  \DateTime   $closeDate
+     * @param \DateTime $closeDate
      * @return Opportunity
      */
     public function setCloseDate($closeDate)
@@ -505,7 +553,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  Contact     $contact
+     * @param Contact $contact
      * @return Opportunity
      */
     public function setContact($contact)
@@ -524,7 +572,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  string      $customerNeed
+     * @param string $customerNeed
      * @return Opportunity
      */
     public function setCustomerNeed($customerNeed)
@@ -543,7 +591,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  float       $probability
+     * @param float $probability
      * @return Opportunity
      */
     public function setProbability($probability)
@@ -562,7 +610,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  string      $proposedSolution
+     * @param string $proposedSolution
      * @return Opportunity
      */
     public function setProposedSolution($proposedSolution)
@@ -581,7 +629,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  string      $name
+     * @param string $name
      * @return Opportunity
      */
     public function setName($name)
@@ -600,7 +648,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  OpportunityCloseReason $closeReason
+     * @param OpportunityCloseReason $closeReason
      * @return Opportunity
      */
     public function setCloseReason($closeReason)
@@ -646,7 +694,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  \DateTime   $created
+     * @param \DateTime $created
      * @return Opportunity
      */
     public function setCreatedAt($created)
@@ -665,7 +713,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  \DateTime   $updated
+     * @param \DateTime $updated
      * @return Opportunity
      */
     public function setUpdatedAt($updated)
@@ -699,8 +747,9 @@ class Opportunity implements
     #[\Override]
     public function __toString()
     {
-        return (string) $this->getName();
+        return (string)$this->getName();
     }
+
     #[ORM\PrePersist]
     public function beforeSave()
     {
@@ -723,7 +772,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  User        $owningUser
+     * @param User $owningUser
      * @return Opportunity
      */
     public function setOwner($owningUser)
@@ -742,7 +791,7 @@ class Opportunity implements
     }
 
     /**
-     * @param  string      $notes
+     * @param string $notes
      * @return Opportunity
      */
     public function setNotes($notes)
@@ -799,6 +848,7 @@ class Opportunity implements
         if (null !== $this->budgetAmountValue) {
             $this->setBudgetAmountCurrency($this->budgetAmount->getCurrency());
             $this->setBaseBudgetAmountValue($this->budgetAmount->getBaseCurrencyValue());
+
             return;
         }
 
@@ -812,6 +862,7 @@ class Opportunity implements
         if (null !== $this->closeRevenueValue) {
             $this->setCloseRevenueCurrency($this->closeRevenue->getCurrency());
             $this->setBaseCloseRevenueValue($this->closeRevenue->getBaseCurrencyValue());
+
             return;
         }
 
