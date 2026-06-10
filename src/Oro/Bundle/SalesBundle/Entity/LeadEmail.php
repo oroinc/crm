@@ -7,6 +7,7 @@ use Extend\Entity\Autocomplete\OroSalesBundle_Entity_LeadEmail;
 use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
 use Oro\Bundle\EmailBundle\Entity\EmailInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
@@ -32,6 +33,7 @@ class LeadEmail extends AbstractEmail implements ExtendEntityInterface, EmailInt
 
     #[ORM\ManyToOne(targetEntity: Lead::class, inversedBy: 'emails')]
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?Lead $owner = null;
 
     /**

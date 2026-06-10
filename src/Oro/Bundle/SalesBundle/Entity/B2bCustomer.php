@@ -44,21 +44,22 @@ use Oro\Bundle\UserBundle\Entity\User;
             'icon' => 'fa-user-md',
             'contact_information' => [
                 'email' => [['fieldName' => 'primaryEmail']],
-                'phone' => [['fieldName' => 'primaryPhone']]
-            ]
+                'phone' => [['fieldName' => 'primaryPhone']],
+            ],
         ],
         'ownership' => [
             'owner_type' => 'USER',
             'owner_field_name' => 'owner',
             'owner_column_name' => 'user_owner_id',
             'organization_field_name' => 'organization',
-            'organization_column_name' => 'organization_id'
+            'organization_column_name' => 'organization_id',
         ],
         'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'sales_data'],
         'dataaudit' => ['auditable' => true],
         'form' => ['form_type' => B2bCustomerSelectType::class],
         'grid' => ['default' => 'oro-sales-b2bcustomers-grid', 'context' => 'oro-sales-b2bcustomers-for-context-grid'],
-        'tag' => ['enabled' => true]
+        'tag' => ['enabled' => true],
+        'email' => ['available_in_template' => true],
     ]
 )]
 class B2bCustomer implements
@@ -71,12 +72,16 @@ class B2bCustomer implements
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ConfigField(defaultValues: ['importexport' => ['order' => 0]])]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 0], 'email' => ['available_in_template' => true]])]
     protected ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true, 'order' => 10]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['identity' => true, 'order' => 10],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $name = null;
 
@@ -85,54 +90,85 @@ class B2bCustomer implements
      */
     #[ORM\Column(name: 'lifetime', type: 'money', nullable: true)]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => false], 'importexport' => ['full' => true, 'order' => 15]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => false],
+            'importexport' => ['full' => true, 'order' => 15],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected $lifetime = 0;
 
     #[ORM\ManyToOne(targetEntity: Address::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    #[ConfigField(defaultValues: ['importexport' => ['full' => true, 'order' => 20]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['full' => true, 'order' => 20],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?Address $shippingAddress = null;
 
     #[ORM\ManyToOne(targetEntity: Address::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'billing_address_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    #[ConfigField(defaultValues: ['importexport' => ['full' => true, 'order' => 30]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['full' => true, 'order' => 30],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?Address $billingAddress = null;
 
     #[ORM\ManyToOne(targetEntity: Account::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'account_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 40, 'short' => true]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 40, 'short' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?Account $account = null;
 
     #[ORM\ManyToOne(targetEntity: Contact::class)]
     #[ORM\JoinColumn(name: 'contact_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 50, 'short' => true]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 50, 'short' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?Contact $contact = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 70, 'short' => true]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 70, 'short' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?User $owner = null;
 
     #[ORM\ManyToOne(targetEntity: Organization::class)]
     #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?OrganizationInterface $organization = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.created_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.created_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.updated_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.updated_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $updatedAt = null;
 
@@ -140,7 +176,11 @@ class B2bCustomer implements
      * @var Collection<int, B2bCustomerPhone>
      */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: B2bCustomerPhone::class, cascade: ['all'], orphanRemoval: true)]
-    #[ConfigField(defaultValues: ['importexport' => ['order' => 80], 'dataaudit' => ['auditable' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['order' => 80],
+        'dataaudit' => ['auditable' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?Collection $phones = null;
 
     /**
@@ -148,7 +188,11 @@ class B2bCustomer implements
      */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: B2bCustomerEmail::class, cascade: ['all'], orphanRemoval: true)]
     #[ORM\OrderBy(['primary' => Criteria::DESC])]
-    #[ConfigField(defaultValues: ['importexport' => ['order' => 90], 'dataaudit' => ['auditable' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['order' => 90],
+        'dataaudit' => ['auditable' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?Collection $emails = null;
 
     public function __construct()
@@ -370,7 +414,7 @@ class B2bCustomer implements
     #[\Override]
     public function __toString()
     {
-        return (string) $this->getName();
+        return (string)$this->getName();
     }
 
     /**
