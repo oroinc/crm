@@ -1,0 +1,2 @@
+parameters:
+    oro_test.behat.base_url: 'http://dev-crm.local'
