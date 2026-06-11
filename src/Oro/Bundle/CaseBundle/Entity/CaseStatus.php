@@ -10,30 +10,35 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 
 /**
-* Entity that represents Case Status
-*
-*/
+ * Entity that represents Case Status
+ *
+ */
 #[ORM\Entity]
 #[ORM\Table(name: 'orocrm_case_status')]
 #[Gedmo\TranslationEntity(class: CaseStatusTranslation::class)]
 #[Config(defaultValues: ['grouping' => ['groups' => ['dictionary']], 'dictionary' => ['virtual_fields' => ['label']]])]
 class CaseStatus implements Translatable
 {
-    const STATUS_OPEN        = 'open';
-    const STATUS_IN_PROGRESS = 'in_progress';
-    const STATUS_RESOLVED    = 'resolved';
-    const STATUS_CLOSED      = 'closed';
+    public const STATUS_OPEN = 'open';
+    public const STATUS_IN_PROGRESS = 'in_progress';
+    public const STATUS_RESOLVED = 'resolved';
+    public const STATUS_CLOSED = 'closed';
 
     #[ORM\Id]
     #[ORM\Column(name: 'name', type: Types::STRING, length: 16)]
-    #[ConfigField(defaultValues: ['importexport' => ['identity' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['identity' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $name = null;
 
     #[ORM\Column(name: '`order`', type: Types::INTEGER)]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?int $order = null;
 
     #[ORM\Column(name: 'label', type: Types::STRING, length: 255)]
     #[Gedmo\Translatable]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?string $label = null;
 
     #[Gedmo\Locale]

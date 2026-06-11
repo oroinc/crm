@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Extend\Entity\Autocomplete\OroContactUsBundle_Entity_ContactRequest;
 use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -37,7 +38,8 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
         ],
         'entity' => ['icon' => 'fa-envelope'],
         'security' => ['type' => 'ACL', 'permissions' => 'All', 'group_name' => '', 'category' => 'account_management'],
-        'grid' => ['default' => 'orcrm-contact-requests-grid']
+        'grid' => ['default' => 'orcrm-contact-requests-grid'],
+        'email' => ['available_in_template' => true],
     ]
 )]
 class ContactRequest extends AbstractContactRequest implements ExtendEntityInterface
@@ -49,28 +51,35 @@ class ContactRequest extends AbstractContactRequest implements ExtendEntityInter
     const CONTACT_METHOD_EMAIL = 'oro.contactus.contactrequest.method.email';
 
     #[ORM\Column(name: 'customer_name', type: Types::STRING, nullable: true)]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?string $customerName = null;
 
     #[ORM\Column(name: 'preferred_contact_method', type: Types::STRING, length: 100)]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?string $preferredContactMethod = self::CONTACT_METHOD_EMAIL;
 
     #[ORM\ManyToOne(targetEntity: ContactReason::class)]
     #[ORM\JoinColumn(name: 'contact_reason_id', referencedColumnName: 'id', nullable: true)]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?ContactReason $contactReason = null;
 
     #[ORM\Column(name: 'feedback', type: Types::TEXT, nullable: true)]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?string $feedback = null;
 
     #[ORM\ManyToOne(targetEntity: Opportunity::class)]
     #[ORM\JoinColumn(name: 'opportunity_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?Opportunity $opportunity = null;
 
     #[ORM\ManyToOne(targetEntity: Lead::class)]
     #[ORM\JoinColumn(name: 'lead_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?Lead $lead = null;
 
     #[ORM\ManyToOne(targetEntity: Organization::class)]
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?Organization $owner = null;
 
     public function setCustomerName(?string $customerName = null): void
