@@ -17,6 +17,16 @@ class OroContactBundle implements Migration, AttachmentExtensionAwareInterface
      */
     public function up(Schema $schema, QueryBag $queries): void
     {
-        $this->attachmentExtension->addImageRelation($schema, 'orocrm_contact', 'picture', [], 2, 58, 58);
+        $this->attachmentExtension->addImageRelation(
+            $schema,
+            'orocrm_contact',
+            'picture',
+            [
+                'email' => ['available_in_template' => true],
+            ],
+            2,
+            58,
+            58
+        );
     }
 }

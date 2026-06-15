@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Extend\Entity\Autocomplete\OroSalesBundle_Entity_B2bCustomerPhone;
 use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
@@ -33,6 +34,7 @@ class B2bCustomerPhone extends AbstractPhone implements ExtendEntityInterface
 
     #[ORM\ManyToOne(targetEntity: B2bCustomer::class, inversedBy: 'phones')]
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?B2bCustomer $owner = null;
 
     public function setOwner(B2bCustomer $owner = null)

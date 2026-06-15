@@ -26,11 +26,12 @@ use Oro\Bundle\UserBundle\Entity\User;
             'owner_field_name' => 'owner',
             'owner_column_name' => 'user_owner_id',
             'organization_field_name' => 'organization',
-            'organization_column_name' => 'organization_id'
+            'organization_column_name' => 'organization_id',
         ],
         'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'account_management'],
         'activity' => ['immutable' => true],
-        'attachment' => ['immutable' => true]
+        'attachment' => ['immutable' => true],
+        'email' => ['available_in_template' => true],
     ]
 )]
 class Group implements ExtendEntityInterface
@@ -40,18 +41,24 @@ class Group implements ExtendEntityInterface
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 30, unique: true, nullable: false)]
-    #[ConfigField(defaultValues: ['importexport' => ['identity' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['identity' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $label = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?User $owner = null;
 
     #[ORM\ManyToOne(targetEntity: Organization::class)]
     #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?OrganizationInterface $organization = null;
 
     /**
@@ -79,7 +86,7 @@ class Group implements ExtendEntityInterface
     }
 
     /**
-     * @param  string $name
+     * @param string $name
      * @return Group
      */
     public function setLabel($name)

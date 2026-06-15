@@ -223,6 +223,7 @@ class OroSalesBundleInstaller implements
                     'is_visible' => DatagridScope::IS_VISIBLE_FALSE,
                 ],
                 'merge' => ['inverse_display' => false],
+                'email' => ['available_in_template' => true],
             ]
         );
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
@@ -638,7 +639,8 @@ class OroSalesBundleInstaller implements
                 'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
                 'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
                 'dataaudit' => ['auditable' => true],
-                'importexport' => ['order' => 90, 'short' => true]
+                'importexport' => ['order' => 90, 'short' => true],
+                'email' => ['available_in_template' => true],
             ]
         );
 
@@ -670,7 +672,8 @@ class OroSalesBundleInstaller implements
                 'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
                 'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
                 'dataaudit' => ['auditable' => true],
-                'importexport' => ['order' => 90, 'short' => true]
+                'importexport' => ['order' => 90, 'short' => true],
+                'email' => ['available_in_template' => true],
             ]
         );
 

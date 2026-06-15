@@ -10,27 +10,30 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 
 /**
-* Entity that represents Case Source
-*
-*/
+ * Entity that represents Case Source
+ */
 #[ORM\Entity]
 #[ORM\Table(name: 'orocrm_case_source')]
 #[Gedmo\TranslationEntity(class: CaseSourceTranslation::class)]
 #[Config(defaultValues: ['grouping' => ['groups' => ['dictionary']], 'dictionary' => ['virtual_fields' => ['label']]])]
 class CaseSource implements Translatable
 {
-    const SOURCE_EMAIL = 'email';
-    const SOURCE_PHONE = 'phone';
-    const SOURCE_WEB   = 'web';
-    const SOURCE_OTHER = 'other';
+    public const SOURCE_EMAIL = 'email';
+    public const SOURCE_PHONE = 'phone';
+    public const SOURCE_WEB = 'web';
+    public const SOURCE_OTHER = 'other';
 
     #[ORM\Id]
     #[ORM\Column(name: 'name', type: Types::STRING, length: 16)]
-    #[ConfigField(defaultValues: ['importexport' => ['identity' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['identity' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $name = null;
 
     #[ORM\Column(name: 'label', type: Types::STRING, length: 255)]
     #[Gedmo\Translatable]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?string $label = null;
 
     #[Gedmo\Locale]

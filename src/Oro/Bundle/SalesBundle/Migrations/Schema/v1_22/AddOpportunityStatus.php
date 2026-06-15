@@ -56,7 +56,8 @@ class AddOpportunityStatus implements
                 'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
                 'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
                 'dataaudit' => ['auditable' => true],
-                'importexport' => ['order' => 90, 'short' => true]
+                'importexport' => ['order' => 90, 'short' => true],
+                'email' => ['available_in_template' => true],
             ]
         );
 

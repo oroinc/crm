@@ -50,21 +50,22 @@ use Oro\Bundle\UserBundle\Entity\User;
             'icon' => 'fa-phone',
             'contact_information' => [
                 'email' => [['fieldName' => 'primaryEmail']],
-                'phone' => [['fieldName' => 'primaryPhone']]
-            ]
+                'phone' => [['fieldName' => 'primaryPhone']],
+            ],
         ],
         'ownership' => [
             'owner_type' => 'USER',
             'owner_field_name' => 'owner',
             'owner_column_name' => 'user_owner_id',
             'organization_field_name' => 'organization',
-            'organization_column_name' => 'organization_id'
+            'organization_column_name' => 'organization_id',
         ],
         'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'sales_data'],
         'form' => ['form_type' => LeadSelectType::class, 'grid_name' => 'sales-lead-grid'],
         'dataaudit' => ['auditable' => true],
         'grid' => ['default' => 'sales-lead-grid', 'context' => 'sales-lead-for-context-grid'],
-        'tag' => ['enabled' => true, 'enableDefaultRendering' => false]
+        'tag' => ['enabled' => true, 'enableDefaultRendering' => false],
+        'email' => ['available_in_template' => true],
     ]
 )]
 class Lead implements
@@ -80,51 +81,87 @@ class Lead implements
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ConfigField(defaultValues: ['importexport' => ['order' => 0]])]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 0], 'email' => ['available_in_template' => true]])]
     protected ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Contact::class)]
     #[ORM\JoinColumn(name: 'contact_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 150, 'short' => true]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 150, 'short' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?Contact $contact = null;
 
     #[ORM\Column(name: 'name', type: Types::STRING, length: 255)]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 20, 'identity' => true]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 20, 'identity' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $name = null;
 
     #[ORM\Column(name: 'name_prefix', type: Types::STRING, length: 255, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 30]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 30],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $namePrefix = null;
 
     #[ORM\Column(name: 'first_name', type: Types::STRING, length: 255, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 40]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 40],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $firstName = null;
 
     #[ORM\Column(name: 'middle_name', type: Types::STRING, length: 255, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 50]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 50],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $middleName = null;
 
     #[ORM\Column(name: 'last_name', type: Types::STRING, length: 255, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 60]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 60],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $lastName = null;
 
     #[ORM\Column(name: 'name_suffix', type: Types::STRING, length: 255, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 70]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 70],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $nameSuffix = null;
 
     #[ORM\Column(name: 'job_title', type: Types::STRING, length: 255, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 80]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 80],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $jobTitle = null;
 
     /**
      * @var Collection<int, LeadPhone>
      */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: LeadPhone::class, cascade: ['all'], orphanRemoval: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 220]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 220],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?Collection $phones = null;
 
     /**
@@ -132,23 +169,43 @@ class Lead implements
      */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: LeadEmail::class, cascade: ['all'], orphanRemoval: true)]
     #[ORM\OrderBy(['primary' => Criteria::DESC])]
-    #[ConfigField(defaultValues: ['importexport' => ['order' => 210], 'dataaudit' => ['auditable' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['order' => 210],
+        'dataaudit' => ['auditable' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?Collection $emails = null;
 
     #[ORM\Column(name: 'company_name', type: Types::STRING, length: 255, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 110]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 110],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $companyName = null;
 
     #[ORM\Column(name: 'website', type: Types::STRING, length: 255, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 120]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 120],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $website = null;
 
     #[ORM\Column(name: 'number_of_employees', type: Types::INTEGER, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 130]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 130],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?int $numberOfEmployees = null;
 
     #[ORM\Column(name: 'industry', type: Types::STRING, length: 255, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 140]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 140],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $industry = null;
 
     /**
@@ -157,26 +214,42 @@ class Lead implements
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: LeadAddress::class, cascade: ['all'], orphanRemoval: true)]
     #[ORM\OrderBy(['primary' => Criteria::DESC])]
     #[ConfigField(
-        defaultValues: ['importexport' => ['full' => true, 'order' => 170], 'dataaudit' => ['auditable' => true]]
+        defaultValues: [
+            'importexport' => ['full' => true, 'order' => 170],
+            'dataaudit' => ['auditable' => true],
+            'email' => ['available_in_template' => true],
+        ]
     )]
     protected ?Collection $addresses = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.created_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.created_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.updated_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.updated_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 180, 'short' => true]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 180, 'short' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?User $owner = null;
 
@@ -184,35 +257,51 @@ class Lead implements
      * @var Collection<int, Opportunity>
      */
     #[ORM\OneToMany(mappedBy: 'lead', targetEntity: Opportunity::class)]
-    #[ConfigField(defaultValues: ['importexport' => ['order' => 190, 'short' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['order' => 190, 'short' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?Collection $opportunities = null;
 
     #[ORM\Column(name: 'notes', type: Types::TEXT, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 140]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 140],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $notes = null;
 
     #[ORM\ManyToOne(targetEntity: Organization::class)]
     #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?OrganizationInterface $organization = null;
 
     #[ORM\Column(name: 'twitter', type: Types::STRING, length: 255, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 175]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 175],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $twitter = null;
 
     #[ORM\Column(name: 'linkedin', type: Types::STRING, length: 255, nullable: true)]
-    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 180]])]
+    #[ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['order' => 180],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $linkedIn = null;
 
     #[ORM\ManyToOne(targetEntity: Customer::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'customer_association_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
-    #[ConfigField(defaultValues: ['importexport' => ['full' => true]])]
+    #[ConfigField(defaultValues: ['importexport' => ['full' => true], 'email' => ['available_in_template' => true]])]
     protected ?Customer $customerAssociation = null;
 
     public function __construct()
     {
         $this->opportunities = new ArrayCollection();
-        $this->phones   = new ArrayCollection();
-        $this->emails   = new ArrayCollection();
+        $this->phones = new ArrayCollection();
+        $this->emails = new ArrayCollection();
         $this->addresses = new ArrayCollection();
     }
 
@@ -647,7 +736,7 @@ class Lead implements
      */
     public function __toString()
     {
-        return (string) $this->getName();
+        return (string)$this->getName();
     }
 
     /**

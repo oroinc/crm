@@ -7,6 +7,7 @@ use Extend\Entity\Autocomplete\OroContactBundle_Entity_ContactEmail;
 use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
 use Oro\Bundle\EmailBundle\Entity\EmailInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
@@ -34,6 +35,7 @@ class ContactEmail extends AbstractEmail implements
 
     #[ORM\ManyToOne(targetEntity: Contact::class, inversedBy: 'emails')]
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?Contact $owner = null;
 
     /**

@@ -30,11 +30,12 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
         'ownership' => [
             'owner_type' => 'ORGANIZATION',
             'owner_field_name' => 'owner',
-            'owner_column_name' => 'organization_owner_id'
+            'owner_column_name' => 'organization_owner_id',
         ],
         'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'account_management'],
         'form' => ['form_type' => ChannelSelectType::class],
-        'grid' => ['default' => 'oro-channels-grid']
+        'grid' => ['default' => 'oro-channels-grid'],
+        'email' => ['available_in_template' => true],
     ]
 )]
 class Channel
@@ -45,12 +46,16 @@ class Channel
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ConfigField(defaultValues: ['importexport' => ['order' => 0]])]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 0], 'email' => ['available_in_template' => true]])]
     protected ?int $id = null;
 
     #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true, 'order' => 10]]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['identity' => true, 'order' => 10],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $name = null;
 
@@ -62,22 +67,33 @@ class Channel
 
     #[ORM\ManyToOne(targetEntity: Organization::class)]
     #[ORM\JoinColumn(name: 'organization_owner_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?Organization $owner = null;
 
     #[ORM\OneToOne(targetEntity: Integration::class, cascade: ['all'], orphanRemoval: true)]
     #[ORM\JoinColumn(name: 'data_source_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?Integration $dataSource = null;
 
     #[ORM\Column(name: 'status', type: Types::BOOLEAN, nullable: false)]
-    #[ConfigField(defaultValues: ['importexport' => ['full' => true, 'order' => 20]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['full' => true, 'order' => 20],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?bool $status = self::STATUS_INACTIVE;
 
     #[ORM\Column(name: 'customer_identity', type: Types::STRING, length: 255, nullable: false)]
-    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['excluded' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $customerIdentity = null;
 
     #[ORM\Column(name: 'channel_type', type: Types::STRING, nullable: false)]
-    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['excluded' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $channelType = null;
 
     /**
@@ -88,13 +104,21 @@ class Channel
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.created_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.created_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.updated_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.updated_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $updatedAt = null;
 

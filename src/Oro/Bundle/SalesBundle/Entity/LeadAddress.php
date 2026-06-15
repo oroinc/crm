@@ -23,7 +23,7 @@ use Oro\Bundle\FormBundle\Entity\PrimaryItem;
     defaultValues: [
         'entity' => ['icon' => 'fa-map-marker'],
         'activity' => ['immutable' => true],
-        'attachment' => ['immutable' => true]
+        'attachment' => ['immutable' => true],
     ]
 )]
 class LeadAddress extends AbstractAddress implements PrimaryItem, ExtendEntityInterface
@@ -32,11 +32,17 @@ class LeadAddress extends AbstractAddress implements PrimaryItem, ExtendEntityIn
 
     #[ORM\ManyToOne(targetEntity: Lead::class, cascade: ['persist'], inversedBy: 'addresses')]
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['excluded' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?Lead $owner = null;
 
     #[ORM\Column(name: 'is_primary', type: Types::BOOLEAN, nullable: true)]
-    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['excluded' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?bool $primary = null;
 
     public function __construct()
