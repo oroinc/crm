@@ -24,7 +24,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
         'entity' => ['icon' => 'fa-map-marker'],
         'activity' => ['immutable' => true],
         'dataaudit' => ['auditable' => true],
-        'attachment' => ['immutable' => true]
+        'attachment' => ['immutable' => true],
     ]
 )]
 class ContactAddress extends AbstractTypedAddress implements ExtendEntityInterface
@@ -33,7 +33,10 @@ class ContactAddress extends AbstractTypedAddress implements ExtendEntityInterfa
 
     #[ORM\ManyToOne(targetEntity: Contact::class, cascade: ['persist'], inversedBy: 'addresses')]
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['excluded' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?Contact $owner = null;
 
     /**
@@ -43,7 +46,10 @@ class ContactAddress extends AbstractTypedAddress implements ExtendEntityInterfa
     #[ORM\JoinTable(name: 'orocrm_contact_adr_to_adr_type')]
     #[ORM\JoinColumn(name: 'contact_address_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'type_name', referencedColumnName: 'name')]
-    #[ConfigField(defaultValues: ['importexport' => ['order' => 200, 'short' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['order' => 200, 'short' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?Collection $types = null;
 
     /**

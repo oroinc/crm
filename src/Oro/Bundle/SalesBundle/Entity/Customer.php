@@ -32,12 +32,15 @@ class Customer implements ExtendEntityInterface
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['excluded' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Account::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'account_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    #[ConfigField(defaultValues: ['importexport' => ['short' => true]])]
+    #[ConfigField(defaultValues: ['importexport' => ['short' => true], 'email' => ['available_in_template' => true]])]
     protected ?Account $account = null;
 
     /**
@@ -62,7 +65,7 @@ class Customer implements ExtendEntityInterface
     }
 
     /**
-     * @param Account     $account
+     * @param Account $account
      * @param object|null $target
      *
      * @return $this

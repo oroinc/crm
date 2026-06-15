@@ -7,6 +7,7 @@ use Extend\Entity\Autocomplete\OroContactBundle_Entity_ContactPhone;
 use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
 use Oro\Bundle\ContactBundle\Entity\Repository\ContactPhoneRepository;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
@@ -33,6 +34,7 @@ class ContactPhone extends AbstractPhone implements ExtendEntityInterface
 
     #[ORM\ManyToOne(targetEntity: Contact::class, inversedBy: 'phones')]
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?Contact $owner = null;
 
     /**
