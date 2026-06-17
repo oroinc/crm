@@ -52,6 +52,9 @@ use Oro\Bundle\UserBundle\Entity\User;
  *          "tag"={
  *              "enabled"=true,
  *              "immutable"=true
+ *          },
+ *          "email"={
+ *              "available_in_template"=true
  *          }
  *      }
  * )

@@ -41,7 +41,10 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
  *      },
  *      "grid"={
  *          "default"="oro-channels-grid"
- *     }
+ *      },
+ *      "email"={
+ *          "available_in_template"=true
+ *      }
  *  }
  * )
  */

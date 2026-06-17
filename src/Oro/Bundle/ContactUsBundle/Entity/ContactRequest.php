@@ -39,6 +39,9 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
  *          },
  *          "grid"={
  *              "default"="orcrm-contact-requests-grid"
+ *          },
+ *          "email"={
+ *              "available_in_template"=true
  *          }
  *      }
  * )

@@ -34,6 +34,9 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
  *          },
  *          "activity"={
  *              "immutable"=true
+ *          },
+ *          "email"={
+ *              "available_in_template"=true
  *          }
  *      }
  * )
