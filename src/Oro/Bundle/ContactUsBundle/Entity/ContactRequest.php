@@ -10,6 +10,8 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
+ * Entity are used to track contact with individuals who are requesting information.
+ *
  * @ORM\Entity
  * @ORM\Table(
  *      name="orocrm_contactus_request",
@@ -36,6 +38,9 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
  *          },
  *          "grid"={
  *              "default"="orcrm-contact-requests-grid"
+ *          },
+ *          "email"={
+ *              "available_in_template"=true
  *          }
  *      }
  * )

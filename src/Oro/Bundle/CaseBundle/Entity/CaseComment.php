@@ -8,6 +8,8 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
+ * Store case comment in database.
+ *
  * @ORM\Entity()
  * @ORM\Table(name="orocrm_case_comment")
  * @ORM\HasLifecycleCallbacks()
@@ -30,6 +32,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *          },
  *          "activity"={
  *              "immutable"=true
+ *          },
+ *          "email"={
+ *              "available_in_template"=true
  *          }
  *      }
  * )

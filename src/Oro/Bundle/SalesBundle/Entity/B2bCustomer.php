@@ -64,8 +64,11 @@ use Oro\Bundle\UserBundle\Entity\User;
  *              "default"="oro-sales-b2bcustomers-grid",
  *              "context"="oro-sales-b2bcustomers-for-context-grid"
  *          },
- *         "tag"={
+ *          "tag"={
  *              "enabled"=true
+ *          },
+ *          "email"={
+ *              "available_in_template"=true
  *          }
  *      }
  * )

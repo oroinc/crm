@@ -64,6 +64,9 @@ use Oro\Bundle\UserBundle\Entity\User;
  *          },
  *          "tag"={
  *              "enabled"=true
+ *          },
+ *          "email"={
+ *              "available_in_template"=true
  *          }
  *      }
  * )

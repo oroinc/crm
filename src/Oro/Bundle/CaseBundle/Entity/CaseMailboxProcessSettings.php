@@ -11,6 +11,8 @@ use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
+ * Store case mailbox settings in a database.
+ *
  * @ORM\Entity
  * @Config(
  *      mode="hidden"
