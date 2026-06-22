@@ -18,10 +18,14 @@ class Method
 {
     #[ORM\Column(name: 'name', type: Types::STRING, length: 32)]
     #[ORM\Id]
-    #[ConfigField(defaultValues: ['importexport' => ['identity' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['identity' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $name = null;
 
     #[ORM\Column(name: 'label', type: Types::STRING, length: 255, unique: true)]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?string $label = null;
 
     /**

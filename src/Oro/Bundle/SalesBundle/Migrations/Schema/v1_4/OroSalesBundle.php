@@ -22,7 +22,10 @@ class OroSalesBundle implements Migration, ExtendExtensionAwareInterface
             'campaign',
             'orocrm_campaign',
             'combined_name',
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
+            [
+                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM],
+                'email' => ['available_in_template' => true],
+            ]
         );
     }
 }

@@ -63,7 +63,17 @@ class OroContactBundleInstaller implements
         $this->addOrocrmContactToContactGrpForeignKeys($schema);
         $this->oroEmailAddressForeignKeys($schema);
 
-        $this->attachmentExtension->addImageRelation($schema, 'orocrm_contact', 'picture', [], 2, 58, 58);
+        $this->attachmentExtension->addImageRelation(
+            $schema,
+            'orocrm_contact',
+            'picture',
+            [
+                'email' => ['available_in_template' => true],
+            ],
+            2,
+            58,
+            58
+        );
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contact');
         $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_contact');
     }

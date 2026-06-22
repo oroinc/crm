@@ -37,26 +37,27 @@ use Oro\Bundle\UserBundle\Entity\User;
     defaultValues: [
         'entity' => [
             'icon' => 'fa-suitcase',
-            'contact_information' => ['email' => [['fieldName' => 'contactInformation']]]
+            'contact_information' => ['email' => [['fieldName' => 'contactInformation']]],
         ],
         'ownership' => [
             'owner_type' => 'USER',
             'owner_field_name' => 'owner',
             'owner_column_name' => 'user_owner_id',
             'organization_field_name' => 'organization',
-            'organization_column_name' => 'organization_id'
+            'organization_column_name' => 'organization_id',
         ],
         'security' => [
             'type' => 'ACL',
             'group_name' => '',
             'category' => 'account_management',
-            'field_acl_supported' => true
+            'field_acl_supported' => true,
         ],
         'merge' => ['enable' => true],
         'form' => ['form_type' => AccountSelectType::class, 'grid_name' => 'accounts-select-grid'],
         'dataaudit' => ['auditable' => true],
         'grid' => ['default' => 'accounts-grid', 'context' => 'accounts-for-context-grid'],
-        'tag' => ['enabled' => true]
+        'tag' => ['enabled' => true],
+        'email' => ['available_in_template' => true],
     ]
 )]
 class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterface
@@ -66,7 +67,7 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ConfigField(defaultValues: ['importexport' => ['order' => 10]])]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 10], 'email' => ['available_in_template' => true]])]
     protected ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -74,8 +75,9 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
         defaultValues: [
             'merge' => ['display' => true],
             'dataaudit' => ['auditable' => true],
-            'importexport' => ['identity' => true, 'order' => 20]
-        ]
+            'importexport' => ['identity' => true, 'order' => 20],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $name = null;
 
@@ -85,8 +87,9 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
         defaultValues: [
             'merge' => ['display' => true],
             'dataaudit' => ['auditable' => true],
-            'importexport' => ['order' => 30, 'short' => true]
-        ]
+            'importexport' => ['order' => 30, 'short' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?User $owner = null;
 
@@ -97,7 +100,11 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
      */
     #[ORM\ManyToMany(targetEntity: Contact::class, inversedBy: 'accounts')]
     #[ORM\JoinTable(name: 'orocrm_account_to_contact')]
-    #[ConfigField(defaultValues: ['merge' => ['display' => true], 'importexport' => ['order' => 50, 'short' => true]])]
+    #[ConfigField(defaultValues: [
+        'merge' => ['display' => true],
+        'importexport' => ['order' => 50, 'short' => true],
+        'email' => ['available_in_template' => true]
+    ])]
     protected ?Collection $contacts = null;
 
     /**
@@ -108,29 +115,40 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
     #[ConfigField(
         defaultValues: [
             'merge' => ['display' => true, 'inverse_display' => false],
-            'importexport' => ['order' => 40, 'short' => true]
-        ]
+            'importexport' => ['order' => 40, 'short' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?Contact $defaultContact = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.created_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.created_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.updated_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.updated_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: Organization::class)]
     #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?OrganizationInterface $organization = null;
 
     #[ORM\ManyToOne(targetEntity: Account::class)]
     #[ORM\JoinColumn(name: 'referred_by_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?Account $referredBy = null;
 
     public function __construct()
@@ -149,7 +167,7 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
     }
 
     /**
-     * @param  int     $id
+     * @param int $id
      * @return Account
      */
     public function setId($id)
@@ -284,7 +302,7 @@ class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterf
     #[\Override]
     public function __toString()
     {
-        return (string) $this->getName();
+        return (string)$this->getName();
     }
 
     #[ORM\PrePersist]
