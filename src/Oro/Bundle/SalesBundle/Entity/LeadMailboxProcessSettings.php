@@ -8,6 +8,8 @@ use Oro\Bundle\SalesBundle\Model\ExtendLeadMailboxProcessSettings;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
+ * Store load mailbox settings in a database.
+ *
  * @ORM\Entity
  */
 class LeadMailboxProcessSettings extends ExtendLeadMailboxProcessSettings
