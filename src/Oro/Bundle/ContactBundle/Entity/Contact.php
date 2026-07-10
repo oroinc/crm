@@ -50,22 +50,23 @@ use Oro\Bundle\UserBundle\Entity\User;
             'icon' => 'fa-users',
             'contact_information' => [
                 'email' => [['fieldName' => 'primaryEmail']],
-                'phone' => [['fieldName' => 'primaryPhone']]
-            ]
+                'phone' => [['fieldName' => 'primaryPhone']],
+            ],
         ],
         'ownership' => [
             'owner_type' => 'USER',
             'owner_field_name' => 'owner',
             'owner_column_name' => 'user_owner_id',
             'organization_field_name' => 'organization',
-            'organization_column_name' => 'organization_id'
+            'organization_column_name' => 'organization_id',
         ],
         'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'account_management'],
         'form' => ['form_type' => ContactSelectType::class, 'grid_name' => 'contacts-select-grid'],
         'dataaudit' => ['auditable' => true],
         'grid' => ['default' => 'contacts-grid', 'context' => 'contacts-for-context-grid'],
         'tag' => ['enabled' => true],
-        'merge' => ['enable' => true]
+        'merge' => ['enable' => true],
+        'email' => ['available_in_template' => true],
     ]
 )]
 class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInterface
@@ -78,7 +79,7 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ConfigField(defaultValues: ['importexport' => ['order' => 10]])]
+    #[ConfigField(defaultValues: ['importexport' => ['order' => 10], 'email' => ['available_in_template' => true]])]
     protected ?int $id = null;
 
     #[ORM\Column(name: 'name_prefix', type: Types::STRING, length: 255, nullable: true)]
@@ -86,8 +87,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 20],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $namePrefix = null;
 
@@ -96,8 +98,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['identity' => true, 'order' => 30],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $firstName = null;
 
@@ -106,8 +109,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 40],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $middleName = null;
 
@@ -116,8 +120,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['identity' => true, 'order' => 50],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $lastName = null;
 
@@ -126,8 +131,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 60],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $nameSuffix = null;
 
@@ -136,8 +142,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 70],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $gender = null;
 
@@ -146,8 +153,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 160],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $birthday = null;
 
@@ -156,8 +164,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 80],
-            'merge' => ['display' => true, 'autoescape' => false]
-        ]
+            'merge' => ['display' => true, 'autoescape' => false],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $description = null;
 
@@ -167,8 +176,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 170],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?Source $source = null;
 
@@ -178,8 +188,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 180],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?Method $method = null;
 
@@ -189,8 +200,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 190, 'short' => true],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?User $owner = null;
 
@@ -200,8 +212,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 200, 'short' => true],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?User $assignedTo = null;
 
@@ -211,8 +224,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['excluded' => true],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?Contact $reportsTo = null;
 
@@ -221,14 +235,19 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 90],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $jobTitle = null;
 
     #[ORM\Column(name: 'email', type: Types::STRING, length: 255, nullable: true)]
     #[ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true], 'entity' => ['contact_information' => 'email']]
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'entity' => ['contact_information' => 'email'],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $email = null;
 
@@ -241,7 +260,8 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'importexport' => ['order' => 210],
             'dataaudit' => ['auditable' => true],
-            'merge' => ['display' => true]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
         ]
     )]
     protected ?Collection $emails = null;
@@ -254,7 +274,8 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 220],
-            'merge' => ['display' => true]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
         ]
     )]
     protected ?Collection $phones = null;
@@ -264,8 +285,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 100],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $fax = null;
 
@@ -274,8 +296,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 110],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $skype = null;
 
@@ -284,8 +307,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 120],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $twitter = null;
 
@@ -294,8 +318,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 130],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $facebook = null;
 
@@ -304,8 +329,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 140],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $googlePlus = null;
 
@@ -314,8 +340,9 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'dataaudit' => ['auditable' => true],
             'importexport' => ['order' => 150],
-            'merge' => ['display' => true]
-        ]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?string $linkedIn = null;
 
@@ -328,7 +355,8 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
         defaultValues: [
             'importexport' => ['full' => true, 'order' => 250],
             'dataaudit' => ['auditable' => true],
-            'merge' => ['display' => true]
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
         ]
     )]
     protected ?Collection $addresses = null;
@@ -341,7 +369,11 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
     #[ORM\JoinColumn(name: 'contact_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'contact_group_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ConfigField(
-        defaultValues: ['importexport' => ['order' => 230, 'short' => true], 'merge' => ['display' => true]]
+        defaultValues: [
+            'importexport' => ['order' => 230, 'short' => true],
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ]
     )]
     protected ?Collection $groups = null;
 
@@ -351,34 +383,53 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
     #[ORM\ManyToMany(targetEntity: Account::class, mappedBy: 'contacts')]
     #[ORM\JoinTable(name: 'orocrm_account_to_contact')]
     #[ConfigField(
-        defaultValues: ['importexport' => ['order' => 240, 'short' => true], 'merge' => ['display' => true]]
+        defaultValues: [
+            'importexport' => ['order' => 240, 'short' => true],
+            'merge' => ['display' => true],
+            'email' => ['available_in_template' => true],
+        ]
     )]
     protected ?Collection $accounts = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'created_by_user_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['excluded' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?User $createdBy = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'updated_by_user_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    #[ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    #[ConfigField(defaultValues: [
+        'importexport' => ['excluded' => true],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?User $updatedBy = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.created_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.created_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[ConfigField(
-        defaultValues: ['entity' => ['label' => 'oro.ui.updated_at'], 'importexport' => ['excluded' => true]]
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.updated_at'],
+            'importexport' => ['excluded' => true],
+            'email' => ['available_in_template' => true],
+        ],
     )]
     protected ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: Organization::class)]
     #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?OrganizationInterface $organization = null;
 
     /**
@@ -392,10 +443,10 @@ class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInt
     {
         parent::__construct();
 
-        $this->groups   = new ArrayCollection();
+        $this->groups = new ArrayCollection();
         $this->accounts = new ArrayCollection();
-        $this->emails   = new ArrayCollection();
-        $this->phones   = new ArrayCollection();
+        $this->emails = new ArrayCollection();
+        $this->phones = new ArrayCollection();
         $this->defaultInAccounts = new ArrayCollection();
     }
 
