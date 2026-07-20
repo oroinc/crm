@@ -8,6 +8,7 @@ use Extend\Entity\Autocomplete\OroCaseBundle_Entity_CaseComment;
 use Oro\Bundle\CommentBundle\Entity\BaseComment;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
@@ -30,7 +31,8 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
             'organization_column_name' => 'organization_id'
         ],
         'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'account_management'],
-        'activity' => ['immutable' => true]
+        'activity' => ['immutable' => true],
+        'email' => ['available_in_template' => true],
     ]
 )]
 class CaseComment extends BaseComment implements ExtendEntityInterface
@@ -39,13 +41,16 @@ class CaseComment extends BaseComment implements ExtendEntityInterface
 
     #[ORM\ManyToOne(targetEntity: CaseEntity::class, cascade: ['persist'], inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?CaseEntity $case = null;
 
     #[ORM\ManyToOne(targetEntity: Contact::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'contact_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?Contact $contact = null;
 
     #[ORM\Column(name: 'public', type: Types::BOOLEAN, options: ['default' => false])]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?bool $public = false;
 
     /**

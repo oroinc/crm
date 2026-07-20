@@ -22,30 +22,44 @@ abstract class AbstractContactRequest implements
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?int $id = null;
 
     #[ORM\Column(name: 'first_name', type: Types::STRING, length: 100)]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?string $firstName = null;
 
     #[ORM\Column(name: 'last_name', type: Types::STRING, length: 100)]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?string $lastName = null;
 
     #[ORM\Column(name: 'email_address', type: Types::STRING, length: 100, nullable: true)]
-    #[ConfigField(defaultValues: ['entity' => ['contact_information' => 'email']])]
+    #[ConfigField(defaultValues: [
+        'entity' => ['contact_information' => 'email'],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?string $emailAddress = null;
 
     #[ORM\Column(name: 'phone', type: Types::STRING, length: 100, nullable: true)]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?string $phone = null;
 
     #[ORM\Column(name: 'comment', type: Types::TEXT)]
+    #[ConfigField(defaultValues: ['email' => ['available_in_template' => true]])]
     protected ?string $comment = null;
 
     #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
-    #[ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.created_at']])]
+    #[ConfigField(defaultValues: [
+        'entity' => ['label' => 'oro.ui.created_at'],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE)]
-    #[ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.updated_at']])]
+    #[ConfigField(defaultValues: [
+        'entity' => ['label' => 'oro.ui.updated_at'],
+        'email' => ['available_in_template' => true],
+    ])]
     protected ?\DateTimeInterface $updatedAt = null;
 
     /**

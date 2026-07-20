@@ -53,7 +53,7 @@ class OroSalesBundleInstaller implements
     #[\Override]
     public function getMigrationVersion(): string
     {
-        return 'v1_45';
+        return 'v1_46';
     }
 
     #[\Override]
@@ -159,7 +159,9 @@ class OroSalesBundleInstaller implements
         $table->addColumn('external_id', 'string', ['length' => 36, 'notnull' => false, OroOptions::KEY => [
             ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
             'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
+            'form' => ['is_enabled' => false],
+            'view' => ['is_displayable' => false],
             'importexport' => ['excluded' => true],
             'dataaudit' => ['auditable' => true]
         ]]);
@@ -232,13 +234,16 @@ class OroSalesBundleInstaller implements
                     'is_visible' => DatagridScope::IS_VISIBLE_FALSE,
                 ],
                 'merge' => ['inverse_display' => false],
+                'email' => ['available_in_template' => true],
             ]
         );
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('external_id', 'string', ['length' => 36, 'notnull' => false, OroOptions::KEY => [
             ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
             'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
+            'form' => ['is_enabled' => false],
+            'view' => ['is_displayable' => false],
             'importexport' => ['excluded' => true],
             'dataaudit' => ['auditable' => true]
         ]]);
@@ -621,7 +626,8 @@ class OroSalesBundleInstaller implements
                 'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
                 'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
                 'dataaudit' => ['auditable' => true],
-                'importexport' => ['order' => 90, 'short' => true]
+                'importexport' => ['order' => 90, 'short' => true],
+                'email' => ['available_in_template' => true],
             ]
         );
 
@@ -649,10 +655,11 @@ class OroSalesBundleInstaller implements
             false,
             false,
             [
-               'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
-               'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
-               'dataaudit' => ['auditable' => true],
-               'importexport' => ['order' => 90, 'short' => true]
+                'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
+                'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
+                'dataaudit' => ['auditable' => true],
+                'importexport' => ['order' => 90, 'short' => true],
+                'email' => ['available_in_template' => true],
             ]
         );
         $enumOptionIds = [

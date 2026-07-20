@@ -36,7 +36,7 @@ class OroContactBundleInstaller implements
     #[\Override]
     public function getMigrationVersion(): string
     {
-        return 'v1_19';
+        return 'v1_20';
     }
 
     #[\Override]
@@ -63,7 +63,17 @@ class OroContactBundleInstaller implements
         $this->addOrocrmContactToContactGrpForeignKeys($schema);
         $this->oroEmailAddressForeignKeys($schema);
 
-        $this->attachmentExtension->addImageRelation($schema, 'orocrm_contact', 'picture', [], 2, 58, 58);
+        $this->attachmentExtension->addImageRelation(
+            $schema,
+            'orocrm_contact',
+            'picture',
+            [
+                'email' => ['available_in_template' => true],
+            ],
+            2,
+            58,
+            58
+        );
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contact');
         $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_contact');
     }
@@ -107,7 +117,9 @@ class OroContactBundleInstaller implements
         $table->addColumn('external_id', 'string', ['length' => 36, 'notnull' => false, OroOptions::KEY => [
             ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
             'extend' => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
+            'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
+            'form' => ['is_enabled' => false],
+            'view' => ['is_displayable' => false],
             'importexport' => ['excluded' => true],
             'dataaudit' => ['auditable' => true]
         ]]);
