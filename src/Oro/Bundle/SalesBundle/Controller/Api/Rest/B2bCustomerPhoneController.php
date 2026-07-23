@@ -25,7 +25,7 @@ class B2bCustomerPhoneController extends RestController
      * @param int $customerId
      * @return Response
      */
-    #[AclAncestor('oro_b2bcustomer_view')]
+    #[AclAncestor('oro_sales_b2bcustomer_view')]
     public function cgetAction(int $customerId)
     {
         /** @var B2bCustomer $customer */
@@ -56,7 +56,7 @@ class B2bCustomerPhoneController extends RestController
      * )
      * @return Response
      */
-    #[AclAncestor('oro_b2bcustomer_view')]
+    #[AclAncestor('oro_sales_b2bcustomer_view')]
     public function getPrimaryAction(int $customerId)
     {
         /** @var B2bCustomer $customer */
