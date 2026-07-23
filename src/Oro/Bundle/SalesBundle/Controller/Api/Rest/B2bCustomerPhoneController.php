@@ -22,7 +22,7 @@ class B2bCustomerPhoneController extends RestController
      *      description="Get all phones items",
      *      resource=true
      * )
-     * @AclAncestor("oro_b2bcustomer_view")
+     * @AclAncestor("oro_sales_b2bcustomer_view")
      * @param int $customerId
      * @return Response
      */
@@ -54,7 +54,7 @@ class B2bCustomerPhoneController extends RestController
      *      description="Get customer primary phone",
      *      resource=true
      * )
-     * @AclAncestor("oro_b2bcustomer_view")
+     * @AclAncestor("oro_sales_b2bcustomer_view")
      * @return Response
      */
     public function getPrimaryAction(int $customerId)
