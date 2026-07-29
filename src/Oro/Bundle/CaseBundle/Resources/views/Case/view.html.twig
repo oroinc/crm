@@ -58,55 +58,57 @@
     {% import '@OroUI/macros.html.twig' as UI %}
 
     {%- set caseInformation -%}
-        <div class="row-fluid form-horizontal">
-            <div class="responsive-block">
-                {{ UI.renderProperty('oro.case.caseentity.subject.label'|trans, entity.subject) }}
-                {{ UI.renderSwitchableHtmlProperty('oro.case.caseentity.description.label'|trans, entity.description) }}
-                {{ UI.renderSwitchableHtmlProperty('oro.case.caseentity.resolution.label'|trans, entity.resolution) }}
-                {{ UI.renderProperty('oro.case.caseentity.source.label'|trans, entity.source) }}
-                {{ UI.renderProperty('oro.case.caseentity.status.label'|trans, entity.status) }}
-                {{ UI.renderProperty('oro.case.caseentity.priority.label'|trans, entity.priority) }}
-                {{ UI.renderProperty('oro.case.caseentity.reported_at.label'|trans, entity.reportedAt|oro_format_datetime) }}
-                {% if entity.closedAt is not empty %}
-                    {{ UI.renderProperty('oro.case.caseentity.closed_at.label'|trans, entity.closedAt|oro_format_datetime) }}
-                {% endif %}
+        <div class="responsive-with-extra-block">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    {{ UI.renderProperty('oro.case.caseentity.subject.label'|trans, entity.subject) }}
+                    {{ UI.renderSwitchableHtmlProperty('oro.case.caseentity.description.label'|trans, entity.description) }}
+                    {{ UI.renderSwitchableHtmlProperty('oro.case.caseentity.resolution.label'|trans, entity.resolution) }}
+                    {{ UI.renderProperty('oro.case.caseentity.source.label'|trans, entity.source) }}
+                    {{ UI.renderProperty('oro.case.caseentity.status.label'|trans, entity.status) }}
+                    {{ UI.renderProperty('oro.case.caseentity.priority.label'|trans, entity.priority) }}
+                    {{ UI.renderProperty('oro.case.caseentity.reported_at.label'|trans, entity.reportedAt|oro_format_datetime) }}
+                    {% if entity.closedAt is not empty %}
+                        {{ UI.renderProperty('oro.case.caseentity.closed_at.label'|trans, entity.closedAt|oro_format_datetime) }}
+                    {% endif %}
 
-                {%- set owner -%}
-                    {%- if entity.owner -%}
-                        {{ U.render_user_name(entity.owner) }}
-                        {{ U.user_business_unit_name(entity.owner) }}
-                    {%- endif -%}
-                {%- endset -%}
-                {{ UI.renderHtmlProperty('oro.case.caseentity.owner.label'|trans, owner) }}
+                    {%- set owner -%}
+                        {%- if entity.owner -%}
+                            {{ U.render_user_name(entity.owner) }}
+                            {{ U.user_business_unit_name(entity.owner) }}
+                        {%- endif -%}
+                    {%- endset -%}
+                    {{ UI.renderHtmlProperty('oro.case.caseentity.owner.label'|trans, owner) }}
 
-                {%- set assignedTo -%}
-                    {%- if entity.assignedTo -%}
-                        {{ U.render_user_name(entity.assignedTo) }}
-                        {{ U.user_business_unit_name(entity.assignedTo) }}
-                    {%- endif -%}
-                {%- endset -%}
-                {{ UI.renderHtmlProperty('oro.case.caseentity.assigned_to.label'|trans, assignedTo) }}
+                    {%- set assignedTo -%}
+                        {%- if entity.assignedTo -%}
+                            {{ U.render_user_name(entity.assignedTo) }}
+                            {{ U.user_business_unit_name(entity.assignedTo) }}
+                        {%- endif -%}
+                    {%- endset -%}
+                    {{ UI.renderHtmlProperty('oro.case.caseentity.assigned_to.label'|trans, assignedTo) }}
 
-                {{ UI.renderHtmlProperty(
-                    'oro.case.caseentity.related_contact.label'|trans,
-                    UI.entityViewLink(entity.relatedContact, entity.relatedContact|oro_format_name, 'oro_contact_view')
-                ) }}
+                    {{ UI.renderHtmlProperty(
+                        'oro.case.caseentity.related_contact.label'|trans,
+                        UI.entityViewLink(entity.relatedContact, entity.relatedContact|oro_format_name, 'oro_contact_view')
+                    ) }}
 
-                {%- set relatedAccount -%}
-                    {%- if entity.relatedAccount -%}
-                        {% if is_granted('oro_account_view') %}
-                            <a href="{{ path('oro_account_view', {'id': entity.relatedAccount.id}) }}">
-                                {{ UI.renderEntityViewLabel(entity.relatedAccount, 'name', 'oro.account.entity_label') }}
-                            </a>
-                        {% else %}
-                            {{ UI.renderEntityViewLabel(entity.relatedAccount, 'name') }}
-                        {% endif %}
-                    {%- endif -%}
-                {%- endset -%}
-                {{ UI.renderHtmlProperty('oro.case.caseentity.related_account.label'|trans, relatedAccount) }}
-            </div>
-            <div class="responsive-block">
-                {{ entityConfig.renderDynamicFields(entity) }}
+                    {%- set relatedAccount -%}
+                        {%- if entity.relatedAccount -%}
+                            {% if is_granted('oro_account_view') %}
+                                <a href="{{ path('oro_account_view', {'id': entity.relatedAccount.id}) }}">
+                                    {{ UI.renderEntityViewLabel(entity.relatedAccount, 'name', 'oro.account.entity_label') }}
+                                </a>
+                            {% else %}
+                                {{ UI.renderEntityViewLabel(entity.relatedAccount, 'name') }}
+                            {% endif %}
+                        {%- endif -%}
+                    {%- endset -%}
+                    {{ UI.renderHtmlProperty('oro.case.caseentity.related_account.label'|trans, relatedAccount) }}
+                </div>
+                <div class="responsive-block">
+                    {{ entityConfig.renderDynamicFields(entity) }}
+                </div>
             </div>
         </div>
     {%- endset -%}
@@ -114,6 +116,9 @@
     {% set dataBlocks = [
         {
             'title': 'oro.case.block.general'|trans,
+            'content_attr': {
+                'class': 'row-fluid-divider'
+            },
             'subblocks': [
                 {'data' : [caseInformation]}
             ]

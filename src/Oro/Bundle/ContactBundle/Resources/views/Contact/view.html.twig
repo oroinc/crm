@@ -54,7 +54,8 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'url': path('oro_contact_info', {id: entity.id}),
-            'title': 'Contact Information'|trans
+            'title': 'Contact Information'|trans,
+            'widgetContainerAttributes': {'class': 'always-border-visible-for-last-child'}
         }) }}
     {% endset %}
 
