@@ -68,14 +68,13 @@ Scenario: Cancel edit
     | Emails     | [fake@gmail.com] |
     | Phones     | [+0000000000000] |
   When click "Cancel"
-  Then I should see Charlie Sheen in grid with following data:
-    | Email   | charlie@gmail.com   |
-    | Phone   | +1 415-731-9375     |
-    | Country | Ukraine             |
-    | State   | Kharkivs'ka Oblast' |
+  Then page has "Charlie Sheen" header
+  And Phone "+1 415-731-9375" should be primary
+  And email "charlie@gmail.com" should be primary
+  And two addresses should be in page
+  And Ukraine address must be primary
 
 Scenario: Change primary address
-  And I click view Charlie Sheen in grid
   And click edit LOS ANGELES address
   And check "Primary"
   When I click "Save"
