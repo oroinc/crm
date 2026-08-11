@@ -19,8 +19,14 @@
     padding-top: 4px;
 }
 
-.entities-component .grid-container .grid .action-cell {
-    text-align: right;
+.entities-component .grid-container {
+    .grid .action-cell {
+        text-align: right;
+    }
+
+    .action + .action {
+        margin-left: $content-padding-small;
+    }
 }
 
 .orocrm-channel-datasource-field {

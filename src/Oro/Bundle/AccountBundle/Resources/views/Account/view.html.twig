@@ -49,6 +49,7 @@
     {% set accountInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
+            'contentClasses': ['account-information-view'],
             'title': 'oro.account.widgets.account_information'|trans,
             'url': path('oro_account_widget_info', {id: entity.id})
         }) }}

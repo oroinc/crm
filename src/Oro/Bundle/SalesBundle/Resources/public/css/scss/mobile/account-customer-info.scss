@@ -16,7 +16,7 @@
             > .dropdown {
                 /* stylelint-disable selector-max-compound-selectors */
                 &.active > a {
-                    border-bottom: 1px solid $additional-lighten;
+                    border-bottom: 1px solid $additional-light;
                 }
 
                 > .dropdown-menu.pull-right {

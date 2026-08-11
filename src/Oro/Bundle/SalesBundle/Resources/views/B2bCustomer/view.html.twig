@@ -49,7 +49,8 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'title': 'oro.sales.widgets.b2bcustomer_information'|trans,
-            'url': path('oro_sales_b2bcustomer_widget_info', {id: entity.id})
+            'url': path('oro_sales_b2bcustomer_widget_info', {id: entity.id}),
+            'widgetContainerAttributes': {'class': 'responsive-with-extra-block'}
         }) }}
     {% endset %}
 
@@ -57,6 +58,9 @@
 
     {% set dataBlocks = [{
         'title': 'oro.sales.sections.general'|trans,
+        'content_attr': {
+            'class': 'row-fluid-divider'
+        },
         'subblocks': generalSectionBlocks
     }] %}
 
