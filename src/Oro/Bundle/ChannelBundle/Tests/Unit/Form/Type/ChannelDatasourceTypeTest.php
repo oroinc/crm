@@ -15,6 +15,7 @@ use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\FormBundle\Autocomplete\SearchHandlerInterface;
 use Oro\Bundle\FormBundle\Autocomplete\SearchRegistry;
+use Oro\Bundle\FormBundle\Form\DataTransformer\EntitySelectOrCreateDataTransformerFactory;
 use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Oro\Bundle\FormBundle\Form\Type\OroJquerySelect2HiddenType;
 use Oro\Bundle\FormBundle\Tests\Unit\Stub\TooltipFormExtensionStub;
@@ -28,6 +29,7 @@ use Oro\Bundle\IntegrationBundle\Provider\ChannelInterface;
 use Oro\Bundle\IntegrationBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\TranslationBundle\Translation\IdentityTranslator;
 use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
@@ -111,7 +113,11 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                         $this->createMock(FeatureChecker::class),
                         $this->createMock(ConfigManager::class),
                         $this->doctrine,
-                        $searchRegistry
+                        $searchRegistry,
+                        new EntitySelectOrCreateDataTransformerFactory(
+                            $this->doctrine,
+                            $this->createMock(AclHelper::class)
+                        )
                     ),
                     new OroJquerySelect2HiddenType(
                         $this->doctrine,
