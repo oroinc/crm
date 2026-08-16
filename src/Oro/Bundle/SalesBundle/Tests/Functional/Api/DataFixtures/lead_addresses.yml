@@ -2,10 +2,20 @@ dependencies:
   - Oro\Bundle\AddressBundle\Tests\Functional\DataFixtures\LoadCountriesAndRegions
   - Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadLeadsData
 
+Oro\Bundle\OrganizationBundle\Entity\Organization:
+    another_organization:
+        name: 'Another Organization'
+        enabled: true
+        users: ['@user']
+
 Oro\Bundle\SalesBundle\Entity\Lead:
     another_lead:
         name: Another Lead
         organization: '@organization'
+        owner: '@user'
+    lead_from_another_org:
+        name: Lead From Another Organization
+        organization: '@another_organization'
         owner: '@user'
 
 Oro\Bundle\SalesBundle\Entity\LeadAddress:
@@ -68,6 +78,15 @@ Oro\Bundle\SalesBundle\Entity\LeadAddress:
         primary: false
         label: 'Another Lead Address 2'
         street: 'Street 2'
+        city: 'Los Angeles'
+        postalCode: '90001'
+        country: '@country_usa'
+        region: '@region_usa_california'
+    lead_address_for_lead_from_another_org:
+        owner: '@lead_from_another_org'
+        primary: true
+        label: 'Lead Address For Lead From Another Organization'
+        street: 'Street 1'
         city: 'Los Angeles'
         postalCode: '90001'
         country: '@country_usa'
