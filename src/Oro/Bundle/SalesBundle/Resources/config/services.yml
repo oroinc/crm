@@ -1,4 +1,11 @@
 services:
+    oro_sales.access_rule.lead_address:
+        class: Oro\Bundle\SecurityBundle\AccessRule\AssociationAwareAccessRule
+        arguments:
+            - 'owner'
+        tags:
+            - { name: oro_security.access_rule, entityClass: Oro\Bundle\SalesBundle\Entity\LeadAddress }
+
     oro_sales.opportunity.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         public: true
