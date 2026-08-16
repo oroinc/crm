@@ -8,6 +8,7 @@ use Oro\Bundle\AddressBundle\Tests\Functional\Api\RestJsonApi\UnchangeableAddres
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadAddress;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @dbIsolationPerTest
@@ -40,12 +41,7 @@ class LeadAddressTest extends RestJsonApiTestCase
         $this->loadFixtures(['@OroSalesBundle/Tests/Functional/Api/DataFixtures/lead_addresses.yml']);
     }
 
-    /**
-     * @param LeadAddress $address
-     *
-     * @return Lead
-     */
-    private function getOwner(LeadAddress $address)
+    private function getOwner(LeadAddress $address): Lead
     {
         return $address->getOwner();
     }
@@ -96,6 +92,25 @@ class LeadAddressTest extends RestJsonApiTestCase
         );
 
         $this->assertResponseContains('get_lead_address.yml', $response);
+    }
+
+    public function testTryToGetForLeadFromAnotherOrganization()
+    {
+        $response = $this->get(
+            ['entity' => self::ENTITY_TYPE, 'id' => '<toString(@lead_address_for_lead_from_another_org->id)>'],
+            [],
+            [],
+            false
+        );
+
+        $this->assertResponseValidationError(
+            [
+                'title' => 'access denied exception',
+                'detail' => 'No access to the entity.'
+            ],
+            $response,
+            Response::HTTP_FORBIDDEN
+        );
     }
 
     public function testCreate()
@@ -207,6 +222,33 @@ class LeadAddressTest extends RestJsonApiTestCase
         self::assertEquals('Updated Address', $address->getLabel());
     }
 
+    public function testTryToUpdateForLeadFromAnotherOrganization()
+    {
+        $response = $this->patch(
+            ['entity' => self::ENTITY_TYPE, 'id' => '<toString(@lead_address_for_lead_from_another_org->id)>'],
+            [
+                'data' => [
+                    'type' => self::ENTITY_TYPE,
+                    'id' => '<toString(@lead_address_for_lead_from_another_org->id)>',
+                    'attributes' => [
+                        'label' => 'Updated Address'
+                    ]
+                ]
+            ],
+            [],
+            false
+        );
+
+        $this->assertResponseValidationError(
+            [
+                'title' => 'access denied exception',
+                'detail' => 'No access to the entity.'
+            ],
+            $response,
+            Response::HTTP_FORBIDDEN
+        );
+    }
+
     public function testDelete()
     {
         $addressId = $this->getReference('lead_address2')->getId();
@@ -218,6 +260,25 @@ class LeadAddressTest extends RestJsonApiTestCase
         $address = $this->getEntityManager()
             ->find(self::ENTITY_CLASS, $addressId);
         self::assertTrue(null === $address);
+    }
+
+    public function testTryToDeleteForLeadFromAnotherOrganization()
+    {
+        $response = $this->delete(
+            ['entity' => self::ENTITY_TYPE, 'id' => '<toString(@lead_address_for_lead_from_another_org->id)>'],
+            [],
+            [],
+            false
+        );
+
+        $this->assertResponseValidationError(
+            [
+                'title' => 'access denied exception',
+                'detail' => 'No access to the entity.'
+            ],
+            $response,
+            Response::HTTP_FORBIDDEN
+        );
     }
 
     public function testDeleteList()
