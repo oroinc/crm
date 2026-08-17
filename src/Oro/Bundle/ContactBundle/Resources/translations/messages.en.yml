@@ -199,7 +199,7 @@ oro:
                 description:     The first line of the street address. Usually contains the street name and the building number.
             street2:
                 label:           Street 2
-                description:     The second line of the street address. May contain the appartment number, P.O. box, building name, etc.
+                description:     The second line of the street address. May contain the apartment number, P.O. box, building name, etc.
             types:
                 label:           Types
                 description:     The address types (whether it is a billing address, shipping address, or both) configured for the contact address.

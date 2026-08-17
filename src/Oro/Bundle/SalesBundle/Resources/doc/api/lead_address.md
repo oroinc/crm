@@ -194,23 +194,6 @@ Retrieve a record of the lead who is the owner of a specific lead address record
 
 Retrieve the ID of the lead who is the owner of a specific lead address record.
 
-#### update_relationship
-
-Replace the owner of a specific lead address record.
-
-{@request:json_api}
-Example:
-
-```JSON
-{
-  "data": {
-    "type": "leads",
-    "id": "1"
-  }
-}
-```
-{@/request}
-
 ### region
 
 #### get_subresource
