@@ -66,6 +66,7 @@ use Oro\Bundle\UserBundle\Entity\User;
         'grid' => ['default' => 'sales-lead-grid', 'context' => 'sales-lead-for-context-grid'],
         'tag' => ['enabled' => true, 'enableDefaultRendering' => false],
         'email' => ['available_in_template' => true],
+        'integration' => ['webhook_accessible' => true],
     ]
 )]
 class Lead implements
