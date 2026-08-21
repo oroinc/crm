@@ -67,6 +67,7 @@ use Oro\Bundle\UserBundle\Entity\User;
         'tag' => ['enabled' => true],
         'merge' => ['enable' => true],
         'email' => ['available_in_template' => true],
+        'integration' => ['webhook_accessible' => true],
     ]
 )]
 class Contact extends BasePerson implements EmailOwnerInterface, ExtendEntityInterface
