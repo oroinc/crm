@@ -38,6 +38,7 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
         'security' => ['type' => 'ACL', 'permissions' => 'All', 'group_name' => '', 'category' => 'account_management'],
         'grid' => ['default' => 'orcrm-contact-requests-grid'],
         'email' => ['available_in_template' => true],
+        'integration' => ['webhook_accessible' => true],
     ]
 )]
 class ContactRequest extends AbstractContactRequest implements ExtendEntityInterface
