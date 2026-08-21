@@ -57,6 +57,7 @@ use Oro\Bundle\UserBundle\Entity\User;
         'grid' => ['default' => 'sales-opportunity-grid', 'context' => 'sales-opportunity-for-context-grid'],
         'tag' => ['enabled' => true, 'enableDefaultRendering' => false],
         'email' => ['available_in_template' => true],
+        'integration' => ['webhook_accessible' => true],
     ]
 )]
 class Opportunity implements

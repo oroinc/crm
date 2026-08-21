@@ -53,7 +53,7 @@ class OroSalesBundleInstaller implements
     #[\Override]
     public function getMigrationVersion(): string
     {
-        return 'v1_46';
+        return 'v1_47';
     }
 
     #[\Override]
