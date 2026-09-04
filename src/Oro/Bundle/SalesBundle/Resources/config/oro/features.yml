@@ -30,6 +30,14 @@ features:
             - Oro\Bundle\SalesBundle\Entity\LeadAddress
             - Oro\Bundle\SalesBundle\Entity\LeadEmail
             - Oro\Bundle\SalesBundle\Entity\LeadPhone
+        datagrids:
+            - base-sales-b2bcustomer-leads-grid
+            - dashboard-my-sales-lead-grid
+            - oro_reportcrm-leads-by_date
+            - sales-b2bcustomer-leads-grid
+            - sales-customers-leads-grid
+            - sales-lead-for-context-grid
+            - sales-lead-grid
         placeholder_items:
             - leads_launchpad
         dashboard_widgets:
@@ -63,6 +71,20 @@ features:
         entities:
             - Oro\Bundle\SalesBundle\Entity\Opportunity
             - Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
+        datagrids:
+            - base-sales-b2bcustomer-opportunities-grid
+            - dashboard-my-sales-opportunity-grid
+            - oro_reportcrm-accounts-by_opportunities
+            - oro_reportcrm-accounts-life_time_value
+            - oro_reportcrm-opportunities-by_status
+            - oro_reportcrm-opportunities-total_forecast
+            - oro_reportcrm-opportunities-won_by_period
+            - sales-b2bcustomer-opportunities-grid
+            - sales-customers-opportunities-alternate-grid
+            - sales-customers-opportunities-grid
+            - sales-opportunity-by-account-grid
+            - sales-opportunity-for-context-grid
+            - sales-opportunity-grid
         configuration:
             - opportunity_status_probabilities
             - display_settings
