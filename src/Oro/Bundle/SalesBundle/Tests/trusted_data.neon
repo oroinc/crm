@@ -8,6 +8,9 @@ trusted_data:
         Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager:
             getCustomerTargetField: true
     variables:
+        Oro\Bundle\SalesBundle\Migrations\Schema\v1_31\Query\MigrateB2bCustomersQuery:
+            doExecute:
+                insertQuery: true
         Oro\Bundle\SalesBundle\Api\Processor\AddAccountCustomerAssociations:
             addAccountCustomersAssociation:
                 customerAssociationName: true
