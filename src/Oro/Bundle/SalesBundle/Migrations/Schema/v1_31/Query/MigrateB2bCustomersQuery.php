@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_31\Query;
 
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
@@ -70,9 +71,22 @@ class MigrateB2bCustomersQuery extends ParametrizedMigrationQuery
                 $types['serialized_data'] = 'string';
             }
 
-            $this->connection->insert('orocrm_account', $params, $types);
+            $columns = array_keys($params);
+            $insertQuery = sprintf(
+                'INSERT INTO orocrm_account (%s) VALUES (%s)',
+                implode(', ', $columns),
+                implode(', ', array_map(static fn (string $column): string => ':' . $column, $columns))
+            );
 
-            $accountId = $this->connection->lastInsertId();
+            if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+                // lastInsertId() relies on LASTVAL() on PostgreSQL, which returns an ID of another sequence
+                // when a trigger on the table inserts into other tables (e.g. SymmetricDS replication).
+                $accountId = $this->connection->fetchOne(sprintf('%s RETURNING id', $insertQuery), $params, $types);
+            } else {
+                // MySQL is not affected: LAST_INSERT_ID() is restored when a trigger ends.
+                $this->connection->executeStatement($insertQuery, $params, $types);
+                $accountId = $this->connection->lastInsertId();
+            }
 
             $query = 'UPDATE orocrm_sales_b2bcustomer SET account_id = :account_id WHERE id = :id';
             $this->connection->executeQuery(
