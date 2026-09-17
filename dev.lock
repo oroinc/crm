@@ -5205,7 +5205,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "f25c2c009d5413925839c1f53107dcc091ae84c8"
+                "reference": "db48e223676915b5110995299ec4539579ae8a55"
             },
             "require": {
                 "ass/xmlsecurity": "1.1.1",
@@ -5488,7 +5488,6 @@
                     "Oro\\Bundle\\ViewSwitcherBundle\\": "src/Oro/Bundle/ViewSwitcherBundle",
                     "Oro\\Bundle\\WindowsBundle\\": "src/Oro/Bundle/WindowsBundle",
                     "Oro\\Bundle\\WorkflowBundle\\": "src/Oro/Bundle/WorkflowBundle",
-                    "Oro\\Bundle\\WsseAuthenticationBundle\\": "src/Oro/Bundle/WsseAuthenticationBundle",
                     "Oro\\Bundle\\PdfGeneratorBundle\\": "src/Oro/Bundle/PdfGeneratorBundle",
                     "Oro\\Component\\Action\\": "src/Oro/Component/Action",
                     "Oro\\Component\\ChainProcessor\\": "src/Oro/Component/ChainProcessor",
@@ -5505,7 +5504,6 @@
                     "Oro\\Component\\Log\\": "src/Oro/Component/Log",
                     "Oro\\Component\\Math\\": "src/Oro/Component/Math",
                     "Oro\\Component\\MessageQueue\\": "src/Oro/Component/MessageQueue",
-                    "Oro\\Component\\PropertyAccess\\": "src/Oro/Component/PropertyAccess",
                     "Oro\\Component\\PhpUtils\\": "src/Oro/Component/PhpUtils",
                     "Oro\\Component\\Routing\\": "src/Oro/Component/Routing",
                     "Oro\\Component\\Testing\\": "src/Oro/Component/Testing",
