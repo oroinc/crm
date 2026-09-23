@@ -1,5 +1,4 @@
 @ticket-BB-19935
-@regression
 @fixture-OroSalesBundle:OpportunityWithCreatedAtFixture.yml
 
 Feature: Opportunity date time filter

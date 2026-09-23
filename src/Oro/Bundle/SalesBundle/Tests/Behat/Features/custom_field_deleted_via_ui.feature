@@ -1,4 +1,3 @@
-@regression
 @fix-BAP-15111
 @fixture-OroSalesBundle:OpportunityFixture.yml
 Feature: Custom field deleted via UI
