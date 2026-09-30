@@ -13,7 +13,7 @@ Feature: Opportunity won report
       | Opportunity Name       | Supper Opportunity      |
       | Account                | customer                |
       | Contact                | CatherineJH@armyspy.com |
-      | Status                 | Closed won              |
+      | Status                 | Closed Won              |
       | Close Reason           | Won                     |
       | Close Revenue Amount   | 100                     |
       | Close Revenue Currency | $                       |
