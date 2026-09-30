@@ -5201,7 +5201,7 @@
             "dist": {
                 "type": "path",
                 "url": "../platform",
-                "reference": "db48e223676915b5110995299ec4539579ae8a55"
+                "reference": "94c094bc2eae4530fd680b997d54f96fe49e3efb"
             },
             "require": {
                 "ass/xmlsecurity": "1.1.1",
@@ -5342,6 +5342,8 @@
                 "oro/twig-inspector": "1.1.*",
                 "phpmd/phpmd": "~2.15.0",
                 "phpunit/phpunit": "~9.6.34",
+                "playwright-php/playwright": "^1.4",
+                "playwright-php/playwright-mink": "^1.0",
                 "squizlabs/php_codesniffer": "~4.0.4",
                 "symfony/browser-kit": "~7.4.0",
                 "symfony/css-selector": "~7.4.0",
@@ -5407,7 +5409,13 @@
                 },
                 "branch-alias": {
                     "dev-master": "7.1-dev"
-                }
+                },
+                "oro-post-install-cmd": [
+                    "@playwright-bootstrap"
+                ],
+                "oro-post-update-cmd": [
+                    "@playwright-bootstrap"
+                ]
             },
             "autoload": {
                 "psr-4": {
@@ -5507,6 +5515,11 @@
                 },
                 "exclude-from-classmap": [
                     "**/Tests/"
+                ]
+            },
+            "scripts": {
+                "playwright-bootstrap": [
+                    "Oro\\Bundle\\TestFrameworkBundle\\Composer\\PlaywrightBootstrapHandler::bootstrap"
                 ]
             },
             "license": [

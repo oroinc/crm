@@ -15,7 +15,7 @@ Feature: Create Report with Enum field
     And click "Create field"
     And I fill form with:
       | Field Name   | CustomEnum  |
-      | Storage Type | Table column  |
+      | Storage Type | Serialized field |
       | Type         | Select        |
     And I click "Continue"
     And set Options with:
