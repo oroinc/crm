@@ -6,6 +6,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ApiBundle\ApiDoc\EntityNameProvider;
 use Oro\Bundle\ApiBundle\ApiDoc\ResourceDocParserInterface;
 use Oro\Bundle\ApiBundle\Config\EntityDefinitionConfig;
+use Oro\Bundle\ApiBundle\Config\Extra\DescriptionsConfigExtra;
 use Oro\Bundle\ApiBundle\Processor\GetConfig\CompleteDescriptions\ResourceDocParserProvider;
 use Oro\Bundle\ApiBundle\Processor\GetConfig\ConfigContext;
 use Oro\Bundle\ApiBundle\Request\ApiAction;
@@ -52,10 +53,20 @@ class AddAccountCustomerAssociationDescriptions implements ProcessorInterface
         $this->entityNameProvider = $entityNameProvider;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     #[\Override]
     public function process(ContextInterface $context): void
     {
         /** @var ConfigContext $context */
+
+        /** @var DescriptionsConfigExtra|null $descriptionsConfigExtra */
+        $descriptionsConfigExtra = $context->getExtra(DescriptionsConfigExtra::NAME);
+        if (null !== $descriptionsConfigExtra && !$descriptionsConfigExtra->useFallbackDescriptions()) {
+            return;
+        }
 
         $targetAction = $context->getTargetAction();
         if (!$targetAction || ApiAction::OPTIONS === $targetAction) {
