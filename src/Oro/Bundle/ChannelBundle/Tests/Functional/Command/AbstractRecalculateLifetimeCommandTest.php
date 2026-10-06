@@ -2,43 +2,57 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Command;
 
-use Oro\Bundle\DataAuditBundle\Entity\Audit;
-use Oro\Bundle\DataAuditBundle\Entity\AuditField;
+use Oro\Bundle\DataAuditBundle\Test\Functional\AuditRecordsExtension;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\Testing\Command\CommandTestingTrait;
 
 abstract class AbstractRecalculateLifetimeCommandTest extends WebTestCase
 {
-    use CommandTestingTrait, MessageQueueExtension;
+    use AuditRecordsExtension;
+    use CommandTestingTrait;
+    use MessageQueueExtension;
+
+    protected const AUDIT_LISTENER = 'oro_dataaudit.listener.send_changed_entities_to_message_queue';
 
     protected function setUp(): void
     {
         $this->initClient();
     }
 
+    /**
+     * The lifetime field is not auditable, so recalculating it must not add data audit records.
+     */
     public function testThatCommandNotProduceNewDataAuditRecordsInDatabase()
     {
-        $manager = self::getDataFixturesExecutorEntityManager();
+        $this->emptyMessageQueue();
 
-        self::consumeAllMessages();
+        $lastAuditId = $this->getLastAuditId();
+        $lastAuditFieldId = $this->getLastAuditFieldId();
 
-        $auditFieldCount = $manager->getRepository(AuditField::class)->count([]);
-        $auditCount = $manager->getRepository(Audit::class)->count([]);
+        $this->getOptionalListenerManager()->enableListener(self::AUDIT_LISTENER);
 
-        $this->getOptionalListenerManager()->enableListener(
-            'oro_dataaudit.listener.send_changed_entities_to_message_queue'
+        try {
+            $this->doExecuteCommand($this->getCommandName(), ['--force' => true]);
+
+            // Do not assert the number of audit messages: it depends on the batch size
+            // {@see SendChangedEntitiesToMessageQueueListener::BATCH_SIZE} and on which fields the
+            // listener sends, so it is not stable.
+            self::consumeAllMessages();
+        } finally {
+            // A failed assertion must not leave the listener enabled for the next tests.
+            $this->getOptionalListenerManager()->disableListener(self::AUDIT_LISTENER);
+        }
+
+        self::assertSame(
+            [],
+            $this->getAuditFieldsCreatedAfter($lastAuditFieldId),
+            'The lifetime recalculation must not add audit field records.'
         );
-
-        $this->doExecuteCommand($this->getCommandName(), ['--force' => true]);
-
-        self::consumeAllMessages();
-
-        self::assertEquals($auditFieldCount, $manager->getRepository(AuditField::class)->count([]));
-        self::assertEquals($auditCount, $manager->getRepository(Audit::class)->count([]));
-
-        $this->getOptionalListenerManager()->disableListener(
-            'oro_dataaudit.listener.send_changed_entities_to_message_queue'
+        self::assertSame(
+            [],
+            $this->getAuditsCreatedAfter($lastAuditId),
+            'The lifetime recalculation must not add audit records.'
         );
     }
 
