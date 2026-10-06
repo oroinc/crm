@@ -110,34 +110,9 @@ oro_behat_extension:
         mapping:
           Close reason: 'oro_workflow_transition[close_reason_name]'
 
-    All Quotes Grid:
-      selector: 'div[data-page-component-name="quotes-grid"]'
-      class: Oro\Bundle\SalesBundle\Tests\Behat\Element\QuotesGrid
-
     Quotes Grid:
       selector: '[id^="grid-opportunity-quotes-grid"]'
       class: Oro\Bundle\SalesBundle\Tests\Behat\Element\QuotesGrid
-
-    Quote Line Items:
-      selector: '.quote-lineitems'
-      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
-      options:
-        mapping:
-          Product:
-            type: 'css'
-            locator: '.quote-lineitem-product-select .select2-offscreen[type="text"]'
-          Unit Price: 'oro_sale_quote[quoteProducts][0][quoteProductOffers][0][price][value]'
-          Quantity: 'oro_sale_quote[quoteProducts][0][quoteProductOffers][0][quantity]'
-
-    Unit Price:
-      selector: '[name="oro_sale_quote[quoteProducts][0][quoteProductOffers][0][price][value]"]'
-
-    Shipping Address:
-      selector: '[data-name="field__customer-address"]'
-      class: Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity
-
-    Calculate Shipping:
-      selector: '[data-role="possible_shipping_methods_btn"]'
 
     Shipping Method Form:
       selector: 'div.possible_shipping_methods_form'
@@ -152,13 +127,6 @@ oro_behat_extension:
     Customer Quotes Grid:
       selector: '.frontend-datagrid'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendGrid
-
-    Quote View Grid:
-      selector: '.oro-grid-table'
-      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendTableGrid
-
-    CurrencyPopover:
-      selector: '.action-cell button[data-toggle="popover"]'
 
     OpportunityStatusFilter:
        selector:
@@ -211,16 +179,6 @@ oro_behat_extension:
     Business Customer Leads GridFilterItem:
       selector: 'div.filter-item'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridFilterItem
-
-    First Widget Add Button:
-      selector:
-        locator: '(//div[(contains(@class,"widget-picker__results"))]//details[@style="opacity: 1;"]//button[contains(text(),"Add")])[1]'
-        type: xpath
-
-    Enter keyword:
-      selector:
-        locator: '//input[contains(@class,"widget-picker__filter-search")]'
-        type: xpath
 
     Leads List:
       selector:
@@ -323,11 +281,6 @@ oro_behat_extension:
       selector:
         type: 'xpath'
         locator: '//select[@data-name="custom_part"]/..//span'
-
-    Widget Save Button:
-      selector:
-        type: 'xpath'
-        locator: '//div[@class="widget-actions-section"]/..//button[contains(text(),"Save")]'
 
     ChannelEntitiesGrid:
       selector: 'div.grid-container'

@@ -41,7 +41,7 @@ class OroAccountBundleInstaller implements
     #[\Override]
     public function getMigrationVersion(): string
     {
-        return 'v1_16';
+        return 'v1_17';
     }
 
     #[\Override]

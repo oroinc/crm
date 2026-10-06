@@ -58,6 +58,7 @@ use Oro\Bundle\UserBundle\Entity\User;
         'grid' => ['default' => 'accounts-grid', 'context' => 'accounts-for-context-grid'],
         'tag' => ['enabled' => true],
         'email' => ['available_in_template' => true],
+        'integration' => ['webhook_accessible' => true],
     ]
 )]
 class Account implements EmailHolderInterface, NameInterface, ExtendEntityInterface
