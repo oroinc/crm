@@ -261,7 +261,7 @@ Feature: Activities
     And click on "Empty slot"
     When I fill "Event Form" with:
       | Title         | Stand-Up            |
-      | Start         | <DateTime:+2 hours> |
+      | Start         | <DateTime:+7 days 10:00 AM> |
       | All-Day Event | false               |
       | Repeat        | false               |
       | Description   | testfull desc       |
@@ -273,6 +273,7 @@ Feature: Activities
       | Flash message | minutes       | 5               |
     And click "Save"
     And click "Notify"
+    And go to next calendar page
     Then I should see "Stand-Up" in calendar with:
       | Description   | testfull desc                        |
       | Guests        | Charlie Sheen (Charlie1@example.com) |
