@@ -259,6 +259,9 @@ Feature: Activities
   Scenario: Create an event from My Calendar
     Given click My Calendar in user menu
     And click on "Empty slot"
+    # The event starts in the next week on purpose, so it is always shown on the next calendar page.
+    # If it started a few hours from now and the scenario checked the current week, on Saturday evenings the event
+    # could fall on Sunday, which is already the next week, and the scenario would fail.
     When I fill "Event Form" with:
       | Title         | Stand-Up            |
       | Start         | <DateTime:+7 days 10:00 AM> |
