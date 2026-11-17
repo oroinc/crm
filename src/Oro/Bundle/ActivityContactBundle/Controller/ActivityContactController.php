@@ -25,6 +25,9 @@ class ActivityContactController extends AbstractController
     public function metricsAction($entityClass, $entityId)
     {
         $entity       = $this->container->get(EntityRoutingHelper::class)->getEntity($entityClass, $entityId);
+        if (!$this->isGranted('VIEW', $entity)) {
+            throw $this->createAccessDeniedException();
+        }
         $dataProvider = $this->container->get(EntityActivityContactDataProvider::class);
         $data         = $dataProvider->getEntityContactData($entity);
 
